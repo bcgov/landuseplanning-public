@@ -1,0 +1,164 @@
+<header class="app-header" id="header">
+	<div class="brand-container">
+		<a class="brand" href="/" [routerLink]="['/']" tabindex="0"></a>
+		<button class="navbar-toggler navbar-toggler-right hidden-xl-up collapsed" type="button"
+			data-toggle="collapse"
+			data-target="#mainNav"
+			aria-controls="mainNav"
+			aria-expanded="false"
+			aria-label="Toggle navigation"><i class="material-icons">menu</i><span>MENU</span>
+		</button>
+	</div>
+	<nav class="navbar navbar-toggleable-lg main-nav">
+		<div class="collapse navbar-collapse" id="mainNav">
+			<ul class="navbar-nav">
+				<!--
+				<li class="nav-item">
+					<a class="nav-link" href="/" [routerLink]="['/']" tabindex="1"><i class="material-icons">home</i></a>
+				</li>
+				-->
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="findEAProjects" tabindex="4"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"><span>Find PRC in BC</span><span class="caret"></span>
+					</a>
+					<div class="dropdown-menu dm-sm dropdown-menu-right" aria-labelledby="findEAProjects">
+						<a class="dropdown-item" href="/projects" [routerLink]="['/projects']" tabindex="5">
+							<strong>Find Projects by List</strong>
+							<span class="dd-item-desc">View a list of major mines in British Columbia</span>
+						</a>
+						<a class="dropdown-item" href="/map" [routerLink]="['/map']" tabindex="6">
+							<strong>Find Projects by Map</strong>
+							<span class="dd-item-desc">Use our interactive map to locate mines across British Columbia</span>
+						</a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/search" [routerLink]="['/search']" title="Find documents available on the BC Mine Information website"><span>Find Documents</span></a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="processAndProcedures" tabindex="4"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"><span>Processes & Procedures</span><span class="caret"></span>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="processAndProcedures">
+						<a class="dropdown-item" href="/legislation" [routerLink]="['/legislation']">
+							<strong>Legislation</strong>
+							<span class="dd-item-desc">Learn about the key statutes and regulations that apply to mining activities in British Columbia.</span></a>
+						<a class="dropdown-item" href="/authorizations" [routerLink]="['/authorizations']">
+							<strong>Authorizations</strong>
+							<span class="dd-item-desc">Environmental assessment certificates and permits issued under the Mines Act and Environmental Management Act.</span></a>
+						<a class="dropdown-item" href="/compliance-oversight" [routerLink]="['/compliance-oversight']">
+							<strong>Compliance Oversight</strong>
+							<span class="dd-item-desc">Several provincial agencies work together to provide integrated oversight of British Columbia’s mines.</span></a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/contact" [routerLink]="['/contact']"><span>Connect With Us</span></a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>
+
+<router-outlet id="scrollTop"></router-outlet>
+
+<footer class="app-footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<section>
+					<h4>About this website...</h4>
+					<p class="mb-0">The NRTS Lorem Ipsum.</p>
+				</section>
+			</div>
+			<div class="col-md-4">
+				<section>
+					<h4>Navigate</h4>
+					<h5>Find PRC In British Columbia</h5>
+					<ul>
+						<li>
+							<a href="/projcts" [routerLink]="['/projects']">Find PRC by List</a>
+						</li>
+						<li>
+							<a href="/map" [routerLink]="['/map']">Find PRC by Map</a>
+						</li>
+					</ul>
+					<h5>PRC in British Columbia</h5>
+					<ul>
+						<li>
+							<a href="/lifecycle" [routerLink]="['/lifecycle']">The PRC Lifecycle</a>
+						</li>
+						<li>
+							<a href="/topics-of-interest" [routerLink]="['/topics-of-interest']">Topics of Interest</a>
+						</li>
+						<li>
+							<a href="/projects" [routerLink]="['/projects']">Find PRC in BC</a>
+						</li>
+					</ul>
+					<h5>Our Processes &amp; Procedures</h5>
+					<ul class="mb-0">
+						<li>
+							<a href="/legislation" [routerLink]="['/legislation']">Legislation</a>
+						</li>
+						<li>
+							<a href="/authorizations" [routerLink]="['/authorizations']">Authorizations</a>
+						</li>
+						<li>
+							<a href="/compliance-oversight" [routerLink]="['/compliance-oversight']">Compliance Oversight</a>
+						</li>
+					</ul>
+				</section>
+			</div>
+			<div class="col-md-4">
+				<section class="last">
+					<h4>Connect With Us</h4>
+					<p>NRTS PRC is continuously evolving. More information and features will be added to the site on an ongoing basis and we welcome feedback to help us decide what would be most valuable.</p>
+					<a class="btn slide-r-btn inverted" href="/contact" [routerLink]="['/contact']"><span>Submit Feedback</span><i class="material-icons">arrow_forward</i></a>
+				</section>
+			</div>
+		</div>
+		<div class="footer-admin clearfix">
+			<ul class="gov-links">
+				<li><a href="#">Home</a></li>
+				<li><a href="http://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">Copyright</a></li>
+				<li><a href="http://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">Disclaimer</a></li>
+				<li><a href="http://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">Privacy</a></li>
+				<li><a href="http://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">Accessibility</a></li>
+			</ul>
+			<ul class="connect-links">
+				<li>
+					<div class="fb-share-button"
+						data-href="https://nrts.gov.bc.ca"
+						data-layout="button"
+						data-size="large"
+						data-mobile-iframe="true">
+						<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fnrts.gov.bc.ca%2F&amp;src=sdkpreparse">
+							<img src="assets/images/facebook_circle.svg"/>
+						</a>
+					</div>
+				</li>
+				<li>
+					<a class="twitter-share-button" href="https://twitter.com/share" data-show-count="false" target="_blank">
+						<img src="assets/images/twitter_circle.svg"/>
+					</a>
+					<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+				</li>
+				<li>
+					<a href="https://plus.google.com/share?url=nrts.gov.bc.ca"
+						onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><img
+						src="assets/images/google_circle.svg" alt="Share on Google+"/></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</footer>
+
+<a href="#scrollTop" class="btn scroll-top-btn"
+	pageScroll
+	[pageScrollOffset]="0"
+	[pageScrollDuration]="800">
+	<i class="material-icons">arrow_upward</i>
+</a>
