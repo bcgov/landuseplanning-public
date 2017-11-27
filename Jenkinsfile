@@ -25,14 +25,14 @@ pipeline {
                 openshiftTag(srcStream: 'nginx-runtime', srcTag: 'latest', destStream: 'nginx-runtime', destTag: 'dev')
             }
         }
-        stage('build and package angular-on-nginx-build'){
+        stage('build and package angular-on-nginx'){
             steps {
-                openshiftBuild(bldCfg: 'angular-on-nginx-build-build', showBuildLogs: 'true')
+                openshiftBuild(bldCfg: 'angular-on-nginx-build', showBuildLogs: 'true')
             }
         }
         stage('tag and deploy to dev') {
             steps {
-                openshiftTag(srcStream: 'angular-on-nginx-build', srcTag: 'latest', destStream: 'angular-on-nginx-build', destTag: 'dev')
+                openshiftTag(srcStream: 'angular-on-nginx', srcTag: 'latest', destStream: 'angular-on-nginx', destTag: 'dev')
                 notifyBuild('DEPLOYED:DEV')
             }
         }
@@ -42,7 +42,7 @@ pipeline {
                     try {
                         timeout(time: 2, unit: 'MINUTES') {
                           input "Deploy to TEST?"
-                          openshiftTag(srcStream: 'angular-on-nginx-build', srcTag: 'dev', destStream: 'angular-on-nginx-build', destTag: 'test')
+                          openshiftTag(srcStream: 'angular-on-nginx', srcTag: 'dev', destStream: 'angular-on-nginx', destTag: 'test')
                           notifyBuild('DEPLOYED:TEST')
                         }
                     } catch (err) {
@@ -57,7 +57,7 @@ pipeline {
                     try {
                         timeout(time: 2, unit: 'MINUTES') {
                           input "Deploy to PROD?"
-                          openshiftTag(srcStream: 'angular-on-nginx-build', srcTag: 'test', destStream: 'angular-on-nginx-build', destTag: 'prod')
+                          openshiftTag(srcStream: 'angular-on-nginx', srcTag: 'test', destStream: 'angular-on-nginx', destTag: 'prod')
                           notifyBuild('DEPLOYED:PROD')
                         }
                     } catch (err) {

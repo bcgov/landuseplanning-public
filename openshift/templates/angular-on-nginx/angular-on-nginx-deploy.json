@@ -230,7 +230,7 @@
       "displayName": "Image Namespace",
       "name": "IMAGE_NAMESPACE",
       "required": true,
-      "value": "gcpe-mygovbc-demo"
+      "value": "nrts-prc-tools"
     },
     {
       "description": "OpenShift cluster private IP range in CIDR notation, used by Nginx ngx_http_realip_module.",
@@ -254,7 +254,7 @@
       "description": "The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca, if left blank a value will be defaulted.",
       "displayName": "Application Hostname",
       "name": "APPLICATION_DOMAIN",
-      "value": "angular-scaffold-demo.pathfinder.gov.bc.ca"
+      "value": "nrts-prc-public.pathfinder.gov.bc.ca"
     },
     {
       "description": "The TAG name for this environment, e.g., dev, test, prod",
