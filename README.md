@@ -4,11 +4,13 @@
 
 ## Node and NPM 
 
-Node 6.x or greater must be installed.
+Node 6.9.x or greater must be installed. Run `node -v` to verify.
+
+npm 3.x.x or greater must be installed. Run `npm -v` to verify
 
 ## Install [Angular CLI](https://angular.io/)
 
-**Note, use `angular/cli`, do not use `angular/angular-cli`**
+**Note, use `angular/cli`. Do not use `angular/angular-cli`**.
 
 ```
 npm i -g @angular/cli

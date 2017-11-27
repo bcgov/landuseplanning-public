@@ -18,12 +18,13 @@ header {
 .brand {
     float: left;
     display: block;
-    width: 265px;
-    height: 55px;
+    width: 270px; // Using PX dimensions here to ensure exact match to image
+    height: 3rem;
     background-image: url("~assets/images/bcgov-header-horiz-SM.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: auto;
+    outline: none; // Override user agent stylesheet default
 }
 
 .navbar-toggler {
@@ -34,6 +35,11 @@ header {
     color: $gold;
     font-size: 1rem;
     font-weight: 600;
+    outline: none; // Override user agent stylesheet default
+    
+    &:hover {
+        cursor: pointer;
+    }
 
     &.collapsed {
         border: 2px solid transparent;
@@ -138,7 +144,8 @@ header {
     }
 }
 
-@media (min-width: 1200px) {
+// same as @screen-md-min
+@media (min-width: 992px) {
     header {
         &.app-header {
             position: fixed;
@@ -148,9 +155,9 @@ header {
             z-index: 1000;
             padding: 0;
             border-bottom-style: solid;
-            border-bottom-width: 0;
-            border-bottom-color: rgba(#5475a7, 0.25);
-            background-color: transparent;
+            // border-bottom-width: 0;
+            // border-bottom-color: rgba(#5475a7, 0.25);
+            // background-color: transparent;
             transition: all linear 0.2s;
 
             &.dark {
@@ -237,11 +244,10 @@ header {
     }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
     .brand {
         width: 400px; // Using PX dimensions here to ensure exact match to image
         height: 4rem;
         background-image: url("~assets/images/bcgov-header-horiz-LG.png");
-        background-size: auto;
     }
 }
