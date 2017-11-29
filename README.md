@@ -6,7 +6,7 @@
 
 Node 6.x or greater must be installed.
 
-## Install angular/cli
+## Install [Angular CLI](https://angular.io/)
 
 **Note, use `angular/cli`, do not use `angular/angular-cli`**
 
@@ -23,7 +23,7 @@ npm list -g @angular/cli --depth=0
 ng -v
 ```
 
-## Install [yarn](https://yarnpkg.com/lang/en/docs/install/#alternatives-tab).
+## Install [yarn](https://yarnpkg.com/lang/en/docs/install/#alternatives-tab)
 
 ```
 npm i -g yarn
