@@ -7,7 +7,6 @@ import { HomeComponent } from 'app/home/home.component';
 import { LegislationComponent } from 'app/legislation/legislation.component';
 import { LifecycleComponent } from 'app/lifecycle/lifecycle.component';
 import { ProcessComponent } from 'app/process/process.component';
-import { NewsComponent } from 'app/news/news.component';
 import { ReclamationComponent } from 'app/reclamation/reclamation.component';
 import { TailingsManagementComponent } from 'app/tailings-management/tailings-management.component';
 import { TopicsOfInterestComponent } from 'app/topics-of-interest/topics-of-interest.component';
@@ -43,10 +42,6 @@ const routes: Routes = [
   {
     path: 'process',
     component: ProcessComponent
-  },
-  {
-    path: 'news',
-    component: NewsComponent
   },
   {
     path: 'reclamation',

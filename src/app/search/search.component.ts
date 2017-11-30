@@ -62,95 +62,95 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.noMoreResults      = true;
-    this.ranSearch          = false;
-    this.showAdvancedFields = false;
-    this.loading            = false;
+    // this.noMoreResults      = true;
+    // this.ranSearch          = false;
+    // this.showAdvancedFields = false;
+    // this.loading            = false;
 
-    this.route.params.subscribe((params: Params) => {
-      /*
-        TBD: Deal with meta search terms?
-          this.params.type
-          this.params.page
-          this.params.limit
-      */
-      this.params = params;
-      this.terms  = new SearchTerms();
+    // this.route.params.subscribe((params: Params) => {
+    //   /*
+    //     TBD: Deal with meta search terms?
+    //       this.params.type
+    //       this.params.page
+    //       this.params.limit
+    //   */
+    //   this.params = params;
+    //   this.terms  = new SearchTerms();
 
-      // Get the proponents
-      this.proponentService.getAll().subscribe(
-        proponents => {
-          this.proponents = proponents;
+    //   // Get the proponents
+    //   this.proponentService.getAll().subscribe(
+    //     proponents => {
+    //       this.proponents = proponents;
 
-          // Grab any terms that were passed in through the URL
-          if (this.params.proponents) {
-            const operatorIds = this.params.proponents.split(',');
-            this.terms.proponents = this.proponents.filter(proponent => operatorIds.indexOf(proponent._id) !== -1);
-            this.showAdvancedFields = true;
-          }
+    //       // Grab any terms that were passed in through the URL
+    //       if (this.params.proponents) {
+    //         const operatorIds = this.params.proponents.split(',');
+    //         this.terms.proponents = this.proponents.filter(proponent => operatorIds.indexOf(proponent._id) !== -1);
+    //         this.showAdvancedFields = true;
+    //       }
 
-          if (this.params.ownerships) {
-            const ownerIds = this.params.ownerships.split(',');
-            this.terms.ownerships = this.proponents.filter(proponent => ownerIds.indexOf(proponent._id) !== -1);
-            this.showAdvancedFields = true;
-          }
+    //       if (this.params.ownerships) {
+    //         const ownerIds = this.params.ownerships.split(',');
+    //         this.terms.ownerships = this.proponents.filter(proponent => ownerIds.indexOf(proponent._id) !== -1);
+    //         this.showAdvancedFields = true;
+    //       }
 
-          // Needed in development mode - not required in prod.
-          this._changeDetectionRef.detectChanges();
+    //       // Needed in development mode - not required in prod.
+    //       this._changeDetectionRef.detectChanges();
 
-          // Get the projects
-          this.projectService.getAll().subscribe(
-            projects => {
-              this.projects = projects;
-              this.projectArray = [];
-              this.projects.forEach((project, index) => {
-                this.projectArray.push(project._id);
-              });
+    //       // Get the projects
+    //       this.projectService.getAll().subscribe(
+    //         projects => {
+    //           this.projects = projects;
+    //           this.projectArray = [];
+    //           this.projects.forEach((project, index) => {
+    //             this.projectArray.push(project._id);
+    //           });
 
-              // Grab any terms that were passed in through the URL
-              if (this.params.projects) {
-                const projectIds = this.params.projects.split(',');
-                this.terms.projects = this.projects.filter(project => projectIds.indexOf(project._id) !== -1);
-                this.showAdvancedFields = true;
-              }
+    //           // Grab any terms that were passed in through the URL
+    //           if (this.params.projects) {
+    //             const projectIds = this.params.projects.split(',');
+    //             this.terms.projects = this.projects.filter(project => projectIds.indexOf(project._id) !== -1);
+    //             this.showAdvancedFields = true;
+    //           }
 
-              if (this.params.keywords) {
-                this.terms.keywords = this.params.keywords.split(',').join(' ');
-              }
+    //           if (this.params.keywords) {
+    //             this.terms.keywords = this.params.keywords.split(',').join(' ');
+    //           }
 
-              if (this.params.datestart && Date.parse(this.params.datestart)) {
-                const dateStart = new Date(this.params.datestart);
-                this.terms.dateStart = {
-                  day: dateStart.getUTCDate(),
-                  month: dateStart.getUTCMonth() + 1,
-                  year: dateStart.getUTCFullYear()
-                };
-                this.showAdvancedFields = true;
-              }
+    //           if (this.params.datestart && Date.parse(this.params.datestart)) {
+    //             const dateStart = new Date(this.params.datestart);
+    //             this.terms.dateStart = {
+    //               day: dateStart.getUTCDate(),
+    //               month: dateStart.getUTCMonth() + 1,
+    //               year: dateStart.getUTCFullYear()
+    //             };
+    //             this.showAdvancedFields = true;
+    //           }
 
-              if (this.params.dateend && Date.parse(this.params.dateend)) {
-                const dateEnd = new Date(this.params.dateend);
-                this.terms.dateEnd = {
-                  day: dateEnd.getUTCDate(),
-                  month: dateEnd.getUTCMonth() + 1,
-                  year: dateEnd.getUTCFullYear()
-                };
-                this.showAdvancedFields = true;
-              }
+    //           if (this.params.dateend && Date.parse(this.params.dateend)) {
+    //             const dateEnd = new Date(this.params.dateend);
+    //             this.terms.dateEnd = {
+    //               day: dateEnd.getUTCDate(),
+    //               month: dateEnd.getUTCMonth() + 1,
+    //               year: dateEnd.getUTCFullYear()
+    //             };
+    //             this.showAdvancedFields = true;
+    //           }
 
-              // Needed in development mode - not required in prod.
-              this._changeDetectionRef.detectChanges();
+    //           // Needed in development mode - not required in prod.
+    //           this._changeDetectionRef.detectChanges();
 
-              if (!_.isEmpty(this.terms.getParams())) {
-                this.doSearch(true);
-              }
-            },
-            error => console.log(error)
-          );
-        },
-        error => console.log(error)
-      );
-    });
+    //           if (!_.isEmpty(this.terms.getParams())) {
+    //             this.doSearch(true);
+    //           }
+    //         },
+    //         error => console.log(error)
+    //       );
+    //     },
+    //     error => console.log(error)
+    //   );
+    // });
   }
 
   toggleAdvancedSearch() {

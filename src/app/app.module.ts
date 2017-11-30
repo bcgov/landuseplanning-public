@@ -9,7 +9,6 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { NewsComponent } from './news/news.component';
 import { ObjectFilterPipe } from './object-filter.pipe';
 import { LegislationComponent } from './legislation/legislation.component';
 import { ProcessComponent } from './process/process.component';
@@ -23,6 +22,7 @@ import { TailingsManagementComponent } from './tailings-management/tailings-mana
 import { ReclamationComponent } from './reclamation/reclamation.component';
 import { SearchComponent } from './search/search.component';
 import { ProponentService } from './services/proponent.service';
+import { ApplicationService } from './services/application.service';
 
 // feature modules
 import { MapModule } from './map/map.module';
@@ -35,7 +35,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   declarations: [
     AppComponent,
     HomeComponent,
-    NewsComponent,
     ObjectFilterPipe,
     LegislationComponent,
     ProcessComponent,
@@ -62,7 +61,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     Ng2PageScrollModule.forRoot(),
     MapModule
   ],
-  providers: [NewsComponent, ProponentService, CookieService],
+  providers: [ProponentService, ApplicationService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
