@@ -12,17 +12,18 @@ export class ProponentService {
   constructor(private api: Api) { }
 
   getAll() {
-    // Get all organizations
-    return this.api.getProponents()
-      .map((res: Response) => {
-        const organizations = res.text() ? res.json() : [];
+    return null;
+    // // Get all organizations
+    // return this.api.getProponents()
+    //   .map((res: Response) => {
+    //     const organizations = res.text() ? res.json() : [];
 
-        organizations.forEach((org, index) => {
-          organizations[index] = new Proponent(org);
-        });
+    //     organizations.forEach((org, index) => {
+    //       organizations[index] = new Proponent(org);
+    //     });
 
-        return organizations;
-      })
-      .catch(this.api.handleError);
+    //     return organizations;
+    //   })
+    //   .catch(this.api.handleError);
   }
 }

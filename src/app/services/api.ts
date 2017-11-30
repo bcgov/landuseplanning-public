@@ -8,10 +8,7 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class Api {
-  pathMEM: string;
-  pathEPIC: string;
-  hostnameMEM: string;
-  hostnameEPIC: string;
+  pathAPI: string;
   params: Params;
   env: 'local' | 'dev' | 'test' | 'prod';
 
@@ -20,82 +17,41 @@ export class Api {
     switch (hostname) {
       case 'localhost':
         // Local
-        this.hostnameMEM  = 'http://localhost:4000';
-        this.hostnameEPIC = 'http://localhost:3000';
+        this.pathAPI = 'http://localhost:3000/api';
         this.env = 'local';
         break;
 
-      case 'www-mem-mmt-dev.pathfinder.gov.bc.ca':
+      case 'www-nrts-prc-dev.pathfinder.gov.bc.ca':
         // Dev
-        this.hostnameMEM  = 'https://mem-mmt-dev.pathfinder.gov.bc.ca';
-        this.hostnameEPIC = 'https://esm-master.pathfinder.gov.bc.ca';
+        this.pathAPI = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/api';
         this.env = 'dev';
         break;
 
-      case 'www-mem-mmt-test.pathfinder.gov.bc.ca':
+      case 'www-nrts-prc-test.pathfinder.gov.bc.ca':
         // Test
-        this.hostnameMEM  = 'https://mem-mmt-test.pathfinder.gov.bc.ca';
-        this.hostnameEPIC = 'https://esm-test.pathfinder.gov.bc.ca';
+        this.pathAPI = 'https://nrts-prc-test.pathfinder.gov.bc.ca/api';
         this.env = 'test';
         break;
 
       default:
         // Prod
-        this.hostnameMEM  = 'https://mines.empr.gov.bc.ca';
-        this.hostnameEPIC = 'https://projects.eao.gov.bc.ca';
+        this.pathAPI = 'https://';
         this.env = 'prod';
     };
-
-    this.pathMEM  = `${ this.hostnameMEM }/api`;
-    this.pathEPIC = `${ this.hostnameEPIC }/api`;
   }
 
-  // Projects
-
-  getProjects() {
-    return this.getMEM('projects/major');
-  }
-
-  getProjectByCode(projectCode: string) {
-    return this.getMEM(`projects/major/${ projectCode }`);
-  }
-
-  getProjectCollectionsMEM(projectCode: string) {
-    return this.getMEM(`collections/project/${ projectCode }`);
-  }
-
-  getProjectCollectionsEPIC(projectCode: string) {
-    return this.getEPIC(`collections/project/${ projectCode }`);
-  }
-
-  // Proponents
-
-  getProponents() {
-    return this.getMEM('organization');
-  }
-
-  // News
-
-  getNews() {
-    return this.getEPIC('recentactivity');
+  // Applications
+  getApplications() {
+    return this.getApps('applications/pending');
   }
 
   // Methods
-
-  getMEM(apiRoute: string, options?: Object) {
-    return this.get(this.pathMEM, apiRoute, options);
+  getApps(apiRoute: string, options?: Object) {
+    return this.get(this.pathAPI, apiRoute, options);
   }
 
-  getEPIC(apiRoute: string, options?: Object) {
-    return this.get(this.pathEPIC, apiRoute, options);
-  }
-
-  putMEM(apiRoute: string, body?: Object, options?: Object) {
-    return this.put(this.pathMEM, apiRoute, body, options);
-  }
-
-  putEPIC(apiRoute: string, body?: Object, options?: Object) {
-    return this.put(this.pathEPIC, apiRoute, body, options);
+  putApps(apiRoute: string, body?: Object, options?: Object) {
+    return this.put(this.pathAPI, apiRoute, body, options);
   }
 
   handleError(error: any) {
