@@ -3,6 +3,7 @@ import { PaginationInstance } from 'ngx-pagination';
 
 import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
+import { ApplicationService } from '../../services/application.service';
 
 @Component({
   selector: 'app-project-list',
@@ -23,11 +24,11 @@ export class ProjectListComponent implements OnInit {
     currentPage: 1
   };
 
-  constructor(private projectService: ProjectService, private _changeDetectionRef: ChangeDetectorRef) { }
+  constructor(private applicationService: ApplicationService, private _changeDetectionRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.loading = true;
-    this.projectService.getAll().subscribe(
+    this.applicationService.getAll().subscribe(
       data => {
         this.projects = data;
         this.mineCount = data ? data.length : 0;
