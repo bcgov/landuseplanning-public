@@ -14,13 +14,13 @@ export class HomeComponent implements OnInit {
   constructor(private newsService: NewsService, private projectService: ProjectService) { }
 
   ngOnInit() {
-    this.newsService.getAll().subscribe(
-      data => { this.results = data; },
-      error => console.log(error)
-    );
-    this.projectService.getAll().subscribe(
-      data => { this.numProjects = data ? data.length : 0; },
-      error => console.log(error)
-    );
+    // this.newsService.getAll().subscribe(
+    //   data => { this.results = data; },
+    //   error => console.log(error)
+    // );
+    // this.projectService.getAll().subscribe(
+    //   data => { this.numProjects = data ? data.length : 0; },
+    //   error => console.log(error)
+    // );
   }
 }
