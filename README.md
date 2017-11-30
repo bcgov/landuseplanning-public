@@ -6,7 +6,7 @@
 
 Node 6.9.x or greater must be installed. Run `node -v` to verify.
 
-npm 3.x.x or greater must be installed. Run `npm -v` to verify
+npm 3.x.x or greater must be installed. Run `npm -v` to verify.
 
 ## Install [Angular CLI](https://angular.io/)
 
