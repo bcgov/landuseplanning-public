@@ -5,6 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 // modules
 import { MapModule } from '../map/map.module';
 import { ProjectsRoutingModule } from './projects-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 // components
 import { ProjectListComponent } from './project-list/project-list.component';
@@ -14,7 +15,6 @@ import { AuthorizationsTabContentComponent } from './project-detail/authorizatio
 import { ComplianceTabContentComponent } from './project-detail/compliance/compliance-tab-content.component';
 import { DocumentsTabContentComponent } from './project-detail/documents/documents-tab-content.component';
 import { SiteActivitiesComponent } from './site-activities/site-activities.component';
-import { OrderByPipe } from '../filters/order-by.pipe';
 
 // services
 import { Api } from '../services/api';
@@ -26,6 +26,7 @@ import { ProjectService } from '../services/project.service';
     NgxPaginationModule,
     ProjectsRoutingModule,
     MapModule,
+    SharedModule
   ],
   declarations: [
     ProjectListComponent,
@@ -34,8 +35,7 @@ import { ProjectService } from '../services/project.service';
     AuthorizationsTabContentComponent,
     ComplianceTabContentComponent,
     DocumentsTabContentComponent,
-    SiteActivitiesComponent,
-    OrderByPipe
+    SiteActivitiesComponent
   ],
   exports: [
     ProjectListComponent,
