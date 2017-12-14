@@ -9,7 +9,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class NewlinePipe implements PipeTransform {
 
   transform(value: any): any {
-    let input = value || '';
+    const input = value || '';
     return input.replace(/\\n/g, '<br />');
   }
 
