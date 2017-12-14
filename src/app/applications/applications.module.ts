@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 // modules
+import { MapModule } from '../map/map.module';
 import { ApplicationsRoutingModule } from './applications-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
@@ -20,9 +20,9 @@ import { ApplicationService } from '../services/application.service';
 @NgModule({
   imports: [
     CommonModule,
-    NgbModule,
     NgxPaginationModule,
     ApplicationsRoutingModule,
+    MapModule,
     SharedModule
   ],
   declarations: [

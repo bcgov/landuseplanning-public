@@ -81,7 +81,7 @@
                 padding-left: 0.75rem;
                 padding-right: 0.75rem;
     
-                &.application-table__name-col {
+                &.application-table__code-col {
                     @include flex(1 1 auto);
                 }
             }
@@ -90,6 +90,11 @@
         &__region-col {
             display: none;
         }
+
+        &__purpose-col {
+            width: 40%; //15rem;
+        }
+
         &__date-col {
             width: 7.5rem;
             text-align: right;
@@ -111,12 +116,16 @@
 
 @media (min-width: 760px) {
     .application-table {
+        &__purpose-col {
+            width: 40%;
+        }
+
         &__region-col {
-            width: 38%;
+            width: 20%;
         }
 
         &__date-col {
-            width: 25%;
+            width: 20%;
             text-align: left;
         }
 

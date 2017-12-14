@@ -15,9 +15,11 @@ const routes: Routes = [
     path: 'a/:code',
     component: ApplicationDetailComponent,
     resolve: {
-      project: ApplicationDetailResolver
+      application: ApplicationDetailResolver
     },
-    children: TAB_NAV_ROUTES  // each tab within the page navigates to a separate route; e.g. /p/:code/(overview|compliance|docs)
+    // each tab within the page navigates to a separate route
+    // e.g. /a/:code/(overview|authorizations|compliance|docs)
+    children: TAB_NAV_ROUTES
   }
 ];
 
