@@ -42,7 +42,11 @@ export class Api {
 
   // Applications
   getApplications() {
-    return this.getApps('applications/pending');
+    return this.getApps('app/status/published');
+  }
+
+  getApplicationByCode(code: string) {
+    return this.getApps('app/code/' + code);
   }
 
   // Methods
@@ -61,12 +65,11 @@ export class Api {
   }
 
   // Private
-
   private get(apiPath: string, apiRoute: string, options?: Object) {
-    return this.http.get(`${ apiPath }/${ apiRoute }`, options || null);
+    return this.http.get(`${apiPath}/${apiRoute}`, options || null);
   }
 
   private put(apiPath: string, apiRoute: string, body?: Object, options?: Object) {
-    return this.http.put(`${ apiPath }/${ apiRoute }`, body || null, options || null);
+    return this.http.put(`${apiPath}/${apiRoute}`, body || null, options || null);
   }
 }

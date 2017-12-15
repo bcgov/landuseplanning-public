@@ -1,0 +1,98 @@
+<div class="hero-banner">
+  <div class="container">
+    <div class="container__inner-container">
+      <div class="hero-banner__content">
+        <h1 id="pgTitle">Find Crown Land Application information in British Columbia</h1>
+        <p class="mb-2">Some blurb about applications and PRC...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="anchor-point">
+  <main>
+    <section>
+      <h2>Crown Land Applications in British Columbia</h2>
+      <p class="tab-intro">Use the list below to navigate to information on individual application. Click on any application to go directly to
+        its profile page, or click the ‘+’ sign to expand the list item to see basic information (e.g., description, purpose,
+        type, etc.) about that application. You can also use our interactive map to navigate to information on individual
+        applications across British Columbia.</p>
+
+      <table class="table application-table" id="tableTop">
+        <thead class="application-table__sort-header">
+          <tr>
+            <th class="application-table__code-col sortable" (click)="sort('code')">Code
+              <i class="sort" [ngClass]="{'sort-asc': (column == 'code' && isDesc), 'sort-desc': (column == 'code' && !isDesc) }" aria-hidden="true"></i>
+            </th>
+            <th class="application-table__purpose-col sortable" (click)="sort('purpose')">Purpose/Subpurpose
+              <i class="sort" [ngClass]="{'sort-asc': (column == 'purpose' && isDesc), 'sort-desc': (column == 'purpose' && !isDesc) }" aria-hidden="true"></i>
+            </th>
+            <th class="application-table__region-col sortable" (click)="sort('region')">Region
+              <i class="sort" [ngClass]="{'sort-asc': (column == 'region' && isDesc), 'sort-desc': (column == 'region' && !isDesc) }" aria-hidden="true"></i>
+            </th>
+            <th class="application-table__date-col sortable" (click)="sort('projectDate')">Date
+              <i class="sort" [ngClass]="{'sort-asc': (column == 'projectDate' && isDesc), 'sort-desc': (column == 'projectDate' && !isDesc) }"
+                aria-hidden="true"></i>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="application-table__content">
+          <tr *ngFor="let item of applications | orderBy: {property: column, direction: direction} | paginate: config">
+            <td class="accordion__collapse-item p-0" colspan="4">
+              <div class="accordion__collapse-header" id="accordHead" role="tab">
+                <a class="accordion__collapse-header--column toggle collapsed" data-toggle="collapse" href="#accordCollapse{{item.code}}">
+                  <i class="material-icons open-icon">add</i>
+                  <i class="material-icons close-icon">remove</i>
+                </a>
+                <span class="accordion__collapse-header--column">
+                  <a [routerLink]="['/a', item.code]">{{item.code}}</a>
+                </span>
+                <span class="accordion__collapse-header--column application-table__purpose-col">{{item.purpose}}/{{item.subpurpose}}</span>
+                <!-- TODO: create filter 'unknown' for null/blank region -->
+                <span class="accordion__collapse-header--column application-table__region-col">{{item.region}}</span>
+                <span class="accordion__collapse-header--column application-table__date-col">{{item.projectDate | date}}</span>
+              </div>
+              <div class="collapse" id="accordCollapse{{item.code}}" role="tabpanel">
+                <div class="accordion__collapse-body">
+                  <div class="application-table__application-details">
+                    <div class="application-table__application-details--description pt-0" [innerHTML]="item.description | newline"></div>
+                    <ul class="application-table__application-details--list list-group">
+                      <li class="list-group-item p-0">
+                        <span class="name">Type/Subtype:</span>
+                        <span class="value">{{item.type}}/{{item.subtype}}</span>
+                      </li>
+                      <li class="list-group-item p-0">
+                        <span class="name">Proponent:</span>
+                        <span class="value">{{item.proponent}}</span>
+                      </li>
+                      <li class="list-group-item p-0">
+                        <span class="name">Location:</span>
+                        <span class="value">{{item.location}}</span>
+                      </li>
+                      <li class="list-group-item p-0">
+                        <span class="name">Legal Description:</span>
+                        <span class="value">{{item.legalDescription}}</span>
+                      </li>
+                    </ul>
+                    <div class="application-table__application-details--links">
+                      <a class="btn content-btn slide-l-btn btn-sm" [routerLink]="['/a', item.code]">
+                        <i class="material-icons">info_outline</i>
+                        <span>Show Details</span>
+                      </a>
+                      <a class="btn content-btn slide-l-btn btn-sm" href="/map" [routerLink]="['/map', { application: item.code }]">
+                        <i class="material-icons">location_on</i>
+                        <span>Show on Map</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </section>
+  </main>
+</div>

@@ -1,0 +1,165 @@
+@import "~assets/styles/base.scss";
+
+.application-table {
+    tbody {
+        tr {
+            background: transparent;
+
+            .accordion__collapse-header {
+                background: $table-row-bg;
+            }
+
+            &:nth-child(even) {
+                .accordion__collapse-header {
+                    background: $table-alt-row-bg;
+                }
+            }
+        }
+    }
+
+    .accordion__collapse-header {
+        background: transparent;
+    }
+
+    &__application-details {
+        &--links {
+            padding-top: 1.5rem;
+        }
+    }
+}
+
+
+.application-table {
+    &__application-details {
+        font-size: 0.85rem;
+
+        &--description {
+            margin-bottom: 1.25rem;
+
+            &::ng-deep {
+                p {
+                    margin: 0;
+                    line-height: calc(0.85rem * 1.5);
+                    font-size: 0.85rem;
+                }
+            }
+        }
+
+        &--list {
+            li {
+                @include align-items(start);
+
+                + li {
+                    border-top: 1px solid #fff;
+                }
+            }
+
+            .name, 
+            .value {
+                margin: 0;
+                padding: 0.5rem 0.75rem;
+                width: 50%;
+            }
+        }
+    }
+}
+
+@media (max-width: 760px) {
+    .application-table {
+        table-layout: auto;
+
+        thead {
+            display: block;
+            width: 100%;
+    
+            tr {
+                @include flex-box();
+            }
+    
+            th {
+                border-top: none;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+    
+                &.application-table__code-col {
+                    @include flex(1 1 auto);
+                }
+            }
+        }
+
+        &__region-col {
+            display: none;
+        }
+
+        &__purpose-col {
+            width: 40%; //15rem;
+        }
+
+        &__date-col {
+            width: 7.5rem;
+            text-align: right;
+        }
+
+        &__application-details {
+            &--links {
+                .btn {
+                    width: 100%;
+
+                    +.btn {
+                        margin-top: 0.5rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 760px) {
+    .application-table {
+        &__purpose-col {
+            width: 40%;
+        }
+
+        &__region-col {
+            width: 20%;
+        }
+
+        &__date-col {
+            width: 20%;
+            text-align: left;
+        }
+
+        &__application-details {
+            font-size: 0.9375rem;
+
+            &--description {
+                &::ng-deep {
+                    p {
+                        line-height: calc(0.9375rem * 1.5);
+                        font-size: 0.9375rem;
+                    }
+                }
+            }
+
+            &--list {
+                list-style-type: none;
+    
+                .name {
+                    width: 10rem;
+                }
+
+                .value {
+                    width: auto;
+                }
+            }
+
+            &--links {
+                .btn {
+                    + .btn {
+                        margin-left: 0.5rem;
+                    }
+                }
+            }
+        }
+    }
+}
