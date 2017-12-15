@@ -40,6 +40,12 @@ export class Application {
 
   collections: CollectionsList; // used for documents
 
+  content: {
+    type: string;
+    page: string;
+    html: string;
+  }[];
+
   client: string;
 
   constructor(obj?: any) {
@@ -80,8 +86,18 @@ export class Application {
     this.subtype                 = obj && obj.subtype                 || null;
 
     this.collections             = obj && obj.collections             || null;
+    this.content                 = obj && obj.content                 || [];
 
     // get the client from the proponent
     this.client = (obj && obj.proponent && obj.proponent.name) ? obj.proponent.name : 'unknown';
+  }
+
+  getContent(page: string, type: string): string {
+    try {
+      const entry = this.content.find(x => x.type === type && x.page === page);
+      return entry.html;
+    } catch (e) {
+      return '';
+    }
   }
 }
