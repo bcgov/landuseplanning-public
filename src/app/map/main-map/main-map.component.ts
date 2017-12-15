@@ -65,7 +65,7 @@ export class MainMapComponent implements OnInit {
           .then(zoom => this.zoom = obj.zoom = zoom)
           .then(() => obj);
       })
-      // find the feature layer with `project` data
+      // find the feature layer with `application` data
       .then(obj => {
         const { map, mapView } = obj;  // es6 destructuring
         obj.featureLayer = this.findFeatureLayer(map);
@@ -91,14 +91,14 @@ export class MainMapComponent implements OnInit {
         mapView.ui.add(search, 'top-left');
         return obj;
       })
-      // automatically show project popup on the map when coming from project details page
+      // automatically show application popup on the map when coming from application details page
       .then(obj => {
         this.route.paramMap.subscribe((params: ParamMap) => {
           const { featureLayer, mapView } = obj;  // es6 destructuring
           let targetMine: __esri.Graphic;
 
-          // fetch the project Id from URL/route params (if any)
-          this.selectedId = params.get('project');
+          // fetch the application Id from URL/route params (if any)
+          this.selectedId = params.get('application');
 
           if (this.selectedId) {
             this.queryMapLayer(featureLayer, this.selectedId)
@@ -133,11 +133,11 @@ export class MainMapComponent implements OnInit {
     });
   }
 
-  private queryMapLayer(featureLayer: __esri.FeatureLayer, projectId: string): Promise<__esri.FeatureSet> {
+  private queryMapLayer(featureLayer: __esri.FeatureLayer, applicationId: string): Promise<__esri.FeatureSet> {
     return new Promise((resolve, reject) => {
       // construct a query object that matches the layer's current configuration
       const query = featureLayer.createQuery();
-      query.where = `code = '${projectId}'`;
+      query.where = `code = '${applicationId}'`;
 
       // query the layer with the modified params object
       // then set the popup's features which will populate popup content and title
@@ -188,7 +188,7 @@ export class MainMapComponent implements OnInit {
             suggestionsEnabled: true,
             minSuggestCharacters: 1,  // minimum number of characters required before querying for a suggestion
             maxSuggestions: 6,
-            placeholder: 'Find Mines in BC'
+            placeholder: 'Find Applications in BC'
           }
         ]
       });

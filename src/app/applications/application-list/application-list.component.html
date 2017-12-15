@@ -24,7 +24,7 @@
             <th class="application-table__code-col sortable" (click)="sort('code')">Code
               <i class="sort" [ngClass]="{'sort-asc': (column == 'code' && isDesc), 'sort-desc': (column == 'code' && !isDesc) }" aria-hidden="true"></i>
             </th>
-            <th class="application-table__purpose-col sortable" (click)="sort('purpose')">Purpose/Subpurpose
+            <th class="application-table__purpose-col sortable" (click)="sort('purpose')">Purpose / Subpurpose
               <i class="sort" [ngClass]="{'sort-asc': (column == 'purpose' && isDesc), 'sort-desc': (column == 'purpose' && !isDesc) }" aria-hidden="true"></i>
             </th>
             <th class="application-table__region-col sortable" (click)="sort('region')">Region
@@ -48,7 +48,7 @@
                 <span class="accordion__collapse-header--column">
                   <a [routerLink]="['/a', item.code]">{{item.code}}</a>
                 </span>
-                <span class="accordion__collapse-header--column application-table__purpose-col">{{item.purpose}}/{{item.subpurpose}}</span>
+                <span class="accordion__collapse-header--column application-table__purpose-col">{{item.purpose}} / {{item.subpurpose}}</span>
                 <!-- TODO: create filter 'unknown' for null/blank region -->
                 <span class="accordion__collapse-header--column application-table__region-col">{{item.region}}</span>
                 <span class="accordion__collapse-header--column application-table__date-col">{{item.projectDate | date}}</span>
@@ -56,15 +56,15 @@
               <div class="collapse" id="accordCollapse{{item.code}}" role="tabpanel">
                 <div class="accordion__collapse-body">
                   <div class="application-table__application-details">
-                    <div class="application-table__application-details--description pt-0" [innerHTML]="item.description | newline"></div>
+                    <!-- <div class="application-table__application-details--description pt-0" [innerHTML]="item.description | newlines"></div> -->
                     <ul class="application-table__application-details--list list-group">
                       <li class="list-group-item p-0">
-                        <span class="name">Type/Subtype:</span>
-                        <span class="value">{{item.type}}/{{item.subtype}}</span>
+                        <span class="name">Client:</span>
+                        <span class="value">{{item.client}}</span>
                       </li>
                       <li class="list-group-item p-0">
-                        <span class="name">Proponent:</span>
-                        <span class="value">{{item.proponent}}</span>
+                        <span class="name">Type / Subtype:</span>
+                        <span class="value">{{item.type}} / {{item.subtype}}</span>
                       </li>
                       <li class="list-group-item p-0">
                         <span class="name">Location:</span>
