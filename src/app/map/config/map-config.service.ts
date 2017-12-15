@@ -41,24 +41,25 @@ export class MapConfigService {
       content: `<div class="map-popup-content">
                   <ul class="map-popup-meta">
                     <li>
-                      <span class="meta-name">Type:</span>
-                      <span class="meta-value">{type}</span>
+                      <span class="meta-name">Purpose/Sub-purpose:</span>
+                      <span class="meta-value">{purpose}{subpurpose}</span>
                     </li>
                   </ul>
                   <div class="map-popup-desc">{description}</div>
                   <div class="map-popup-btns">
-                    <a class="btn btn-sm slide-r-btn" title="View additional information about {name}" href="${this.projectUrl('{code}')}">
-                      <span>Go to Project Details</span><i class="material-icons">arrow_forward</i>
+                    <a class="btn btn-sm slide-r-btn" title="View additional information about {name}"
+                      href="${this.applicationUrl('{code}')}">
+                      <span>Go to Application Details</span><i class="material-icons">arrow_forward</i>
                     </a>
                   <div>
                 </div>`
     };
   }
 
-  // generates link to mine details page; e.g. "http://<host>/p/<code>"
-  private projectUrl(code: string): string {
+  // generates link to application details page; e.g. "http://<host>/a/<code>"
+  private applicationUrl(code: string): string {
     const { protocol, host } = window.location;
-    return `${protocol}//${host}/p/${code}`;
+    return `${protocol}//${host}/a/${code}`;
   }
 
   private webmapForEnv(env: 'local' | 'dev' | 'test' | 'prod'): string {
