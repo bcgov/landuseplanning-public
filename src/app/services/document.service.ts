@@ -5,19 +5,41 @@ import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstra
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
 import { Api } from './api';
 
 import { Search, SearchArray, SearchTerms } from '../models/search';
 import { Project } from '../models/project';
+import { Application } from '../models/application';
+import { Document } from '../models/document';
 import { Proponent } from '../models/proponent';
 
 @Injectable()
 export class DocumentService {
-  searchResult: SearchArray;
+  // searchResult: SearchArray;
 
   constructor(private api: Api) { }
+
+  getDocuments(appId: string) {
+    this.api.getDocuments(appId)
+      .map((response: Response) => <Document[]>response.json().data)
+      .catch(this.handleError);
+
+    return [
+      new Document({ _id: 1, displayName: 'first' }),
+      new Document({ _id: 2, displayName: 'second' }),
+      new Document({ _id: 3, displayName: 'third' })
+    ];
+  }
+
+  private handleError(error: Response) {
+    const msg = `Status code ${error.status} on url ${error.url}`;
+    console.error(msg);
+    // return Observable.throw(error.json().error || 'Server error');
+    return Observable.throw(msg);
+  }
 
   get(terms: SearchTerms, projects: Array<Project>, proponents: Array<Proponent>, page: number, limit: number) {
     return null;
@@ -128,25 +150,25 @@ export class DocumentService {
     // query += '&fields=_id project displayName documentDate description datePosted \
     // documentCategories collections keywords inspectionReport';
     // const mem = this.api.getMEM(`v2/${query}${memProjectQuery}`)
-    // .map((res: Response) => {
-    //   const data = res.text() ? res.json() : { count: 0, results: [] };
-    //   if (data.results) {
-    //     data.results.forEach(i => {
-    //       i.hostname = this.api.hostnameMEM;
-    //     });
-    //   }
-    //   return data;
-    // });
+    //   .map((res: Response) => {
+    //     const data = res.text() ? res.json() : { count: 0, results: [] };
+    //     if (data.results) {
+    //       data.results.forEach(i => {
+    //         i.hostname = this.api.hostnameMEM;
+    //       });
+    //     }
+    //     return data;
+    //   });
     // const epic = this.api.getEPIC(`v3/${query}${epicProjectQuery}`)
-    // .map((res: Response) => {
-    //   const data = res.text() ? res.json() : { count: 0, results: [] };
-    //   if (data.results) {
-    //     data.results.forEach(i => {
-    //       i.hostname = this.api.hostnameEPIC;
-    //     });
-    //   }
-    //   return data;
-    // });
+    //   .map((res: Response) => {
+    //     const data = res.text() ? res.json() : { count: 0, results: [] };
+    //     if (data.results) {
+    //       data.results.forEach(i => {
+    //         i.hostname = this.api.hostnameEPIC;
+    //       });
+    //     }
+    //     return data;
+    //   });
 
     // return Observable.forkJoin([mem, epic]);
   }

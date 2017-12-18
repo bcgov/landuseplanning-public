@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Application } from '../../models/application';
 import { CollectionsArray } from '../../models/collection';
+// import { DocumentService } from '../../services/document.service';
 
 @Component({
   selector: 'app-application-detail',
@@ -19,10 +20,16 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
   // private fields
   private sub: Subscription;
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+    // ,private documentService: DocumentService
+  ) { }
 
   ngOnInit(): void {
     this.loading = true;
+
+    // this.collections = [new Collection(this.documentService.getDocuments())];
 
     // wait for the resolver to retrieve the application details from back-end
     this.sub = this.route.data.subscribe(

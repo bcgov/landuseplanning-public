@@ -5,7 +5,6 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 
-
 @Injectable()
 export class Api {
   pathAPI: string;
@@ -42,11 +41,15 @@ export class Api {
 
   // Applications
   getApplications() {
-    return this.getApps('app/status/published');
+    return this.getApps('public/application');
   }
 
   getApplicationByCode(code: string) {
-    return this.getApps('app/code/' + code);
+    return this.getApps('public/application/code/' + code);
+  }
+
+  getDocuments(id: string) {
+    return this.get(this.pathAPI, 'public/documents/' + id);
   }
 
   // Methods
