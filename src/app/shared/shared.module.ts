@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 // import { CommonModule } from '@angular/common';
 
-import { OrderByPipe } from '../filters/order-by.pipe';
-import { NewlinesPipe } from '../filters/newlines.pipe';
+import { OrderByPipe } from '../pipes/order-by.pipe';
+import { NewlinesPipe } from '../pipes/newlines.pipe';
 
 @NgModule({
   imports: [
