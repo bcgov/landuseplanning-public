@@ -22,13 +22,13 @@ export class Api {
 
       case 'www-nrts-prc-dev.pathfinder.gov.bc.ca':
         // Dev
-        this.pathAPI = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/api';
+        this.pathAPI = 'https://prc-api-dev.pathfinder.gov.bc.ca/api';
         this.env = 'dev';
         break;
 
       case 'www-nrts-prc-test.pathfinder.gov.bc.ca':
         // Test
-        this.pathAPI = 'https://nrts-prc-test.pathfinder.gov.bc.ca/api';
+        this.pathAPI = 'https://prc-api-test.pathfinder.gov.bc.ca/api';
         this.env = 'test';
         break;
 
