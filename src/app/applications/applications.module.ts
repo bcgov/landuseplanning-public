@@ -10,12 +10,14 @@ import { SharedModule } from '../shared/shared.module';
 // components
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ApplicationDetailComponent } from './application-detail/application-detail.component';
-import { OrderByPipe } from '../filters/order-by.pipe';
-import { NewlinePipe } from '../filters/newline.pipe';
+import { DocumentsTabContentComponent } from './application-detail/documents/documents-tab-content.component';
+import { OrderByPipe } from '../pipes/order-by.pipe';
+import { NewlinesPipe } from '../pipes/newlines.pipe';
 
 // services
 import { Api } from '../services/api';
 import { ApplicationService } from '../services/application.service';
+// import { DocumentService } from '../services/document.service';
 
 @NgModule({
   imports: [
@@ -27,7 +29,8 @@ import { ApplicationService } from '../services/application.service';
   ],
   declarations: [
     ApplicationListComponent,
-    ApplicationDetailComponent
+    ApplicationDetailComponent,
+    DocumentsTabContentComponent
   ],
   exports: [
     ApplicationListComponent,
@@ -36,6 +39,7 @@ import { ApplicationService } from '../services/application.service';
   providers: [
     Api,
     ApplicationService
+    // ,DocumentService
   ]
 })
 export class ApplicationsModule { }

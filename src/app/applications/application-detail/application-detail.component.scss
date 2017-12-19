@@ -1,0 +1,82 @@
+@import "~assets/styles/base.scss";
+.application-description {
+    p {
+        margin: 0;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+.application-details {
+    // font-size: 0.85rem;
+    &--list {
+        li {
+            @include align-items(start);
+            +li {
+                border-top: 1px solid #fff;
+            }
+        }
+        .name,
+        .value {
+            margin: 0;
+            padding: 0.5rem 0.75rem;
+            width: 50%;
+        }
+    }
+}
+
+.map-section {
+    margin-bottom: 0;
+    display: table;
+    width: 100%;
+    overflow: hidden;
+    background: #eee;
+    &__thumbnail {
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+        transform: scale(1.4);
+        cursor: pointer;
+    }
+}
+
+.related_documents {
+    li {
+        line-height: 1.25rem;
+        font-size: 0.875rem;
+        +li {
+            border-top: 1px solid #fff;
+        }
+    }
+}
+
+@media (max-width: 760px) {
+    .related_documents {
+        .card-header {
+            padding: 0.3rem 1rem;
+            font-size: 0.7rem;
+        }
+    }
+}
+
+@media (min-width: 760px) {
+    .application-details {
+        &--list {
+            .name {
+                margin: 0;
+                padding: 0.5rem 0.75rem;
+                width: 25%;
+            }
+            .value {
+                margin: 0;
+                padding: 0.5rem 0.75rem;
+                width: 75%;
+            }
+        }
+    }
+    .related_documents {
+        .card-header {
+            padding: 0.3rem 1rem;
+            font-size: 0.875rem;
+        }
+    }
+}
