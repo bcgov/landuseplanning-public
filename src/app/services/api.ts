@@ -44,8 +44,8 @@ export class Api {
     return this.getApps('public/application');
   }
 
-  getApplicationByCode(code: string) {
-    return this.getApps('public/application/code/' + code);
+  getApplicationById(_id: string) {
+    return this.getApps('public/application/' + _id);
   }
 
   getDocuments(id: string) {

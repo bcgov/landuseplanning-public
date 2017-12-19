@@ -11,7 +11,7 @@ export class ApplicationDetailResolver implements Resolve<Application> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Application | Observable<Application> | Promise<Application> {
     const code = route.paramMap.get('code');
-    return this.applicationService.getByCode(code)
+    return this.applicationService.getById(code)
       .catch(err => {
         return Observable.throw(err);
       });
