@@ -4,10 +4,10 @@ import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { DocumentService } from '../services/document.service';
-import { Project } from '../models/project';
+import { Application } from '../models/application';
 import { Search, SearchTerms } from '../models/search';
 import { Proponent } from '../models/proponent';
-import { ProjectService } from '../services/project.service';
+import { ApplicationService } from '../services/application.service';
 import { ProponentService } from '../services/proponent.service';
 import { Api } from '../services/api';
 import 'rxjs/add/operator/filter';
@@ -38,9 +38,9 @@ export class SearchComponent implements OnInit {
   count: number;
   noMoreResults: boolean;
   ranSearch: boolean;
-  projects: Array<Project>;
+  applications: Array<Application>;
   proponents: Array<Proponent>;
-  projectArray: Array<string>;
+  applicationArray: Array<string>;
   protoSearchActive: boolean;
   showAdvancedFields: boolean;
   public loading: boolean;
@@ -48,11 +48,11 @@ export class SearchComponent implements OnInit {
   params: Params;
   terms: SearchTerms;
 
-  myProjects: Array<any>;
+  myApplications: Array<any>;
 
   constructor(calender: NgbCalendar,
               private documentService: DocumentService,
-              private projectService: ProjectService,
+              private applicationService: ApplicationService,
               private proponentService: ProponentService,
               private _changeDetectionRef: ChangeDetectorRef,
               private router: Router,
@@ -98,19 +98,19 @@ export class SearchComponent implements OnInit {
     //       // Needed in development mode - not required in prod.
     //       this._changeDetectionRef.detectChanges();
 
-    //       // Get the projects
-    //       this.projectService.getAll().subscribe(
-    //         projects => {
-    //           this.projects = projects;
-    //           this.projectArray = [];
-    //           this.projects.forEach((project, index) => {
-    //             this.projectArray.push(project._id);
+    //       // Get the applications
+    //       this.applicationService.getAll().subscribe(
+    //         applications => {
+    //           this.applications = applications;
+    //           this.applicationArray = [];
+    //           this.applications.forEach((application, index) => {
+    //             this.applicationArray.push(application._id);
     //           });
 
     //           // Grab any terms that were passed in through the URL
-    //           if (this.params.projects) {
-    //             const projectIds = this.params.projects.split(',');
-    //             this.terms.projects = this.projects.filter(project => projectIds.indexOf(project._id) !== -1);
+    //           if (this.params.applications) {
+    //             const applicationIds = this.params.applications.split(',');
+    //             this.terms.applications = this.applications.filter(application => applicationIds.indexOf(application._id) !== -1);
     //             this.showAdvancedFields = true;
     //           }
 
@@ -170,7 +170,7 @@ export class SearchComponent implements OnInit {
       this.page += 1;
     }
 
-    this.documentService.get(this.terms, this.projects, this.proponents, this.page, this.limit).subscribe(
+    this.documentService.get(this.terms, this.applications, this.proponents, this.page, this.limit).subscribe(
       data => {
         this.loading = false;
 

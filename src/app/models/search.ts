@@ -1,4 +1,4 @@
-import { Project } from './project';
+import { Application } from './application';
 import { Proponent } from './proponent';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,7 +11,7 @@ export class Search {
   type: string;
   status: string;
   hostname: string;
-  project: Project;
+  application: Application;
 
   constructor(search?: any, hostname?: any) {
     this._id         = search && search._id         || null;
@@ -20,7 +20,7 @@ export class Search {
     this.type        = search && search.type        || null;
     this.date        = search && search.date        || null;
     this.status      = search && search.status      || null;
-    this.project     = search && search.project     || null;
+    this.application = search && search.application || null;
     this.hostname    = hostname;
   }
 }
@@ -53,19 +53,19 @@ export class SearchArray {
 
 export class SearchTerms {
   keywords: string;
-  projects: Array<Project>;
+  applications: Array<Application>;
   proponents: Array<Proponent>;
   ownerships: Array<Proponent>;
   dateStart: NgbDateStruct;
   dateEnd: NgbDateStruct;
 
   constructor() {
-    this.keywords   = '';
-    this.projects   = [];
-    this.proponents = [];
-    this.ownerships = [];
-    this.dateStart  = null;
-    this.dateEnd    = null;
+    this.keywords     = '';
+    this.applications = [];
+    this.proponents   = [];
+    this.ownerships   = [];
+    this.dateStart    = null;
+    this.dateEnd      = null;
   }
 
   getParams() {
@@ -75,8 +75,8 @@ export class SearchTerms {
       params['keywords'] = this.keywords.split(' ').join(',');
     }
 
-    if (this.projects.length) {
-      params['projects'] = this.projects.map(p => p._id).join(',');
+    if (this.applications.length) {
+      params['applications'] = this.applications.map(p => p._id).join(',');
     }
 
     if (this.proponents.length) {

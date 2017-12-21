@@ -48,7 +48,7 @@ export class MapConfigService {
                   <div class="map-popup-desc">{description}</div>
                   <div class="map-popup-btns">
                     <a class="btn btn-sm slide-r-btn" title="View additional information about {name}"
-                      href="${this.applicationUrl('{code}')}">
+                      href="${this.applicationUrl('{id}')}">
                       <span>Go to Application Details</span><i class="material-icons">arrow_forward</i>
                     </a>
                   <div>
