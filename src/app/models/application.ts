@@ -28,7 +28,7 @@ export class Application {
   mapsheet: string;
   postID: number;
   projectDate: Date;
-  // proponent: string; // objectid -> Organization
+  proponent: string; // should be objectid -> Organization?
   purpose: string;
   subpurpose: string;
   region: string;
@@ -46,7 +46,7 @@ export class Application {
     html: string;
   }[];
 
-  client: string;
+  // client: string;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -75,7 +75,7 @@ export class Application {
     this.mapsheet                = obj && obj.mapsheet                || null;
     this.postID                  = obj && obj.postID                  || null;
     this.projectDate             = obj && obj.projectDate             || null;
-    // this.proponent               = obj && obj.proponent               || null;
+    this.proponent               = obj && obj.proponent               || null;
     this.purpose                 = obj && obj.purpose                 || null;
     this.subpurpose              = obj && obj.subpurpose              || null;
     this.region                  = obj && obj.region                  || null;
@@ -89,7 +89,7 @@ export class Application {
     this.content                 = obj && obj.content                 || [];
 
     // get the client from the proponent
-    this.client = (obj && obj.proponent && obj.proponent.name) ? obj.proponent.name : 'unknown';
+    // this.client = (obj && obj.proponent && obj.proponent.name) ? obj.proponent.name : null;
   }
 
   getContent(page: string, type: string): string {

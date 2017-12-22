@@ -137,7 +137,7 @@ export class MainMapComponent implements OnInit {
     return new Promise((resolve, reject) => {
       // construct a query object that matches the layer's current configuration
       const query = featureLayer.createQuery();
-      query.where = `code = '${applicationId}'`;
+      query.where = `id = '${applicationId}'`;
 
       // query the layer with the modified params object
       // then set the popup's features which will populate popup content and title

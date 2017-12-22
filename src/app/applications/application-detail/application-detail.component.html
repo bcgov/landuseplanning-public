@@ -21,7 +21,7 @@
         <ul class="nv-list application-details--list">
           <li>
             <span class="name">Client</span>
-            <span class="value">{{application.client}}</span>
+            <span class="value">{{application.proponent || 'unknown'}}</span>
           </li>
           <li>
             <span class="name">Type / Subtype</span>
@@ -41,8 +41,8 @@
           </li>
           <li>
             <span class="name">Crown Land Files</span>
-            <!-- <span class="value">{{application.cl_files ? application.cl_files.join(', ') : ''}}</span> -->
-            <span class="value">{{application.cl_files}}</span>
+            <span class="value">{{application.cl_files ? application.cl_files.join(', ') : 'none'}}</span>
+            <!-- <span class="value">{{application.cl_files}}</span> -->
           </li>
         </ul>
         <div class="map-section">

@@ -29,14 +29,13 @@ export class ApplicationService {
       .catch(this.api.handleError);
   }
 
-  getById(_id: string): Observable<Application> {
+  getById(id: string): Observable<Application> {
     // return this.application = null;
 
     // Grab the application data first
-    return this.api.getApplicationById(_id)
+    return this.api.getApplication(id)
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
-
         return applications.length > 0 ? applications[0] : null;
         // return res.text() ? new Application(res.json().) : null;
       })
@@ -45,30 +44,30 @@ export class ApplicationService {
 
         this.application = application;
 
-      //  this.application.collections = new CollectionsList();
+        // this.application.collections = new CollectionsList();
 
-      //   // Now grab the MEM collections
-      //   this.api.getProjectCollectionsMEM(this.project.code)
-      //     .map((res: Response) => this.processCollections(res))
-      //     .subscribe(memCollections => {
-      //       // Push them into the project
-      //       memCollections.forEach(collection => {
-      //         this.addCollection(this.project.collections, collection);
-      //       });
-      //     });
+        // // Now grab the MEM collections
+        // this.api.getApplicationCollectionsMEM(this.application.code)
+        //   .map((res: Response) => this.processCollections(res))
+        //   .subscribe(memCollections => {
+        //     // Push them into the application
+        //     memCollections.forEach(collection => {
+        //       this.addCollection(this.application.collections, collection);
+        //     });
+        //   });
 
-      //   // Get EPIC collections next.
-      //   // Note: there may be multiple (or no) EPIC projects associated with this MEM project.
-      //   this.project.epicProjectCodes.forEach(epicProjectCode => {
-      //     this.api.getProjectCollectionsEPIC(epicProjectCode)
-      //       .map((res: Response) => this.processCollections(res))
-      //       .subscribe(epicCollections => {
-      //         // Push them into the project
-      //         epicCollections.forEach(collection => {
-      //           this.addCollection(this.project.collections, collection);
-      //         });
-      //       });
-      //   });
+        // // Get EPIC collections next.
+        // // Note: there may be multiple (or no) EPIC applications associated with this MEM application.
+        // this.application.epicApplicationCodes.forEach(epicApplicationCode => {
+        //   this.api.getApplicationCollectionsEPIC(epicApplicationCode)
+        //     .map((res: Response) => this.processCollections(res))
+        //     .subscribe(epicCollections => {
+        //       // Push them into the application
+        //       epicCollections.forEach(collection => {
+        //         this.addCollection(this.application.collections, collection);
+        //       });
+        //     });
+        // });
 
         return this.application;
       })
