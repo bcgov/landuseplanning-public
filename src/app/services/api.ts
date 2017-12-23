@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Params } from '@angular/router';
-
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 
@@ -10,7 +10,6 @@ export class Api {
   pathAPI: string;
   params: Params;
   env: 'local' | 'dev' | 'test' | 'prod';
-
   constructor(private http: Http) {
     const { hostname } = window.location;
     switch (hostname) {
@@ -41,11 +40,53 @@ export class Api {
 
   // Applications
   getApplications() {
-    return this.getApps('public/application');
+    const fields = ['name',
+                    'type',
+                    'subtype',
+                    'purpose',
+                    'subpurpose',
+                    'proponent',
+                    'latitude',
+                    'longitude',
+                    'location',
+                    'region',
+                    'description',
+                    'legalDescription',
+                    'businessUnit',
+                    'cl_files',
+                    'commodityType',
+                    'commodity',
+                    'commodities'];
+    let queryString = 'public/application?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    return this.getApps(queryString);
   }
 
   getApplication(id: string) {
-    return this.getApps('public/application/' + id);
+    const fields = ['name',
+                    'type',
+                    'subtype',
+                    'purpose',
+                    'subpurpose',
+                    'proponent',
+                    'latitude',
+                    'longitude',
+                    'location',
+                    'region',
+                    'description',
+                    'legalDescription',
+                    'businessUnit',
+                    'cl_files',
+                    'commodityType',
+                    'commodity',
+                    'commodities'];
+    let queryString = 'public/application/'  + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    return this.getApps(queryString);
   }
 
   getDocuments(id: string) {
