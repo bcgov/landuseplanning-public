@@ -15,8 +15,6 @@ import { ApplicationDetailComponent } from './application-detail/application-det
 // import { ComplianceTabContentComponent } from './application-detail/compliance/compliance-tab-content.component';
 // import { SiteActivitiesComponent } from './site-activities/site-activities.component';
 import { DocumentsTabContentComponent } from './application-detail/documents/documents-tab-content.component';
-import { OrderByPipe } from '../pipes/order-by.pipe';
-import { NewlinesPipe } from '../pipes/newlines.pipe';
 
 // services
 import { Api } from '../services/api';
