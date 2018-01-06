@@ -61,10 +61,12 @@ export class Api {
     _.each(fields, function (f) {
       queryString += f + '|';
     });
-    return this.getApps(queryString);
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(this.pathAPI, queryString, {});
   }
 
-  getApplication(id: string) {
+  getApplicationById(id: string) {
     const fields = ['name',
                     'type',
                     'subtype',
@@ -86,21 +88,23 @@ export class Api {
     _.each(fields, function (f) {
       queryString += f + '|';
     });
-    return this.getApps(queryString);
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(this.pathAPI, queryString, {});
   }
 
   getDocuments(id: string) {
-    return this.get(this.pathAPI, 'public/documents/' + id);
+    return this.get(this.pathAPI, 'public/documents/' + id, {});
   }
 
   // Methods
-  getApps(apiRoute: string, options?: Object) {
-    return this.get(this.pathAPI, apiRoute, options);
-  }
+  // getApps(apiRoute: string, options?: Object) {
+  //   return this.get(this.pathAPI, apiRoute, options);
+  // }
 
-  putApps(apiRoute: string, body?: Object, options?: Object) {
-    return this.put(this.pathAPI, apiRoute, body, options);
-  }
+  // putApps(apiRoute: string, body?: Object, options?: Object) {
+  //   return this.put(this.pathAPI, apiRoute, body, options);
+  // }
 
   handleError(error: any) {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');

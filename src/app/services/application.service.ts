@@ -33,7 +33,7 @@ export class ApplicationService {
     // return this.application = null;
 
     // Grab the application data first
-    return this.api.getApplication(id)
+    return this.api.getApplicationById(id)
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
         return applications.length > 0 ? applications[0] : null;
