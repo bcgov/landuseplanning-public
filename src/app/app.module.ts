@@ -12,16 +12,11 @@ import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ObjectFilterPipe } from './object-filter.pipe';
-import { LegislationComponent } from './legislation/legislation.component';
+// import { LegislationComponent } from './legislation/legislation.component';
 import { ProcessComponent } from './process/process.component';
-import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
+// import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
 import { ContactComponent } from './contact/contact.component';
-import { AuthorizationsComponent } from './authorizations/authorizations.component';
-import { LifecycleComponent } from './lifecycle/lifecycle.component';
-import { TopicsOfInterestComponent } from './topics-of-interest/topics-of-interest.component';
-import { WaterQualityComponent } from './water-quality/water-quality.component';
-import { TailingsManagementComponent } from './tailings-management/tailings-management.component';
-import { ReclamationComponent } from './reclamation/reclamation.component';
+// import { AuthorizationsComponent } from './authorizations/authorizations.component';
 import { SearchComponent } from './search/search.component';
 
 // services
@@ -40,16 +35,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppComponent,
     HomeComponent,
     ObjectFilterPipe,
-    LegislationComponent,
+    // LegislationComponent,
     ProcessComponent,
-    ComplianceOversightComponent,
+    // ComplianceOversightComponent,
     ContactComponent,
-    AuthorizationsComponent,
-    LifecycleComponent,
-    TopicsOfInterestComponent,
-    WaterQualityComponent,
-    TailingsManagementComponent,
-    ReclamationComponent,
+    // AuthorizationsComponent,
     SearchComponent
   ],
   imports: [
