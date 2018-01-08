@@ -3,8 +3,8 @@
         <div class="container__inner-container">
             <div class="hero-banner__content">
                 <h1 id="pgTitle">Connect With Us</h1>
-                <p class="mb-2">BC Mine Information is continuously evolving. More information and features will be added to the site on
-                    an ongoing basis and we welcome feedback to help us decide what would be most valuable.</p>
+                <p class="mb-2">Public Review &amp; Comment is continuously evolving. More information and features will be added to the
+                    site on an ongoing basis and we welcome feedback to help us decide what would be most valuable.</p>
             </div>
         </div>
     </div>
@@ -14,10 +14,10 @@
     <div class="row">
         <main class="col-lg-8">
             <h2>Help Us Build a Better Service</h2>
-            <p>Thank you for visiting the new BC Mine Information website. More information and features will be added to this
-                site on an ongoing basis, and the design will be continuously refined to improve user experience. Suggestions
-                on how to make this website better can be submitted via the form below.</p>
-            <form name="commentForm" >
+            <p>Thank you for visiting the new Public Review &amp; Comment website. More information and features will be added
+                to this site on an ongoing basis, and the design will be continuously refined to improve user experience.
+                Suggestions on how to make this website better can be submitted via the form below.</p>
+            <form name="commentForm">
                 <div class="form-group" x-show-errors>
                     <label>Your Name</label>
                     <input class="form-control" placeholder="Enter your Name" type="text" name="name" ng-model="comment.name" required/>
@@ -35,8 +35,9 @@
                     <input type="text" name="subject">
                 </div>
                 <div ng-if="!busy" class="form-btns">
-                    <button class="btn slide-r-btn submit-btn" ng-click="save(commentForm.$valid)" >
-                        <span>Submit Feedback</span> <i class="material-icons">send</i>
+                    <button class="btn slide-r-btn submit-btn" ng-click="save(commentForm.$valid)">
+                        <span>Submit Feedback</span>
+                        <i class="material-icons">send</i>
                     </button>
                 </div>
                 <!--
@@ -51,15 +52,17 @@
                 <h4 class="card-header">External Links &amp; Resources</h4>
                 <ul class="nv-list">
                     <li>
-                        <a href="http://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/energy-mines-and-petroleum-resources"
-                            target="_blank">Ministy of Energy, Mines and Petroleum Resources</a>
+                        <a href="https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/forests-lands-natural-resource-operations-and-rural-development"
+                            target="_blank">Ministy of Forests, Lands, Natural Resource Operations &amp; Rural Development</a>
                     </li>
                     <li>
-                        <a href="http://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/environment-climate-change"
-                            target="_blank">Ministry of Environment and Climate Change Strategy</a>
+                        <a href="http://www.eao.gov.bc.ca/" target="_blank">Environmental Assessment Office (EAO)</a>
                     </li>
                     <li>
-                        <a href="http://www.eao.gov.bc.ca/" target="_blank">Environmental Assessment Office</a>
+                        <a href="https://projects.eao.gov.bc.ca/" target="_blank">EAO Project Information & Collaboration (EPIC) System</a>
+                    </li>
+                    <li>
+                        <a href="https://arfd.gov.bc.ca" target="_blank">Applications and Reasons for Decisions (ARFD)</a>
                     </li>
                 </ul>
             </section>
@@ -72,11 +75,11 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-               <h2>Thank you for your Feedback!</h2>
-               <p>Your feedback has been sent.</p>
-               <div>
-                   <button class="ok-btn btn submit-btn" type="button" ng-click="userConfirmed()" data-dismiss="modal">Close</button>
-               </div>
+                <h2>Thank you for your Feedback!</h2>
+                <p>Your feedback has been sent.</p>
+                <div>
+                    <button class="ok-btn btn submit-btn" type="button" ng-click="userConfirmed()" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
