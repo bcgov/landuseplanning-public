@@ -12,13 +12,13 @@ export class OrderByPipe implements PipeTransform {
             return records;
         }
 
-        return records.sort(function(a, b) {
+        return records.sort(function (a, b) {
             if (!args) {
                 return 0;
             }
 
-            let aCompare = a[args.property];
-            let bCompare = b[args.property];
+            let aCompare = a[args.property] || '';
+            let bCompare = b[args.property] || '';
 
             if (typeof aCompare === 'object' && !(aCompare instanceof Date)) {
                 // MBL TODO: Assume name for sub-property.  Fix this to be more generic.
