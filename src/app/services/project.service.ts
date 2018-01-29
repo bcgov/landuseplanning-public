@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { Api } from './api';
+import { ApiService } from './api';
 
 import { Project } from '../models/project';
 import { Collection, CollectionsList } from '../models/collection';
@@ -13,7 +13,7 @@ import { Collection, CollectionsList } from '../models/collection';
 export class ProjectService {
   project: Project;
 
-  constructor(private api: Api) { }
+  constructor(private api: ApiService) { }
 
   getAll() {
     return null;

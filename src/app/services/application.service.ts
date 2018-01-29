@@ -4,18 +4,17 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { Api } from './api';
-
-import { Application } from '../models/application';
-// import { CollectionsList } from '../models/collection';
+import { ApiService } from './api';
+import { Application } from 'app/models/application';
+// import { CollectionsList } from 'app/models/collection';
 
 @Injectable()
 export class ApplicationService {
-  application: Application;
+  public application: Application;
 
-  constructor(private api: Api) { }
+  constructor(private api: ApiService) { }
 
-  getAll() {
+  getAll(): Observable<Application[]> {
     return this.api.getApplications()
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
@@ -30,41 +29,40 @@ export class ApplicationService {
   }
 
   getById(id: string): Observable<Application> {
-    // return this.application = null;
-
-    // Grab the application data first
-    return this.api.getApplicationById(id)
+    // first grab the application data
+    return this.api.getApplication(id)
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
+        // return the first (only) application
         return applications.length > 0 ? applications[0] : null;
-        // return res.text() ? new Application(res.json().) : null;
       })
       .map((application: Application) => {
-        if (!application) { return; }
+        // if (!application) { return; }
 
+        // cache application
         this.application = application;
 
         // this.application.collections = new CollectionsList();
 
         // // Now grab the MEM collections
-        // this.api.getApplicationCollectionsMEM(this.application.code)
+        // this.api.getProjectCollectionsMEM(this.project.code)
         //   .map((res: Response) => this.processCollections(res))
         //   .subscribe(memCollections => {
-        //     // Push them into the application
+        //     // Push them into the project
         //     memCollections.forEach(collection => {
-        //       this.addCollection(this.application.collections, collection);
+        //       this.addCollection(this.project.collections, collection);
         //     });
         //   });
 
         // // Get EPIC collections next.
-        // // Note: there may be multiple (or no) EPIC applications associated with this MEM application.
-        // this.application.epicApplicationCodes.forEach(epicApplicationCode => {
-        //   this.api.getApplicationCollectionsEPIC(epicApplicationCode)
+        // // Note: there may be multiple (or no) EPIC projects associated with this MEM project.
+        // this.project.epicProjectCodes.forEach(epicProjectCode => {
+        //   this.api.getProjectCollectionsEPIC(epicProjectCode)
         //     .map((res: Response) => this.processCollections(res))
         //     .subscribe(epicCollections => {
-        //       // Push them into the application
+        //       // Push them into the project
         //       epicCollections.forEach(collection => {
-        //         this.addCollection(this.application.collections, collection);
+        //         this.addCollection(this.project.collections, collection);
         //       });
         //     });
         // });

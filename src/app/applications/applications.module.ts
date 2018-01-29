@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 // modules
-import { MapModule } from '../map/map.module';
+import { MapModule } from 'app/map/map.module';
 import { ApplicationsRoutingModule } from './applications-routing.module';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 // components
 import { ApplicationListComponent } from './application-list/application-list.component';
@@ -17,8 +17,8 @@ import { ApplicationDetailComponent } from './application-detail/application-det
 import { DocumentsTabContentComponent } from './application-detail/documents/documents-tab-content.component';
 
 // services
-import { Api } from '../services/api';
-import { ApplicationService } from '../services/application.service';
+import { ApiService } from 'app/services/api';
+import { ApplicationService } from 'app/services/application.service';
 
 @NgModule({
   imports: [
@@ -42,7 +42,7 @@ import { ApplicationService } from '../services/application.service';
     ApplicationDetailComponent
   ],
   providers: [
-    Api,
+    ApiService,
     ApplicationService
   ]
 })
