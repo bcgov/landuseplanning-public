@@ -17,7 +17,7 @@ import { DocumentsTabContentComponent } from './project-detail/documents/documen
 import { SiteActivitiesComponent } from './site-activities/site-activities.component';
 
 // services
-import { Api } from '../services/api';
+import { ApiService } from '../services/api';
 import { ProjectService } from '../services/project.service';
 
 @NgModule({
@@ -42,7 +42,7 @@ import { ProjectService } from '../services/project.service';
     ProjectDetailComponent
   ],
   providers: [
-    Api,
+    ApiService,
     ProjectService
   ]
 })

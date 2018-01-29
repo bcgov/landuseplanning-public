@@ -24,11 +24,14 @@ export class ProjectListComponent implements OnInit {
     currentPage: 1
   };
 
-  constructor(private applicationService: ApplicationService, private _changeDetectionRef: ChangeDetectorRef) { }
+  constructor(
+    private projectService: ProjectService,
+    private _changeDetectionRef: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     this.loading = true;
-    this.applicationService.getAll().subscribe(
+    this.projectService.getAll().subscribe(
       data => {
         this.projects = data;
         this.mineCount = data ? data.length : 0;
@@ -40,10 +43,9 @@ export class ProjectListComponent implements OnInit {
     );
   }
 
-  sort (property) {
+  private sort(property) {
     this.isDesc = !this.isDesc;
     this.column = property;
     this.direction = this.isDesc ? 1 : -1;
   }
-
 }

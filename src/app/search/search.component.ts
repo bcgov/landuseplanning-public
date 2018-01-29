@@ -1,18 +1,19 @@
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import * as _ from 'lodash';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import { DocumentService } from '../services/document.service';
-import { Application } from '../models/application';
-import { Search, SearchTerms } from '../models/search';
-import { Proponent } from '../models/proponent';
-import { ApplicationService } from '../services/application.service';
-import { ProponentService } from '../services/proponent.service';
-import { Api } from '../services/api';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
+import * as _ from 'lodash';
+
+import { ApiService } from 'app/services/api';
+import { Application } from 'app/models/application';
+import { Search, SearchTerms } from 'app/models/search';
+import { Proponent } from 'app/models/proponent';
+import { ApplicationService } from 'app/services/application.service';
+import { DocumentService } from 'app/services/document.service';
+import { ProponentService } from 'app/services/proponent.service';
 
 @Component({
   selector: 'app-search',
@@ -22,10 +23,10 @@ import 'rxjs/add/operator/map';
   animations: [
     trigger('visibility', [
       transition(':enter', [   // :enter is alias to 'void => *'
-        animate('0.2s 0s', style({opacity: 1}))
+        animate('0.2s 0s', style({ opacity: 1 }))
       ]),
       transition(':leave', [   // :leave is alias to '* => void'
-        animate('0.2s 0.75s', style({opacity: 0}))
+        animate('0.2s 0.75s', style({ opacity: 0 }))
       ])
     ])
   ]
@@ -50,14 +51,16 @@ export class SearchComponent implements OnInit {
 
   myApplications: Array<any>;
 
-  constructor(calender: NgbCalendar,
-              private documentService: DocumentService,
-              private applicationService: ApplicationService,
-              private proponentService: ProponentService,
-              private _changeDetectionRef: ChangeDetectorRef,
-              private router: Router,
-              private route: ActivatedRoute,
-              private api: Api) {
+  constructor(
+    calender: NgbCalendar,
+    private documentService: DocumentService,
+    private applicationService: ApplicationService,
+    private proponentService: ProponentService,
+    private _changeDetectionRef: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute,
+    private api: ApiService
+  ) {
     this.limit = 15;
   }
 

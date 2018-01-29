@@ -8,23 +8,22 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
-import { Api } from './api';
-
-import { Search, SearchArray, SearchTerms } from '../models/search';
-import { Application } from '../models/application';
-import { Document } from '../models/document';
-import { Proponent } from '../models/proponent';
+import { ApiService } from './api';
+import { Search, SearchArray, SearchTerms } from 'app/models/search';
+import { Application } from 'app/models/application';
+import { Document } from 'app/models/document';
+import { Proponent } from 'app/models/proponent';
 
 @Injectable()
 export class DocumentService {
   // searchResult: SearchArray;
 
-  constructor(private api: Api) { }
+  constructor(private api: ApiService) { }
 
-  getDocuments(appId: string) {
-    this.api.getDocuments(appId)
-      .map((response: Response) => <Document[]>response.json().data)
-      .catch(this.handleError);
+  getDocuments(id: string) {
+    // this.api.getDocumentsByAppId(id)
+    //   .map((response: Response) => <Document[]>response.json().data)
+    //   .catch(this.handleError);
 
     return [
       new Document({ _id: 1, displayName: 'first' }),
@@ -45,8 +44,8 @@ export class DocumentService {
     // this.searchResult = new SearchArray();
 
     // let query = 'search?types=document';
-    // let memApplicationQuery = '';
-    // let epicApplicationQuery = '';
+    // let memProjectQuery = '';
+    // let epicProjectQuery = '';
 
     // // Paging
     // query += '&page=' + page + '&limit=' + limit;
@@ -60,33 +59,33 @@ export class DocumentService {
 
     // // We change the way we query epic because the only thing we're currently in
     // // for api/applications/major is the epicCode.  In future we'll be able to change
-    // // this to reference application= in epic.
+    // // this to reference project= in epic.
     // if (params['applications']) {
     //   const epicQuery = [];
     //   terms.applications.forEach(p => {
-    //     p.epicApplicationCodes.forEach(c => {
+    //     p.epicProjectCodes.forEach(c => {
     //       epicQuery.push(c);
     //     });
     //   });
-    //   memApplicationQuery += '&application=' + params['applications'];
-    //   epicApplicationQuery += '&applicationcode=' + epicQuery;
+    //   memProjectQuery += '&project=' + params['applications'];
+    //   epicProjectQuery += '&projectcode=' + epicQuery;
     // } else {
     //   // Make sure we query all the applications by default
-    //   const applicationQuery = [];
+    //   const projectQuery = [];
     //   const epicQuery = [];
     //   applications.forEach(p => {
-    //     applicationQuery.push(p._id);
-    //     p.epicApplicationCodes.forEach(c => {
+    //     projectQuery.push(p._id);
+    //     p.epicProjectCodes.forEach(c => {
     //       epicQuery.push(c);
     //     });
     //   });
-    //   memApplicationQuery += '&application=' + applicationQuery;
-    //   epicApplicationQuery += '&applicationcode=' + epicQuery;
+    //   memProjectQuery += '&project=' + projectQuery;
+    //   epicProjectQuery += '&projectcode=' + epicQuery;
     // }
 
     // if (params['proponents']) {
     //   // EPIC needs the string name for proponent, not the objectID
-    //   memApplicationQuery += '&proponent=' + params['proponents'];
+    //   memProjectQuery += '&proponent=' + params['proponents'];
 
     //   const proponentQ = [];
 
@@ -104,7 +103,7 @@ export class DocumentService {
     //     });
     //   });
     //   if (proponentQ.length > 0) {
-    //     epicApplicationQuery += '&proponentstring=' + proponentQ;
+    //     epicProjectQuery += '&proponentstring=' + proponentQ;
     //   }
     // }
     // if (params['ownerships']) {
@@ -129,13 +128,13 @@ export class DocumentService {
     //     // EPIC doesn't store ownership data right now, search as though we're setting
     //     // the owner/proponent field - remake the prop string to include the specific
     //     // results for EPIC.
-    //     if (false === epicApplicationQuery.includes('&proponentstring=')) {
-    //       epicApplicationQuery += '&proponentstring=' + ownershipQ;
+    //     if (false === epicProjectQuery.includes('&proponentstring=')) {
+    //       epicProjectQuery += '&proponentstring=' + ownershipQ;
     //     } else {
     //       // Tack it on the end
-    //       epicApplicationQuery += ',' + ownershipQ;
+    //       epicProjectQuery += ',' + ownershipQ;
     //     }
-    //     memApplicationQuery += '&ownership=' + params['ownerships'];
+    //     memProjectQuery += '&ownership=' + params['ownerships'];
     //   }
     // }
     // if (params['datestart']) {
@@ -148,7 +147,7 @@ export class DocumentService {
     // // Field selection
     // query += '&fields=_id application displayName documentDate description datePosted \
     // documentCategories collections keywords inspectionReport';
-    // const mem = this.api.getMEM(`v2/${query}${memApplicationQuery}`)
+    // const mem = this.api.getMEM(`v2/${query}${memProjectQuery}`)
     //   .map((res: Response) => {
     //     const data = res.text() ? res.json() : { count: 0, results: [] };
     //     if (data.results) {
@@ -158,7 +157,7 @@ export class DocumentService {
     //     }
     //     return data;
     //   });
-    // const epic = this.api.getEPIC(`v3/${query}${epicApplicationQuery}`)
+    // const epic = this.api.getEPIC(`v3/${query}${epicProjectQuery}`)
     //   .map((res: Response) => {
     //     const data = res.text() ? res.json() : { count: 0, results: [] };
     //     if (data.results) {
@@ -169,6 +168,7 @@ export class DocumentService {
     //     return data;
     //   });
 
+    // // execute in parallel
     // return Observable.forkJoin([mem, epic]);
   }
 }
