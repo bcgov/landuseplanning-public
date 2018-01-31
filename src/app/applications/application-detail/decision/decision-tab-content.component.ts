@@ -6,17 +6,15 @@ import { Application } from '../../../models/application';
 import { CollectionsArray } from '../../../models/collection';
 
 @Component({
-  selector: 'app-documents-tab-content',
-  templateUrl: './documents-tab-content.component.html',
-  styleUrls: ['./documents-tab-content.component.scss']
+  selector: 'app-decision-tab-content',
+  templateUrl: './decision-tab-content.component.html',
+  styleUrls: ['./decision-tab-content.component.scss']
 })
-export class DocumentsTabContentComponent implements OnInit, OnDestroy {
-  // public properties
-  loading: boolean;
-  application: Application;
-  collections: CollectionsArray;
+export class DecisionTabContentComponent implements OnInit, OnDestroy {
+  public loading: boolean;
+  public application: Application;
+  public collections: CollectionsArray;
 
-  // private fields
   private sub: Subscription;
 
   constructor(private route: ActivatedRoute) { }

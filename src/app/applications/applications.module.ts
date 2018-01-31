@@ -10,11 +10,9 @@ import { SharedModule } from 'app/shared/shared.module';
 // components
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ApplicationDetailComponent } from './application-detail/application-detail.component';
-// import { OverviewTabContentComponent } from './application-detail/overview/overview-tab-content.component';
-// import { AuthorizationsTabContentComponent } from './application-detail/authorizations/authorizations-tab-content.component';
-// import { ComplianceTabContentComponent } from './application-detail/compliance/compliance-tab-content.component';
-// import { SiteActivitiesComponent } from './site-activities/site-activities.component';
-import { DocumentsTabContentComponent } from './application-detail/documents/documents-tab-content.component';
+import { ApplicationTabContentComponent } from './application-detail/application/application-tab-content.component';
+import { CommentsTabContentComponent } from './application-detail/comments/comments-tab-content.component';
+import { DecisionTabContentComponent } from './application-detail/decision/decision-tab-content.component';
 
 // services
 import { ApiService } from 'app/services/api';
@@ -31,11 +29,9 @@ import { ApplicationService } from 'app/services/application.service';
   declarations: [
     ApplicationListComponent,
     ApplicationDetailComponent,
-    // OverviewTabContentComponent,
-    // AuthorizationsTabContentComponent,
-    // ComplianceTabContentComponent,
-    // SiteActivitiesComponent,
-    DocumentsTabContentComponent
+    ApplicationTabContentComponent,
+    CommentsTabContentComponent,
+    DecisionTabContentComponent
   ],
   exports: [
     ApplicationListComponent,
@@ -46,4 +42,5 @@ import { ApplicationService } from 'app/services/application.service';
     ApplicationService
   ]
 })
+
 export class ApplicationsModule { }

@@ -22,10 +22,6 @@ const routes: Routes = [
     path: 'contact',
     component: ContactComponent
   },
-  {
-    path: '',
-    component: HomeComponent
-  },
   // {
   //   path: 'legislation',
   //   component: LegislationComponent
@@ -41,6 +37,10 @@ const routes: Routes = [
   {
     path: 'search',
     component: SearchComponent
+  },
+  {
+    path: '',
+    component: HomeComponent
   }
 ];
 
@@ -48,4 +48,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule { }
