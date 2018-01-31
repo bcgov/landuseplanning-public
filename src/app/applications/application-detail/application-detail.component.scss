@@ -1,17 +1,5 @@
 @import "~assets/styles/base.scss";
-.nogap {
-    >.col {
-        padding-left: 7.5px;
-        padding-right: 7.5px;
-    }
-    >.col:first-child {
-        padding-left: 15px;
-    }
-    >.col:last-child {
-        padding-right: 15px;
-    }
-}
-
+@import "node_modules/bootstrap/scss/bootstrap.scss";
 .application-detail {
     background: #ddd;
     margin: auto;
@@ -93,6 +81,14 @@
                 padding: 0.5rem 0.75rem;
                 width: 50%;
             }
+        }
+    }
+}
+
+@media (max-width: map-get($grid-breakpoints, md)) {
+    .application-detail {
+        &__meta {
+            margin-bottom: 15px;
         }
     }
 }
