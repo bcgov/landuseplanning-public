@@ -1,10 +1,11 @@
-<div class="documents tab-pane" id="docs" role="tabpanel">
+<div class="decision tab-pane" id="docs" role="tabpanel">
     <p class="tab-intro">
         <span [innerHTML]="application?.getContent('Other', 'Intro')"></span>
     </p>
 
     <section class="doc-section">
-        <div class="accordion inspections-list" role="tablist" aria-multiselectable="false">
+        <h4>Decision goes here</h4>
+        <!-- <div class="accordion inspections-list" role="tablist" aria-multiselectable="false">
             <div class="accordion__collapse-item" *ngFor="let c of collections.items">
                 <div class="accordion__collapse-header" role="tab" id="heading-{{c._id}}">
                     <a class="accordion__collapse-header--column toggle collapsed" data-toggle="collapse" href="#collapse-{{c._id}}" aria-expanded="true"
@@ -28,7 +29,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </section>
 
 </div>

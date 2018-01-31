@@ -11,11 +11,15 @@ import { Application } from '../../models/application';
   styleUrls: ['./application-detail.component.scss']
 })
 export class ApplicationDetailComponent implements OnInit, OnDestroy {
-  // public properties
-  loading: boolean;
-  application: Application;
+  readonly tabLinks = [
+    { label: 'Application', link: 'application' },
+    { label: 'Comments', link: 'comments' },
+    { label: 'Decision', link: 'decision' }
+  ];
 
-  // private fields
+  public loading: boolean;
+  public application: Application;
+
   private sub: Subscription;
 
   constructor(

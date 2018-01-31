@@ -2,11 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
+import { TagInputModule } from 'ngx-chips';
 
 // components
 import { AppComponent } from './app.component';
@@ -26,9 +28,6 @@ import { ApplicationService } from './services/application.service';
 // feature modules
 import { MapModule } from './map/map.module';
 import { ApplicationsModule } from './applications/applications.module';
-
-import { TagInputModule } from 'ngx-chips';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -58,4 +57,5 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   providers: [ProponentService, ApplicationService, CookieService],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

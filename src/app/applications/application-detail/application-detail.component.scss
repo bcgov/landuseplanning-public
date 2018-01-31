@@ -1,89 +1,98 @@
 @import "~assets/styles/base.scss";
-.application-description {
-    p {
-        margin: 0;
-        padding: 0.5rem 0.75rem;
+.nogap {
+    >.col {
+        padding-left: 7.5px;
+        padding-right: 7.5px;
+    }
+    >.col:first-child {
+        padding-left: 15px;
+    }
+    >.col:last-child {
+        padding-right: 15px;
     }
 }
 
-.application-details {
-    // font-size: 0.85rem;
-    &--list {
-        li {
-            @include align-items(start);
-            +li {
-                border-top: 1px solid #fff;
+.application-detail {
+    background: #ddd;
+    margin: auto;
+    padding: 2rem;
+    &__meta>section {
+        padding: 15px;
+        background-color: white;
+        border: 1px black solid;
+        border-radius: 5px;
+        >div {
+            word-wrap: break-word;
+            border: 1px #eee solid;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 0.5rem;
+        }
+        .title {
+            font-weight: bold;
+            color: #002663;
+            margin-bottom: 0.5rem;
+        }
+        .name {
+            font-weight: bold;
+            color: #002663;
+            margin-bottom: 0;
+        }
+        .value {
+            font-size: smaller;
+            line-height: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .map-section {
+            display: table;
+            width: 100%;
+            overflow: hidden;
+            &__thumbnail {
+                transform: scale(1.4);
+            }
+            &:hover {
+                border: 1px #bbb solid;
+                opacity: 0.7;
+                cursor: pointer;
             }
         }
-        .name,
-        .value {
+    }
+    &__tabs>section {
+        position: relative;
+        padding: 15px;
+        background-color: white;
+        min-height: 30rem;
+        border: 1px black solid;
+        border-radius: 5px;
+        >button {
+            position: absolute;
+            right: 1em;
+        }
+    }
+    .application-links {
+        padding-top: 1rem;
+    }
+    .application-description {
+        p {
             margin: 0;
             padding: 0.5rem 0.75rem;
-            width: 50%;
         }
     }
-}
-
-.application-legal_description {
-    p {
-        margin: 0;
-        padding: 0.5rem 0.75rem;
-    }
-}
-
-.map-section {
-    margin-bottom: 0;
-    display: table;
-    width: 100%;
-    overflow: hidden;
-    background: #eee;
-    &__thumbnail {
-        display: table-cell;
-        text-align: center;
-        vertical-align: middle;
-        transform: scale(1.4);
-        cursor: pointer;
-    }
-}
-
-.related_documents {
-    li {
-        line-height: 1.25rem;
-        font-size: 0.875rem;
-        +li {
-            border-top: 1px solid #fff;
-        }
-    }
-}
-
-@media (max-width: 760px) {
-    .related_documents {
-        .card-header {
-            padding: 0.3rem 1rem;
-            font-size: 0.7rem;
-        }
-    }
-}
-
-@media (min-width: 760px) {
     .application-details {
+        // font-size: 0.85rem;
         &--list {
-            .name {
-                margin: 0;
-                padding: 0.5rem 0.75rem;
-                width: 25%;
+            li {
+                @include align-items(start);
+                +li {
+                    border-top: 1px solid #fff;
+                }
             }
+            .name,
             .value {
                 margin: 0;
                 padding: 0.5rem 0.75rem;
-                width: 75%;
+                width: 50%;
             }
-        }
-    }
-    .related_documents {
-        .card-header {
-            padding: 0.3rem 1rem;
-            font-size: 0.875rem;
         }
     }
 }
