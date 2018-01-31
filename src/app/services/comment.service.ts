@@ -63,6 +63,8 @@ export class CommentService {
         // cache comment
         this.comment = comment;
 
+        // now grab the documents
+
         return this.comment;
       })
       .catch(this.api.handleError);
@@ -77,12 +79,12 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
-  // save(comment: Comment): Observable<Comment> {
-  //   return this.api.saveComment(comment)
-  //     .map((res: Response) => {
-  //       const c = res.text() ? res.json() : null;
-  //       return c;
-  //     })
-  //     .catch(this.api.handleError);
-  // }
+  save(comment: Comment): Observable<Comment> {
+    return this.api.saveComment(comment)
+      .map((res: Response) => {
+        const c = res.text() ? res.json() : null;
+        return c;
+      })
+      .catch(this.api.handleError);
+  }
 }

@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
-import { CollectionsList } from './collection';
+
+import { CommentPeriod } from './commentperiod';
+import { Organization } from './organization';
 
 export class Application {
   _id: string;
@@ -38,15 +40,9 @@ export class Application {
   type: string;
   subtype: string;
 
-  collections: CollectionsList; // used for documents
-
-  content: {
-    type: string;
-    page: string;
-    html: string;
-  }[];
-
-  // client: string;
+  proponent: Organization;
+  periods: Array<CommentPeriod>;
+  decision: string; // TODO: some sort of object?
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -85,19 +81,8 @@ export class Application {
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
 
-    this.collections             = obj && obj.collections             || null;
-    this.content                 = obj && obj.content                 || [];
-
-    // get the client from the proponent
-    // this.client = (obj && obj.proponent && obj.proponent.name) ? obj.proponent.name : 'unknown';
-  }
-
-  getContent(page: string, type: string): string {
-    try {
-      const entry = this.content.find(x => x.type === type && x.page === page);
-      return entry.html;
-    } catch (e) {
-      return '';
-    }
+    this.proponent = null;
+    this.periods = [];
+    this.decision = null;
   }
 }

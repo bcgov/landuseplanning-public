@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 
 import { ApiService } from './api';
 import { Application } from 'app/models/application';
+import { CommentPeriod } from 'app/models/commentperiod';
 // import { CollectionsList } from 'app/models/collection';
 
 @Injectable()
@@ -29,7 +30,7 @@ export class ApplicationService {
   }
 
   getById(id: string): Observable<Application> {
-    // first grab the application data
+    // first get the application data
     return this.api.getApplication(id)
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
@@ -39,8 +40,13 @@ export class ApplicationService {
       .map((application: Application) => {
         // if (!application) { return; }
 
-        // cache application
-        this.application = application;
+        // get the proponent
+
+        // get the comment periods
+
+        // get the comments (for the current period, if any)
+
+        // get the decision
 
         // this.application.collections = new CollectionsList();
 
@@ -66,6 +72,9 @@ export class ApplicationService {
         //       });
         //     });
         // });
+
+        // cache application
+        this.application = application;
 
         return this.application;
       })

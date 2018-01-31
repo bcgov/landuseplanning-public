@@ -57,35 +57,9 @@
             right: 1em;
         }
     }
-    .application-links {
-        padding-top: 1rem;
-    }
-    .application-description {
-        p {
-            margin: 0;
-            padding: 0.5rem 0.75rem;
-        }
-    }
-    .application-details {
-        // font-size: 0.85rem;
-        &--list {
-            li {
-                @include align-items(start);
-                +li {
-                    border-top: 1px solid #fff;
-                }
-            }
-            .name,
-            .value {
-                margin: 0;
-                padding: 0.5rem 0.75rem;
-                width: 50%;
-            }
-        }
-    }
 }
 
-@media (max-width: map-get($grid-breakpoints, md)) {
+@include media-breakpoint-down(sm) {
     .application-detail {
         &__meta {
             margin-bottom: 15px;

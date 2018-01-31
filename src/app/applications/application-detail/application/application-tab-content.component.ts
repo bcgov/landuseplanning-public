@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Application } from '../../../models/application';
-import { CollectionsArray } from '../../../models/collection';
+// import { CollectionsArray } from '../../../models/collection';
 
 @Component({
   selector: 'app-application-tab-content',
@@ -13,7 +13,7 @@ import { CollectionsArray } from '../../../models/collection';
 export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  public collections: CollectionsArray;
+  // public collections: CollectionsArray;
 
   private sub: Subscription;
 
@@ -21,12 +21,17 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+    this.application = null;
+    // this.collections = new CollectionsArray();
+
     this.sub = this.route.parent.data.subscribe(
       (data: { application: Application }) => {
-        if (data.application && data.application.collections) {
+        if (data.application) {
           this.application = data.application;
-          this.collections = data.application.collections.documents;
-          this.collections.sort();
+          // if (data.application.collections) {
+          //   this.collections = data.application.collections.documents;
+          //   this.collections.sort();
+          // }
         }
       },
       error => console.log(error),

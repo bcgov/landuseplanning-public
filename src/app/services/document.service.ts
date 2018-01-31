@@ -20,23 +20,10 @@ export class DocumentService {
 
   constructor(private api: ApiService) { }
 
-  getDocuments(id: string) {
-    // this.api.getDocumentsByAppId(id)
-    //   .map((response: Response) => <Document[]>response.json().data)
-    //   .catch(this.handleError);
-
-    return [
-      new Document({ _id: 1, displayName: 'first' }),
-      new Document({ _id: 2, displayName: 'second' }),
-      new Document({ _id: 3, displayName: 'third' })
-    ];
-  }
-
-  private handleError(error: Response) {
-    const msg = `Status code ${error.status} on url ${error.url}`;
-    console.error(msg);
-    // return Observable.throw(error.json().error || 'Server error');
-    return Observable.throw(msg);
+  getDocumentsByApplicationId(appId: string) {
+    this.api.getDocumentsByAppId(appId)
+      .map((response: Response) => <Document[]>response.json().data)
+      .catch(this.api.handleError);
   }
 
   get(terms: SearchTerms, applications: Array<Application>, proponents: Array<Proponent>, page: number, limit: number) {

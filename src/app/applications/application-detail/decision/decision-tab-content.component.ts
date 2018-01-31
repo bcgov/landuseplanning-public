@@ -3,7 +3,6 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Application } from '../../../models/application';
-import { CollectionsArray } from '../../../models/collection';
 
 @Component({
   selector: 'app-decision-tab-content',
@@ -13,7 +12,7 @@ import { CollectionsArray } from '../../../models/collection';
 export class DecisionTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  public collections: CollectionsArray;
+  public decision: string;
 
   private sub: Subscription;
 
@@ -21,12 +20,16 @@ export class DecisionTabContentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+    this.application = null;
+    this.decision = null;
+
     this.sub = this.route.parent.data.subscribe(
       (data: { application: Application }) => {
-        if (data.application && data.application.collections) {
+        if (data.application) {
           this.application = data.application;
-          this.collections = data.application.collections.documents;
-          this.collections.sort();
+          if (data.application.decision) {
+            this.decision = data.application.decision;
+          }
         }
       },
       error => console.log(error),
