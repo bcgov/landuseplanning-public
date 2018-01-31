@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Application } from '../../../models/application';
-// import { CollectionsArray } from '../../../models/collection';
+import { Application } from 'app/models/application';
+// import { CollectionsArray } from 'app/models/collection';
 
 @Component({
   selector: 'app-application-tab-content',

@@ -5,15 +5,24 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { ApiService } from './api';
+import { OrganizationService } from './organization.service';
+import { DocumentService } from './document.service';
+import { CommentPeriodService } from './commentperiod.service';
+import { DecisionService } from './decision.service';
 import { Application } from 'app/models/application';
-import { CommentPeriod } from 'app/models/commentperiod';
 // import { CollectionsList } from 'app/models/collection';
 
 @Injectable()
 export class ApplicationService {
   public application: Application;
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    private organizationService: OrganizationService,
+    private documentService: DocumentService,
+    private commentPeriodService: CommentPeriodService,
+    private decisionService: DecisionService
+  ) { }
 
   getAll(): Observable<Application[]> {
     return this.api.getApplications()
@@ -41,12 +50,33 @@ export class ApplicationService {
         // if (!application) { return; }
 
         // get the proponent
+        if (application._proponent) {
+          this.organizationService.getById(application._proponent)
+            .subscribe(
+            organization => this.application.proponent = organization,
+            error => console.log(error)
+            );
+        }
+
+        // get the documents
+        this.documentService.getAllByApplicationId(application._id)
+          .subscribe(
+          documents => this.application.documents = documents,
+          error => console.log(error)
+          );
 
         // get the comment periods
 
-        // get the comments (for the current period, if any)
+        // get the comments (for the current period)
 
         // get the decision
+        if (application._decision) {
+          this.organizationService.getById(application._decision)
+            .subscribe(
+            decision => this.application.decision = decision,
+            error => console.log(error)
+            );
+        }
 
         // this.application.collections = new CollectionsList();
 

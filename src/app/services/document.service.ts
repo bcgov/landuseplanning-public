@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
 import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/forkJoin';
 
 import { ApiService } from './api';
 import { Search, SearchArray, SearchTerms } from 'app/models/search';
-import { Application } from 'app/models/application';
 import { Document } from 'app/models/document';
+import { Comment } from 'app/models/comment';
+import { Application } from 'app/models/application';
 import { Proponent } from 'app/models/proponent';
 
 @Injectable()
@@ -20,10 +18,36 @@ export class DocumentService {
 
   constructor(private api: ApiService) { }
 
-  getDocumentsByApplicationId(appId: string) {
-    this.api.getDocumentsByAppId(appId)
-      .map((response: Response) => <Document[]>response.json().data)
+  // get all comments for the specified application id
+  getAllByApplicationId(appId: string): Observable<Document[]> {
+    return this.api.getDocumentsByAppId(appId)
+      .map((res: Response) => {
+        const documents = res.text() ? res.json() : [];
+
+        documents.forEach((document, index) => {
+          documents[index] = new Document(document);
+        });
+
+        return documents;
+      })
       .catch(this.api.handleError);
+  }
+
+  // get all comments for the specified comment id
+  getAllByCommentId(comment: Comment): Observable<Document[]> {
+    return Observable.of([]);
+    // TODO: iterate over comment._documents[]
+    // return this.api.getDocumentsByAppId(appId)
+    //   .map((res: Response) => {
+    //     const documents = res.text() ? res.json() : [];
+
+    //     documents.forEach((document, index) => {
+    //       documents[index] = new Document(document);
+    //     });
+
+    //     return documents;
+    //   })
+    //   .catch(this.api.handleError);
   }
 
   get(terms: SearchTerms, applications: Array<Application>, proponents: Array<Proponent>, page: number, limit: number) {

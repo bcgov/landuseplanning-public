@@ -60,10 +60,10 @@ export class CommentService {
       .map((comment: Comment) => {
         // if (!comment) { return; }
 
+        // now grab the documents
+
         // cache comment
         this.comment = comment;
-
-        // now grab the documents
 
         return this.comment;
       })

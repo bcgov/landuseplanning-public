@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Application } from '../../../models/application';
+import { Application } from 'app/models/application';
+import { Decision } from 'app/models/decision';
 
 @Component({
   selector: 'app-decision-tab-content',
@@ -12,7 +13,7 @@ import { Application } from '../../../models/application';
 export class DecisionTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  public decision: string;
+  public decision: Decision;
 
   private sub: Subscription;
 

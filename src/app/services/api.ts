@@ -8,7 +8,6 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { Application } from 'app/models/application';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
@@ -118,8 +117,6 @@ export class ApiService {
     return this.get(this.pathAPI, queryString, {});
   }
 
-  // TODO: addApplication() and saveApplication()
-
   //
   // Organizations
   //
@@ -130,6 +127,24 @@ export class ApiService {
       'name'
     ];
     let queryString = 'organization/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(this.pathAPI, queryString, {});
+  }
+
+  //
+  // Decisions
+  //
+  getDecision(id: string) {
+    const fields = [
+      '_addedBy',
+      'code',
+      'name'
+    ];
+    let queryString = 'decision/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });
@@ -275,18 +290,44 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.put(this.pathAPI, queryString, comment, { });
+    return this.put(this.pathAPI, queryString, comment, {});
   }
 
   //
   // Documents
   //
   getDocumentsByAppId(appId: string) {
-    return this.get(this.pathAPI, 'document?_application=' + appId, {});
+    const fields = [
+      '_application',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
+    let queryString = 'document?_application=' + appId + '&fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(this.pathAPI, queryString, {});
   }
 
   getDocument(id: string) {
-    return this.get(this.pathAPI, 'document/' + id, {});
+    const fields = [
+      '_application',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
+    let queryString = 'document/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(this.pathAPI, queryString, {});
   }
 
   // TODO: saveDocument()
