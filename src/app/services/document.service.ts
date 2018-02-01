@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
 import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/forkJoin';
 
 import { ApiService } from './api';
 import { Search, SearchArray, SearchTerms } from 'app/models/search';
-import { Application } from 'app/models/application';
 import { Document } from 'app/models/document';
+import { Comment } from 'app/models/comment';
+import { Application } from 'app/models/application';
 import { Proponent } from 'app/models/proponent';
 
 @Injectable()
@@ -20,23 +18,36 @@ export class DocumentService {
 
   constructor(private api: ApiService) { }
 
-  getDocuments(id: string) {
-    // this.api.getDocumentsByAppId(id)
-    //   .map((response: Response) => <Document[]>response.json().data)
-    //   .catch(this.handleError);
+  // get all comments for the specified application id
+  getAllByApplicationId(appId: string): Observable<Document[]> {
+    return this.api.getDocumentsByAppId(appId)
+      .map((res: Response) => {
+        const documents = res.text() ? res.json() : [];
 
-    return [
-      new Document({ _id: 1, displayName: 'first' }),
-      new Document({ _id: 2, displayName: 'second' }),
-      new Document({ _id: 3, displayName: 'third' })
-    ];
+        documents.forEach((document, index) => {
+          documents[index] = new Document(document);
+        });
+
+        return documents;
+      })
+      .catch(this.api.handleError);
   }
 
-  private handleError(error: Response) {
-    const msg = `Status code ${error.status} on url ${error.url}`;
-    console.error(msg);
-    // return Observable.throw(error.json().error || 'Server error');
-    return Observable.throw(msg);
+  // get all comments for the specified comment id
+  getAllByCommentId(comment: Comment): Observable<Document[]> {
+    return Observable.of([]);
+    // TODO: iterate over comment._documents[]
+    // return this.api.getDocumentsByAppId(appId)
+    //   .map((res: Response) => {
+    //     const documents = res.text() ? res.json() : [];
+
+    //     documents.forEach((document, index) => {
+    //       documents[index] = new Document(document);
+    //     });
+
+    //     return documents;
+    //   })
+    //   .catch(this.api.handleError);
   }
 
   get(terms: SearchTerms, applications: Array<Application>, proponents: Array<Proponent>, page: number, limit: number) {

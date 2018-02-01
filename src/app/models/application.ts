@@ -1,5 +1,9 @@
 import * as _ from 'lodash';
-import { CollectionsList } from './collection';
+
+import { Organization } from './organization';
+import { Document } from './document';
+import { CommentPeriod } from './commentperiod';
+import { Decision } from './decision';
 
 export class Application {
   _id: string;
@@ -37,16 +41,12 @@ export class Application {
   tantalisID: number;
   type: string;
   subtype: string;
+  _decision: string; // objectid -> Decision
 
-  collections: CollectionsList; // used for documents
-
-  content: {
-    type: string;
-    page: string;
-    html: string;
-  }[];
-
-  // client: string;
+  proponent: Organization;
+  documents: Array<Document>;
+  periods: Array<CommentPeriod>;
+  decision: Decision;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -84,20 +84,11 @@ export class Application {
     this.tantalisID              = obj && obj.tantalisID              || 0;
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
+    this._decision               = obj && obj._decision               || null;
 
-    this.collections             = obj && obj.collections             || null;
-    this.content                 = obj && obj.content                 || [];
-
-    // get the client from the proponent
-    // this.client = (obj && obj.proponent && obj.proponent.name) ? obj.proponent.name : 'unknown';
-  }
-
-  getContent(page: string, type: string): string {
-    try {
-      const entry = this.content.find(x => x.type === type && x.page === page);
-      return entry.html;
-    } catch (e) {
-      return '';
-    }
+    this.proponent = null;
+    this.documents = [];
+    this.periods = [];
+    this.decision = null;
   }
 }

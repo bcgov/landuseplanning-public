@@ -36,7 +36,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     this.sub = this.applicationService.getAll()
-      // .finally(() => this.loading = false) // TODO: make this work
       .subscribe(
       applications => {
         this.loading = false;
@@ -46,6 +45,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this._changeDetectionRef.detectChanges();
       },
       error => {
+        this.loading = false;
         alert('Error loading applications');
       });
   }

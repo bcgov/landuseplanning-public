@@ -13,22 +13,6 @@ export class OrganizationService {
 
   constructor(private api: ApiService) { }
 
-  // get all organizations
-  getAll(): Observable<Organization[]> {
-    return null;
-    // return this.api.getOrganizations()
-    //   .map((res: Response) => {
-    //     const organizations = res.text() ? res.json() : [];
-
-    //     organizations.forEach((org, index) => {
-    //       organizations[index] = new Organization(org);
-    //     });
-
-    //     return organizations;
-    //   })
-    //   .catch(this.api.handleError);
-  }
-
   // get a specific organization by its id
   getById(id: string): Observable<Organization> {
     return this.api.getOrganization(id)
@@ -40,6 +24,7 @@ export class OrganizationService {
       .map((organization: Organization) => {
         // if (!organization) { return; }
 
+        // cache organization
         this.organization = organization;
 
         return this.organization;

@@ -1,13 +1,18 @@
 @import "~assets/styles/base.scss";
-.application-list {
-    .card {
-        border: 1px black solid;
-        margin-bottom: 1em;
-        .card-header {
-            text-transform: none;
-            font-size: 1.25rem;
-        }
-        .card-body {
+.container {
+    background: #eee;
+    .application-list {
+        background: white;
+        width: 40%;
+        min-width: 300px;
+        padding: 1em;
+        .card {
+            border: 1px black solid;
+            margin-bottom: 1em;
+            .card-header {
+                text-transform: none;
+                font-size: 1.25rem;
+            }
             .title {
                 font-size: large;
                 font-weight: bold;
@@ -24,10 +29,10 @@
             .value {
                 margin-bottom: 0;
             }
-        }
-        .card-footer {
-            .content-btn {
-                padding: 0.25rem 0.5rem;
+            .card-footer {
+                .content-btn {
+                    padding: 0.25rem 0.5rem;
+                }
             }
         }
     }

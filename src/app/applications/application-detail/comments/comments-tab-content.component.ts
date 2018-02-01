@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Application } from 'app/models/application';
-import { CollectionsArray } from 'app/models/collection';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @Component({
   selector: 'app-comments-tab-content',
@@ -13,20 +13,23 @@ import { CollectionsArray } from 'app/models/collection';
 export class CommentsTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  public collections: CollectionsArray;
-
+  public currentPeriod: CommentPeriod;
   private sub: Subscription;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.loading = true;
+    this.application = null;
+    this.currentPeriod = null;
+
     this.sub = this.route.parent.data.subscribe(
       (data: { application: Application }) => {
-        if (data.application && data.application.collections) {
+        if (data.application) {
           this.application = data.application;
-          this.collections = data.application.collections.documents;
-          this.collections.sort();
+          if (data.application.periods) {
+            this.currentPeriod = data.application.periods[0];
+          }
         }
       },
       error => console.log(error),
