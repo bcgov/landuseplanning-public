@@ -8,7 +8,7 @@
 
         <div class="row" *ngIf="application.documents.length > 0">
             <div class="col-md-6" *ngFor="let document of application.documents">
-                <a [href]="getHref(document)" target="_blank">{{document.documentFileName}}</a>
+                <a [href]="api.getDocumentUrl(document)" target="_blank">{{document.documentFileName}}</a>
             </div>
         </div>
     </section>
