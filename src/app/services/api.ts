@@ -326,6 +326,10 @@ export class ApiService {
     return this.get(queryString);
   }
 
+  getDocumentUrl(document: Document): string {
+    return this.apiPath + '/document/' + document._id + '/download';
+  }
+
   // TODO: saveDocument()
 
   //
