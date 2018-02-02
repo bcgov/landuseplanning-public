@@ -29,8 +29,8 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+    this.application = null;
 
-    // wait for the resolver to retrieve the application details from back-end
     this.sub = this.route.data.subscribe(
       (data: { application: Application }) => {
         this.loading = false;
@@ -42,7 +42,10 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
           this.gotoApplicationList();
         }
       },
-      error => console.log(error)
+      error => {
+        this.loading = false;
+        console.log(error);
+      }
     );
   }
 
@@ -50,11 +53,11 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  gotoApplicationList(): void {
+  private gotoApplicationList(): void {
     this.router.navigate(['/applications']);
   }
 
-  gotoMap(): void {
+  private gotoMap(): void {
     // pass along the id of the current application if available
     // so that the map component can show the popup for it
     const applicationId = this.application ? this.application._id : null;

@@ -7,9 +7,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { HomeComponent } from './home/home.component';
 import { DocumentService } from './services/document.service';
 import { SearchComponent } from './search/search.component';
-
-import { News } from './models/news';
 import { ApiService } from './services/api';
+import { News } from './models/news';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +16,7 @@ import { ApiService } from './services/api';
   styleUrls: ['./app.component.scss'],
   providers: [DocumentService]
 })
+
 export class AppComponent implements OnInit {
   loggedIn: String;
   hostname: String;
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
     private api: ApiService
   ) {
     // Used for sharing links.
-    this.hostname = api.pathAPI; // TODO: Wrong
+    this.hostname = api.apiPath; // TODO: Wrong
 
     PageScrollConfig.defaultScrollOffset = 50;
     PageScrollConfig.defaultEasingLogic = {

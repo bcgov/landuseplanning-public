@@ -14,31 +14,31 @@ import { TagInputModule } from 'ngx-chips';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ObjectFilterPipe } from './object-filter.pipe';
-// import { LegislationComponent } from './legislation/legislation.component';
 import { ProcessComponent } from './process/process.component';
-// import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
 import { ContactComponent } from './contact/contact.component';
-// import { AuthorizationsComponent } from './authorizations/authorizations.component';
 import { SearchComponent } from './search/search.component';
 
 // services
-import { ProponentService } from './services/proponent.service';
 import { ApplicationService } from './services/application.service';
+import { ProponentService } from './services/proponent.service';
+import { OrganizationService } from './services/organization.service';
+import { DocumentService } from './services/document.service';
+import { CommentPeriodService } from './services/commentperiod.service';
+import { CommentService } from './services/comment.service';
+import { DecisionService } from './services/decision.service';
 
 // feature modules
 import { MapModule } from './map/map.module';
 import { ApplicationsModule } from './applications/applications.module';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ObjectFilterPipe,
-    // LegislationComponent,
     ProcessComponent,
-    // ComplianceOversightComponent,
     ContactComponent,
-    // AuthorizationsComponent,
     SearchComponent
   ],
   imports: [
@@ -54,7 +54,16 @@ import { ApplicationsModule } from './applications/applications.module';
     Ng2PageScrollModule.forRoot(),
     MapModule
   ],
-  providers: [ProponentService, ApplicationService, CookieService],
+  providers: [
+    CookieService,
+    ApplicationService,
+    ProponentService,
+    OrganizationService,
+    DocumentService,
+    CommentPeriodService,
+    CommentService,
+    DecisionService
+  ],
   bootstrap: [AppComponent]
 })
 

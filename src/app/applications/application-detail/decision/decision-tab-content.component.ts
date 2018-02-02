@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Application } from '../../../models/application';
-import { CollectionsArray } from '../../../models/collection';
+import { Application } from 'app/models/application';
+import { Decision } from 'app/models/decision';
+import { DecisionService } from 'app/services/decision.service';
 
 @Component({
   selector: 'app-decision-tab-content',
@@ -12,21 +13,26 @@ import { CollectionsArray } from '../../../models/collection';
 })
 export class DecisionTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
-  public application: Application;
-  public collections: CollectionsArray;
-
+  public decision: Decision;
   private sub: Subscription;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private decisionService: DecisionService) { }
 
   ngOnInit(): void {
     this.loading = true;
+    this.decision = null;
+
     this.sub = this.route.parent.data.subscribe(
       (data: { application: Application }) => {
-        if (data.application && data.application.collections) {
-          this.application = data.application;
-          this.collections = data.application.collections.documents;
-          this.collections.sort();
+        if (data.application && data.application._decision) {
+          this.decisionService.getById(data.application._decision).subscribe(
+            decision => {
+              this.decision = decision;
+            },
+            error => console.log(error)
+          );
         }
       },
       error => console.log(error),

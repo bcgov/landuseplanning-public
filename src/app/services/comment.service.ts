@@ -58,10 +58,12 @@ export class CommentService {
         return comments.length > 0 ? comments[0] : null;
       })
       .map((comment: Comment) => {
-        // if (!comment) { return; }
+        if (!comment) { return; }
 
         // cache comment
         this.comment = comment;
+
+        // now grab the comment documents
 
         return this.comment;
       })
@@ -77,12 +79,12 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
-  // save(comment: Comment): Observable<Comment> {
-  //   return this.api.saveComment(comment)
-  //     .map((res: Response) => {
-  //       const c = res.text() ? res.json() : null;
-  //       return c;
-  //     })
-  //     .catch(this.api.handleError);
-  // }
+  save(comment: Comment): Observable<Comment> {
+    return this.api.saveComment(comment)
+      .map((res: Response) => {
+        const c = res.text() ? res.json() : null;
+        return c;
+      })
+      .catch(this.api.handleError);
+  }
 }

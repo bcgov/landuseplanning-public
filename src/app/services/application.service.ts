@@ -4,16 +4,30 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { ApiService } from './api';
 import { Application } from 'app/models/application';
-// import { CollectionsList } from 'app/models/collection';
+import { Organization } from 'app/models/organization';
+import { Document } from 'app/models/document';
+import { Decision } from 'app/models/decision';
+
+import { ApiService } from './api';
+import { OrganizationService } from './organization.service';
+import { DocumentService } from './document.service';
+// import { CommentPeriodService } from './commentperiod.service';
+import { DecisionService } from './decision.service';
 
 @Injectable()
 export class ApplicationService {
   public application: Application;
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    private organizationService: OrganizationService,
+    private documentService: DocumentService,
+    // private commentPeriodService: CommentPeriodService,
+    private decisionService: DecisionService
+  ) { }
 
+  // get all applications
   getAll(): Observable<Application[]> {
     return this.api.getApplications()
       .map((res: Response) => {
@@ -21,6 +35,9 @@ export class ApplicationService {
 
         applications.forEach((application, index) => {
           applications[index] = new Application(application);
+
+          // TODO: get the proponent for each application
+          // ref: https://www.metaltoad.com/blog/angular-2-http-observables-and-concurrent-data-loading
         });
 
         return applications;
@@ -28,8 +45,9 @@ export class ApplicationService {
       .catch(this.api.handleError);
   }
 
+  // get a specific application by its id
   getById(id: string): Observable<Application> {
-    // first grab the application data
+    // first get the application data
     return this.api.getApplication(id)
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
@@ -37,35 +55,45 @@ export class ApplicationService {
         return applications.length > 0 ? applications[0] : null;
       })
       .map((application: Application) => {
-        // if (!application) { return; }
+        if (!application) { return; }
 
         // cache application
-        this.application = application;
+        this.application = new Application(application);
 
-        // this.application.collections = new CollectionsList();
+        // get the proponent
+        if (application._proponent) {
+          this.organizationService.getById(application._proponent)
+            .subscribe(
+            organization => {
+              this.application.proponent = new Organization(organization);
+            },
+            error => console.log(error)
+            );
+        }
 
-        // // Now grab the MEM collections
-        // this.api.getProjectCollectionsMEM(this.project.code)
-        //   .map((res: Response) => this.processCollections(res))
-        //   .subscribe(memCollections => {
-        //     // Push them into the project
-        //     memCollections.forEach(collection => {
-        //       this.addCollection(this.project.collections, collection);
+        // get the application documents
+        this.documentService.getAllByApplicationId(application._id)
+          .subscribe(
+          documents => {
+            documents.forEach(document => {
+              this.application.documents.push(document);
+            });
+          },
+          error => console.log(error)
+          );
+
+        // get the comment periods
+        // this.commentPeriodService.getAllByApplicationId(application._id)
+        //   .subscribe(
+        //   periods => {
+        //     console.log('periods=', periods);
+        //     periods.forEach(period => {
+        //       this.application.periods.push(period);
         //     });
-        //   });
-
-        // // Get EPIC collections next.
-        // // Note: there may be multiple (or no) EPIC projects associated with this MEM project.
-        // this.project.epicProjectCodes.forEach(epicProjectCode => {
-        //   this.api.getProjectCollectionsEPIC(epicProjectCode)
-        //     .map((res: Response) => this.processCollections(res))
-        //     .subscribe(epicCollections => {
-        //       // Push them into the project
-        //       epicCollections.forEach(collection => {
-        //         this.addCollection(this.project.collections, collection);
-        //       });
-        //     });
-        // });
+        //     console.log('periods=', this.application.periods);
+        //   },
+        //   error => console.log(error)
+        //   );
 
         return this.application;
       })
