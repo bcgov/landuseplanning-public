@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
     private api: ApiService
   ) {
     // Used for sharing links.
-    this.hostname = api.pathAPI; // TODO: Wrong
+    this.hostname = api.apiPath; // TODO: Wrong
 
     PageScrollConfig.defaultScrollOffset = 50;
     PageScrollConfig.defaultEasingLogic = {

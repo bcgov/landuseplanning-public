@@ -2,33 +2,60 @@
   <div class="row">
     <div class="col-md-4 application-detail__meta">
       <section>
-        <div>
-          <p class="title">{{application._proponent}}</p>
+        <div class="item">
+          <p class="title">{{application.proponent ? application.proponent.name : '-'}}</p>
           <label class="name">Purpose</label>
           <p class="value">{{application.purpose}}</p>
           <label class="name">Subpurpose</label>
           <p class="value">{{application.subpurpose}}</p>
         </div>
-        <div class="map-section">
+        <div class="item map-section">
           <div class="map-section__thumbnail" (click)="gotoMap()">
             <app-application-map [application]="application" [zoom]="4"></app-application-map>
           </div>
         </div>
-        <div>
-          <label class="name">Description</label>
+        <div class="item">
+            <label class="name">Description</label>
           <p class="value" [innerHTML]="application.description | newlines"></p>
         </div>
-        <div>
-          <label class="name">Crown Land File(s)</label>
+        <div class="item">
+            <label class="name">Crown Land File(s)</label>
           <p class="value">{{application.cl_files ? application.cl_files.join(', ') : 'none'}}</p>
         </div>
-        <div>
-          <label class="name">Area (ha)</label>
-          <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : '-'}}</p>
-          <label class="name">Location</label>
-          <p class="value">{{application.location || '-'}}</p>
-          <label class="name">Region</label>
-          <p class="value">{{application.region || '-'}}</p>
+        <div class="item row">
+          <div class="col-lg-6">
+            <label class="name">Area (ha)</label>
+            <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : '-'}}</p>
+          </div>
+          <div class="col-lg-6">
+            <label class="name">Location</label>
+            <p class="value">{{application.location || '-'}}</p>
+          </div>
+          <div class="col-lg-6">
+            <label class="name">Region</label>
+            <p class="value">{{application.region || '-'}}</p>
+          </div>
+        </div>
+        <div class="item row">
+          <div class="col-lg-6">
+            <label class="name">Tenure Type</label>
+            <p class="value">-</p>
+          </div>
+          <div class="col-lg-6">
+            <label class="name">Tenure Subtype</label>
+            <p class="value">-</p>
+          </div>
+          <div class="col-lg-6">
+            <label class="name">Tenure Stage</label>
+            <p class="value">-</p>
+          </div>
+        </div>
+        <div class="item">
+            <label class="name">Contact</label>
+          <p class="value">Name
+            <br>Email
+            <br>Address
+            <br>Phone</p>
         </div>
       </section>
     </div>

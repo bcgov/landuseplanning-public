@@ -2,8 +2,7 @@ import * as _ from 'lodash';
 
 import { Organization } from './organization';
 import { Document } from './document';
-import { CommentPeriod } from './commentperiod';
-import { Decision } from './decision';
+// import { CommentPeriod } from './commentperiod';
 
 export class Application {
   _id: string;
@@ -45,8 +44,7 @@ export class Application {
 
   proponent: Organization;
   documents: Array<Document>;
-  periods: Array<CommentPeriod>;
-  decision: Decision;
+  // periods: Array<CommentPeriod>;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -87,8 +85,7 @@ export class Application {
     this._decision               = obj && obj._decision               || null;
 
     this.proponent = null;
-    this.documents = [];
-    this.periods = [];
-    this.decision = null;
+    this.documents = new Array<Document>();
+    // this.periods = new Array<CommentPeriod>();
   }
 }

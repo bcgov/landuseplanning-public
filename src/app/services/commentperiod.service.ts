@@ -37,7 +37,7 @@ export class CommentPeriodService {
         return periods.length > 0 ? periods[0] : null;
       })
       .map((period: CommentPeriod) => {
-        // if (!period) { return; }
+        if (!period) { return; }
 
         // cache comment period
         this.commentperiod = period;

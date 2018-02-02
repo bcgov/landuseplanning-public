@@ -3,78 +3,9 @@
     margin: 1rem;
 }
 
-// .inspections-list {
-//     &__date-col {
-//         text-align: right;
-//     }
-//     &__related-comments {
-//         li {
-//             line-height: 1.25rem;
-//             font-size: 0.875rem;
-//             +li {
-//                 border-top: 1px solid #fff;
-//             }
-//         }
-//     }
-//     .accordion {
-//         &__collapse-header {
-//             &--column {
-//                 line-height: 1.15rem;
-//                 font-size: 0.875rem;
-//             }
-//         }
-//     }
-// }
-
-// @media (max-width: 760px) {
-//     .inspections-list {
-//         .accordion {
-//             &__collapse-header {
-//                 @include flex-box();
-//                 @include flex-direction(column);
-//                 position: relative;
-//                 display: block;
-//                 padding: 1rem;
-//                 padding-left: 3rem;
-//                 &--column {
-//                     @include flex(1 1 auto);
-//                     display: block;
-//                     &.toggle {
-//                         position: absolute;
-//                         top: 0;
-//                         left: 0;
-//                     }
-//                 }
-//             }
-//         }
-//         &__name-col,
-//         &__date-col {
-//             padding: 0;
-//             text-align: left;
-//         }
-//         &__date-col {
-//             margin-top: 0.5rem;
-//         }
-//         &__name-col {
-//             font-size: 0.9375rem;
-//             font-weight: 600;
-//         }
-//         &__related-comments {
-//             .card-header {
-//                 padding: 0.3rem 1rem;
-//                 font-size: 0.7rem;
-//             }
-//         }
-//     }
-// }
-
-// @media (min-width: 760px) {
-//     .inspections-list {
-//         &__related-comments {
-//             .card-header {
-//                 padding: 0.3rem 1rem;
-//                 font-size: 0.875rem;
-//             }
-//         }
-//     }
-// }
+.doc-section {
+    .row {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}

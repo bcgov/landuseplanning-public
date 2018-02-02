@@ -3,7 +3,6 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Application } from 'app/models/application';
-// import { CollectionsArray } from 'app/models/collection';
 
 @Component({
   selector: 'app-application-tab-content',
@@ -13,8 +12,6 @@ import { Application } from 'app/models/application';
 export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  // public collections: CollectionsArray;
-
   private sub: Subscription;
 
   constructor(private route: ActivatedRoute) { }
@@ -22,16 +19,11 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loading = true;
     this.application = null;
-    // this.collections = new CollectionsArray();
 
     this.sub = this.route.parent.data.subscribe(
       (data: { application: Application }) => {
         if (data.application) {
           this.application = data.application;
-          // if (data.application.collections) {
-          //   this.collections = data.application.collections.documents;
-          //   this.collections.sort();
-          // }
         }
       },
       error => console.log(error),
@@ -41,5 +33,12 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  getHref(document: Document): string {
+    // TODO: http://.../document/<id>/document
+    // build using api.apiPath etc
+    // call api helper?
+    return '#';
   }
 }

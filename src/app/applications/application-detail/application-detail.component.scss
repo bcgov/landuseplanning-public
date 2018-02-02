@@ -9,12 +9,17 @@
         background-color: white;
         border: 1px black solid;
         border-radius: 5px;
-        >div {
+        .item {
             word-wrap: break-word;
             border: 1px #eee solid;
             border-radius: 5px;
             padding: 5px;
             margin-bottom: 0.5rem;
+            margin-left: 0;
+            margin-right: 0;
+            >div {
+                padding: 0px;
+            }
         }
         .title {
             font-weight: bold;
@@ -36,6 +41,7 @@
             width: 100%;
             overflow: hidden;
             &__thumbnail {
+                height: 15rem; // TODO: make this proportional to parent width
                 transform: scale(1.4);
             }
             &:hover {
@@ -49,7 +55,7 @@
         position: relative;
         padding: 15px;
         background-color: white;
-        min-height: 30rem;
+        min-height: 20rem;
         border: 1px black solid;
         border-radius: 5px;
         >button {

@@ -8,30 +8,35 @@
         padding: 1em;
         .card {
             border: 1px black solid;
-            margin-bottom: 1em;
+            margin-bottom: 0.5rem;
             .card-header {
+                padding: 0px 10px;
                 text-transform: none;
                 font-size: 1.25rem;
             }
-            .title {
-                font-size: large;
-                font-weight: bold;
-                color: #002663;
-                margin-bottom: 0;
-            }
-            .name {
-                font-size: large;
-                font-weight: bold;
-                color: #002663;
-                margin-top: 1rem;
-                margin-bottom: 0;
-            }
-            .value {
-                margin-bottom: 0;
+            .card-body {
+                padding: 0px 10px;
+                .title {
+                    font-size: large;
+                    font-weight: bold;
+                    color: #002663;
+                    margin-bottom: 0;
+                }
+                .name {
+                    font-size: large;
+                    font-weight: bold;
+                    color: #002663;
+                    margin-bottom: 0;
+                }
+                .value {
+                    line-height: 1.5rem;
+                    margin-bottom: 0;
+                }
             }
             .card-footer {
+                padding: 5px 10px;
                 .content-btn {
-                    padding: 0.25rem 0.5rem;
+                    padding: 0;
                 }
             }
         }
