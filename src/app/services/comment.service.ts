@@ -8,6 +8,7 @@ import 'rxjs/add/observable/of';
 
 import { ApiService } from './api';
 import { CommentPeriodService } from './commentperiod.service';
+import { DocumentService } from './document.service';
 import { Comment } from 'app/models/comment';
 
 @Injectable()
@@ -16,7 +17,8 @@ export class CommentService {
 
   constructor(
     private api: ApiService,
-    private commentPeriodService: CommentPeriodService
+    private commentPeriodService: CommentPeriodService,
+    private documentService: DocumentService
   ) { }
 
   // get all comments for the specified application id
@@ -64,6 +66,15 @@ export class CommentService {
         this.comment = comment;
 
         // now grab the comment documents
+        this.documentService.getAllByComment(comment)
+          .subscribe(
+          documents => {
+            documents.forEach(document => {
+              this.comment.documents.push(document);
+            });
+          },
+          error => console.log(error)
+          );
 
         return this.comment;
       })

@@ -12,7 +12,7 @@ import { Decision } from 'app/models/decision';
 import { ApiService } from './api';
 import { OrganizationService } from './organization.service';
 import { DocumentService } from './document.service';
-// import { CommentPeriodService } from './commentperiod.service';
+import { CommentPeriodService } from './commentperiod.service';
 import { DecisionService } from './decision.service';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class ApplicationService {
     private api: ApiService,
     private organizationService: OrganizationService,
     private documentService: DocumentService,
-    // private commentPeriodService: CommentPeriodService,
+    private commentPeriodService: CommentPeriodService,
     private decisionService: DecisionService
   ) { }
 
@@ -37,7 +37,6 @@ export class ApplicationService {
           applications[index] = new Application(application);
 
           // TODO: get the proponent for each application
-          // ref: https://www.metaltoad.com/blog/angular-2-http-observables-and-concurrent-data-loading
         });
 
         return applications;
@@ -66,6 +65,7 @@ export class ApplicationService {
             .subscribe(
             organization => {
               this.application.proponent = new Organization(organization);
+              console.log('proponent=', this.application.proponent);
             },
             error => console.log(error)
             );
@@ -78,23 +78,27 @@ export class ApplicationService {
             documents.forEach(document => {
               this.application.documents.push(document);
             });
+            console.log('documents=', this.application.documents);
           },
           error => console.log(error)
           );
 
         // get the comment periods
-        // this.commentPeriodService.getAllByApplicationId(application._id)
-        //   .subscribe(
-        //   periods => {
-        //     console.log('periods=', periods);
-        //     periods.forEach(period => {
-        //       this.application.periods.push(period);
-        //     });
-        //     console.log('periods=', this.application.periods);
-        //   },
-        //   error => console.log(error)
-        //   );
+        // TODO: what we really want is the current or future comment period
+        // if current then commenting is OPEN
+        // if future then commenting is SCHEDULED
+        this.commentPeriodService.getAllByApplicationId(application._id)
+          .subscribe(
+          periods => {
+            periods.forEach(period => {
+              this.application.periods.push(period);
+            });
+            console.log('periods=', this.application.periods);
+          },
+          error => console.log(error)
+          );
 
+        console.log('In ApplicationService...', this.application);
         return this.application;
       })
       .catch(this.api.handleError);

@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { ApiService } from './api';
 import { Decision } from 'app/models/decision';
+import { ApiService } from './api';
+import { DocumentService } from './document.service';
 
 @Injectable()
 export class DecisionService {
   public decision: Decision;
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    private documentService: DocumentService
+  ) { }
 
   // get a specific decision by its id
   getById(decisionId): Observable<Decision> {
@@ -26,10 +30,18 @@ export class DecisionService {
         this.decision = decision;
 
         // now grab the decision documents
+        this.documentService.getAllByDecision(decision)
+          .subscribe(
+          documents => {
+            documents.forEach(document => {
+              this.decision.documents.push(document);
+            });
+          },
+          error => console.log(error)
+          );
 
         return this.decision;
       })
       .catch(this.api.handleError);
   }
-
 }

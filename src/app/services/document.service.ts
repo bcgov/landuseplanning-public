@@ -10,7 +10,8 @@ import { ApiService } from './api';
 import { Document } from 'app/models/document';
 import { Comment } from 'app/models/comment';
 import { Application } from 'app/models/application';
-import { Proponent } from 'app/models/proponent';
+import { Decision } from 'app/models/decision';
+// import { Proponent } from 'app/models/proponent';
 
 @Injectable()
 export class DocumentService {
@@ -38,6 +39,25 @@ export class DocumentService {
     return Observable.of([]);
 
     // TODO: iterate over comment._documents[]
+
+    // return this.api.getDocumentsByAppId(appId)
+    //   .map((res: Response) => {
+    //     const documents = res.text() ? res.json() : [];
+
+    //     documents.forEach((document, index) => {
+    //       documents[index] = new Document(document);
+    //     });
+
+    //     return documents;
+    //   })
+    //   .catch(this.api.handleError);
+  }
+
+  // get all documents for the specified decision
+  getAllByDecision(decision: Decision): Observable<Document[]> {
+    return Observable.of([]);
+
+    // TODO: iterate over decision._documents[]
 
     // return this.api.getDocumentsByAppId(appId)
     //   .map((res: Response) => {
