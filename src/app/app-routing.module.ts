@@ -5,7 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContactComponent } from 'app/contact/contact.component';
 import { HomeComponent } from 'app/home/home.component';
 // import { LegislationComponent } from 'app/legislation/legislation.component';
-import { ProcessComponent } from 'app/process/process.component';
+import { LifecycleComponent } from 'app/lifecycle/lifecycle.component';
+// import { ProcessComponent } from 'app/process/process.component';
 import { MainMapComponent } from 'app/map/main-map/main-map.component';
 import { SearchComponent } from 'app/search/search.component';
 
@@ -27,9 +28,13 @@ const routes: Routes = [
   //   component: LegislationComponent
   // },
   {
-    path: 'process',
-    component: ProcessComponent
+    path: 'lifecycle',
+    component: LifecycleComponent
   },
+  // {
+  //   path: 'process',
+  //   component: ProcessComponent
+  // },
   {
     path: 'map',
     component: MainMapComponent

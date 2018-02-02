@@ -15,15 +15,16 @@ import { ApplicationService } from '../../services/application.service';
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
+  readonly openStates = ['ACCEPTED'];
   public applications: Array<Application>;
   public loading: boolean;
-  public appCount: number;
+  // public appCount: number;
   public config: PaginationInstance = {
     id: 'custom',
     itemsPerPage: 10,
     currentPage: 1
   };
-
+  private showOnlyOpenApps = true;
   private sub: Subscription;
 
   constructor(
@@ -33,14 +34,26 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.getApplications();
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
+
+  private getApplications() {
     this.loading = true;
 
     this.sub = this.applicationService.getAll()
       .subscribe(
       applications => {
         this.loading = false;
-        this.applications = applications;
-        this.appCount = applications ? applications.length : 0;
+        this.applications = applications.filter(
+          application => (!this.showOnlyOpenApps || this.openStates.includes(application.status))
+        );
+        // this.appCount = this.applications ? this.applications.length : 0;
         // Needed in development mode - not required in prod.
         this._changeDetectionRef.detectChanges();
       },
@@ -50,7 +63,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
+  private showChange(e) {
+    this.showOnlyOpenApps = e.target.checked;
+    this.getApplications();
   }
 }

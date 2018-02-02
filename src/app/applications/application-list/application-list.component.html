@@ -1,11 +1,23 @@
 <div class="container" id="anchor-point">
   <main class="application-list">
+    <div class="switchWrapper">
+      <label class="switch">
+        <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
+        <span class="slider round"></span>
+      </label>
+      <div>&nbsp;&nbsp;Show only open applications</div>
+    </div>
+
+    <div *ngIf="!applications || applications.length == 0">
+      <em>No applications found.</em>
+    </div>
+
     <div class="card" *ngFor="let item of applications | paginate: config">
-      <div class="card-header">{{item.status || '-' | titlecase}}</div>
+      <div class="card-header">{{item.proponent ? item.proponent.name : '-'}}</div>
       <div class="card-body">
         <div class="row">
           <div class="col">
-            <p class="title">{{item.proponent ? item.proponent.name : '-'}}</p>
+            <p class="title">{{item.status | titlecase}}</p>
           </div>
         </div>
         <div class="row">

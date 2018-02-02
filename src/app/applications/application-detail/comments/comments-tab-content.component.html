@@ -2,11 +2,11 @@
     <h4 class="tab-intro">Application Comments</h4>
 
     <section class="doc-section">
-        <div class="row" *ngIf="comments.length == 0">
+        <div class="row" *ngIf="!comments || comments.length == 0">
             <em>If this application had comments, they would display here.</em>
         </div>
 
-        <div class="row" *ngIf="comments.length > 0">
+        <div class="row" *ngIf="comments && comments.length > 0">
             <!-- TODO: change to listgroup or table -->
             <div class="d-flex w-100 justify-content-between">
                 <div><u>&nbsp;#&nbsp;</u></div>

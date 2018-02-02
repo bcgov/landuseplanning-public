@@ -4,10 +4,16 @@
       <section>
         <div class="item">
           <p class="title">{{application.proponent ? application.proponent.name : '-'}}</p>
-          <label class="name">Purpose</label>
-          <p class="value">{{application.purpose}}</p>
-          <label class="name">Subpurpose</label>
-          <p class="value">{{application.subpurpose}}</p>
+          <div class="row">
+            <div class="col-lg-6">
+              <label class="name">Purpose</label>
+              <p class="value">{{application.purpose | titlecase}}</p>
+            </div>
+            <div class="col-lg-6">
+              <label class="name">Subpurpose</label>
+              <p class="value">{{application.subpurpose | titlecase}}</p>
+            </div>
+          </div>
         </div>
         <div class="item map-section">
           <div class="map-section__thumbnail" (click)="gotoMap()">
@@ -15,11 +21,11 @@
           </div>
         </div>
         <div class="item">
-            <label class="name">Description</label>
+          <label class="name">Description</label>
           <p class="value" [innerHTML]="application.description | newlines"></p>
         </div>
         <div class="item">
-            <label class="name">Crown Land File(s)</label>
+          <label class="name">Crown Land File(s)</label>
           <p class="value">{{application.cl_files ? application.cl_files.join(', ') : 'none'}}</p>
         </div>
         <div class="item row">
@@ -29,29 +35,29 @@
           </div>
           <div class="col-lg-6">
             <label class="name">Location</label>
-            <p class="value">{{application.location || '-'}}</p>
+            <p class="value">{{application.location}}</p>
           </div>
           <div class="col-lg-6">
             <label class="name">Region</label>
-            <p class="value">{{application.region || '-'}}</p>
+            <p class="value">{{application.region}}</p>
           </div>
         </div>
         <div class="item row">
           <div class="col-lg-6">
             <label class="name">Tenure Type</label>
-            <p class="value">-</p>
+            <p class="value">{{application.type | titlecase}}</p>
           </div>
           <div class="col-lg-6">
             <label class="name">Tenure Subtype</label>
-            <p class="value">-</p>
+            <p class="value">{{application.subtype | titlecase}}</p>
           </div>
           <div class="col-lg-6">
             <label class="name">Tenure Stage</label>
-            <p class="value">-</p>
+            <p class="value">{{application.stageCode}}</p>
           </div>
         </div>
         <div class="item">
-            <label class="name">Contact</label>
+          <label class="name">Contact</label>
           <p class="value">Name
             <br>Email
             <br>Address

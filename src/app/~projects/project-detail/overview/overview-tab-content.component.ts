@@ -3,18 +3,16 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Project } from '../../../models/project';
-import { CollectionsArray } from '../../../models/collection';
 
 @Component({
-  selector: 'app-documents-tab-content',
-  templateUrl: './documents-tab-content.component.html',
-  styleUrls: ['./documents-tab-content.component.scss']
+  selector: 'app-overview-tab-content',
+  templateUrl: './overview-tab-content.component.html',
+  styleUrls: ['./overview-tab-content.component.scss']
 })
-export class DocumentsTabContentComponent implements OnInit, OnDestroy {
+export class OverviewTabContentComponent implements OnInit, OnDestroy {
   // public properties
   loading: boolean;
   project: Project;
-  collections: CollectionsArray;
 
   // private fields
   private sub: Subscription;
@@ -24,19 +22,15 @@ export class DocumentsTabContentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loading = true;
     this.sub = this.route.parent.data.subscribe(
-      (data: { project: Project }) => {
-        if (data.project && data.project.collections) {
-          this.project = data.project;
-          this.collections = data.project.collections.documents;
-          this.collections.sort();
-        }
-      },
+      (data: { project: Project }) => this.project = data.project,
       error => console.log(error),
       () => this.loading = false
     );
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

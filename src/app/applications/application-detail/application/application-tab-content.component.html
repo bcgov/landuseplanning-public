@@ -2,13 +2,13 @@
     <h4 class="tab-intro">Application Documents</h4>
 
     <section class="doc-section">
-        <div class="row" *ngIf="application.documents.length == 0">
+        <div class="row" *ngIf="!application || !application.documents || application.documents.length == 0">
             <em>If this application had documents, they would display here.</em>
         </div>
 
-        <div class="row" *ngIf="application.documents.length > 0">
+        <div class="row" *ngIf="application && application.documents && application.documents.length > 0">
             <div class="col-md-6" *ngFor="let document of application.documents">
-                <a [href]="api.getDocumentUrl(document)" target="_blank">{{document.documentFileName}}</a>
+                <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
             </div>
         </div>
     </section>
