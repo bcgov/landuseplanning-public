@@ -58,12 +58,12 @@ export class CommentService {
         return comments.length > 0 ? comments[0] : null;
       })
       .map((comment: Comment) => {
-        // if (!comment) { return; }
-
-        // now grab the documents
+        if (!comment) { return; }
 
         // cache comment
         this.comment = comment;
+
+        // now grab the comment documents
 
         return this.comment;
       })

@@ -22,7 +22,7 @@ export class OrganizationService {
         return organizations.length > 0 ? organizations[0] : null;
       })
       .map((organization: Organization) => {
-        // if (!organization) { return; }
+        if (!organization) { return; }
 
         // cache organization
         this.organization = organization;

@@ -3,7 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Application } from 'app/models/application';
-import { CommentPeriod } from 'app/models/commentperiod';
+import { Comment } from 'app/models/comment';
+import { CommentService } from 'app/services/comment.service';
 
 @Component({
   selector: 'app-comments-tab-content',
@@ -12,24 +13,29 @@ import { CommentPeriod } from 'app/models/commentperiod';
 })
 export class CommentsTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
-  public application: Application;
-  public currentPeriod: CommentPeriod;
+  public comments: Array<Comment>;
   private sub: Subscription;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private commentService: CommentService
+  ) { }
 
   ngOnInit(): void {
     this.loading = true;
-    this.application = null;
-    this.currentPeriod = null;
+    this.comments = new Array<Comment>();
 
     this.sub = this.route.parent.data.subscribe(
       (data: { application: Application }) => {
         if (data.application) {
-          this.application = data.application;
-          if (data.application.periods) {
-            this.currentPeriod = data.application.periods[0];
-          }
+          this.commentService.getAllByApplicationId(data.application._id).subscribe(
+            comments => {
+              comments.forEach(comment => {
+                this.comments.push(comment);
+              });
+            },
+            error => console.log(error)
+          );
         }
       },
       error => console.log(error),

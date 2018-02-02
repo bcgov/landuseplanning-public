@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
-import { Params, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
@@ -16,36 +13,35 @@ import { User } from 'app/models/user';
 @Injectable()
 export class ApiService {
   public token: string;
-  pathAPI: string;
-  params: Params;
-  env: 'local' | 'dev' | 'test' | 'prod';
+  public apiPath: string;
+  public env: 'local' | 'dev' | 'test' | 'prod';
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private http: Http) {
     const { hostname } = window.location;
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
     switch (hostname) {
       case 'localhost':
         // Local
-        this.pathAPI = 'http://localhost:3000/api/public';
+        this.apiPath = 'http://localhost:3000/api/public';
         this.env = 'local';
         break;
 
       case 'www-nrts-prc-dev-public.pathfinder.gov.bc.ca':
         // Dev
-        this.pathAPI = 'https://prc-api-dev.pathfinder.gov.bc.ca/api/public';
+        this.apiPath = 'https://prc-api-dev.pathfinder.gov.bc.ca/api/public';
         this.env = 'dev';
         break;
 
       case 'www-nrts-prc-test-public.pathfinder.gov.bc.ca':
         // Test
-        this.pathAPI = 'https://prc-api-test.pathfinder.gov.bc.ca/api/public';
+        this.apiPath = 'https://prc-api-test.pathfinder.gov.bc.ca/api/public';
         this.env = 'test';
         break;
 
       default:
         // Prod
-        this.pathAPI = 'https://';
+        this.apiPath = 'https://';
         this.env = 'prod';
     };
   }
@@ -82,7 +78,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   getApplication(id: string) {
@@ -114,7 +110,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   //
@@ -132,7 +128,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   //
@@ -150,7 +146,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   //
@@ -171,7 +167,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   getPeriod(id: string) {
@@ -189,7 +185,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   addCommentPeriod(period: CommentPeriod) {
@@ -200,7 +196,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.post(this.pathAPI, queryString, period, {});
+    return this.post(queryString, period);
   }
 
   saveCommentPeriod(period: CommentPeriod) {
@@ -211,7 +207,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.put(this.pathAPI, queryString, period, {});
+    return this.put(queryString, period);
   }
 
   deleteCommentPeriod(period: CommentPeriod) {
@@ -222,7 +218,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.delete(this.pathAPI, queryString, period, {});
+    return this.delete(queryString, period);
   }
 
   //
@@ -246,7 +242,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   getComment(id: string) {
@@ -267,7 +263,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   addComment(comment: Comment) {
@@ -279,7 +275,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.post(this.pathAPI, queryString, comment, {});
+    return this.post(queryString, comment);
   }
 
   saveComment(comment: Comment) {
@@ -290,7 +286,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.put(this.pathAPI, queryString, comment, {});
+    return this.put(queryString, comment);
   }
 
   //
@@ -310,7 +306,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   getDocument(id: string) {
@@ -327,7 +323,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   // TODO: saveDocument()
@@ -343,7 +339,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.get(this.pathAPI, queryString, {});
+    return this.get(queryString);
   }
 
   saveUser(user: User) {
@@ -354,7 +350,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.put(this.pathAPI, queryString, user, {});
+    return this.put(queryString, user);
   }
 
   addUser(user: User) {
@@ -365,7 +361,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.post(this.pathAPI, queryString, user, {});
+    return this.post(queryString, user);
   }
 
   public handleError(error: any) {
@@ -377,18 +373,18 @@ export class ApiService {
   //
   // Private
   //
-  private get(apiPath: string, apiRoute: string, options?: Object) {
-    return this.http.get(`${apiPath}/${apiRoute}`, options || null);
+  private get(apiRoute: string, options?: Object) {
+    return this.http.get(`${this.apiPath}/${apiRoute}`, options || null);
   }
 
-  private put(apiPath: string, apiRoute: string, body?: Object, options?: Object) {
-    return this.http.put(`${apiPath}/${apiRoute}`, body || null, options || null);
+  private put(apiRoute: string, body?: Object, options?: Object) {
+    return this.http.put(`${this.apiPath}/${apiRoute}`, body || null, options || null);
   }
 
-  private post(apiPath: string, apiRoute: string, body?: Object, options?: Object) {
-    return this.http.post(`${apiPath}/${apiRoute}`, body || null, options || null);
+  private post(apiRoute: string, body?: Object, options?: Object) {
+    return this.http.post(`${this.apiPath}/${apiRoute}`, body || null, options || null);
   }
-  private delete(apiPath: string, apiRoute: string, body?: Object, options?: Object) {
-    return this.http.delete(`${apiPath}/${apiRoute}`, options || null);
+  private delete(apiRoute: string, body?: Object, options?: Object) {
+    return this.http.delete(`${this.apiPath}/${apiRoute}`, options || null);
   }
 }

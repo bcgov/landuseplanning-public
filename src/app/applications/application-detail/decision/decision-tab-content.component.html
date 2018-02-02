@@ -1,8 +1,19 @@
-<div class="decision tab-pane" id="docs" role="tabpanel">
-    <h4 class="tab-intro">Decision package goes here</h4>
+<div class="tab-pane" id="docs" role="tabpanel">
+    <h4 class="tab-intro">Application Decision</h4>
 
     <section class="doc-section">
-        <!-- TODO: fill in some decision fields -->
+        <div class="row" *ngIf="!decision">
+            <em>If this application had a decision, it would display here.</em>
+        </div>
+
+        <div class="row" *ngIf="decision">
+            <p>_id={{decision._id}}</p>
+            <p>_addedBy={{decision._addedBy}}</p>
+            <p>code={{decision.code}}</p>
+            <p>name={{decision.name}}</p>
+            
+            <!-- TODO: decision documents -->
+        </div>
     </section>
 
 </div>

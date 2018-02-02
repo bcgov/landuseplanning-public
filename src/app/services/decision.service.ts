@@ -20,12 +20,12 @@ export class DecisionService {
         return decisions.length > 0 ? decisions[0] : null;
       })
       .map((decision: Decision) => {
-        // if (!decision) { return; }
-
-        // now grab the documents
+        if (!decision) { return; }
 
         // cache decision
         this.decision = decision;
+
+        // now grab the decision documents
 
         return this.decision;
       })

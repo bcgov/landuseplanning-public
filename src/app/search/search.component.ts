@@ -173,33 +173,33 @@ export class SearchComponent implements OnInit {
       this.page += 1;
     }
 
-    this.documentService.get(this.terms, this.applications, this.proponents, this.page, this.limit).subscribe(
-      data => {
-        this.loading = false;
+  //   this.documentService.get(this.terms, this.applications, this.proponents, this.page, this.limit).subscribe(
+  //     data => {
+  //       this.loading = false;
 
-        // Push in 1st call
-        if (data[0].results) {
-          data[0].results.forEach(i => {
-            this.results.push(i);
-          });
-        }
+  //       // Push in 1st call
+  //       if (data[0].results) {
+  //         data[0].results.forEach(i => {
+  //           this.results.push(i);
+  //         });
+  //       }
 
-        // Push in 2nd call
-        if (data[1].results) {
-          data[1].results.forEach(i => {
-            this.results.push(i);
-          });
-        }
+  //       // Push in 2nd call
+  //       if (data[1].results) {
+  //         data[1].results.forEach(i => {
+  //           this.results.push(i);
+  //         });
+  //       }
 
-        this.count = (data[0].count || 0) + (data[1].count || 0);
+  //       this.count = (data[0].count || 0) + (data[1].count || 0);
 
-        this.noMoreResults = (this.results.length === this.count) || (data[0].results.length === 0 && data[1].results.length === 0);
+  //       this.noMoreResults = (this.results.length === this.count) || (data[0].results.length === 0 && data[1].results.length === 0);
 
-        // Needed in development mode - not required in prod.
-        this._changeDetectionRef.detectChanges();
-      },
-      error => console.log(error)
-    );
+  //       // Needed in development mode - not required in prod.
+  //       this._changeDetectionRef.detectChanges();
+  //     },
+  //     error => console.log(error)
+  //   );
   }
 
   onSubmit() {

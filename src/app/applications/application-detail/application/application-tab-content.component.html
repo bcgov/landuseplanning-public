@@ -1,8 +1,16 @@
-<div class="application tab-pane" id="docs" role="tabpanel">
-    <h4 class="tab-intro">Application package goes here</h4>
+<div class="tab-pane" id="docs" role="tabpanel">
+    <h4 class="tab-intro">Application Documents</h4>
 
     <section class="doc-section">
-        <!-- TODO: fill in some application fields -->
+        <div class="row" *ngIf="application.documents.length == 0">
+            <em>If this application had documents, they would display here.</em>
+        </div>
+
+        <div class="row" *ngIf="application.documents.length > 0">
+            <div class="col-md-6" *ngFor="let document of application.documents">
+                <a [href]="getHref(document)" target="_blank">{{document.documentFileName}}</a>
+            </div>
+        </div>
     </section>
 
 </div>
