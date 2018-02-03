@@ -14,7 +14,8 @@ import { TagInputModule } from 'ngx-chips';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ObjectFilterPipe } from './object-filter.pipe';
-import { ProcessComponent } from './process/process.component';
+import { LifecycleComponent } from './lifecycle/lifecycle.component';
+// import { ProcessComponent } from './process/process.component';
 import { ContactComponent } from './contact/contact.component';
 import { SearchComponent } from './search/search.component';
 
@@ -37,7 +38,8 @@ import { CommentPeriod } from 'app/models/commentperiod';
     AppComponent,
     HomeComponent,
     ObjectFilterPipe,
-    ProcessComponent,
+    LifecycleComponent,
+    // ProcessComponent,
     ContactComponent,
     SearchComponent
   ],

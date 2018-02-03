@@ -20,19 +20,19 @@ function scroll_style() {
     }
 }
 
-$(function() {
+$(function () {
     $(window).scroll(scroll_style);
     scroll_style();
 });
 
 // Collapse Menu when navigating to route
-$(document).on('click','.navbar-collapse.show',function(e) {
+$(document).on('click', '.navbar-collapse.show', function (e) {
     $(this).collapse('hide');
 });
 
 // Collapse main navigation drop menus on click
-$(function(){ 
-    $('.dropdown-item').click(function() {
+$(function () {
+    $('.dropdown-item').click(function () {
         $('#mainNav').collapse('hide');
     });
 });
