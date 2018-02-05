@@ -1,15 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 import { TagInputModule } from 'ngx-chips';
+
+import { AppRoutingModule } from './app-routing.module';
 
 // components
 import { AppComponent } from './app.component';

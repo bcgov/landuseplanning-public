@@ -1,6 +1,9 @@
 @import "~assets/styles/base.scss";
 .container {
-    background: #eee;
+    background: #ededed; // must come before image
+    background-image: url("~assets/images/hero-background-prc.png");
+    background-repeat: no-repeat;
+    background-position: top;
     .application-list {
         background: white;
         width: 40%;
