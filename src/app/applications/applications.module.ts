@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 // modules
-import { MapModule } from 'app/map/map.module';
 import { ApplicationsRoutingModule } from './applications-routing.module';
+import { MapModule } from 'app/map/map.module';
 import { SharedModule } from 'app/shared/shared.module';
 
 // components
@@ -23,6 +24,7 @@ import { ApplicationService } from 'app/services/application.service';
 @NgModule({
   imports: [
     CommonModule,
+    NgbModule.forRoot(),
     NgxPaginationModule,
     ApplicationsRoutingModule,
     MapModule,
