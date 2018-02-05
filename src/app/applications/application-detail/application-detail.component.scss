@@ -1,7 +1,10 @@
 @import "~assets/styles/base.scss";
 @import "node_modules/bootstrap/scss/bootstrap.scss";
 .application-detail {
-    background: #ddd;
+    background: #ededed; // must come before image
+    // background-image: url("~assets/images/hero-background-prc.png");
+    // background-repeat: no-repeat;
+    // background-position: top;
     margin: auto;
     padding: 2rem;
     &__meta>section {
@@ -62,8 +65,7 @@
         .title {
             // font-size: larger;
             // font-weight: bold;
-            color: #002663;
-            // margin-bottom: 0.5rem;
+            color: #002663; // margin-bottom: 0.5rem;
         }
         >button {
             position: absolute;
