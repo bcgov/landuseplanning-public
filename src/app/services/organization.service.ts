@@ -9,8 +9,6 @@ import { Organization } from 'app/models/organization';
 
 @Injectable()
 export class OrganizationService {
-  organization: Organization;
-
   constructor(private api: ApiService) { }
 
   // get a specific organization by its id
@@ -19,15 +17,12 @@ export class OrganizationService {
       .map((res: Response) => {
         const organizations = res.text() ? res.json() : [];
         // return the first (only) organization
-        return organizations.length > 0 ? organizations[0] : null;
+        return organizations.length > 0 ? new Organization(organizations[0]) : null;
       })
       .map((organization: Organization) => {
         if (!organization) { return; }
 
-        // cache organization
-        this.organization = organization;
-
-        return this.organization;
+        return organization;
       })
       .catch(this.api.handleError);
   }

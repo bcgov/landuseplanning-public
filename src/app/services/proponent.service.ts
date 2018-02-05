@@ -9,8 +9,6 @@ import { Proponent } from 'app/models/proponent';
 
 @Injectable()
 export class ProponentService {
-  proponent: Proponent;
-
   constructor(private api: ApiService) { }
 
   // get all proponents
@@ -19,11 +17,9 @@ export class ProponentService {
     // return this.api.getProponents()
     //   .map((res: Response) => {
     //     const proponents = res.text() ? res.json() : [];
-
-    //     proponents.forEach((org, index) => {
-    //       proponents[index] = new Proponent(org);
+    //     proponents.forEach((org, i) => {
+    //       proponents[i] = new Proponent(org);
     //     });
-
     //     return proponents;
     //   })
     //   .catch(this.api.handleError);
@@ -36,14 +32,12 @@ export class ProponentService {
     //   .map((res: Response) => {
     //     const proponents = res.text() ? res.json() : [];
     //     // return just the first (only) proponent
-    //     return proponents.length > 0 ? proponents[0] : null;
+    //     return proponents.length > 0 ? new Proponent(proponents[0]) : null;
     //   })
     //   .map((proponent: Proponent) => {
     //     if (!proponent) { return; }
 
-    //     this.proponent = proponent;
-
-    //     return this.proponent;
+    //     return proponent;
     //   })
     //   .catch(this.api.handleError);
   }

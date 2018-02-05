@@ -20,11 +20,9 @@ export class ProjectService {
     // return this.api.getProjects()
     //   .map((res: Response) => {
     //     const projects = res.text() ? res.json() : [];
-
-    //     projects.forEach((project, index) => {
-    //       projects[index] = new Project(project);
+    //     projects.forEach((project, i) => {
+    //       projects[i] = new Project(project);
     //     });
-
     //     return projects;
     //   })
     //   .catch(this.api.handleError);

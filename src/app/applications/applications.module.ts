@@ -13,6 +13,8 @@ import { ApplicationDetailComponent } from './application-detail/application-det
 import { ApplicationTabContentComponent } from './application-detail/application/application-tab-content.component';
 import { CommentsTabContentComponent } from './application-detail/comments/comments-tab-content.component';
 import { DecisionTabContentComponent } from './application-detail/decision/decision-tab-content.component';
+import { ViewCommentComponent } from './application-detail/comments/view-comment/view-comment.component';
+import { AddCommentComponent } from './application-detail/add-comment/add-comment.component';
 
 // services
 import { ApiService } from 'app/services/api';
@@ -31,15 +33,23 @@ import { ApplicationService } from 'app/services/application.service';
     ApplicationDetailComponent,
     ApplicationTabContentComponent,
     CommentsTabContentComponent,
-    DecisionTabContentComponent
+    DecisionTabContentComponent,
+    ViewCommentComponent,
+    AddCommentComponent
   ],
   exports: [
     ApplicationListComponent,
-    ApplicationDetailComponent
+    ApplicationDetailComponent,
+    ViewCommentComponent,
+    AddCommentComponent
   ],
   providers: [
     ApiService,
     ApplicationService
+  ],
+  entryComponents: [
+    ViewCommentComponent,
+    AddCommentComponent
   ]
 })
 
