@@ -6,8 +6,26 @@ import { ApplicationService } from 'app/services/application.service';
 import { Application } from 'app/models/application';
 
 @Injectable()
+export class ApplicationListResolver implements Resolve<Application[]> {
+  constructor(
+    private applicationService: ApplicationService,
+    private router: Router
+  ) { }
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Application[] | Observable<Application[]> | Promise<Application[]> {
+    return this.applicationService.getAll()
+      .catch(err => {
+        return Observable.throw(err);
+      });
+  }
+}
+
+@Injectable()
 export class ApplicationDetailResolver implements Resolve<Application> {
-  constructor(private applicationService: ApplicationService, private router: Router) { }
+  constructor(
+    private applicationService: ApplicationService,
+    private router: Router
+  ) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Application | Observable<Application> | Promise<Application> {
     const appId = route.paramMap.get('appId');
