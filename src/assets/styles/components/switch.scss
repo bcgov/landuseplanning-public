@@ -3,13 +3,14 @@
 /* ref: https://www.w3schools.com/howto/howto_css_switch.asp */
 
 .switchWrapper {
-    div {
-        display: inline-block;
+    .label {
+        display: inline;
+        font-size: small;
     }
     .switch {
+        display: inline-block;
         vertical-align: middle;
         position: relative;
-        display: inline-block;
         width: 48px;
         height: 24px;
         margin: 0;

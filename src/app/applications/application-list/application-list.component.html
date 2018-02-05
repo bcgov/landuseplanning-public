@@ -5,7 +5,7 @@
         <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
         <span class="slider round"></span>
       </label>
-      <div>&nbsp;&nbsp;Show only open applications</div>
+      <div class="label">&nbsp;&nbsp;Show only applications that have an open comment period</div>
     </div>
 
     <div *ngIf="!applications || applications.length == 0">

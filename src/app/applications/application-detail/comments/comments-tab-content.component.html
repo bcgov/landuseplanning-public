@@ -1,32 +1,33 @@
 <div class="tab-pane" id="docs" role="tabpanel">
-    <h4 class="tab-intro">Application Comments</h4>
+    <section class="tab-section">
+        <h4>Application Comments</h4>
 
-    <section class="doc-section">
         <div class="row" *ngIf="!comments || comments.length == 0">
             <em>If this application had comments, they would display here.</em>
         </div>
 
         <div class="row" *ngIf="comments && comments.length > 0">
-            <!-- TODO: change to listgroup or table -->
-            <div class="d-flex w-100 justify-content-between">
-                <div><u>&nbsp;#&nbsp;</u></div>
-                <div><u>&nbsp;Contact Name&nbsp;</u></div>
-                <div><u>&nbsp;Date Added&nbsp;</u></div>
-            </div>
-            <ng-template ngFor let-item [ngForOf]="comments">
-                <div class="d-flex w-100 justify-content-between" style="margin-bottom: 1 rem;">
-                    <div>
-                        {{item.commentNumber || '-'}}
-                    </div>
-                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        {{item.commentAuthor?.contactName || '-'}}
-                    </div>
-                    <div>
-                        {{(item.dateAdded | date) || '-'}}
-                    </div>
-                </div>
-            </ng-template>
+            <table class="table striped">
+                <thead>
+                    <tr>
+                        <th scope="col" style="font-size: large; min-width: 3rem;">#</th>
+                        <th scope="col" style="font-size: large; min-width: 10rem;">Contact Name</th>
+                        <th scope="col" style="font-size: large; min-width: 7rem;">Date Added</th>
+                        <th scope="col" style="font-size: large; min-width: 7rem;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let comment of comments">
+                        <th scope="row">{{comment.commentNumber}}</th>
+                        <td>
+                            <div>{{comment.commentAuthor?.contactName || '(Anonymous)'}}</div>
+                            <div>{{comment.commentAuthor?.orgName}}</div>
+                        </td>
+                        <td>{{comment.dateAdded | date}}</td>
+                        <td><button (click)="viewDetails(comment._id)">View Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
-    
 </div>

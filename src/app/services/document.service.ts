@@ -24,11 +24,9 @@ export class DocumentService {
     return this.api.getDocumentsByAppId(appId)
       .map((res: Response) => {
         const documents = res.text() ? res.json() : [];
-
-        documents.forEach((document, index) => {
-          documents[index] = new Document(document);
+        documents.forEach((document, i) => {
+          documents[i] = new Document(document);
         });
-
         return documents;
       })
       .catch(this.api.handleError);
@@ -43,11 +41,9 @@ export class DocumentService {
     // return this.api.getDocumentsByAppId(appId)
     //   .map((res: Response) => {
     //     const documents = res.text() ? res.json() : [];
-
-    //     documents.forEach((document, index) => {
-    //       documents[index] = new Document(document);
+    //     documents.forEach((document, i) => {
+    //       documents[i] = new Document(document);
     //     });
-
     //     return documents;
     //   })
     //   .catch(this.api.handleError);
@@ -62,11 +58,9 @@ export class DocumentService {
     // return this.api.getDocumentsByAppId(appId)
     //   .map((res: Response) => {
     //     const documents = res.text() ? res.json() : [];
-
-    //     documents.forEach((document, index) => {
-    //       documents[index] = new Document(document);
+    //     documents.forEach((document, i) => {
+    //       documents[i] = new Document(document);
     //     });
-
     //     return documents;
     //   })
     //   .catch(this.api.handleError);

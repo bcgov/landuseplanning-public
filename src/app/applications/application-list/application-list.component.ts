@@ -18,7 +18,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   readonly openStates = ['ACCEPTED'];
   public applications: Array<Application>;
   public loading: boolean;
-  // public appCount: number;
   public config: PaginationInstance = {
     id: 'custom',
     itemsPerPage: 10,
@@ -53,7 +52,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.applications = applications.filter(
           application => (!this.showOnlyOpenApps || this.openStates.includes(application.status))
         );
-        // this.appCount = this.applications ? this.applications.length : 0;
+        console.log('applications =', applications);
         // Needed in development mode - not required in prod.
         this._changeDetectionRef.detectChanges();
       },

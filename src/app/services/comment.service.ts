@@ -13,8 +13,6 @@ import { Comment } from 'app/models/comment';
 
 @Injectable()
 export class CommentService {
-  public comment: Comment;
-
   constructor(
     private api: ApiService,
     private commentPeriodService: CommentPeriodService,
@@ -22,7 +20,7 @@ export class CommentService {
   ) { }
 
   // get all comments for the specified application id
-  getAllByApplicationId(appId: string): Observable<Comment[]> {
+  getAllByApplicationId(appId: string): Observable<Array<Comment>> {
     // first get the comment periods
     return this.commentPeriodService.getAllByApplicationId(appId)
       .mergeMap(periods => {
@@ -37,15 +35,13 @@ export class CommentService {
   }
 
   // get all comments for the specified comment period id
-  getAllByPeriodId(periodId: string): Observable<Comment[]> {
+  getAllByPeriodId(periodId: string): Observable<Array<Comment>> {
     return this.api.getCommentsByPeriodId(periodId)
       .map((res: Response) => {
         const comments = res.text() ? res.json() : [];
-
-        comments.forEach((comment, index) => {
-          comments[index] = new Comment(comment);
+        comments.forEach((comment, i) => {
+          comments[i] = new Comment(comment);
         });
-
         return comments;
       })
       .catch(this.api.handleError);
@@ -57,26 +53,23 @@ export class CommentService {
       .map((res: Response) => {
         const comments = res.text() ? res.json() : [];
         // return the first (only) comment
-        return comments.length > 0 ? comments[0] : null;
+        return comments.length > 0 ? new Comment(comments[0]) : null;
       })
       .map((comment: Comment) => {
         if (!comment) { return; }
-
-        // cache comment
-        this.comment = comment;
 
         // now grab the comment documents
         this.documentService.getAllByComment(comment)
           .subscribe(
           documents => {
             documents.forEach(document => {
-              this.comment.documents.push(document);
+              comment.documents.push(document);
             });
           },
           error => console.log(error)
           );
 
-        return this.comment;
+        return comment;
       })
       .catch(this.api.handleError);
   }

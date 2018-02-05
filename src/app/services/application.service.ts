@@ -17,8 +17,6 @@ import { DecisionService } from './decision.service';
 
 @Injectable()
 export class ApplicationService {
-  public application: Application;
-
   constructor(
     private api: ApiService,
     private organizationService: OrganizationService,
@@ -32,11 +30,27 @@ export class ApplicationService {
     return this.api.getApplications()
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
+        applications.forEach((application, i) => {
+          applications[i] = new Application(application);
+        });
+        return applications;
+      })
+      .map((applications: Array<Application>) => {
+        if (applications.length === 0) {
+          return Observable.of([]);
+        }
 
-        applications.forEach((application, index) => {
-          applications[index] = new Application(application);
-
-          // TODO: get the proponent for each application
+        // get the proponent for each application
+        applications.forEach((application, i) => {
+          if (applications[i]._proponent) {
+            this.organizationService.getById(applications[i]._proponent)
+              .subscribe(
+              organization => {
+                applications[i].proponent = organization; // new Organization(organization);
+              },
+              error => console.log(error)
+              );
+          }
         });
 
         return applications;
@@ -51,21 +65,17 @@ export class ApplicationService {
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
         // return the first (only) application
-        return applications.length > 0 ? applications[0] : null;
+        return applications.length > 0 ? new Application(applications[0]) : null;
       })
       .map((application: Application) => {
         if (!application) { return; }
-
-        // cache application
-        this.application = new Application(application);
 
         // get the proponent
         if (application._proponent) {
           this.organizationService.getById(application._proponent)
             .subscribe(
             organization => {
-              this.application.proponent = new Organization(organization);
-              console.log('proponent=', this.application.proponent);
+              application.proponent = organization; // new Organization(organization);
             },
             error => console.log(error)
             );
@@ -76,9 +86,8 @@ export class ApplicationService {
           .subscribe(
           documents => {
             documents.forEach(document => {
-              this.application.documents.push(document);
+              application.documents.push(document);
             });
-            console.log('documents=', this.application.documents);
           },
           error => console.log(error)
           );
@@ -87,19 +96,29 @@ export class ApplicationService {
         // TODO: what we really want is the current or future comment period
         // if current then commenting is OPEN
         // if future then commenting is SCHEDULED
+        // otherwise, commenting is CLOSED
         this.commentPeriodService.getAllByApplicationId(application._id)
           .subscribe(
           periods => {
             periods.forEach(period => {
-              this.application.periods.push(period);
+              application.periods.push(period);
             });
-            console.log('periods=', this.application.periods);
           },
           error => console.log(error)
           );
 
-        console.log('In ApplicationService...', this.application);
-        return this.application;
+        // get the decision
+        if (application._decision) {
+          this.decisionService.getById(application._decision)
+            .subscribe(
+            decision => {
+              application.decision = decision; // new Decision(decision);
+            },
+            error => console.log(error)
+            );
+        }
+
+        return application;
       })
       .catch(this.api.handleError);
   }

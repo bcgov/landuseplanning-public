@@ -9,8 +9,6 @@ import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentPeriodService {
-  public commentperiod: CommentPeriod;
-
   constructor(private api: ApiService) { }
 
   // get all comment periods for the specified application id
@@ -18,11 +16,9 @@ export class CommentPeriodService {
     return this.api.getPeriodsByAppId(appId)
       .map((res: Response) => {
         const periods = res.text() ? res.json() : [];
-
-        periods.forEach((period, index) => {
-          periods[index] = new CommentPeriod(period);
+        periods.forEach((period, i) => {
+          periods[i] = new CommentPeriod(period);
         });
-
         return periods;
       })
       .catch(this.api.handleError);
@@ -34,15 +30,12 @@ export class CommentPeriodService {
       .map((res: Response) => {
         const periods = res.text() ? res.json() : [];
         // return the first (only) comment period
-        return periods.length > 0 ? periods[0] : null;
+        return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
       })
       .map((period: CommentPeriod) => {
         if (!period) { return; }
 
-        // cache comment period
-        this.commentperiod = period;
-
-        return this.commentperiod;
+        return period;
       })
       .catch(this.api.handleError);
   }

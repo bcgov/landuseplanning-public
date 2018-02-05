@@ -35,7 +35,6 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
       (data: { application: Application }) => {
         this.loading = false;
         this.application = data.application;
-        console.log('In ApplicationDetailComponent...', this.application);
 
         // application not found --> navigate back to application list
         if (!this.application || !this.application._id) {
