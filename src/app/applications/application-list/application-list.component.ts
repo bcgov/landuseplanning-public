@@ -11,7 +11,11 @@ import { ApplicationService } from '../../services/application.service';
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
   styleUrls: ['./application-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // TODO: improve change detection
+  // https://blog.thoughtram.io/angular/2016/02/22/angular-2-change-detection-explained.html
+  // https://blog.angular-university.io/how-does-angular-2-change-detection-really-work/
+  // https://blog.angular-university.io/onpush-change-detection-how-it-works/
+  changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
@@ -51,7 +55,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       applications => {
         this.loading = false;
         this.applications = applications.filter(
-          application => (!this.showOnlyOpenApps || this.openStates.includes(application.commentingStatus))
+          application => true, // (!this.showOnlyOpenApps || this.openStates.includes(application.commentingStatus))
         );
         console.log('applications =', this.applications);
         // Needed in development mode - not required in prod.

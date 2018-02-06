@@ -69,7 +69,8 @@
     <main class="col-md-8 application-detail__tabs">
       <section>
         <h2 class="title">{{application.proponent ? application.proponent.name : '-'}}</h2>
-        <p>Status: {{application.status | titlecase}}</p>
+        <p>Application: <strong>{{application.status | titlecase}}</strong><br>
+        Commenting: <strong>{{application.commentingStatus | titlecase}}</strong></p>
         <button disabled>Add Comment</button>
         <div role="navigation">
           <ul class="nav nav-tabs" role="tablist">

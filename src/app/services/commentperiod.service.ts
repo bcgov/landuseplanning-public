@@ -66,6 +66,6 @@ export class CommentPeriodService {
     // if there is a current period then commenting is OPEN
     // else if there is a future period then commenting is SCHEDULED
     // else commenting is CLOSED
-    return 'OPEN';
+    return (periods.length > 0) ? 'OPEN' : 'CLOSED';
   }
 }
