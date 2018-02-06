@@ -8,7 +8,7 @@ import { ApiService } from './api';
 import { OrganizationService } from './organization.service';
 import { CommentPeriodService } from './commentperiod.service';
 import { Application } from 'app/models/application';
-import { Organization } from 'app/models/Organization';
+import { Organization } from 'app/models/organization';
 import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
