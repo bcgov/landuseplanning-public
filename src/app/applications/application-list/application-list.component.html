@@ -5,38 +5,38 @@
         <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
         <span class="slider round"></span>
       </label>
-      <div class="label">&nbsp;&nbsp;Show only applications that have an open comment period</div>
+      <div class="label">&nbsp;&nbsp;Show only applications that have an open or scheduled comment period</div>
     </div>
 
     <div *ngIf="!applications || applications.length == 0">
       <em>No applications found.</em>
     </div>
 
-    <div class="card" *ngFor="let item of applications | paginate: config">
-      <div class="card-header">{{item.proponent ? item.proponent.name : '-'}}</div>
+    <div class="card" *ngFor="let application of applications | paginate: config">
+      <div class="card-header">{{application.proponent ? application.proponent.name : '-'}}</div>
       <div class="card-body">
         <div class="row">
           <div class="col">
-            <p class="title">{{item.status | titlecase}}</p>
+            <p class="title">{{application.status | titlecase}}</p>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
             <label class="name">Purpose</label>
-            <p class="value">{{item.purpose | titlecase}}</p>
+            <p class="value">{{application.purpose | titlecase}}</p>
           </div>
           <div class="col-md-6">
             <label class="name">Subpurpose</label>
-            <p class="value">{{item.subpurpose | titlecase}}</p>
+            <p class="value">{{application.subpurpose | titlecase}}</p>
           </div>
           <div class="col-md-6">
             <label class="name">Commenting</label>
-            <p class="value">TBD</p>
+            <p class="value">{{(application.commentingStatus | titlecase) || '-'}}</p>
           </div>
         </div>
       </div>
       <div class="card-footer">
-        <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', item._id]">
+        <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', application._id]">
           <i class="material-icons">info_outline</i>
           <span>View Details</span>
         </a>

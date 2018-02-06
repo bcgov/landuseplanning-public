@@ -20,7 +20,7 @@ export class OrganizationService {
         return organizations.length > 0 ? new Organization(organizations[0]) : null;
       })
       .map((organization: Organization) => {
-        if (!organization) { return; }
+        if (!organization) { return null; }
 
         return organization;
       })

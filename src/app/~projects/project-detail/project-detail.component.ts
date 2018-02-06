@@ -26,7 +26,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loading = true;
 
     // wait for the resolver to retrieve the project details from back-end
@@ -44,17 +44,17 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     if (this.sub) {
       this.sub.unsubscribe();
     }
   }
 
-  gotoProjectList(): void {
+  gotoProjectList() {
     this.router.navigate(['/projects']);
   }
 
-  gotoMap(): void {
+  gotoMap() {
     // pass along the id of the current project if available
     // so that the map component can show the popup for it.
     const projectId = this.project ? this.project.code : null;

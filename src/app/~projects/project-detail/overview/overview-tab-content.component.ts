@@ -19,7 +19,7 @@ export class OverviewTabContentComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loading = true;
     this.sub = this.route.parent.data.subscribe(
       (data: { project: Project }) => this.project = data.project,
@@ -28,7 +28,7 @@ export class OverviewTabContentComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     if (this.sub) {
       this.sub.unsubscribe();
     }

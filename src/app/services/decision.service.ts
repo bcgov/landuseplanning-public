@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Decision } from 'app/models/decision';
 import { ApiService } from './api';
 import { DocumentService } from './document.service';
+import { Decision } from 'app/models/decision';
 
 @Injectable()
 export class DecisionService {
@@ -22,18 +22,13 @@ export class DecisionService {
         return decisions.length > 0 ? new Decision(decisions[0]) : null;
       })
       .map((decision: Decision) => {
-        if (!decision) { return; }
+        if (!decision) { return null; }
 
         // now grab the decision documents
-        this.documentService.getAllByDecision(decision)
-          .subscribe(
-          documents => {
-            documents.forEach(document => {
-              decision.documents.push(document);
-            });
-          },
+        this.documentService.getAllByDecision(decision).subscribe(
+          documents => decision.documents = documents,
           error => console.log(error)
-          );
+        );
 
         return decision;
       })

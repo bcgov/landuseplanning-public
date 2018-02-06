@@ -35,7 +35,7 @@ export class ProponentService {
     //     return proponents.length > 0 ? new Proponent(proponents[0]) : null;
     //   })
     //   .map((proponent: Proponent) => {
-    //     if (!proponent) { return; }
+    //     if (!proponent) { return null; }
 
     //     return proponent;
     //   })
