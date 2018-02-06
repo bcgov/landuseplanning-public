@@ -27,7 +27,7 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loading = true;
     this.application = null;
 
@@ -49,17 +49,17 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     if (this.sub) {
       this.sub.unsubscribe();
     }
   }
 
-  private gotoApplicationList(): void {
+  private gotoApplicationList() {
     this.router.navigate(['/applications']);
   }
 
-  private gotoMap(): void {
+  private gotoMap() {
     // pass along the id of the current application if available
     // so that the map component can show the popup for it
     const applicationId = this.application ? this.application._id : null;

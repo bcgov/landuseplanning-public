@@ -33,7 +33,7 @@ export class CommentPeriodService {
         return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
       })
       .map((period: CommentPeriod) => {
-        if (!period) { return; }
+        if (!period) { return null; }
 
         return period;
       })
@@ -57,4 +57,15 @@ export class CommentPeriodService {
   //     })
   //     .catch(this.api.handleError);
   // }
+
+  getCommentingStatus(periods: Array<CommentPeriod>): string {
+    // sort periods by open date
+    // iterate over periods
+    // ...
+
+    // if there is a current period then commenting is OPEN
+    // else if there is a future period then commenting is SCHEDULED
+    // else commenting is CLOSED
+    return 'OPEN';
+  }
 }

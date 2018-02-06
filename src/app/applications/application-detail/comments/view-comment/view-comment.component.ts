@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 import { Comment } from 'app/models/comment';
 import { CommentService } from 'app/services/comment.service';
@@ -19,28 +21,35 @@ export class ViewCommentComponent extends DialogComponent<DataModel, boolean> im
   public title: string;
   public message: string;
   public commentId: string;
-
   public comment: Comment;
-  public showAlert: boolean; // for attachment error
+
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public dialogService: DialogService,
     private commentService: CommentService
   ) {
     super(dialogService);
-    this.showAlert = false;
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    console.log('period id=', this.commentId);
+    this.comment = null;
+
+    this.commentService.getById(this.commentId)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+      comment => {
+        this.comment = comment;
+        console.log('this.comment =', this.comment);
+      },
+      error => console.log(error)
+      );
   }
 
-  save() {
-    // we set dialog result as true on click of save button
-    // then we can get dialog result from caller code
-    this.result = true;
-    alert('Save is not yet implemented');
-    // this.close();
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

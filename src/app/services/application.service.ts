@@ -4,25 +4,19 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { Application } from 'app/models/application';
-import { Organization } from 'app/models/organization';
-import { Document } from 'app/models/document';
-import { Decision } from 'app/models/decision';
-
 import { ApiService } from './api';
 import { OrganizationService } from './organization.service';
-import { DocumentService } from './document.service';
 import { CommentPeriodService } from './commentperiod.service';
-import { DecisionService } from './decision.service';
+import { Application } from 'app/models/application';
+import { Organization } from 'app/models/Organization';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class ApplicationService {
   constructor(
     private api: ApiService,
     private organizationService: OrganizationService,
-    private documentService: DocumentService,
-    private commentPeriodService: CommentPeriodService,
-    private decisionService: DecisionService
+    private commentPeriodService: CommentPeriodService
   ) { }
 
   // get all applications
@@ -40,17 +34,25 @@ export class ApplicationService {
           return Observable.of([]);
         }
 
-        // get the proponent for each application
+        // for each application, get the proponent
         applications.forEach((application, i) => {
           if (applications[i]._proponent) {
-            this.organizationService.getById(applications[i]._proponent)
-              .subscribe(
-              organization => {
-                applications[i].proponent = organization; // new Organization(organization);
-              },
+            this.organizationService.getById(applications[i]._proponent).subscribe(
+              organization => application.proponent = organization,
               error => console.log(error)
-              );
+            );
           }
+        });
+
+        // for each application, get the comment periods and commenting status
+        applications.forEach((application, i) => {
+          this.commentPeriodService.getAllByApplicationId(applications[i]._id).subscribe(
+            periods => {
+              applications[i].periods = periods;
+              applications[i].commentingStatus = this.commentPeriodService.getCommentingStatus(periods);
+            },
+            error => console.log(error)
+          );
         });
 
         return applications;
@@ -68,55 +70,24 @@ export class ApplicationService {
         return applications.length > 0 ? new Application(applications[0]) : null;
       })
       .map((application: Application) => {
-        if (!application) { return; }
+        if (!application) { return null; }
 
         // get the proponent
         if (application._proponent) {
-          this.organizationService.getById(application._proponent)
-            .subscribe(
-            organization => {
-              application.proponent = organization; // new Organization(organization);
-            },
+          this.organizationService.getById(application._proponent).subscribe(
+            organization => application.proponent = organization,
             error => console.log(error)
-            );
+          );
         }
 
-        // get the application documents
-        this.documentService.getAllByApplicationId(application._id)
-          .subscribe(
-          documents => {
-            documents.forEach(document => {
-              application.documents.push(document);
-            });
-          },
-          error => console.log(error)
-          );
-
-        // get the comment periods
-        // TODO: what we really want is the current or future comment period
-        // if current then commenting is OPEN
-        // if future then commenting is SCHEDULED
-        // otherwise, commenting is CLOSED
-        this.commentPeriodService.getAllByApplicationId(application._id)
-          .subscribe(
+        // get the comment periods and commenting status
+        this.commentPeriodService.getAllByApplicationId(application._id).subscribe(
           periods => {
-            periods.forEach(period => {
-              application.periods.push(period);
-            });
+            application.periods = periods;
+            application.commentingStatus = this.commentPeriodService.getCommentingStatus(periods);
           },
           error => console.log(error)
-          );
-
-        // get the decision
-        if (application._decision) {
-          this.decisionService.getById(application._decision)
-            .subscribe(
-            decision => {
-              application.decision = decision; // new Decision(decision);
-            },
-            error => console.log(error)
-            );
-        }
+        );
 
         return application;
       })

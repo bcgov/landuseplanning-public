@@ -16,6 +16,6 @@ export class Decision {
       this.name       = obj && obj.name       || null;
       this._documents = obj && obj._documents || [];
 
-      this.documents = new Array<Document>();
+    this.documents = null;
     }
   }

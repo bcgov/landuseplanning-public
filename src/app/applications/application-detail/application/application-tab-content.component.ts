@@ -1,43 +1,56 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 import { Application } from 'app/models/application';
 import { ApiService } from 'app/services/api';
+import { Document } from 'app/models/document';
+import { DocumentService } from 'app/services/document.service';
 
 @Component({
-  selector: 'app-application-tab-content',
   templateUrl: './application-tab-content.component.html',
   styleUrls: ['./application-tab-content.component.scss']
 })
 export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  private sub: Subscription;
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private documentService: DocumentService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loading = true;
     this.application = null;
 
-    this.sub = this.route.parent.data.subscribe(
+    this.route.parent.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
       (data: { application: Application }) => {
         if (data.application) {
           this.application = data.application;
+
+          // get application documents
+          this.application.documents = [];
+          this.documentService.getAllByApplicationId(this.application._id)
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(
+            documents => this.application.documents = documents,
+            error => console.log(error)
+            );
         }
       },
       error => console.log(error),
       () => this.loading = false
-    );
+      );
   }
 
-  ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

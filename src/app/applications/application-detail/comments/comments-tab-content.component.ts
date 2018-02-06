@@ -11,12 +11,12 @@ import { CommentService } from 'app/services/comment.service';
 import { ViewCommentComponent } from './view-comment/view-comment.component';
 
 @Component({
-  // selector: 'app-comments-tab-content',
   templateUrl: './comments-tab-content.component.html',
   styleUrls: ['./comments-tab-content.component.scss']
 })
 export class CommentsTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
+  public application: Application;
   public comments: Array<Comment>;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -26,21 +26,21 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
     private dialogService: DialogService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loading = true;
-    this.comments = new Array<Comment>();
+    this.application = null;
+    this.comments = [];
 
     this.route.parent.data.subscribe(
       (data: { application: Application }) => {
         if (data.application) {
-          this.commentService.getAllByApplicationId(data.application._id)
+          this.application = data.application;
+
+          // get application comments
+          this.commentService.getAllByApplicationId(this.application._id)
             .takeUntil(this.ngUnsubscribe)
             .subscribe(
-            comments => {
-              comments.forEach(comment => {
-                this.comments.push(comment);
-              });
-            },
+            comments => this.comments = comments,
             error => console.log(error)
             );
         }
@@ -50,7 +50,7 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

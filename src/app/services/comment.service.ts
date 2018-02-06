@@ -28,8 +28,8 @@ export class CommentService {
           return Observable.of([]);
         }
 
-        // now get the comments
-        // TODO: return comments for all periods
+        // now get the comments for all periods
+        // TODO: periods.forEach(...)
         return this.getAllByPeriodId(periods[0]._id);
       });
   }
@@ -56,18 +56,14 @@ export class CommentService {
         return comments.length > 0 ? new Comment(comments[0]) : null;
       })
       .map((comment: Comment) => {
-        if (!comment) { return; }
+        if (!comment) { return null; }
 
         // now grab the comment documents
-        this.documentService.getAllByComment(comment)
-          .subscribe(
-          documents => {
-            documents.forEach(document => {
-              comment.documents.push(document);
-            });
-          },
+        this.documentService.getAllByComment(comment).subscribe(
+          documents => comment.documents = documents,
           error => console.log(error)
-          );
+        );
+
 
         return comment;
       })

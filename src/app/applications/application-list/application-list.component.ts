@@ -15,7 +15,7 @@ import { ApplicationService } from '../../services/application.service';
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
-  readonly openStates = ['ACCEPTED'];
+  readonly openStates = ['OPEN', 'SCHEDULED'];
   public applications: Array<Application>;
   public loading: boolean;
   public config: PaginationInstance = {
@@ -33,6 +33,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.applications = [];
     this.getApplications();
   }
 
@@ -50,9 +51,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       applications => {
         this.loading = false;
         this.applications = applications.filter(
-          application => (!this.showOnlyOpenApps || this.openStates.includes(application.status))
+          application => (!this.showOnlyOpenApps || this.openStates.includes(application.commentingStatus))
         );
-        console.log('applications =', applications);
+        console.log('applications =', this.applications);
         // Needed in development mode - not required in prod.
         this._changeDetectionRef.detectChanges();
       },

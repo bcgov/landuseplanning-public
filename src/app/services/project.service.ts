@@ -37,7 +37,7 @@ export class ProjectService {
     //     return res.text() ? new Project(res.json()) : null;
     //   })
     //   .map((project: Project) => {
-    //     if (!project) { return; }
+    //     if (!project) { return null; }
 
     //     this.project = project;
     //     this.project.collections = new CollectionsList();

@@ -1,14 +1,17 @@
 @import "~assets/styles/base.scss";
 .container {
-    background: #ededed; // must come before image
-    background-image: url("~assets/images/hero-background-prc.png");
+    background: #fff; // must come before image
+    background-image: url("~assets/images/hero-background-prc.jpg");
     background-repeat: no-repeat;
     background-position: top;
     .application-list {
         background: white;
         width: 40%;
         min-width: 300px;
+        min-height: 20rem;
         padding: 1em;
+        border: 1px #ccc solid;
+        border-radius: 5px;
         .switchWrapper {
             margin-bottom: 1rem;
         }
