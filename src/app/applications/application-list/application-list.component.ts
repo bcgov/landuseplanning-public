@@ -11,11 +11,7 @@ import { CommentPeriodService } from '../../services/commentperiod.service';
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
   styleUrls: ['./application-list.component.scss'],
-  // TODO: improve change detection
-  // https://blog.thoughtram.io/angular/2016/02/22/angular-2-change-detection-explained.html
-  // https://blog.angular-university.io/how-does-angular-2-change-detection-really-work/
-  // https://blog.angular-university.io/onpush-change-detection-how-it-works/
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush // PRC-149: improve change detection
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
@@ -25,7 +21,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     itemsPerPage: 10,
     currentPage: 1
   };
-  private showOnlyOpenApps = false; // TODO: fix change detection bug when initially true
+  private showOnlyOpenApps = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,7 +32,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.applications = [];
-    this.getApplications();
+    // PRC-149: remove work-around change detection bug is fixed
+    setTimeout(() => this.getApplications(), 0);
   }
 
   ngOnDestroy() { }
