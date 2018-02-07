@@ -3,8 +3,8 @@
     <div class="col-md-4 application-detail__meta">
       <section>
         <div class="item">
-            <p class="title">{{application.proponent ? application.proponent.name : '-'}}</p>
-            <div class="row">
+          <p class="title">{{application.proponent ? application.proponent.name : '-'}}</p>
+          <div class="row">
             <div class="col-lg-6">
               <label class="name">Purpose</label>
               <p class="value">{{application.purpose | titlecase}}</p>
@@ -17,7 +17,7 @@
         </div>
         <div class="item map-section">
           <div class="map-section__thumbnail" (click)="gotoMap()">
-            <app-application-map [application]="application" [zoom]="4"></app-application-map>
+            <!-- <app-application-map [application]="application" [zoom]="4"></app-application-map> -->
           </div>
         </div>
         <div class="item">
@@ -26,7 +26,7 @@
         </div>
         <div class="item">
           <label class="name">Crown Land File(s)</label>
-          <p class="value">{{application.cl_files ? application.cl_files.join(', ') : 'none'}}</p>
+          <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
         </div>
         <div class="item row">
           <div class="col-lg-6">
@@ -51,27 +51,24 @@
             <label class="name">Tenure Subtype</label>
             <p class="value">{{application.subtype | titlecase}}</p>
           </div>
-          <div class="col-lg-6">
+          <!-- <div class="col-lg-6">
             <label class="name">Tenure Stage</label>
             <p class="value">{{application.stageCode}}</p>
-          </div>
-        </div>
-        <div class="item">
-          <label class="name">Contact</label>
-          <p class="value">Name
-            <br>Email
-            <br>Address
-            <br>Phone</p>
+          </div> -->
         </div>
       </section>
     </div>
 
+    <!-- TODO: instead of the tabs, this could be a map -->
     <main class="col-md-8 application-detail__tabs">
       <section>
         <h2 class="title">{{application.proponent ? application.proponent.name : '-'}}</h2>
-        <p>Application: <strong>{{application.status | titlecase}}</strong><br>
-        Commenting: <strong>{{application.commentingStatus | titlecase}}</strong></p>
-        <button disabled>Add Comment</button>
+        <p>
+          <strong>{{applicationService.getStatus(application) | titlecase}}</strong>
+          <br>
+          <strong>{{commentPeriodService.getStatus(application.currentPeriod) | titlecase}}</strong>
+        </p>
+        <button (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Add Comment</button>
         <div role="navigation">
           <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
@@ -79,7 +76,9 @@
             </li>
           </ul>
         </div>
+
         <router-outlet></router-outlet>
+
       </section>
     </main>
   </div>

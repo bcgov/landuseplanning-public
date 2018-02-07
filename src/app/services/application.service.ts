@@ -8,8 +8,6 @@ import { ApiService } from './api';
 import { OrganizationService } from './organization.service';
 import { CommentPeriodService } from './commentperiod.service';
 import { Application } from 'app/models/application';
-import { Organization } from 'app/models/organization';
-import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class ApplicationService {
@@ -44,13 +42,10 @@ export class ApplicationService {
           }
         });
 
-        // for each application, get the comment periods and commenting status
+        // for each application, get the current comment period
         applications.forEach((application, i) => {
           this.commentPeriodService.getAllByApplicationId(applications[i]._id).subscribe(
-            periods => {
-              applications[i].periods = periods;
-              applications[i].commentingStatus = this.commentPeriodService.getCommentingStatus(periods);
-            },
+            periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods),
             error => console.log(error)
           );
         });
@@ -80,17 +75,19 @@ export class ApplicationService {
           );
         }
 
-        // get the comment periods and commenting status
+        // get the current comment period
         this.commentPeriodService.getAllByApplicationId(application._id).subscribe(
-          periods => {
-            application.periods = periods;
-            application.commentingStatus = this.commentPeriodService.getCommentingStatus(periods);
-          },
+          periods => application.currentPeriod = this.commentPeriodService.getCurrent(periods),
           error => console.log(error)
         );
 
         return application;
       })
       .catch(this.api.handleError);
+  }
+
+  getStatus(application: Application): string {
+    // TODO: return user friendly application status based on stageCode + status
+    return application.status;
   }
 }

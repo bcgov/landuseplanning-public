@@ -58,14 +58,18 @@ export class CommentPeriodService {
   //     .catch(this.api.handleError);
   // }
 
-  getCommentingStatus(periods: Array<CommentPeriod>): string {
-    // sort periods by open date
-    // iterate over periods
-    // ...
+  // returns current (latest) period
+  // assumes if there's an open period, there isn't also future one
+  getCurrent(periods: Array<CommentPeriod>): CommentPeriod {
+    const sortedPeriods = periods.sort((a, b) => a.startDate < b.startDate ? 1 : 0);
+    return (sortedPeriods.length > 0) ? sortedPeriods[0] : null;
+  }
 
-    // if there is a current period then commenting is OPEN
-    // else if there is a future period then commenting is SCHEDULED
-    // else commenting is CLOSED
-    return (periods.length > 0) ? 'OPEN' : 'CLOSED';
+  isOpen(period: CommentPeriod): boolean {
+    return (period && period.status === 'COMMENTING OPEN');
+  }
+
+  getStatus(period: CommentPeriod): string {
+    return (period && period.status) || 'NOT OPEN FOR COMMENTING';
   }
 }

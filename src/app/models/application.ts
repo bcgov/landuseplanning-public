@@ -43,9 +43,8 @@ export class Application {
 
   proponent: Organization;
   documents: Array<Document>;
-  periods: Array<CommentPeriod>;
+  currentPeriod: CommentPeriod;
   decision: Decision;
-  commentingStatus: string;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -60,7 +59,7 @@ export class Application {
     this.agency                  = obj && obj.agency                  || null;
     this.areaHectares            = obj && obj.areaHectares            || null;
     this.businessUnit            = obj && obj.businessUnit            || null;
-    this.cl_files                = obj && obj.cl_file                 || null;
+    this.cl_files                = obj && obj.cl_files                || null;
     this.code                    = obj && obj.code                    || null;
     this.name                    = obj && obj.name                    || null;
     this.description             = obj && obj.description             || null;
@@ -87,8 +86,7 @@ export class Application {
 
     this.proponent = null;
     this.documents = [];
-    this.periods = [];
+    this.currentPeriod = null;
     this.decision = null;
-    this.commentingStatus = null;
   }
 }
