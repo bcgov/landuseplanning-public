@@ -14,7 +14,7 @@ import { DecisionService } from 'app/services/decision.service';
 export class DecisionTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
-  public decision: Decision;
+  public decisions: Decision;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -25,7 +25,7 @@ export class DecisionTabContentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.application = null;
-    this.decision = null;
+    this.decisions = null;
 
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
@@ -39,9 +39,9 @@ export class DecisionTabContentComponent implements OnInit, OnDestroy {
             this.decisionService.getById(this.application._decision)
               .takeUntil(this.ngUnsubscribe)
               .subscribe(
-              decision => {
-                this.decision = new Decision(decision);
-                console.log('this.decision =', this.decision);
+              decisions => {
+                this.decisions = new Decision(decisions);
+                console.log('this.decisions =', this.decisions);
               },
               error => console.log(error)
               );

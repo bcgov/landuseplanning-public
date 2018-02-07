@@ -43,9 +43,8 @@ export class Application {
 
   proponent: Organization;
   documents: Array<Document>;
-  periods: Array<CommentPeriod>;
+  currentPeriod: CommentPeriod;
   decision: Decision;
-  commentingStatus: string;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -87,8 +86,7 @@ export class Application {
 
     this.proponent = null;
     this.documents = [];
-    this.periods = [];
+    this.currentPeriod = null;
     this.decision = null;
-    this.commentingStatus = null;
   }
 }

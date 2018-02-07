@@ -9,6 +9,9 @@
             content: "*";
             color: red;
         }
+        .form-group.optional .control-label:after {
+            content: "(optional)";
+        }
         .fb-upload-container {
             border: 1px #495057 solid;
             padding: 1em;
@@ -17,6 +20,21 @@
     .modal-footer {
         button {
             cursor: pointer;
+        }
+    }
+    .page1 {}
+    .page2 {
+        textarea {
+            min-height: 5rem;
+        }
+    }
+    .page3 {
+        .modal-body {
+            text-align: center;
+        }
+        img {
+            width: 100px;
+            height: 100px;
         }
     }
 }

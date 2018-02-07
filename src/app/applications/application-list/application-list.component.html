@@ -29,9 +29,8 @@
             <label class="name">Subpurpose</label>
             <p class="value">{{application.subpurpose | titlecase}}</p>
           </div>
-          <div class="col-md-6">
-            <label class="name">Commenting</label>
-            <p class="value">{{(application.commentingStatus | titlecase) || '-'}}</p>
+          <div class="col">
+            <p class="title">{{application.currentPeriod?.status || 'NOT OPEN FOR COMMENT' | titlecase}}</p>
           </div>
         </div>
       </div>

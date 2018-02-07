@@ -1,15 +1,13 @@
 <div class="tab-pane" id="docs" role="tabpanel">
     <section class="tab-section">
-        <h4>Application Decision</h4>
-
         <div class="row" *ngIf="!decision">
-            <em>If this application had a decision, it would display here.</em>
+            <em>No decisions have been made for this application at this time.</em>
         </div>
 
-        <div class="row" *ngIf="decision">
-            <pre>{{decision}}</pre>
+        <div class="row" *ngIf="decisions">
+            <pre>{{decision | json}}</pre>
 
-            <!-- TODO: decision documents -->
+            <!-- TODO: application status, decision text and documents -->
         </div>
     </section>
 </div>
