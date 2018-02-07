@@ -1,13 +1,13 @@
 <div class="tab-pane" id="docs" role="tabpanel">
     <section class="tab-section">
-        <div class="row" *ngIf="!decision">
+        <div class="row" *ngIf="!decisions">
             <em>No decisions have been made for this application at this time.</em>
         </div>
 
         <div class="row" *ngIf="decisions">
-            <pre>{{decision | json}}</pre>
+            <pre>{{decisions | json}}</pre>
 
-            <!-- TODO: application status, decision text and documents -->
+            <!-- TODO: application status, decisions text and documents -->
         </div>
     </section>
 </div>

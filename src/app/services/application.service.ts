@@ -86,8 +86,24 @@ export class ApplicationService {
       .catch(this.api.handleError);
   }
 
+  // returns application status based on stage code + status code
   getStatus(application: Application): string {
-    // TODO: return user friendly application status based on stageCode + status
-    return application.status;
+    // if (application.stageCode === 'A') {
+      switch (application.status.toUpperCase()) {
+        case 'ABANDONED': return 'Application Abandoned';
+        case 'ACCEPTED': return 'Application Under Review';
+        case 'ALLOWED': return 'Decision Made: Allowed';
+        case 'DISALLOWED': return 'Decision Made: Disallowed';
+        case 'OFFERED': return 'Decision Made: Offered';
+        case 'OFFER ACCEPTED': return 'Decision Made: Offer Accepted';
+        case 'OFFER NOT ACCEPTED': return 'Offer Not Accepted';
+    //   }
+    // } else if (application.stageCode === 'T') {
+    //   switch (application.status.toUpperCase()) {
+        case 'DISPOSITION IN GOOD STANDING': return 'Tenure: Disposition in Good Standing';
+        case 'SUSPENDED': return 'Tenure: Suspended';
+      }
+    // }
+    return '-';
   }
 }

@@ -66,10 +66,29 @@ export class CommentPeriodService {
   }
 
   isOpen(period: CommentPeriod): boolean {
-    return (period && period.status === 'COMMENTING OPEN');
+    return (this.getStatus(period) === 'Commenting Open');
+  }
+
+  isOpenFuture(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === 'Commenting Open' ||
+      this.getStatus(period) === 'Commenting Not Started');
   }
 
   getStatus(period: CommentPeriod): string {
-    return (period && period.status) || 'NOT OPEN FOR COMMENTING';
+    if (!period) {
+      return 'Not Open For Commenting';
+    }
+
+    const today = new Date();
+    const startDate = new Date(period.startDate);
+    const endDate = new Date(period.endDate);
+
+    if (endDate < today) {
+      return 'Commenting Closed';
+    } else if (startDate > today) {
+      return 'Commenting Not Started';
+    } else {
+      return 'Commenting Open';
+    }
   }
 }
