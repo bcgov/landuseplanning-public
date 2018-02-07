@@ -24,6 +24,12 @@
                 padding: 0px;
             }
         }
+        .proponent {
+            font-size: x-large;
+            font-weight: bold;
+            color: #002663;
+            margin-bottom: 0.5rem;
+        }
         .title {
             font-size: larger;
             font-weight: bold;
@@ -62,11 +68,6 @@
         min-height: 20rem;
         border: 1px black solid;
         border-radius: 5px;
-        .title {
-            // font-size: larger;
-            // font-weight: bold;
-            color: #002663; // margin-bottom: 0.5rem;
-        }
         >button {
             position: absolute;
             top: 1em;

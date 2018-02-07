@@ -16,11 +16,21 @@
                 <tbody>
                     <tr *ngFor="let comment of comments">
                         <td>
-                            <div>{{comment.commentAuthor?.contactName || '(Anonymous)'}}</div>
-                            <div>{{comment.commentAuthor?.orgName}}</div>
+                            <div *ngIf="comment.commentAuthor && comment.commentAuthor.contactName; else anonymous">
+                                {{comment.commentAuthor.contactName}}
+                                <span *ngIf="comment.commentAuthor && comment.commentAuthor.orgName">
+                                    ({{comment.commentAuthor.orgName}})
+                                </span>
+                            </div>
+                            <ng-template #anonymous>
+                                <em>Anonymous</em>
+                            </ng-template>
+                            <div>{{comment.commentAuthor?.location}}</div>
                         </td>
                         <td>{{comment.dateAdded | date}}</td>
-                        <td><button (click)="viewDetails(comment._id)">View Details</button></td>
+                        <td>
+                            <button (click)="viewDetails(comment._id)">View Details</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
