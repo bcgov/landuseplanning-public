@@ -1,15 +1,14 @@
 .modal-dialog {
     .modal-header {
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin-bottom: 0;
-        }
         button {
             cursor: pointer;
         }
     }
     .modal-body {
+        p {
+            font-size: smaller;
+            line-height: 1.25rem;
+        }
     }
     .modal-footer {
         button {

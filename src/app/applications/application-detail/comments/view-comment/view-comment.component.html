@@ -8,16 +8,20 @@
     </div>
 
     <div class="modal-header" *ngIf="comment">
-      <div class="comment-detail__author">
-        <ul>
-          <li class="badge badge-warning" *ngIf="comment.commentAuthor.requestedAnonymous">Requested Anonymous</li>
-          <li class="value">
-            <strong>{{comment.commentAuthor.contactName}}</strong>
-          </li>
-          <li class="value" *ngIf="comment.commentAuthor.orgName">{{comment.commentAuthor.orgName}}</li>
-          <li class="value">{{comment.commentAuthor.location}}</li>
-          <li class="value">{{comment.dateAdded | date:'fullDate'}}</li>
-        </ul>
+      <div>
+        <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: large; color: #003366;">
+          <div *ngIf="comment.commentAuthor && comment.commentAuthor.tags; else anonymous">
+            {{comment.commentAuthor.contactName}}
+            <span *ngIf="comment.commentAuthor.orgName">({{comment.commentAuthor.orgName}})</span>
+            <span *ngIf="comment.commentAuthor.location">, {{comment.commentAuthor.location}}</span>
+          </div>
+          <ng-template #anonymous>
+            <em>Anonymous</em>
+          </ng-template>
+        </div>
+        <div>
+          {{(comment.dateAdded | date:'longDate') || '-'}}
+        </div>
       </div>
       <button type="button" class="close" aria-label="Close" (click)="close()">
         <span aria-hidden="true">&times;</span>
@@ -32,7 +36,11 @@
       </div>
 
       <div>
-        <div class="row" *ngIf="comment.documents && comment.documents.length > 0">
+        <div *ngIf="comment.documents.length == 0">
+          <em>This comment has no documents.</em>
+        </div>
+
+        <div class="row" *ngIf="comment.documents.length > 0">
           <div class="col-md-6" *ngFor="let document of application.documents">
             <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
           </div>

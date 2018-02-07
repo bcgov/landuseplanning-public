@@ -1,8 +1,8 @@
-<div class="tab-pane" id="docs" role="tabpanel">
+<div class="tab-pane" id="application" role="tabpanel">
     <section class="tab-section" *ngIf="application">
         <div>
             <h4>Application Documents</h4>
-            <div class="row" *ngIf="documents.length == 0">
+            <div *ngIf="documents.length == 0">
                 <em>No documents have been uploaded for this application.</em>
             </div>
             <div class="row" *ngIf="documents.length > 0">

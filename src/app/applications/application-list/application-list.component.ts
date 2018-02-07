@@ -32,16 +32,28 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.applications = [];
-    // PRC-149: remove work-around change detection bug is fixed
-    setTimeout(() => this.getApplications(), 0);
+    // PRC-149: remove work-around when change detection bug is fixed
+    setTimeout(() => this.getApplications(), 100);
   }
 
   ngOnDestroy() { }
 
   private getApplications() {
+    // approach 1: get data from resolver
     this.applications = this.route.snapshot.data.applications.filter(
       application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenFuture(application.currentPeriod))
     );
+
+    // approach 2: wait for resolver to retrieve applications
+    // this.route.data.subscribe(
+    //   (data: { applications: Application[] }) => {
+    //     this.applications = data.applications.filter(
+    //       application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenFuture(application.currentPeriod))
+    //     );
+    //   },
+    //   error => console.log(error)
+    // );
+
     console.log('this.applications =', this.applications);
     // Needed in development mode - not required in prod.
     this._changeDetectionRef.detectChanges();

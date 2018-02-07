@@ -1,4 +1,10 @@
 @import "~assets/styles/base.scss";
 .tab-section {
-    margin: 1em;
+    >div {
+        margin: 1em;
+    }
+    h4 {
+        margin-bottom: 0;
+        color: $primary;
+    }
 }

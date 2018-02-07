@@ -32,7 +32,7 @@ export class ApplicationService {
           return Observable.of([]);
         }
 
-        // for each application, get the proponent
+        // now get the proponent for each application
         applications.forEach((application, i) => {
           if (applications[i]._proponent) {
             this.organizationService.getById(applications[i]._proponent).subscribe(
@@ -42,7 +42,7 @@ export class ApplicationService {
           }
         });
 
-        // for each application, get the current comment period
+        // now get the current comment period for each application
         applications.forEach((application, i) => {
           this.commentPeriodService.getAllByApplicationId(applications[i]._id).subscribe(
             periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods),

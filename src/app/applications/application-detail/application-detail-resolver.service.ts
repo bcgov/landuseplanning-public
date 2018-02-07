@@ -5,6 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import { ApplicationService } from 'app/services/application.service';
 import { Application } from 'app/models/application';
 
+//
+// TODO: implement resolvers according to route spec
+//
 @Injectable()
 export class ApplicationListResolver implements Resolve<Application[]> {
   constructor(private applicationService: ApplicationService) { }
