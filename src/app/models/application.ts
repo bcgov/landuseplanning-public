@@ -1,5 +1,4 @@
 import { Organization } from './organization';
-import { Document } from './document';
 import { CommentPeriod } from './commentperiod';
 import { Decision } from './decision';
 
@@ -42,7 +41,6 @@ export class Application {
   _decision: string; // objectid -> Decision
 
   proponent: Organization;
-  documents: Array<Document>;
   currentPeriod: CommentPeriod;
   decision: Decision;
 
@@ -85,7 +83,6 @@ export class Application {
     this._decision               = obj && obj._decision               || null;
 
     this.proponent = null;
-    this.documents = [];
     this.currentPeriod = null;
     this.decision = null;
   }

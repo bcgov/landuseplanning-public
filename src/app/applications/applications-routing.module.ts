@@ -10,9 +10,9 @@ const routes: Routes = [
   {
     path: 'applications',
     component: ApplicationListComponent,
-    // resolve: {
-    //   application: ApplicationListResolver
-    // }
+    resolve: {
+      applications: ApplicationListResolver
+    }
   },
   {
     path: 'application/:appId',

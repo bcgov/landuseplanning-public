@@ -3,7 +3,12 @@
     <div class="col-md-4 application-detail__meta">
       <section>
         <div class="item">
-          <p class="title">{{application.proponent ? application.proponent.name : '-'}}</p>
+          <p class="proponent">{{application.proponent ? application.proponent.name : '-'}}</p>
+          <div class="row">
+            <div class="col">
+              <p class="title">{{applicationService.getStatus(application)}}</p>
+            </div>
+          </div>
           <div class="row">
             <div class="col-lg-6">
               <label class="name">Purpose</label>
@@ -12,6 +17,11 @@
             <div class="col-lg-6">
               <label class="name">Subpurpose</label>
               <p class="value">{{application.subpurpose | titlecase}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</p>
             </div>
           </div>
         </div>
@@ -51,10 +61,6 @@
             <label class="name">Tenure Subtype</label>
             <p class="value">{{application.subtype | titlecase}}</p>
           </div>
-          <!-- <div class="col-lg-6">
-            <label class="name">Tenure Stage</label>
-            <p class="value">{{application.stageCode}}</p>
-          </div> -->
         </div>
       </section>
     </div>
@@ -62,12 +68,6 @@
     <!-- TODO: instead of the tabs, this could be a map -->
     <main class="col-md-8 application-detail__tabs">
       <section>
-        <h2 class="title">{{application.proponent ? application.proponent.name : '-'}}</h2>
-        <p>
-          <strong>{{applicationService.getStatus(application) | titlecase}}</strong>
-          <br>
-          <strong>{{commentPeriodService.getStatus(application.currentPeriod) | titlecase}}</strong>
-        </p>
         <button (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Add Comment</button>
         <div role="navigation">
           <ul class="nav nav-tabs" role="tablist">

@@ -5,7 +5,7 @@
         <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
         <span class="slider round"></span>
       </label>
-      <div class="label">&nbsp;&nbsp;Show only applications that have an open or scheduled comment period</div>
+      <div class="label">&nbsp;&nbsp;Show only applications that have an open or future comment period</div>
     </div>
 
     <div *ngIf="!applications || applications.length == 0">
@@ -17,7 +17,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col">
-            <p class="title">{{application.status | titlecase}}</p>
+            <p class="title">{{applicationService.getStatus(application)}}</p>
           </div>
         </div>
         <div class="row">
@@ -29,8 +29,10 @@
             <label class="name">Subpurpose</label>
             <p class="value">{{application.subpurpose | titlecase}}</p>
           </div>
+        </div>
+        <div class="row">
           <div class="col">
-            <p class="title">{{application.currentPeriod?.status || 'NOT OPEN FOR COMMENT' | titlecase}}</p>
+            <p class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</p>
           </div>
         </div>
       </div>

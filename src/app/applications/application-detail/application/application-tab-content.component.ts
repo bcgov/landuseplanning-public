@@ -15,6 +15,7 @@ import { DocumentService } from 'app/services/document.service';
 export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public application: Application;
+  public documents: Array<Document>;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -26,6 +27,7 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.application = null;
+    this.documents = [];
 
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
@@ -35,11 +37,11 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
           this.application = data.application;
 
           // get application documents
-          this.application.documents = [];
+          this.documents = [];
           this.documentService.getAllByApplicationId(this.application._id)
             .takeUntil(this.ngUnsubscribe)
             .subscribe(
-            documents => this.application.documents = documents,
+            documents => this.documents = documents,
             error => console.log(error)
             );
         }

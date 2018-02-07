@@ -2,11 +2,11 @@
     <section class="tab-section" *ngIf="application">
         <div>
             <h4>Application Documents</h4>
-            <div class="row" *ngIf="!application.documents || application.documents.length == 0">
+            <div class="row" *ngIf="documents.length == 0">
                 <em>No documents have been uploaded for this application.</em>
             </div>
-            <div class="row" *ngIf="application.documents && application.documents.length > 0">
-                <div class="col-md-6" *ngFor="let document of application.documents">
+            <div class="row" *ngIf="documents.length > 0">
+                <div class="col-md-6" *ngFor="let document of documents">
                     <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
                 </div>
             </div>
