@@ -1,4 +1,28 @@
 @import "~assets/styles/base.scss";
 .tab-section {
-    margin: 1em;
+    >div {
+        margin: 1em;
+    }
+    h4 {
+        margin-bottom: 0;
+        color: $primary;
+    }
+    // .list-group {
+    //     max-height: 50rem;
+    //     overflow-y: auto;
+    // }
+    .list-group-item {
+        margin-bottom: 10px;
+        border: 1px #eee solid;
+        border-radius: 5px;
+        background: white;
+        // &:nth-child(odd) {
+        //     border: #f0f0f0 2px solid;
+        //     background: #f7f8fa; // #f0f0f0;
+        // }
+        // &:nth-child(even) {
+        //     border: #e7e7e7 2px solid;
+        //     background: #f4f4f4; // #e7e7e7;
+        // }
+    }
 }

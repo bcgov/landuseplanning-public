@@ -5,6 +5,14 @@
         }
     }
     .modal-body {
+        padding: 30px;
+    }
+    .modal-footer {
+        button {
+            cursor: pointer;
+        }
+    }
+    .page1 {
         .form-group.required .control-label:after {
             content: "*";
             color: red;
@@ -17,24 +25,19 @@
             padding: 1em;
         }
     }
-    .modal-footer {
-        button {
-            cursor: pointer;
-        }
-    }
-    .page1 {}
     .page2 {
         textarea {
             min-height: 5rem;
         }
     }
     .page3 {
-        .modal-body {
-            text-align: center;
-        }
+        // .modal-body {
+        //     text-align: center;
+        // }
         img {
             width: 100px;
             height: 100px;
+            margin: 1rem;
         }
     }
 }
