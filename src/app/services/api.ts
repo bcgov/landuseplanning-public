@@ -54,7 +54,7 @@ export class ApiService {
       'name',
       // 'type',
       // 'subtype',
-      // 'stageCode',
+      'stageCode',
       'purpose',
       'subpurpose',
       '_proponent',

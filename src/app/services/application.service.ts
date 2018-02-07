@@ -88,7 +88,7 @@ export class ApplicationService {
 
   // returns application status based on stage code + status code
   getStatus(application: Application): string {
-    // if (application.stageCode === 'A') {
+    if (application.stageCode === 'A') {
       switch (application.status.toUpperCase()) {
         case 'ABANDONED': return 'Application Abandoned';
         case 'ACCEPTED': return 'Application Under Review';
@@ -97,13 +97,13 @@ export class ApplicationService {
         case 'OFFERED': return 'Decision Made: Offered';
         case 'OFFER ACCEPTED': return 'Decision Made: Offer Accepted';
         case 'OFFER NOT ACCEPTED': return 'Offer Not Accepted';
-    //   }
-    // } else if (application.stageCode === 'T') {
-    //   switch (application.status.toUpperCase()) {
+      }
+    } else if (application.stageCode === 'T') {
+      switch (application.status.toUpperCase()) {
         case 'DISPOSITION IN GOOD STANDING': return 'Tenure: Disposition in Good Standing';
         case 'SUSPENDED': return 'Tenure: Suspended';
       }
-    // }
+    }
     return '-';
   }
 }
