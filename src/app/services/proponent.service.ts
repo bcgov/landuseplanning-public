@@ -34,11 +34,6 @@ export class ProponentService {
     //     // return just the first (only) proponent
     //     return proponents.length > 0 ? new Proponent(proponents[0]) : null;
     //   })
-    //   .map((proponent: Proponent) => {
-    //     if (!proponent) { return null; }
-
-    //     return proponent;
-    //   })
     //   .catch(this.api.handleError);
   }
 }

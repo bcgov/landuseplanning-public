@@ -314,6 +314,40 @@ export class ApiService {
     return this.get(queryString);
   }
 
+  getDocumentsByCommentId(commentId: string) {
+    const fields = [
+      '_application',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
+    let queryString = 'document?_comment=' + commentId + '&fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
+  getDocumentsByDecisionId(decisionId: string) {
+    const fields = [
+      '_application',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
+    let queryString = 'document?_decision=' + decisionId + '&fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
   getDocument(id: string) {
     const fields = [
       '_application',

@@ -61,7 +61,7 @@ $search-input-font-size: 0.9375rem;
         width: 100%;
         color: #fff;
         border-color: $gold;
-        background: darken($gold, 5%);
+        background-color: darken($gold, 5%);
         text-transform: uppercase;
         font-size: 0.9375rem;
 
@@ -69,7 +69,7 @@ $search-input-font-size: 0.9375rem;
         &:focus,
         &:hover {
             border-color: $gold;
-            background: $gold;
+            background-color: $gold;
             color: $primary;
         }
     }
@@ -249,14 +249,14 @@ tag-input {
                 height: auto;
                 color: #fff;
                 border-radius: 0.2rem;
-                background: #5091cd;
+                background-color: #5091cd;
                 letter-spacing: 0;
                 font-size: $search-input-font-size;
                 font-weight: 400;
 
                 &:hover {
                     color: #fff !important;
-                    background: #5091cd !important; 
+                    background-color: #5091cd !important; 
                 }
 
                 &__text {

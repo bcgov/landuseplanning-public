@@ -64,7 +64,6 @@ export class CommentService {
           error => console.log(error)
         );
 
-
         return comment;
       })
       .catch(this.api.handleError);
