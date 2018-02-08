@@ -27,7 +27,7 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.application = null;
-    this.documents = [];
+    this.documents = null;
 
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)

@@ -1,10 +1,10 @@
 <div class="tab-pane" id="comments" role="tabpanel">
-    <section class="tab-section">
-        <div *ngIf="comments.length == 0">
+    <section class="tab-section" *ngIf="application">
+        <div *ngIf="comments?.length == 0">
             <em>No comments have been received for this application at this time.</em>
         </div>
 
-        <div *ngIf="comments.length > 0">
+        <div *ngIf="comments?.length > 0">
             <div>
                 <h4>Comment Period Description</h4>
                 <p>{{application.currentPeriod?.description}}</p>

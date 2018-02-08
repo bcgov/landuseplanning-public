@@ -1,13 +1,28 @@
 <div class="tab-pane" id="decisions" role="tabpanel">
-    <section class="tab-section">
-        <div *ngIf="!decisions">
+    <section class="tab-section" *ngIf="application">
+        <div *ngIf="application?._decision == null">
             <em>No decisions have been made for this application at this time.</em>
         </div>
 
-        <div *ngIf="decisions">
-            <pre>{{decisions | json}}</pre>
+        <div *ngIf="application?._decision != null" class="decision-date">
+            <p>Decision Date: {{decision.date | date:'longDate'}}</p>
+        </div>
 
-            <!-- TODO: application status, decisions text and documents -->
+        <div *ngIf="application?._decision != null">
+            <h4>Decision Description</h4>
+            <p>{{decision.description}}</p>
+        </div>
+
+        <div *ngIf="application?._decision != null">
+            <h4>Decision Documents</h4>
+            <div *ngIf="decision.documents?.length == 0">
+                <em>No documents have been uploaded for this decision.</em>
+            </div>
+            <div class="row" *ngIf="decision.documents?.length > 0">
+                <div class="col-md-6" *ngFor="let document of decision.documents">
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
+                </div>
+            </div>
         </div>
     </section>
 </div>

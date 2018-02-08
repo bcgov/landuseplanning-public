@@ -96,7 +96,7 @@ export class ApplicationService {
         case 'DISALLOWED': return 'Decision Made: Disallowed';
         case 'OFFERED': return 'Decision Made: Offered';
         case 'OFFER ACCEPTED': return 'Decision Made: Offer Accepted';
-        case 'OFFER NOT ACCEPTED': return 'Offer Not Accepted';
+        case 'OFFER NOT ACCEPTED': return 'Decision Made: Offer Not Accepted';
       }
     } else if (application.stageCode === 'T') {
       switch (application.status.toUpperCase()) {

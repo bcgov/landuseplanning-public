@@ -140,7 +140,10 @@ export class ApiService {
     const fields = [
       '_addedBy',
       'code',
-      'name'
+      'name',
+      'date',
+      'description',
+      '_documents'
     ];
     let queryString = 'decision/' + id + '?fields=';
     _.each(fields, function (f) {
