@@ -34,36 +34,73 @@ export class DocumentService {
 
   // get all documents for the specified comment
   getAllByComment(comment: Comment): Observable<Document[]> {
-    // PRC-154: iterate over comment._documents[]
-    // or use new API call:
+    const documents = [];
 
-    // return this.api.getDocumentsByCommentId(comment._id)
-    //   .map((res: Response) => {
-    //     const documents = res.text() ? res.json() : [];
-    //     documents.forEach((document, i) => {
-    //       documents[i] = new Document(document);
-    //     });
-    //     return documents;
-    //   })
-    //   .catch(this.api.handleError);
-    return Observable.of([]);
+    if (comment) {
+      comment._documents.forEach((documentId, i) => {
+        this.getById(documentId).subscribe(
+          document => documents.push(document),
+          error => console.log(error)
+        );
+      });
+    }
+
+    return Observable.of(documents);
+  }
+
+  // get all documents for the specified comment
+  // using new API call
+  getAllByComment2(comment: Comment): Observable<Document[]> {
+    return this.api.getDocumentsByCommentId(comment._id)
+      .map((res: Response) => {
+        const documents = res.text() ? res.json() : [];
+        documents.forEach((document, i) => {
+          documents[i] = new Document(document);
+        });
+        return documents;
+      })
+      .catch(this.api.handleError);
   }
 
   // get all documents for the specified decision
   getAllByDecision(decision: Decision): Observable<Document[]> {
-    // PRC-154: iterate over decision._documents[]
-    // or use new API call:
+    const documents = [];
 
-    // return this.api.getDocumentsByDecisionId(decision._id)
-    //   .map((res: Response) => {
-    //     const documents = res.text() ? res.json() : [];
-    //     documents.forEach((document, i) => {
-    //       documents[i] = new Document(document);
-    //     });
-    //     return documents;
-    //   })
-    //   .catch(this.api.handleError);
-    return Observable.of([]);
+    if (decision) {
+      decision._documents.forEach((documentId, i) => {
+        this.getById(documentId).subscribe(
+          document => documents.push(document),
+          error => console.log(error)
+        );
+      });
+    }
+
+    return Observable.of(documents);
+  }
+
+  // get all documents for the specified decision
+  // using new API call
+  getAllByDecision2(decision: Decision): Observable<Document[]> {
+    return this.api.getDocumentsByDecisionId(decision._id)
+      .map((res: Response) => {
+        const documents = res.text() ? res.json() : [];
+        documents.forEach((document, i) => {
+          documents[i] = new Document(document);
+        });
+        return documents;
+      })
+      .catch(this.api.handleError);
+  }
+
+  // get a specific document by its id
+  getById(documentId): Observable<Document> {
+    return this.api.getDocument(documentId)
+      .map((res: Response) => {
+        const document = res.text() ? res.json() : [];
+        // return the first (only) document
+        return document.length > 0 ? new Document(document[0]) : null;
+      })
+      .catch(this.api.handleError);
   }
 
   // get(terms: SearchTerms, applications: Array<Application>, proponents: Array<Proponent>, page: number, limit: number) {

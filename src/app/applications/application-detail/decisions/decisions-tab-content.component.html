@@ -19,7 +19,7 @@
                 <em>No documents have been uploaded for this decision.</em>
             </div>
             <div class="row" *ngIf="decision.documents?.length > 0">
-                <div class="col-md-6" *ngFor="let document of decision.documents">
+                <div class="col-12" *ngFor="let document of decision.documents">
                     <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
                 </div>
             </div>

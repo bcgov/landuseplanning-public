@@ -32,11 +32,6 @@ export class CommentPeriodService {
         // return the first (only) comment period
         return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
       })
-      .map((period: CommentPeriod) => {
-        if (!period) { return null; }
-
-        return period;
-      })
       .catch(this.api.handleError);
   }
 

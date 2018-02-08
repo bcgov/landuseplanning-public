@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
 import { Comment } from 'app/models/comment';
+import { ApiService } from 'app/services/api';
 import { CommentService } from 'app/services/comment.service';
 
 export interface DataModel {
@@ -27,6 +28,7 @@ export class ViewCommentComponent extends DialogComponent<DataModel, boolean> im
 
   constructor(
     public dialogService: DialogService,
+    private api: ApiService,
     private commentService: CommentService
   ) {
     super(dialogService);
@@ -39,11 +41,8 @@ export class ViewCommentComponent extends DialogComponent<DataModel, boolean> im
     this.commentService.getById(this.commentId)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-      comment => {
-        this.comment = comment;
-        console.log('this.comment =', this.comment);
-      },
-      error => console.log(error)
+        comment => this.comment = comment,
+        error => console.log(error)
       );
   }
 
