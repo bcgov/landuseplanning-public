@@ -1,21 +1,24 @@
-<div class="container application-detail" id="anchor-point">
+<div class="container" id="anchor-point">
   <div class="row">
-    <div class="col-md-4 application-detail__meta">
+    <main class="col-lg-5 application-tombstone">
       <section>
+        <div class="item proponent-item">
+          <p>{{application.proponent ? application.proponent.name : '-'}}</p>
+        </div>
+
         <div class="item">
-          <p class="proponent">{{application.proponent ? application.proponent.name : '-'}}</p>
           <div class="row">
             <div class="col">
               <p class="title">{{applicationService.getStatus(application)}}</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6">
-              <label class="name">Purpose</label>
+            <div class="col-sm-6">
+              <label>Purpose</label>
               <p class="value">{{application.purpose | titlecase}}</p>
             </div>
-            <div class="col-lg-6">
-              <label class="name">Subpurpose</label>
+            <div class="col-sm-6">
+              <label>Subpurpose</label>
               <p class="value">{{application.subpurpose | titlecase}}</p>
             </div>
           </div>
@@ -25,50 +28,55 @@
             </div>
           </div>
         </div>
-        <div class="item map-section">
-          <div class="map-section__thumbnail" (click)="gotoMap()">
-            <!-- <app-application-map [application]="application" [zoom]="4"></app-application-map> -->
+
+        <div class="item map-item">
+          <div class="map-item__thumbnail" (click)="gotoMap()" title="Click to see full page map">
+            <app-application-map [application]="application" [zoom]="6"></app-application-map>
           </div>
         </div>
+
         <div class="item">
-          <label class="name">Description</label>
+          <label>Description</label>
           <p class="value" [innerHTML]="application.description | newlines"></p>
         </div>
-        <div class="item">
-          <label class="name">Crown Land File(s)</label>
-          <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
-        </div>
+
         <div class="item row">
-          <div class="col-lg-6">
-            <label class="name">Area (ha)</label>
+          <div class="col-sm-6">
+            <label>Area (ha)</label>
             <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : '-'}}</p>
           </div>
-          <div class="col-lg-6">
-            <label class="name">Location</label>
+          <div class="col-sm-6">
+            <label>Location</label>
             <p class="value">{{application.location}}</p>
           </div>
-          <div class="col-lg-6">
-            <label class="name">Region</label>
+          <div class="col-sm-6">
+            <label>Region</label>
             <p class="value">{{application.region}}</p>
           </div>
         </div>
+
         <div class="item row">
-          <div class="col-lg-6">
-            <label class="name">Tenure Type</label>
+          <div class="col-sm-6">
+            <label>Tenure Type</label>
             <p class="value">{{application.type | titlecase}}</p>
           </div>
-          <div class="col-lg-6">
-            <label class="name">Tenure Subtype</label>
+          <div class="col-sm-6">
+            <label>Tenure Subtype</label>
             <p class="value">{{application.subtype | titlecase}}</p>
           </div>
         </div>
+
+        <div class="item">
+          <label>Crown Land File(s)</label>
+          <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
+        </div>
       </section>
-    </div>
+    </main>
 
     <!-- TODO: instead of the tabs, this could be a map -->
-    <main class="col-md-8 application-detail__tabs">
+    <aside class="col-lg-7 application-tabs">
       <section>
-        <button (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Add Comment</button>
+        <button class="btn btn-warning" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Add Comment</button>
         <div role="navigation">
           <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
@@ -80,6 +88,6 @@
         <router-outlet></router-outlet>
 
       </section>
-    </main>
+    </aside>
   </div>
 </div>

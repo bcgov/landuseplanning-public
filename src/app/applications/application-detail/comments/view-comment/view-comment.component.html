@@ -9,7 +9,7 @@
 
     <div class="modal-header" *ngIf="comment">
       <div>
-        <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: large; color: #003366;">
+        <div class="comment-author">
           <div *ngIf="comment.commentAuthor && comment.commentAuthor.tags; else anonymous">
             {{comment.commentAuthor.contactName}}
             <span *ngIf="comment.commentAuthor.orgName">({{comment.commentAuthor.orgName}})</span>
@@ -30,7 +30,7 @@
 
     <div class="modal-body" *ngIf="comment">
       <div class="row">
-        <div class="col-12 comment-detail__comment">
+        <div class="col-12">
           <p [innerHTML]="comment.comment | newlines"></p>
         </div>
       </div>
@@ -49,7 +49,7 @@
     </div>
 
     <div class="modal-footer" *ngIf="comment">
-      <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+      <button class="btn btn-secondary" (click)="close()">Close</button>
     </div>
   </div>
 </div>

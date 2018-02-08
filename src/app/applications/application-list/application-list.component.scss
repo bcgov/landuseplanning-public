@@ -1,55 +1,76 @@
 @import "~assets/styles/base.scss";
 .container {
-    background: #fff; // must come before image
-    background-image: url("~assets/images/hero-background-prc.jpg");
-    background-repeat: no-repeat;
-    background-position: top;
+    // background-image: url("~assets/images/hero-background-prc.jpg");
+    // background-repeat: no-repeat;
+    // background-position: top;
+    padding: 2rem;
     .application-list {
-        background: white;
-        width: 40%;
-        min-width: 300px;
-        min-height: 20rem;
-        padding: 1em;
-        border: 1px #ccc solid;
-        border-radius: 5px;
-        .switchWrapper {
-            margin-bottom: 1rem;
-        }
-        .card {
-            border: 1px black solid;
-            margin-bottom: 0.5rem;
-            .card-header {
-                padding: 0px 10px;
-                text-transform: none;
-                font-size: large;
+        >section {
+            background: white;
+            min-height: 20rem;
+            padding: 1em;
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            .switchWrapper {
+                margin-bottom: 1rem;
             }
-            .card-body {
-                margin-top: 0.5rem;
-                padding: 0px 10px;
-                .title {
+            .card {
+                border: 1px black solid;
+                margin-bottom: 0.5rem;
+                .card-header {
+                    padding: 0px 10px;
+                    text-transform: none;
                     font-size: large;
-                    font-weight: bold;
-                    color: $primary;
-                    margin-bottom: 0.5rem;
                 }
-                .name {
-                    // font-size: large;
-                    font-weight: bold;
-                    color: $primary;
-                    margin-bottom: 0;
+                .card-body {
+                    margin-top: 0.5rem;
+                    padding: 0px 10px;
+                    .title {
+                        font-size: large;
+                        font-weight: bold;
+                        color: $primary;
+                        margin-bottom: 0.5rem;
+                    }
+                    .name {
+                        // font-size: large;
+                        font-weight: bold;
+                        color: $primary;
+                        margin-bottom: 0;
+                    }
+                    .value {
+                        font-size: smaller;
+                        line-height: 1rem;
+                        margin-bottom: 0.5rem;
+                    }
                 }
-                .value {
-                    font-size: smaller;
-                    line-height: 1rem;
-                    margin-bottom: 0.5rem;
+                .card-footer {
+                    padding: 5px 10px;
+                    .content-btn {
+                        padding: 0;
+                    }
                 }
             }
-            .card-footer {
-                padding: 5px 10px;
-                .content-btn {
-                    padding: 0;
-                }
+        }
+    }
+    .application-map {
+        margin-top: 0;
+        >section {
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            img {
+                width: 100%;
+                height: 37rem;
+                object-fit: none;
+                object-position: top;
             }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        .application-list {
+            margin-bottom: 1rem;
         }
     }
 }

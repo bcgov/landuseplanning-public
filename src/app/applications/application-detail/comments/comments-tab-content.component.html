@@ -6,7 +6,7 @@
 
         <div *ngIf="comments.length > 0">
             <div>
-                <h4>Description</h4>
+                <h4>Comment Period Description</h4>
                 <p>{{application.currentPeriod?.description}}</p>
             </div>
 
@@ -14,7 +14,7 @@
                 <ng-template ngFor let-item [ngForOf]="comments">
                     <div class="list-group-item flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
-                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <div class="comment-author">
                                 <div *ngIf="item.commentAuthor && item.commentAuthor.tags; else anonymous">
                                     {{item.commentAuthor.contactName}}
                                     <span *ngIf="item.commentAuthor.orgName">({{item.commentAuthor.orgName}})</span>
@@ -28,13 +28,11 @@
                                 {{(item.dateAdded | date:'longDate') || '-'}}
                             </div>
                         </div>
-                        <p class="mb-1" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            <small>{{item.comment}}</small>
-                        </p>
+                        <p class="mb-1 comment-text">{{item.comment}}</p>
                         <div class="d-flex w-100 justify-content-end">
                             <!-- <div class="material-icons" *ngIf="item._documents.length > 0">attachment</div> -->
-                            <!-- <button (click)="viewDetails(item._id)">View Details</button> -->
-                            <div class="clickable" (click)="viewDetails(item._id)" title="Click to view full comment">View more</div>
+                            <button class="btn btn-primary" (click)="viewDetails(item._id)">View full comment</button>
+                            <!-- <div class="clickable" (click)="viewDetails(item._id)">View full comment</div> -->
                         </div>
                     </div>
                 </ng-template>
