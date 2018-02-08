@@ -1,4 +1,3 @@
-// Base
 @import "~assets/styles/base.scss";
 
 $ff-metric-bg-1: #002663;
@@ -6,13 +5,16 @@ $ff-metric-bg-2: #f7f7f7;
 $ff-metric-color-1: #FFF;
 $ff-metric-color-2: #494949;
 
-
 @media (max-width: 574px) {
     .hero-banner {
         height: 24rem;
         background-position: -12rem top;
         background-size: 290%;
     }
+}
+
+.bg-default, .bg-faded {
+    background-color: #fff;
 }
 
 .fast-facts {

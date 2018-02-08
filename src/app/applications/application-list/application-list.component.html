@@ -1,47 +1,58 @@
 <div class="container" id="anchor-point">
-  <main class="application-list">
-    <div class="switchWrapper">
-      <label class="switch">
-        <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
-        <span class="slider round"></span>
-      </label>
-      <div class="label">&nbsp;&nbsp;Show only applications that have an open or future comment period</div>
-    </div>
+  <div class="row">
+    <main class="col-md-5 application-list">
+      <section>
+        <div class="switchWrapper">
+          <label class="switch">
+            <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
+            <span class="slider round"></span>
+          </label>
+          <div class="label">&nbsp;&nbsp;Show only applications that have an open or future comment period</div>
+        </div>
 
-    <div *ngIf="!applications || applications.length == 0">
-      <em>No applications found.</em>
-    </div>
+        <div *ngIf="!applications || applications.length == 0">
+          <em>No applications found.</em>
+        </div>
 
-    <div class="card" *ngFor="let application of applications | paginate: config">
-      <div class="card-header">{{application.proponent ? application.proponent.name : '-'}}</div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col">
-            <p class="title">{{applicationService.getStatus(application)}}</p>
+        <div class="card" *ngFor="let application of applications | paginate: config">
+          <div class="card-header">{{application.proponent ? application.proponent.name : '-'}}</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <p class="title">{{applicationService.getStatus(application)}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <label class="name">Purpose</label>
+                <p class="value">{{application.purpose | titlecase}}</p>
+              </div>
+              <div class="col-6">
+                <label class="name">Subpurpose</label>
+                <p class="value">{{application.subpurpose | titlecase}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', application._id]">
+              <i class="material-icons">info_outline</i>
+              <span>View Details</span>
+            </a>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <label class="name">Purpose</label>
-            <p class="value">{{application.purpose | titlecase}}</p>
-          </div>
-          <div class="col-md-6">
-            <label class="name">Subpurpose</label>
-            <p class="value">{{application.subpurpose | titlecase}}</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <p class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer">
-        <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', application._id]">
-          <i class="material-icons">info_outline</i>
-          <span>View Details</span>
-        </a>
-      </div>
-    </div>
-  </main>
+      </section>
+    </main>
+
+    <aside class="col-md-7 application-map">
+      <section>
+        <!-- TODO: main map goes here -->
+        <img src="assets/images/hero-background-prc.jpg" alt="Main map">
+      </section>
+    </aside>
+  </div>
 </div>

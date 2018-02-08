@@ -66,8 +66,8 @@ export class Application {
     this.isPublished             = obj && obj.isPublished             || null;
     this.legalDescription        = obj && obj.legalDescription        || null;
     this.location                = obj && obj.location                || '-';
-    this.latitude                = obj && obj.lat                     || 0;
-    this.longitude               = obj && obj.lon                     || 0;
+    this.latitude                = obj && obj.latitude                || 0;
+    this.longitude               = obj && obj.longitude               || 0;
     this.mapsheet                = obj && obj.mapsheet                || null;
     this.postID                  = obj && obj.postID                  || null;
     this.projectDate             = obj && obj.projectDate             || null;

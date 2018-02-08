@@ -1,7 +1,15 @@
 .modal-dialog {
     .modal-header {
+        background-color: #f1f1f1;
         button {
             cursor: pointer;
+        }
+        .comment-author {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: larger;
+            color: #003366;
         }
     }
     .modal-body {
@@ -11,6 +19,7 @@
         }
     }
     .modal-footer {
+        background-color: #f1f1f1;
         button {
             cursor: pointer;
         }

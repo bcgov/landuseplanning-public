@@ -32,11 +32,11 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     private commentService: CommentService
   ) {
     super(dialogService);
-    this.showAlert = false;
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
+    this.showAlert = false;
     console.log('comment period id=', this.currentPeriod._id);
     this.currentPage = 1;
   }
@@ -50,6 +50,9 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   }
 
   private submit() {
+    // first upload all attached files
+    // then save new comment (with document ids)
+
     // we set dialog result as true on click of submit button
     // then we can get dialog result from caller code
     // may not be needed here

@@ -1,85 +1,89 @@
 @import "~assets/styles/base.scss";
 @import "node_modules/bootstrap/scss/bootstrap.scss";
-.application-detail {
-    background: #fff; // must come before image
-    // background-image: url("~assets/images/hero-background-prc.jpg");
-    // background-repeat: no-repeat;
-    // background-position: top;
-    margin: auto;
+.container {
     padding: 2rem;
-    &__meta>section {
-        padding: 15px;
-        background-color: white;
-        border: 1px black solid;
-        border-radius: 5px;
-        .item {
-            word-wrap: break-word;
-            border: 1px #eee solid;
+    .application-tombstone {
+        >section {
+            background-color: #fff;
+            padding: 1rem;
+            border: 1px #ccc solid;
             border-radius: 5px;
-            padding: 5px;
-            margin-bottom: 0.5rem;
-            margin-left: 0;
-            margin-right: 0;
-            >div {
-                padding: 0px;
+            .item {
+                word-wrap: break-word;
+                border: 1px #ccc solid;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 0.5rem;
+                margin-left: 0;
+                margin-right: 0;
+                >div {
+                    padding: 0px;
+                }
             }
-        }
-        .proponent {
-            font-size: x-large;
-            font-weight: bold;
-            color: $primary;
-            margin-bottom: 0.5rem;
-        }
-        .title {
-            font-size: larger;
-            font-weight: bold;
-            color: $primary;
-            margin-bottom: 0.5rem;
-        }
-        .name {
-            font-weight: bold;
-            color: $primary;
-            margin-bottom: 0;
-        }
-        .value {
-            font-size: smaller;
-            line-height: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        .map-section {
-            display: table;
-            width: 100%;
-            overflow: hidden;
-            &__thumbnail {
-                height: 15rem; // TODO: make this proportional to parent width
-                transform: scale(1.4);
+            .proponent-item {
+                color: #fff;
+                background-color: #38598a;
+                padding: 5px 10px;
+                p {
+                    font-size: large;
+                    font-weight: bold;
+                    margin-bottom: 0;
+                }
             }
-            &:hover {
-                border: 1px #bbb solid;
-                opacity: 0.7;
-                cursor: pointer;
+            .title {
+                font-size: larger;
+                font-weight: bold;
+                color: $primary;
+                margin-bottom: 5px;
+            }
+            label {
+                font-weight: bold;
+                color: $primary;
+                margin-bottom: 0;
+            }
+            .value {
+                font-size: smaller;
+                line-height: 1.25rem;
+                margin-bottom: 5px;
+            }
+            .map-item {
+                display: table;
+                width: 100%;
+                overflow: hidden;
+                &__thumbnail {
+                    height: 250px; // TODO: make this proportional to parent width
+                    transform: scale(1.4);
+                }
+                &:hover {
+                    border: 1px #bbb solid;
+                    opacity: 0.7;
+                    cursor: pointer;
+                }
             }
         }
     }
-    &__tabs>section {
-        position: relative;
-        padding: 15px;
-        background-color: white;
-        min-height: 20rem;
-        border: 1px black solid;
-        border-radius: 5px;
-        >button {
-            position: absolute;
-            top: 1em;
-            right: 1em;
+    .application-tabs {
+        margin-top: 0;
+        >section {
+            position: relative;
+            background-color: #fff;
+            padding: 1rem;
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            min-height: 20rem;
+            >button {
+                position: absolute;
+                top: 0.5rem;
+                right: 0.5rem;
+            }
         }
     }
 }
 
-@include media-breakpoint-down(sm) {
-    .application-detail {
-        &__meta {
-            margin-bottom: 15px;
+@include media-breakpoint-down(md) {
+    .container {
+        .application-tombstone {
+            margin-bottom: 1rem;
         }
     }
 }
