@@ -34,11 +34,10 @@ export class DocumentService {
 
   // get all documents for the specified comment
   getAllByComment(comment: Comment): Observable<Document[]> {
-    return Observable.of([]);
+    // PRC-154: iterate over comment._documents[]
+    // or use new API call:
 
-    // TODO: iterate over comment._documents[]
-
-    // return this.api.getDocumentsByAppId(appId)
+    // return this.api.getDocumentsByCommentId(comment._id)
     //   .map((res: Response) => {
     //     const documents = res.text() ? res.json() : [];
     //     documents.forEach((document, i) => {
@@ -47,15 +46,15 @@ export class DocumentService {
     //     return documents;
     //   })
     //   .catch(this.api.handleError);
+    return Observable.of([]);
   }
 
   // get all documents for the specified decision
   getAllByDecision(decision: Decision): Observable<Document[]> {
-    return Observable.of([]);
+    // PRC-154: iterate over decision._documents[]
+    // or use new API call:
 
-    // TODO: iterate over decision._documents[]
-
-    // return this.api.getDocumentsByAppId(appId)
+    // return this.api.getDocumentsByDecisionId(decision._id)
     //   .map((res: Response) => {
     //     const documents = res.text() ? res.json() : [];
     //     documents.forEach((document, i) => {
@@ -64,6 +63,7 @@ export class DocumentService {
     //     return documents;
     //   })
     //   .catch(this.api.handleError);
+    return Observable.of([]);
   }
 
   // get(terms: SearchTerms, applications: Array<Application>, proponents: Array<Proponent>, page: number, limit: number) {

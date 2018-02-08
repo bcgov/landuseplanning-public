@@ -29,7 +29,7 @@ export class CommentService {
         }
 
         // now get the comments for all periods
-        // TODO: periods.forEach(...)
+        // PRC-153: periods.forEach(...)
         return this.getAllByPeriodId(periods[0]._id);
       });
   }

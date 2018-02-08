@@ -7,4 +7,15 @@
         margin-bottom: 0;
         color: $primary;
     }
+    p {
+        margin-bottom: 0;
+    }
+    .decision-date {
+        width: fit-content;
+        border: 1px #f2e9bf solid;
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+        color: $primary;
+        background-color: #fffae7;
+    }
 }

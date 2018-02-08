@@ -29,7 +29,7 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.application = null;
-    this.comments = [];
+    this.comments = null;
 
     this.route.parent.data.subscribe(
       (data: { application: Application }) => {
@@ -40,8 +40,8 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
           this.commentService.getAllByApplicationId(this.application._id)
             .takeUntil(this.ngUnsubscribe)
             .subscribe(
-            comments => this.comments = comments,
-            error => console.log(error)
+              comments => this.comments = comments,
+              error => console.log(error)
             );
         }
       },
