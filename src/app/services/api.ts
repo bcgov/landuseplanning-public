@@ -366,7 +366,7 @@ export class ApiService {
   }
 
   getDocumentUrl(document: Document): string {
-    return this.apiPath + '/document/' + document._id + '/download';
+    return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
   }
 
   // TODO: saveDocument()

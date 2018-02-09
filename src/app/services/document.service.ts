@@ -38,7 +38,7 @@ export class DocumentService {
     if (comment) {
       comment._documents.forEach(documentId => {
         this.getById(documentId).subscribe(
-          document => documents.push(document),
+          document => { if (document) { documents.push(document); } },
           error => console.log(error)
         );
       });
@@ -66,7 +66,7 @@ export class DocumentService {
     if (decision) {
       decision._documents.forEach(documentId => {
         this.getById(documentId).subscribe(
-          document => documents.push(document),
+          document => { if (document) { documents.push(document); } },
           error => console.log(error)
         );
       });

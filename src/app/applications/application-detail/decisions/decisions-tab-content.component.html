@@ -10,7 +10,7 @@
 
         <div *ngIf="application?._decision != null">
             <h4>Decision Description</h4>
-            <p>{{decision.description}}</p>
+            <p [innerHTML]="decision.description | newlines"></p>
         </div>
 
         <div *ngIf="application?._decision != null">
@@ -20,7 +20,9 @@
             </div>
             <div class="row" *ngIf="decision.documents?.length > 0">
                 <div class="col-12" *ngFor="let document of decision.documents">
-                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                    </a>
                 </div>
             </div>
         </div>

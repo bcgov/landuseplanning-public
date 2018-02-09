@@ -129,8 +129,7 @@
             target="_blank">{{item.displayName}}</a>
           <div class="search-results-item__meta">{{item.documentDate | date:'yyyy-MM-dd'}}</div>
           <div class="search-results-item__description mt-3"
-            *ngIf="item.description">{{item.description}}
-          </div>
+            *ngIf="item.description" [innerHTML]="item.description | newlines"></div>
         </li>
       </ul>
 

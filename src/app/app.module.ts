@@ -10,6 +10,7 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 import { TagInputModule } from 'ngx-chips';
 
+import { SharedModule } from 'app/shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 
 // components
@@ -57,7 +58,8 @@ import { CommentPeriod } from 'app/models/commentperiod';
     NgxPaginationModule,
     Ng2PageScrollModule.forRoot(),
     BootstrapModalModule,
-    MapModule
+    MapModule,
+    SharedModule
   ],
   providers: [
     CookieService,

@@ -7,7 +7,9 @@
             </div>
             <div class="row" *ngIf="documents?.length > 0">
                 <div class="col-md-6" *ngFor="let document of documents">
-                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">{{document.documentFileName}}</a>
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                    </a>
                 </div>
             </div>
         </div>
@@ -19,7 +21,7 @@
 
         <div>
             <h4>Legal Description</h4>
-            <p>{{application.legalDescription}}</p>
+            <p [innerHTML]="application.legalDescription | newlines"></p>
         </div>
     </section>
 </div>
