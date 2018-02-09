@@ -77,18 +77,18 @@ export class MainMapComponent implements OnInit {
         return this.setPopupTemplateForLayer(featureLayer, popupProperties)
           .then(() => obj);
       })
-      // create search widget instance, then add it to the map
-      .then(obj => {
-        const { mapView, featureLayer } = obj;
-        return this.createSearchWidget(mapView, featureLayer)
-          .then(search => this.search = obj.search = search)
-          .then(() => obj);
-      })
+      // // create search widget instance, then add it to the map
+      // .then(obj => {
+      //   const { mapView, featureLayer } = obj;
+      //   return this.createSearchWidget(mapView, featureLayer)
+      //     .then(search => this.search = obj.search = search)
+      //     .then(() => obj);
+      // })
       // position the interactive widgets (i.e. zoom, search) on the map
       .then(obj => {
         const { mapView, search, zoom } = obj;
         mapView.ui.add(zoom, 'bottom-right');
-        mapView.ui.add(search, 'top-left');
+        // mapView.ui.add(search, 'top-left');
         return obj;
       })
       // automatically show application popup on the map when coming from application details page
