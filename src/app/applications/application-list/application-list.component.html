@@ -10,13 +10,18 @@
           <div class="label">&nbsp;&nbsp;Show only applications that have an open or future comment period</div>
         </div>
 
-        <div *ngIf="!applications || applications.length == 0">
+        <div *ngIf="applications?.length == 0">
           <em>No applications found.</em>
         </div>
 
         <div class="card" *ngFor="let application of applications | paginate: config">
           <div class="card-header">{{application.proponent ? application.proponent.name : '-'}}</div>
           <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
+              </div>
+            </div>
             <div class="row">
               <div class="col">
                 <p class="title">{{applicationService.getStatus(application)}}</p>

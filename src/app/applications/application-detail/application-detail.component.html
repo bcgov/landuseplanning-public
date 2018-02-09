@@ -9,6 +9,11 @@
         <div class="item">
           <div class="row">
             <div class="col">
+              <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <p class="title">{{applicationService.getStatus(application)}}</p>
             </div>
           </div>
