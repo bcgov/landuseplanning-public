@@ -20,7 +20,7 @@ export class CommentService {
   ) { }
 
   // get all comments for the specified application id
-  getAllByApplicationId(appId: string): Observable<Array<Comment>> {
+  getAllByApplicationId(appId: string): Observable<Comment[]> {
     // first get the comment periods
     return this.commentPeriodService.getAllByApplicationId(appId)
       .mergeMap(periods => {
@@ -29,13 +29,20 @@ export class CommentService {
         }
 
         // now get the comments for all periods
-        // PRC-153: periods.forEach(...)
-        return this.getAllByPeriodId(periods[0]._id);
+        const allComments = [];
+        periods.forEach(period => {
+          this.getAllByPeriodId(period._id).subscribe(
+            comments => comments.forEach(comment => allComments.push(comment)),
+            error => console.log(error)
+          );
+        });
+
+        return Observable.of(allComments);
       });
   }
 
   // get all comments for the specified comment period id
-  getAllByPeriodId(periodId: string): Observable<Array<Comment>> {
+  getAllByPeriodId(periodId: string): Observable<Comment[]> {
     return this.api.getCommentsByPeriodId(periodId)
       .map((res: Response) => {
         const comments = res.text() ? res.json() : [];

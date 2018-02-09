@@ -10,7 +10,7 @@
           <div class="label">&nbsp;&nbsp;Show only applications that have an open or future comment period</div>
         </div>
 
-        <div *ngIf="!applications || applications.length == 0">
+        <div *ngIf="applications?.length == 0">
           <em>No applications found.</em>
         </div>
 

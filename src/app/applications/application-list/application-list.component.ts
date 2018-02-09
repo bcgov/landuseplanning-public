@@ -31,7 +31,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.applications = [];
+    this.applications = null;
     // PRC-149: remove work-around when change detection bug is fixed
     setTimeout(() => this.getApplications(), 100);
   }
@@ -54,7 +54,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     //   error => console.log(error)
     // );
 
-    console.log('this.applications =', this.applications);
     // Needed in development mode - not required in prod.
     this._changeDetectionRef.detectChanges();
   }

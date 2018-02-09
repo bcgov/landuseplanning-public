@@ -35,16 +35,14 @@ export class DocumentService {
   // get all documents for the specified comment
   getAllByComment(comment: Comment): Observable<Document[]> {
     const documents = [];
-
     if (comment) {
-      comment._documents.forEach((documentId, i) => {
+      comment._documents.forEach(documentId => {
         this.getById(documentId).subscribe(
           document => documents.push(document),
           error => console.log(error)
         );
       });
     }
-
     return Observable.of(documents);
   }
 
@@ -65,16 +63,14 @@ export class DocumentService {
   // get all documents for the specified decision
   getAllByDecision(decision: Decision): Observable<Document[]> {
     const documents = [];
-
     if (decision) {
-      decision._documents.forEach((documentId, i) => {
+      decision._documents.forEach(documentId => {
         this.getById(documentId).subscribe(
           document => documents.push(document),
           error => console.log(error)
         );
       });
     }
-
     return Observable.of(documents);
   }
 

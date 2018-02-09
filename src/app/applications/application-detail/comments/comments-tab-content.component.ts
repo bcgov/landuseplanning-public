@@ -40,6 +40,7 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
           this.commentService.getAllByApplicationId(this.application._id)
             .takeUntil(this.ngUnsubscribe)
             .subscribe(
+              // TODO: sort comments by date
               comments => this.comments = comments,
               error => console.log(error)
             );
