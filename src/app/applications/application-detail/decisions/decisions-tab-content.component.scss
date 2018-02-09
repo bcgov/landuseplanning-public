@@ -3,13 +3,6 @@
     >div {
         margin: 1em;
     }
-    h4 {
-        margin-bottom: 0;
-        color: $primary;
-    }
-    p {
-        margin-bottom: 0;
-    }
     .decision-date {
         width: fit-content;
         border: 1px #f2e9bf solid;
@@ -17,5 +10,15 @@
         padding: 0.5rem 1rem;
         color: $primary;
         background-color: #fffae7;
+    }
+    h4 {
+        margin-bottom: 0;
+        color: $primary;
+    }
+    p {
+        margin-bottom: 0;
+    }
+    a {
+        display: inline-flex;
     }
 }
