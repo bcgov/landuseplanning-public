@@ -39,13 +39,19 @@
               <label class="control-label">
                 <strong>Name</strong>
               </label>
-              <input class="form-control" placeholder="Firstname Lastname" type="text" required aria-required="true" />
+              <input class="form-control" placeholder="First Last" type="text" required aria-required="true" />
             </div>
             <div class="form-group col-lg-6 required">
               <label class="control-label">
                 <strong>Location</strong>
               </label>
               <input class="form-control" placeholder="City" type="text" required aria-required="true" />
+            </div>
+            <div class="form-group col-lg-12 optional">
+              <label class="control-label">
+                <strong>Organization</strong>
+              </label>
+              <input class="form-control" placeholder="Org Name" type="text" required aria-required="true" />
             </div>
           </div>
 
@@ -78,11 +84,10 @@
             </div>
           </div>
 
-          <h5>Comment</h5>
+          <h5>Your Comment</h5>
           <div class="row">
             <div class="form-group col-12">
-              <!-- <label class="control-label"><strong>Your Comment</strong></label> -->
-              <textarea class="form-control" rows="10"></textarea>
+              <textarea class="form-control" rows="3"></textarea>
             </div>
           </div>
 
@@ -101,7 +106,7 @@
                   <div class="fb-upload-target pcp" id="dropzone" ngf-drop ngf-select ngf-allow-dir="true" ng-model="s.comment.files" ngf-drag-over-class="fb-upload-target-hover"
                     ngf-multiple="true">
                     <div class="fb-upload-target-content">
-                      <span class="glyphicon glyphicon-open icon-default"></span>
+                      <mat-icon>file_upload</mat-icon>
                       <span class="fb-upload-target-msg">
                         <strong>Drag &amp; Drop</strong> or
                         <strong>Browse Files</strong> to upload.

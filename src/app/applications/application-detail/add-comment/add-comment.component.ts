@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import * as FileSaver from 'file-saver';
 
 import { Comment } from 'app/models/comment';
 import { CommentPeriod } from 'app/models/commentperiod';

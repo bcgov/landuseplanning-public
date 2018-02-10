@@ -35,24 +35,6 @@ export class CommentPeriodService {
       .catch(this.api.handleError);
   }
 
-  // add(commentperiod: CommentPeriod): Observable<CommentPeriod> {
-  //   return this.api.addCommentPeriod(commentperiod)
-  //     .map((res: Response) => {
-  //       const cp = res.text() ? res.json() : null;
-  //       return cp;
-  //     })
-  //     .catch(this.api.handleError);
-  // }
-
-  // save(commentperiod: CommentPeriod): Observable<CommentPeriod> {
-  //   return this.api.saveCommentPeriod(commentperiod)
-  //     .map((res: Response) => {
-  //       const cp = res.text() ? res.json() : null;
-  //       return cp;
-  //     })
-  //     .catch(this.api.handleError);
-  // }
-
   // returns current (latest) period
   // assumes if there's an open period, there isn't also future one
   getCurrent(periods: Array<CommentPeriod>): CommentPeriod {

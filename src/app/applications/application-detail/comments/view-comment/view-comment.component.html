@@ -42,8 +42,8 @@
 
         <div class="row" *ngIf="comment.documents.length > 0">
           <div class="col-12" *ngFor="let document of comment.documents">
-            <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document?.displayName || ''">
-              <i class="material-icons">attachment</i>&nbsp;{{document?.documentFileName}}
+            <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+              <mat-icon>attachment</mat-icon>&nbsp;{{document.documentFileName}}
             </a>
           </div>
         </div>

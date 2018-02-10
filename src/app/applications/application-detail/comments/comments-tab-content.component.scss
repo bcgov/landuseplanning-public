@@ -3,9 +3,11 @@
     >div {
         margin: 1em;
     }
-    h4 {
-        margin-bottom: 0;
+    .title {
+        font-size: larger;
+        font-weight: bold;
         color: $primary;
+        margin-bottom: 5px;
     }
     .list-group {
         // max-height: 50rem;

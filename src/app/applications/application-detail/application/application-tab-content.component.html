@@ -1,26 +1,26 @@
 <div class="tab-pane" id="application" role="tabpanel">
     <section class="tab-section" *ngIf="application">
         <div>
-            <h4>Application Documents</h4>
+            <p class="title">Application Documents</p>
             <div *ngIf="documents?.length == 0">
                 <em>No documents have been uploaded for this application.</em>
             </div>
             <div class="row" *ngIf="documents?.length > 0">
                 <div class="col-md-6" *ngFor="let document of documents">
                     <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                        <mat-icon>attachment</mat-icon>&nbsp;{{document.documentFileName}}
                     </a>
                 </div>
             </div>
         </div>
 
         <div>
-            <h4>Business Unit</h4>
+            <p class="title">Business Unit</p>
             <p>{{application.businessUnit || '-'}}</p>
         </div>
 
         <div>
-            <h4>Legal Description</h4>
+            <p class="title">Legal Description</p>
             <p [innerHTML]="application.legalDescription | newlines"></p>
         </div>
     </section>

@@ -14,7 +14,8 @@
             cursor: pointer;
         }
     }
-    .page1 {
+    .page1 {}
+    .page2 {
         .form-group.required .control-label:after {
             content: "*";
             color: red;
@@ -22,14 +23,19 @@
         .form-group.optional .control-label:after {
             content: "(optional)";
         }
+        textarea {
+            min-height: 36px;
+        }
         .fb-upload-container {
             border: 1px #495057 solid;
             padding: 1em;
-        }
-    }
-    .page2 {
-        textarea {
-            min-height: 5rem;
+            cursor: pointer;
+            .fb-upload-target {
+                display: flex;
+                .fb-upload-target-content {
+                    display: inline-flex;
+                }
+            }
         }
     }
     .page3 {

@@ -11,9 +11,11 @@
         color: $primary;
         background-color: #fffae7;
     }
-    h4 {
-        margin-bottom: 0;
+    .title {
+        font-size: larger;
+        font-weight: bold;
         color: $primary;
+        margin-bottom: 5px;
     }
     p {
         margin-bottom: 0;
