@@ -12,8 +12,12 @@
             padding: 1em;
             border: 1px #ccc solid;
             border-radius: 5px;
-            .switchWrapper {
-                margin-bottom: 1rem;
+            mat-slide-toggle {
+                display: initial;
+                div {
+                    white-space: initial;
+                    margin-left: 0.5rem;
+                }
             }
             .card {
                 border: 1px #000 solid;

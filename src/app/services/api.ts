@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { Http, ResponseContentType, RequestOptions, Headers } from '@angular/http';
 import * as _ from 'lodash';
+import * as FileSaver from 'file-saver';
 
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/throw';
 
 import { CommentPeriod } from 'app/models/commentperiod';
@@ -12,14 +14,14 @@ import { User } from 'app/models/user';
 
 @Injectable()
 export class ApiService {
-  public token: string;
+  // public token: string;
   public apiPath: string;
   public env: 'local' | 'dev' | 'test' | 'prod';
 
   constructor(private http: Http) {
     const { hostname } = window.location;
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = currentUser && currentUser.token;
+    // const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // this.token = currentUser && currentUser.token;
     switch (hostname) {
       case 'localhost':
         // Local
@@ -44,6 +46,12 @@ export class ApiService {
         this.apiPath = 'https://';
         this.env = 'prod';
     };
+  }
+
+  public handleError(error: any) {
+    const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
+    console.log(reason);
+    return Observable.throw(reason);
   }
 
   //
@@ -193,39 +201,6 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  addCommentPeriod(period: CommentPeriod) {
-    const fields = ['_application', 'startDate', 'endDate', 'description'];
-    let queryString = 'commentperiod?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
-    return this.post(queryString, period);
-  }
-
-  saveCommentPeriod(period: CommentPeriod) {
-    const fields = ['_application', 'startDate', 'endDate', 'description'];
-    let queryString = 'commentperiod/' + period._id + '?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
-    return this.put(queryString, period);
-  }
-
-  deleteCommentPeriod(period: CommentPeriod) {
-    const fields = ['_application', 'startDate', 'endDate', 'description'];
-    let queryString = 'commentperiod/' + period._id + '?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
-    return this.delete(queryString, period);
-  }
-
   //
   // Comments
   //
@@ -365,11 +340,37 @@ export class ApiService {
     return this.get(queryString);
   }
 
+  uploadDocument(formData) {
+    const fields = [
+      'displayName',
+      'internalURL',
+      'documentFileName',
+      'internalMime'
+    ];
+    let queryString = 'document/?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.post(queryString, formData);
+  }
+
+  downloadDocument(file): Subscription {
+    const queryString = 'document/' + file._id + '/download';
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ responseType: ResponseContentType.Blob, headers });
+    return this.http.get('/' + queryString, options)
+      .map(res => res.blob())
+      .subscribe((obj: any) => {
+        const blob = new Blob([obj], { type: file.internalMime });
+        FileSaver.saveAs(blob, file.displayName);
+      });
+  }
+
   getDocumentUrl(document: Document): string {
     return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
   }
-
-  // TODO: saveDocument()
 
   //
   // Users
@@ -383,34 +384,6 @@ export class ApiService {
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
     return this.get(queryString);
-  }
-
-  saveUser(user: User) {
-    const fields = ['displayName', 'username', 'firstName', 'lastName'];
-    let queryString = 'user/' + user._id + '?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
-    return this.put(queryString, user);
-  }
-
-  addUser(user: User) {
-    const fields = ['displayName', 'username', 'firstName', 'lastName'];
-    let queryString = 'user?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
-    return this.post(queryString, user);
-  }
-
-  public handleError(error: any) {
-    const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
-    console.log(reason);
-    return Observable.throw(reason);
   }
 
   //

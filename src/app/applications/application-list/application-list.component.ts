@@ -59,7 +59,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   private showChange(e) {
-    this.showOnlyOpenApps = e.target.checked;
+    this.showOnlyOpenApps = e.checked;
     this.getApplications();
   }
 }

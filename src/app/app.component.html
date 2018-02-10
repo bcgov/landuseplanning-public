@@ -15,7 +15,7 @@
 					<a class="nav-link" href="/" [routerLink]="['/']" tabindex="1"><i class="material-icons">home</i></a>
 				</li>
 				-->
-				<li class="nav-item dropdown">
+				<!-- <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="findApplications" tabindex="4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<span>Find Applications in BC</span>
 						<span class="caret"></span>
@@ -30,6 +30,11 @@
 							<span class="dd-item-desc">Use our interactive map to locate applications across British Columbia</span>
 						</a>
 					</div>
+				</li> -->
+				<li class="nav-item">
+					<a class="nav-link" href="/applications" [routerLink]="['/applications']" title="Find applications by list and map">
+						<span>Find Applications in BC</span>
+					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="/search" [routerLink]="['/search']" title="Find documents available on the Public Review &amp; Comment website">
@@ -78,7 +83,7 @@
 			<div class="col-md-4">
 				<section>
 					<h4>Navigate</h4>
-					<h5>Find Applications In British Columbia</h5>
+					<!-- <h5>Find Applications In British Columbia</h5>
 					<ul>
 						<li>
 							<a href="/applications" [routerLink]="['/applications']">Find Application by List</a>
@@ -86,14 +91,14 @@
 						<li>
 							<a href="/map" [routerLink]="['/map']">Find Application by Map</a>
 						</li>
-					</ul>
+					</ul> -->
 					<h5>PRC in British Columbia</h5>
 					<ul>
 						<li>
-							<a href="/lifecycle" [routerLink]="['/lifecycle']">The PRC Lifecycle</a>
+							<a href="/applications" [routerLink]="['/applications']">Find Applications in BC</a>
 						</li>
 						<li>
-							<a href="/applications" [routerLink]="['/applications']">Find Applications in BC</a>
+							<a href="/lifecycle" [routerLink]="['/lifecycle']">The PRC Lifecycle</a>
 						</li>
 					</ul>
 					<!-- <h5>Our Processes &amp; Procedures</h5>

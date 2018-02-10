@@ -2,13 +2,9 @@
   <div class="row">
     <main class="col-md-5 application-list">
       <section>
-        <div class="switchWrapper">
-          <label class="switch">
-            <input type="checkbox" [attr.checked]="showOnlyOpenApps ? '' : null" (change)="showChange($event)">
-            <span class="slider round"></span>
-          </label>
-          <div class="label">&nbsp;&nbsp;Show only applications that have an open or future comment period</div>
-        </div>
+        <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showChange($event)">
+          <div>Show only applications that have an open or future comment period</div>
+        </mat-slide-toggle>
 
         <div *ngIf="applications?.length == 0">
           <em>No applications found.</em>
