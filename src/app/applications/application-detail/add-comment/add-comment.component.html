@@ -18,13 +18,13 @@
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="accept()">I Agree</button>
+      <button type="button" class="btn btn-primary" (click)="p1_accept()">I Agree</button>
     </div>
   </div>
 
   <div class="modal-content page2" *ngIf="this.currentPage === 2">
     <div class="modal-header">
-      <h4 class="modal-title">Add Comment</h4>
+      <h4 class="modal-title">Add Comment (page 1 of 2)</h4>
       <button type="button" class="close" aria-label="Close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -39,19 +39,19 @@
               <label class="control-label">
                 <strong>Name</strong>
               </label>
-              <input class="form-control" placeholder="First Last" type="text" required aria-required="true" />
+              <input class="form-control" type="text" maxlength="50" placeholder="First Last" required aria-required="true" />
             </div>
             <div class="form-group col-lg-6 required">
               <label class="control-label">
                 <strong>Location</strong>
               </label>
-              <input class="form-control" placeholder="City" type="text" required aria-required="true" />
+              <input class="form-control" type="text" maxlength="50" required aria-required="true" />
             </div>
             <div class="form-group col-lg-12 optional">
               <label class="control-label">
                 <strong>Organization</strong>
               </label>
-              <input class="form-control" placeholder="Org Name" type="text" required aria-required="true" />
+              <input class="form-control" type="text" maxlength="100" placeholder="Org Name" required aria-required="true" />
             </div>
           </div>
 
@@ -59,10 +59,8 @@
             <div class="form-group col-12 required">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" />&nbsp;Make me anonymous.
-                  <small>Checking this option will hide your name and location on the public site. Your email and phone are never
-                    public.
-                  </small>
+                  <input type="checkbox" />&nbsp;Make me anonymous. (Checking this option will hide your name, organization and location on the public
+                  site. Your email and phone are never public.)
                 </label>
               </div>
             </div>
@@ -83,11 +81,31 @@
               <input class="form-control" placeholder="xxx-xxx-xxxx" type="tel" required aria-required="true" />
             </div>
           </div>
+        </fieldset>
+      </form>
+    </div>
 
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="p2_back()">Back</button>
+      <button type="button" class="btn btn-primary" (click)="p2_next()">Next</button>
+    </div>
+  </div>
+
+  <div class="modal-content page2" *ngIf="this.currentPage === 3">
+    <div class="modal-header">
+      <h4 class="modal-title">Add Comment (page 2 of 2)</h4>
+      <button type="button" class="close" aria-label="Close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form class="add-comment">
+        <fieldset>
           <h5>Your Comment</h5>
           <div class="row">
             <div class="form-group col-12">
-              <textarea class="form-control" rows="3"></textarea>
+              <textarea class="form-control" rows="10"></textarea>
             </div>
           </div>
 
@@ -108,10 +126,10 @@
                     <div class="fb-upload-target-content">
                       <mat-icon>file_upload</mat-icon>
                       <span class="fb-upload-target-msg">
-                        <strong>Drag &amp; Drop</strong> or
+                        <strong>Drag &amp; Drop</strong>&nbsp;or&nbsp;
                         <strong>Browse Files</strong> to upload.
                       </span>
-                      <span class="fb-upload-req-msg">Total size is limited to 5MB.</span>
+                      <span class="fb-upload-req-msg">&nbsp;Total size is limited to 5MB.</span>
                     </div>
                     <div class="fb-upload-target-border"></div>
                   </div>
@@ -131,12 +149,12 @@
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="back()">Back</button>
-      <button type="button" class="btn btn-primary" (click)="submit()">Submit</button>
+      <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
+      <button type="button" class="btn btn-primary" (click)="p3_submit()">Submit</button>
     </div>
   </div>
 
-  <div class="modal-content page3" *ngIf="this.currentPage === 3">
+  <div class="modal-content page3" *ngIf="this.currentPage === 4">
     <div class="modal-header">
       <h4 class="modal-title">Confirmation</h4>
       <button type="button" class="close" aria-label="Close" (click)="close()">
