@@ -42,15 +42,15 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.currentPage = 1;
   }
 
-  private accept() {
-    this.currentPage = 2;
-  }
+  private p1_accept() { this.currentPage++; }
 
-  private back() {
-    this.currentPage = 1;
-  }
+  private p2_back() { this.currentPage--; }
 
-  private submit() {
+  private p2_next() { this.currentPage++; }
+
+  private p3_back() { this.currentPage--; }
+
+  private p3_submit() {
     // first upload all attached files
     // then save new comment (with document ids)
 
@@ -59,6 +59,6 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     // may not be needed here
     this.result = true;
     // alert('Submit is not yet implemented');
-    this.currentPage = 3;
+    this.currentPage++;
   }
 }

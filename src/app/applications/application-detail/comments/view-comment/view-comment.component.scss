@@ -13,6 +13,8 @@
         }
     }
     .modal-body {
+        max-height: 72vh; // worst-case (Galaxy S5)
+        overflow-y: auto;
         p {
             font-size: smaller;
             line-height: 1.25rem;
