@@ -3,44 +3,45 @@
     <main class="col-md-5 application-list">
       <section>
         <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showChange($event)">
-          <div>Show only applications that have an open or future comment period</div>
+          <div>Only show applications with an open or future comment period</div>
         </mat-slide-toggle>
 
         <div *ngIf="applications?.length == 0">
           <em>No applications found.</em>
         </div>
 
-        <div class="card" *ngFor="let application of applications | paginate: config">
-          <div class="card-header">{{application.proponent ? application.proponent.name : '-'}}</div>
+        <div class="card" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)"
+          (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
+          <div class="card-header">{{item.proponent ? item.proponent.name : '-'}}</div>
           <div class="card-body">
             <div class="row">
               <div class="col">
-                <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
+                <p class="value">Published on {{item.projectDate | date:'longDate'}}</p>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <p class="title">{{applicationService.getStatus(application)}}</p>
+                <p class="title">{{applicationService.getStatus(item)}}</p>
               </div>
             </div>
             <div class="row">
               <div class="col-6">
                 <label class="name">Purpose</label>
-                <p class="value">{{application.purpose | titlecase}}</p>
+                <p class="value">{{item.purpose | titlecase}}</p>
               </div>
               <div class="col-6">
                 <label class="name">Subpurpose</label>
-                <p class="value">{{application.subpurpose | titlecase}}</p>
+                <p class="value">{{item.subpurpose | titlecase}}</p>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <p class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</p>
+                <p class="title">{{commentPeriodService.getStatus(item.currentPeriod)}}</p>
               </div>
             </div>
           </div>
           <div class="card-footer">
-            <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', application._id]">
+            <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', item._id]">
               <i class="material-icons">info_outline</i>
               <span>View Details</span>
             </a>

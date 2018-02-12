@@ -27,6 +27,20 @@
                     text-transform: none;
                     font-size: large;
                 }
+                &:active,
+                &:focus,
+                &:hover {
+                    background-color: lighten($gold, 25%);
+                    // color: #495057;
+                    // border-color: $gold;
+                    // font-weight: 700;
+                }
+                &.active {
+                    border-right: $gold 10px solid;
+                    // color: #495057;
+                    // border-color: $gold;
+                    // font-weight: 700;
+                }
                 .card-body {
                     margin-top: 0.5rem;
                     padding: 0px 10px;
@@ -59,12 +73,10 @@
     }
     .application-map {
         margin-top: 0;
-        min-height: 30rem;
-        // max-height: 60rem;
+        min-height: 30rem; // max-height: 60rem;
         >section {
             border: 1px #ccc solid;
-            border-radius: 5px;
-            // img {
+            border-radius: 5px; // img {
             //     width: 100%;
             //     height: 37rem;
             //     object-fit: none;
