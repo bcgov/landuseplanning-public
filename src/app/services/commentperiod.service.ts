@@ -56,6 +56,10 @@ export class CommentPeriodService {
       return 'Not Open For Commenting';
     }
 
+    if (!period.startDate || !period.endDate) {
+      return null; // error
+    }
+
     const today = new Date();
     const startDate = new Date(period.startDate);
     const endDate = new Date(period.endDate);

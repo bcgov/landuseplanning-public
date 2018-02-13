@@ -60,8 +60,8 @@ export class ApiService {
   getApplications() {
     const fields = [
       'name',
-      // 'type',
-      // 'subtype',
+      'type',
+      'subtype',
       'stageCode',
       'purpose',
       'subpurpose',

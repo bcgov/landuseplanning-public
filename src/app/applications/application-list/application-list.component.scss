@@ -20,10 +20,11 @@
                 }
             }
             .card {
+                cursor: pointer;
                 border: 1px #000 solid;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.25rem;
                 .card-header {
-                    padding: 0px 10px;
+                    padding: 0px 5px;
                     text-transform: none;
                     font-size: large;
                 }
@@ -31,24 +32,18 @@
                 &:focus,
                 &:hover {
                     background-color: lighten($gold, 25%);
-                    // color: #495057;
-                    // border-color: $gold;
-                    // font-weight: 700;
                 }
                 &.active {
                     border-right: $gold 10px solid;
-                    // color: #495057;
-                    // border-color: $gold;
-                    // font-weight: 700;
                 }
                 .card-body {
-                    margin-top: 0.5rem;
-                    padding: 0px 10px;
+                    margin-top: 0.25rem;
+                    padding: 0px 5px;
                     .title {
                         font-size: large;
                         font-weight: bold;
                         color: $primary;
-                        margin-bottom: 0.5rem;
+                        margin-bottom: 0.25rem;
                     }
                     .name {
                         // font-size: large;
@@ -59,7 +54,7 @@
                     .value {
                         font-size: smaller;
                         line-height: 1rem;
-                        margin-bottom: 0.5rem;
+                        margin-bottom: 0.25rem;
                     }
                 }
                 .card-footer {
@@ -73,15 +68,17 @@
     }
     .application-map {
         margin-top: 0;
-        min-height: 30rem; // max-height: 60rem;
+        min-height: 30rem;
+        // max-height: 60rem;
         >section {
             border: 1px #ccc solid;
-            border-radius: 5px; // img {
+            border-radius: 5px;
+            img {
             //     width: 100%;
             //     height: 37rem;
             //     object-fit: none;
             //     object-position: top;
-            // }
+            }
         }
     }
 }
