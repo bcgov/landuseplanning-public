@@ -1,4 +1,8 @@
 <div class="modal-dialog modal-lg">
+  <div class="spinner-container full-screen" *ngIf="loading" [@visibility]>
+    <div class="spinner-new rotating"></div>
+  </div>
+
   <div class="modal-content page1" *ngIf="this.currentPage === 1">
     <div class="modal-header">
       <h4 class="modal-title">Conditions</h4>
@@ -101,8 +105,8 @@
             <div class="form-group col-12 required">
               <label for="comment" class="control-label">Comment</label>
               <textarea class="form-control" id="comment" name="comment" rows="10" required aria-required="true" [(ngModel)]="comment.comment"
-                #comment="ngModel"></textarea>
-              <div [hidden]="comment.valid || comment.pristine" class="alert alert-danger">Comment is required</div>
+                #comment2="ngModel"></textarea>
+              <div [hidden]="comment2.valid || comment2.pristine" class="alert alert-danger">Comment is required</div>
             </div>
           </div>
 
@@ -145,7 +149,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
-        <button [disabled]="!commentForm2.form.valid" type="submit" class="btn btn-primary">Submit</button>
+        <button [disabled]="!commentForm2.form.valid || commentForm2.form.submitted" type="submit" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </form>
