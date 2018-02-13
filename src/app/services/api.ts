@@ -255,6 +255,8 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
+    console.log('queryString = ', queryString);
+    console.log('comment = ', comment);
     return this.post(queryString, comment);
   }
 

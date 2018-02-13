@@ -17,13 +17,23 @@
         }
     }
     .page1 {}
-    .page2 {
+    .page2,
+    .page3 {
         .form-group.required .control-label:after {
-            content: "*";
+            white-space: pre;
+            content: " *";
             color: red;
         }
         .form-group.optional .control-label:after {
-            content: "(optional)";
+            white-space: pre;
+            content: " (optional)";
+            font-weight: normal;
+        }
+        .control-label {
+            font-weight: bold;
+        }
+        .form-check-input {
+            margin-left: 0;
         }
         textarea {
             min-height: 36px;
@@ -40,7 +50,7 @@
             }
         }
     }
-    .page3 {
+    .page4 {
         .modal-body {
             // text-align: center;
         }
