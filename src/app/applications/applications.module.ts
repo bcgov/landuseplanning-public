@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -24,6 +25,7 @@ import { ApplicationService } from 'app/services/application.service';
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     NgbModule.forRoot(),
     NgxPaginationModule,
     ApplicationsRoutingModule,

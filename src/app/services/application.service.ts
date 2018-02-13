@@ -88,6 +88,10 @@ export class ApplicationService {
 
   // returns application status based on stage code + status code
   getStatus(application: Application): string {
+    if (!application || !application.stageCode || !application.status) {
+      return null; // error
+    }
+
     if (application.stageCode === 'A') {
       switch (application.status.toUpperCase()) {
         case 'ABANDONED': return 'Application Abandoned';
@@ -104,6 +108,6 @@ export class ApplicationService {
         case 'SUSPENDED': return 'Tenure: Suspended';
       }
     }
-    return '-';
+    return null; // unknown status
   }
 }

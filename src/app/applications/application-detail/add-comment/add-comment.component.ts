@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import * as FileSaver from 'file-saver';
 
 import { Comment } from 'app/models/comment';
+// import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { CommentService } from 'app/services/comment.service';
 
@@ -24,7 +24,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public currentPeriod: CommentPeriod;
 
   public comment: Comment;
-  public dateAdded: NgbDateStruct;
+  // public documents: Array<Document>;
   public showAlert: boolean; // for attachment error
   private currentPage = 0;
 
@@ -37,8 +37,9 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
+    this.comment = new Comment();
+    // this.documents = new Array<Document>();
     this.showAlert = false;
-    console.log('comment period id=', this.currentPeriod._id);
     this.currentPage = 1;
   }
 
@@ -46,19 +47,26 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   private p2_back() { this.currentPage--; }
 
-  private p2_next() { this.currentPage++; }
+  private p2_submit() { this.currentPage++; }
 
   private p3_back() { this.currentPage--; }
 
   private p3_submit() {
-    // first upload all attached files
-    // then save new comment (with document ids)
+    // console.log('this.comment =', this.comment);
 
-    // we set dialog result as true on click of submit button
-    // then we can get dialog result from caller code
-    // may not be needed here
-    this.result = true;
-    // alert('Submit is not yet implemented');
-    this.currentPage++;
+    // first upload all attached files
+    // then save new comment with document ids
+    // OR ONE BIG MIME MESS?
+
+    this.commentService.add(this.comment)
+      .subscribe(
+        data => { console.log('Saved comment, data= ', data); this.result = true; },
+        error => { console.log(error); this.result = false; }
+      );
+
+    // TODO: need to wait for result!
+    if (this.result) {
+      this.currentPage++;
+    }
   }
 }

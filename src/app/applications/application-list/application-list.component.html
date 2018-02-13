@@ -10,31 +10,39 @@
           <em>No applications found.</em>
         </div>
 
-        <div class="card" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)"
-          (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
-          <div class="card-header">{{item.proponent ? item.proponent.name : '-'}}</div>
+        <div class="card" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
+          (click)="setCurrentApp(item)">
+          <div class="card-header">{{item.proponent ? item.proponent.name : 'Unknown'}}</div>
           <div class="card-body">
             <div class="row">
               <div class="col">
                 <p class="value">Published on {{item.projectDate | date:'longDate'}}</p>
               </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="applicationService.getStatus(item)">
               <div class="col">
                 <p class="title">{{applicationService.getStatus(item)}}</p>
               </div>
             </div>
             <div class="row">
-              <div class="col-6">
+              <div class="col-6" *ngIf="item.purpose && item.subpurpose">
                 <label class="name">Purpose</label>
                 <p class="value">{{item.purpose | titlecase}}</p>
               </div>
-              <div class="col-6">
+              <div class="col-6" *ngIf="item.purpose && item.subpurpose">
                 <label class="name">Subpurpose</label>
                 <p class="value">{{item.subpurpose | titlecase}}</p>
               </div>
+              <div class="col-6" *ngIf="item.type && item.subtype">
+                <label class="name">Tenure Type</label>
+                <p class="value">{{item.type | titlecase}}</p>
+              </div>
+              <div class="col-6" *ngIf="item.type && item.subtype">
+                <label class="name">Tenure Subtype</label>
+                <p class="value">{{item.subtype | titlecase}}</p>
+              </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="commentPeriodService.getStatus(item.currentPeriod)">
               <div class="col">
                 <p class="title">{{commentPeriodService.getStatus(item.currentPeriod)}}</p>
               </div>
@@ -52,8 +60,7 @@
 
     <aside class="col-md-7 application-map">
       <section>
-        <!-- TODO: main map goes here -->
-        <!-- <img src="assets/images/hero-background-prc.jpg" alt="Main map"> -->
+        <!-- TODO: listmap goes here -->
         <app-main-map></app-main-map>
       </section>
     </aside>
