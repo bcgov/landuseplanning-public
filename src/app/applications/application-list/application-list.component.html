@@ -14,11 +14,6 @@
           (click)="setCurrentApp(item)">
           <div class="card-header">{{item.proponent ? item.proponent.name : 'Unknown'}}</div>
           <div class="card-body">
-            <div class="row">
-              <div class="col">
-                <p class="value">Published on {{item.projectDate | date:'longDate'}}</p>
-              </div>
-            </div>
             <div class="row" *ngIf="applicationService.getStatus(item)">
               <div class="col">
                 <p class="title">{{applicationService.getStatus(item)}}</p>
@@ -33,14 +28,6 @@
                 <label class="name">Subpurpose</label>
                 <p class="value">{{item.subpurpose | titlecase}}</p>
               </div>
-              <div class="col-6" *ngIf="item.type && item.subtype">
-                <label class="name">Tenure Type</label>
-                <p class="value">{{item.type | titlecase}}</p>
-              </div>
-              <div class="col-6" *ngIf="item.type && item.subtype">
-                <label class="name">Tenure Subtype</label>
-                <p class="value">{{item.subtype | titlecase}}</p>
-              </div>
             </div>
             <div class="row" *ngIf="commentPeriodService.getStatus(item.currentPeriod)">
               <div class="col">
@@ -51,7 +38,7 @@
           <div class="card-footer">
             <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', item._id]">
               <i class="material-icons">info_outline</i>
-              <span>View Details</span>
+              <span>See Details</span>
             </a>
           </div>
         </div>
