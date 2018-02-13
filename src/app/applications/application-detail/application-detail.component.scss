@@ -64,6 +64,9 @@
     }
     .application-tabs {
         margin-top: 0;
+        >button {
+            margin-bottom: 0.5rem;
+        }
         >section {
             position: relative;
             background-color: #fff;
@@ -71,11 +74,6 @@
             border: 1px #ccc solid;
             border-radius: 5px;
             min-height: 20rem;
-            >button {
-                position: absolute;
-                top: 0.5rem;
-                right: 0.5rem;
-            }
         }
     }
 }
