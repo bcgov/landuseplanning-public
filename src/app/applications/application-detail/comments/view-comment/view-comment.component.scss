@@ -1,3 +1,4 @@
+@import "~assets/styles/base.scss";
 .modal-dialog {
     .modal-header {
         background-color: #f1f1f1;
@@ -16,11 +17,16 @@
         max-height: 72vh; // worst-case (Galaxy S5)
         overflow-y: auto;
         p {
-            font-size: smaller;
-            line-height: 1.25rem;
+            line-height: 1.5rem;
         }
         a {
             display: inline-flex;
+        }
+        .title {
+            font-size: larger;
+            font-weight: bold;
+            color: $primary;
+            margin-bottom: 5px;
         }
     }
     .modal-footer {

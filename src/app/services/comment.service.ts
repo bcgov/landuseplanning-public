@@ -77,6 +77,10 @@ export class CommentService {
   }
 
   add(comment: Comment): Observable<Comment> {
+    // delete object keys the back end doesn't want
+    delete comment._id;
+    delete comment.commentStatus;
+
     return this.api.addComment(comment)
       .map((res: Response) => {
         const c = res.text() ? res.json() : null;
