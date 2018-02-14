@@ -4,13 +4,13 @@ app-application-list:host {
     @include flex-box;
     @include flex-direction(column);
     @include fill-parent(fixed);
-    margin-top: 67px;
+    margin-top: 68px;
     z-index: 999;
 }
 
-@media (min-width: 1024px) {
-     :host {
-        margin-top: 67px;
+@media (max-width: 991px) {
+    app-application-list:host {
+        margin-top: 52px;
     }
 }
 
