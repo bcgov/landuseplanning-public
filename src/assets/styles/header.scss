@@ -10,20 +10,16 @@ header {
     }
 }
 
-.brand-container {
-    @include clearfix;
-}
-
-.brand {
-    float: left;
-    display: block;
-    width: 270px; // Using PX dimensions here to ensure exact match to image
+.navbar-brand {
+    // float: left;
+    // display: block;
+    width: 270px; // use PX dimensions here to ensure exact match to image
     height: 3rem;
     background-image: url("~assets/images/bcgov-header-horiz-SM.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: auto;
-    outline: none; // Override user agent stylesheet default
+    // outline: none; // override user agent stylesheet default
 }
 
 .navbar-toggler {
@@ -34,7 +30,7 @@ header {
     color: $gold;
     font-size: 1rem;
     font-weight: 600;
-    outline: none; // Override user agent stylesheet default
+    outline: none; // override user agent stylesheet default
     &:hover {
         cursor: pointer;
     }
@@ -67,7 +63,7 @@ header {
     }
 }
 
-.main-nav {
+.navbar {
     padding: 0;
     background-color: $header-bg;
     z-index: 1000;
@@ -154,20 +150,17 @@ header {
             }
         }
     }
-    .brand-container {
-        float: left;
-    }
-    .brand {
-        width: 270px; // Using PX dimensions here to ensure exact match to image
+    .navbar-brand {
+        width: 270px; // use PX dimensions here to ensure exact match to image
         height: 4rem;
     }
-    .main-nav {
-        float: right;
+    .navbar {
+        // float: right;
         background: transparent;
         .navbar-nav {
             margin-top: 0;
             .nav-link {
-                height: 4rem; //60px to match the branding height
+                height: 4rem; // 60px to match the branding height
                 padding: 0.5rem 0.75rem !important;
                 border-top: none;
                 span {
@@ -218,8 +211,8 @@ header {
 }
 
 @media (min-width: 1200px) {
-    .brand {
-        width: 342px; // Using PX dimensions here to ensure exact match to image
+    .navbar-brand {
+        width: 342px; // use PX dimensions here to ensure exact match to image
         height: 4rem;
         background-image: url("~assets/images/bcgov-header-horiz-LG.png");
     }

@@ -1,68 +1,101 @@
-<div class="container" id="anchor-point">
-  <div class="row">
-    <main class="col-md-5 application-list">
-      <section>
-        <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showChange($event)">
-          <div>Only show applications with an open or future comment period</div>
-        </mat-slide-toggle>
+<div class="application-view">
 
-        <div *ngIf="applications?.length == 0">
-          <em>No applications found.</em>
+    <h1 class="sr-only">BC Public Review and Comment Application</h1>
+
+    <!-- APPLICATION LIST VIEW -->
+    <div class="map-list-container">
+        <div class="map-list-container__options">
+            <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showChange($event)">
+                Only show applications with an open or future comment period
+            </mat-slide-toggle>
         </div>
+        <div class="list-group">
+            <div class="list-group-item" *ngIf="applications?.length == 0">
+                No applications found.
+            </div>
+            <div class="list-group-item" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
+                (click)="setCurrentApp(item)">
+                <h2>{{item.proponent ? item.proponent.name : 'Unknown'}}</h2>
+                <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod)">{{commentPeriodService.getStatus(item.currentPeriod)}}</span>
+                <ul class="nv-list">
+                    <li>
+                        <span class="nv-list__item--name">Status</span>
+                        <span class="nv-list__item--value">{{applicationService.getStatus(item)}}</span>
+                    </li>
+                    <li class="nv-list_item" *ngIf="item.purpose && item.subpurpose">
+                        <span class="nv-list__item--name">Purpose</span>
+                        <span class="nv-list__item--value">
+                            <span>{{item.purpose | titlecase}}</span>
+                            <span>({{item.subpurpose | titlecase}})</span>
+                        </span>
+                    </li>
+                    <li class="nv-list_item" *ngIf="item.type && item.subtype">
+                        <span class="nv-list__item--name">Tenure Type</span>
+                        <span class="nv-list__item--value">
+                            {{item.type | titlecase}}
+                            <span>({{item.subtype | titlecase}})</span>
+                        </span>
+                    </li>
+                </ul>
+                <div class="list-group-item__buttons">
+                    <a class="btn btn-sm content-btn-alt" [routerLink]="['/application', item._id]"><span>Go to Application Details &rsaquo;</span></a>
+                </div>
 
-        <div class="card" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
-          (click)="setCurrentApp(item)">
-          <div class="card-header">{{item.proponent ? item.proponent.name : 'Unknown'}}</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col">
-                <p class="value">Published on {{item.projectDate | date:'longDate'}}</p>
-              </div>
+                <!-- OLD LAYOUT
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                        <p class="value">Published on {{item.projectDate | date:'longDate'}}</p>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="applicationService.getStatus(item)">
+                        <div class="col">
+                        <p class="title">{{applicationService.getStatus(item)}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6" *ngIf="item.purpose && item.subpurpose">
+                        <label class="name">Purpose</label>
+                        <p class="value">{{item.purpose | titlecase}}</p>
+                        </div>
+                        <div class="col-6" *ngIf="item.purpose && item.subpurpose">
+                        <label class="name">Subpurpose</label>
+                        <p class="value">{{item.subpurpose | titlecase}}</p>
+                        </div>
+                        <div class="col-6" *ngIf="item.type && item.subtype">
+                        <label class="name">Tenure Type</label>
+                        <p class="value">{{item.type | titlecase}}</p>
+                        </div>
+                        <div class="col-6" *ngIf="item.type && item.subtype">
+                        <label class="name">Tenure Subtype</label>
+                        <p class="value">{{item.subtype | titlecase}}</p>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="commentPeriodService.getStatus(item.currentPeriod)">
+                        <div class="col">
+                        <p class="title">{{commentPeriodService.getStatus(item.currentPeriod)}}</p>
+                        </div>
+                    </div>
+                </div>
+                -->
+                <!-- OLD FOOTER
+                <div class="card-footer">
+                <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', item._id]">
+                    <i class="material-icons">info_outline</i>
+                    <span>View Details</span>
+                </a>
+                -->
+
             </div>
-            <div class="row" *ngIf="applicationService.getStatus(item)">
-              <div class="col">
-                <p class="title">{{applicationService.getStatus(item)}}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6" *ngIf="item.purpose && item.subpurpose">
-                <label class="name">Purpose</label>
-                <p class="value">{{item.purpose | titlecase}}</p>
-              </div>
-              <div class="col-6" *ngIf="item.purpose && item.subpurpose">
-                <label class="name">Subpurpose</label>
-                <p class="value">{{item.subpurpose | titlecase}}</p>
-              </div>
-              <div class="col-6" *ngIf="item.type && item.subtype">
-                <label class="name">Tenure Type</label>
-                <p class="value">{{item.type | titlecase}}</p>
-              </div>
-              <div class="col-6" *ngIf="item.type && item.subtype">
-                <label class="name">Tenure Subtype</label>
-                <p class="value">{{item.subtype | titlecase}}</p>
-              </div>
-            </div>
-            <div class="row" *ngIf="commentPeriodService.getStatus(item.currentPeriod)">
-              <div class="col">
-                <p class="title">{{commentPeriodService.getStatus(item.currentPeriod)}}</p>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', item._id]">
-              <i class="material-icons">info_outline</i>
-              <span>View Details</span>
-            </a>
-          </div>
         </div>
-      </section>
-    </main>
+    </div>
 
-    <aside class="col-md-7 application-map">
-      <section>
+    <!-- APPLICATION MAP VIEW -->
+    <div class="map-container">
+        <section>
         <!-- TODO: listmap goes here -->
         <app-main-map></app-main-map>
-      </section>
-    </aside>
-  </div>
+        </section>
+    </div>
 </div>
+

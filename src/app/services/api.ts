@@ -60,8 +60,8 @@ export class ApiService {
   getApplications() {
     const fields = [
       'name',
-      'type',
-      'subtype',
+      // 'type',
+      // 'subtype',
       'stageCode',
       'purpose',
       'subpurpose',
@@ -74,7 +74,7 @@ export class ApiService {
       // 'description',
       // 'legalDescription',
       'status',
-      'projectDate',
+      // 'projectDate',
       // 'businessUnit',
       // 'cl_files',
       // 'commodityType',

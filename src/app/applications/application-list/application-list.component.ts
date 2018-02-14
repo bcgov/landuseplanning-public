@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationInstance } from 'ngx-pagination';
@@ -23,7 +23,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     currentPage: 1
   };
   public currentApp: Application;
-  private showOnlyOpenApps = true;
+  private showOnlyOpenApps = false;
+
+  @HostBinding('class.full-screen') fullScreen = true;
 
   constructor(
     private route: ActivatedRoute,

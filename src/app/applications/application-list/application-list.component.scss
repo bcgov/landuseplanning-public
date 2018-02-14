@@ -1,92 +1,113 @@
 @import "~assets/styles/base.scss";
-.container {
-    // background-image: url("~assets/images/hero-background-prc.jpg");
-    // background-repeat: no-repeat;
-    // background-position: top;
-    padding: 2rem;
-    .application-list {
-        // max-height: 60rem;
-        // overflow-y: scroll;
-        >section {
-            background-color: #fff;
-            padding: 1em;
-            border: 1px #ccc solid;
-            border-radius: 5px;
-            mat-slide-toggle {
-                display: initial;
-                div {
-                    white-space: initial;
-                    margin-left: 0.5rem;
-                }
-            }
-            .card {
-                cursor: pointer;
-                border: 1px #000 solid;
-                margin-bottom: 0.25rem;
-                .card-header {
-                    padding: 0px 5px;
-                    text-transform: none;
-                    font-size: large;
-                }
-                &:active,
-                &:focus,
-                &:hover {
-                    background-color: lighten($gold, 25%);
-                }
-                &.active {
-                    border-right: $gold 10px solid;
-                }
-                .card-body {
-                    margin-top: 0.25rem;
-                    padding: 0px 5px;
-                    .title {
-                        font-size: large;
-                        font-weight: bold;
-                        color: $primary;
-                        margin-bottom: 0.25rem;
-                    }
-                    .name {
-                        // font-size: large;
-                        font-weight: bold;
-                        color: $primary;
-                        margin-bottom: 0;
-                    }
-                    .value {
-                        font-size: smaller;
-                        line-height: 1rem;
-                        margin-bottom: 0.25rem;
-                    }
-                }
-                .card-footer {
-                    padding: 5px 10px;
-                    .content-btn {
-                        padding: 0;
-                    }
-                }
-            }
-        }
-    }
-    .application-map {
-        margin-top: 0;
-        min-height: 30rem;
-        // max-height: 60rem;
-        >section {
-            border: 1px #ccc solid;
-            border-radius: 5px;
-            img {
-            //     width: 100%;
-            //     height: 37rem;
-            //     object-fit: none;
-            //     object-position: top;
-            }
-        }
+// NEW LAYOUT STUFF
+app-application-list:host {
+    @include flex-box;
+    @include flex-direction(column);
+    @include fill-parent(fixed);
+    margin-top: 67px;
+    z-index: 999;
+}
+
+@media (min-width: 1024px) {
+     :host {
+        margin-top: 67px;
     }
 }
 
-@media (max-width: 767px) {
-    .container {
-        .application-list {
-            margin-bottom: 1rem;
+.application-view {
+    @include flex-box();
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    .map-list-container {
+        @include flex-box();
+        @include flex-direction(column);
+        @include flex(0 0 auto);
+        width: 26rem;
+        overflow: hidden;
+        &__options {
+            @include flex(0 0 auto);
+            padding: 1rem;
+            border-bottom: 1px solid #ccc;
+            mat-slide-toggle {
+                white-space: normal;
+            }
+        }
+        .list-group {
+            @include flex(1 1 auto);
+            overflow-y: scroll;
+        }
+        .list-group-item {
+            padding: 1.5rem;
+            border-radius: 0 !important;
+            border-bottom: 1px solid #eee;
+            background: transparent;
+            .badge {
+                text-transform: uppercase;
+                font-size: 0.85rem;
+            }
+            &:nth-child(odd) {
+                background: #f7f8fa;
+            }
+            &__buttons {
+                margin-top: 1.35rem;
+                .btn {
+                    padding: 0.25rem 0.75rem;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    text-transform: none;
+                }
+            }
+            &.active {
+                color: #fff !important;
+                background: #007bff !important;
+                a {
+                    color: inherit;
+                    border-color: #fff;
+                }
+            }
+        }
+    }
+    .map-container {
+        @include flex(1 1 auto);
+        position: relative;
+        // width: 20rem;
+    }
+}
+
+// Name/Value Pair list
+.map-list-container {
+    h2 {
+        margin-bottom: 0;
+        letter-spacing: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    .nv-list {
+        margin-top: 1rem;
+        li {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            // Have to set some overrides here on existing styling
+            font-size: 0.875rem; // 14px
+            +li {
+                margin-top: 0.15rem;
+            }
+        }
+        &__item {
+            display: table-row;
+            &--name,
+            &--value {
+                display: table-cell;
+            }
+            &--name {
+                width: 8rem;
+                padding-right: 1.5rem;
+                font-weight: 700;
+            }
         }
     }
 }

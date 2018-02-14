@@ -29,6 +29,7 @@
     </div>
 
     <div class="modal-body" *ngIf="comment">
+      <p class="title">Comment</p>
       <div class="row">
         <div class="col-12">
           <p [innerHTML]="comment.comment | newlines"></p>
@@ -36,15 +37,18 @@
       </div>
 
       <div>
-        <div *ngIf="comment.documents.length == 0">
+        <!-- <div *ngIf="comment.documents.length == 0">
           <em>This comment has no documents.</em>
-        </div>
+        </div> -->
 
-        <div class="row" *ngIf="comment.documents.length > 0">
-          <div class="col-12" *ngFor="let document of comment.documents">
-            <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-              <mat-icon>attachment</mat-icon>&nbsp;{{document.documentFileName}}
-            </a>
+        <div *ngIf="comment.documents.length > 0">
+          <p class="title">Attachments</p>
+          <div class="row">
+            <div class="col-12" *ngFor="let document of comment.documents">
+              <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                <mat-icon>attachment</mat-icon>&nbsp;{{document.documentFileName}}
+              </a>
+            </div>
           </div>
         </div>
       </div>
