@@ -39,13 +39,17 @@ const routes: Routes = [
     path: 'map',
     component: MainMapComponent
   },
-  {
-    path: 'search',
-    component: SearchComponent
-  },
+  // {
+  //   path: 'search',
+  //   component: SearchComponent
+  // },
   {
     path: '',
     component: HomeComponent
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
 

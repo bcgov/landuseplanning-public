@@ -25,7 +25,7 @@ app-application-list:host {
         @include flex-box();
         @include flex-direction(column);
         @include flex(0 0 auto);
-        width: 28rem;
+        width: 26rem;
         overflow: hidden;
         &__options {
             @include flex(0 0 auto);
@@ -73,7 +73,7 @@ app-application-list:host {
     .map-container {
         @include flex(1 1 auto);
         position: relative;
-        width: 20rem;
+        // width: 20rem;
     }
 }
 
