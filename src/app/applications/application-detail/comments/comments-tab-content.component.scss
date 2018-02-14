@@ -26,21 +26,21 @@
             // border: #e7e7e7 2px solid;
             // background-color: #f4f4f4; // #e7e7e7;
         }
-        .comment-author {
+        .comment__author {
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: large;
             color: #003366;
         }
-        .comment-text {
+        .comment__text {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: small;
         }
-        button {
-            padding: 0rem 0.5rem;
-            cursor: pointer;
-        }
+        // button {
+        //     padding: 0rem 0.5rem;
+        //     cursor: pointer;
+        // }
     }
 }

@@ -14,7 +14,7 @@
                 <ng-template ngFor let-item [ngForOf]="comments">
                     <div class="list-group-item flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
-                            <div class="comment-author">
+                            <div class="comment__author">
                                 <div *ngIf="item.commentAuthor && item.commentAuthor.tags; else anonymous">
                                     {{item.commentAuthor.contactName}}
                                     <span *ngIf="item.commentAuthor.orgName">({{item.commentAuthor.orgName}})</span>
@@ -24,15 +24,15 @@
                                     <em>Anonymous</em>
                                 </ng-template>
                             </div>
-                            <div>
+                            <div class="comment__date">
                                 {{(item.dateAdded | date:'longDate') || '-'}}
                             </div>
                         </div>
-                        <p class="mb-1 comment-text">{{item.comment}}</p>
-                        <div class="d-flex w-100 justify-content-end">
-                            <!-- <div class="material-icons" *ngIf="item._documents.length > 0">attachment</div> -->
-                            <button class="btn btn-primary" (click)="viewDetails(item._id)">Read More</button>
-                            <!-- <div class="clickable" (click)="viewDetails(item._id)">Read More</div> -->
+                        <p class="mb-1 comment__text">{{item.comment}}</p>
+                        <div class="comment__buttons ">
+                            <!-- <div class="material-icons" *ngIf="item._documents.length> 0">attachment</div> -->
+                            <!-- <button class="btn btn-primary" (click)="viewDetails(item._id)">Read More &rsaquo;</button> -->
+                            <div class="clickable" (click)="viewDetails(item._id)">Read More &rsaquo;</div>
                         </div>
                     </div>
                 </ng-template>
