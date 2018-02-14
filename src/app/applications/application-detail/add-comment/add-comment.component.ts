@@ -56,7 +56,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.currentPage = 1;
   }
 
-  private p1_accept() { this.currentPage++; }
+  private p1_next() { this.currentPage++; }
 
   private p2_back() { this.currentPage--; }
 
