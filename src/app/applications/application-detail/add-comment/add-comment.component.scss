@@ -16,7 +16,11 @@
             cursor: pointer;
         }
     }
-    .page1 {}
+    .page1 {
+        .form-check * {
+            cursor: pointer;
+        }
+    }
     .page2,
     .page3 {
         .form-group.required .control-label:after {
@@ -31,6 +35,9 @@
         }
         .control-label {
             font-weight: bold;
+        }
+        .form-check * {
+            cursor: pointer;
         }
         .form-check-input {
             margin-left: 0;
@@ -51,9 +58,6 @@
         }
     }
     .page4 {
-        .modal-body {
-            // text-align: center;
-        }
         img {
             width: 100px;
             height: 100px;

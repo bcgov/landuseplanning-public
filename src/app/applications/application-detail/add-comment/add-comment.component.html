@@ -3,28 +3,35 @@
     <div class="spinner-new rotating"></div>
   </div>
 
-  <div class="modal-content page1" *ngIf="this.currentPage === 1">
-    <div class="modal-header">
-      <h4 class="modal-title">Conditions</h4>
-      <button type="button" class="close" aria-label="Close" (click)="close()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+  <form #preCommentForm="ngForm">
+    <div class="modal-content page1" *ngIf="this.currentPage === 1">
+      <div class="modal-header">
+        <h4 class="modal-title">Conditions</h4>
+        <button type="button" class="close" aria-label="Close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-    <div class="modal-body">
-      <h5>How It Works</h5>
-      <p>All accepted comments submitted to the Public Review and Comment Website will be published online within seven days
-        of receipt. Commenters can choose whether they want their name to be published along with their comments or whether
-        they wish to remain anonymous. Comments are not accepted if &ndash; in the view of the Authorizing Agency &ndash;
-        they are profane, abusive, or do not relate to the matter being consulted upon as stated in our Moderation Policy.</p>
-      <p>All comments will be considered in the decision process. The decision maker may also respond with follow up questions
-        if appropriate (e.g. if the decision maker wants more information).</p>
-    </div>
+      <div class="modal-body">
+        <h5>How It Works</h5>
+        <p>All accepted comments submitted to the Public Review and Comment Website will be published online within one week
+          of receipt. Commenters can choose whether they want their name to be published along with their comments or whether
+          they wish to remain anonymous to other commenters. Comments are not accepted if they are profane, abusive, or do
+          not relate to the matter being consulted upon as stated in our Moderation Policy.</p>
+        <p>All comments will be considered in the decision process. The decision maker may also respond with follow up questions
+          (e.g. if the decision maker wants more information).</p>
+        <div class="form-check col-12">
+          <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="comment.commentAuthor.iAgree" #iAgree="ngModel" />
+          <label for="iAgree" class="form-check-label">I agree. By ticking this checkbox, I am conclusively deemed to have read and agreed unconditionally to the above
+            Moderation Policy and Terms of Use.</label>
+        </div>
+      </div>
 
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="p1_accept()">I Agree</button>
+      <div class="modal-footer">
+        <button [disabled]="!comment.commentAuthor.iAgree" type="button" class="btn btn-primary" (click)="p1_next()">Next</button>
+      </div>
     </div>
-  </div>
+  </form>
 
   <!-- FIRST PAGE OF FORM -->
   <form (ngSubmit)="p2_submit()" #commentForm1="ngForm">
@@ -62,7 +69,7 @@
             <div class="form-check col-12">
               <input type="checkbox" class="form-check-input" id="requestedAnonymous" name="requestedAnonymous" [(ngModel)]="comment.commentAuthor.requestedAnonymous"
                 #requestedAnonymous="ngModel" />
-              <label for="requestedAnonymous" class="form-check-label">Make me anonymous. (Checking this option will hide your name, organization and location on the public site.
+              <label for="requestedAnonymous" class="form-check-label">Make me anonymous. (Checking this option will hide your name, location and organization on the public site.
                 Your email and phone are never public.)</label>
             </div>
 
@@ -167,14 +174,6 @@
         <h3>Thank you for your comment!</h3>
         <img src="assets/images/check.png">
       </div>
-      <h5>What happens next?</h5>
-      <p>We publish all comments received within seven days of receipt, except comments that we deem to be inappropriate for
-        publication. Comments may be considered inappropriate for publication if &ndash; in the view of the Authorizing Agency
-        &ndash; they are profane, abusive, or do not relate to the matter being consulted upon as stated in our Moderation
-        Policy.
-      </p>
-      <p>All comments will be considered in the decision process. The decision maker may also respond with follow up questions
-        if appropriate (e.g. if the decision maker wants more information).</p>
     </div>
 
     <div class="modal-footer">
