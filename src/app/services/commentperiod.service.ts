@@ -9,7 +9,14 @@ import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentPeriodService {
-  constructor(private api: ApiService) { }
+  commentStatuses = {};
+
+  constructor(private api: ApiService) {
+    this.commentStatuses['NOT_STARTED'] = 'Commenting Not Started';
+    this.commentStatuses['NOT_OPEN'] = 'Not Open For Commenting';
+    this.commentStatuses['CLOSED'] = 'Commenting Closed';
+    this.commentStatuses['OPEN'] = 'Commenting Open';
+  }
 
   // get all comment periods for the specified application id
   getAllByApplicationId(appId: string): Observable<CommentPeriod[]> {
@@ -43,17 +50,17 @@ export class CommentPeriodService {
   }
 
   isOpen(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === 'Commenting Open');
+    return (this.getStatus(period) === this.commentStatuses['OPEN']);
   }
 
-  isOpenFuture(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === 'Commenting Open' ||
-      this.getStatus(period) === 'Commenting Not Started');
+  isOpenNotStarted(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses['OPEN'] ||
+      this.getStatus(period) === this.commentStatuses['NOT_STARTED']);
   }
 
   getStatus(period: CommentPeriod): string {
     if (!period) {
-      return 'Not Open For Commenting';
+      return this.commentStatuses['NOT_OPEN'];
     }
 
     if (!period.startDate || !period.endDate) {
@@ -65,11 +72,11 @@ export class CommentPeriodService {
     const endDate = new Date(period.endDate);
 
     if (endDate < today) {
-      return 'Commenting Closed';
+      return this.commentStatuses['CLOSED'];
     } else if (startDate > today) {
-      return 'Commenting Not Started';
+      return this.commentStatuses['NOT_STARTED'];
     } else {
-      return 'Commenting Open';
+      return this.commentStatuses['OPEN'];
     }
   }
 }

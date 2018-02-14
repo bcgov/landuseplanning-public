@@ -40,7 +40,7 @@ app-application-list:host {
             overflow-y: scroll;
         }
         .list-group-item {
-            padding: 1.5rem;
+            // padding: 1.5rem;
             border-radius: 0 !important;
             border-bottom: 1px solid #eee;
             background: transparent;
@@ -52,7 +52,7 @@ app-application-list:host {
                 background: #f7f8fa;
             }
             &__buttons {
-                margin-top: 1.35rem;
+                margin-top: 0.5rem;
                 .btn {
                     padding: 0.25rem 0.75rem;
                     font-size: 0.85rem;
@@ -80,13 +80,13 @@ app-application-list:host {
 // Name/Value Pair list
 .map-list-container {
     h2 {
-        margin-bottom: 0;
+        // margin-bottom: 0;
         letter-spacing: 0;
         font-size: 1.25rem;
         font-weight: 600;
     }
     .nv-list {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
         li {
             margin: 0;
             padding: 0;

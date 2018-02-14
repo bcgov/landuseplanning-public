@@ -14,6 +14,14 @@
           </div>
           <div class="row">
             <div class="col">
+              <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT_STARTED']">{{commentPeriodService.commentStatuses['NOT_STARTED']}}</span>
+              <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT_OPEN']">{{commentPeriodService.commentStatuses['NOT_OPEN']}}</span>
+              <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>
+              <span class="badge badge-success" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">{{commentPeriodService.commentStatuses['OPEN']}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <p class="title">{{applicationService.getStatus(application) || "Unknown Application Status"}}</p>
             </div>
           </div>
@@ -35,11 +43,11 @@
               <p class="value">{{application.subtype || "-" | titlecase}}</p>
             </div>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col">
               <p class="title">{{commentPeriodService.getStatus(application.currentPeriod) || "Unknown Commenting Status"}}</p>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="item map-item">

@@ -43,16 +43,16 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ngOnDestroy() { }
 
   private getApplications() {
-    // approach 1: get data from resolver
+    // approach 1: get data directly from resolver
     this.applications = this.route.snapshot.data.applications.filter(
-      application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenFuture(application.currentPeriod))
+      application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenNotStarted(application.currentPeriod))
     );
 
     // approach 2: wait for resolver to retrieve applications
     // this.route.data.subscribe(
     //   (data: { applications: Application[] }) => {
     //     this.applications = data.applications.filter(
-    //       application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenFuture(application.currentPeriod))
+    //       application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenNotStarted(application.currentPeriod))
     //     );
     //   },
     //   error => console.log(error)
