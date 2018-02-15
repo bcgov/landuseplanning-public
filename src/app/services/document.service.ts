@@ -32,7 +32,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  // get all documents for the specified comment
+  // get all documents for the specified comment using forward-references
   // getAllByComment(comment: Comment): Observable<Document[]> {
   //   const documents = [];
   //   if (comment) {
@@ -46,8 +46,7 @@ export class DocumentService {
   //   return Observable.of(documents);
   // }
 
-  // get all documents for the specified comment
-  // using new API call
+  // get all documents for the specified comment using back-references
   getAllByComment(comment: Comment): Observable<Document[]> {
     return this.api.getDocumentsByCommentId(comment._id)
       .map((res: Response) => {
@@ -60,7 +59,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  // get all documents for the specified decision
+  // get all documents for the specified decision using forward-references
   // getAllByDecision(decision: Decision): Observable<Document[]> {
   //   const documents = [];
   //   if (decision) {
@@ -74,8 +73,7 @@ export class DocumentService {
   //   return Observable.of(documents);
   // }
 
-  // get all documents for the specified decision
-  // using new API call
+  // get all documents for the specified decision using back-references
   getAllByDecision(decision: Decision): Observable<Document[]> {
     return this.api.getDocumentsByDecisionId(decision._id)
       .map((res: Response) => {

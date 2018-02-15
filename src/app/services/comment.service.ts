@@ -77,16 +77,30 @@ export class CommentService {
   }
 
   add(comment: Comment): Observable<Comment> {
-    // delete object keys the back end doesn't want
-    delete comment._id;
-    delete comment.commentStatus;
-
-    return this.api.addComment(comment)
+    return this.api.addComment(this.sanitizeComment(comment))
       .map((res: Response) => {
         const c = res.text() ? res.json() : null;
         return c;
       })
       .catch(this.api.handleError);
+  }
+
+  private sanitizeComment(comment: Comment): Comment {
+    // delete object keys the back end doesn't want on POST
+    delete comment._id;
+    delete comment._addedBy;
+    // keep _commentPeriod
+    delete comment.commentNumber;
+    // keep comment
+    // keep comment.commentAuthor
+    // keep comment.commentAuthor.internal
+    delete comment._documents;
+    delete comment.review;
+    delete comment.dateAdded;
+    delete comment.commentStatus;
+    delete comment.documents; // API doesn't even look at this
+
+    return comment;
   }
 
   save(comment: Comment): Observable<Comment> {

@@ -4,9 +4,10 @@ import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import * as FileSaver from 'file-saver';
 
 import { Comment } from 'app/models/comment';
-// import { Document } from 'app/models/document';
+import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { CommentService } from 'app/services/comment.service';
+import { ApiService } from 'app/services/api';
 
 export interface DataModel {
   title: string; // not used
@@ -36,13 +37,14 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   public loading: boolean;
   public comment: Comment;
-  // public documents: Array<Document>;
+  public documents: Array<Document>;
   public showAlert: boolean; // for attachment error
   private currentPage: number;
 
   constructor(
     public dialogService: DialogService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private api: ApiService
   ) {
     super(dialogService);
   }
@@ -50,8 +52,10 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.loading = false;
-    this.comment = new Comment({ _commentPeriod: this.currentPeriod });
-    // this.documents = new Array<Document>();
+    this.comment = new Comment();
+    this.comment._commentPeriod = this.currentPeriod._id;
+    this.comment.commentAuthor.requestedAnonymous = false;
+    this.documents = new Array<Document>();
     this.showAlert = false;
     this.currentPage = 1;
   }
@@ -65,13 +69,9 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   private p3_back() { this.currentPage--; }
 
   private p3_submit() {
-    // TODO: disable Submit button
     this.loading = true;
 
-    // first upload all attached files
-    // then save new comment with document ids
-    // OR ONE BIG MIME MESS?
-
+    // first POST new comment
     this.commentService.add(this.comment)
       .subscribe(
         data => {
@@ -84,7 +84,13 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           this.result = false;
           alert('Error saving comment');
         },
-        () => this.loading = false
+        () => this.loading = false // TODO: move to last call
       );
+
+    // then UPLOAD all attachments with comment id
+    // TODO
+
+    // then PUT new comment with array of document ids
+    // TODO
   }
 }

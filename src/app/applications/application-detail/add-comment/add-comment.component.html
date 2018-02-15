@@ -144,9 +144,9 @@
 
                   <div class="fb-upload-target-status" ng-if="uploadService.actions.busy || uploadService.actions.completed"></div>
                 </div>
-                <div class="m-t-1" ng-if="s.fileList.length > 0">
-                  <!-- <x-file-upload-listing file-list="s.fileList"></x-file-upload-listing> -->
-                </div>
+                <!-- <div class="m-t-1" ng-if="s.fileList.length > 0">
+                  <x-file-upload-listing file-list="s.fileList"></x-file-upload-listing>
+                </div> -->
               </div>
               <!-- /UPLOAD CONTAINER -->
             </div>
@@ -156,7 +156,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
-        <button [disabled]="!commentForm2.form.valid || commentForm2.form.submitted" type="submit" class="btn btn-primary">Submit</button>
+        <button [disabled]="!commentForm2.form.valid || loading" type="submit" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </form>

@@ -261,7 +261,7 @@ export class ApiService {
   }
 
   saveComment(comment: Comment) {
-    const fields = ['review', 'commentStatus'];
+    const fields = ['comment', 'commentAuthor', '_documents'];
     let queryString = 'comment/' + comment._id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
@@ -293,7 +293,7 @@ export class ApiService {
 
   getDocumentsByCommentId(commentId: string) {
     const fields = [
-      '_application',
+      '_comment',
       'documentFileName',
       'displayName',
       'internalURL',
@@ -310,7 +310,7 @@ export class ApiService {
 
   getDocumentsByDecisionId(decisionId: string) {
     const fields = [
-      '_application',
+      '_decision',
       'documentFileName',
       'displayName',
       'internalURL',
@@ -326,19 +326,7 @@ export class ApiService {
   }
 
   getDocument(id: string) {
-    const fields = [
-      '_application',
-      'documentFileName',
-      'displayName',
-      'internalURL',
-      'internalMime'
-    ];
-    let queryString = 'document/' + id + '?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
+    const queryString = 'document/' + id;
     return this.get(queryString);
   }
 
