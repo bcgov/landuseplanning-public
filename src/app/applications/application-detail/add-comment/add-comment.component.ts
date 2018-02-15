@@ -50,7 +50,9 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.loading = false;
-    this.comment = new Comment({ _commentPeriod: this.currentPeriod });
+    this.comment = new Comment();
+    this.comment._commentPeriod = this.currentPeriod._id;
+    this.comment.commentAuthor.requestedAnonymous = false;
     // this.documents = new Array<Document>();
     this.showAlert = false;
     this.currentPage = 1;

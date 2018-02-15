@@ -261,7 +261,7 @@ export class ApiService {
   }
 
   saveComment(comment: Comment) {
-    const fields = ['review', 'commentStatus'];
+    const fields = ['comment', 'commentAuthor', '_documents'];
     let queryString = 'comment/' + comment._id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
