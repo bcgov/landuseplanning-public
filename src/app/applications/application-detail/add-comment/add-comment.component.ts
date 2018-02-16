@@ -72,6 +72,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.loading = true;
 
     // first POST new comment
+    // TODO: use promise so we can use then() for attachments?
     this.commentService.add(this.comment)
       .subscribe(
         data => {
@@ -88,7 +89,8 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
       );
 
     // then UPLOAD all attachments with comment id
-    // TODO
+    // TODO: use forkJoin to wait until all calls have been completed?
+    // ref: https://stackoverflow.com/questions/39022048/converting-rxjs-observable-to-a-promise
 
     // then PUT new comment with array of document ids
     // TODO
