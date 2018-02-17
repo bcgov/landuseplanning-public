@@ -37,7 +37,6 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // this.loading = true;
     // NOTE: leave this.application and this.decision undefined
 
     // get application

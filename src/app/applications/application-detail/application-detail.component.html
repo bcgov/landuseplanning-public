@@ -14,8 +14,8 @@
           </div>
           <div class="row">
             <div class="col">
-              <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT_STARTED']">{{commentPeriodService.commentStatuses['NOT_STARTED']}}</span>
-              <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT_OPEN']">{{commentPeriodService.commentStatuses['NOT_OPEN']}}</span>
+              <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>
+              <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">{{commentPeriodService.commentStatuses['NOT OPEN']}}</span>
               <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>
               <span class="badge badge-success" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">{{commentPeriodService.commentStatuses['OPEN']}}</span>
             </div>
@@ -61,7 +61,7 @@
           <p class="value" [innerHTML]="application.description | newlines"></p>
         </div>
 
-        <div class="item row">
+        <!-- <div class="item row">
           <div class="col-6">
             <label>Area (ha)</label>
             <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
@@ -74,12 +74,12 @@
             <label>Region</label>
             <p class="value">{{application.region || "-"}}</p>
           </div>
-        </div>
+        </div> -->
 
-        <div class="item">
+        <!-- <div class="item">
           <label>Crown Land File(s)</label>
           <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
-        </div>
+        </div> -->
       </section>
     </main>
 

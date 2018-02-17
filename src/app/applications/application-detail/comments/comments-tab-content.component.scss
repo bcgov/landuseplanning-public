@@ -3,6 +3,14 @@
     >div {
         margin: 1em;
     }
+    .period-date {
+        width: fit-content;
+        border: 1px #f2e9bf solid;
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+        color: $primary;
+        background-color: #fffae7;
+    }
     .title {
         font-size: larger;
         font-weight: bold;
@@ -38,9 +46,9 @@
             text-overflow: ellipsis;
             font-size: small;
         }
-        // button {
-        //     padding: 0rem 0.5rem;
-        //     cursor: pointer;
-        // }
+        button {
+            // padding: 0rem 0.5rem;
+            // cursor: pointer;
+        }
     }
 }
