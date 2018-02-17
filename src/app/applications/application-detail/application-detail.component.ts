@@ -41,20 +41,19 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-      (data: { application: Application }) => {
-        this.loading = false;
-        this.application = data.application;
-
-        // application not found --> navigate back to application list
-        if (!this.application || !this.application._id) {
-          console.log('Application not found!');
-          this.gotoApplicationList();
+        (data: { application: Application }) => {
+          if (data.application) {
+            this.application = data.application;
+          } else {
+            console.log('ERROR =', 'missing application');
+            this.loading = false;
+            this.gotoApplicationList();
+          }
+        },
+        error => {
+          console.log(error);
+          this.loading = false;
         }
-      },
-      error => {
-        this.loading = false;
-        console.log(error);
-      }
       );
   }
 

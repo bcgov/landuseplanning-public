@@ -13,13 +13,9 @@ export class HomeComponent implements OnInit {
   constructor(private applicationService: ApplicationService) { }
 
   ngOnInit() {
-    // this.newsService.getAll().subscribe(
-    //   data => { this.results = data; },
-    //   error => console.log(error)
-    // );
-    this.applicationService.getAll().subscribe(
-      data => { this.numApplications = data ? data.length : 0; },
-      error => console.log(error)
+    this.applicationService.getCount().subscribe(
+      count => this.numApplications = count,
+      error => console.log('ERROR =', 'could not get all applications')
     );
   }
 }

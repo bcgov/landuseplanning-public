@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 
 import { ApiService } from './api';
@@ -25,7 +25,7 @@ export class CommentService {
     return this.commentPeriodService.getAllByApplicationId(appId)
       .mergeMap(periods => {
         if (periods.length === 0) {
-          return Observable.of([]);
+          return Observable.of([]); // TODO: return null?
         }
 
         // now get the comments for all periods
@@ -76,11 +76,13 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
+  // TODO: should this be a promise instead?
+  // and all other POSTS/PUTS?
   add(comment: Comment): Observable<Comment> {
     return this.api.addComment(this.sanitizeComment(comment))
       .map((res: Response) => {
         const c = res.text() ? res.json() : null;
-        return c;
+        return c ? new Comment(c) : null;
       })
       .catch(this.api.handleError);
   }

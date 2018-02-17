@@ -3,7 +3,9 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/forkJoin';
+// import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/toPromise';
+// import 'rxjs/add/observable/forkJoin';
 
 import { ApiService } from './api';
 // import { Search, SearchArray, SearchTerms } from 'app/models/search';
@@ -29,24 +31,12 @@ export class DocumentService {
         });
         return documents;
       })
-      .catch(this.api.handleError);
+      .catch(this.api.handleError)
+      // .delay(2000) // FOR TESTING
+      ;
   }
 
-  // get all documents for the specified comment using forward-references
-  // getAllByComment(comment: Comment): Observable<Document[]> {
-  //   const documents = [];
-  //   if (comment) {
-  //     comment._documents.forEach(documentId => {
-  //       this.getById(documentId).subscribe(
-  //         document => { if (document) { documents.push(document); } },
-  //         error => console.log(error)
-  //       );
-  //     });
-  //   }
-  //   return Observable.of(documents);
-  // }
-
-  // get all documents for the specified comment using back-references
+  // get all documents for the specified comment
   getAllByComment(comment: Comment): Observable<Document[]> {
     return this.api.getDocumentsByCommentId(comment._id)
       .map((res: Response) => {
@@ -56,24 +46,12 @@ export class DocumentService {
         });
         return documents;
       })
-      .catch(this.api.handleError);
+      .catch(this.api.handleError)
+      // .delay(2000) // FOR TESTING
+      ;
   }
 
-  // get all documents for the specified decision using forward-references
-  // getAllByDecision(decision: Decision): Observable<Document[]> {
-  //   const documents = [];
-  //   if (decision) {
-  //     decision._documents.forEach(documentId => {
-  //       this.getById(documentId).subscribe(
-  //         document => { if (document) { documents.push(document); } },
-  //         error => console.log(error)
-  //       );
-  //     });
-  //   }
-  //   return Observable.of(documents);
-  // }
-
-  // get all documents for the specified decision using back-references
+  // get all documents for the specified decision
   getAllByDecision(decision: Decision): Observable<Document[]> {
     return this.api.getDocumentsByDecisionId(decision._id)
       .map((res: Response) => {
@@ -83,7 +61,9 @@ export class DocumentService {
         });
         return documents;
       })
-      .catch(this.api.handleError);
+      .catch(this.api.handleError)
+      // .delay(2000) // FOR TESTING
+      ;
   }
 
   // get a specific document by its id
@@ -94,6 +74,20 @@ export class DocumentService {
         // return the first (only) document
         return document.length > 0 ? new Document(document[0]) : null;
       })
+      .catch(this.api.handleError);
+  }
+
+  // returns a promise
+  // alternately, use first()
+  // ref: https://stackoverflow.com/questions/36777284/angular-2-convert-observable-to-promise
+  upload(formData: Object): Promise<Document> {
+    return this.api.uploadDocument(formData)
+      .map((res: Response) => {
+        const documents = res.text() ? res.json() : null;
+        // return documents.length > 0 ? new Document(documents[0]) : null;
+        return documents;
+      })
+      .toPromise()
       .catch(this.api.handleError);
   }
 

@@ -17,6 +17,16 @@ export class ApplicationService {
     private commentPeriodService: CommentPeriodService
   ) { }
 
+  // get count of applications
+  getCount(): Observable<number> {
+    return this.api.getApplications()
+      .map((res: Response) => {
+        const applications = res.text() ? res.json() : [];
+        return applications.length;
+      })
+      .catch(this.api.handleError);
+  }
+
   // get all applications
   getAll(): Observable<Application[]> {
     return this.api.getApplications()
@@ -29,7 +39,7 @@ export class ApplicationService {
       })
       .map((applications: Array<Application>) => {
         if (applications.length === 0) {
-          return Observable.of([]);
+          return Observable.of([]); // TODO: return null?
         }
 
         // now get the proponent for each application

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -11,10 +12,20 @@ import { DecisionService } from 'app/services/decision.service';
 
 @Component({
   templateUrl: './decisions-tab-content.component.html',
-  styleUrls: ['./decisions-tab-content.component.scss']
+  styleUrls: ['./decisions-tab-content.component.scss'],
+  animations: [
+    trigger('visibility', [
+      transition(':enter', [   // :enter is alias to 'void => *'
+        animate('0.2s 0s', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [   // :leave is alias to '* => void'
+        animate('0.2s 0.75s', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class DecisionsTabContentComponent implements OnInit, OnDestroy {
-  public loading: boolean;
+  public loading = true;
   public application: Application;
   public decision: Decision;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -26,10 +37,10 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.loading = true;
-    this.application = null;
-    this.decision = null;
+    // this.loading = true;
+    // NOTE: leave this.application and this.decision undefined
 
+    // get application
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
@@ -38,35 +49,36 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
             this.application = data.application;
 
             // get application decision
-            if (this.application._decision) {
-              this.decisionService.getById(this.application._decision)
-                .takeUntil(this.ngUnsubscribe)
-                .subscribe(
-                  decision => this.decision = decision,
-                  error => console.log(error)
-                );
-            } else {
-              // TODO: remove when API is implemented
-              // this.application._decision = '';
-              // this.decision = new Decision({
-              //   date: new Date(),
-              //   description: 'Et sea graecis intellegat intellegebat, ferri aperiri posidonium usu ex. Nihil meliore nec cu. Omnis'
-              //     + ' augue liberavisse et pro, cum mandamus salutatus id.\\n\\nHendrerit complectitur eam eu. Ius officiis suavitate'
-              //     + ' cu. Cu aeterno fierent cum, ex commodo qualisque principes his.'
-              // });
-              // this.decision.documents.push(new Document({ documentFileName: 'Document 1' }));
-              // this.decision.documents.push(new Document({ documentFileName: 'Document 2' }));
-              // this.decision.documents.push(new Document({ documentFileName: 'Document 3' }));
-            }
+            this.decisionService.getByApplicationId(this.application._id)
+              .takeUntil(this.ngUnsubscribe)
+              .subscribe(
+                decision => {
+                  this.decision = decision;
+                  this.loading = false;
+                },
+                error => {
+                  console.log(error);
+                  this.loading = false;
+                }
+              );
+          } else {
+            console.log('ERROR =', 'missing application');
+            this.loading = false;
           }
         },
-        error => console.log(error),
-        () => this.loading = false
+        error => {
+          console.log(error);
+          this.loading = false;
+        }
       );
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  private isUndefined(x): boolean {
+    return (typeof x === 'undefined');
   }
 }

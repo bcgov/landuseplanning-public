@@ -144,14 +144,32 @@ export class ApiService {
   //
   // Decisions
   //
+  getDecisionByAppId(appId: string) {
+    const fields = [
+      '_addedBy',
+      '_application',
+      'code',
+      'name',
+      'decisionDate',
+      'description'
+    ];
+    let queryString = 'decision?_application=' + appId + '&fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
   getDecision(id: string) {
     const fields = [
       '_addedBy',
+      '_application',
       'code',
       'name',
-      'date',
-      'description',
-      '_documents'
+      'decisionDate',
+      'description'
     ];
     let queryString = 'decision/' + id + '?fields=';
     _.each(fields, function (f) {
@@ -247,7 +265,6 @@ export class ApiService {
   }
 
   addComment(comment: Comment) {
-    // TODO: add comment documents
     const fields = ['comment', 'commentAuthor'];
     let queryString = 'comment?fields=';
     _.each(fields, function (f) {
@@ -255,8 +272,6 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    console.log('queryString = ', queryString);
-    console.log('comment = ', comment);
     return this.post(queryString, comment);
   }
 
@@ -330,7 +345,7 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  uploadDocument(formData) {
+  uploadDocument(formData: Object) {
     const fields = [
       'displayName',
       'internalURL',

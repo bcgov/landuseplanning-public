@@ -16,8 +16,8 @@
             <div class="list-group-item" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
                 (click)="setCurrentApp(item)">
                 <h2>{{item.proponent ? item.proponent.name : 'Unknown'}}</h2>
-                <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT_STARTED']">{{commentPeriodService.commentStatuses['NOT_STARTED']}}</span>
-                <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT_OPEN']">{{commentPeriodService.commentStatuses['NOT_OPEN']}}</span>
+                <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>
+                <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">{{commentPeriodService.commentStatuses['NOT OPEN']}}</span>
                 <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>
                 <span class="badge badge-success" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">{{commentPeriodService.commentStatuses['OPEN']}}</span>
                 <ul class="nv-list">

@@ -12,8 +12,8 @@ export class CommentPeriodService {
   commentStatuses = {};
 
   constructor(private api: ApiService) {
-    this.commentStatuses['NOT_STARTED'] = 'Commenting Not Started';
-    this.commentStatuses['NOT_OPEN'] = 'Not Open For Commenting';
+    this.commentStatuses['NOT STARTED'] = 'Commenting Not Started';
+    this.commentStatuses['NOT OPEN'] = 'Not Open For Commenting';
     this.commentStatuses['CLOSED'] = 'Commenting Closed';
     this.commentStatuses['OPEN'] = 'Commenting Open';
   }
@@ -55,12 +55,12 @@ export class CommentPeriodService {
 
   isOpenNotStarted(period: CommentPeriod): boolean {
     return (this.getStatus(period) === this.commentStatuses['OPEN'] ||
-      this.getStatus(period) === this.commentStatuses['NOT_STARTED']);
+      this.getStatus(period) === this.commentStatuses['NOT STARTED']);
   }
 
   getStatus(period: CommentPeriod): string {
     if (!period) {
-      return this.commentStatuses['NOT_OPEN'];
+      return this.commentStatuses['NOT OPEN'];
     }
 
     if (!period.startDate || !period.endDate) {
@@ -74,7 +74,7 @@ export class CommentPeriodService {
     if (endDate < today) {
       return this.commentStatuses['CLOSED'];
     } else if (startDate > today) {
-      return this.commentStatuses['NOT_STARTED'];
+      return this.commentStatuses['NOT STARTED'];
     } else {
       return this.commentStatuses['OPEN'];
     }
