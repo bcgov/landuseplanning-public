@@ -17,6 +17,16 @@ export class ApplicationService {
     private commentPeriodService: CommentPeriodService
   ) { }
 
+  // get count of applications
+  getCount(): Observable<number> {
+    return this.api.getApplications()
+      .map((res: Response) => {
+        const applications = res.text() ? res.json() : [];
+        return applications.length;
+      })
+      .catch(this.api.handleError);
+  }
+
   // get all applications
   getAll(): Observable<Application[]> {
     return this.api.getApplications()

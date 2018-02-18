@@ -1,27 +1,61 @@
 <div class="tab-pane" id="application" role="tabpanel">
-    <section class="tab-section" *ngIf="application">
+    <div class="spinner-container" *ngIf="loading" [@visibility]>
+        <div class="spinner-new rotating"></div>
+    </div>
+
+    <section class="tab-section" *ngIf="!loading">
+        <div *ngIf="isUndefined(application)">
+            <em>Error loading application.</em>
+        </div>
+
         <div>
             <p class="title">Application Documents</p>
-            <div *ngIf="documents?.length == 0">
-                <em>No documents have been uploaded for this application.</em>
+            <div *ngIf="isUndefined(documents)">
+                <em>Error loading documents.</em>
             </div>
-            <div class="row" *ngIf="documents?.length > 0">
-                <div class="col-md-6" *ngFor="let document of documents">
-                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                        <mat-icon>attachment</mat-icon>&nbsp;{{document.documentFileName}}
-                    </a>
+            <div *ngIf="documents">
+                <div *ngIf="documents.length === 0">
+                    <em>No documents have been uploaded for this application.</em>
+                </div>
+
+                <div class="row">
+                    <div class="col-12" *ngFor="let document of documents">
+                        <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                            <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div>
+        <div *ngIf="application">
             <p class="title">Business Unit</p>
             <p>{{application.businessUnit || '-'}}</p>
         </div>
 
-        <div>
+        <div *ngIf="application">
             <p class="title">Legal Description</p>
             <p [innerHTML]="application.legalDescription | newlines"></p>
+        </div>
+
+        <div *ngIf="application">
+            <p class="title">Area (ha)</p>
+            <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
+        </div>
+
+        <div *ngIf="application">
+            <p class="title">Location</p>
+            <p class="value">{{application.location || "-"}}</p>
+        </div>
+
+        <div *ngIf="application">
+            <p class="title">Region</p>
+            <p [innerHTML]="application.legalDescription | newlines"></p>
+        </div>
+
+        <div *ngIf="application">
+            <p class="title">Crown Land File(s)</p>
+            <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
         </div>
     </section>
 </div>

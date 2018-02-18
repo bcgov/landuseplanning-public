@@ -18,7 +18,7 @@
           of receipt. Commenters can choose whether they want their name to be published along with their comments or whether
           they wish to remain anonymous to other commenters. Comments are not accepted if they are profane, abusive, or do
           not relate to the matter being consulted upon as stated in our Moderation Policy.</p>
-        <p>All comments will be considered in the decision process. The decision maker may also respond with follow up questions
+        <p>All comments will be provided to the decision maker. The decision maker may also respond with follow up questions
           (e.g. if the decision maker wants more information).</p>
         <div class="form-check col-12">
           <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="comment.commentAuthor.iAgree" #iAgree="ngModel" />
@@ -132,7 +132,7 @@
                   <div class="fb-upload-target pcp" id="dropzone" ngf-drop ngf-select ngf-allow-dir="true" ng-model="s.comment.files" ngf-drag-over-class="fb-upload-target-hover"
                     ngf-multiple="true">
                     <div class="fb-upload-target-content">
-                      <mat-icon>file_upload</mat-icon>
+                      <i class="material-icons">file_upload</i>
                       <span class="fb-upload-target-msg">
                         <strong>Drag &amp; Drop</strong>&nbsp;or&nbsp;
                         <strong>Browse Files</strong> to upload.

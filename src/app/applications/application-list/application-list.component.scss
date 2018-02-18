@@ -44,15 +44,11 @@ app-application-list:host {
             border-radius: 0 !important;
             border-bottom: 1px solid #eee;
             background: transparent;
-            .badge {
-                text-transform: uppercase;
-                font-size: 0.85rem;
-            }
             &:nth-child(odd) {
                 background: #f7f8fa;
             }
             &__buttons {
-                margin-top: 0.5rem;
+                margin-top: 0;
                 a {
                     padding: 0.25rem 0rem;
                     // font-size: 0.85rem;
@@ -68,46 +64,46 @@ app-application-list:host {
                     border-color: #fff;
                 }
             }
+            h2 {
+                margin-bottom: 0;
+                letter-spacing: 0;
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+            .badge {
+                text-transform: uppercase;
+                font-size: 0.85rem;
+            }
+            // Name/Value Pair list
+            .nv-list {
+                margin-top: 0;
+                li {
+                    margin: 0;
+                    padding: 0;
+                    background: transparent; // Have to set some overrides here on existing styling
+                    font-size: 0.875rem; // 14px
+                    +li {
+                        margin-top: 0.15rem;
+                    }
+                }
+                &__item {
+                    display: table-row;
+                    &--name,
+                    &--value {
+                        display: table-cell;
+                    }
+                    &--name {
+                        width: 6rem;
+                        padding-right: 1.5rem;
+                        font-weight: 700;
+                    }
+                }
+            }
         }
     }
     .map-container {
         @include flex(1 1 auto);
         position: relative;
         // width: 20rem;
-    }
-}
-
-// Name/Value Pair list
-.map-list-container {
-    h2 {
-        // margin-bottom: 0;
-        letter-spacing: 0;
-        font-size: 1.25rem;
-        font-weight: 600;
-    }
-    .nv-list {
-        margin-top: 0.5rem;
-        li {
-            margin: 0;
-            padding: 0;
-            background: transparent;
-            // Have to set some overrides here on existing styling
-            font-size: 0.875rem; // 14px
-            +li {
-                margin-top: 0.15rem;
-            }
-        }
-        &__item {
-            display: table-row;
-            &--name,
-            &--value {
-                display: table-cell;
-            }
-            &--name {
-                width: 6rem;
-                padding-right: 1.5rem;
-                font-weight: 700;
-            }
-        }
     }
 }

@@ -1,7 +1,17 @@
 @import "~assets/styles/base.scss";
 .tab-section {
+    max-height: 74vh;
+    overflow-y: auto;
     >div {
         margin: 1em;
+    }
+    .period-date {
+        width: fit-content;
+        border: 1px #f2e9bf solid;
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+        color: $primary;
+        background-color: #fffae7;
     }
     .title {
         font-size: larger;
@@ -10,7 +20,7 @@
         margin-bottom: 5px;
     }
     .list-group {
-        // max-height: 50rem;
+        // max-height: 86vh;
         // overflow-y: auto;
     }
     .list-group-item {
@@ -32,15 +42,19 @@
             font-size: large;
             color: #003366;
         }
+        .comment__date {
+            padding-left: 0.25rem;
+        }
         .comment__text {
+            margin-bottom: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: small;
         }
-        // button {
-        //     padding: 0rem 0.5rem;
-        //     cursor: pointer;
-        // }
+        button {
+            // padding: 0rem 0.5rem;
+            // cursor: pointer;
+        }
     }
 }

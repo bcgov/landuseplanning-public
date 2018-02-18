@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, ChangeDetectionStrategy, HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { PaginationInstance } from 'ngx-pagination';
 import * as _ from 'lodash';
 
 import { Application } from '../../models/application';
@@ -16,14 +15,9 @@ import { CommentPeriodService } from '../../services/commentperiod.service';
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
-  public applications: Array<Application>;
-  public config: PaginationInstance = {
-    id: 'custom',
-    itemsPerPage: 10,
-    currentPage: 1
-  };
-  public currentApp: Application;
   private showOnlyOpenApps = false;
+  public applications: Array<Application>;
+  public currentApp: Application;
 
   @HostBinding('class.full-screen') fullScreen = true;
 

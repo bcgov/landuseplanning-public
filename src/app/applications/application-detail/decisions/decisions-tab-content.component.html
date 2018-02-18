@@ -1,27 +1,39 @@
 <div class="tab-pane" id="decisions" role="tabpanel">
-    <section class="tab-section" *ngIf="application">
-        <div *ngIf="application?._decision == null">
+    <div class="spinner-container" *ngIf="loading" [@visibility]>
+        <div class="spinner-new rotating"></div>
+    </div>
+
+    <section class="tab-section" *ngIf="!loading">
+        <div *ngIf="isUndefined(application)">
+            <em>Error loading application.</em>
+        </div>
+
+        <div *ngIf="isUndefined(decision)">
+            <em>Error loading decision.</em>
+        </div>
+
+        <div *ngIf="decision === null">
             <em>No decisions have been made for this application at this time.</em>
         </div>
 
-        <div *ngIf="application?._decision != null" class="decision-date">
-            <p>Decision Date: {{decision.date | date:'longDate'}}</p>
+        <div *ngIf="decision && decision.decisionDate" class="decision-date">
+            Decision Date: {{decision.decisionDate | date:'longDate'}}
         </div>
 
-        <div *ngIf="application?._decision != null">
+        <div *ngIf="decision && decision.description">
             <p class="title">Decision Description</p>
             <p [innerHTML]="decision.description | newlines"></p>
         </div>
 
-        <div *ngIf="application?._decision != null">
+        <div *ngIf="decision">
             <p class="title">Decision Documents</p>
-            <div *ngIf="decision.documents?.length == 0">
+            <div *ngIf="decision.documents.length === 0">
                 <em>No documents have been uploaded for this decision.</em>
             </div>
-            <div class="row" *ngIf="decision.documents?.length > 0">
+            <div class="row">
                 <div class="col-12" *ngFor="let document of decision.documents">
                     <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                        <mat-icon>attachment</mat-icon>&nbsp;{{document.documentFileName}}
+                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
                     </a>
                 </div>
             </div>

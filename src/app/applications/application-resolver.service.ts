@@ -12,6 +12,7 @@ export class ApplicationListResolver implements Resolve<Application[]> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Application[] | Observable<Application[]> | Promise<Application[]> {
     return this.applicationService.getAll()
       .catch(err => {
+        console.log('ERROR =', 'could not resolve application list');
         return Observable.throw(err);
       });
   }
@@ -25,6 +26,7 @@ export class ApplicationDetailResolver implements Resolve<Application> {
     const appId = route.paramMap.get('appId');
     return this.applicationService.getById(appId)
       .catch(err => {
+        console.log('ERROR =', 'could not resolve application detail');
         return Observable.throw(err);
       });
   }
