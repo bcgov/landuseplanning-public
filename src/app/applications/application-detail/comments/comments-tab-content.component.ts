@@ -54,11 +54,9 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
             .subscribe(
               comments => {
                 this.comments = comments;
-                // sort by date
-                // DOESN'T WORK BECAUSE WE DON'T HAVE THE COMMENTS YET
-                // MAY NEED TO USE PROMISE/THEN()
+                // sort by date added
                 this.comments.sort(function (a: Comment, b: Comment) {
-                  return (a.dateAdded > b.dateAdded) ? 1 : -1;
+                  return (a.dateAdded > b.dateAdded) ? 1 : -1; // TODO: doesn't work
                 });
                 this.loading = false;
               },

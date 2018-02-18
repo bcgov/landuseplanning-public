@@ -9,11 +9,12 @@
             </mat-slide-toggle>
         </div>
 
-        <div class="list-group">
-            <div class="list-group-item" *ngIf="applications?.length == 0">
+        <div class="list-group" *ngIf="applications">
+            <div class="list-group-item" *ngIf="applications.length === 0">
                 No applications found.
             </div>
-            <div class="list-group-item" *ngFor="let item of applications | paginate: config" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
+
+            <div class="list-group-item" *ngFor="let item of applications" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
                 (click)="setCurrentApp(item)">
                 <h2>{{item.proponent ? item.proponent.name : 'Unknown'}}</h2>
                 <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>

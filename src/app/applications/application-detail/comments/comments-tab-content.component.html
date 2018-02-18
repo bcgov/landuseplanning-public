@@ -37,7 +37,7 @@
             <div *ngIf="comments.length === 0">
                 <em>No comments have been received for this application at this time.</em>
             </div>
-            <div class="list-group" *ngIf="comments.length > 0">
+            <div class="list-group">
                 <ng-template ngFor let-item [ngForOf]="comments">
                     <div class="list-group-item flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">

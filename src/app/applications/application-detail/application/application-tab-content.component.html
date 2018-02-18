@@ -18,7 +18,7 @@
                     <em>No documents have been uploaded for this application.</em>
                 </div>
 
-                <div class="row" *ngIf="documents.length > 0">
+                <div class="row">
                     <div class="col-12" *ngFor="let document of documents">
                         <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
                             <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
