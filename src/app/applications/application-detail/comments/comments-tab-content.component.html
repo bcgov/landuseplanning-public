@@ -1,22 +1,49 @@
 <div class="tab-pane" id="comments" role="tabpanel">
-    <section class="tab-section" *ngIf="application">
-        <div *ngIf="comments?.length == 0">
-            <em>No comments have been received for this application at this time.</em>
+    <div class="spinner-container" *ngIf="loading" [@visibility]>
+        <div class="spinner-new rotating"></div>
+    </div>
+
+    <section class="tab-section" *ngIf="!loading">
+        <div *ngIf="isUndefined(application)">
+            <em>Error loading application.</em>
         </div>
 
-        <div *ngIf="comments?.length > 0">
-            <div>
-                <p class="title">Comment Period Description</p>
-                <p>{{application.currentPeriod?.description}}</p>
-            </div>
+        <div *ngIf="isUndefined(comments)">
+            <em>Error loading comments.</em>
+        </div>
 
-            <div class="list-group">
+        <div *ngIf="application && commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">
+            <div class="period-date">Commenting starts: {{application.currentPeriod.startDate | date:'mediumDate'}}</div>
+        </div>
+
+        <div *ngIf="application && commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">
+            <div class="period-date">Not open for commenting.</div>
+        </div>
+
+        <div *ngIf="application && commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">
+            <div class="period-date">Commenting ended: {{application.currentPeriod.endDate | date:'mediumDate'}}</div>
+        </div>
+
+        <div *ngIf="application && commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">
+            <div class="period-date">Commenting closes: {{application.currentPeriod.endDate | date:'mediumDate'}}</div>
+        </div>
+
+        <div *ngIf="application && application.currentPeriod">
+            <p class="title">Comment Period Description</p>
+            <p>{{application.currentPeriod.description}}</p>
+        </div>
+
+        <div *ngIf="comments">
+            <div *ngIf="comments.length === 0">
+                <em>No comments have been received for this application at this time.</em>
+            </div>
+            <div class="list-group" *ngIf="comments.length > 0">
                 <ng-template ngFor let-item [ngForOf]="comments">
                     <div class="list-group-item flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
                             <div class="comment__author">
                                 <div *ngIf="item.commentAuthor && item.commentAuthor.tags; else anonymous">
-                                    {{item.commentAuthor.contactName}}
+                                    <span>{{item.commentAuthor.contactName}}</span>
                                     <span *ngIf="item.commentAuthor.orgName">({{item.commentAuthor.orgName}})</span>
                                     <span *ngIf="item.commentAuthor.location">, {{item.commentAuthor.location}}</span>
                                 </div>
@@ -28,7 +55,7 @@
                                 {{(item.dateAdded | date:'longDate') || '-'}}
                             </div>
                         </div>
-                        <p class="mb-1 comment__text">{{item.comment}}</p>
+                        <p class="comment__text">{{item.comment}}</p>
                         <div class="comment__buttons ">
                             <!-- <div class="material-icons" *ngIf="item._documents.length> 0">attachment</div> -->
                             <!-- <button class="btn btn-primary" (click)="viewDetails(item._id)">Read More &rsaquo;</button> -->

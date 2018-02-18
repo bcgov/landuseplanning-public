@@ -1,5 +1,7 @@
 @import "~assets/styles/base.scss";
 .tab-section {
+    max-height: 74vh;
+    overflow-y: auto;
     >div {
         margin: 1em;
     }
@@ -18,7 +20,7 @@
         margin-bottom: 5px;
     }
     .list-group {
-        // max-height: 50rem;
+        // max-height: 86vh;
         // overflow-y: auto;
     }
     .list-group-item {
@@ -40,7 +42,11 @@
             font-size: large;
             color: #003366;
         }
+        .comment__date {
+            padding-left: 0.25rem;
+        }
         .comment__text {
+            margin-bottom: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

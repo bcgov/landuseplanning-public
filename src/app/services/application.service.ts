@@ -39,7 +39,7 @@ export class ApplicationService {
       })
       .map((applications: Array<Application>) => {
         if (applications.length === 0) {
-          return Observable.of([]); // TODO: return null?
+          return Observable.of([]);
         }
 
         // now get the proponent for each application

@@ -25,7 +25,7 @@ export class CommentService {
     return this.commentPeriodService.getAllByApplicationId(appId)
       .mergeMap(periods => {
         if (periods.length === 0) {
-          return Observable.of([]); // TODO: return null?
+          return Observable.of([]);
         }
 
         // now get the comments for all periods

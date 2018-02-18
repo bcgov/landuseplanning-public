@@ -1,5 +1,4 @@
 <div class="application-view">
-
     <h1 class="sr-only">BC Public Review and Comment Application</h1>
 
     <!-- APPLICATION LIST VIEW -->
@@ -9,6 +8,7 @@
                 Only show applications with an open or future comment period
             </mat-slide-toggle>
         </div>
+
         <div class="list-group">
             <div class="list-group-item" *ngIf="applications?.length == 0">
                 No applications found.
@@ -43,52 +43,6 @@
                 <div class="list-group-item__buttons">
                     <a [routerLink]="['/application', item._id]">Go to Application Details &rsaquo;</a>
                 </div>
-
-                <!-- OLD LAYOUT
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                        <p class="value">Published on {{item.projectDate | date:'longDate'}}</p>
-                        </div>
-                    </div>
-                    <div class="row" *ngIf="applicationService.getStatus(item)">
-                        <div class="col">
-                        <p class="title">{{applicationService.getStatus(item)}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6" *ngIf="item.purpose && item.subpurpose">
-                        <label class="name">Purpose</label>
-                        <p class="value">{{item.purpose | titlecase}}</p>
-                        </div>
-                        <div class="col-6" *ngIf="item.purpose && item.subpurpose">
-                        <label class="name">Subpurpose</label>
-                        <p class="value">{{item.subpurpose | titlecase}}</p>
-                        </div>
-                        <div class="col-6" *ngIf="item.type && item.subtype">
-                        <label class="name">Tenure Type</label>
-                        <p class="value">{{item.type | titlecase}}</p>
-                        </div>
-                        <div class="col-6" *ngIf="item.type && item.subtype">
-                        <label class="name">Tenure Subtype</label>
-                        <p class="value">{{item.subtype | titlecase}}</p>
-                        </div>
-                    </div>
-                    <div class="row" *ngIf="commentPeriodService.getStatus(item.currentPeriod)">
-                        <div class="col">
-                        <p class="title">{{commentPeriodService.getStatus(item.currentPeriod)}}</p>
-                        </div>
-                    </div>
-                </div>
-                -->
-                <!-- OLD FOOTER
-                <div class="card-footer">
-                <a class="btn content-btn slide-l-btn btn-sm float-right" [routerLink]="['/application', item._id]">
-                    <i class="material-icons">info_outline</i>
-                    <span>View Details</span>
-                </a>
-                -->
-
             </div>
         </div>
     </div>
@@ -96,7 +50,6 @@
     <!-- APPLICATION MAP VIEW -->
     <div class="map-container">
         <section>
-            <!-- TODO: listmap goes here -->
             <app-main-map></app-main-map>
         </section>
     </div>

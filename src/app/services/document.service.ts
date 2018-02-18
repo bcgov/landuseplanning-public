@@ -3,7 +3,6 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/toPromise';
 // import 'rxjs/add/observable/forkJoin';
 
@@ -31,9 +30,7 @@ export class DocumentService {
         });
         return documents;
       })
-      .catch(this.api.handleError)
-      // .delay(2000) // FOR TESTING
-      ;
+      .catch(this.api.handleError);
   }
 
   // get all documents for the specified comment
@@ -46,9 +43,7 @@ export class DocumentService {
         });
         return documents;
       })
-      .catch(this.api.handleError)
-      // .delay(2000) // FOR TESTING
-      ;
+      .catch(this.api.handleError);
   }
 
   // get all documents for the specified decision
@@ -61,9 +56,7 @@ export class DocumentService {
         });
         return documents;
       })
-      .catch(this.api.handleError)
-      // .delay(2000) // FOR TESTING
-      ;
+      .catch(this.api.handleError);
   }
 
   // get a specific document by its id

@@ -25,7 +25,7 @@
             <p [innerHTML]="decision.description | newlines"></p>
         </div>
 
-        <div *ngIf="decision && decision.documents">
+        <div *ngIf="decision">
             <p class="title">Decision Documents</p>
             <div *ngIf="decision.documents.length === 0">
                 <em>No documents have been uploaded for this decision.</em>
