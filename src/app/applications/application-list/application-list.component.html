@@ -15,7 +15,7 @@
             </div>
 
             <ng-template ngFor let-item [ngForOf]="applications">
-                <div *ngIf="(!showOnlyOpenApps || commentPeriodService.isOpenNotStarted(item.currentPeriod))" class="list-group-item" [class.active]="isCurrentApp(item)"
+                <div *ngIf="showThisApp(item)" class="list-group-item" [class.active]="isCurrentApp(item)"
                     (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
                     <h2>{{item.proponent ? item.proponent.name : 'Unknown'}}</h2>
                     <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>

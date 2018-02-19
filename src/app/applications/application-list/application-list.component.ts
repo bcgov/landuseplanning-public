@@ -72,4 +72,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  private showThisApp(item: Application) {
+    // TODO: don't show this app if it's not visible on current map
+    return !this.showOnlyOpenApps || this.commentPeriodService.isOpenNotStarted(item.currentPeriod);
+  }
 }
