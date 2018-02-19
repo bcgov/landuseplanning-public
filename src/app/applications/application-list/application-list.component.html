@@ -4,7 +4,7 @@
     <!-- APPLICATION LIST VIEW -->
     <div class="map-list-container">
         <div class="map-list-container__options">
-            <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showChange($event)">
+            <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showOnlyOpenApps = $event.checked">
                 Only show applications with an open or future comment period
             </mat-slide-toggle>
         </div>
@@ -14,37 +14,39 @@
                 No applications found.
             </div>
 
-            <div class="list-group-item" *ngFor="let item of applications" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)"
-                (click)="setCurrentApp(item)">
-                <h2>{{item.proponent ? item.proponent.name : 'Unknown'}}</h2>
-                <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>
-                <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">{{commentPeriodService.commentStatuses['NOT OPEN']}}</span>
-                <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>
-                <span class="badge badge-success" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">{{commentPeriodService.commentStatuses['OPEN']}}</span>
-                <ul class="nv-list">
-                    <li>
-                        <span class="nv-list__item--name">Status</span>
-                        <span class="nv-list__item--value">{{applicationService.getStatus(item)}}</span>
-                    </li>
-                    <li class="nv-list_item" *ngIf="item.purpose && item.subpurpose">
-                        <span class="nv-list__item--name">Purpose</span>
-                        <span class="nv-list__item--value">
-                            <span>{{item.purpose | titlecase}}</span>
-                            <span>({{item.subpurpose | titlecase}})</span>
-                        </span>
-                    </li>
-                    <li class="nv-list_item" *ngIf="item.type && item.subtype">
-                        <span class="nv-list__item--name">Tenure Type</span>
-                        <span class="nv-list__item--value">
-                            {{item.type | titlecase}}
-                            <span>({{item.subtype | titlecase}})</span>
-                        </span>
-                    </li>
-                </ul>
-                <div class="list-group-item__buttons">
-                    <a [routerLink]="['/application', item._id]">Go to Application Details &rsaquo;</a>
+            <ng-template ngFor let-item [ngForOf]="applications">
+                <div *ngIf="(!showOnlyOpenApps || commentPeriodService.isOpenNotStarted(item.currentPeriod))" class="list-group-item" [class.active]="isCurrentApp(item)"
+                    (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
+                    <h2>{{item.proponent ? item.proponent.name : 'Unknown'}}</h2>
+                    <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>
+                    <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">{{commentPeriodService.commentStatuses['NOT OPEN']}}</span>
+                    <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>
+                    <span class="badge badge-success" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">{{commentPeriodService.commentStatuses['OPEN']}}</span>
+                    <ul class="nv-list">
+                        <li>
+                            <span class="nv-list__item--name">Status</span>
+                            <span class="nv-list__item--value">{{applicationService.getStatus(item)}}</span>
+                        </li>
+                        <li class="nv-list_item" *ngIf="item.purpose && item.subpurpose">
+                            <span class="nv-list__item--name">Purpose</span>
+                            <span class="nv-list__item--value">
+                                <span>{{item.purpose | titlecase}}</span>
+                                <span>({{item.subpurpose | titlecase}})</span>
+                            </span>
+                        </li>
+                        <li class="nv-list_item" *ngIf="item.type && item.subtype">
+                            <span class="nv-list__item--name">Tenure Type</span>
+                            <span class="nv-list__item--value">
+                                {{item.type | titlecase}}
+                                <span>({{item.subtype | titlecase}})</span>
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="list-group-item__buttons">
+                        <a [routerLink]="['/application', item._id]">Go to Application Details &rsaquo;</a>
+                    </div>
                 </div>
-            </div>
+            </ng-template>
         </div>
     </div>
 

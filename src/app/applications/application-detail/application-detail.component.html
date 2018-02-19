@@ -9,11 +9,6 @@
         <div class="item">
           <div class="row">
             <div class="col">
-              <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
               <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>
               <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">{{commentPeriodService.commentStatuses['NOT OPEN']}}</span>
               <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>

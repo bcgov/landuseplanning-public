@@ -29,18 +29,12 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.applications = null;
-    // PRC-149: remove work-around when change detection bug is fixed
-    setTimeout(() => this.getApplications(), 100);
-  }
+    this.applications = this.route.snapshot.data.applications;
 
-  ngOnDestroy() { }
-
-  private getApplications() {
     // approach 1: get data directly from resolver
-    this.applications = this.route.snapshot.data.applications.filter(
-      application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenNotStarted(application.currentPeriod))
-    );
+    // this.applications = this.route.snapshot.data.applications.filter(
+    //   application => (!this.showOnlyOpenApps || this.commentPeriodService.isOpenNotStarted(application.currentPeriod))
+    // );
 
     // approach 2: wait for resolver to retrieve applications
     // this.route.data.subscribe(
@@ -52,12 +46,13 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     //   error => console.log(error)
     // );
 
-    // Needed in development mode - not required in prod.
+    // Needed in development mode - not required in prod???
     this._changeDetectionRef.detectChanges();
   }
 
+  ngOnDestroy() { }
+
   private isCurrentApp(item): boolean {
-    // return _.isMatch(this.currentComment, item);
     return (item === this.currentApp);
   }
 
@@ -76,10 +71,5 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.currentApp = null; // unset
       }
     }
-  }
-
-  private showChange(e) {
-    this.showOnlyOpenApps = e.checked;
-    this.getApplications();
   }
 }

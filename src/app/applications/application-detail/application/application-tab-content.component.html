@@ -8,6 +8,10 @@
             <em>Error loading application.</em>
         </div>
 
+        <div *ngIf="application">
+            <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
+        </div>
+
         <div>
             <p class="title">Application Documents</p>
             <div *ngIf="isUndefined(documents)">
