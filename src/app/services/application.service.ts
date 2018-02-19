@@ -3,6 +3,7 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import * as _ from 'lodash';
 
 import { ApiService } from './api';
 import { OrganizationService } from './organization.service';
@@ -96,28 +97,25 @@ export class ApplicationService {
       .catch(this.api.handleError);
   }
 
-  // returns application status based on stage code + status code
+  // returns application status based on status code
   getStatus(application: Application): string {
-    if (!application || !application.stageCode || !application.status) {
-      return null; // error
+    if (!application || !application.status) {
+      return 'Unknown Application Status';
     }
 
-    if (application.stageCode === 'A') {
-      switch (application.status.toUpperCase()) {
-        case 'ABANDONED': return 'Application Abandoned';
-        case 'ACCEPTED': return 'Application Under Review';
-        case 'ALLOWED': return 'Decision Made: Allowed';
-        case 'DISALLOWED': return 'Decision Made: Disallowed';
-        case 'OFFERED': return 'Decision Made: Offered';
-        case 'OFFER ACCEPTED': return 'Decision Made: Offer Accepted';
-        case 'OFFER NOT ACCEPTED': return 'Decision Made: Offer Not Accepted';
-      }
-    } else if (application.stageCode === 'T') {
-      switch (application.status.toUpperCase()) {
-        case 'DISPOSITION IN GOOD STANDING': return 'Tenure: Disposition in Good Standing';
-        case 'SUSPENDED': return 'Tenure: Suspended';
-      }
+    switch (application.status.toUpperCase()) {
+      case 'ABANDONED': return 'Application Abandoned';
+      case 'ACCEPTED': return 'Application Under Review';
+      case 'ALLOWED': return 'Decision: Allowed';
+      case 'DISALLOWED': return 'Decision: Not Approved';
+      case 'DISPOSITION IN GOOD STANDING': return 'Tenure: Disposition in Good Standing';
+      case 'OFFER ACCEPTED': return 'Decision: Offer Accepted';
+      case 'OFFER NOT ACCEPTED': return 'Decision: Offer Not Accepted';
+      case 'OFFERED': return 'Decision: Offered';
+      case 'SUSPENDED': return 'Tenure: Suspended';
     }
-    return null; // unknown status
+
+    // return status in title case
+    return _.startCase(_.camelCase(application.status));
   }
 }

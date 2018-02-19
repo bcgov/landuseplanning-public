@@ -33,7 +33,6 @@ export class Application {
   purpose: string;
   subpurpose: string;
   region: string;
-  stageCode: string;
   status: string;
   tantalisID: number;
   type: string;
@@ -75,7 +74,6 @@ export class Application {
     this.purpose                 = obj && obj.purpose                 || null;
     this.subpurpose              = obj && obj.subpurpose              || null;
     this.region                  = obj && obj.region                  || null;
-    this.stageCode               = obj && obj.stageCode               || null;
     this.status                  = obj && obj.status                  || null;
     this.tantalisID              = obj && obj.tantalisID              || 0;
     this.type                    = obj && obj.type                    || null;

@@ -59,12 +59,8 @@ export class CommentPeriodService {
   }
 
   getStatus(period: CommentPeriod): string {
-    if (!period) {
+    if (!period || !period.startDate || !period.endDate) {
       return this.commentStatuses['NOT OPEN'];
-    }
-
-    if (!period.startDate || !period.endDate) {
-      return null; // error
     }
 
     const today = new Date();
