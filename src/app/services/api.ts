@@ -295,7 +295,7 @@ export class ApiService {
       'internalURL',
       'internalMime'
     ];
-    let queryString = 'document?_application=' + appId + '&fields=';
+    let queryString = 'document?isDeleted=false&_application=' + appId + '&fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });
@@ -312,7 +312,7 @@ export class ApiService {
       'internalURL',
       'internalMime'
     ];
-    let queryString = 'document?_comment=' + commentId + '&fields=';
+    let queryString = 'document?isDeleted=false&_comment=' + commentId + '&fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });
@@ -329,7 +329,7 @@ export class ApiService {
       'internalURL',
       'internalMime'
     ];
-    let queryString = 'document?_decision=' + decisionId + '&fields=';
+    let queryString = 'document?isDeleted=false&_decision=' + decisionId + '&fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });

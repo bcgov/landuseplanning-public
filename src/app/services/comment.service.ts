@@ -66,7 +66,7 @@ export class CommentService {
         if (!comment) { return null; }
 
         // now grab the comment documents
-        this.documentService.getAllByComment(comment).subscribe(
+        this.documentService.getAllByCommentId(comment._id).subscribe(
           documents => comment.documents = documents,
           error => console.log(error)
         );
@@ -109,7 +109,7 @@ export class CommentService {
     return this.api.saveComment(comment)
       .map((res: Response) => {
         const c = res.text() ? res.json() : null;
-        return c;
+        return c ? new Comment(c) : null;
       })
       .catch(this.api.handleError);
   }
