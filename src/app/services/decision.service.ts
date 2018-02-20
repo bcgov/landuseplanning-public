@@ -27,7 +27,7 @@ export class DecisionService {
         if (!decision) { return null; }
 
         // now grab the decision documents
-        this.documentService.getAllByDecision(decision).subscribe(
+        this.documentService.getAllByDecisionId(decision._id).subscribe(
           documents => decision.documents = documents,
           error => console.log(error)
         );
@@ -49,7 +49,7 @@ export class DecisionService {
         if (!decision) { return null; }
 
         // now grab the decision documents
-        this.documentService.getAllByDecision(decision).subscribe(
+        this.documentService.getAllByDecisionId(decision._id).subscribe(
           documents => decision.documents = documents,
           error => console.log(error)
         );

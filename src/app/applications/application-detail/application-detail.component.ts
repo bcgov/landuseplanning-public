@@ -44,10 +44,12 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
         (data: { application: Application }) => {
           if (data.application) {
             this.application = data.application;
+            this.loading = false;
           } else {
             console.log('ERROR =', 'missing application');
             this.loading = false;
-            this.gotoApplicationList();
+            // go to applications list
+            this.router.navigate(['/applications']);
           }
         },
         error => {
@@ -60,10 +62,6 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  private gotoApplicationList() {
-    this.router.navigate(['/applications']);
   }
 
   private gotoMap() {

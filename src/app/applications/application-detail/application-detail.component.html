@@ -1,9 +1,9 @@
 <div class="container" id="anchor-point">
   <div class="row">
     <main class="col-lg-5 application-tombstone">
-      <section>
+      <section *ngIf="!loading">
         <div class="item proponent-item">
-          <p>{{application.proponent ? application.proponent.name : '-'}}</p>
+          <p>{{application.proponent ? application.proponent.name : 'Unknown Proponent'}}</p>
         </div>
 
         <div class="item">
@@ -17,7 +17,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <p class="title">{{applicationService.getStatus(application) || "Unknown Application Status"}}</p>
+              <p class="title">{{applicationService.getStatus(application)}}</p>
             </div>
           </div>
           <div class="row">
@@ -40,7 +40,7 @@
           </div>
           <!-- <div class="row">
             <div class="col">
-              <p class="title">{{commentPeriodService.getStatus(application.currentPeriod) || "Unknown Commenting Status"}}</p>
+              <p class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</p>
             </div>
           </div> -->
         </div>

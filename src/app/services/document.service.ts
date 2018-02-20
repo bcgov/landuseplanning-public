@@ -9,9 +9,7 @@ import 'rxjs/add/operator/toPromise';
 import { ApiService } from './api';
 // import { Search, SearchArray, SearchTerms } from 'app/models/search';
 import { Document } from 'app/models/document';
-import { Comment } from 'app/models/comment';
-import { Application } from 'app/models/application';
-import { Decision } from 'app/models/decision';
+// import { Application } from 'app/models/application';
 // import { Proponent } from 'app/models/proponent';
 
 @Injectable()
@@ -34,8 +32,8 @@ export class DocumentService {
   }
 
   // get all documents for the specified comment
-  getAllByComment(comment: Comment): Observable<Document[]> {
-    return this.api.getDocumentsByCommentId(comment._id)
+  getAllByCommentId(commentId: string): Observable<Document[]> {
+    return this.api.getDocumentsByCommentId(commentId)
       .map((res: Response) => {
         const documents = res.text() ? res.json() : [];
         documents.forEach((document, i) => {
@@ -47,8 +45,8 @@ export class DocumentService {
   }
 
   // get all documents for the specified decision
-  getAllByDecision(decision: Decision): Observable<Document[]> {
-    return this.api.getDocumentsByDecisionId(decision._id)
+  getAllByDecisionId(decisionId: string): Observable<Document[]> {
+    return this.api.getDocumentsByDecisionId(decisionId)
       .map((res: Response) => {
         const documents = res.text() ? res.json() : [];
         documents.forEach((document, i) => {
