@@ -139,10 +139,6 @@ header {
 
 // same as @screen-md-min
 @media (min-width: 992px) {
-  body {
-    padding-top: 4rem; // to push other divs below fixed header
-  }
-  
   header {
     &.app-header {
       position: fixed;
@@ -151,10 +147,12 @@ header {
       right: 0;
       z-index: 1000;
       padding: 0;
-      border-bottom-style: solid; // border-bottom-width: 0;
-      // border-bottom-color: rgba(#5475a7, 0.25);
-      // background-color: transparent;
+      border-bottom-style: solid; 
+      border-bottom-width: 0;
+      border-bottom-color: transparent;
+      background-color: rgba($header-bg, 0.25);
       transition: all linear 0.2s;
+      
       &.dark {
         border-bottom-width: 4px;
         border-bottom-color: $gold;
@@ -166,6 +164,10 @@ header {
   .navbar-brand {
     width: 270px; // use PX dimensions here to ensure exact match to image
     height: 4rem;
+  }
+
+  .navbar-collapse {
+    flex-grow: 0;
   }
 
   .navbar {
