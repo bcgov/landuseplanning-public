@@ -49,10 +49,8 @@
           </div> -->
         </div>
 
-        <div class="item map-item">
-          <div class="map-item__thumbnail" (click)="gotoMap()" title="Click to see full page map">
-            <app-application-map [application]="application" [zoom]="6"></app-application-map>
-          </div>
+        <div class="map-thumbnail mb-2" (click)="gotoMap()" title="Click to see full page map">
+          <app-application-map [application]="application" [zoom]="6"></app-application-map>
         </div>
 
         <div class="item">

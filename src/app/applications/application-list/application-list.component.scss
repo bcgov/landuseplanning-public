@@ -41,11 +41,12 @@ app-application-list:host {
 
     .badge {
       border: 1px solid transparent;
-    }
 
-    .badge-light {
-      color: #666;
-      background-color: #ccc;
+      &-light,
+      &.undefined {
+        color: #666;
+        background-color: #ccc;
+      }
     }
 
     .list-group {
