@@ -11,10 +11,10 @@
           <div class="row">
             <div class="col">
               <span class="badge" 
-                [ngClass]="{'badge-info' : commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED'],
-                            'badge-light' : commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN'],
-                            'badge-light' : commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['CLOSED'],
-                            'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['OPEN']}">
+                [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
+                            'badge-secondary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
+                            'badge-danger' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
+                            'badge-success' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
                 {{commentPeriodService.getStatus(application.currentPeriod)}}
               </span>
             </div>
