@@ -19,10 +19,10 @@
                 <div *ngIf="showThisApp(item)" class="list-group-item" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
                     <h2>{{item.proponent ? item.proponent.name : 'Unknown Proponent'}}</h2>
                     <span class="badge" 
-                      [ngClass]="{'badge-info' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED'],
-                                  'badge-light' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN'],
-                                  'badge-light' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['CLOSED'],
-                                  'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['OPEN']}">
+                      [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
+                                  'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
+                                  'badge-danger' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
+                                  'badge-success' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
                       {{commentPeriodService.getStatus(item.currentPeriod)}}
                     </span>
                     <ul class="nv-list">
