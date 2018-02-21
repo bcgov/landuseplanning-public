@@ -1,120 +1,128 @@
 @import "~assets/styles/base.scss";
-// NEW LAYOUT STUFF
+
 app-application-list:host {
-    @include flex-box;
-    @include flex-direction(column);
-    @include fill-parent(fixed);
-    margin-top: 68px;
-    z-index: 999;
+  @include flex-box;
+  @include flex-direction(column);
+  @include fill-parent(fixed);
+  margin-top: 68px;
+  z-index: 999;
 }
 
 @media (max-width: 991px) {
-    app-application-list:host {
-        margin-top: 52px;
+  app-application-list:host {
+    margin-top: 52px;
+  }
+}
+
+@media (min-width: 992px) {
+  .application-list {
+    &:before {
+      content: " ";
+      position: absolute;
+      top: -68px;
+      left: 0;
+      width: 100%;
+      height: 67px;
+      border-bottom: 4px solid gold;
+      background: $header-bg;
     }
+  }
 }
 
 .application-list {
+  @include flex-box();
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  .map-list-container {
     @include flex-box();
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    @include flex-direction(column);
+    @include flex(0 0 auto);
+    width: 26rem;
+    overflow: hidden;
 
-    &:before {
-        content: ' ';
-        position: absolute;
-        top: -68px;
-        left: 0;
-        width: 100%;
-        height: 67px;
-        border-bottom: 4px solid gold;
-        background: $header-bg;
+    &__options {
+      @include flex(0 0 auto);
+      padding: 1rem;
+      border-bottom: 1px solid #ccc;
+      mat-slide-toggle {
+        white-space: normal;
+      }
     }
 
-    .map-list-container {
-        @include flex-box();
-        @include flex-direction(column);
-        @include flex(0 0 auto);
-        width: 26rem;
-        overflow: hidden;
-        &__options {
-            @include flex(0 0 auto);
-            padding: 1rem;
-            border-bottom: 1px solid #ccc;
-            mat-slide-toggle {
-                white-space: normal;
-            }
-        }
-        .list-group {
-            @include flex(1 1 auto);
-            overflow-y: scroll;
-        }
-        .list-group-item {
-            // padding: 1.5rem;
-            border-radius: 0 !important;
-            border-bottom: 1px solid #eee;
-            background: transparent;
-            &:nth-child(odd) {
-                background: #f7f8fa;
-            }
-            &__buttons {
-                margin-top: 0;
-                a {
-                    padding: 0.25rem 0rem;
-                    // font-size: 0.85rem;
-                    // font-weight: 600;
-                    // text-transform: none;
-                }
-            }
-            &.active {
-                color: #fff !important;
-                background: #007bff !important;
-                a {
-                    color: inherit;
-                    border-color: #fff;
-                }
-            }
-            h2 {
-                margin-bottom: 0;
-                letter-spacing: 0;
-                font-size: 1.25rem;
-                font-weight: 600;
-            }
-            .badge {
-                text-transform: uppercase;
-                font-size: 0.85rem;
-            }
-            // Name/Value Pair list
-            .nv-list {
-                margin-top: 0;
-                li {
-                    margin: 0;
-                    padding: 0;
-                    background: transparent; // Have to set some overrides here on existing styling
-                    font-size: 0.875rem; // 14px
-                    +li {
-                        margin-top: 0.15rem;
-                    }
-                }
-                &__item {
-                    display: table-row;
-                    &--name,
-                    &--value {
-                        display: table-cell;
-                    }
-                    &--name {
-                        width: 6rem;
-                        padding-right: 1.5rem;
-                        font-weight: 700;
-                    }
-                }
-            }
-        }
+    .list-group {
+      @include flex(1 1 auto);
+      overflow-y: scroll;
     }
-    .map-container {
-        @include flex(1 1 auto);
-        position: relative;
+
+    .list-group-item {
+      // padding: 1.5rem;
+      border-radius: 0 !important;
+      border-bottom: 1px solid #eee;
+      background: transparent;
+      &:nth-child(odd) {
+        background: #f7f8fa;
+      }
+      &__buttons {
+        margin-top: 0;
+        a {
+          padding: 0.25rem 0rem;
+          // font-size: 0.85rem;
+          // font-weight: 600;
+          // text-transform: none;
+        }
+      }
+
+      &.active {
+        color: #fff !important;
+        background: #007bff !important;
+        a {
+          color: inherit;
+          border-color: #fff;
+        }
+      }
+      h2 {
+        margin-bottom: 0;
+        letter-spacing: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      .badge {
+        text-transform: uppercase;
+        font-size: 0.85rem;
+      }
+      // Name/Value Pair list
+      .nv-list {
+        margin-top: 0;
+        li {
+          margin: 0;
+          padding: 0;
+          background: transparent; // Have to set some overrides here on existing styling
+          font-size: 0.875rem; // 14px
+          +li {
+            margin-top: 0.15rem;
+          }
+        }
+        &__item {
+          display: table-row;
+          &--name,
+          &--value {
+            display: table-cell;
+          }
+          &--name {
+            width: 6rem;
+            padding-right: 1.5rem;
+            font-weight: 700;
+          }
+        }
+      }
     }
+  }
+  .map-container {
+    @include flex(1 1 auto);
+    position: relative;
+  }
 }
