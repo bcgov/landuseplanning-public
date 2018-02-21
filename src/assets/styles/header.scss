@@ -12,8 +12,6 @@ header {
 }
 
 .navbar-brand {
-  // float: left;
-  // display: block;
   width: 270px; // use PX dimensions here to ensure exact match to image
   height: 3rem;
   background-image: url("~assets/images/bcgov-header-horiz-SM.png");
@@ -124,9 +122,11 @@ header {
         &:focus,
         &:hover {
           background: transparent;
+          
           strong {
             color: $mn-hover-color;
           }
+
           .dd-item-desc {
             opacity: 1;
           }

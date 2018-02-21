@@ -1,40 +1,32 @@
 @import "~assets/styles/base.scss";
 
 .nv-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li {
     margin: 0;
     padding: 0;
-    list-style-type: none;
+    background: transparent; // Have to set some overrides here on existing styling
+    font-size: 0.875rem; // 14px
 
-    li {
-        @include clearfix();
-        margin-top: 1px;
-        padding: 0.5rem 1rem;
-        font-size: 0.9375rem;
-        background: $nv-list-bg;
+    + li {
+      margin-top: 0.1rem;
     }
+  }
 
-    span {
-        &.name,
-        &.value {
-            float: left;
-            display: block;
-            width: 50%;
-        }
+  &__item {
+    display: table-row;
+      &--name,
+      &--value {
+        display: table-cell;
+      }
 
-        &.name {
-            margin-bottom: 0.25rem;
-        }
+      &--name {
+        width: 5rem;
+        padding-right: 1.5rem;
+        font-weight: 700;
+      }
     }
-}
-
-.list-group-item {
-    border: none;
-    
-    &:nth-child(odd) {
-        background: $list-row-bg;
-    }
-
-    &:nth-child(even) {
-        background: $list-row-alt-bg;
-    }
-}
+  }
