@@ -1,96 +1,132 @@
 @import "~assets/styles/base.scss";
+
+app-application-detail:host {
+  display: block;
+  margin-top: 68px;
+  z-index: 998;
+}
+  
+@media (max-width: 991px) {
+  app-application-detail:host {
+    margin-top: 52px;
+  }
+}
+
+.application-detail {
+  .badge {
+    text-transform: uppercase;
+    font-size: 0.725rem;
+
+    &-light {
+      background: #ddd;
+    }
+  }
+}
+
 .container {
-    padding: 2rem;
-    .application-tombstone {
-        >section {
-            max-height: 86vh;
-            overflow-y: auto;
-            background-color: #fff;
-            padding: 1rem;
-            border: 1px #ccc solid;
-            border-radius: 5px;
-            .item {
-                word-wrap: break-word;
-                border: 1px #ccc solid;
-                border-radius: 5px;
-                padding: 10px;
-                margin-bottom: 0.5rem;
-                margin-left: 0;
-                margin-right: 0;
-                >div {
-                    padding: 0px;
-                }
-            }
-            .proponent-item {
-                color: #fff;
-                background-color: #38598a;
-                padding: 5px 10px;
-                p {
-                    font-size: large;
-                    font-weight: bold;
-                    margin-bottom: 0;
-                }
-            }
-            .badge {
-                text-transform: uppercase;
-                font-size: 0.85rem;
-                margin-bottom: 5px;
-            }
-            .title {
-                font-size: larger;
-                font-weight: bold;
-                color: $primary;
-                margin-bottom: 5px;
-            }
-            label {
-                font-weight: bold;
-                color: $primary;
-                margin-bottom: 0;
-            }
-            .value {
-                font-size: smaller;
-                line-height: 1.25rem;
-                margin-bottom: 5px;
-            }
-            .map-item {
-                display: table;
-                width: 100%;
-                overflow: hidden;
-                &__thumbnail {
-                    height: 250px; // TODO: make this proportional to parent width
-                    transform: scale(1.4);
-                }
-                &:hover {
-                    border: 1px #bbb solid;
-                    opacity: 0.7;
-                    cursor: pointer;
-                }
-            }
+  padding: 2rem;
+  .application-tombstone {
+    >section {
+      max-height: 86vh;
+      overflow-y: auto;
+      background-color: #fff;
+      padding: 1rem;
+      border: 1px #ccc solid;
+      border-radius: 5px;
+      .item {
+        word-wrap: break-word;
+        border: 1px #ccc solid;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 0.5rem;
+        margin-left: 0;
+        margin-right: 0;
+        >div {
+          padding: 0px;
         }
+      }
+      .proponent-item {
+        color: #fff;
+        background-color: #38598a;
+        padding: 5px 10px;
+        p {
+          font-size: large;
+          font-weight: bold;
+          margin-bottom: 0;
+        }
+      }
+      .title {
+        font-size: larger;
+        font-weight: bold;
+        color: $primary;
+        margin-bottom: 5px;
+      }
+      label {
+        font-weight: bold;
+        color: $primary;
+        margin-bottom: 0;
+      }
+      .value {
+        font-size: smaller;
+        line-height: 1.25rem;
+        margin-bottom: 5px;
+      }
+      .map-item {
+        display: table;
+        width: 100%;
+        overflow: hidden;
+        &__thumbnail {
+          height: 250px; // TODO: make this proportional to parent width
+          transform: scale(1.4);
+        }
+        &:hover {
+          border: 1px #bbb solid;
+          opacity: 0.7;
+          cursor: pointer;
+        }
+      }
     }
-    .application-tabs {
-        margin-top: 0;
-        >button {
-            margin-bottom: 1rem;
-        }
-        >section {
-            position: relative;
-            background-color: #fff;
-            padding: 1rem;
-            border: 1px #ccc solid;
-            border-radius: 5px;
-            min-height: 20rem;
-            ul.nav-tabs {
-                margin-bottom: 1.5rem;
-            }
-        }
+  }
+  .application-tabs {
+    margin-top: 0;
+    >button {
+      margin-bottom: 1rem;
     }
+    >section {
+      position: relative;
+      background-color: #fff;
+      padding: 1rem;
+      border: 1px #ccc solid;
+      border-radius: 5px;
+      min-height: 20rem;
+      ul.nav-tabs {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
 }
 
 @media (max-width: 991px) {
-    .container {
-        .application-tombstone {
-            margin-bottom: 1rem;
-        }
+  .container {
+    .application-tombstone {
+      margin-bottom: 1rem;
     }
+  }
 }
+
+@media (min-width: 992px) {
+  .application-detail {
+    &:before {
+    content: " ";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    height: 68px;
+    border-bottom: 4px solid gold;
+    background: $header-bg;
+    }
+  }
+}
+  
