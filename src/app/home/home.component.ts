@@ -14,8 +14,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.applicationService.getCount().subscribe(
-      count => this.numApplications = count,
-      error => console.log('ERROR =', 'could not get all applications')
+      value => this.numApplications = value,
+      error => console.log('ERROR =', 'could not count applications')
     );
   }
 }
