@@ -31,7 +31,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  // get all documents for the specified comment
+  // get all documents for the specified comment id
   getAllByCommentId(commentId: string): Observable<Document[]> {
     return this.api.getDocumentsByCommentId(commentId)
       .map((res: Response) => {
@@ -44,7 +44,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  // get all documents for the specified decision
+  // get all documents for the specified decision id
   getAllByDecisionId(decisionId: string): Observable<Document[]> {
     return this.api.getDocumentsByDecisionId(decisionId)
       .map((res: Response) => {

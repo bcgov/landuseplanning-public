@@ -54,8 +54,8 @@ export class CommentPeriodService {
   }
 
   isOpenNotStarted(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses['OPEN'] ||
-      this.getStatus(period) === this.commentStatuses['NOT STARTED']);
+    const status = this.getStatus(period);
+    return (status === this.commentStatuses['OPEN'] || status === this.commentStatuses['NOT STARTED']);
   }
 
   getStatus(period: CommentPeriod): string {

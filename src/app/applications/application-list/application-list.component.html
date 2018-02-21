@@ -1,5 +1,5 @@
 <div class="application-list">
-    
+
     <h1 class="sr-only">BC Public Review and Comment Application</h1>
 
     <!-- APPLICATION LIST VIEW -->
@@ -18,10 +18,12 @@
             <ng-template ngFor let-item [ngForOf]="applications">
                 <div *ngIf="showThisApp(item)" class="list-group-item" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
                     <h2>{{item.proponent ? item.proponent.name : 'Unknown Proponent'}}</h2>
-                    <span class="badge badge-primary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">{{commentPeriodService.commentStatuses['NOT STARTED']}}</span>
-                    <span class="badge badge-secondary" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN']">{{commentPeriodService.commentStatuses['NOT OPEN']}}</span>
-                    <span class="badge badge-danger" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['CLOSED']">{{commentPeriodService.commentStatuses['CLOSED']}}</span>
-                    <span class="badge badge-success" *ngIf="commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['OPEN']">{{commentPeriodService.commentStatuses['OPEN']}}</span>
+                    <span class="badge" [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED'],
+                       'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['NOT OPEN'],
+                       'badge-danger' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['CLOSED'],
+                       'badge-success' : commentPeriodService.getStatus(item.currentPeriod) == commentPeriodService.commentStatuses['OPEN']}">
+                        {{commentPeriodService.getStatus(item.currentPeriod)}}
+                    </span>
                     <ul class="nv-list">
                         <li>
                             <span class="nv-list__item--name">Status</span>
