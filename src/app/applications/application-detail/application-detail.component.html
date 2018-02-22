@@ -87,7 +87,7 @@
         <div role="navigation">
           <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
-              <a class="nav-link" role="tab" [routerLink]="tabLink.link" [skipLocationChange]="true" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive">{{tabLink.label}}</a>
+              <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive">{{tabLink.label}}</a>
             </li>
           </ul>
         </div>
