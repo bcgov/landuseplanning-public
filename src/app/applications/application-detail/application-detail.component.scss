@@ -115,22 +115,17 @@ app-application-detail:host {
 }
 
 .map-thumbnail {
-  app-application-map {
-    @include flex-box();
-    width: 100%;
-    height: 250px;
-  }
-
   .map-container {
-    @include flex(1 1 auto);
+    display: block;
     position: relative;
     overflow: hidden;
-    
+    height: 250px;
+
     esri-map {
       @include fill-parent(absolute);
     }
   }
-
+  
   .map {
     transform: scale(1.4);
   }
