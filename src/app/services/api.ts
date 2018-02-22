@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import * as FileSaver from 'file-saver';
 
 import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/throw';
 
@@ -48,7 +49,7 @@ export class ApiService {
     };
   }
 
-  public handleError(error: any) {
+  public handleError(error: any): ErrorObservable {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
     console.log(reason);
     return Observable.throw(reason);
