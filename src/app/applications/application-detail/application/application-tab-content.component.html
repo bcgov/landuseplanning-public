@@ -42,7 +42,7 @@
             <p [innerHTML]="application.legalDescription | newlines"></p>
         </div>
 
-        <div *ngIf="application">
+        <!-- <div *ngIf="application">
             <p class="title">Area (ha)</p>
             <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
         </div>
@@ -60,6 +60,6 @@
         <div *ngIf="application">
             <p class="title">Crown Land File(s)</p>
             <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
-        </div>
+        </div> -->
     </section>
 </div>
