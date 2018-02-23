@@ -20,10 +20,13 @@
           not relate to the matter being consulted upon as stated in our Moderation Policy.</p>
         <p>All comments will be provided to the decision maker. The decision maker may also respond with follow up questions
           (e.g. if the decision maker wants more information).</p>
-        <div class="form-check col-12">
-          <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="comment.commentAuthor.iAgree" #iAgree="ngModel" />
-          <label for="iAgree" class="form-check-label">I agree. By ticking this checkbox, I am conclusively deemed to have read and agreed unconditionally to the above
-            Moderation Policy and Terms of Use.</label>
+
+        <div class="row">
+          <div class="form-check col-12">
+            <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="comment.commentAuthor.iAgree" #iAgree="ngModel" />
+            <label for="iAgree" class="form-check-label">I agree. By ticking this checkbox, I am conclusively deemed to have read and agreed unconditionally to the above
+              Moderation Policy and Terms of Use.</label>
+          </div>
         </div>
       </div>
 
@@ -66,7 +69,7 @@
                 #organization="ngModel" />
             </div>
 
-            <div class="form-check col-12">
+            <div class="form-check col-lg-12">
               <input type="checkbox" class="form-check-input" id="requestedAnonymous" name="requestedAnonymous" [(ngModel)]="comment.commentAuthor.requestedAnonymous"
                 #requestedAnonymous="ngModel" />
               <label for="requestedAnonymous" class="form-check-label">Make me anonymous. (Checking this option will hide your name, location and organization on the public site.

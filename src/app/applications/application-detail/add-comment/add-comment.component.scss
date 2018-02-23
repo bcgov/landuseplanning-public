@@ -16,11 +16,7 @@
             cursor: pointer;
         }
     }
-    .page1 {
-        .form-check * {
-            cursor: pointer;
-        }
-    }
+    .page1,
     .page2,
     .page3 {
         .form-group.required .control-label:after {
@@ -36,11 +32,15 @@
         .control-label {
             font-weight: bold;
         }
+        .form-check {
+            padding-left: 35px;
+        }
         .form-check * {
             cursor: pointer;
         }
-        .form-check-input {
-            margin-left: 0;
+        input[type="checkbox"] {
+            height: 20px;
+            width: 20px; 
         }
         textarea {
             min-height: 36px;
