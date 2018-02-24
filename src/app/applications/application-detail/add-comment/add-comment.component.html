@@ -1,5 +1,5 @@
 <div class="modal-dialog modal-lg">
-  <div class="spinner-container full-screen" *ngIf="loading" [@visibility]>
+  <div class="spinner-container full-screen" *ngIf="submitting" [@visibility]>
     <div class="spinner-new rotating"></div>
   </div>
 
@@ -23,7 +23,7 @@
 
         <div class="row">
           <div class="form-check col-12">
-            <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="comment.commentAuthor.iAgree" #iAgree="ngModel" />
+            <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="iAgreeModel" #iAgree="ngModel" />
             <label for="iAgree" class="form-check-label">I agree. By ticking this checkbox, I am conclusively deemed to have read and agreed unconditionally to the above
               Moderation Policy and Terms of Use.</label>
           </div>
@@ -31,7 +31,7 @@
       </div>
 
       <div class="modal-footer">
-        <button [disabled]="!comment.commentAuthor.iAgree" type="button" class="btn btn-primary" (click)="p1_next()">Next</button>
+        <button [disabled]="!iAgreeModel" type="button" class="btn btn-primary" (click)="p1_next()">Next</button>
       </div>
     </div>
   </form>
@@ -123,35 +123,7 @@
           <div class="row">
             <div class="upload-attachments form-group no-margin col-12 optional">
               <label for="attachments" class="control-label">Attachments</label>
-
-              <ngb-alert type="danger" *ngIf="showAlert" (close)="showAlert=false">
-                All attachments must be no larger than
-                <strong>5MB</strong>.
-              </ngb-alert>
-
-              <!-- UPLOAD CONTAINER -->
-              <div class="fb-upload-container">
-                <div class="fb-upload-target-container">
-                  <div class="fb-upload-target pcp" id="dropzone" ngf-drop ngf-select ngf-allow-dir="true" ng-model="s.comment.files" ngf-drag-over-class="fb-upload-target-hover"
-                    ngf-multiple="true">
-                    <div class="fb-upload-target-content">
-                      <i class="material-icons">file_upload</i>
-                      <span class="fb-upload-target-msg">
-                        <strong>Drag &amp; Drop</strong>&nbsp;or&nbsp;
-                        <strong>Browse Files</strong> to upload.
-                      </span>
-                      <span class="fb-upload-req-msg">&nbsp;Total size is limited to 5MB.</span>
-                    </div>
-                    <div class="fb-upload-target-border"></div>
-                  </div>
-
-                  <div class="fb-upload-target-status" ng-if="uploadService.actions.busy || uploadService.actions.completed"></div>
-                </div>
-                <!-- <div class="m-t-1" ng-if="s.fileList.length > 0">
-                  <x-file-upload-listing file-list="s.fileList"></x-file-upload-listing>
-                </div> -->
-              </div>
-              <!-- /UPLOAD CONTAINER -->
+              <app-file-upload (onNewList)="files = $event"></app-file-upload>
             </div>
           </div>
         </fieldset>
@@ -159,7 +131,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
-        <button [disabled]="!commentForm2.form.valid || loading" type="submit" class="btn btn-primary">Submit</button>
+        <button [disabled]="!commentForm2.form.valid || submitting" type="submit" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </form>

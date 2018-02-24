@@ -7,7 +7,7 @@
     }
     .modal-body {
         padding: 30px;
-        // max-height: 75vh; // worst-case (Galaxy S5)
+        max-height: 75vh; // worst-case (Galaxy S5)
         overflow-y: auto;
     }
     .modal-footer {
@@ -45,16 +45,9 @@
         textarea {
             min-height: 36px;
         }
-        .fb-upload-container {
-            border: 1px #495057 solid;
-            padding: 1em;
-            cursor: pointer;
-            .fb-upload-target {
-                display: flex;
-                .fb-upload-target-content {
-                    display: inline-flex;
-                }
-            }
+        app-file-upload {
+            display: inline-block;
+            width: 100%;
         }
     }
     .page4 {
