@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
-import * as FileSaver from 'file-saver';
 
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
@@ -35,11 +34,12 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public message: string;
   public currentPeriod: CommentPeriod;
 
-  public loading: boolean;
+  public submitting = false;
   public comment: Comment;
   public documents: Array<Document>;
-  public showAlert: boolean; // for attachment error
-  private currentPage: number;
+  private currentPage = 1;
+
+  files: Array<File> = [];
 
   constructor(
     public dialogService: DialogService,
@@ -51,13 +51,16 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    this.loading = false;
     this.comment = new Comment();
     this.comment._commentPeriod = this.currentPeriod._id;
     this.comment.commentAuthor.requestedAnonymous = false;
     this.documents = new Array<Document>();
-    this.showAlert = false;
-    this.currentPage = 1;
+
+    // DEBUGGING - remove before submitting
+    this.comment.commentAuthor.contactName = 'Test Name';
+    this.comment.commentAuthor.location = 'Test Location';
+    this.comment.commentAuthor.internal.email = 'Test Email';
+    this.comment.comment = 'Test Comment';
   }
 
   private p1_next() { this.currentPage++; }
@@ -69,30 +72,46 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   private p3_back() { this.currentPage--; }
 
   private p3_submit() {
-    this.loading = true;
+    this.submitting = true;
+    this.result = true; // assume success - override as needed
 
     // first POST new comment
-    // TODO: use promise so we can use then() for attachments?
+    // TODO: use promise so we can use then() for documents
     this.commentService.add(this.comment)
       .subscribe(
-        data => {
-          console.log('Saved comment, data= ', data);
-          this.result = true;
-          this.currentPage++;
+        value => {
+          console.log('comment =', value);
+          this.comment = value;
         },
         error => {
           console.log(error);
           this.result = false;
           alert('Error saving comment');
-        },
-        () => this.loading = false // TODO: move to last call
+        }
       );
 
-    // then UPLOAD all attachments with comment id
-    // TODO: use forkJoin to wait until all calls have been completed?
-    // ref: https://stackoverflow.com/questions/39022048/converting-rxjs-observable-to-a-promise
+    // then UPLOAD all documents with comment id back-ref
+    // TODO: display status (on spinner?) as each file upload completes
+    this.files.forEach((file: File) => {
+      const formData = new FormData();
+      formData.append('_comment', this.comment._id);
+      formData.append('displayName', file.name);
+      formData.append('upfile', file);
+      this.api.uploadDocument(formData)
+        .subscribe(
+          value => {
+            console.log('document =', value);
+          },
+          error => {
+            console.log('error =', error);
+            this.result = false;
+            alert('Error saving document');
+          }
+        );
+    });
 
-    // then PUT new comment with array of document ids
-    // TODO
+    // TODO: only call this when everything completes (or fails)
+    this.submitting = false;
+    this.currentPage++;
   }
 }

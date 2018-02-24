@@ -16,11 +16,7 @@
             cursor: pointer;
         }
     }
-    .page1 {
-        .form-check * {
-            cursor: pointer;
-        }
-    }
+    .page1,
     .page2,
     .page3 {
         .form-group.required .control-label:after {
@@ -36,25 +32,22 @@
         .control-label {
             font-weight: bold;
         }
+        .form-check {
+            padding-left: 35px;
+        }
         .form-check * {
             cursor: pointer;
         }
-        .form-check-input {
-            margin-left: 0;
+        input[type="checkbox"] {
+            height: 20px;
+            width: 20px; 
         }
         textarea {
             min-height: 36px;
         }
-        .fb-upload-container {
-            border: 1px #495057 solid;
-            padding: 1em;
-            cursor: pointer;
-            .fb-upload-target {
-                display: flex;
-                .fb-upload-target-content {
-                    display: inline-flex;
-                }
-            }
+        app-file-upload {
+            display: inline-block;
+            width: 100%;
         }
     }
     .page4 {

@@ -11,36 +11,34 @@ import { CookieService } from 'ngx-cookie-service';
 import { TagInputModule } from 'ngx-chips';
 
 import { SharedModule } from 'app/shared/shared.module';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from 'app/app-routing.module';
 
 // components
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { ObjectFilterPipe } from './object-filter.pipe';
-import { LifecycleComponent } from './lifecycle/lifecycle.component';
-// import { ProcessComponent } from './process/process.component';
-import { ContactComponent } from './contact/contact.component';
-import { SearchComponent } from './search/search.component';
+import { AppComponent } from 'app/app.component';
+import { HomeComponent } from 'app/home/home.component';
+import { LifecycleComponent } from 'app/lifecycle/lifecycle.component';
+// import { ProcessComponent } from 'app/process/process.component';
+import { ContactComponent } from 'app/contact/contact.component';
+import { SearchComponent } from 'app/search/search.component';
 
 // services
-import { ApplicationService } from './services/application.service';
-import { ProponentService } from './services/proponent.service';
-import { OrganizationService } from './services/organization.service';
-import { DocumentService } from './services/document.service';
-import { CommentPeriodService } from './services/commentperiod.service';
-import { CommentService } from './services/comment.service';
-import { DecisionService } from './services/decision.service';
+import { ApplicationService } from 'app/services/application.service';
+import { ProponentService } from 'app/services/proponent.service';
+import { OrganizationService } from 'app/services/organization.service';
+import { DocumentService } from 'app/services/document.service';
+import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { CommentService } from 'app/services/comment.service';
+import { DecisionService } from 'app/services/decision.service';
 
 // feature modules
-import { MapModule } from './map/map.module';
-import { ApplicationsModule } from './applications/applications.module';
+import { MapModule } from 'app/map/map.module';
+import { ApplicationsModule } from 'app/applications/applications.module';
 import { CommentPeriod } from 'app/models/commentperiod';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    ObjectFilterPipe,
     LifecycleComponent,
     // ProcessComponent,
     ContactComponent,
