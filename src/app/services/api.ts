@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, ResponseContentType, RequestOptions, Headers } from '@angular/http';
 import * as _ from 'lodash';
-import * as FileSaver from 'file-saver';
 
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
@@ -358,18 +357,6 @@ export class ApiService {
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
     return this.post(queryString, formData);
-  }
-
-  downloadDocument(file): Subscription {
-    const queryString = 'document/' + file._id + '/download';
-    const headers = new Headers({ 'Content-Type': 'application/json' });
-    const options = new RequestOptions({ responseType: ResponseContentType.Blob, headers });
-    return this.http.get('/' + queryString, options)
-      .map(res => res.blob())
-      .subscribe((obj: any) => {
-        const blob = new Blob([obj], { type: file.internalMime });
-        FileSaver.saveAs(blob, file.displayName);
-      });
   }
 
   getDocumentUrl(document: Document): string {

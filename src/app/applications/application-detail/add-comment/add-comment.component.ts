@@ -60,6 +60,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.comment.commentAuthor.contactName = 'Test Name';
     this.comment.commentAuthor.location = 'Test Location';
     this.comment.commentAuthor.internal.email = 'Test Email';
+    this.comment.comment = 'Test Comment';
   }
 
   private p1_next() { this.currentPage++; }
@@ -72,25 +73,45 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   private p3_submit() {
     this.submitting = true;
+    this.result = true; // assume success - override as needed
 
     // first POST new comment
     // TODO: use promise so we can use then() for documents
     this.commentService.add(this.comment)
       .subscribe(
-        data => {
-          console.log('Saved comment, data =', data);
-          this.result = true;
-          this.currentPage++;
+        value => {
+          console.log('comment =', value);
+          this.comment = value;
         },
         error => {
           console.log(error);
           this.result = false;
           alert('Error saving comment');
-        },
-        () => this.submitting = false // TODO: move to last document call
+        }
       );
 
     // then UPLOAD all documents with comment id back-ref
-    // TODO: display status as each file upload completes
+    // TODO: display status (on spinner?) as each file upload completes
+    this.files.forEach((file: File) => {
+      const formData = new FormData();
+      formData.append('_comment', this.comment._id);
+      formData.append('displayName', file.name);
+      formData.append('upfile', file);
+      this.api.uploadDocument(formData)
+        .subscribe(
+          value => {
+            console.log('document =', value);
+          },
+          error => {
+            console.log('error =', error);
+            this.result = false;
+            alert('Error saving document');
+          }
+        );
+    });
+
+    // TODO: only call this when everything completes (or fails)
+    this.submitting = false;
+    this.currentPage++;
   }
 }
