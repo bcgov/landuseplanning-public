@@ -1,6 +1,9 @@
 <div class="modal-dialog modal-lg">
   <div class="spinner-container full-screen" *ngIf="submitting" [@visibility]>
-    <div class="spinner-new rotating"></div>
+    <div class="progress-new">
+      <span>Submitting . . .</span>
+      <mat-progress-bar color="primary" mode="determinate" [value]="progressValue"></mat-progress-bar>
+    </div>
   </div>
 
   <form #preCommentForm="ngForm">

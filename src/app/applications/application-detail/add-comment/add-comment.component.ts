@@ -35,11 +35,11 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public currentPeriod: CommentPeriod;
 
   public submitting = false;
+  public progressValue = 0;
   public comment: Comment;
   public documents: Array<Document>;
   private currentPage = 1;
-
-  files: Array<File> = [];
+  private files: Array<File> = [];
 
   constructor(
     public dialogService: DialogService,
@@ -75,11 +75,17 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.submitting = true;
     this.result = true; // assume success - override as needed
 
+    // approximate size of everything for progress reporting
+    const commentSize = this.sizeof(this.comment);
+    let totalSize = commentSize;
+    this.files.forEach(file => totalSize += file.size);
+
     // first POST new comment
     // TODO: use promise so we can use then() for documents
     this.commentService.add(this.comment)
       .subscribe(
         value => {
+          this.progressValue += 100 * commentSize / totalSize;
           console.log('comment =', value);
           this.comment = value;
         },
@@ -100,6 +106,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
       this.api.uploadDocument(formData)
         .subscribe(
           value => {
+            this.progressValue += 100 * file.size / totalSize;
             console.log('document =', value);
           },
           error => {
@@ -113,5 +120,22 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     // TODO: only call this when everything completes (or fails)
     this.submitting = false;
     this.currentPage++;
+  }
+
+  // approximate size (keys + data)
+  private sizeof(object: Object) {
+    let bytes = 0;
+
+    Object.keys(object).forEach(key => {
+      bytes += key.length;
+      const obj = object[key];
+      switch (typeof obj) {
+        case 'boolean': bytes += 4; break;
+        case 'number': bytes += 8; break;
+        case 'string': bytes += 2 * obj.length; break;
+        case 'object': if (obj) { bytes += this.sizeof(obj); } break;
+      }
+    });
+    return bytes;
   }
 }
