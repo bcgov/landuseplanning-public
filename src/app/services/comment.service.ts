@@ -20,6 +20,8 @@ export class CommentService {
   ) { }
 
   // get all comments for the specified application id
+  // TODO: chain things nicely
+  // see http://www.syntaxsuccess.com/viewarticle/error-handling-in-rxjs
   getAllByApplicationId(appId: string): Observable<Comment[]> {
     // first get the comment periods
     return this.commentPeriodService.getAllByApplicationId(appId)

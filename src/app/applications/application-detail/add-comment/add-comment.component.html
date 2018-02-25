@@ -6,6 +6,7 @@
     </div>
   </div>
 
+  <!-- FIRST PAGE -->
   <form #preCommentForm="ngForm">
     <div class="modal-content page1" *ngIf="this.currentPage === 1">
       <div class="modal-header">
@@ -39,7 +40,7 @@
     </div>
   </form>
 
-  <!-- FIRST PAGE OF FORM -->
+  <!-- SECOND PAGE -->
   <form (ngSubmit)="p2_submit()" #commentForm1="ngForm">
     <div class="modal-content page2" *ngIf="this.currentPage === 2">
       <div class="modal-header">
@@ -102,7 +103,7 @@
     </div>
   </form>
 
-  <!-- SECOND PAGE OF FORM -->
+  <!-- THIRD PAGE -->
   <form (ngSubmit)="p3_submit()" #commentForm2="ngForm">
     <div class="modal-content page3" *ngIf="this.currentPage === 3">
       <div class="modal-header">
@@ -126,7 +127,7 @@
           <div class="row">
             <div class="upload-attachments form-group no-margin col-12 optional">
               <label for="attachments" class="control-label">Attachments</label>
-              <app-file-upload (onNewList)="files = $event"></app-file-upload>
+              <app-file-upload [(files)]="files"></app-file-upload>
             </div>
           </div>
         </fieldset>
@@ -139,6 +140,7 @@
     </div>
   </form>
 
+  <!-- FOURTH PAGE -->
   <div class="modal-content page4" *ngIf="this.currentPage === 4">
     <div class="modal-header">
       <h4 class="modal-title">Confirmation</h4>
@@ -158,5 +160,4 @@
       <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
     </div>
   </div>
-
 </div>

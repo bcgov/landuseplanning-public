@@ -43,8 +43,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   private totalSize: number;
   private currentPage = 1;
   private comment: Comment;
-  private documents: Array<Document> = [];
-  private files: Array<File> = [];
+  public files: Array<File> = [];
 
   constructor(
     public dialogService: DialogService,
@@ -59,12 +58,6 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.comment = new Comment();
     this.comment._commentPeriod = this.currentPeriod._id;
     this.comment.commentAuthor.requestedAnonymous = false;
-
-    // DEBUGGING - remove before final submit
-    this.comment.commentAuthor.contactName = 'Test Name';
-    this.comment.commentAuthor.location = 'Test Location';
-    this.comment.commentAuthor.internal.email = 'Test Email';
-    this.comment.comment = 'Test Comment';
   }
 
   private p1_next() { this.currentPage++; }
@@ -94,8 +87,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           this.progressValue += 100 * commentSize / this.totalSize;
           this.comment = comment;
           return comment;
-        },
-        error => { throw error; }
+        }
       )
       .then(comment => {
         // then upload all documents
@@ -112,10 +104,8 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
                 this.progressValue += 100 * file.size / this.totalSize;
                 console.log('document =', document);
                 return document;
-              },
-              error => { throw error; }
+              }
             )
-            .catch(error => { return Promise.reject(error); })
           );
         });
 
@@ -129,6 +119,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
       })
       .catch(error => {
         // TODO: abort other uploads? (all or none)
+        // see http://www.syntaxsuccess.com/viewarticle/error-handling-in-rxjs
         alert('Uh-oh, error submitting comment');
         this.submitting = false;
         this.result = false;

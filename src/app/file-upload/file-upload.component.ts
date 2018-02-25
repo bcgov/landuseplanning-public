@@ -11,10 +11,9 @@ export class FileUploadComponent {
   @Input() fileExt = 'JPG, GIF, PNG, DOC, DOCX, XLS, XLSX, PPT, PPTX, PDF, TXT';
   @Input() maxFiles = 5;
   @Input() maxSize = 5; // in MB
-  @Output() onNewList = new EventEmitter();
-
-  files: Array<File> = [];
-  errors: Array<string> = [];
+  @Input() files: Array<File> = [];
+  @Output() filesChange = new EventEmitter();
+  private errors: Array<string> = [];
 
   constructor() { }
 
@@ -57,7 +56,7 @@ export class FileUploadComponent {
       for (let i = 0; i < files.length; i++) {
         this.files.push(files[i]);
       }
-      this.onNewList.emit(this.files);
+      this.filesChange.emit(this.files);
     }
   }
 
