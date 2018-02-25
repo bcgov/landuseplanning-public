@@ -76,8 +76,6 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
-  // TODO: should this be a promise instead?
-  // and all other POSTS/PUTS?
   add(comment: Comment): Observable<Comment> {
     return this.api.addComment(this.sanitizeComment(comment))
       .map((res: Response) => {
@@ -87,8 +85,8 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
+  // deletes object keys the API doesn't want on POST
   private sanitizeComment(comment: Comment): Comment {
-    // delete object keys the back end doesn't want on POST
     delete comment._id;
     delete comment._addedBy;
     // keep _commentPeriod
