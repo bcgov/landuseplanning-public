@@ -38,8 +38,8 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public currentPeriod: CommentPeriod;
 
   private submitting = false;
-  private totalSize: number;
   private progressValue: number;
+  private totalSize: number;
   private currentPage = 1;
   private comment: Comment;
   public files: Array<File> = [];
@@ -69,12 +69,12 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   private p3_submit() {
     this.submitting = true;
+    this.progressValue = 0;
 
     // approximate size of everything for progress reporting
     const commentSize = this.sizeof(this.comment);
     this.totalSize = commentSize;
     this.files.forEach(file => this.totalSize += file.size);
-    this.progressValue = 0;
 
     // first add new comment
     this.commentService.add(this.comment).toPromise()
