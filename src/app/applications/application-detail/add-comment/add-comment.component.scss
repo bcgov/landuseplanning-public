@@ -1,4 +1,11 @@
+@import "~assets/styles/base.scss";
 .modal-dialog {
+    .progress-new {
+        position: absolute;
+        top: 40%;
+        left: 25%;
+        width: 50%;
+    }
     .modal-header {
         background-color: #f1f1f1;
         button {
@@ -40,7 +47,7 @@
         }
         input[type="checkbox"] {
             height: 20px;
-            width: 20px; 
+            width: 20px;
         }
         textarea {
             min-height: 36px;

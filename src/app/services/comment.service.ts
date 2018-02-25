@@ -20,6 +20,8 @@ export class CommentService {
   ) { }
 
   // get all comments for the specified application id
+  // TODO: chain things nicely
+  // see http://www.syntaxsuccess.com/viewarticle/error-handling-in-rxjs
   getAllByApplicationId(appId: string): Observable<Comment[]> {
     // first get the comment periods
     return this.commentPeriodService.getAllByApplicationId(appId)
@@ -76,8 +78,6 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
-  // TODO: should this be a promise instead?
-  // and all other POSTS/PUTS?
   add(comment: Comment): Observable<Comment> {
     return this.api.addComment(this.sanitizeComment(comment))
       .map((res: Response) => {
@@ -87,13 +87,15 @@ export class CommentService {
       .catch(this.api.handleError);
   }
 
+  // deletes object keys the API doesn't want on POST
   private sanitizeComment(comment: Comment): Comment {
-    // delete object keys the back end doesn't want on POST
     delete comment._id;
     delete comment._addedBy;
     // keep _commentPeriod
     delete comment.commentNumber;
     // keep comment
+    // replace newlines with \\n
+    comment.comment = comment.comment.replace(/\n/g, '\\n');
     // keep comment.commentAuthor
     // keep comment.commentAuthor.internal
     delete comment._documents;
@@ -105,12 +107,12 @@ export class CommentService {
     return comment;
   }
 
-  save(comment: Comment): Observable<Comment> {
-    return this.api.saveComment(comment)
-      .map((res: Response) => {
-        const c = res.text() ? res.json() : null;
-        return c ? new Comment(c) : null;
-      })
-      .catch(this.api.handleError);
-  }
+  // save(comment: Comment): Observable<Comment> {
+  //   return this.api.saveComment(comment)
+  //     .map((res: Response) => {
+  //       const c = res.text() ? res.json() : null;
+  //       return c ? new Comment(c) : null;
+  //     })
+  //     .catch(this.api.handleError);
+  // }
 }

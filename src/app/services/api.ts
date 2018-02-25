@@ -273,16 +273,16 @@ export class ApiService {
     return this.post(queryString, comment);
   }
 
-  saveComment(comment: Comment) {
-    const fields = ['comment', 'commentAuthor', '_documents'];
-    let queryString = 'comment/' + comment._id + '?fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
-    return this.put(queryString, comment);
-  }
+  // saveComment(comment: Comment) {
+  //   const fields = ['comment', 'commentAuthor', '_documents'];
+  //   let queryString = 'comment/' + comment._id + '?fields=';
+  //   _.each(fields, function (f) {
+  //     queryString += f + '|';
+  //   });
+  //   // Trim the last |
+  //   queryString = queryString.replace(/\|$/, '');
+  //   return this.put(queryString, comment);
+  // }
 
   //
   // Documents

@@ -29,6 +29,8 @@ export class ApplicationService {
   }
 
   // get all applications
+  // TODO: chain things nicely
+  // see http://www.syntaxsuccess.com/viewarticle/error-handling-in-rxjs
   getAll(): Observable<Application[]> {
     return this.api.getApplications()
       .map((res: Response) => {

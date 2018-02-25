@@ -3,7 +3,6 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/toPromise';
 // import 'rxjs/add/observable/forkJoin';
 
 import { ApiService } from './api';
@@ -61,24 +60,19 @@ export class DocumentService {
   getById(documentId): Observable<Document> {
     return this.api.getDocument(documentId)
       .map((res: Response) => {
-        const document = res.text() ? res.json() : [];
+        const documents = res.text() ? res.json() : [];
         // return the first (only) document
-        return document.length > 0 ? new Document(document[0]) : null;
+        return documents.length > 0 ? new Document(documents[0]) : null;
       })
       .catch(this.api.handleError);
   }
 
-  // returns a promise
-  // alternately, use first()
-  // ref: https://stackoverflow.com/questions/36777284/angular-2-convert-observable-to-promise
-  upload(formData: Object): Promise<Document> {
+  upload(formData: Object): Observable<Document> {
     return this.api.uploadDocument(formData)
       .map((res: Response) => {
-        const documents = res.text() ? res.json() : null;
-        // return documents.length > 0 ? new Document(documents[0]) : null;
-        return documents;
+        const d = res.text() ? res.json() : null;
+        return d ? new Document(d) : null;
       })
-      .toPromise()
       .catch(this.api.handleError);
   }
 
