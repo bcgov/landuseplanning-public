@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
@@ -91,15 +90,15 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
       )
       .then(comment => {
         // then upload all documents
-        const promises: Array<Promise<Document>> = [];
+        const observables: Array<Observable<Document>> = [];
 
         this.files.forEach(file => {
           const formData = new FormData();
           formData.append('_comment', this.comment._id);
           formData.append('displayName', file.name);
           formData.append('upfile', file);
-          promises.push(this.documentService.upload(formData).toPromise()
-            .then(
+          observables.push(this.documentService.upload(formData)
+            .map(
               document => {
                 this.progressValue += 100 * file.size / this.totalSize;
                 console.log('document =', document);
@@ -110,7 +109,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
         });
 
         // execute all uploads in parallel
-        return Observable.forkJoin(promises).toPromise();
+        return Observable.forkJoin(observables).toPromise();
       })
       .then(() => {
         this.submitting = false;
@@ -118,8 +117,6 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
         this.currentPage++;
       })
       .catch(error => {
-        // TODO: abort other uploads? (all or none)
-        // see http://www.syntaxsuccess.com/viewarticle/error-handling-in-rxjs
         alert('Uh-oh, error submitting comment');
         this.submitting = false;
         this.result = false;
