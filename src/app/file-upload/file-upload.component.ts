@@ -1,3 +1,6 @@
+//
+// inspired by http://www.advancesharp.com/blog/1218/angular-4-upload-files-with-data-and-web-api-by-drag-drop
+//
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 
 @Component({
@@ -13,7 +16,7 @@ export class FileUploadComponent {
   @Input() maxSize = 5; // in MB
   @Input() files: Array<File> = [];
   @Output() filesChange = new EventEmitter();
-  private errors: Array<string> = [];
+  public errors: Array<string> = [];
 
   constructor() { }
 

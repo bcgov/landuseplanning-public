@@ -1,5 +1,6 @@
 <div class="modal-dialog modal-lg">
-  <div class="spinner-container full-screen" *ngIf="submitting" [@visibility]>
+  <!-- only show when submitting larger submissions -->
+  <div class="spinner-container full-screen" *ngIf="submitting && (totalSize > 100000)" [@visibility]>
     <div class="progress-new">
       <span>Submitting . . .</span>
       <mat-progress-bar color="primary" mode="determinate" [value]="progressValue"></mat-progress-bar>
