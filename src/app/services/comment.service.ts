@@ -94,6 +94,8 @@ export class CommentService {
     // keep _commentPeriod
     delete comment.commentNumber;
     // keep comment
+    // replace newlines with \\n
+    comment.comment = comment.comment.replace(/\n/g, '\\n');
     // keep comment.commentAuthor
     // keep comment.commentAuthor.internal
     delete comment._documents;
@@ -105,12 +107,12 @@ export class CommentService {
     return comment;
   }
 
-  save(comment: Comment): Observable<Comment> {
-    return this.api.saveComment(comment)
-      .map((res: Response) => {
-        const c = res.text() ? res.json() : null;
-        return c ? new Comment(c) : null;
-      })
-      .catch(this.api.handleError);
-  }
+  // save(comment: Comment): Observable<Comment> {
+  //   return this.api.saveComment(comment)
+  //     .map((res: Response) => {
+  //       const c = res.text() ? res.json() : null;
+  //       return c ? new Comment(c) : null;
+  //     })
+  //     .catch(this.api.handleError);
+  // }
 }
