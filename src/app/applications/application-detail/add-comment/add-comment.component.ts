@@ -39,6 +39,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   private submitting = false;
   private progressValue: number;
+  private progressBufferValue: number;
   private totalSize: number;
   private currentPage = 1;
   private comment: Comment;
@@ -69,7 +70,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   private p3_submit() {
     this.submitting = true;
-    this.progressValue = 0;
+    this.progressValue = this.progressBufferValue = 0;
 
     // approximate size of everything for progress reporting
     const commentSize = this.sizeof(this.comment);
@@ -77,6 +78,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.files.forEach(file => this.totalSize += file.size);
 
     // first add new comment
+    this.progressBufferValue += 100 * commentSize / this.totalSize;
     this.commentService.add(this.comment).toPromise()
       .then(
         comment => {
@@ -94,6 +96,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           formData.append('_comment', this.comment._id);
           formData.append('displayName', file.name);
           formData.append('upfile', file);
+          this.progressBufferValue += 100 * file.size / this.totalSize;
           observables.push(this.documentService.upload(formData)
             .map(
               document => {
