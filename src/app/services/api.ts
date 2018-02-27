@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, ResponseContentType, RequestOptions, Headers } from '@angular/http';
+import { Http } from '@angular/http';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/throw';
 
-import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
-import { User } from 'app/models/user';
 
 @Injectable()
 export class ApiService {
@@ -356,7 +352,7 @@ export class ApiService {
     });
     // Trim the last |
     queryString = queryString.replace(/\|$/, '');
-    return this.post(queryString, formData);
+    return this.post(queryString, formData, { reportProgress: true });
   }
 
   getDocumentUrl(document: Document): string {

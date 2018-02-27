@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { HttpEventType } from '@angular/common/http';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
@@ -97,14 +99,20 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           formData.append('displayName', file.name);
           formData.append('upfile', file);
           this.progressBufferValue += 100 * file.size / this.totalSize;
+
+          // TODO: improve progress bar by listening to progress events
+          // see https://angular.io/guide/http#listening-to-progress-events
           observables.push(this.documentService.upload(formData)
-            .map(
-              document => {
-                this.progressValue += 100 * file.size / this.totalSize;
-                console.log('document =', document);
-                return document;
-              }
-            )
+            .map(document => {
+              this.progressValue += 100 * file.size / this.totalSize;
+              console.log('document =', document);
+              return document;
+            })
+            // .subscribe((event: HttpEventType) => {
+            //   if (event.type === HttpEventType.UploadProgress) {
+            //     // TODO: do something here
+            //   }
+            // })
           );
         });
 
