@@ -223,7 +223,6 @@ export class ApiService {
       'commentNumber',
       'comment',
       'commentAuthor',
-      '_documents',
       'review',
       'dateAdded',
       'commentStatus'
@@ -244,7 +243,6 @@ export class ApiService {
       'commentNumber',
       'comment',
       'commentAuthor',
-      '_documents',
       'review',
       'dateAdded',
       'commentStatus'
@@ -270,7 +268,7 @@ export class ApiService {
   }
 
   // saveComment(comment: Comment) {
-  //   const fields = ['comment', 'commentAuthor', '_documents'];
+  //   const fields = ['comment', 'commentAuthor'];
   //   let queryString = 'comment/' + comment._id + '?fields=';
   //   _.each(fields, function (f) {
   //     queryString += f + '|';
