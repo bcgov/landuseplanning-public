@@ -1,7 +1,7 @@
 <div class="hero-banner home-banner">
 	<div class="container">
-		<div class="container__inner-container">
-			<div class="hero-banner__content">
+		<div class="row">
+			<div class="hero-banner__content col-12">
 				<h1 id="pgTitle">
 					<span>Public Review & Comment</span>
 					<span class="badge" id="alpha" title="Initial release of PRC">ALPHA</span>
@@ -10,7 +10,7 @@
 				<div class="hero-banner__content--cta-btns">
 					<a class="btn slide-l-btn hero-btn inverted" href="/applications" [routerLink]="['/applications']">
 						<i class="material-icons">list</i>
-						<span>View applications in this Region</span>
+						<span>View applications in this region</span>
 					</a>
 				</div>
 			</div>
@@ -21,69 +21,50 @@
 <main id="anchor-point">
 	<div class="bg-default">
 		<div class="site-intro container">
-			<div class="row">
-				<div class="col-12">
+			<div class="row fb-container">
+				<div class="col-lg-8">
 					<section class="about-info mb-0">
-						<h2>About this site</h2>
-						<p>The Public Review and Comment (PRC) website is part of B.C.'s digital products portfolio. The website has been launched
-							as a pilot for the Province's Skeena Region, and will be continuously improved and rolled out provincially over the next
-							year. We welcome feedback on the PRC website. To share your feedback, email use at
+						<h3>About this site</h3>
+						<p>This website is used to post Crown Land Application information for public review and comment, as per Section 32(2)
+							of the Land Act, and to support Government's mandate to be transparent in making decisions related to Crown Land Applications.
+						</p>
+						<p>The website has been launched as a pilot for the Province's Skeena Region, and will be continuously improved and rolled
+							out provincially over the next year. We are always looking for feedback on the PRC website. To share your thoughts,
+							email us at
 							<a href="mailto:nrtsprc@gov.bc.ca">nrtsprc@gov.bc.ca</a>.</p>
-						<p>If you wish to view and comment on Crown Lands Applications in other regions of the Province, please visit
+						<p>If you wish to view and comment on Crown Land Applications in other regions of the Province, please visit
 							<a href="http://arfd.gov.bc.ca">arfd.gov.bc.ca</a>
 						</p>
 					</section>
 				</div>
-				<!-- <div class="col-lg-4">
-					<section class="fast-facts">
-						<h4>Fast Facts about the Natural Resource Transformation Secretariat in British Columbia</h4>
-						<ul class="row mb-0">
-							<li class="col-xs-12 col-sm-6 col-lg-12">
-								<div>
-									<span class="metric">1<sup>B</sup></span>
-									<span class="metric-desc">2017 Lorem</span>
-								</div>
-							</li>
-							<li class="col-xs-12 col-sm-6 col-lg-12">
-								<div>
-									<span class="metric">2<sup>M</sup></span>
-									<span class="metric-desc">Ipsum</span>
-								</div>
-							</li>
-							<li class=" col-xs-12 col-sm-6 col-lg-12">
-								<div>
-									<span class="metric">3</span>
-									<span class="metric-desc">Span</span>
-								</div>
-							</li>
-						</ul>
-					</section>
-				</div> -->
+				<div class="col-lg-4">
+					<div class="feature-block fast-fact">
+						<h3>Tell us what you think</h3>
+						<p>Public Review and Comment (PRC) is continuously evolving. More information and features will be added to the website
+							on an ongoing basis. We are always looking for feedback.</p>
+						<p>To share your feedback, email us
+							<a href="mailto:nrtsprc@gov.bc.ca">nrtsprc@gov.bc.ca</a>.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row fb-container">
+				<div class="col-lg-4">
+					<div class="feature-block">
+						<h4>Find applications open for comment</h4>
+						<p>Review relevant application details and provide you comments.</p>
+						<a class="btn inverted" href="/applications" [routerLink]="['/applications']">View List</a>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="feature-block">
+						<h4>See full list of applications</h4>
+						<p>For a full list of all applications in the Province, please go to arfd.gov.bc.ca.</p>
+						<a class="btn inverted" href="http://arfd.gov.bc.ca">Leave this site</a>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="fb-container bg-faded">
-		<section class="container">
-			<h2>Public Review &amp; Comment in British Columbia</h2>
-			<div class="row feature-blocks">
-				<div class="col-md-4">
-					<div class="feature-block">
-						<h3>The Application Lifecycle</h3>
-						<p>It can take several seconds to fulfill an application, which is a lot</p>
-						<a class="btn inverted" href="/lifecycle" [routerLink]="['/lifecycle']">Learn More</a>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="feature-block">
-						<h3>Find Applications in BC</h3>
-						<p>The NRTS PRC website currently profiles&nbsp;<strong>{{numApplications}}</strong>&nbsp;applications</p>
-						<a class="btn inverted" href="/applications" [routerLink]="['/applications']">List</a>
-						<span>&nbsp;</span>
-						<a class="btn inverted" href="/search" [routerLink]="['/search']">Search</a>
-					</div>
-				</div>
-			</div>
-		</section>
 	</div>
 
 	<!-- <div class="fb-container" id="bottom">
