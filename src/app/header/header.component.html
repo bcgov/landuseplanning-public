@@ -1,0 +1,31 @@
+<header class="app-header" id="header">
+  <nav class="navbar navbar-expand-lg justify-content-between">
+    <a class="navbar-brand" href="/" [routerLink]="['/']"></a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="navbarText" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <i class="material-icons">menu</i>
+      <span>MENU</span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/applications" [routerLink]="['/applications']" title="Find applications by list and map">
+            <span>List Applications in BC</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/search" [routerLink]="['/search']" title="Find applications by searching">
+            <span>Search Applications in BC</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact" [routerLink]="['/contact']" title="Connect with us">
+            <span>Contact Us</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

@@ -1,6 +1,10 @@
 @import "~assets/styles/base.scss";
 .hero-banner {
     position: relative;
+    margin-top: 0;
+    height: 15rem;
+    background-position: 0 0;
+    background-size: 160%;
     background-color: rgba(#00245a, 1);
     background-image: url("~assets/images/hero-banner.jpg");
     background-repeat: no-repeat;
@@ -10,10 +14,17 @@
         padding-right: 1.5rem;
         padding-left: 1.5rem;
         h1 {
-            margin-top: -0.25rem;
             margin-bottom: 1.5rem;
             font-size: 2rem;
             line-height: 2rem;
+            span {
+                display: inline-block;
+            }
+        }
+        h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            line-height: 1.5rem;
             span {
                 display: inline-block;
             }
@@ -78,26 +89,15 @@
     }
 }
 
-@media (max-width: 574px) {
-    .hero-banner {
-        height: 18rem;
-        background-position: 0 0;
-        background-size: 160%;
-    }
-}
-
 @media (min-width: 575px) {
     .hero-banner {
-        height: 20rem;
-        background-position: 0 0;
         background-size: 140%;
     }
 }
 
 @media (min-width: 768px) {
     .hero-banner {
-        height: 24rem;
-        background-position: 0 0;
+        height: 17rem;
         background-size: 125%;
         &__content {
             margin-bottom: 1rem;
@@ -124,8 +124,6 @@
 
 @media (min-width: 992px) {
     .hero-banner {
-        height: 28rem;
-        background-position: 0 0;
         background-size: 115%;
     }
     &__content {
@@ -144,23 +142,10 @@
 
 @media (min-width: 1200px) {
     .hero-banner {
-        height: 30rem;
-        background-position: 0 0;
         background-size: 100%;
-        &__content {
-            margin: 0;
-            padding-top: 2rem;
-            padding-right: 2rem;
-            padding-left: 2rem;
-            h1 {
-                font-size: 2.8rem;
-            }
-            p {
-                margin-bottom: 1.75rem;
-            }
-        }
     }
 }
+
 
 // @media (min-width: 1200px) and (min-height: 900px) {
 //     .hero-banner {
