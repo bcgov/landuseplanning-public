@@ -17,7 +17,8 @@ header {
   background-image: url("~assets/images/bcgov-header-horiz-SM.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: auto; // outline: none; // override user agent stylesheet default
+  background-size: auto;
+  // outline: none; // override user agent stylesheet default
 }
 
 .navbar-toggler {
@@ -44,22 +45,12 @@ header {
     margin-bottom: -0.25rem;
 
     + span {
-      display: none;
+      display: inline-block;
       margin-top: 2px;
       margin-left: 0.25rem;
       font-size: 0.85rem;
       font-weight: 700;
       vertical-align: top;
-    }
-  }
-}
-
-@media (min-width: 400px) {
-  .navbar-toggler {
-    i {
-      + span {
-        display: inline-block;
-      }
     }
   }
 }
@@ -138,28 +129,6 @@ header {
 
 // same as @screen-md-min
 @media (min-width: 992px) {
-  header {
-    &.app-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 0;
-      border-bottom-style: solid; 
-      border-bottom-width: 0;
-      border-bottom-color: transparent;
-      background-color: rgba($header-bg, 0.25);
-      transition: all linear 0.2s;
-      
-      &.dark {
-        border-bottom-width: 4px;
-        border-bottom-color: $gold;
-        background-color: $header-bg;
-      }
-    }
-  }
-  
   .navbar-brand {
     width: 270px; // use PX dimensions here to ensure exact match to image
     height: 4rem;

@@ -20,6 +20,7 @@ import { LifecycleComponent } from 'app/lifecycle/lifecycle.component';
 // import { ProcessComponent } from 'app/process/process.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { SearchComponent } from 'app/search/search.component';
+import { HeaderComponent } from 'app/header/header.component';
 
 // services
 import { ApplicationService } from 'app/services/application.service';
@@ -42,7 +43,8 @@ import { CommentPeriod } from 'app/models/commentperiod';
     LifecycleComponent,
     // ProcessComponent,
     ContactComponent,
-    SearchComponent
+    SearchComponent,
+    HeaderComponent
   ],
   imports: [
     TagInputModule,
