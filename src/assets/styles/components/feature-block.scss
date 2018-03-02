@@ -1,7 +1,7 @@
 @import "~assets/styles/base.scss";
 .feature-block {
     margin-bottom: 1rem;
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
     background-size: 200%;
     background-color: $feature-block-bg;
     color: $feature-block-color;
@@ -18,14 +18,14 @@
         font-size: 0.875rem;
         line-height: 1.4rem;
     }
+    p+p {
+        margin-bottom: 0;
+    }
     .btn {
         padding: 0.65rem;
         font-size: 0.875rem;
     }
 }
-
-// same as @screen-sm-min
-@media (min-width: 768px) {}
 
 @media (min-width: 768px) and (orientation: portrait) {
     .fb-container {

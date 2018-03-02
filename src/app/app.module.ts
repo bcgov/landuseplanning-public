@@ -16,11 +16,10 @@ import { AppRoutingModule } from 'app/app-routing.module';
 // components
 import { AppComponent } from 'app/app.component';
 import { HomeComponent } from 'app/home/home.component';
-import { LifecycleComponent } from 'app/lifecycle/lifecycle.component';
-// import { ProcessComponent } from 'app/process/process.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { SearchComponent } from 'app/search/search.component';
 import { HeaderComponent } from 'app/header/header.component';
+import { FooterComponent } from 'app/footer/footer.component';
 
 // services
 import { ApplicationService } from 'app/services/application.service';
@@ -40,11 +39,10 @@ import { CommentPeriod } from 'app/models/commentperiod';
   declarations: [
     AppComponent,
     HomeComponent,
-    LifecycleComponent,
-    // ProcessComponent,
     ContactComponent,
     SearchComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     TagInputModule,
