@@ -1,26 +1,50 @@
 @import "~assets/styles/base.scss";
-.hero-banner {
-    &__content {
-        .btn.inverted {
-            color: $font-gray;
-            border: 2px solid $font-gray;
-            background-color: #fff;
-            text-transform: unset;
-            &:active,
-            &:focus,
-            &:hover {
-                border-color: $gold;
-                background: darken($gold, 8%);
-                font-weight: 700;
+.site-intro {
+    margin-top: -2rem;
+    color: $font-gray;
+    background-color: #fff;
+    .home-banner {
+        height: 30rem;
+        background-position: center;
+        background-size: cover;
+        background-image: url("~assets/images/map.jpg");
+        background-repeat: no-repeat;
+        &__content {
+            margin-top: 2rem;
+            h1 {
+                font-size: 2rem;
+                line-height: 2rem;
+                span {
+                    display: inline-block;
+                }
+            }
+            h2 {
+                font-size: 1.5rem;
+                line-height: 1.5rem;
+                span {
+                    display: inline-block;
+                }
+            }
+            .btn.inverted {
+                color: $font-gray;
+                border: 2px solid $font-gray;
+                background-color: #fff;
+                text-transform: unset;
+                &:active,
+                &:focus,
+                &:hover {
+                    border-color: $gold;
+                    background: darken($gold, 8%);
+                    font-weight: 700;
+                }
+            }
+            .badge {
+                color: $gold;
             }
         }
     }
-}
-
-.bg-default {
-    background-color: #fff;
-    .site-intro {
-        margin-top: -2rem;
+    .about-info {
+        margin-top: -18rem;
         .fast-fact {
             color: $font-gray;
             background-color: #fff;
@@ -29,8 +53,41 @@
     }
 }
 
-@media (min-width: 768px) {}
+@media (min-width: 768px) {
+    .home-banner {
+        &__content {
+            h1 {
+                font-size: 2.5rem;
+                line-height: 2.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+                line-height: 1.8rem;
+            }
+            p {
+                font-size: 1.2rem;
+                line-height: 1.8rem;
+            }
+        }
+    }
+    .about-info {
+        margin-top: -17rem;
+    }
+}
 
-@media (min-width: 992px) {}
+@media (min-width: 992px) {
+    .home-banner {
+        &__content {
+            h1 {
+                font-size: 2.8rem;
+                line-height: 2.8rem;
+            }
+            h2 {
+                line-height: 2rem;
+                font-size: 2rem;
+            }
+        }
+    }
+}
 
 @media (min-width: 1200px) {}
