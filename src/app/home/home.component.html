@@ -7,12 +7,10 @@
 					<span class="badge" id="alpha" title="Initial release of PRC">ALPHA</span>
 				</h1>
 				<h2>Skeena Region Pilot</h2>
-				<div class="hero-banner__content--cta-btns">
-					<a class="btn slide-l-btn hero-btn inverted" href="/applications" [routerLink]="['/applications']">
-						<i class="material-icons">list</i>
-						<span>View applications in this region</span>
-					</a>
-				</div>
+				<a class="btn slide-l-btn hero-btn inverted" href="/applications" [routerLink]="['/applications']">
+					<i class="material-icons">list</i>
+					<span>View applications in this region</span>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -22,7 +20,7 @@
 	<div class="bg-default">
 		<div class="site-intro container">
 			<div class="row fb-container">
-				<div class="col-lg-8">
+				<div class="col-md-8">
 					<section class="about-info mb-0">
 						<h3>About this site</h3>
 						<p>This website is used to post Crown Land Application information for public review and comment, as per Section 32(2)
@@ -37,7 +35,7 @@
 						</p>
 					</section>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-md-4">
 					<div class="feature-block fast-fact">
 						<h3>Tell us what you think</h3>
 						<p>Public Review and Comment (PRC) is continuously evolving. More information and features will be added to the website
@@ -49,18 +47,24 @@
 			</div>
 
 			<div class="row fb-container">
-				<div class="col-lg-4">
+				<div class="col-md-4">
 					<div class="feature-block">
 						<h4>Find applications open for comment</h4>
 						<p>Review relevant application details and provide you comments.</p>
-						<a class="btn inverted" href="/applications" [routerLink]="['/applications']">View List</a>
+						<a class="btn slide-l-btn hero-btn inverted" href="/applications" [routerLink]="['/applications']">
+							<i class="material-icons">list</i>
+							<span>View List</span>
+						</a>
 					</div>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-md-4">
 					<div class="feature-block">
 						<h4>See full list of applications</h4>
 						<p>For a full list of all applications in the Province, please go to arfd.gov.bc.ca.</p>
-						<a class="btn inverted" href="http://arfd.gov.bc.ca">Leave this site</a>
+						<a class="btn slide-r-btn inverted" href="http://arfd.gov.bc.ca">
+							<span>Leave this site</span>
+							<i class="material-icons">arrow_forward</i>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -68,7 +72,7 @@
 	</div>
 
 	<!-- <div class="fb-container" id="bottom">
-		<section class="container mt-0">
+		<section class="container mt-0">https://bcnrds.atlassian.net/browse/PRC-170
 			<h2>Our Processes &amp; Procedures</h2>
 			<div class="row">
 				<div class="col-md-4">

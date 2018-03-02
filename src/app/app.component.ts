@@ -5,7 +5,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs/Subscription';
 
 import { HomeComponent } from './home/home.component';
-import { DocumentService } from './services/document.service';
 import { SearchComponent } from './search/search.component';
 import { ApiService } from './services/api';
 import { News } from './models/news';
@@ -13,14 +12,14 @@ import { News } from './models/news';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  providers: [DocumentService]
+  styleUrls: ['./app.component.scss']
 })
 
 export class AppComponent implements OnInit {
   loggedIn: String;
   hostname: String;
   private sub: Subscription;
+
   constructor(
     private _router: Router,
     private cookieService: CookieService,

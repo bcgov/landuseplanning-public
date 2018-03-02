@@ -1,14 +1,17 @@
 @import "~assets/styles/base.scss";
 .hero-banner {
     &__content {
-        &--cta-btns {
-            .btn {
-                text-transform: unset;
-            }
-            .btn.inverted {
-                color: $font-gray;
-                border: 2px solid $font-gray;
-                background-color: #fff;
+        .btn.inverted {
+            color: $font-gray;
+            border: 2px solid $font-gray;
+            background-color: #fff;
+            text-transform: unset;
+            &:active,
+            &:focus,
+            &:hover {
+                border-color: $gold;
+                background: darken($gold, 8%);
+                font-weight: 700;
             }
         }
     }
