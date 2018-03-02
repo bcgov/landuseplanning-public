@@ -127,11 +127,11 @@ header {
   }
 }
 
-// same as @screen-md-min
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .navbar-brand {
-    width: 270px; // use PX dimensions here to ensure exact match to image
+    width: 342px; // use PX dimensions here to ensure exact match to image
     height: 4rem;
+    background-image: url("~assets/images/bcgov-header-horiz-LG.png");
   }
 
   .navbar-collapse {
@@ -196,13 +196,5 @@ header {
         }
       }
     }
-  }
-}
-
-@media (min-width: 1200px) {
-  .navbar-brand {
-    width: 342px; // use PX dimensions here to ensure exact match to image
-    height: 4rem;
-    background-image: url("~assets/images/bcgov-header-horiz-LG.png");
   }
 }
