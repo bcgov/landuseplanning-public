@@ -1,4 +1,4 @@
-import { Document } from './Document';
+import { Document } from './document';
 import { Organization } from './organization';
 import { CommentPeriod } from './commentperiod';
 import { Decision } from './decision';
