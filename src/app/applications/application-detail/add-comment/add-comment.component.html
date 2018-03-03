@@ -28,7 +28,7 @@
 
         <div class="row">
           <div class="form-check col-12">
-            <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="iAgreeModel" #iAgree="ngModel" />
+            <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="iAgreeModel" #iAgree />
             <label for="iAgree" class="form-check-label">I agree. By ticking this checkbox, I am conclusively deemed to have read and agreed unconditionally to the above
               Moderation Policy and Terms of Use.</label>
           </div>
@@ -36,13 +36,13 @@
       </div>
 
       <div class="modal-footer">
-        <button [disabled]="!iAgreeModel" type="button" class="btn btn-primary" (click)="p1_next()">Next</button>
+        <button type="button" class="btn btn-primary" (click)="p1_next()" [disabled]="!iAgreeModel" >Next</button>
       </div>
     </div>
   </form>
 
   <!-- SECOND PAGE -->
-  <form (ngSubmit)="p2_submit()" #commentForm1="ngForm">
+  <form #commentForm1="ngForm">
     <div class="modal-content page2" *ngIf="this.currentPage === 2">
       <div class="modal-header">
         <h4 class="modal-title">Personal Information</h4>
@@ -57,8 +57,8 @@
             <div class="form-group col-lg-6 required">
               <label for="contactName" class="control-label">Name</label>
               <input type="text" class="form-control" id="contactName" name="contactName" maxlength="50" placeholder="First Last" required
-                aria-required="true" [(ngModel)]="comment.commentAuthor.contactName" #name="ngModel" />
-              <div [hidden]="name.valid || name.untouched" class="alert alert-danger">Name is required</div>
+                aria-required="true" [(ngModel)]="comment.commentAuthor.contactName" #contactName="ngModel" />
+              <div [hidden]="contactName.valid || contactName.untouched" class="alert alert-danger">Name is required</div>
             </div>
 
             <div class="form-group col-lg-6 required">
@@ -69,9 +69,9 @@
             </div>
 
             <div class="form-group col-lg-12 optional">
-              <label for="organization" class="control-label">Organization</label>
-              <input type="text" class="form-control" id="organization" name="organization" maxlength="100" placeholder="Org Name" [(ngModel)]="comment.commentAuthor.orgName"
-                #organization="ngModel" />
+              <label for="orgName" class="control-label">Organization</label>
+              <input type="text" class="form-control" id="orgName" name="orgName" maxlength="100" placeholder="Org Name" [(ngModel)]="comment.commentAuthor.orgName"
+                #orgName="ngModel" />
             </div>
 
             <div class="form-check col-lg-12">
@@ -99,13 +99,13 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="p2_back()">Back</button>
-        <button [disabled]="!commentForm1.form.valid" type="submit" class="btn btn-primary">Next</button>
+        <button type="button" class="btn btn-primary" (click)="p2_next()" [disabled]="!commentForm1.form.valid">Next</button>
       </div>
     </div>
   </form>
 
   <!-- THIRD PAGE -->
-  <form (ngSubmit)="p3_submit()" #commentForm2="ngForm">
+  <form #commentForm2="ngForm">
     <div class="modal-content page3" *ngIf="this.currentPage === 3">
       <div class="modal-header">
         <h4 class="modal-title">Your Comment</h4>
@@ -136,7 +136,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
-        <button [disabled]="!commentForm2.form.valid || submitting" type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary" (click)="p3_next()" [disabled]="!commentForm2.form.valid || submitting">Submit</button>
       </div>
     </div>
   </form>

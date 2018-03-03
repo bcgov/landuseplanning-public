@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { HttpEventType } from '@angular/common/http';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
@@ -35,6 +35,10 @@ export interface DataModel {
 })
 
 export class AddCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel {
+  @ViewChild('iAgree') private iAgree: ElementRef;
+  @ViewChild('contactName') private contactName: ElementRef;
+  @ViewChild('comment2') private comment2: ElementRef;
+
   public title: string;
   public message: string;
   public currentPeriod: CommentPeriod;
@@ -48,6 +52,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public files: Array<File> = [];
 
   constructor(
+    public renderer: Renderer,
     public dialogService: DialogService,
     private commentService: CommentService,
     private documentService: DocumentService
@@ -62,15 +67,32 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.comment.commentAuthor.requestedAnonymous = false;
   }
 
-  private p1_next() { this.currentPage++; }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.focus(this.iAgree);
+  }
 
-  private p2_back() { this.currentPage--; }
+  private p1_next() {
+    this.currentPage++;
+    this.focus(this.contactName);
+  }
 
-  private p2_submit() { this.currentPage++; }
+  private p2_back() {
+    this.currentPage--;
+    this.focus(this.iAgree);
+  }
 
-  private p3_back() { this.currentPage--; }
+  private p2_next() {
+    this.currentPage++;
+    this.focus(this.comment2);
+  }
 
-  private p3_submit() {
+  private p3_back() {
+    this.currentPage--;
+    this.focus(this.contactName);
+  }
+
+  private p3_next() {
     this.submitting = true;
     this.progressValue = this.progressBufferValue = 0;
 
@@ -146,5 +168,13 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
       }
     });
     return bytes;
+  }
+
+  // see https://stackoverflow.com/questions/34522306/focus-on-newly-added-input-element
+  private focus(elem: ElementRef) {
+    console.log('elem =', elem);
+    if (elem && elem.nativeElement) {
+      this.renderer.invokeElementMethod(elem.nativeElement, 'focus', []);
+    }
   }
 }

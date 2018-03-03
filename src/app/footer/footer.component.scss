@@ -22,7 +22,8 @@
         font-size: 1rem;
         font-weight: 600;
     }
-    p {
+    p,
+    a {
         font-size: 0.875rem;
         line-height: 1.5rem;
     }
@@ -38,20 +39,21 @@
         }
     }
     a {
-        color: #FFF;
+        color: $footer-color;
         &:focus,
         &:hover {
             color: $gold;
         }
     }
-    .btn {
-        font-size: 0.875rem;
-        font-weight: 700;
-    }
+    // .btn {
+    //     margin-top: 1rem;
+    //     font-size: 0.875rem;
+    //     font-weight: 700;
+    // }
 }
 
 @media (min-width: 768px) {
-    &.app-footer {
+    .app-footer {
         section {
             margin-top: 1rem;
             margin-bottom: 1rem;
