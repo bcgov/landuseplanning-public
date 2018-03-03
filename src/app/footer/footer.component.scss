@@ -54,6 +54,7 @@
 
 @media (min-width: 768px) {
     .app-footer {
+        text-align: left;
         section {
             margin-top: 1rem;
             margin-bottom: 1rem;
@@ -69,7 +70,6 @@
 
 .footer-nav {
     padding-top: 1rem;
-    text-align: center;
     .gov-links {
         margin-top: 0;
         margin-bottom: 0;
@@ -110,10 +110,9 @@
 @media (min-width: 768px) {
     .footer-nav {
         border-top: 1px solid $bg-dark-border-color;
-        // .gov-links {
-        //     float: left;
-        //     margin-bottom: 0;
-        // }
+        .gov-links {
+            float: left;
+        }
         // .connect-links {
         //     margin-right: 3.5rem;
         //     float: right;
