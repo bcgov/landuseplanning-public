@@ -12,6 +12,7 @@ import { Document } from 'app/models/document';
 export class ApiService {
   // public token: string;
   public apiPath: string;
+  public adminPath: string;
   public env: 'local' | 'dev' | 'test' | 'prod';
 
   constructor(private http: Http) {
@@ -22,24 +23,28 @@ export class ApiService {
       case 'localhost':
         // Local
         this.apiPath = 'http://localhost:3000/api/public';
+        this.adminPath = 'http://localhost:4200';
         this.env = 'local';
         break;
 
       case 'www-nrts-prc-dev-public.pathfinder.gov.bc.ca':
         // Dev
         this.apiPath = 'https://prc-api-dev.pathfinder.gov.bc.ca/api/public';
+        this.adminPath = 'https://nrts-prc-admin-dev.pathfinder.gov.bc.ca';
         this.env = 'dev';
         break;
 
       case 'www-nrts-prc-test-public.pathfinder.gov.bc.ca':
         // Test
         this.apiPath = 'https://prc-api-test.pathfinder.gov.bc.ca/api/public';
+        this.adminPath = 'https://nrts-prc-admin-test.pathfinder.gov.bc.ca';
         this.env = 'test';
         break;
 
       default:
         // Prod
-        this.apiPath = 'https://';
+        this.apiPath = 'https://comment.nrs.gov.bc.ca/api';
+        this.adminPath = 'https://comment.nrs.gov.bc.ca/admin';
         this.env = 'prod';
     };
   }

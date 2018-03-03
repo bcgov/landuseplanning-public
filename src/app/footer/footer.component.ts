@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from 'app/services/api';
 
 @Component({
   selector: 'app-footer',
@@ -8,6 +9,6 @@ import { Component } from '@angular/core';
 
 export class FooterComponent {
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
 }
