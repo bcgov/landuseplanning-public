@@ -5,10 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
 import { Application } from 'app/models/application';
-import { Decision } from 'app/models/decision';
-import { Document } from 'app/models/document';
 import { ApiService } from 'app/services/api';
-import { DecisionService } from 'app/services/decision.service';
 
 @Component({
   templateUrl: './decisions-tab-content.component.html',
@@ -27,17 +24,15 @@ import { DecisionService } from 'app/services/decision.service';
 export class DecisionsTabContentComponent implements OnInit, OnDestroy {
   public loading = true;
   public application: Application;
-  public decision: Decision;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService,
-    private decisionService: DecisionService
+    private api: ApiService
   ) { }
 
   ngOnInit() {
-    // NOTE: leave this.application and this.decision undefined
+    // NOTE: leave this.application undefined
 
     // get application
     this.route.parent.data
@@ -46,24 +41,10 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
         (data: { application: Application }) => {
           if (data.application) {
             this.application = data.application;
-
-            // get application decision
-            this.decisionService.getByApplicationId(this.application._id)
-              .takeUntil(this.ngUnsubscribe)
-              .subscribe(
-                decision => {
-                  this.decision = decision;
-                  this.loading = false;
-                },
-                error => {
-                  console.log(error);
-                  this.loading = false;
-                }
-              );
           } else {
             console.log('ERROR =', 'missing application');
-            this.loading = false;
           }
+          this.loading = false;
         },
         error => {
           console.log(error);

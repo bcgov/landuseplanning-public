@@ -3,8 +3,8 @@
   <div class="row">
     <main class="col-lg-5 application-tombstone">
       <section *ngIf="!loading">
-        <div class="item proponent-item">
-          <p>{{application.proponent ? application.proponent.name : 'Unknown Proponent'}}</p>
+        <div class="item organization-item">
+          <p>{{application.organization ? application.organization.name : 'Unknown Proponent'}}</p>
         </div>
 
         <div class="item">
@@ -50,13 +50,14 @@
 
         <div class="item">
           <label>Description</label>
-          <p class="value" [innerHTML]="application.description | newlines"></p>
+          <p class="value" *ngIf="application.description" [innerHTML]="application.description | newlines"></p>
+          <p class="value" *ngIf="!application.description">-</p>
         </div>
 
         <div class="item row">
           <div class="col-6">
             <label>Area (ha)</label>
-            <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
+            <p class="value">{{application.areaHectares ? application.areaHectares : "-"}}</p>
           </div>
           <div class="col-6">
             <label>Location</label>
@@ -70,7 +71,7 @@
 
         <div class="item cl-item">
           <label>Crown Land File(s)</label>
-          <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
+          <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
         </div>
       </section>
     </main>

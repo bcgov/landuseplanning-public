@@ -10,6 +10,8 @@ import { Decision } from 'app/models/decision';
 
 @Injectable()
 export class DecisionService {
+  private decision: Decision = null;
+
   constructor(
     private api: ApiService,
     private documentService: DocumentService
@@ -39,6 +41,10 @@ export class DecisionService {
 
   // get a specific decision by its id
   getById(decisionId): Observable<Decision> {
+    if (this.decision && this.decision._id === decisionId) {
+      return Observable.of(this.decision);
+    }
+
     return this.api.getDecision(decisionId)
       .map((res: Response) => {
         const decisions = res.text() ? res.json() : [];
@@ -54,7 +60,8 @@ export class DecisionService {
           error => console.log(error)
         );
 
-        return decision;
+        this.decision = decision;
+        return this.decision;
       })
       .catch(this.api.handleError);
   }

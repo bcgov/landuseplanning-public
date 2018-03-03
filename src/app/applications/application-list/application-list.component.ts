@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, ChangeDetectionStrategy, HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+// import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 
 import { Application } from '../../models/application';
@@ -18,6 +19,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   private showOnlyOpenApps = false;
   public applications: Array<Application>;
   public currentApp: Application;
+  // private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   @HostBinding('class.full-screen') fullScreen = true;
 
@@ -33,16 +35,21 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.applications = this.route.snapshot.data.applications;
 
     // approach 2: wait for resolver to retrieve applications
-    // this.route.data.subscribe(
-    //   (data: { applications: Application[] }) => this.applications = data.applications,
-    //   error => console.log(error)
-    // );
+    // this.route.data
+    //   .takeUntil(this.ngUnsubscribe)
+    //   .subscribe(
+    //     (data: { applications: Application[] }) => this.applications = data.applications,
+    //     error => console.log(error)
+    //   );
 
     // Needed in development mode - not required in prod???
     this._changeDetectionRef.detectChanges();
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    // this.ngUnsubscribe.next();
+    // this.ngUnsubscribe.complete();
+  }
 
   private isCurrentApp(item): boolean {
     return (item === this.currentApp);

@@ -8,38 +8,34 @@
             <em>Error loading application.</em>
         </div>
 
-        <div *ngIf="application">
+        <div *ngIf="application && application.projectDate">
             <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
         </div>
 
         <div>
             <p class="title">Application Documents</p>
-            <div *ngIf="isUndefined(documents)">
-                <em>Error loading documents.</em>
+            <div *ngIf="application?.documents.length === 0">
+                <em>No documents have been uploaded for this application.</em>
             </div>
-            <div *ngIf="documents">
-                <div *ngIf="documents.length === 0">
-                    <em>No documents have been uploaded for this application.</em>
-                </div>
 
-                <div class="row">
-                    <div class="col-12" *ngFor="let document of documents">
-                        <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                            <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
-                        </a>
-                    </div>
+            <div class="row">
+                <div class="col-12" *ngFor="let document of application?.documents">
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                    </a>
                 </div>
             </div>
         </div>
 
         <div *ngIf="application">
             <p class="title">Business Unit</p>
-            <p>{{application.businessUnit || '-'}}</p>
+            <p>{{application.businessUnit || "-"}}</p>
         </div>
 
         <div *ngIf="application">
             <p class="title">Legal Description</p>
-            <p [innerHTML]="application.legalDescription | newlines"></p>
+            <p *ngIf="application.legalDescription" [innerHTML]="application.legalDescription | newlines"></p>
+            <p *ngIf="!application.legalDescription">-</p>
         </div>
 
         <!-- <div *ngIf="application">
@@ -59,7 +55,7 @@
 
         <div *ngIf="application">
             <p class="title">Crown Land File(s)</p>
-            <p class="value">{{application.cl_files ? application.cl_files.join(', ') : '-'}}</p>
+            <p class="value">{{application.cl_files ? application.cl_files.join(', ') : "-"}}</p>
         </div> -->
     </section>
 </div>

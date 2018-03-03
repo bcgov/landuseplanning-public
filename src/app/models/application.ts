@@ -1,5 +1,7 @@
+import { Document } from './Document';
 import { Organization } from './organization';
 import { CommentPeriod } from './commentperiod';
+import { Decision } from './decision';
 
 export class Application {
   _id: string;
@@ -28,7 +30,7 @@ export class Application {
   mapsheet: string;
   postID: number;
   projectDate: Date;
-  _proponent: string; // objectid -> Organization
+  _organization: string; // objectid -> Organization
   purpose: string;
   subpurpose: string;
   region: string;
@@ -37,8 +39,10 @@ export class Application {
   type: string;
   subtype: string;
 
-  proponent: Organization;
+  documents: Array<Document>;
+  organization: Organization;
   currentPeriod: CommentPeriod;
+  decision: Decision;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
@@ -67,7 +71,7 @@ export class Application {
     this.mapsheet                = obj && obj.mapsheet                || null;
     this.postID                  = obj && obj.postID                  || null;
     this.projectDate             = obj && obj.projectDate             || null;
-    this._proponent              = obj && obj._proponent              || null;
+    this._organization           = obj && obj._proponent              || null; // TODO: change to _organization
     this.purpose                 = obj && obj.purpose                 || null;
     this.subpurpose              = obj && obj.subpurpose              || null;
     this.region                  = obj && obj.region                  || null;
@@ -76,7 +80,9 @@ export class Application {
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
 
-    this.proponent = null;
+    this.documents = [];
+    this.organization = null;
     this.currentPeriod = null;
+    this.decision = null;
   }
 }

@@ -5,17 +5,23 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import * as _ from 'lodash';
 
+import { Application } from 'app/models/application';
 import { ApiService } from './api';
+import { DocumentService } from './document.service';
 import { OrganizationService } from './organization.service';
 import { CommentPeriodService } from './commentperiod.service';
-import { Application } from 'app/models/application';
+import { DecisionService } from './decision.service';
 
 @Injectable()
 export class ApplicationService {
+  private application: Application = null;
+
   constructor(
     private api: ApiService,
+    private documentService: DocumentService,
     private organizationService: OrganizationService,
-    private commentPeriodService: CommentPeriodService
+    private commentPeriodService: CommentPeriodService,
+    private decisionService: DecisionService
   ) { }
 
   // get count of applications
@@ -45,11 +51,13 @@ export class ApplicationService {
           return Observable.of([]);
         }
 
-        // now get the proponent for each application
+        // TODO: just call this.getById() to get each application
+
+        // now get the organization for each application
         applications.forEach((application, i) => {
-          if (applications[i]._proponent) {
-            this.organizationService.getById(applications[i]._proponent).subscribe(
-              organization => application.proponent = organization,
+          if (applications[i]._organization) {
+            this.organizationService.getById(applications[i]._organization).subscribe(
+              organization => application.organization = organization,
               error => console.log(error)
             );
           }
@@ -69,9 +77,13 @@ export class ApplicationService {
   }
 
   // get a specific application by its id
-  getById(id: string): Observable<Application> {
+  getById(appId: string): Observable<Application> {
+    if (this.application && this.application._id === appId) {
+      return Observable.of(this.application);
+    }
+
     // first get the application data
-    return this.api.getApplication(id)
+    return this.api.getApplication(appId)
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
         // return the first (only) application
@@ -80,13 +92,19 @@ export class ApplicationService {
       .map((application: Application) => {
         if (!application) { return null; }
 
-        // get the proponent
-        if (application._proponent) {
-          this.organizationService.getById(application._proponent).subscribe(
-            organization => application.proponent = organization,
+        // get the organization
+        if (application._organization) {
+          this.organizationService.getById(application._organization).subscribe(
+            organization => application.organization = organization,
             error => console.log(error)
           );
         }
+
+        // get the documents
+        this.documentService.getAllByApplicationId(application._id).subscribe(
+          documents => this.application.documents = documents,
+          error => console.log(error)
+        );
 
         // get the current comment period
         this.commentPeriodService.getAllByApplicationId(application._id).subscribe(
@@ -94,7 +112,14 @@ export class ApplicationService {
           error => console.log(error)
         );
 
-        return application;
+        // get the decision
+        this.decisionService.getByApplicationId(application._id).subscribe(
+          decision => this.application.decision = decision,
+          error => console.log(error)
+        );
+
+        this.application = application;
+        return this.application;
       })
       .catch(this.api.handleError);
   }

@@ -9,10 +9,11 @@ import { ApiService } from './api';
 // import { Search, SearchArray, SearchTerms } from 'app/models/search';
 import { Document } from 'app/models/document';
 // import { Application } from 'app/models/application';
-// import { Proponent } from 'app/models/proponent';
+// import { Organization } from 'app/models/organization';
 
 @Injectable()
 export class DocumentService {
+  private document: Document = null;
   // searchResult: SearchArray;
 
   constructor(private api: ApiService) { }
@@ -58,11 +59,21 @@ export class DocumentService {
 
   // get a specific document by its id
   getById(documentId): Observable<Document> {
+    if (this.document && this.document._id === documentId) {
+      return Observable.of(this.document);
+    }
+
     return this.api.getDocument(documentId)
       .map((res: Response) => {
         const documents = res.text() ? res.json() : [];
         // return the first (only) document
         return documents.length > 0 ? new Document(documents[0]) : null;
+      })
+      .map((document: Document) => {
+        if (!document) { return null; }
+
+        this.document = document;
+        return this.document;
       })
       .catch(this.api.handleError);
   }
@@ -76,7 +87,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  // get(terms: SearchTerms, applications: Array<Application>, proponents: Array<Proponent>, page: number, limit: number) {
+  // get(terms: SearchTerms, applications: Array<Application>, organizations: Array<Organization>, page: number, limit: number) {
   //   this.searchResult = new SearchArray();
 
   //   let query = 'search?types=document';
@@ -119,27 +130,27 @@ export class DocumentService {
   //     epicProjectQuery += '&projectcode=' + epicQuery;
   //   }
 
-  //   if (params['proponents']) {
-  //     // EPIC needs the string name for proponent, not the objectID
-  //     memProjectQuery += '&proponent=' + params['proponents'];
+  //   if (params['organizations']) {
+  //     // EPIC needs the string name for organization, not the objectID
+  //     memProjectQuery += '&proponent=' + params['organizations'];
 
-  //     const proponentQ = [];
+  //     const organizationQ = [];
 
-  //     const props = params['proponents'].split(',');
+  //     const props = params['organizations'].split(',');
   //     props.forEach(prop => {
-  //       proponents.forEach(p => {
+  //       organizations.forEach(p => {
   //         if (p._id === prop) {
   //           // If the AKA field is set, use that - otherwise use the company name
   //           if (p.alsoKnownAs && p.alsoKnownAs !== '') {
-  //             proponentQ.push(p.alsoKnownAs);
+  //             organizationQ.push(p.alsoKnownAs);
   //           } else {
-  //             proponentQ.push(p.company);
+  //             organizationQ.push(p.company);
   //           }
   //         }
   //       });
   //     });
-  //     if (proponentQ.length > 0) {
-  //       epicProjectQuery += '&proponentstring=' + proponentQ;
+  //     if (organizationQ.length > 0) {
+  //       epicProjectQuery += '&proponentstring=' + organizationQ;
   //     }
   //   }
   //   if (params['ownerships']) {
@@ -149,7 +160,7 @@ export class DocumentService {
 
   //     const owns = params['ownerships'].split(',');
   //     owns.forEach(prop => {
-  //       proponents.forEach(p => {
+  //       organizations.forEach(p => {
   //         if (p._id === prop) {
   //           // If the AKA field is set, use that - otherwise use the company name
   //           if (p.alsoKnownAs && p.alsoKnownAs !== '') {
