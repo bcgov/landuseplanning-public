@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { HomeComponent } from './home/home.component';
 import { SearchComponent } from './search/search.component';
 import { ApiService } from './services/api';
-import { News } from './models/news';
 
 @Component({
   selector: 'app-root',
