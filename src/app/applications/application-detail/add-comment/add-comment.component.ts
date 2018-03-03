@@ -35,7 +35,7 @@ export interface DataModel {
 })
 
 export class AddCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel {
-  @ViewChild('iAgreeModel') private iAgree: ElementRef;
+  @ViewChild('iAgree') private iAgree: ElementRef;
   @ViewChild('contactName') private contactName: ElementRef;
   @ViewChild('comment2') private comment2: ElementRef;
 
@@ -173,6 +173,8 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   // see https://stackoverflow.com/questions/34522306/focus-on-newly-added-input-element
   private focus(elem: ElementRef) {
     console.log('elem =', elem);
-    if (elem) { this.renderer.invokeElementMethod(elem.nativeElement, 'focus', []); }
+    if (elem && elem.nativeElement) {
+      this.renderer.invokeElementMethod(elem.nativeElement, 'focus', []);
+    }
   }
 }
