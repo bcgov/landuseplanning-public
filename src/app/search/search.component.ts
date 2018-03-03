@@ -10,10 +10,10 @@ import * as _ from 'lodash';
 import { ApiService } from 'app/services/api';
 import { Application } from 'app/models/application';
 import { Search, SearchTerms } from 'app/models/search';
-import { Proponent } from 'app/models/proponent';
+import { Organization } from 'app/models/organization';
 import { ApplicationService } from 'app/services/application.service';
 import { DocumentService } from 'app/services/document.service';
-import { ProponentService } from 'app/services/proponent.service';
+import { OrganizationService } from 'app/services/organization.service';
 
 @Component({
   selector: 'app-search',
@@ -40,7 +40,7 @@ export class SearchComponent implements OnInit {
   noMoreResults: boolean;
   ranSearch: boolean;
   applications: Array<Application>;
-  proponents: Array<Proponent>;
+  organizations: Array<Organization>;
   applicationArray: Array<string>;
   protoSearchActive: boolean;
   showAdvancedFields: boolean;
@@ -55,7 +55,7 @@ export class SearchComponent implements OnInit {
     calender: NgbCalendar,
     private documentService: DocumentService,
     private applicationService: ApplicationService,
-    private proponentService: ProponentService,
+    private organizationService: OrganizationService,
     private _changeDetectionRef: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
@@ -80,21 +80,21 @@ export class SearchComponent implements OnInit {
     //   this.params = params;
     //   this.terms  = new SearchTerms();
 
-    //   // Get the proponents
-    //   this.proponentService.getAll().subscribe(
-    //     proponents => {
-    //       this.proponents = proponents;
+    //   // Get the organizations
+    //   this.organizationService.getAll().subscribe(
+    //     organizations => {
+    //       this.organizations = organizations;
 
     //       // Grab any terms that were passed in through the URL
-    //       if (this.params.proponents) {
-    //         const operatorIds = this.params.proponents.split(',');
-    //         this.terms.proponents = this.proponents.filter(proponent => operatorIds.indexOf(proponent._id) !== -1);
+    //       if (this.params.organizations) {
+    //         const operatorIds = this.params.organizations.split(',');
+    //         this.terms.organizations = this.organizations.filter(organization => operatorIds.indexOf(organization._id) !== -1);
     //         this.showAdvancedFields = true;
     //       }
 
     //       if (this.params.ownerships) {
     //         const ownerIds = this.params.ownerships.split(',');
-    //         this.terms.ownerships = this.proponents.filter(proponent => ownerIds.indexOf(proponent._id) !== -1);
+    //         this.terms.ownerships = this.organizations.filter(organization => ownerIds.indexOf(organization._id) !== -1);
     //         this.showAdvancedFields = true;
     //       }
 
@@ -173,7 +173,7 @@ export class SearchComponent implements OnInit {
       this.page += 1;
     }
 
-  //   this.documentService.get(this.terms, this.applications, this.proponents, this.page, this.limit).subscribe(
+  //   this.documentService.get(this.terms, this.applications, this.organizations, this.page, this.limit).subscribe(
   //     data => {
   //       this.loading = false;
 

@@ -114,8 +114,8 @@ export class Project {
     this.ownershipData           = obj && obj.ownershipData           || [];
     this.collections             = obj && obj.collections             || null;
 
-    // Get the operator from the proponent.
-    this.operator = obj && obj.proponent ? obj.proponent.name : '';
+    // Get the operator from the organization.
+    this.operator = obj && obj.organization ? obj.organization.name : '';
 
     // Commodities come from commodity
     this.commodities = obj && obj.commodity ? (<string>obj.commodity).split(',').map(x => {

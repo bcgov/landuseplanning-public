@@ -38,11 +38,11 @@
                 [secondaryPlaceholder]="'Enter an Operator Name'"
                 [identifyBy]="'_id'"
                 [displayBy]="'company'"
-                [(ngModel)]="terms.proponents">
+                [(ngModel)]="terms.organizations">
                    <tag-input-dropdown
                     [identifyBy]="'_id'"
                     [displayBy]="'company'"
-                    [autocompleteItems]="proponents">
+                    [autocompleteItems]="organizations">
                    </tag-input-dropdown>
               </tag-input>
             </div>
@@ -56,7 +56,7 @@
                    <tag-input-dropdown
                     [identifyBy]="'_id'"
                     [displayBy]="'company'"
-                    [autocompleteItems]="proponents">
+                    [autocompleteItems]="organizations">
                    </tag-input-dropdown>
               </tag-input>
             </div>

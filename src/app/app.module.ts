@@ -23,7 +23,6 @@ import { FooterComponent } from 'app/footer/footer.component';
 
 // services
 import { ApplicationService } from 'app/services/application.service';
-import { ProponentService } from 'app/services/proponent.service';
 import { OrganizationService } from 'app/services/organization.service';
 import { DocumentService } from 'app/services/document.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
@@ -62,7 +61,6 @@ import { CommentPeriod } from 'app/models/commentperiod';
   providers: [
     CookieService,
     ApplicationService,
-    ProponentService,
     OrganizationService,
     DocumentService,
     CommentPeriodService,

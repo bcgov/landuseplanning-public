@@ -17,7 +17,7 @@
 
             <ng-template ngFor let-item [ngForOf]="applications">
                 <div *ngIf="showThisApp(item)" class="list-group-item" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
-                    <h2>{{item.proponent ? item.proponent.name : 'Unknown Proponent'}}</h2>
+                    <h2>{{item.organization ? item.organization.name : 'Unknown Proponent'}}</h2>
                     <span class="badge" 
                       [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
                                   'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
@@ -30,20 +30,22 @@
                             <span class="nv-list__item--name">Status</span>
                             <span class="nv-list__item--value">{{applicationService.getStatus(item)}}</span>
                         </li>
-                        <li class="nv-list_item" *ngIf="item.purpose && item.subpurpose">
+                        <li class="nv-list_item">
                             <span class="nv-list__item--name">Purpose</span>
-                            <span class="nv-list__item--value">
+                            <span class="nv-list__item--value" *ngIf="item.purpose && item.subpurpose">
                                 <span>{{item.purpose | titlecase}}</span>
                                 <span>({{item.subpurpose | titlecase}})</span>
                             </span>
-                        </li>
-                        <li class="nv-list_item" *ngIf="item.type && item.subtype">
+                            <span class="nv-list__item--value" *ngIf="!item.purpose || !item.subpurpose">-</span>
+                            </li>
+                        <li class="nv-list_item">
                             <span class="nv-list__item--name">Tenure Type</span>
-                            <span class="nv-list__item--value">
-                                {{item.type | titlecase}}
+                            <span class="nv-list__item--value" *ngIf="item.type && item.subtype">
+                                <span>{{item.type | titlecase}}</span>
                                 <span>({{item.subtype | titlecase}})</span>
                             </span>
-                        </li>
+                            <span class="nv-list__item--value" *ngIf="!item.type || !item.subtype">-</span>
+                            </li>
                     </ul>
                     <div class="list-group-item__buttons">
                         <a [routerLink]="['/application', item._id]">Go to Application Details &rsaquo;</a>
