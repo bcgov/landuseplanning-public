@@ -49,8 +49,6 @@
             color: $font-gray;
             background-color: #fff;
             border: 1px solid $font-gray;
-            box-shadow: 3px 3px 9px;
-            border-radius: 5px;
         }
     }
     .fb-container {
@@ -79,6 +77,10 @@
     }
     .about-info {
         margin-top: -17rem;
+        .fast-fact {
+            box-shadow: 3px 3px 9px;
+            border-radius: 5px;
+        }
     }
 }
 
