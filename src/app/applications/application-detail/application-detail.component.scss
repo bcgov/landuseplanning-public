@@ -2,14 +2,14 @@
 
 app-application-detail:host {
   display: block;
-  margin-top: 68px;
+  // margin-top: 68px;
   z-index: 998;
 }
 
 @media (max-width: 991px) {
-  app-application-detail:host {
-    margin-top: 52px;
-  }
+//   app-application-detail:host {
+//     margin-top: 52px;
+//   }
 }
 
 .application-detail {
@@ -43,6 +43,9 @@ app-application-detail:host {
                     padding: 0px;
                 }
             }
+            .item:last-of-type {
+                margin-bottom: 0;
+            }
             .organization-item {
                 color: #fff;
                 background-color: #38598a;
@@ -52,9 +55,6 @@ app-application-detail:host {
                     font-weight: bold;
                     margin-bottom: 0;
                 }
-            }
-            .cl-item {
-                margin-bottom: 0;
             }
             .title {
                 font-size: larger;
