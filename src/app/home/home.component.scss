@@ -44,7 +44,7 @@
         }
     }
     .about-info {
-        margin-top: -18rem;
+        margin-top: -13rem;
         .fast-fact {
             color: $font-gray;
             background-color: #fff;
@@ -58,30 +58,48 @@
     }
 }
 
+@media (min-width: 388px) {
+    .site-intro {
+        .about-info {
+            margin-top: -16rem;
+        }
+    }
+}
+
+@media (min-width: 447px) {
+    .site-intro {
+        .about-info {
+            margin-top: -18rem;
+        }
+    }
+}
+
 @media (min-width: 768px) {
-    .home-banner {
-        &__content {
-            h1 {
-                font-size: 2.5rem;
-                line-height: 2.5rem;
-            }
-            h2 {
-                font-size: 1.8rem;
-                line-height: 1.8rem;
-            }
-            p {
-                font-size: 1.2rem;
-                line-height: 1.8rem;
+    .site-intro {
+        .home-banner {
+            &__content {
+                h1 {
+                    font-size: 2.5rem;
+                    line-height: 2.5rem;
+                }
+                h2 {
+                    font-size: 1.8rem;
+                    line-height: 1.8rem;
+                }
+                p {
+                    font-size: 1.2rem;
+                    line-height: 1.8rem;
+                }
             }
         }
-    }
-    .about-info {
-        margin-top: -17rem;
-        .fast-fact {
-            box-shadow: 3px 3px 9px;
-            border-radius: 5px;
+        .about-info {
+            margin-top: -17rem;
+            .fast-fact {
+                box-shadow: 3px 3px 9px;
+                border-radius: 5px;
+            }
         }
-    }
+}
 }
 
 @media (min-width: 992px) {
