@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Home } from '../models/home';
 import { ApplicationService } from '../services/application.service';
 
 @Component({
@@ -7,9 +6,10 @@ import { ApplicationService } from '../services/application.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+
 export class HomeComponent implements OnInit {
-  results: Array<Home>;
   numApplications: Number;
+
   constructor(private applicationService: ApplicationService) { }
 
   ngOnInit() {

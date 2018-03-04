@@ -51,8 +51,6 @@ export class ApplicationService {
           return Observable.of([]);
         }
 
-        // TODO: just call this.getById() to get each application
-
         // now get the organization for each application
         applications.forEach((application, i) => {
           if (applications[i]._organization) {
