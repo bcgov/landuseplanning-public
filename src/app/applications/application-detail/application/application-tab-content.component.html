@@ -1,13 +1,5 @@
 <div class="tab-pane" id="application" role="tabpanel">
-    <div class="spinner-container" *ngIf="loading" [@visibility]>
-        <div class="spinner-new rotating"></div>
-    </div>
-
-    <section class="tab-section" *ngIf="!loading">
-        <div *ngIf="isUndefined(application)">
-            <em>Error loading application.</em>
-        </div>
-
+    <section class="tab-section">
         <div *ngIf="application && application.projectDate">
             <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
         </div>

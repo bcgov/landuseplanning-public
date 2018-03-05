@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { trigger, style, transition, animate } from '@angular/animations';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
@@ -9,31 +8,19 @@ import { ApiService } from 'app/services/api';
 
 @Component({
   templateUrl: './decisions-tab-content.component.html',
-  styleUrls: ['./decisions-tab-content.component.scss'],
-  animations: [
-    trigger('visibility', [
-      transition(':enter', [   // :enter is alias to 'void => *'
-        animate('0.2s 0s', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [   // :leave is alias to '* => void'
-        animate('0.2s 0.75s', style({ opacity: 0 }))
-      ])
-    ])
-  ]
+  styleUrls: ['./decisions-tab-content.component.scss']
 })
 export class DecisionsTabContentComponent implements OnInit, OnDestroy {
-  public loading = true;
-  public application: Application;
+  public application: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService
+    private router: Router,
+    private api: ApiService // used in template
   ) { }
 
   ngOnInit() {
-    // NOTE: leave this.application undefined
-
     // get application
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
@@ -42,13 +29,12 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
           if (data.application) {
             this.application = data.application;
           } else {
-            console.log('ERROR =', 'missing application');
+            alert('Uh-oh, application not found');
+            this.router.navigate(['/applications']);
           }
-          this.loading = false;
         },
         error => {
           console.log(error);
-          this.loading = false;
         }
       );
   }
@@ -56,9 +42,5 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  private isUndefined(x): boolean {
-    return (typeof x === 'undefined');
   }
 }

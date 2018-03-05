@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, ChangeDetectionStrategy, HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-// import { Subject } from 'rxjs/Subject';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { Application } from '../../models/application';
-import { ApplicationService } from '../../services/application.service';
+import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from '../../services/commentperiod.service';
 
 @Component({
@@ -17,47 +16,38 @@ import { CommentPeriodService } from '../../services/commentperiod.service';
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
   private showOnlyOpenApps = false;
-  public applications: Array<Application>;
-  public currentApp: Application;
-  // private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+  public applications: Array<Application> = [];
+  public currentApp: Application = null;
 
   @HostBinding('class.full-screen') fullScreen = true;
 
   constructor(
     private route: ActivatedRoute,
-    private applicationService: ApplicationService,
-    private commentPeriodService: CommentPeriodService,
+    private router: Router,
+    private applicationService: ApplicationService, // used in template
+    private commentPeriodService: CommentPeriodService, // used in template
     private _changeDetectionRef: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    // approach 1: get data directly from resolver
+    // get data directly from resolver
     this.applications = this.route.snapshot.data.applications;
 
-    // approach 2: wait for resolver to retrieve applications
-    // this.route.data
-    //   .takeUntil(this.ngUnsubscribe)
-    //   .subscribe(
-    //     (data: { applications: Application[] }) => this.applications = data.applications,
-    //     error => console.log(error)
-    //   );
-
-    // Needed in development mode - not required in prod???
-    this._changeDetectionRef.detectChanges();
+    // applications not found --> navigate back to home
+    if (!this.applications) {
+      alert('Uh-oh, applications not found');
+      this.router.navigate(['/']);
+    }
   }
 
-  ngOnDestroy() {
-    // this.ngUnsubscribe.next();
-    // this.ngUnsubscribe.complete();
-  }
+  ngOnDestroy() { }
 
   private isCurrentApp(item): boolean {
     return (item === this.currentApp);
   }
 
   // TODO: delete if we don't need a hover action for list items
-  private showCurrentApp(item) {
-  }
+  private showCurrentApp(item) { }
 
   // TODO: delete if we don't need a select action for list items
   private setCurrentApp(item) {
