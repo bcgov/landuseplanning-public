@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/mergeMap';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
+import * as _ from 'lodash';
 
 import { ApiService } from './api';
 import { CommentPeriodService } from './commentperiod.service';
 import { DocumentService } from './document.service';
 import { Comment } from 'app/models/comment';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentService {
@@ -22,26 +25,27 @@ export class CommentService {
   ) { }
 
   // get all comments for the specified application id
-  // TODO: chain things nicely
-  // see http://www.syntaxsuccess.com/viewarticle/error-handling-in-rxjs
-  getAllByApplicationId(appId: string): Observable<Comment[]> {
+  // use promises to chain things nicely
+  // no need for catch statements since we're calling other services
+  getAllByApplicationId(appId: string): Promise<Comment[]> {
     // first get the comment periods
     return this.commentPeriodService.getAllByApplicationId(appId)
-      .mergeMap(periods => {
+      .toPromise()
+      .then((periods: CommentPeriod[]) => {
         if (periods.length === 0) {
-          return Observable.of([]);
+          return [];
         }
 
         // now get the comments for all periods
-        const allComments = [];
+        const promises: Array<Promise<any>> = [];
         periods.forEach(period => {
-          this.getAllByPeriodId(period._id).subscribe(
-            comments => comments.forEach(comment => allComments.push(comment)),
-            error => console.log(error)
-          );
+          promises.push(this.getAllByPeriodId(period._id).toPromise());
         });
 
-        return Observable.of(allComments);
+        return Promise.all(promises)
+          .then((allComments: Comment[][]) => {
+            return _.flatten(allComments);
+          });
       });
   }
 

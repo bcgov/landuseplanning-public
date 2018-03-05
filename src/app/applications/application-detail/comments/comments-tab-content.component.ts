@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { DialogService } from 'ng2-bootstrap-modal';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import { DialogService } from 'ng2-bootstrap-modal';
 
 import { Application } from 'app/models/application';
 import { Comment } from 'app/models/comment';
@@ -50,16 +50,17 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
 
           // get application comments
           this.commentService.getAllByApplicationId(this.application._id)
-            .takeUntil(this.ngUnsubscribe)
-            .subscribe(
-              comments => {
-                this.comments = comments;
-                // sort by date added
+            .then((comments: Comment[]) => {
+              this.comments = comments;
+
+              // sort by date added
+              if (this.comments) {
                 this.comments.sort(function (a: Comment, b: Comment) {
-                  return (a.dateAdded > b.dateAdded) ? 1 : -1; // TODO: doesn't work
+                  return (new Date(a.dateAdded) > new Date(b.dateAdded) ? 1 : -1);
                 });
-                this.loading = false;
-              },
+              }
+              this.loading = false;
+            },
               error => {
                 console.log(error);
                 this.loading = false;

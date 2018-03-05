@@ -3,7 +3,6 @@ import { HttpEventType } from '@angular/common/http';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
@@ -103,7 +102,8 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
     // first add new comment
     this.progressBufferValue += 100 * commentSize / this.totalSize;
-    this.commentService.add(this.comment).toPromise()
+    this.commentService.add(this.comment)
+      .toPromise()
       .then(
         comment => {
           this.progressValue += 100 * commentSize / this.totalSize;
