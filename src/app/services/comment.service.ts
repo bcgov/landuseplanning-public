@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -25,15 +25,13 @@ export class CommentService {
   ) { }
 
   // get all comments for the specified application id
-  // use promises to chain things nicely
   // no need for catch statements since we're calling other services
-  getAllByApplicationId(appId: string): Promise<Comment[]> {
+  getAllByApplicationId(appId: string): Observable<Comment[]> {
     // first get the comment periods
     return this.commentPeriodService.getAllByApplicationId(appId)
-      .toPromise()
-      .then((periods: CommentPeriod[]) => {
+      .mergeMap((periods: CommentPeriod[]) => {
         if (periods.length === 0) {
-          return [];
+          return Observable.of([]);
         }
 
         // now get the comments for all periods

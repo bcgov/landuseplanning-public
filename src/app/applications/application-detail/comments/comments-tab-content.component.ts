@@ -50,15 +50,14 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
 
           // get application comments
           this.commentService.getAllByApplicationId(this.application._id)
-            .then((comments: Comment[]) => {
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe((comments: Comment[]) => {
               this.comments = comments;
 
               // sort by date added
-              if (this.comments) {
-                this.comments.sort(function (a: Comment, b: Comment) {
-                  return (new Date(a.dateAdded) > new Date(b.dateAdded) ? 1 : -1);
-                });
-              }
+              this.comments.sort(function (a: Comment, b: Comment) {
+                return (new Date(a.dateAdded) > new Date(b.dateAdded) ? 1 : -1);
+              });
               this.loading = false;
             },
               error => {

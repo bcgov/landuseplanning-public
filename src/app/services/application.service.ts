@@ -36,7 +36,6 @@ export class ApplicationService {
   }
 
   // get all applications
-  // use promises to chain things nicely
   // no need for catch statements since we're calling other services
   getAll(): Promise<Application[]> {
     // first get the applications
