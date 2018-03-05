@@ -37,14 +37,15 @@ export class ApplicationService {
 
   // get all applications
   // no need for catch statements since we're calling other services
-  getAll(): Promise<Application[]> {
+  getAll(): Observable<Application[]> {
     // first get the applications
     return this.getAllInternal()
-      .toPromise()
-      .then((applications: Application[]) => {
+      .mergeMap((applications: Application[]) => {
         if (applications.length === 0) {
           return [];
         }
+
+        const promises: Array<Promise<any>> = [];
 
         // now get the organization for each application
         applications.forEach((application, i) => {
@@ -62,12 +63,12 @@ export class ApplicationService {
             .then(periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods));
         });
 
-        return applications;
+        return Promise.all(promises).then(() => { return applications; });
       });
   }
 
   // get just the applications
-  private getAllInternal() {
+  private getAllInternal(): Observable<Application[]> {
     return this.api.getApplications()
       .map((res: Response) => {
         const applications = res.text() ? res.json() : [];
