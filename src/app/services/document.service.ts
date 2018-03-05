@@ -87,7 +87,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  // get(terms: SearchTerms, applications: Array<Application>, organizations: Array<Organization>, page: number, limit: number) {
+  // get(terms: SearchTerms, applications: Application[], organizations: Organization[], page: number, limit: number) {
   //   this.searchResult = new SearchArray();
 
   //   let query = 'search?types=document';
