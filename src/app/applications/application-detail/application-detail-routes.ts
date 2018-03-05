@@ -12,26 +12,14 @@ export const TAB_NAV_ROUTES: Routes = [
     },
     {
         path: 'application',
-        component: ApplicationTabContentComponent,
-        // FUTURE: implement resolver for faster-seeming page loads
-        // resolve: {
-        //   documents: ApplicationResolver
-        // }
+        component: ApplicationTabContentComponent
     },
     {
         path: 'comments',
-        component: CommentsTabContentComponent,
-        // FUTURE: implement resolver for faster-seeming page loads
-        // resolve: {
-        //   comments: CommentsResolver
-        // }
+        component: CommentsTabContentComponent
     },
     {
         path: 'decisions',
-        component: DecisionsTabContentComponent,
-        // FUTURE: implement resolver for faster-seeming page loads
-        // resolve: {
-        //   decision: DecisionsResolver
-        // }
+        component: DecisionsTabContentComponent
     }
 ];

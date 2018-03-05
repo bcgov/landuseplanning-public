@@ -4,14 +4,6 @@
     </div>
 
     <section class="tab-section" *ngIf="!loading">
-        <div *ngIf="isUndefined(application)">
-            <em>Error loading application.</em>
-        </div>
-
-        <div *ngIf="isUndefined(comments)">
-            <em>Error loading comments.</em>
-        </div>
-
         <div *ngIf="application && commentPeriodService.getStatus(application.currentPeriod) == commentPeriodService.commentStatuses['NOT STARTED']">
             <div class="period-date">Commenting starts: {{application.currentPeriod.startDate | date:'mediumDate'}}</div>
         </div>

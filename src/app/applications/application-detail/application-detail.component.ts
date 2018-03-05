@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { DialogService } from 'ng2-bootstrap-modal';
@@ -22,41 +22,26 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
     { label: 'Decisions', link: 'decisions' }
   ];
 
-  public loading: boolean;
-  public application: Application;
+  public application: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private dialogService: DialogService,
-    private applicationService: ApplicationService,
-    private commentPeriodService: CommentPeriodService
+    private applicationService: ApplicationService, // used in template
+    private commentPeriodService: CommentPeriodService // used in template
   ) { }
 
   ngOnInit() {
-    this.loading = true;
-    this.application = null;
+    // get data directly from resolver
+    this.application = this.route.snapshot.data.application;
 
-    this.route.data
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(
-        (data: { application: Application }) => {
-          if (data.application) {
-            this.application = data.application;
-            this.loading = false;
-          } else {
-            console.log('ERROR =', 'missing application');
-            this.loading = false;
-            // go to applications list
-            this.router.navigate(['/applications']);
-          }
-        },
-        error => {
-          console.log(error);
-          this.loading = false;
-        }
-      );
+    // application not found --> navigate back to application list
+    if (!this.application || !this.application._id) {
+      alert('Uh-oh, application not found');
+      this.router.navigate(['/applications']);
+    }
   }
 
   ngOnDestroy() {

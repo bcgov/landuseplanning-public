@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 // import { AuthorizationsComponent } from 'app/authorizations/authorizations.component';
 // import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
 // import { LegislationComponent } from 'app/legislation/legislation.component';
@@ -44,12 +45,15 @@ const routes: Routes = [
     component: SearchComponent
   },
   {
+    // default route
     path: '',
     component: HomeComponent
   },
   {
+    // wildcard route
     path: '**',
-    redirectTo: ''
+    redirectTo: '/',
+    pathMatch: 'full'
   }
 ];
 

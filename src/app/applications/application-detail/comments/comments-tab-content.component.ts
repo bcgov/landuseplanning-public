@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -28,62 +28,60 @@ import { ViewCommentComponent } from './view-comment/view-comment.component';
 })
 export class CommentsTabContentComponent implements OnInit, OnDestroy {
   public loading = true;
-  public application: Application;
-  public comments: Array<Comment>;
+  public application: Application = null;
+  public comments: Array<Comment> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private commentService: CommentService,
-    private commentPeriodService: CommentPeriodService,
+    private commentPeriodService: CommentPeriodService, // used in template
     private dialogService: DialogService
   ) { }
 
   ngOnInit() {
-    // NOTE: leave this.application and this.comments undefined
-
     // get application
-    this.route.parent.data.subscribe(
-      (data: { application: Application }) => {
-        if (data.application) {
-          this.application = data.application;
+    this.route.parent.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        (data: { application: Application }) => {
+          if (data.application) {
+            this.application = data.application;
 
-          // get application comments
-          this.commentService.getAllByApplicationId(this.application._id)
-            .takeUntil(this.ngUnsubscribe)
-            .subscribe((comments: Comment[]) => {
-              this.comments = comments;
+            // get application comments
+            this.commentService.getAllByApplicationId(this.application._id)
+              .takeUntil(this.ngUnsubscribe)
+              .subscribe((comments: Comment[]) => {
+                this.comments = comments;
 
-              // sort by date added
-              this.comments.sort(function (a: Comment, b: Comment) {
-                return (new Date(a.dateAdded) > new Date(b.dateAdded) ? 1 : -1);
-              });
-              this.loading = false;
-            },
-              error => {
-                console.log(error);
+                // sort by date added
+                this.comments.sort(function (a: Comment, b: Comment) {
+                  return (new Date(a.dateAdded) > new Date(b.dateAdded) ? 1 : -1);
+                });
                 this.loading = false;
-              }
-            );
-        } else {
-          console.log('ERROR =', 'missing application');
+              },
+                error => {
+                  console.log(error);
+                  this.loading = false;
+                }
+              );
+          } else {
+            alert('Uh-oh, application not found');
+            this.loading = false;
+            this.router.navigate(['/applications']);
+          }
+        },
+        error => {
+          console.log(error);
           this.loading = false;
         }
-      },
-      error => {
-        console.log(error);
-        this.loading = false;
-      }
-    );
+      );
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  private isUndefined(x): boolean {
-    return (typeof x === 'undefined');
   }
 
   private viewDetails(commentId: string) {
