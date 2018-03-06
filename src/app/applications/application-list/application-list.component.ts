@@ -3,9 +3,9 @@ import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
-import { Application } from '../../models/application';
+import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
-import { CommentPeriodService } from '../../services/commentperiod.service';
+import { CommentPeriodService } from 'app/services/commentperiod.service';
 
 @Component({
   selector: 'app-application-list',
@@ -38,6 +38,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       alert('Uh-oh, applications not found');
       this.router.navigate(['/']);
     }
+
+    // Needed in development mode - not required in prod?
+    this._changeDetectionRef.detectChanges();
   }
 
   ngOnDestroy() { }
