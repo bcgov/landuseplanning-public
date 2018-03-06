@@ -37,11 +37,10 @@ export class ApplicationService {
 
   // get all applications
   // no need for catch statements since we're calling other services
-  getAll(): Promise<Application[]> {
+  getAll(): Observable<Application[]> {
     // first get the applications
     return this.getAllInternal()
-      .toPromise()
-      .then((applications: Application[]) => {
+      .mergeMap((applications: Application[]) => {
         if (applications.length === 0) {
           return [];
         }
@@ -51,17 +50,17 @@ export class ApplicationService {
         // now get the organization for each application
         applications.forEach((application, i) => {
           if (applications[i]._organization) {
-            this.organizationService.getById(applications[i]._organization)
-              .toPromise()
-              .then(organization => application.organization = organization);
+            promises.push(this.organizationService.getById(applications[i]._organization)
+                .toPromise()
+                .then(organization => application.organization = organization));
           }
         });
 
         // now get the current comment period for each application
         applications.forEach((application, i) => {
-          this.commentPeriodService.getAllByApplicationId(applications[i]._id)
-            .toPromise()
-            .then(periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods));
+          promises.push(this.commentPeriodService.getAllByApplicationId(applications[i]._id)
+              .toPromise()
+              .then(periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods)));
         });
 
         return Promise.all(promises).then(() => { return applications; });

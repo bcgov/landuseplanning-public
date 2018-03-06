@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ChangeDetectionStrategy, HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
+import { HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -10,8 +10,7 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 @Component({
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
-  styleUrls: ['./application-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush // PRC-149: improve change detection
+  styleUrls: ['./application-list.component.scss']
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
@@ -25,8 +24,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private applicationService: ApplicationService, // used in template
-    private commentPeriodService: CommentPeriodService, // used in template
-    private _changeDetectionRef: ChangeDetectorRef
+    private commentPeriodService: CommentPeriodService // used in template
   ) { }
 
   ngOnInit() {
@@ -38,9 +36,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       alert('Uh-oh, applications not found');
       this.router.navigate(['/']);
     }
-
-    // Needed in development mode - not required in prod?
-    this._changeDetectionRef.detectChanges();
   }
 
   ngOnDestroy() { }
