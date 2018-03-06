@@ -51,16 +51,16 @@ export class ApplicationService {
         applications.forEach((application, i) => {
           if (applications[i]._organization) {
             promises.push(this.organizationService.getById(applications[i]._organization)
-                .toPromise()
-                .then(organization => application.organization = organization));
+              .toPromise()
+              .then(organization => application.organization = organization));
           }
         });
 
         // now get the current comment period for each application
         applications.forEach((application, i) => {
           promises.push(this.commentPeriodService.getAllByApplicationId(applications[i]._id)
-              .toPromise()
-              .then(periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods)));
+            .toPromise()
+            .then(periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods)));
         });
 
         return Promise.all(promises).then(() => { return applications; });
@@ -81,8 +81,8 @@ export class ApplicationService {
   }
 
   // get a specific application by its id
-  getById(appId: string): Observable<Application> {
-    if (this.application && this.application._id === appId) {
+  getById(appId: string, forceReload: boolean = false): Observable<Application> {
+    if (this.application && this.application._id === appId && !forceReload) {
       return Observable.of(this.application);
     }
 
@@ -98,7 +98,7 @@ export class ApplicationService {
 
         // get the organization
         if (application._organization) {
-          this.organizationService.getById(application._organization).subscribe(
+          this.organizationService.getById(application._organization, forceReload).subscribe(
             organization => application.organization = organization,
             error => console.log(error)
           );
@@ -117,7 +117,7 @@ export class ApplicationService {
         );
 
         // get the decision
-        this.decisionService.getByApplicationId(application._id).subscribe(
+        this.decisionService.getByApplicationId(application._id, forceReload).subscribe(
           decision => this.application.decision = decision,
           error => console.log(error)
         );

@@ -18,7 +18,11 @@ export class DecisionService {
   ) { }
 
   // get decision for the specified application id
-  getByApplicationId(appId: string): Observable<Decision> {
+  getByApplicationId(appId: string, forceReload: boolean = false): Observable<Decision> {
+    if (this.decision && this.decision._application === appId && !forceReload) {
+      return Observable.of(this.decision);
+    }
+
     return this.api.getDecisionByAppId(appId)
       .map((res: Response) => {
         const decisions = res.text() ? res.json() : [];
@@ -40,8 +44,8 @@ export class DecisionService {
   }
 
   // get a specific decision by its id
-  getById(decisionId): Observable<Decision> {
-    if (this.decision && this.decision._id === decisionId) {
+  getById(decisionId, forceReload: boolean = false): Observable<Decision> {
+    if (this.decision && this.decision._id === decisionId && !forceReload) {
       return Observable.of(this.decision);
     }
 
