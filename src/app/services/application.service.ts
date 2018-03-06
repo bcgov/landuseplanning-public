@@ -37,10 +37,11 @@ export class ApplicationService {
 
   // get all applications
   // no need for catch statements since we're calling other services
-  getAll(): Observable<Application[]> {
+  getAll(): Promise<Application[]> {
     // first get the applications
     return this.getAllInternal()
-      .mergeMap((applications: Application[]) => {
+      .toPromise()
+      .then((applications: Application[]) => {
         if (applications.length === 0) {
           return [];
         }

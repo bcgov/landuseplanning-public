@@ -10,7 +10,7 @@ import { Application } from 'app/models/application';
 export class ApplicationListResolver implements Resolve<any> {
   constructor(private applicationService: ApplicationService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application[] | ErrorObservable> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Application[] | ErrorObservable> {
     return this.applicationService.getAll()
       .catch(err => {
         alert('Uh-oh,  could not resolve application list');
