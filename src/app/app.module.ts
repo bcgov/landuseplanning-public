@@ -28,11 +28,13 @@ import { DocumentService } from 'app/services/document.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { CommentService } from 'app/services/comment.service';
 import { DecisionService } from 'app/services/decision.service';
+import { SearchService } from 'app/services/search.service';
 
 // feature modules
 import { MapModule } from 'app/map/map.module';
 import { ApplicationsModule } from 'app/applications/applications.module';
 import { CommentPeriod } from 'app/models/commentperiod';
+import { Search } from './models/search';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,8 @@ import { CommentPeriod } from 'app/models/commentperiod';
     DocumentService,
     CommentPeriodService,
     CommentService,
-    DecisionService
+    DecisionService,
+    SearchService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+import { CollectionsList } from './collection';
 import { Document } from './document';
 import { Organization } from './organization';
 import { CommentPeriod } from './commentperiod';
@@ -5,7 +7,6 @@ import { Decision } from './decision';
 
 export class Application {
   _id: string;
-  _schemaName: string;
   id: string; // objectid
 
   _addedBy: string; // objectid -> User
@@ -22,7 +23,6 @@ export class Application {
   description: string;
   interestID: number;
   internalID: number;
-  isPublished: boolean;
   legalDescription: string;
   location: string;
   latitude: number;
@@ -35,18 +35,34 @@ export class Application {
   subpurpose: string;
   region: string;
   status: string;
+  tenureStage: string;
   tantalisID: number;
+  dispositionID: number;
   type: string;
   subtype: string;
+
+  collections: CollectionsList; // TODO: DELETE THIS WHEN DOCUMENTS IS IMPLEMENTED
+
+  content: {
+    type: string;
+    page: string;
+    html: string;
+  }[];
+
+  internal: {
+    notes: string;
+  };
+
+  isPublished = false;
 
   documents: Array<Document>;
   organization: Organization;
   currentPeriod: CommentPeriod;
   decision: Decision;
+  features: object[];
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
-    this._schemaName             = obj && obj._schemaName             || null;
     this.id                      = obj && obj.id                      || null;
 
     this._addedBy                = obj && obj._addedBy                || null;
@@ -63,11 +79,10 @@ export class Application {
     this.description             = obj && obj.description             || null;
     this.interestID              = obj && obj.interestID              || 0;
     this.internalID              = obj && obj.internalID              || 0;
-    this.isPublished             = obj && obj.isPublished             || null;
     this.legalDescription        = obj && obj.legalDescription        || null;
     this.location                = obj && obj.location                || null;
-    this.latitude                = obj && obj.latitude                || 0;
-    this.longitude               = obj && obj.longitude               || 0;
+    this.latitude                = obj && obj.latitude                || 0.00;
+    this.longitude               = obj && obj.longitude               || 0.00;
     this.mapsheet                = obj && obj.mapsheet                || null;
     this.postID                  = obj && obj.postID                  || null;
     this.projectDate             = obj && obj.projectDate             || null;
@@ -76,13 +91,39 @@ export class Application {
     this.subpurpose              = obj && obj.subpurpose              || null;
     this.region                  = obj && obj.region                  || null;
     this.status                  = obj && obj.status                  || null;
+    this.tenureStage             = obj && obj.tenureStage             || null;
     this.tantalisID              = obj && obj.tantalisID              || 0;
+    this.dispositionID           = obj && obj.dispositionID           || 0;
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
+
+    this.collections             = obj && obj.collections             || null;
+    this.content                 = obj && obj.content                 || [];
+    this.internal                = obj && obj.internal                || null;
+
+    // Wrap isPublished around the tags we receive for this object.
+    if (obj && obj.tags) {
+      const self = this;
+      _.each(obj.tags, function (tag) {
+        if (_.includes(tag, 'public')) {
+          self.isPublished = true;
+        }
+      });
+    }
 
     this.documents = [];
     this.organization = null;
     this.currentPeriod = null;
     this.decision = null;
+    this.features = [];
+  }
+
+  getContent(page: string, type: string): string {
+    try {
+      const entry = this.content.find(x => x.type === type && x.page === page);
+      return entry.html;
+    } catch (e) {
+      return '';
+    }
   }
 }

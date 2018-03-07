@@ -12,6 +12,7 @@ import { DocumentService } from './document.service';
 import { OrganizationService } from './organization.service';
 import { CommentPeriodService } from './commentperiod.service';
 import { DecisionService } from './decision.service';
+import { SearchService } from './search.service';
 
 @Injectable()
 export class ApplicationService {
@@ -22,7 +23,8 @@ export class ApplicationService {
     private documentService: DocumentService,
     private organizationService: OrganizationService,
     private commentPeriodService: CommentPeriodService,
-    private decisionService: DecisionService
+    private decisionService: DecisionService,
+    private searchService: SearchService
   ) { }
 
   // get count of applications
@@ -119,6 +121,22 @@ export class ApplicationService {
         // get the decision
         this.decisionService.getByApplicationId(application._id, forceReload).subscribe(
           decision => this.application.decision = decision,
+          error => console.log(error)
+        );
+
+        // get the shapes
+        this.searchService.getByDTID(application.tantalisID.toString()).subscribe(
+          features => {
+            this.application.features = features;
+            // calculate areaHectares
+            let areaHectares = 0;
+            _.each(this.application.features, function (f) {
+              if (f['properties']) {
+                areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
+              }
+            });
+            this.application.areaHectares = areaHectares;
+          },
           error => console.log(error)
         );
 

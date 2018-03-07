@@ -60,26 +60,43 @@ export class ApiService {
   //
   getApplications() {
     const fields = [
+      '_id',
+      'id',
+
+      '_addedBy',
+      '_updatedBy',
+      'dateAdded',
+      'dateUpdated',
+
+      'agency',
+      'areaHectares',
+      'businessUnit',
+      'cl_files',
+      'code',
       'name',
-      'type',
-      'subtype',
+      'description',
+      'interestID',
+      'internalID',
+      'legalDescription',
+      'location',
+      'latitude',
+      'longitude',
+      'mapsheet',
+      'postID',
+      'projectDate',
+      '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
-      '_proponent', // TODO: change to _organization
-      // 'areaHectares',
-      // 'latitude',
-      // 'longitude',
-      // 'location',
-      // 'region',
-      // 'description',
-      // 'legalDescription',
+      'region',
       'status',
-      // 'projectDate',
-      // 'businessUnit',
-      // 'cl_files',
-      // 'commodityType',
-      // 'commodity',
-      // 'commodities'
+      'tenureStage',
+      'tantalisID',
+      'dispositionID',
+      'type',
+      'subtype',
+
+      'internal'
+
     ];
     let queryString = 'application?fields=';
     _.each(fields, function (f) {
@@ -92,26 +109,42 @@ export class ApiService {
 
   getApplication(id: string) {
     const fields = [
-      'name',
-      'type',
-      'subtype',
-      'purpose',
-      'subpurpose',
-      '_proponent', // TODO: change to _organization
+      '_id',
+      'id',
+
+      '_addedBy',
+      '_updatedBy',
+      'dateAdded',
+      'dateUpdated',
+
+      'agency',
       'areaHectares',
-      'latitude',
-      'longitude',
-      'location',
-      'region',
-      'description',
-      'legalDescription',
-      'status',
-      'projectDate',
       'businessUnit',
       'cl_files',
-      'commodityType',
-      'commodity',
-      'commodities'
+      'code',
+      'name',
+      'description',
+      'interestID',
+      'internalID',
+      'legalDescription',
+      'location',
+      'latitude',
+      'longitude',
+      'mapsheet',
+      'postID',
+      'projectDate',
+      '_proponent', // TODO: change to _organization
+      'purpose',
+      'subpurpose',
+      'region',
+      'status',
+      'tenureStage',
+      'tantalisID',
+      'dispositionID',
+      'type',
+      'subtype',
+
+      'internal'
     ];
     let queryString = 'application/' + id + '?fields=';
     _.each(fields, function (f) {
@@ -272,6 +305,7 @@ export class ApiService {
     return this.post(queryString, comment);
   }
 
+  // NOT USED
   // saveComment(comment: Comment) {
   //   const fields = ['comment', 'commentAuthor'];
   //   let queryString = 'comment/' + comment._id + '?fields=';
@@ -360,6 +394,31 @@ export class ApiService {
 
   getDocumentUrl(document: Document): string {
     return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
+  }
+
+  //
+  // Crown Lands files
+  //
+  getBCGWCrownLands(id: string) {
+    const fields = ['name', 'isImported'];
+    let queryString = 'public/search/bcgw/crownLandsId/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
+  getBCGWDispositionTransactionId(id: string) {
+    const fields = ['name'];
+    let queryString = 'public/search/bcgw/dispositionTransactionId/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
   }
 
   //
