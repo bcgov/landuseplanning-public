@@ -29,16 +29,13 @@ export class ApplicationService {
 
   // get count of applications
   getCount(): Observable<number> {
-    return this.api.getApplications()
-      .map((res: Response) => {
-        const applications = res.text() ? res.json() : [];
+    return this.getAllInternal()
+      .map((applications: Application[]) => {
         return applications.length;
-      })
-      .catch(this.api.handleError);
+      });
   }
 
   // get all applications
-  // no need for catch statements since we're calling other services
   getAll(): Observable<Application[]> {
     // first get the applications
     return this.getAllInternal()
@@ -98,46 +95,41 @@ export class ApplicationService {
       .map((application: Application) => {
         if (!application) { return null; }
 
-        // get the organization
+        // now get the organization
         if (application._organization) {
           this.organizationService.getById(application._organization, forceReload).subscribe(
-            organization => application.organization = organization,
-            error => console.log(error)
+            organization => application.organization = organization
           );
         }
 
-        // get the documents
+        // now get the documents
         this.documentService.getAllByApplicationId(application._id).subscribe(
-          documents => this.application.documents = documents,
-          error => console.log(error)
+          documents => application.documents = documents
         );
 
-        // get the current comment period
+        // now get the current comment period
         this.commentPeriodService.getAllByApplicationId(application._id).subscribe(
-          periods => application.currentPeriod = this.commentPeriodService.getCurrent(periods),
-          error => console.log(error)
+          periods => application.currentPeriod = this.commentPeriodService.getCurrent(periods)
         );
 
-        // get the decision
+        // now get the decision
         this.decisionService.getByApplicationId(application._id, forceReload).subscribe(
-          decision => this.application.decision = decision,
-          error => console.log(error)
+          decision => application.decision = decision
         );
 
-        // get the shapes
+        // now get the shapes
         this.searchService.getByDTID(application.tantalisID.toString()).subscribe(
           features => {
-            this.application.features = features;
+            application.features = features;
             // calculate areaHectares
             let areaHectares = 0;
-            _.each(this.application.features, function (f) {
+            _.each(application.features, function (f) {
               if (f['properties']) {
                 areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
               }
             });
-            this.application.areaHectares = areaHectares;
-          },
-          error => console.log(error)
+            application.areaHectares = areaHectares;
+          }
         );
 
         this.application = application;

@@ -8,6 +8,7 @@ import { Application } from 'app/models/application';
 
 @Injectable()
 export class ApplicationListResolver implements Resolve<any> {
+
   constructor(private applicationService: ApplicationService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application[] | ErrorObservable> {
@@ -21,6 +22,7 @@ export class ApplicationListResolver implements Resolve<any> {
 
 @Injectable()
 export class ApplicationDetailResolver implements Resolve<Application> {
+
   constructor(private applicationService: ApplicationService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application> | ErrorObservable {
