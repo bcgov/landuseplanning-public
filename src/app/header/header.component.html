@@ -33,4 +33,9 @@
       </ul>
     </div>
   </nav>
+
+  <ngb-alert type="warning" *ngIf="showBanner" (click)="showBanner = false">
+    <i class="material-icons">info</i> &nbsp; This site is a pilot, launched for applications in the Province's Skeena Region. &nbsp;
+    <a routerLink="/">Learn more...</a>
+  </ngb-alert>
 </header>
