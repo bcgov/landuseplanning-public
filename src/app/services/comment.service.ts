@@ -115,6 +115,7 @@ export class CommentService {
     return comment;
   }
 
+  // NOT USED
   // save(comment: Comment): Observable<Comment> {
   //   return this.api.saveComment(comment)
   //     .map((res: Response) => {

@@ -4,24 +4,35 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 export class Search {
   _id: string;
-  displayName: string;
-  description: string;
+  totalFeatures: number;
+  features: {
+    id: string;
+  }[];
   date: Date;
-  parentType: string;
+  crs: string;
   type: string;
   status: string;
   hostname: string;
   application: Application;
+  sidsFound: string[];
 
   constructor(search?: any, hostname?: any) {
-    this._id         = search && search._id         || null;
-    this.displayName = search && search.displayName || null;
-    this.parentType  = search && search.parentType  || null;
-    this.type        = search && search.type        || null;
-    this.date        = search && search.date        || null;
-    this.status      = search && search.status      || null;
-    this.application = search && search.application || null;
-    this.hostname    = hostname;
+    this._id            = search && search._id            || null;
+    this.totalFeatures  = search && search.totalFeatures  || null;
+    this.crs            = search && search.crs            || null;
+    this.type           = search && search.type           || null;
+    this.date           = search && search.date           || null;
+    this.status         = search && search.status         || null;
+    this.application    = search && search.application    || null;
+    this.sidsFound     = search && search.sidsFound       || null;
+    this.hostname       = hostname;
+
+    this.features = [];
+    if (search && search.features) {
+      search.features.forEach(feature => {
+        this.features.push(feature);
+      });
+    }
   }
 }
 
@@ -53,6 +64,8 @@ export class SearchArray {
 
 export class SearchTerms {
   keywords: string;
+  clfile: string;
+  dtid: string;
   applications: Array<Application>;
   organizations: Array<Organization>;
   ownerships: Array<Organization>;
@@ -60,12 +73,14 @@ export class SearchTerms {
   dateEnd: NgbDateStruct;
 
   constructor() {
-    this.keywords     = '';
-    this.applications = [];
-    this.organizations   = [];
-    this.ownerships   = [];
-    this.dateStart    = null;
-    this.dateEnd      = null;
+    this.keywords       = '';
+    this.clfile         = '';
+    this.dtid           = '';
+    this.applications   = [];
+    this.organizations  = [];
+    this.ownerships     = [];
+    this.dateStart      = null;
+    this.dateEnd        = null;
   }
 
   getParams() {
@@ -73,6 +88,14 @@ export class SearchTerms {
 
     if (this.keywords) {
       params['keywords'] = this.keywords.split(' ').join(',');
+    }
+
+    if (this.clfile) {
+      params['clfile'] = this.clfile.split(' ').join(',');
+    }
+
+    if (this.dtid) {
+      params['dtid'] = this.dtid.split(' ').join(',');
     }
 
     if (this.applications.length) {
