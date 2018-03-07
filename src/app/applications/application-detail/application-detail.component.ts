@@ -35,7 +35,7 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // get data directly from resolver
-    this.application = this.route.snapshot.data.application;
+    this.application = this.route.snapshot.data['application'];
 
     // application not found --> navigate back to application list
     if (!this.application || !this.application._id) {
