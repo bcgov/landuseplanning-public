@@ -124,21 +124,20 @@ export class ApplicationService {
         );
 
         // now get the shapes
-        // NOT WORKING YET
-        // promises.push(this.searchService.getByDTID(application.tantalisID.toString())
-        //   .toPromise()
-        //   .then(features => {
-        //     application.features = features;
-        //     // calculate areaHectares
-        //     let areaHectares = 0;
-        //     _.each(application.features, function (f) {
-        //       if (f['properties']) {
-        //         areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
-        //       }
-        //     });
-        //     application.areaHectares = areaHectares;
-        //   })
-        // );
+        promises.push(this.searchService.getByDTID(application.tantalisID.toString())
+          .toPromise()
+          .then(features => {
+            application.features = features;
+            // calculate areaHectares
+            let areaHectares = 0;
+            _.each(application.features, function (f) {
+              if (f['properties']) {
+                areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
+              }
+            });
+            application.areaHectares = areaHectares;
+          })
+        );
 
         return Promise.all(promises).then(() => {
           this.application = application;

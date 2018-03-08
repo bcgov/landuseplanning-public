@@ -401,7 +401,7 @@ export class ApiService {
   //
   getBCGWCrownLands(id: string) {
     const fields = ['name', 'isImported'];
-    let queryString = 'public/search/bcgw/crownLandsId/' + id + '?fields=';
+    let queryString = 'search/bcgw/crownLandsId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });
@@ -412,7 +412,7 @@ export class ApiService {
 
   getBCGWDispositionTransactionId(id: string) {
     const fields = ['name'];
-    let queryString = 'public/search/bcgw/dispositionTransactionId/' + id + '?fields=';
+    let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });
