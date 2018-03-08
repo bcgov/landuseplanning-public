@@ -1,6 +1,8 @@
 import { HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
@@ -17,6 +19,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   private showOnlyOpenApps = false;
   public applications: Array<Application> = [];
   public currentApp: Application = null;
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   @HostBinding('class.full-screen') fullScreen = true;
 
@@ -28,17 +31,31 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // get data directly from resolver
-    this.applications = this.route.snapshot.data['applications'];
-
-    // applications not found --> navigate back to home
-    if (!this.applications) {
-      alert('Uh-oh, couldn\'t load applications');
-      this.router.navigate(['/']);
-    }
+    // get data from route resolver
+    this.route.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        (data: { applications: Application[] }) => {
+          if (data.applications) {
+            this.applications = data.applications;
+          } else {
+            // applications not found --> navigate back to home
+            alert('Uh-oh, couldn\'t load applications');
+            this.router.navigate(['/']);
+          }
+        },
+        error => {
+          console.log(error);
+          alert('Uh-oh, couldn\'t load applications');
+          this.router.navigate(['/']);
+        }
+      );
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   private isCurrentApp(item): boolean {
     return (item === this.currentApp);

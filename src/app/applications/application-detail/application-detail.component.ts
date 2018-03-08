@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { DialogService } from 'ng2-bootstrap-modal';
-// import { TransformationType, Direction } from 'angular-coordinates';
 
 import { Application } from '../../models/application';
 import { ApplicationService } from 'app/services/application.service';
@@ -34,14 +33,25 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // get data directly from resolver
-    this.application = this.route.snapshot.data['application'];
-
-    // application not found --> navigate back to application list
-    if (!this.application || !this.application._id) {
-      alert('Uh-oh, couldn\'t load application');
-      this.router.navigate(['/applications']);
-    }
+    // get data from route resolver
+    this.route.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        (data: { application: Application }) => {
+          if (data.application) {
+            this.application = data.application;
+          } else {
+            // application not found --> navigate back to application list
+            alert('Uh-oh, couldn\'t load application');
+            this.router.navigate(['/applications']);
+          }
+        },
+        error => {
+          console.log(error);
+          alert('Uh-oh, couldn\'t load application');
+          this.router.navigate(['/applications']);
+        }
+      );
   }
 
   ngOnDestroy() {
