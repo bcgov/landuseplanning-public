@@ -1,5 +1,5 @@
 <div class="application-detail" id="anchor-point">
-  <div class="container"  *ngIf="application" id="anchor-point">
+  <div class="container" *ngIf="application" id="anchor-point">
     <div class="row">
       <main class="col-lg-5 application-tombstone">
         <section>
@@ -10,8 +10,7 @@
           <div class="item">
             <div class="row">
               <div class="col">
-                <span class="badge"
-                [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
+                <span class="badge" [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
                             'badge-secondary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
                             'badge-danger' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
                             'badge-success' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
@@ -56,8 +55,8 @@
 
           <div class="item row">
             <div class="col-6">
-              <label>Area (ha)</label>
-              <p class="value">{{application.areaHectares ? application.areaHectares : "-"}}</p>
+              <label>Area (hectares)</label>
+              <p class="value">{{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</p>
             </div>
             <div class="col-6">
               <label>Location</label>
