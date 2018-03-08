@@ -67,6 +67,7 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
                 }
               );
           } else {
+            // application not found --> navigate back to application list
             alert('Uh-oh, couldn\'t load application');
             this.loading = false;
             this.router.navigate(['/applications']);
@@ -74,7 +75,9 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
         },
         error => {
           console.log(error);
+          alert('Uh-oh, couldn\'t load application');
           this.loading = false;
+          this.router.navigate(['/applications']);
         }
       );
   }

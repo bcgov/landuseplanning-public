@@ -29,12 +29,15 @@ export class DecisionsTabContentComponent implements OnInit, OnDestroy {
           if (data.application) {
             this.application = data.application;
           } else {
+            // application not found --> navigate back to application list
             alert('Uh-oh, couldn\'t load application');
             this.router.navigate(['/applications']);
           }
         },
         error => {
           console.log(error);
+          alert('Uh-oh, couldn\'t load application');
+          this.router.navigate(['/applications']);
         }
       );
   }
