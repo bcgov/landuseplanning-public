@@ -123,6 +123,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           this.progressBufferValue += 100 * file.size / this.totalSize;
 
           // TODO: improve progress bar by listening to progress events
+          // see https://stackoverflow.com/questions/37158928/angular-2-http-progress-bar
           // see https://angular.io/guide/http#listening-to-progress-events
           observables.push(this.documentService.upload(formData)
             .map(document => {
