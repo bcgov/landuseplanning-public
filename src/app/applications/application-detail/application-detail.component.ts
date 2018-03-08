@@ -39,7 +39,7 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
 
     // application not found --> navigate back to application list
     if (!this.application || !this.application._id) {
-      alert('Uh-oh, application not found');
+      alert('Uh-oh, couldn\'t load application');
       this.router.navigate(['/applications']);
     }
   }

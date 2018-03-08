@@ -51,7 +51,7 @@ export class ApiService {
 
   public handleError(error: any): ErrorObservable {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
-    console.log(reason);
+    console.log('API error =', reason);
     return Observable.throw(reason);
   }
 

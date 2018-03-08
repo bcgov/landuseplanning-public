@@ -92,48 +92,58 @@ export class ApplicationService {
         // return the first (only) application
         return applications.length > 0 ? new Application(applications[0]) : null;
       })
-      .map((application: Application) => {
+      .mergeMap((application: Application) => {
         if (!application) { return null; }
+
+        const promises: Array<Promise<any>> = [];
 
         // now get the organization
         if (application._organization) {
-          this.organizationService.getById(application._organization, forceReload).subscribe(
-            organization => application.organization = organization
+          promises.push(this.organizationService.getById(application._organization, forceReload)
+            .toPromise()
+            .then(organization => application.organization = organization)
           );
         }
 
         // now get the documents
-        this.documentService.getAllByApplicationId(application._id).subscribe(
-          documents => application.documents = documents
+        promises.push(this.documentService.getAllByApplicationId(application._id)
+          .toPromise()
+          .then(documents => application.documents = documents)
         );
 
         // now get the current comment period
-        this.commentPeriodService.getAllByApplicationId(application._id).subscribe(
-          periods => application.currentPeriod = this.commentPeriodService.getCurrent(periods)
+        promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
+          .toPromise()
+          .then(periods => application.currentPeriod = this.commentPeriodService.getCurrent(periods))
         );
 
         // now get the decision
-        this.decisionService.getByApplicationId(application._id, forceReload).subscribe(
-          decision => application.decision = decision
+        promises.push(this.decisionService.getByApplicationId(application._id, forceReload)
+          .toPromise()
+          .then(decision => application.decision = decision)
         );
 
         // now get the shapes
-        this.searchService.getByDTID(application.tantalisID.toString()).subscribe(
-          features => {
-            application.features = features;
-            // calculate areaHectares
-            let areaHectares = 0;
-            _.each(application.features, function (f) {
-              if (f['properties']) {
-                areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
-              }
-            });
-            application.areaHectares = areaHectares;
-          }
-        );
+        // NOT WORKING YET
+        // promises.push(this.searchService.getByDTID(application.tantalisID.toString())
+        //   .toPromise()
+        //   .then(features => {
+        //     application.features = features;
+        //     // calculate areaHectares
+        //     let areaHectares = 0;
+        //     _.each(application.features, function (f) {
+        //       if (f['properties']) {
+        //         areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
+        //       }
+        //     });
+        //     application.areaHectares = areaHectares;
+        //   })
+        // );
 
-        this.application = application;
-        return this.application;
+        return Promise.all(promises).then(() => {
+          this.application = application;
+          return this.application;
+        });
       })
       .catch(this.api.handleError);
   }

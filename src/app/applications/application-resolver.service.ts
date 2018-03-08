@@ -13,10 +13,7 @@ export class ApplicationListResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application[] | ErrorObservable> {
     return this.applicationService.getAll()
-      .catch(err => {
-        alert('Uh-oh, could not resolve application list');
-        return Observable.throw(err);
-      });
+      .catch(err => { return Observable.of(null); });
   }
 }
 
@@ -25,12 +22,9 @@ export class ApplicationDetailResolver implements Resolve<Application> {
 
   constructor(private applicationService: ApplicationService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application> | ErrorObservable {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application> {
     const appId = route.paramMap.get('appId');
     return this.applicationService.getById(appId)
-      .catch(err => {
-        alert('Uh-oh, could not resolve application detail');
-        return Observable.throw(err);
-      });
+      .catch(err => { return Observable.of(null); });
   }
 }

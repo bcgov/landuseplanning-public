@@ -1,97 +1,97 @@
 <div class="application-detail" id="anchor-point">
-<div class="container" id="anchor-point">
-  <div class="row">
-    <main class="col-lg-5 application-tombstone">
-      <section>
-        <div class="item organization-item">
-          <p>{{application.organization ? application.organization.name : 'Unknown Proponent'}}</p>
-        </div>
+  <div class="container"  *ngIf="application" id="anchor-point">
+    <div class="row">
+      <main class="col-lg-5 application-tombstone">
+        <section>
+          <div class="item organization-item">
+            <p>{{application.organization ? application.organization.name : 'Unknown Proponent'}}</p>
+          </div>
 
-        <div class="item">
-          <div class="row">
-            <div class="col">
-              <span class="badge" 
+          <div class="item">
+            <div class="row">
+              <div class="col">
+                <span class="badge"
                 [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
                             'badge-secondary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
                             'badge-danger' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
                             'badge-success' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
-                {{commentPeriodService.getStatus(application.currentPeriod)}}
-              </span>
+                  {{commentPeriodService.getStatus(application.currentPeriod)}}
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p class="title">{{applicationService.getStatus(application)}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <label>Purpose</label>
+                <p class="value">{{application.purpose || "-" | titlecase}}</p>
+              </div>
+              <div class="col-6">
+                <label>Subpurpose</label>
+                <p class="value">{{application.subpurpose || "-" | titlecase}}</p>
+              </div>
+              <div class="col-6">
+                <label>Tenure Type</label>
+                <p class="value">{{application.type || "-" | titlecase}}</p>
+              </div>
+              <div class="col-6">
+                <label>Tenure Subtype</label>
+                <p class="value">{{application.subtype || "-" | titlecase}}</p>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col">
-              <p class="title">{{applicationService.getStatus(application)}}</p>
-            </div>
+
+          <div class="map-thumbnail mb-2" (click)="gotoMap()" title="Click to see full page map">
+            <app-application-map class="map-container" [application]="application" [zoom]="6"></app-application-map>
           </div>
-          <div class="row">
+
+          <div class="item">
+            <label>Description</label>
+            <p class="value" *ngIf="application.description" [innerHTML]="application.description | newlines"></p>
+            <p class="value" *ngIf="!application.description">-</p>
+          </div>
+
+          <div class="item row">
             <div class="col-6">
-              <label>Purpose</label>
-              <p class="value">{{application.purpose || "-" | titlecase}}</p>
+              <label>Area (ha)</label>
+              <p class="value">{{application.areaHectares ? application.areaHectares : "-"}}</p>
             </div>
             <div class="col-6">
-              <label>Subpurpose</label>
-              <p class="value">{{application.subpurpose || "-" | titlecase}}</p>
+              <label>Location</label>
+              <p class="value">{{application.location || "-"}}</p>
             </div>
             <div class="col-6">
-              <label>Tenure Type</label>
-              <p class="value">{{application.type || "-" | titlecase}}</p>
-            </div>
-            <div class="col-6">
-              <label>Tenure Subtype</label>
-              <p class="value">{{application.subtype || "-" | titlecase}}</p>
+              <label>Region</label>
+              <p class="value">{{application.region || "-"}}</p>
             </div>
           </div>
-        </div>
 
-        <div class="map-thumbnail mb-2" (click)="gotoMap()" title="Click to see full page map">
-          <app-application-map class="map-container" [application]="application" [zoom]="6"></app-application-map>
-        </div>
-
-        <div class="item">
-          <label>Description</label>
-          <p class="value" *ngIf="application.description" [innerHTML]="application.description | newlines"></p>
-          <p class="value" *ngIf="!application.description">-</p>
-        </div>
-
-        <div class="item row">
-          <div class="col-6">
-            <label>Area (ha)</label>
-            <p class="value">{{application.areaHectares ? application.areaHectares : "-"}}</p>
+          <div class="item">
+            <label>Crown Land File(s)</label>
+            <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
           </div>
-          <div class="col-6">
-            <label>Location</label>
-            <p class="value">{{application.location || "-"}}</p>
+        </section>
+      </main>
+
+      <!-- TODO: instead of the tabs, this could be a map -->
+      <aside class="col-lg-7 application-tabs">
+        <button class="btn btn-warning" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Submit a Comment</button>
+        <section>
+          <div role="navigation">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
+                <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive">{{tabLink.label}}</a>
+              </li>
+            </ul>
           </div>
-          <div class="col-6">
-            <label>Region</label>
-            <p class="value">{{application.region || "-"}}</p>
-          </div>
-        </div>
 
-        <div class="item">
-          <label>Crown Land File(s)</label>
-          <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
-        </div>
-      </section>
-    </main>
+          <router-outlet></router-outlet>
 
-    <!-- TODO: instead of the tabs, this could be a map -->
-    <aside class="col-lg-7 application-tabs">
-      <button class="btn btn-warning" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Submit a Comment</button>
-      <section>
-        <div role="navigation">
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
-              <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive">{{tabLink.label}}</a>
-            </li>
-          </ul>
-        </div>
-
-        <router-outlet></router-outlet>
-
-      </section>
-    </aside>
+        </section>
+      </aside>
+    </div>
   </div>
-</div>
 </div>

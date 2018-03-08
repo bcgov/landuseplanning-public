@@ -29,7 +29,7 @@ export class ApplicationTabContentComponent implements OnInit, OnDestroy {
           if (data.application) {
             this.application = data.application;
           } else {
-            alert('Uh-oh, application not found');
+            alert('Uh-oh, couldn\'t load application');
             this.router.navigate(['/applications']);
           }
         },

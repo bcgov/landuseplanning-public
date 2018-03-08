@@ -33,7 +33,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
     // applications not found --> navigate back to home
     if (!this.applications) {
-      alert('Uh-oh, applications not found');
+      alert('Uh-oh, couldn\'t load applications');
       this.router.navigate(['/']);
     }
   }
