@@ -83,7 +83,7 @@ export class ApiService {
       'longitude',
       'mapsheet',
       'postID',
-      'projectDate',
+      'projectDate', // TODO: change to publishDate
       '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
@@ -132,7 +132,7 @@ export class ApiService {
       'longitude',
       'mapsheet',
       'postID',
-      'projectDate',
+      'projectDate', // TODO: change to publishDate
       '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
@@ -182,7 +182,6 @@ export class ApiService {
       '_application',
       'code',
       'name',
-      'decisionDate',
       'description'
     ];
     let queryString = 'decision?_application=' + appId + '&fields=';
@@ -200,7 +199,6 @@ export class ApiService {
       '_application',
       'code',
       'name',
-      'decisionDate',
       'description'
     ];
     let queryString = 'decision/' + id + '?fields=';
