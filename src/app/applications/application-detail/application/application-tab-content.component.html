@@ -1,7 +1,7 @@
 <div class="tab-pane" id="application" role="tabpanel">
     <section class="tab-section">
-        <div *ngIf="application && application.projectDate">
-            <p class="value">Published on {{application.projectDate | date:'longDate'}}</p>
+        <div *ngIf="application && application.publishDate">
+            <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
         </div>
 
         <div>
