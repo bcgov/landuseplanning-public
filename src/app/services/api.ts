@@ -182,7 +182,6 @@ export class ApiService {
       '_application',
       'code',
       'name',
-      'decisionDate',
       'description'
     ];
     let queryString = 'decision?_application=' + appId + '&fields=';
@@ -200,7 +199,6 @@ export class ApiService {
       '_application',
       'code',
       'name',
-      'decisionDate',
       'description'
     ];
     let queryString = 'decision/' + id + '?fields=';

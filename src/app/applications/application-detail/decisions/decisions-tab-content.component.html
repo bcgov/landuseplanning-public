@@ -4,9 +4,10 @@
             <em>No decisions have been made for this application at this time.</em>
         </div>
 
-        <div *ngIf="application?.decision?.decisionDate" class="decision-date">
+        <!-- TODO: put decision status here -->
+        <!-- <div *ngIf="application?.decision?.decisionDate" class="decision-date">
             Decision Date: {{application.decision.decisionDate | date:'longDate'}}
-        </div>
+        </div> -->
 
         <div *ngIf="application?.decision?.description">
             <p class="title">Decision Description</p>

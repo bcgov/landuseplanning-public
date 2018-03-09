@@ -6,7 +6,6 @@ export class Decision {
     _application: string; // objectid -> Application
     code: string;
     name: string;
-    decisionDate: Date;
     description: string;
 
     documents: Array<Document>;
@@ -17,7 +16,6 @@ export class Decision {
       this._application = obj && obj._application || null;
       this.code         = obj && obj.code         || null;
       this.name         = obj && obj.name         || null;
-      this.decisionDate = obj && obj.decisionDate || null;
       this.description  = obj && obj.description  || null;
 
       this.documents = [];
