@@ -19,12 +19,27 @@
 
       <div class="modal-body">
         <h5>How It Works</h5>
-        <p>All accepted comments submitted to the Public Review and Comment Website will be published online within one week
+        <!-- <p>All accepted comments submitted to the Public Review and Comment Website will be published online within one week
           of receipt. Commenters can choose whether they want their name to be published along with their comments or whether
           they wish to remain anonymous to other commenters. Comments are not accepted if they are profane, abusive, or do
           not relate to the matter being consulted upon as stated in our Moderation Policy.</p>
         <p>All comments will be provided to the decision maker. The decision maker may also respond with follow up questions
-          (e.g. if the decision maker wants more information).</p>
+          (e.g. if the decision maker wants more information).</p> -->
+        <p>Your comments, including but not limited to your opinion, name, phone number, email and mailing address, are collected
+          by the Ministry of Forests, Lands, and Natural Resource Operations &amp; Rural Development (the Ministry) under
+          Section 26(c) of the
+          <em>Freedom of Information and Protection of Privacy Act</em> for the purposes of collecting your thoughts on Crown
+          Land Applications. Your personal information may be used by the Ministry to contact you to follow up on your comments.
+          Should you have any questions about the collection of personal information, please contact:
+        </p>
+        <p>
+          <em>Program Director</em>
+          <br> 5th Floor - 727 Fisgard Street
+          <br> Victoria BC V8W 9R1
+          <br> Canada
+          <br>
+          <strong>1-877-855-3222</strong>
+        </p>
 
         <div class="row">
           <div class="form-check col-12">
@@ -36,7 +51,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="p1_next()" [disabled]="!iAgreeModel" >Next</button>
+        <button type="button" class="btn btn-primary" (click)="p1_next()" [disabled]="!iAgreeModel">Next</button>
       </div>
     </div>
   </form>
@@ -74,12 +89,12 @@
                 #orgName="ngModel" />
             </div>
 
-            <div class="form-check col-lg-12">
+            <!-- <div class="form-check col-lg-12">
               <input type="checkbox" class="form-check-input" id="requestedAnonymous" name="requestedAnonymous" [(ngModel)]="comment.commentAuthor.requestedAnonymous"
                 #requestedAnonymous="ngModel" />
               <label for="requestedAnonymous" class="form-check-label">Make me anonymous. (Checking this option will hide your name, location and organization on the public site.
                 Your email and phone are never public.)</label>
-            </div>
+            </div> -->
 
             <div class="form-group col-lg-6 required">
               <label for="email" class="control-label">Email</label>
@@ -153,6 +168,7 @@
     <div class="modal-body">
       <div style="text-align: center;">
         <h3>Thank you for your comment!</h3>
+        <p>All comments will be provided to the decision maker.</p>
         <img src="assets/images/check.png">
       </div>
     </div>
