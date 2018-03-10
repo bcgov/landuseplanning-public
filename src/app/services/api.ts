@@ -85,7 +85,6 @@ export class ApiService {
       'mapsheet',
       'postID',
       'projectDate', // TODO: change to publishDate
-      '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
       'region',
@@ -135,7 +134,6 @@ export class ApiService {
       'mapsheet',
       'postID',
       'projectDate', // TODO: change to publishDate
-      '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
       'region',
