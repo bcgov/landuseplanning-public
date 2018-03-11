@@ -32,6 +32,11 @@ export class DecisionService {
       .map((decision: Decision) => {
         if (!decision) { return null; }
 
+        // replace \\n (JSON format) with newlines
+        if (decision.description) {
+          decision.description = decision.description.replace(/\\n/g, '\n');
+        }
+
         // now grab the decision documents
         this.documentService.getAllByDecisionId(decision._id).subscribe(
           documents => decision.documents = documents,
@@ -57,6 +62,11 @@ export class DecisionService {
       })
       .map((decision: Decision) => {
         if (!decision) { return null; }
+
+        // replace \\n (JSON format) with newlines
+        if (decision.description) {
+          decision.description = decision.description.replace(/\\n/g, '\n');
+        }
 
         // now grab the decision documents
         this.documentService.getAllByDecisionId(decision._id).subscribe(

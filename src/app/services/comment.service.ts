@@ -30,7 +30,7 @@ export class CommentService {
     return this.commentPeriodService.getAllByApplicationId(appId)
       .mergeMap((periods: CommentPeriod[]) => {
         if (periods.length === 0) {
-          return Observable.of([]);
+          return Observable.of([] as Comment[]);
         }
 
         const promises: Array<Promise<any>> = [];
@@ -57,6 +57,23 @@ export class CommentService {
         });
         return comments;
       })
+      .map((comments: Comment[]) => {
+        if (comments.length === 0) {
+          return [] as Comment[];
+        }
+
+        // replace \\n (JSON format) with newlines in each comment
+        comments.forEach((comment, i) => {
+          if (comments[i].comment) {
+            comments[i].comment = comments[i].comment.replace(/\\n/g, '\n');
+          }
+          if (comments[i].review && comments[i].review.reviewerNotes) {
+            comments[i].review.reviewerNotes = comments[i].review.reviewerNotes.replace(/\\n/g, '\n');
+          }
+        });
+
+        return comments;
+      })
       .catch(this.api.handleError);
   }
 
@@ -75,6 +92,14 @@ export class CommentService {
       .map((comment: Comment) => {
         if (!comment) { return null; }
 
+        // replace \\n (JSON format) with newlines
+        if (comment.comment) {
+          comment.comment = comment.comment.replace(/\\n/g, '\n');
+        }
+        if (comment.review && comment.review.reviewerNotes) {
+          comment.review.reviewerNotes = comment.review.reviewerNotes.replace(/\\n/g, '\n');
+        }
+
         // now grab the comment documents
         this.documentService.getAllByCommentId(comment._id).subscribe(
           documents => comment.documents = documents,
@@ -88,40 +113,25 @@ export class CommentService {
   }
 
   add(comment: Comment): Observable<Comment> {
-    return this.api.addComment(this.sanitizeComment(comment))
+    // ID must not exist on POST
+    delete comment._id;
+
+    // don't send documents
+    delete comment.documents;
+
+    // replace newlines with \\n (JSON format)
+    if (comment.comment) {
+      comment.comment = comment.comment.replace(/\n/g, '\\n');
+    }
+    if (comment.review && comment.review.reviewerNotes) {
+      comment.review.reviewerNotes = comment.review.reviewerNotes.replace(/\n/g, '\\n');
+    }
+
+    return this.api.addComment(this.comment)
       .map((res: Response) => {
         const c = res.text() ? res.json() : null;
         return c ? new Comment(c) : null;
       })
       .catch(this.api.handleError);
   }
-
-  // deletes object keys the API doesn't want on POST
-  private sanitizeComment(comment: Comment): Comment {
-    delete comment._id;
-    delete comment._addedBy;
-    // keep _commentPeriod
-    delete comment.commentNumber;
-    // keep comment
-    // replace newlines with \\n (JSON format)
-    comment.comment = comment.comment.replace(/\n/g, '\\n');
-    // keep comment.commentAuthor
-    // keep comment.commentAuthor.internal
-    delete comment.review;
-    delete comment.dateAdded;
-    delete comment.commentStatus;
-    delete comment.documents; // API doesn't even look at this
-
-    return comment;
-  }
-
-  // NOT USED
-  // save(comment: Comment): Observable<Comment> {
-  //   return this.api.saveComment(comment)
-  //     .map((res: Response) => {
-  //       const c = res.text() ? res.json() : null;
-  //       return c ? new Comment(c) : null;
-  //     })
-  //     .catch(this.api.handleError);
-  // }
 }

@@ -29,6 +29,20 @@ export class CommentPeriodService {
         });
         return periods;
       })
+      .map((periods: CommentPeriod[]) => {
+        if (periods.length === 0) {
+          return [] as CommentPeriod[];
+        }
+
+        // replace \\n (JSON format) with newlines in each comment period
+        periods.forEach((period, i) => {
+          if (periods[i].description) {
+            periods[i].description = periods[i].description.replace(/\\n/g, '\n');
+          }
+        });
+
+        return periods;
+      })
       .catch(this.api.handleError);
   }
 
@@ -44,10 +58,15 @@ export class CommentPeriodService {
         // return the first (only) comment period
         return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
       })
-      .map((commentPeriod: CommentPeriod) => {
-        if (!commentPeriod) { return null; }
+      .map((period: CommentPeriod) => {
+        if (!period) { return null; }
 
-        this.commentPeriod = commentPeriod;
+        // replace \\n (JSON format) with newlines
+        if (period.description) {
+          period.description = period.description.replace(/\\n/g, '\n');
+        }
+
+        this.commentPeriod = period;
         return this.commentPeriod;
       })
       .catch(this.api.handleError);
