@@ -6,24 +6,78 @@ import 'rxjs/add/operator/catch';
 
 import { ApiService } from './api';
 import { Search } from 'app/models/search';
+import { Feature } from 'app/models/feature';
+import { Client } from 'app/models/client';
 
 @Injectable()
 export class SearchService {
+  private search: Search = null;
+  private features: Feature[] = null;
+  private clients: Client[] = null;
 
   constructor(private api: ApiService) { }
 
-  getByCLFile(clfile: string): Observable<Search> {
-    return this.api.getBCGWCrownLands(clfile)
+  getClientsByDispositionId(dispositionId: number, forceReload: boolean = false): Observable<Client[]> {
+    if (this.clients && this.clients.length > 0 && +this.clients[0].ORGANIZATIONS_LEGAL_NAME === dispositionId && !forceReload) {
+      return Observable.of(this.clients);
+    }
+
+    return this.api.getClientsInfoByDispositionId(dispositionId)
       .map((res: Response) => {
-        return res.text() ? new Search(res.json()) : null;
+        const clients = res.text() ? res.json() : [];
+        clients.forEach((client, i) => {
+          clients[i] = new Client(client);
+        });
+        return clients;
+      })
+      .map((clients: Client[]) => {
+        if (clients.length === 0) {
+          return [];
+        }
+
+        // console.log('new clients =', clients);
+        this.clients = clients;
+        return this.clients;
       });
   }
 
-  getByDTID(dtid: string): Observable<object[]> {
+  getByCLFile(clfile: string, forceReload: boolean = false): Observable<Search> {
+    if (this.search && this.search._id === clfile && !forceReload) {
+      return Observable.of(this.search);
+    }
+
+    return this.api.getBCGWCrownLands(clfile)
+      .map((res: Response) => {
+        return res.text() ? new Search(res.json()) : null;
+      })
+      .map((search: Search) => {
+        if (!search) { return null; }
+
+        this.search = search;
+        return this.search;
+      });
+  }
+
+  getByDTID(dtid: string, forceReload: boolean = false): Observable<Feature[]> {
+    // TODO: fix - map error when using cached data!?
+    // if (this.features && this.features[0].properties.DISPOSITION_TRANSACTION_SID === +dtid && !forceReload) {
+    //   console.log('cached features =', this.features);
+    //   return Observable.of(this.features);
+    // }
+
+    console.log('dtid =', dtid);
+
     return this.api.getBCGWDispositionTransactionId(dtid)
       .map((res: Response) => {
         const results = res.text() ? new Search(res.json()) : null;
         return results.features;
+      })
+      .map((features: Feature[]) => {
+        if (!features) { return null; }
+
+        console.log('new features =', features);
+        this.features = features;
+        return this.features;
       });
   }
 }

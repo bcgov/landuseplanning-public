@@ -407,6 +407,17 @@ export class ApiService {
     return this.get(queryString);
   }
 
+  getClientsInfoByDispositionId(id: number) {
+    const fields = ['name'];
+    let queryString = 'search/bcgw/getClientsInfoByDispositionId/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
   //
   // Users
   //
