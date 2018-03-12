@@ -177,6 +177,7 @@ export class ApplicationService {
       case 'ABANDONED': return 'Application Abandoned';
       case 'ACCEPTED': return 'Application Under Review';
       case 'ALLOWED': return 'Decision: Allowed';
+      case 'CANCELLED': return 'Application Cancelled';
       case 'DISALLOWED': return 'Decision: Not Approved';
       case 'DISPOSITION IN GOOD STANDING': return 'Tenure: Disposition in Good Standing';
       case 'OFFER ACCEPTED': return 'Decision: Offer Accepted';
@@ -192,6 +193,7 @@ export class ApplicationService {
   isDecision(status: string): boolean {
     const s = status.toUpperCase();
     return (s === 'ALLOWED'
+      || s === 'CANCELLED'
       || s === 'DISALLOWED'
       || s === 'OFFER ACCEPTED'
       || s === 'OFFER NOT ACCEPTED'
