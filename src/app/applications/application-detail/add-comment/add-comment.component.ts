@@ -104,14 +104,12 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.progressBufferValue += 100 * commentSize / this.totalSize;
     this.commentService.add(this.comment)
       .toPromise()
-      .then(
-        comment => {
-          this.progressValue += 100 * commentSize / this.totalSize;
-          this.comment = comment;
-          return comment;
-        }
-      )
-      .then(comment => {
+      .then((comment: Comment) => {
+        this.progressValue += 100 * commentSize / this.totalSize;
+        this.comment = comment;
+        return comment;
+      })
+      .then((comment: Comment) => {
         // then upload all documents
         const observables: Array<Observable<Document>> = [];
 
@@ -126,7 +124,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           // see https://stackoverflow.com/questions/37158928/angular-2-http-progress-bar
           // see https://angular.io/guide/http#listening-to-progress-events
           observables.push(this.documentService.upload(formData)
-            .map(document => {
+            .map((document: Document) => {
               this.progressValue += 100 * file.size / this.totalSize;
               return document;
             })

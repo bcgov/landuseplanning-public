@@ -1,9 +1,69 @@
-// Base
 @import "~assets/styles/base.scss";
-
-// Components
 @import "~assets/styles/components/aside.scss";
 @import "~assets/styles/components/card.scss";
 @import "~assets/styles/components/hero-banner.scss";
-@import "~assets/styles/components/feature-block.scss";
 @import "~assets/styles/components/lists.scss";
+.contact-us {
+    color: $font-gray;
+    background-color: #fff;
+    height: 30rem;
+    background-position: center;
+    background-size: cover;
+    background-image: url("~assets/images/map.jpg");
+    background-repeat: no-repeat;
+    h1 {
+        font-size: 2rem;
+        line-height: 2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+    }
+    li {
+        line-height: 2rem;
+    }
+    main,
+    aside {
+        margin-top: 0;
+    }
+    .fast-fact {
+        text-align: left;
+        color: $font-gray;
+        background-color: #fff;
+        border: 1px solid $font-gray;
+    }
+}
+
+@media (min-width: 768px) {
+    .contact-us {
+        h1 {
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+            line-height: 1.8rem;
+        }
+    }
+}
+
+@media (min-width: 992px) {
+    .contact-us {
+        h1 {
+            font-size: 2.8rem;
+            line-height: 2.8rem;
+        }
+        h2 {
+            line-height: 2rem;
+            font-size: 2rem;
+        }
+        main,
+        aside {
+            margin-top: 1.5rem;
+        }
+        .fast-fact {
+            box-shadow: 3px 3px 9px;
+            border-radius: 5px;
+        }
+    }
+}
