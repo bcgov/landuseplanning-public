@@ -1,25 +1,7 @@
-<<<<<<< HEAD
-<div class="tab-pane" id="application" role="tabpanel">
-    <section class="tab-section">
-        <div>
-            <p class="title">Description</p>
-            <div *ngIf="application?.description">
-                {{application.description}}
-            </div>
-
-            <div class="row">
-                <div class="col-12" *ngFor="let document of application?.documents">
-                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
-                    </a>
-                </div>
-            </div>
-=======
 <div class="tab-pane" role="tabpanel">
     <section class="tab-section" *ngIf="application">
         <div *ngIf="application.publishDate">
             <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
->>>>>>> 68f6d71f8ad448d6dcbce6605083c85b8960fa01
         </div>
 
         <div>
@@ -47,16 +29,8 @@
             <p *ngIf="application.legalDescription" [innerHTML]="application.legalDescription | newlines"></p>
             <p *ngIf="!application.legalDescription">-</p>
         </div>
-<<<<<<< HEAD
-        <div *ngIf="application && application.publishDate">
-                <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
-            </div>
-    
-        <!-- <div *ngIf="application">
-=======
 
         <!-- <div>
->>>>>>> 68f6d71f8ad448d6dcbce6605083c85b8960fa01
             <p class="title">Area (ha)</p>
             <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
         </div>
