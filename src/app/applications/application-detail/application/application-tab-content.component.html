@@ -1,8 +1,9 @@
 <div class="tab-pane" role="tabpanel">
     <section class="tab-section" *ngIf="application">
-        <div *ngIf="application.publishDate">
-            <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
-        </div>
+        <div>
+            <h2 class="title">Description</h2>
+            <p>{{application.description || "-"}}</p>
+        </div>        
 
         <div>
             <h2 class="title">Application Documents</h2>
@@ -19,35 +20,8 @@
             </div>
         </div>
 
-        <div>
-            <h2 class="title">Business Unit</h2>
-            <p>{{application.businessUnit || "-"}}</p>
+        <div class="float-right" *ngIf="application.publishDate">
+            <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
         </div>
-
-        <div>
-            <h2 class="title">Legal Description</h2>
-            <p *ngIf="application.legalDescription" [innerHTML]="application.legalDescription | newlines"></p>
-            <p *ngIf="!application.legalDescription">-</p>
-        </div>
-
-        <!-- <div>
-            <p class="title">Area (ha)</p>
-            <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
-        </div>
-
-        <div>
-            <p class="title">Location</p>
-            <p class="value">{{application.location || "-"}}</p>
-        </div>
-
-        <div>
-            <p class="title">Region</p>
-            <p [innerHTML]="application.legalDescription | newlines"></p>
-        </div>
-
-        <div>
-            <p class="title">Crown Land File(s)</p>
-            <p class="value">{{application.cl_files ? application.cl_files.join(', ') : "-"}}</p>
-        </div> -->
     </section>
 </div>
