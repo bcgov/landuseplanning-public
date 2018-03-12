@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
@@ -41,19 +43,29 @@ export class ApplicationService {
     return this.getAllInternal()
       .mergeMap((applications: Application[]) => {
         if (applications.length === 0) {
-          return [];
+          return Observable.of([] as Application[]);
         }
+
+        // replace \\n (JSON format) with newlines in each application
+        applications.forEach((application, i) => {
+          if (applications[i].description) {
+            applications[i].description = applications[i].description.replace(/\\n/g, '\n');
+          }
+          if (applications[i].legalDescription) {
+            applications[i].legalDescription = applications[i].legalDescription.replace(/\\n/g, '\n');
+          }
+        });
 
         const promises: Array<Promise<any>> = [];
 
         // now get the organization for each application
-        applications.forEach((application, i) => {
-          if (applications[i]._organization) {
-            promises.push(this.organizationService.getById(applications[i]._organization)
-              .toPromise()
-              .then(organization => application.organization = organization));
-          }
-        });
+        // applications.forEach((application, i) => {
+        //   if (applications[i]._organization) {
+        //     promises.push(this.organizationService.getById(applications[i]._organization)
+        //       .toPromise()
+        //       .then(organization => application.organization = organization));
+        //   }
+        // });
 
         // now get the current comment period for each application
         applications.forEach((application, i) => {
@@ -93,17 +105,25 @@ export class ApplicationService {
         return applications.length > 0 ? new Application(applications[0]) : null;
       })
       .mergeMap((application: Application) => {
-        if (!application) { return null; }
+        if (!application) { return Observable.of(null as Application); }
+
+        // replace \\n (JSON format) with newlines
+        if (application.description) {
+          application.description = application.description.replace(/\\n/g, '\n');
+        }
+        if (application.legalDescription) {
+          application.legalDescription = application.legalDescription.replace(/\\n/g, '\n');
+        }
 
         const promises: Array<Promise<any>> = [];
 
         // now get the organization
-        if (application._organization) {
-          promises.push(this.organizationService.getById(application._organization, forceReload)
-            .toPromise()
-            .then(organization => application.organization = organization)
-          );
-        }
+        // if (application._organization) {
+        //   promises.push(this.organizationService.getById(application._organization, forceReload)
+        //     .toPromise()
+        //     .then(organization => application.organization = organization)
+        //   );
+        // }
 
         // now get the documents
         promises.push(this.documentService.getAllByApplicationId(application._id)
@@ -167,5 +187,14 @@ export class ApplicationService {
 
     // return status in title case
     return _.startCase(_.camelCase(application.status));
+  }
+
+  isDecision(status: string): boolean {
+    const s = status.toUpperCase();
+    return (s === 'ALLOWED'
+      || s === 'DISALLOWED'
+      || s === 'OFFER ACCEPTED'
+      || s === 'OFFER NOT ACCEPTED'
+      || s === 'OFFERED');
   }
 }

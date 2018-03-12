@@ -85,7 +85,6 @@ export class ApiService {
       'mapsheet',
       'postID',
       'projectDate', // TODO: change to publishDate
-      '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
       'region',
@@ -135,7 +134,6 @@ export class ApiService {
       'mapsheet',
       'postID',
       'projectDate', // TODO: change to publishDate
-      '_proponent', // TODO: change to _organization
       'purpose',
       'subpurpose',
       'region',
@@ -305,18 +303,6 @@ export class ApiService {
     return this.post(queryString, comment);
   }
 
-  // NOT USED
-  // saveComment(comment: Comment) {
-  //   const fields = ['comment', 'commentAuthor'];
-  //   let queryString = 'comment/' + comment._id + '?fields=';
-  //   _.each(fields, function (f) {
-  //     queryString += f + '|';
-  //   });
-  //   // Trim the last |
-  //   queryString = queryString.replace(/\|$/, '');
-  //   return this.put(queryString, comment);
-  // }
-
   //
   // Documents
   //
@@ -413,6 +399,17 @@ export class ApiService {
   getBCGWDispositionTransactionId(id: string) {
     const fields = ['name'];
     let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
+  getClientsInfoByDispositionId(id: number) {
+    const fields = ['name'];
+    let queryString = 'search/bcgw/getClientsInfoByDispositionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });

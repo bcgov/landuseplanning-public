@@ -30,7 +30,6 @@ export class Application {
   mapsheet: string;
   postID: number;
   publishDate: Date;
-  _organization: string; // objectid -> Organization
   client: string;
   purpose: string;
   subpurpose: string;
@@ -57,7 +56,6 @@ export class Application {
   isPublished = false;
 
   documents: Array<Document>;
-  organization: Organization;
   currentPeriod: CommentPeriod;
   decision: Decision;
   features: object[];
@@ -88,7 +86,6 @@ export class Application {
     this.mapsheet                = obj && obj.mapsheet                || null;
     this.postID                  = obj && obj.postID                  || null;
     this.publishDate             = obj && obj.projectDate             || null; // TODO: change to publishDate
-    this._organization           = obj && obj._proponent              || null; // TODO: change to _organization
     this.purpose                 = obj && obj.purpose                 || null;
     this.subpurpose              = obj && obj.subpurpose              || null;
     this.region                  = obj && obj.region                  || null;
@@ -114,7 +111,6 @@ export class Application {
     }
 
     this.documents = [];
-    this.organization = null;
     this.currentPeriod = null;
     this.decision = null;
     this.features = [];

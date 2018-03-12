@@ -3,6 +3,7 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
 
 import { ApiService } from './api';
 import { DocumentService } from './document.service';
@@ -30,7 +31,12 @@ export class DecisionService {
         return decisions.length > 0 ? new Decision(decisions[0]) : null;
       })
       .map((decision: Decision) => {
-        if (!decision) { return null; }
+        if (!decision) { return null as Decision; }
+
+        // replace \\n (JSON format) with newlines
+        if (decision.description) {
+          decision.description = decision.description.replace(/\\n/g, '\n');
+        }
 
         // now grab the decision documents
         this.documentService.getAllByDecisionId(decision._id).subscribe(
@@ -56,7 +62,12 @@ export class DecisionService {
         return decisions.length > 0 ? new Decision(decisions[0]) : null;
       })
       .map((decision: Decision) => {
-        if (!decision) { return null; }
+        if (!decision) { return null as Decision; }
+
+        // replace \\n (JSON format) with newlines
+        if (decision.description) {
+          decision.description = decision.description.replace(/\\n/g, '\n');
+        }
 
         // now grab the decision documents
         this.documentService.getAllByDecisionId(decision._id).subscribe(

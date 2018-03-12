@@ -1,4 +1,4 @@
-<div class="tab-pane" id="comments" role="tabpanel">
+<div class="tab-pane" role="tabpanel">
     <div class="spinner-container" *ngIf="loading" [@visibility]>
         <div class="spinner-new rotating"></div>
     </div>
@@ -21,7 +21,7 @@
         </div>
 
         <div *ngIf="application?.currentPeriod">
-            <p class="title">Comment Period Description</p>
+            <h2 class="title">Comment Period Description</h2>
             <p>{{application.currentPeriod.description}}</p>
         </div>
 

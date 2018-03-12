@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="tab-pane" id="application" role="tabpanel">
     <section class="tab-section">
         <div>
@@ -13,11 +14,17 @@
                     </a>
                 </div>
             </div>
+=======
+<div class="tab-pane" role="tabpanel">
+    <section class="tab-section" *ngIf="application">
+        <div *ngIf="application.publishDate">
+            <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
+>>>>>>> 68f6d71f8ad448d6dcbce6605083c85b8960fa01
         </div>
 
         <div>
-            <p class="title">Application Documents</p>
-            <div *ngIf="application?.documents.length === 0">
+            <h2 class="title">Application Documents</h2>
+            <div *ngIf="application.documents.length === 0">
                 <em>No documents have been uploaded for this application.</em>
             </div>
 
@@ -30,36 +37,41 @@
             </div>
         </div>
 
-        <div *ngIf="application">
-            <p class="title">Business Unit</p>
+        <div>
+            <h2 class="title">Business Unit</h2>
             <p>{{application.businessUnit || "-"}}</p>
         </div>
 
-        <div *ngIf="application">
-            <p class="title">Legal Description</p>
+        <div>
+            <h2 class="title">Legal Description</h2>
             <p *ngIf="application.legalDescription" [innerHTML]="application.legalDescription | newlines"></p>
             <p *ngIf="!application.legalDescription">-</p>
         </div>
+<<<<<<< HEAD
         <div *ngIf="application && application.publishDate">
                 <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
             </div>
     
         <!-- <div *ngIf="application">
+=======
+
+        <!-- <div>
+>>>>>>> 68f6d71f8ad448d6dcbce6605083c85b8960fa01
             <p class="title">Area (ha)</p>
             <p class="value">{{(application.areaHectares != NaN) ? application.areaHectares : "-"}}</p>
         </div>
 
-        <div *ngIf="application">
+        <div>
             <p class="title">Location</p>
             <p class="value">{{application.location || "-"}}</p>
         </div>
 
-        <div *ngIf="application">
+        <div>
             <p class="title">Region</p>
             <p [innerHTML]="application.legalDescription | newlines"></p>
         </div>
 
-        <div *ngIf="application">
+        <div>
             <p class="title">Crown Land File(s)</p>
             <p class="value">{{application.cl_files ? application.cl_files.join(', ') : "-"}}</p>
         </div> -->
