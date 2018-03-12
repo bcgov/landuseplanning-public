@@ -188,4 +188,13 @@ export class ApplicationService {
     // return status in title case
     return _.startCase(_.camelCase(application.status));
   }
+
+  isDecision(status: string): boolean {
+    const s = status.toUpperCase();
+    return (s === 'ALLOWED'
+      || s === 'DISALLOWED'
+      || s === 'OFFER ACCEPTED'
+      || s === 'OFFER NOT ACCEPTED'
+      || s === 'OFFERED');
+  }
 }

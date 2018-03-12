@@ -1,17 +1,13 @@
 @import "~assets/styles/base.scss";
 .tab-section {
-    // max-height: 74vh;
     overflow-y: auto;
     >div {
         margin: 1em;
     }
-    .decision-date {
-        width: fit-content;
-        border: 1px #f2e9bf solid;
-        border-radius: 5px;
-        padding: 0.5rem 1rem;
-        color: $primary;
-        background-color: #fffae7;
+    .status {
+        text-align: right;
+        font-size: large;
+        font-weight: bold;
     }
     .title {
         font-size: larger;
