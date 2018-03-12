@@ -128,7 +128,6 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
           observables.push(this.documentService.upload(formData)
             .map(document => {
               this.progressValue += 100 * file.size / this.totalSize;
-              console.log('document =', document);
               return document;
             })
             // .subscribe((event: HttpEventType) => {
@@ -173,7 +172,7 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
 
   // see https://stackoverflow.com/questions/34522306/focus-on-newly-added-input-element
   private focus(elem: ElementRef) {
-    console.log('elem =', elem);
+    // console.log('elem =', elem);
     if (elem && elem.nativeElement) {
       this.renderer.invokeElementMethod(elem.nativeElement, 'focus', []);
     }
