@@ -1,15 +1,14 @@
 @import "~assets/styles/base.scss";
-
 app-application-detail:host {
-  display: block;
-  // margin-top: 68px;
-  z-index: 998;
+    display: block;
+    // margin-top: 68px;
+    z-index: 998;
 }
 
 @media (max-width: 991px) {
-//   app-application-detail:host {
-//     margin-top: 52px;
-//   }
+    //   app-application-detail:host {
+    //     margin-top: 52px;
+    //   }
 }
 
 .map-thumbnail {
@@ -141,7 +140,7 @@ app-application-detail:host {
 }
 
 @media (min-width: 992px) {
-  .application-detail {
+    .application-detail {
         &:before {
             content: " ";
             position: fixed;
