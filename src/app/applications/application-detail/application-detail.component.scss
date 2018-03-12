@@ -12,6 +12,16 @@ app-application-detail:host {
 //   }
 }
 
+.map-thumbnail {
+    .map {
+        position: relative;
+        height: 300px;
+        outline: none;
+        touch-action: none;
+        background-color: #445a71;
+    }
+}
+
 .application-detail {
     .badge {
         text-transform: uppercase;

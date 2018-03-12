@@ -43,19 +43,20 @@
             </div>
           </div>
 
-          <div class="map-thumbnail mb-2" (click)="gotoMap()" title="Click to see full page map">
-            <app-application-map class="map-container" [application]="application" [zoom]="6"></app-application-map>
-          </div>
-
-          <div class="item">
-            <label>Description</label>
-            <p class="value" *ngIf="application.description" [innerHTML]="application.description | newlines"></p>
-            <p class="value" *ngIf="!application.description">-</p>
-          </div>
+          <section class="item map-thumbnail card p-0">
+              <div class="map-container">
+                  <div class="map" id="map"></div>
+              </div>
+          </section>
 
           <div class="item row">
+            <div class="col-12">
+              <label>GEOGRAPAHIC SHAPE INFORMATION</label>
+              <div *ngIf="application.features">This application has
+              <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file' : 'files'}}.<hr></div>
+            </div>
             <div class="col-6">
-              <label>Area (hectares)</label>
+              <label>Total Area (ha)</label>
               <p class="value">{{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</p>
             </div>
             <div class="col-6">
@@ -66,11 +67,36 @@
               <label>Region</label>
               <p class="value">{{application.region || "-"}}</p>
             </div>
+            <div class="col-6">
+              <label>Agency</label>
+              <p class="value">Crown Lands Allocation</p>
+            </div>
           </div>
 
-          <div class="item">
-            <label>Crown Land File(s)</label>
-            <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
+          <div class="item row" *ngFor="let feature of application.features">
+            <div class="col-6">
+              <label>Interest ID</label>
+              <p class="value">{{feature.properties.INTRID_SID}}</p>
+            </div>
+            <div class="col-6">
+                <label>Area (ha)</label>
+                <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2') : '-'}}</p>
+            </div>
+            <div class="col-12">
+              <label>Legal Description</label>
+              <p class="value">{{feature.properties.TENURE_LEGAL_DESCRIPTION}}</p>
+            </div>
+          </div>
+
+          <div class="item row">
+            <div class="col-6">
+              <label>Crown Land File</label>
+              <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
+            </div>
+            <div class="col-6">
+              <label>Disposition ID</label>
+              <p class="value">{{application.tantalisID || "-"}}</p>
+            </div>
           </div>
         </section>
       </main>

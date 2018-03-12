@@ -17,7 +17,7 @@
 
             <ng-template ngFor let-item [ngForOf]="applications">
                 <div *ngIf="showThisApp(item)" class="list-group-item" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
-                    <h2>{{item.organization ? item.organization.name : 'Unknown Proponent'}}</h2>
+                    <h2>{{item.client || 'Unknown Proponent'}}</h2>
                     <span class="badge" 
                       [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
                                   'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
