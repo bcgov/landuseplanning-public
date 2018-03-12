@@ -43,17 +43,19 @@
             </div>
           </div>
 
-          <section class="item map-thumbnail card p-0">
-              <div class="map-container">
-                  <div class="map" id="map"></div>
-              </div>
+          <section class="item map-thumbnail card p-0 mb-2">
+            <div class="map-container">
+              <div class="map" id="map"></div>
+            </div>
           </section>
 
           <div class="item row">
             <div class="col-12">
               <label>GEOGRAPAHIC SHAPE INFORMATION</label>
               <div *ngIf="application.features">This application has
-              <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file' : 'files'}}.<hr></div>
+                <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file' : 'files'}}.
+                <hr>
+              </div>
             </div>
             <div class="col-6">
               <label>Total Area (ha)</label>
@@ -79,8 +81,9 @@
               <p class="value">{{feature.properties.INTRID_SID}}</p>
             </div>
             <div class="col-6">
-                <label>Area (ha)</label>
-                <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2') : '-'}}</p>
+              <label>Area (ha)</label>
+              <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2')
+                : '-'}}</p>
             </div>
             <div class="col-12">
               <label>Legal Description</label>
