@@ -51,9 +51,20 @@ main {
                 color: $font-gray;
                 background-color: #fff;
                 border: 1px solid $font-gray;
+                margin-bottom: 0;
             }
         }
+        .feature-blocks>div {
+            margin-top: 1rem;
+        }
         .feature-blocks {
+            .feature-block {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                margin-bottom: 0;
+            }
             a {
                 color: white;
             }
@@ -82,12 +93,15 @@ main {
                     margin-top: 1.5rem;
                 }
             }
-        }
-        .about-info {
-            margin-top: 1.5rem;
-            .fast-fact {
-                box-shadow: 3px 3px 9px;
-                border-radius: 5px;
+            .about-info {
+                margin-top: 1.5rem;
+                .fast-fact {
+                    box-shadow: 3px 3px 9px;
+                    border-radius: 5px;
+                }
+            }
+            .feature-blocks>div {
+                margin-top: 0;
             }
         }
     }
