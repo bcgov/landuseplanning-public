@@ -1,105 +1,104 @@
 <div class="application-detail" id="anchor-point">
   <div class="container" *ngIf="application" id="anchor-point">
     <div class="row">
-      <main class="col-lg-5 application-tombstone">
-        <section>
-          <div class="item organization-item">
-            <p>{{application.client || '-'}}</p>
-          </div>
+      <main class="col-lg-5 application-info">
+        <section class="organization-item">
+          <p>{{application.client || '-'}}</p>
+        </section>
 
-          <div class="item">
-            <div class="row">
-              <div class="col">
-                <span class="badge" [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
+        <section class="application-item">
+          <!-- <div class="commenting-item">
+            <span>Commenting Open:</span>
+            <span>Mar 1, 2018 - Mar 31, 2018</span>>
+          </div> -->
+          <div class="row">
+            <div class="col">
+              <span class="badge" [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
                             'badge-secondary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
                             'badge-danger' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
                             'badge-success' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
-                  {{commentPeriodService.getStatus(application.currentPeriod)}}
-                </span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <p class="title">{{applicationService.getStatus(application)}}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <label>Purpose</label>
-                <p class="value">{{application.purpose || "-" | titlecase}}</p>
-              </div>
-              <div class="col-6">
-                <label>Subpurpose</label>
-                <p class="value">{{application.subpurpose || "-" | titlecase}}</p>
-              </div>
-              <div class="col-6">
-                <label>Tenure Type</label>
-                <p class="value">{{application.type || "-" | titlecase}}</p>
-              </div>
-              <div class="col-6">
-                <label>Tenure Subtype</label>
-                <p class="value">{{application.subtype || "-" | titlecase}}</p>
-              </div>
+                {{commentPeriodService.getStatus(application.currentPeriod)}}
+              </span>
             </div>
           </div>
-
-          <section class="item map-thumbnail card p-0 mb-2">
-            <div class="map-container">
-              <div class="map" id="map"></div>
-            </div>
-          </section>
-
-          <div class="item row">
-            <div class="col-12">
-              <label>GEOGRAPAHIC SHAPE INFORMATION</label>
-              <div *ngIf="application.features">This application has
-                <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file' : 'files'}}.
-                <hr>
-              </div>
-            </div>
-            <div class="col-6">
-              <label>Total Area (ha)</label>
-              <p class="value">{{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</p>
-            </div>
-            <div class="col-6">
-              <label>Location</label>
-              <p class="value">{{application.location || "-"}}</p>
-            </div>
-            <div class="col-6">
-              <label>Region</label>
-              <p class="value">{{application.region || "-"}}</p>
-            </div>
-            <div class="col-6">
-              <label>Agency</label>
-              <p class="value">Crown Lands Allocation</p>
+          <div class="row">
+            <div class="col">
+              <p class="title">{{applicationService.getStatus(application)}}</p>
             </div>
           </div>
-
-          <div class="item row" *ngFor="let feature of application.features">
+          <div class="row">
             <div class="col-6">
-              <label>Interest ID</label>
-              <p class="value">{{feature.properties.INTRID_SID}}</p>
+              <label>Purpose</label>
+              <p class="value">{{application.purpose || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
-              <label>Area (ha)</label>
-              <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2')
-                : '-'}}</p>
+              <label>Subpurpose</label>
+              <p class="value">{{application.subpurpose || "-" | titlecase}}</p>
             </div>
-            <div class="col-12">
-              <label>Legal Description</label>
-              <p class="value">{{feature.properties.TENURE_LEGAL_DESCRIPTION}}</p>
-            </div>
-          </div>
-
-          <div class="item row">
             <div class="col-6">
-              <label>Crown Land File</label>
+              <label>Tenure Type</label>
+              <p class="value">{{application.type || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Tenure Subtype</label>
+              <p class="value">{{application.subtype || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Crown Land File(s)</label>
               <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
             </div>
             <div class="col-6">
               <label>Disposition ID</label>
               <p class="value">{{application.tantalisID || "-"}}</p>
             </div>
+          </div>
+        </section>
+
+        <section class="map-item card p-0 mb-2">
+          <div class="map-container">
+            <div class="map" id="map"></div>
+          </div>
+        </section>
+
+        <section class="shape-info-item row">
+          <div class="col-12">
+            <label>GEOGRAPHIC SHAPE INFORMATION</label>
+            <div *ngIf="application.features">This application has
+              <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file' : 'files'}}.
+              <hr>
+            </div>
+          </div>
+          <div class="col-6">
+            <label>Total Area (ha)</label>
+            <p class="value">{{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</p>
+          </div>
+          <div class="col-6">
+            <label>Location</label>
+            <p class="value">{{application.location || "-"}}</p>
+          </div>
+          <div class="col-6">
+            <label>Region</label>
+            <p class="value">{{application.region || "-"}}</p>
+          </div>
+          <div class="col-6">
+            <label>Agency</label>
+            <p class="value">Crown Lands Allocation</p>
+          </div>
+        </section>
+
+        <section class="feature-item row" *ngFor="let feature of application.features">
+          <div class="col-6">
+            <label>Interest ID</label>
+            <p class="value">{{feature.properties.INTRID_SID}}</p>
+          </div>
+          <div class="col-6">
+            <label>Area (ha)</label>
+            <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2')
+              : '-'}}</p>
+          </div>
+          <div class="col-12">
+            <label>Legal Description</label>
+            <p class="value">{{feature.properties.TENURE_LEGAL_DESCRIPTION}}</p>
           </div>
         </section>
       </main>

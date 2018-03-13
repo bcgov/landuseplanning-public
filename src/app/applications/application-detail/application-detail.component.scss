@@ -5,109 +5,104 @@ app-application-detail:host {
     z-index: 998;
 }
 
-@media (max-width: 991px) {
-    //   app-application-detail:host {
-    //     margin-top: 52px;
-    //   }
-}
-
-.map-thumbnail {
-    .map {
-        position: relative;
-        height: 300px;
-        outline: none;
-        touch-action: none;
-        background-color: #445a71;
-    }
-}
-
 .application-detail {
-    .badge {
-        text-transform: uppercase;
-        font-size: 0.725rem;
-        &-light {
-            background: #ddd;
-        }
-    }
-}
-
-.container {
-    padding: 2rem;
-    .application-tombstone {
-        >section {
-            overflow-y: auto;
-            background-color: #fff;
-            padding: 1rem;
+    main {
+        overflow-y: auto;
+        background-color: #fff;
+        padding: 1rem;
+        border: 1px #ccc solid;
+        border-radius: 5px;
+        section {
+            word-wrap: break-word;
             border: 1px #ccc solid;
             border-radius: 5px;
-            .item {
-                word-wrap: break-word;
-                border: 1px #ccc solid;
-                border-radius: 5px;
-                padding: 10px;
-                margin-bottom: 0.5rem;
-                margin-left: 0;
-                margin-right: 0;
-                >div {
-                    padding: 0px;
-                }
+            padding: 10px;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            margin-left: 0;
+            margin-right: 0;
+            >div {
+                padding: 0px;
             }
-            .item:last-of-type {
+        }
+        section:last-of-type {
+            margin-bottom: 0;
+        }
+        .title {
+            font-size: larger;
+            font-weight: bold;
+            color: $primary;
+            margin-bottom: 5px;
+        }
+        label {
+            font-weight: bold;
+            color: $primary;
+            margin-bottom: 0;
+        }
+        .value {
+            font-size: smaller;
+            line-height: 1.25rem;
+            margin-bottom: 5px;
+        }
+        .organization-item {
+            margin-top: 0;
+            color: #fff;
+            background-color: #38598a;
+            padding: 5px 10px;
+            p {
+                font-size: large;
+                font-weight: bold;
                 margin-bottom: 0;
             }
-            .organization-item {
-                color: #fff;
-                background-color: #38598a;
-                padding: 5px 10px;
-                p {
-                    font-size: large;
-                    font-weight: bold;
-                    margin-bottom: 0;
-                }
-            }
-            .title {
-                font-size: larger;
-                font-weight: bold;
-                color: $primary;
-                margin-bottom: 5px;
-            }
-            label {
-                font-weight: bold;
-                color: $primary;
-                margin-bottom: 0;
-            }
-            .value {
-                font-size: smaller;
-                line-height: 1.25rem;
-                margin-bottom: 5px;
-            }
-            .map-item {
-                display: table;
-                width: 100%;
-                overflow: hidden;
-                &__thumbnail {
-                    height: 250px;
-                    transform: scale(1.4);
-                }
-                &:hover {
-                    border: 1px #bbb solid;
-                    opacity: 0.7;
-                    cursor: pointer;
+        }
+        .application-item {
+            // .commenting-item {
+            //     background-color: #ddd;
+            //     margin: -10px -10px 0 -10px;
+            //     padding: 5px 10px;
+            //     font-weight: bold;
+            // }
+            .badge {
+                text-transform: uppercase;
+                font-size: 0.725rem;
+                &-light {
+                    background: #ddd;
                 }
             }
         }
+        .map-item {
+            .map-container {
+                display: block;
+                position: relative;
+                overflow: hidden;
+                height: 250px;
+            }
+            .map {
+                position: relative;
+                height: 300px;
+                outline: none;
+                touch-action: none;
+                background-color: #445a71;
+                transform: scale(1.4);
+            }
+        }
+        .shape-info-item {
+            hr {
+                margin: 1rem 0;
+            }
+        }
     }
-    .application-tabs {
+    aside {
         display: flex;
         flex-direction: column;
         margin-top: 0;
-        >button {
+        padding: 0;
+        button {
             margin-bottom: 1rem;
         }
         >section {
             position: relative;
             background-color: #fff;
-            margin-top: 1rem;
             padding: 1rem;
             border: 1px #ccc solid;
             border-radius: 5px;
@@ -120,25 +115,10 @@ app-application-detail:host {
 }
 
 @media (max-width: 991px) {
-    .container {
-        .application-tombstone {
+    .application-detail {
+        main {
             margin-bottom: 1rem;
         }
-    }
-}
-
-.map-thumbnail {
-    .map-container {
-        display: block;
-        position: relative;
-        overflow: hidden;
-        height: 250px;
-        esri-map {
-            @include fill-parent(absolute);
-        }
-    }
-    .map {
-        transform: scale(1.4);
     }
 }
 
@@ -154,6 +134,10 @@ app-application-detail:host {
             height: 68px;
             border-bottom: 4px solid gold;
             background: $header-bg;
+        }
+        aside {
+            padding-right: 15px;
+            padding-left: 15px;
         }
     }
 }
