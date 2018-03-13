@@ -106,7 +106,9 @@
 
       <!-- TODO: instead of the tabs, this could be a map -->
       <aside class="col-lg-7 application-tabs">
-        <button class="btn btn-warning" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Submit a Comment</button>
+        <div>
+          <button class="btn btn-warning float-lg-right" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Submit a Comment</button>
+        </div>
         <section>
           <div role="navigation">
             <ul class="nav nav-tabs" role="tablist">
