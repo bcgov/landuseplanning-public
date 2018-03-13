@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Project } from 'app/models/project';
+import { Application } from 'app/models/application';
 
 @Pipe({
     name: 'objectFilter'
@@ -7,7 +7,7 @@ import { Project } from 'app/models/project';
 
 export class ObjectFilterPipe implements PipeTransform {
 
-    transform(value: Project[], q: string) {
+    transform(value: Application[], q: string) {
         if (!q || q === '') {
             return value;
         }

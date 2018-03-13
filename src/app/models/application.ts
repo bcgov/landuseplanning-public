@@ -1,4 +1,3 @@
-import { CollectionsList } from './collection';
 import { Document } from './document';
 import { Organization } from './organization';
 import { CommentPeriod } from './commentperiod';
@@ -40,8 +39,6 @@ export class Application {
   dispositionID: number;
   type: string;
   subtype: string;
-
-  collections: CollectionsList; // TODO: DELETE THIS WHEN DOCUMENTS IS IMPLEMENTED
 
   content: {
     type: string;
@@ -96,7 +93,6 @@ export class Application {
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
 
-    this.collections             = obj && obj.collections             || null;
     this.content                 = obj && obj.content                 || [];
     this.internal                = obj && obj.internal                || null;
 
