@@ -1,16 +1,16 @@
 @import "~assets/styles/base.scss";
-.site-intro {
-    margin-top: -2rem;
+main {
     color: $font-gray;
-    background-color: #fff;
     .home-banner {
-        height: 30rem;
+        display: table;
+        padding-top: 1rem;
         background-position: center;
         background-size: cover;
         background-image: url("~assets/images/map.jpg");
         background-repeat: no-repeat;
         &__content {
-            margin-top: 2rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
             h1 {
                 font-size: 2rem;
                 line-height: 2rem;
@@ -24,6 +24,9 @@
                 span {
                     display: inline-block;
                 }
+            }
+            .btn {
+                margin-top: 1rem;
             }
             .btn.inverted {
                 color: $font-gray;
@@ -42,41 +45,26 @@
                 color: $gold;
             }
         }
-    }
-    .about-info {
-        margin-top: -13rem;
-        .fast-fact {
-            color: $font-gray;
-            background-color: #fff;
-            border: 1px solid $font-gray;
-        }
-    }
-    .fb-container {
-        a {
-            color: white;
-        }
-    }
-}
-
-@media (min-width: 388px) {
-    .site-intro {
         .about-info {
-            margin-top: -16rem;
+            margin-top: 1rem;
+            .fast-fact {
+                color: $font-gray;
+                background-color: #fff;
+                border: 1px solid $font-gray;
+            }
         }
-    }
-}
-
-@media (min-width: 447px) {
-    .site-intro {
-        .about-info {
-            margin-top: -18rem;
+        .feature-blocks {
+            a {
+                color: white;
+            }
         }
     }
 }
 
 @media (min-width: 768px) {
-    .site-intro {
+    main {
         .home-banner {
+            padding-top: 2rem;
             &__content {
                 h1 {
                     font-size: 2.5rem;
@@ -90,31 +78,34 @@
                     font-size: 1.2rem;
                     line-height: 1.8rem;
                 }
+                .btn {
+                    margin-top: 1.5rem;
+                }
             }
         }
         .about-info {
-            margin-top: -17rem;
+            margin-top: 1.5rem;
             .fast-fact {
                 box-shadow: 3px 3px 9px;
                 border-radius: 5px;
             }
         }
-}
+    }
 }
 
 @media (min-width: 992px) {
-    .home-banner {
-        &__content {
-            h1 {
-                font-size: 2.8rem;
-                line-height: 2.8rem;
-            }
-            h2 {
-                line-height: 2rem;
-                font-size: 2rem;
+    main {
+        .home-banner {
+            &__content {
+                h1 {
+                    font-size: 2.8rem;
+                    line-height: 2.8rem;
+                }
+                h2 {
+                    line-height: 2rem;
+                    font-size: 2rem;
+                }
             }
         }
     }
 }
-
-@media (min-width: 1200px) {}
