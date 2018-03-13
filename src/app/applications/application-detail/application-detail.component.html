@@ -7,18 +7,10 @@
         </section>
 
         <section class="application-item">
-          <!-- <div class="commenting-item">
-            <span>Commenting Open:</span>
-            <span>Mar 1, 2018 - Mar 31, 2018</span>>
-          </div> -->
-          <div class="row">
+          <div class="application-item__commenting row">
             <div class="col">
-              <span class="badge" [ngClass]="{'badge-primary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
-                            'badge-secondary' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
-                            'badge-danger' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
-                            'badge-success' : commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
-                {{commentPeriodService.getStatus(application.currentPeriod)}}
-              </span>
+              <label>{{commentPeriodService.getStatus(application.currentPeriod)}}</label>
+              <span *ngIf="application.currentPeriod">: {{application.currentPeriod.startDate | date:'mediumDate'}} - {{application.currentPeriod.endDate | date:'mediumDate'}}</span>
             </div>
           </div>
           <div class="row">
@@ -54,7 +46,7 @@
           </div>
         </section>
 
-        <section class="map-item card p-0 mb-2">
+        <section class="map-item">
           <div class="map-container">
             <div class="map" id="map"></div>
           </div>

@@ -1,7 +1,6 @@
 @import "~assets/styles/base.scss";
 app-application-detail:host {
     display: block;
-    // margin-top: 68px;
     z-index: 998;
 }
 
@@ -56,21 +55,16 @@ app-application-detail:host {
             }
         }
         .application-item {
-            // .commenting-item {
-            //     background-color: #ddd;
-            //     margin: -10px -10px 0 -10px;
-            //     padding: 5px 10px;
-            //     font-weight: bold;
-            // }
-            .badge {
-                text-transform: uppercase;
-                font-size: 0.725rem;
-                &-light {
-                    background: #ddd;
+            &__commenting {
+                margin: -10px -10px 5px -10px;
+                background-color: #ddd;
+                .col {
+                    padding: 5px 10px;
                 }
             }
         }
         .map-item {
+            padding: 0;
             .map-container {
                 display: block;
                 position: relative;
