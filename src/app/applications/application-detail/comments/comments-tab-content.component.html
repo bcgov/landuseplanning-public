@@ -22,7 +22,7 @@
 
         <div *ngIf="application?.currentPeriod">
             <h2 class="title">Comment Period Description</h2>
-            <p>{{application.currentPeriod.description}}</p>
+            <p [innerHTML]="(application.currentPeriod.description || '-') | newlines"></p>
         </div>
 
         <div *ngIf="comments?.length === 0">
