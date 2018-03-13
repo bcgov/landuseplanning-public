@@ -72,12 +72,6 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.router.navigate(['/applications']);
           }
-        },
-        error => {
-          console.log(error);
-          alert('Uh-oh, couldn\'t load application');
-          this.loading = false;
-          this.router.navigate(['/applications']);
         }
       );
   }
