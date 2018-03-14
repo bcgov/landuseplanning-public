@@ -20,7 +20,7 @@ import * as _ from 'lodash';
 export class ApplicationDetailComponent implements OnInit, OnDestroy {
   readonly tabLinks = [
     { label: 'Application', link: 'application' },
-    { label: 'Comments', link: 'comments' },
+    { label: 'Commenting', link: 'comments' },
     { label: 'Decisions', link: 'decisions' }
   ];
   public layers: L.Layer[];
@@ -110,11 +110,6 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
             alert('Uh-oh, couldn\'t load application');
             this.router.navigate(['/applications']);
           }
-        },
-        error => {
-          console.log(error);
-          alert('Uh-oh, couldn\'t load application');
-          this.router.navigate(['/applications']);
         }
       );
   }

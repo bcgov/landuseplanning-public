@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import * as moment from 'moment-timezone';
 
 import { Application } from 'app/models/application';
 import { Comment } from 'app/models/comment';
@@ -30,6 +31,7 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
   public loading = true;
   public application: Application = null;
   public comments: Array<Comment> = [];
+  public daysRemaining = '?';
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -48,6 +50,14 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
         (data: { application: Application }) => {
           if (data.application) {
             this.application = data.application;
+
+            // get comment period days remaining
+            if (this.application.currentPeriod) {
+              const now = new Date();
+              const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+              const days = moment(this.application.currentPeriod.endDate).diff(moment(today), 'days') + 1;
+              this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
+            }
 
             // get application comments
             this.commentService.getAllByApplicationId(this.application._id)
@@ -72,12 +82,6 @@ export class CommentsTabContentComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.router.navigate(['/applications']);
           }
-        },
-        error => {
-          console.log(error);
-          alert('Uh-oh, couldn\'t load application');
-          this.loading = false;
-          this.router.navigate(['/applications']);
         }
       );
   }
