@@ -1,6 +1,5 @@
 import { Component, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { HttpEventType } from '@angular/common/http';
-import { trigger, style, transition, animate } from '@angular/animations';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
@@ -20,17 +19,7 @@ export interface DataModel {
 
 @Component({
   templateUrl: './add-comment.component.html',
-  styleUrls: ['./add-comment.component.scss'],
-  animations: [
-    trigger('visibility', [
-      transition(':enter', [   // :enter is alias to 'void => *'
-        animate('0.2s 0s', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [   // :leave is alias to '* => void'
-        animate('0.2s 0.75s', style({ opacity: 0 }))
-      ])
-    ])
-  ]
+  styleUrls: ['./add-comment.component.scss']
 })
 
 export class AddCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel {

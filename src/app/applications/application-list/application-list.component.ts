@@ -1,5 +1,4 @@
 import { HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
-import { TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -31,6 +30,11 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    // get optional query parameter
+    if (this.route.snapshot.paramMap.has('showOnlyOpenApps')) {
+      this.showOnlyOpenApps = true;
+    }
+
     // get data from route resolver
     this.route.data
       .takeUntil(this.ngUnsubscribe)

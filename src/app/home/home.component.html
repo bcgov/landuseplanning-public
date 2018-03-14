@@ -47,7 +47,7 @@
 					<h4>Find applications open for comment</h4>
 					<p>Review relevant application details and provide your comments.</p>
 					<div>
-						<a class="btn slide-l-btn hero-btn inverted" routerLink="/applications">
+						<a class="btn slide-l-btn hero-btn inverted" [routerLink]="['/applications', { showOnlyOpenApps: true }]">
 							<i class="material-icons">list</i>
 							<span>View List</span>
 						</a>
