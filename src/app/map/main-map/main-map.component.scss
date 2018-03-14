@@ -1,10 +1,15 @@
 @import "~assets/styles/base.scss";
 
 .map-container {
-    @include flex(1 1 auto);
+    display: block;
     position: relative;
-    
-    esri-map {
-        @include fill-parent(absolute);
-    }
+    overflow: hidden;
+    height: 100%;
+}
+.map {
+    position: relative;
+    height: 100%;
+    outline: none;
+    touch-action: none;
+    background-color: #445a71;
 }

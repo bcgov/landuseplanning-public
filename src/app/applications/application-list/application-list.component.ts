@@ -1,4 +1,4 @@
-import { HostBinding, Component, OnInit, OnDestroy } from '@angular/core';
+import { HostBinding, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { MainMapComponent } from 'app/map/main-map/main-map.component';
 
 @Component({
   selector: 'app-application-list',
@@ -15,6 +16,7 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
+  @ViewChild(MainMapComponent) child: MainMapComponent;
   private showOnlyOpenApps = false;
   public applications: Array<Application> = [];
   public currentApp: Application = null;
@@ -42,6 +44,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         (data: { applications: Application[] }) => {
           if (data.applications) {
             this.applications = data.applications;
+            // Tell the main map to draw.
+            this.child.drawMap(data.applications);
           } else {
             // applications not found --> navigate back to home
             alert('Uh-oh, couldn\'t load applications');
@@ -65,6 +69,17 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return (item === this.currentApp);
   }
 
+  private redrawMap() {
+    const self = this;
+    const apps = [];
+    _.each(this.applications, function (app) {
+      if (self.showOnlyOpenApps || self.commentPeriodService.isOpenNotStarted(app.currentPeriod)) {
+        apps.push(app);
+      }
+    });
+    this.child.showMaps(apps);
+  }
+
   // TODO: delete if we don't need a hover action for list items
   private showCurrentApp(item) { }
 
@@ -75,8 +90,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       this.applications.splice(index, 1, item);
       if (!this.isCurrentApp(item)) {
         this.currentApp = item; // set
+        this.child.highlightApplication(item, true);
       } else {
         this.currentApp = null; // unset
+        this.child.highlightApplication(item, false);
       }
     }
   }

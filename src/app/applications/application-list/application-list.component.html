@@ -5,7 +5,7 @@
     <!-- APPLICATION LIST VIEW -->
     <div class="map-list-container">
         <div class="map-list-container__options">
-            <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showOnlyOpenApps = $event.checked">
+            <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showOnlyOpenApps = $event.checked" (click)="redrawMap()">
                 Only show applications with an open or future comment period
             </mat-slide-toggle>
         </div>
@@ -56,6 +56,6 @@
     </div>
 
     <!-- APPLICATION MAP VIEW -->
-    <app-main-map class="map-container"></app-main-map>
+    <app-main-map #mapref class="map-container"></app-main-map>
 
 </div>
