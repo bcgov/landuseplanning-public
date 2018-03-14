@@ -56,7 +56,7 @@
           <div class="col-12">
             <label>GEOGRAPHIC SHAPE INFORMATION</label>
             <div *ngIf="application.features">This application has
-              <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file' : 'files'}}.
+              <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file (Interest)' : 'files (Interests)'}}.
               <hr>
             </div>
           </div>
@@ -79,9 +79,8 @@
         </section>
 
         <section class="feature-item row" *ngFor="let feature of application.features">
-          <div class="col-6">
-            <label>Interest ID</label>
-            <p class="value">{{feature.properties.INTRID_SID}}</p>
+          <div class="col-12 mb-1">
+            <span class="title">INTEREST ID: {{feature.properties.INTRID_SID}}</span>
           </div>
           <div class="col-6">
             <label>Area (ha)</label>
