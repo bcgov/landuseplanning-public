@@ -7,8 +7,13 @@ import { Component } from '@angular/core';
 })
 
 export class HeaderComponent {
-  private showBanner = true;
-
   constructor() { }
 
+  showBanner(): boolean {
+    return !sessionStorage.hidePrcPilotBanner;
+  }
+
+  hideBanner() {
+    sessionStorage.hidePrcPilotBanner = true;
+  }
 }
