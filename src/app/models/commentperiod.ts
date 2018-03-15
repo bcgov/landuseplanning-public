@@ -1,3 +1,8 @@
+class Internal {
+  notes: string;
+  _addedBy: string;
+}
+
 export class CommentPeriod {
   _id: string;
   _addedBy: string;
@@ -6,10 +11,7 @@ export class CommentPeriod {
   startDate: Date;
   endDate: Date;
   description: string;
-  internal: {
-    notes: string;
-    _addedBy: string;
-  };
+  internal: Internal;
 
   constructor(obj?: any) {
     this._id          = obj && obj._id          || null;
@@ -19,6 +21,6 @@ export class CommentPeriod {
     this.startDate    = obj && obj.startDate    || null;
     this.endDate      = obj && obj.endDate      || null;
     this.description  = obj && obj.description  || null;
-    this.internal     = obj && obj.internal     || null;
+    this.internal     = obj && obj.internal     || new Internal();
   }
 }

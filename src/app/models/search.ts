@@ -24,10 +24,11 @@ export class Search {
     this.date           = search && search.date           || null;
     this.status         = search && search.status         || null;
     this.application    = search && search.application    || null;
-    this.sidsFound     = search && search.sidsFound       || null;
+    this.sidsFound      = search && search.sidsFound      || null;
     this.hostname       = hostname;
 
     this.features = [];
+
     if (search && search.features) {
       search.features.forEach(feature => {
         this.features.push(feature);
