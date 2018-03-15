@@ -84,7 +84,7 @@ export class ApiService {
       'longitude',
       'mapsheet',
       'postID',
-      'projectDate', // TODO: change to publishDate
+      'publishDate',
       'purpose',
       'subpurpose',
       'region',
@@ -133,7 +133,7 @@ export class ApiService {
       'longitude',
       'mapsheet',
       'postID',
-      'projectDate', // TODO: change to publishDate
+      'publishDate',
       'purpose',
       'subpurpose',
       'region',
