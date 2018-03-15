@@ -29,11 +29,11 @@
             </div>
             <div class="col-6">
               <label>Tenure Type</label>
-              <p class="value">{{application.type || "-" | titlecase}}</p>
+              <p class="value">{{application.features[0].properties.TENURE_TYPE || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
               <label>Tenure Subtype</label>
-              <p class="value">{{application.subtype || "-" | titlecase}}</p>
+              <p class="value">{{application.features[0].properties.TENURE_SUBTYPE || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
               <label>Crown Land File(s)</label>
@@ -66,7 +66,7 @@
           </div>
           <div class="col-6">
             <label>Location</label>
-            <p class="value">{{application.location || "-"}}</p>
+            <p class="value">{{application.features[0].properties.TENURE_LOCATION || "-"}}</p>
           </div>
           <div class="col-6">
             <label>Region</label>
@@ -80,16 +80,19 @@
 
         <section class="feature-item row" *ngFor="let feature of application.features">
           <div class="col-12 mb-1">
-            <span class="title">INTEREST ID: {{feature.properties.INTRID_SID}}</span>
+            <span class="title">Interest ID: {{feature.properties.INTRID_SID}}</span>
+          </div>
+          <div class="col-6">
+            <label>Type / Subtype</label>
+            <p class="value">{{feature.properties.TENURE_TYPE || '-'}} / {{feature.properties.TENURE_SUBTYPE || '-'}}</p>
           </div>
           <div class="col-6">
             <label>Area (ha)</label>
-            <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2')
-              : '-'}}</p>
+            <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2') : '-'}}</p>
           </div>
           <div class="col-12">
             <label>Legal Description</label>
-            <p class="value">{{feature.properties.TENURE_LEGAL_DESCRIPTION}}</p>
+            <p class="value" [innerHTML]="(feature.properties.TENURE_LEGAL_DESCRIPTION | newlines) || '-'"></p>
           </div>
         </section>
       </main>
