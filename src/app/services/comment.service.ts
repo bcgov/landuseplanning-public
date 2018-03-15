@@ -113,8 +113,8 @@ export class CommentService {
   }
 
   add(orig: Comment): Observable<Comment> {
-    // make a copy of the passed-in comment so we don't change it
-    const comment = Object.assign({}, orig);
+    // make a (deep) copy of the passed-in comment so we don't change it
+    const comment = _.cloneDeep(orig);
 
     // ID must not exist on POST
     delete comment._id;
