@@ -1,2 +1,80 @@
 @import "~assets/styles/base.scss";
 @import "~assets/styles/layout.scss";
+
+:host {
+  display: block;
+  @include flex-box();
+  @include flex-direction(column);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: hidden;
+}
+
+
+app-header {
+  @include flex(0 0 auto);
+}
+
+.app-body {
+  @include flex(1 1 auto);
+  position: relative;
+  overflow-y: scroll;
+}
+
+.pilot-alert-container /deep/ {
+  .alert {
+    @include flex-box();
+    margin-bottom: 0;
+    border-bottom: 4px solid $gold;
+    background-color: $gold;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #003366;
+
+    button {
+      @include flex(0 0 auto);
+      position: relative;
+      margin-top: -0.2rem;
+      padding: 0;
+      width: 2rem;
+      height: 2rem;
+      order: 3;
+      opacity: 1;
+
+      span {
+        display: inline-block;
+        margin-top: -0.3rem;
+        vertical-align: top;
+        font-size: 1.75rem;
+      }
+    }
+
+    &__icon {
+      @include flex(0 0 auto);
+      margin-right: 0.5rem;
+      order: 1
+    }
+
+    &__msg {
+      @include flex(1 1 auto);
+      padding-top: 0.1rem;
+      line-height: 1.25rem;
+      font-size: 0.875rem;
+      order: 2;
+    }
+  }
+}
+
+app-home {
+  display: block;
+  background: yellow;
+}
+
+.showBanner + div {
+  height: 50rem;
+  background: blue;
+}
