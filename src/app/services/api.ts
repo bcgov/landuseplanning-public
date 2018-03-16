@@ -13,7 +13,7 @@ export class ApiService {
   // public token: string;
   public apiPath: string;
   public adminUrl: string;
-  public env: 'local' | 'dev' | 'test' | 'prod';
+  public env: 'local' | 'dev' | 'test' | 'demo' | 'prod';
 
   constructor(private http: Http) {
     const { hostname } = window.location;
@@ -34,11 +34,18 @@ export class ApiService {
         this.env = 'dev';
         break;
 
-      case 'www-nrts-prc-test-public.pathfinder.gov.bc.ca':
+        case 'www-nrts-prc-test-public.pathfinder.gov.bc.ca':
         // Test
         this.apiPath = 'https://prc-api-test.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://nrts-prc-admin-test.pathfinder.gov.bc.ca';
         this.env = 'test';
+        break;
+
+        case 'www-nrts-prc-demo-public.pathfinder.gov.bc.ca':
+        // demo
+        this.apiPath = 'https://prc-api-demo.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://nrts-prc-admin-demo.pathfinder.gov.bc.ca';
+        this.env = 'demo';
         break;
 
       default:
