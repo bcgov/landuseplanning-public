@@ -43,8 +43,11 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: { applications: Application[] }) => {
           if (data.applications) {
-            this.applications = data.applications;
-            // Tell the main map to draw.
+            // sort by newest first
+            this.applications = data.applications.sort((a: Application, b: Application) => {
+              return (a.publishDate < b.publishDate) ? 1 : -1;
+            });
+            // tell the main map to draw
             this.child.drawMap(data.applications);
           } else {
             // applications not found --> navigate back to home
