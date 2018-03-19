@@ -19,7 +19,9 @@ app-header {
 }
 
 .app-body {
+  @include flex-box();
   @include flex(1 1 auto);
+  @include flex-direction(column);
   position: relative;
   overflow-y: scroll;
 }
