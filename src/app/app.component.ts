@@ -53,4 +53,12 @@ export class AppComponent implements OnInit {
       document.documentElement.scrollTop = 0;
     });
   }
+
+  showBanner(): boolean {
+    return !sessionStorage.hidePrcPilotBanner;
+  }
+
+  hideBanner() {
+    sessionStorage.hidePrcPilotBanner = true;
+  }
 }

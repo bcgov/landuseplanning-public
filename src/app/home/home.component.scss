@@ -1,125 +1,147 @@
 @import "~assets/styles/base.scss";
-main {
-    color: $font-gray;
-    background-position: center;
-    background-size: cover;
-    background-image: url("~assets/images/map.jpg");
-    background-repeat: no-repeat;
-    .home-page {
-        display: table;
-        padding-top: 1rem;
-        &__header {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            h1 {
-                font-size: 2rem;
-                line-height: 2rem;
-                span {
-                    display: inline-block;
-                }
-            }
-            h2 {
-                font-size: 1.5rem;
-                line-height: 1.5rem;
-                span {
-                    display: inline-block;
-                }
-            }
-            .btn {
-                margin-top: 1rem;
-            }
-            .btn.inverted {
-                color: $font-gray;
-                border: 2px solid $font-gray;
-                background-color: #fff;
-                text-transform: unset;
-                &:active,
-                &:focus,
-                &:hover {
-                    border-color: $gold;
-                    background: darken($gold, 8%);
-                    font-weight: 700;
-                }
-            }
-            .badge {
-                color: $gold;
-            }
-        }
-        .about-info {
-            margin-top: 1rem;
-            .fast-fact {
-                color: $font-gray;
-                background-color: #fff;
-                border: 1px solid $font-gray;
-                margin-bottom: 0;
-            }
-        }
-        .feature-blocks>div {
-            margin-top: 1rem;
-        }
-        .feature-blocks {
-            .feature-block {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                margin-bottom: 0;
-            }
-            a {
-                color: white;
-            }
-        }
+
+:host {
+  display: block;
+  background-position: center -8rem;
+  background-size: 250%;
+  background-image: url("~assets/images/map.jpg");
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) and
+  (orientation: portrait) {
+  :host {
+    background-size: 200%;
+    background-position: center -15rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    background-position: center -20rem;
+    background-size: 170%;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host {
+    background-position: center -25rem;
+    background-size: 170%;
+  }
+}
+
+@media (min-width: 1200px) and
+       (min-height: 900px) {
+  :host {
+    background-position: center -25rem;
+    background-size: 125%;
+  }
+}
+
+// Home Title Container
+.home-title-container {
+  .container {
+    padding-top: 2rem;
+    padding-bottom: 0;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    line-height: 2.25rem;
+
+    span:first-child {
+      display: block;
     }
+  }
+
+  h2 {
+    font-size: 2rem;
+    line-height: 2.25rem;
+  }
+
+  .badge {
+    color: $gold;
+  }
+
+  &__action-btns {
+    margin-top: 2rem;
+
+    .btn {
+      width: 100%;
+      background: #fff;
+      border-color: #003366;
+      color: #003366;
+      font-size: 0.85rem;
+    }
+  }
 }
 
 @media (min-width: 768px) {
-    main {
-        .home-page {
-            padding-top: 2rem;
-            &__header {
-                h1 {
-                    font-size: 2.5rem;
-                    line-height: 2.5rem;
-                }
-                h2 {
-                    font-size: 1.8rem;
-                    line-height: 1.8rem;
-                }
-                p {
-                    font-size: 1.2rem;
-                    line-height: 1.8rem;
-                }
-                .btn {
-                    margin-top: 1.5rem;
-                }
-            }
-            .about-info {
-                margin-top: 1.5rem;
-                .fast-fact {
-                    box-shadow: 3px 3px 9px;
-                    border-radius: 5px;
-                }
-            }
-            .feature-blocks>div {
-                margin-top: 0;
-            }
-        }
+  .home-title-container {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  
+    h1 {
+      font-size: 2.8rem;
+      line-height: 2.5rem;
+
+      span:first-child {
+        display: inline;
+      }
     }
+  
+    h2 {
+      font-size: 2.15rem;
+      line-height: 2.45rem;
+    }
+
+    &__action-btns {
+      .btn {
+        width: auto;
+      }
+    }
+  }
 }
 
-@media (min-width: 992px) {
-    main {
-        .home-page {
-            &__header {
-                h1 {
-                    font-size: 2.8rem;
-                    line-height: 2.8rem;
-                }
-                h2 {
-                    line-height: 2rem;
-                    font-size: 2rem;
-                }
-            }
-        }
+@media (min-width: 1200px) {
+  .home-title-container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+// Feature Blocks
+.feature-blocks {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+
+  [class^="col"] {
+    padding: 0.5rem;
+  }
+
+  .feature-block {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .feature-blocks {
+    margin-left: -1rem;
+    margin-right: -1rem;
+
+    [class^="col"] {
+      padding: 1rem;
     }
+
+    .feature-block {
+      height: 16rem;
+    }
+  }
+}
+
+aside {
+  .feature-block {
+    box-shadow: 0.2rem 0.2rem 0.4rem #999;
+  }
 }

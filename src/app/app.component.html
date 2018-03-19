@@ -1,9 +1,18 @@
 <app-header></app-header>
 
-<router-outlet id="scrollTop"></router-outlet>
+<ngb-alert class="pilot-alert-container" type="warning" *ngIf="showBanner()" (click)="hideBanner()">
+	<div class="alert__icon">
+		<i class="material-icons">info</i>
+	</div>
+	<div class="alert__msg">
+		This site is a pilot, launched for Crown Land applications in the Province's Skeena Region. &nbsp;<strong><a routerLink="/">Learn more...</a></strong>
+	</div>
+</ngb-alert>
 
-<app-footer></app-footer>
-
-<a href="#scrollTop" class="btn scroll-top-btn" pageScroll [pageScrollOffset]="0" [pageScrollDuration]="800">
-	<i class="material-icons">arrow_upward</i>
-</a>
+<div class="app-body" id="scrollTop" [ngClass]="{'show-alert': showBanner()}">
+	<router-outlet></router-outlet>
+	<app-footer></app-footer>
+	<a href="#scrollTop" class="btn scroll-top-btn visible" pageScroll [pageScrollOffset]="0" [pageScrollDuration]="800">
+		<i class="material-icons">arrow_upward</i>
+	</a>
+</div>
