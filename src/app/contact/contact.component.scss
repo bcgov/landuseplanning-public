@@ -3,67 +3,106 @@
 @import "~assets/styles/components/card.scss";
 @import "~assets/styles/components/hero-banner.scss";
 @import "~assets/styles/components/lists.scss";
-.contact-us {
-    color: $font-gray;
-    background-color: #fff;
-    height: 30rem;
-    background-position: center;
-    background-size: cover;
-    background-image: url("~assets/images/map.jpg");
-    background-repeat: no-repeat;
-    h1 {
-        font-size: 2rem;
-        line-height: 2rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-        line-height: 1.5rem;
-    }
-    li {
-        line-height: 2rem;
-    }
-    main,
-    aside {
-        margin-top: 0;
-    }
-    .fast-fact {
-        text-align: left;
-        color: $font-gray;
-        background-color: #fff;
-        border: 1px solid $font-gray;
-    }
+
+:host {
+  @include flex(1 1 auto);
+  display: block;
+  background-position: center -8rem;
+  background-size: 250%;
+  background-image: url("~assets/images/map.jpg");
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) and
+       (orientation: portrait) {
+  :host {
+      background-size: 200%;
+      background-position: center -15rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+      background-position: center -20rem;
+      background-size: 170%;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host {
+      background-position: center -25rem;
+      background-size: 170%;
+  }
+}
+
+@media (min-width: 1200px) and
+       (min-height: 900px) {
+  :host {
+      background-position: center -25rem;
+      background-size: 125%;
+  }
+}
+
+.container {
+  padding-top: 2rem;
 }
 
 @media (min-width: 768px) {
-    .contact-us {
-        h1 {
-            font-size: 2.5rem;
-            line-height: 2.5rem;
-        }
-        h2 {
-            font-size: 1.8rem;
-            line-height: 1.8rem;
-        }
-    }
+  .container {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+  }
 }
 
-@media (min-width: 992px) {
-    .contact-us {
-        h1 {
-            font-size: 2.8rem;
-            line-height: 2.8rem;
-        }
-        h2 {
-            line-height: 2rem;
-            font-size: 2rem;
-        }
-        main,
-        aside {
-            margin-top: 1.5rem;
-        }
-        .fast-fact {
-            box-shadow: 3px 3px 9px;
-            border-radius: 5px;
-        }
+.contact-title-container {
+  padding-bottom: 0;
+
+  h1 {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    line-height: 2.25rem;
+
+    span:first-child {
+      display: block;
     }
+  }
+}
+
+@media (min-width: 768px) {
+  .contact-title-container {
+    h1 {
+      margin-bottom: 2rem;
+      line-height: 2.5rem;
+      font-size: 2.8rem;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .contact-title-container {
+    h1 {
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+aside {
+  margin-top: 1rem;
+
+  .feature-block {
+    min-height: 14rem;
+    padding: 1.5rem 2rem 2rem 1.5rem;
+    text-align: left;
+    box-shadow: 0.2rem 0.2rem 0.4rem #999;
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  aside {
+    margin-top: 0.5rem;
+  }
 }
