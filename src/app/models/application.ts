@@ -2,6 +2,7 @@ import { Document } from './document';
 import { Organization } from './organization';
 import { CommentPeriod } from './commentperiod';
 import { Decision } from './decision';
+import { Feature } from './feature';
 import * as _ from 'lodash';
 
 class Content {
@@ -57,7 +58,7 @@ export class Application {
   documents: Array<Document>;
   currentPeriod: CommentPeriod;
   decision: Decision;
-  features: object[];
+  features: Array<Feature>;
 
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
