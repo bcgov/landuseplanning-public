@@ -36,8 +36,8 @@
               <p class="value">{{application.features[0].properties.TENURE_SUBTYPE || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
-              <label>Crown Land File(s)</label>
-              <p class="value">{{application.cl_files ? application.cl_files.join(", ") : "-"}}</p>
+              <label>Crown Land File</label>
+              <p class="value">{{application.cl_file || "-"}}</p>
             </div>
             <div class="col-6">
               <label>Disposition ID</label>
