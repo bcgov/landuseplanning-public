@@ -34,15 +34,15 @@ export class ApiService {
         this.env = 'dev';
         break;
 
-        case 'nrts-prc-test.pathfinder.gov.bc.ca':
+      case 'nrts-prc-test.pathfinder.gov.bc.ca':
         // Test
         this.apiPath = 'https://nrts-prc-test.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://nrts-prc-test.pathfinder.gov.bc.ca/admin/';
         this.env = 'test';
         break;
 
-        case 'nrts-prc-demo.pathfinder.gov.bc.ca':
-        // demo
+      case 'nrts-prc-demo.pathfinder.gov.bc.ca':
+        // Demo
         this.apiPath = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/admin/';
         this.env = 'demo';
