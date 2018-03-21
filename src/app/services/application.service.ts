@@ -32,7 +32,7 @@ export class ApplicationService {
   // get count of applications
   getCount(): Observable<number> {
     return this.getAllInternal()
-      .map((applications: Application[]) => {
+      .map(applications => {
         return applications.length;
       });
   }
@@ -41,7 +41,7 @@ export class ApplicationService {
   getAll(): Observable<Application[]> {
     // first get the applications
     return this.getAllInternal()
-      .mergeMap((applications: Application[]) => {
+      .mergeMap(applications => {
         if (applications.length === 0) {
           return Observable.of([] as Application[]);
         }
@@ -81,7 +81,7 @@ export class ApplicationService {
   // get just the applications
   private getAllInternal(): Observable<Application[]> {
     return this.api.getApplications()
-      .map((res: Response) => {
+      .map(res => {
         const applications = res.text() ? res.json() : [];
         applications.forEach((application, i) => {
           applications[i] = new Application(application);
@@ -99,12 +99,12 @@ export class ApplicationService {
 
     // first get the application data
     return this.api.getApplication(appId)
-      .map((res: Response) => {
+      .map(res => {
         const applications = res.text() ? res.json() : [];
         // return the first (only) application
         return applications.length > 0 ? new Application(applications[0]) : null;
       })
-      .mergeMap((application: Application) => {
+      .mergeMap(application => {
         if (!application) { return Observable.of(null as Application); }
 
         // replace \\n (JSON format) with newlines
@@ -186,7 +186,7 @@ export class ApplicationService {
       case 'SUSPENDED': return 'Tenure: Suspended';
     }
 
-    // return status in title case
+    // else return current status in title case
     return _.startCase(_.camelCase(application.status));
   }
 

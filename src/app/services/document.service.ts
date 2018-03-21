@@ -17,7 +17,7 @@ export class DocumentService {
   // get all documents for the specified application id
   getAllByApplicationId(appId: string): Observable<Document[]> {
     return this.api.getDocumentsByAppId(appId)
-      .map((res: Response) => {
+      .map(res => {
         const documents = res.text() ? res.json() : [];
         documents.forEach((document, i) => {
           documents[i] = new Document(document);
@@ -30,7 +30,7 @@ export class DocumentService {
   // get all documents for the specified comment id
   getAllByCommentId(commentId: string): Observable<Document[]> {
     return this.api.getDocumentsByCommentId(commentId)
-      .map((res: Response) => {
+      .map(res => {
         const documents = res.text() ? res.json() : [];
         documents.forEach((document, i) => {
           documents[i] = new Document(document);
@@ -43,7 +43,7 @@ export class DocumentService {
   // get all documents for the specified decision id
   getAllByDecisionId(decisionId: string): Observable<Document[]> {
     return this.api.getDocumentsByDecisionId(decisionId)
-      .map((res: Response) => {
+      .map(res => {
         const documents = res.text() ? res.json() : [];
         documents.forEach((document, i) => {
           documents[i] = new Document(document);
@@ -60,7 +60,7 @@ export class DocumentService {
     }
 
     return this.api.getDocument(documentId)
-      .map((res: Response) => {
+      .map(res => {
         const documents = res.text() ? res.json() : [];
         // return the first (only) document
         return documents.length > 0 ? new Document(documents[0]) : null;
@@ -76,7 +76,7 @@ export class DocumentService {
 
   upload(formData: Object): Observable<Document> {
     return this.api.uploadDocument(formData)
-      .map((res: Response) => {
+      .map(res => {
         const d = res.text() ? res.json() : null;
         return d ? new Document(d) : null;
       })
