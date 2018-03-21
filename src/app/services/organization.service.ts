@@ -21,7 +21,7 @@ export class OrganizationService {
     }
 
     return this.api.getOrganization(orgId)
-      .map((res: Response) => {
+      .map(res => {
         const organizations = res.text() ? res.json() : [];
         // return the first (only) organization
         return organizations.length > 0 ? new Organization(organizations[0]) : null;

@@ -23,7 +23,7 @@ export class CommentPeriodService {
   // get all comment periods for the specified application id
   getAllByApplicationId(appId: string): Observable<CommentPeriod[]> {
     return this.api.getPeriodsByAppId(appId)
-      .map((res: Response) => {
+      .map(res => {
         const periods = res.text() ? res.json() : [];
         periods.forEach((period, i) => {
           periods[i] = new CommentPeriod(period);
@@ -54,7 +54,7 @@ export class CommentPeriodService {
     }
 
     return this.api.getPeriod(periodId)
-      .map((res: Response) => {
+      .map(res => {
         const periods = res.text() ? res.json() : [];
         // return the first (only) comment period
         return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
