@@ -29,29 +29,29 @@ export class ApiService {
 
       case 'www-nrts-prc-dev-public.pathfinder.gov.bc.ca':
         // Dev
-        this.apiPath = 'https://prc-api-dev.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-admin-dev.pathfinder.gov.bc.ca';
+        this.apiPath = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/admin/';
         this.env = 'dev';
         break;
 
         case 'www-nrts-prc-test-public.pathfinder.gov.bc.ca':
         // Test
-        this.apiPath = 'https://prc-api-test.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-admin-test.pathfinder.gov.bc.ca';
+        this.apiPath = 'https://nrts-prc-test.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://nrts-prc-test.pathfinder.gov.bc.ca/admin/';
         this.env = 'test';
         break;
 
         case 'www-nrts-prc-demo-public.pathfinder.gov.bc.ca':
         // demo
-        this.apiPath = 'https://prc-api-demo.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-admin-demo.pathfinder.gov.bc.ca';
+        this.apiPath = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/admin/';
         this.env = 'demo';
         break;
 
       default:
         // Prod
-        this.apiPath = 'https://comment.nrs.gov.bc.ca/api';
-        this.adminUrl = 'https://comment.nrs.gov.bc.ca/admin';
+        this.apiPath = 'https://comment.nrs.gov.bc.ca/api/public';
+        this.adminUrl = 'https://comment.nrs.gov.bc.ca/admin/';
         this.env = 'prod';
     };
   }
