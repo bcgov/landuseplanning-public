@@ -134,28 +134,11 @@ hr {
     border-width: 2px;
 }
 
-/* modal positioning fix */
-.modal-open {
-    // overflow: auto;
-    // footer {
-    //     margin-right: -17px;
-    //     padding-right: 17px;
-    // }
-}
-
-/* class to make divs look like anchors */
 .clickable {
     cursor: pointer;
     color: $link-color;
     &:focus,
     &:hover {
         text-decoration: underline;
-    }
-}
-
-// hide the footer when a component (e.g. the map) is shown full screen
-.full-screen {
-    +app-footer {
-        display: none;
     }
 }

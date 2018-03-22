@@ -9,7 +9,7 @@
 	</div>
 </ngb-alert>
 
-<div class="app-body" id="scrollTop" [ngClass]="{'show-alert': showBanner()}">
+<div class="app-body" id="scrollTop" [ngClass]="{'show-alert': showBanner()}" routerLink="/applications" routerLinkActive="footer-sm">
 	<router-outlet></router-outlet>
 	<app-footer></app-footer>
 	<a href="#scrollTop" class="btn scroll-top-btn visible" pageScroll [pageScrollOffset]="0" [pageScrollDuration]="800">

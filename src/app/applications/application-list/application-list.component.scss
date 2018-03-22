@@ -1,17 +1,13 @@
 @import "~assets/styles/base.scss";
 
-app-application-list:host {
-  @include flex-box;
-  @include flex-direction(column);
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+:host {
+  @include flex(1 1 auto);
+  position: relative;
 }
 
 .application-list {
   @include flex-box();
+  @include flex(1 1 auto);
   position: absolute;
   top: 0;
   right: 0;
