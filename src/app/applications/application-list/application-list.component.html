@@ -18,12 +18,12 @@
             <ng-template ngFor let-item [ngForOf]="applications">
                 <div *ngIf="showThisApp(item)" class="list-group-item" [class.active]="isCurrentApp(item)" (mouseover)="showCurrentApp(item)" (click)="setCurrentApp(item)">
                     <h2>{{item.client || 'Unknown Client'}}</h2>
-                    <span class="badge" 
-                      [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
-                                  'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
-                                  'badge-danger' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
-                                  'badge-success' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
-                      {{commentPeriodService.getStatus(item.currentPeriod)}}
+                    <span class="badge"
+                        [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
+                            'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
+                            'badge-danger' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
+                            'badge-success' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
+                        {{commentPeriodService.getStatus(item.currentPeriod)}}
                     </span>
                     <ul class="nv-list">
                         <li>
@@ -37,7 +37,7 @@
                                 <span>({{item.subpurpose | titlecase}})</span>
                             </span>
                             <span class="nv-list__item--value" *ngIf="!item.purpose || !item.subpurpose">-</span>
-                            </li>
+                        </li>
                         <li class="nv-list_item">
                             <span class="nv-list__item--name">Tenure Type</span>
                             <span class="nv-list__item--value" *ngIf="item.type && item.subtype">
@@ -45,10 +45,10 @@
                                 <span>({{item.subtype | titlecase}})</span>
                             </span>
                             <span class="nv-list__item--value" *ngIf="!item.type || !item.subtype">-</span>
-                            </li>
+                        </li>
                     </ul>
                     <div class="list-group-item__buttons">
-                        <label class="clickable" (click)="goToApplication($event, item)">Go to Application Details &nbsp; &rsaquo;</label>
+                        <a [routerLink]="['/application', item._id]">Go to Application Details &nbsp; &rsaquo;</a>
                     </div>
                 </div>
             </ng-template>

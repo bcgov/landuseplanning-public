@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   private sub: Subscription;
 
   constructor(
-    private _router: Router,
+    private router: Router,
     private cookieService: CookieService,
     private api: ApiService
   ) {
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.loggedIn = this.cookieService.get('loggedIn');
 
-    this._router.events.subscribe((url: any) => {
+    this.router.events.subscribe((url: any) => {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     });

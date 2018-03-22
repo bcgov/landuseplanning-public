@@ -31,11 +31,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private commentPeriodService: CommentPeriodService // used in template
   ) { }
 
-  goToApplication(event: Event, item) {
-    event.stopPropagation();
-    this.router.navigate(['/application', item._id]);
-  }
-
   ngOnInit() {
     // get optional query parameter
     if (this.route.snapshot.paramMap.has('showOnlyOpenApps')) {
