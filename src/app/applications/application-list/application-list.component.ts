@@ -22,8 +22,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public currentApp: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
-  @HostBinding('class.full-screen') fullScreen = true;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,

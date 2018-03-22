@@ -1,13 +1,17 @@
 @import "~assets/styles/base.scss";
 
-:host {
-  @include flex(1 1 auto);
-  position: relative;
+app-application-list:host {
+  @include flex-box;
+  @include flex-direction(column);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 2.5rem;
+  left: 0;
 }
 
 .application-list {
   @include flex-box();
-  @include flex(1 1 auto);
   position: absolute;
   top: 0;
   right: 0;
@@ -107,4 +111,3 @@
     position: relative;
   }
 }
-
