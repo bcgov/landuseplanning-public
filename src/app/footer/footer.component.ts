@@ -9,6 +9,6 @@ import { ApiService } from 'app/services/api';
 
 export class FooterComponent {
 
-  constructor(private api: ApiService) { }
+  constructor(public api: ApiService) { }
 
 }

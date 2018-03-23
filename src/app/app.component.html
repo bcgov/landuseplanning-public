@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<ngb-alert class="pilot-alert-container" type="warning" *ngIf="showBanner()" (click)="hideBanner()">
+<ngb-alert class="pilot-alert-container" type="warning" *ngIf="showBanner()" (close)="hideBanner()">
 	<div class="alert__icon">
 		<i class="material-icons">info</i>
 	</div>

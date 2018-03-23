@@ -33,11 +33,11 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public message: string;
   public currentPeriod: CommentPeriod;
 
-  private submitting = false;
+  public submitting = false;
   private progressValue: number;
   private progressBufferValue: number;
-  private totalSize: number;
-  private currentPage = 1;
+  public totalSize: number;
+  public currentPage = 1;
   private comment: Comment;
   public files: Array<File> = [];
 
