@@ -16,7 +16,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'application/:appId',
+    path: 'a/:appId',
     component: ApplicationDetailComponent,
     resolve: {
       application: ApplicationDetailResolver

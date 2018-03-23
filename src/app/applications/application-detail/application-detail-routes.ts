@@ -15,7 +15,7 @@ export const TAB_NAV_ROUTES: Routes = [
         component: ApplicationTabContentComponent
     },
     {
-        path: 'comments',
+        path: 'commenting',
         component: CommentsTabContentComponent
     },
     {

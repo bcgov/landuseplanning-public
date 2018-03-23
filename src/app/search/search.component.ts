@@ -203,7 +203,7 @@ export class SearchComponent implements OnInit {
   }
 
   onSubmit() {
-    this.router.navigate(['search', this.terms.getParams()]);
+    this.router.navigate(['/search', this.terms.getParams()]);
   }
 
   loadMore() {
