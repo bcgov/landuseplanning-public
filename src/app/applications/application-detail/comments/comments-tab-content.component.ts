@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import * as moment from 'moment-timezone';
+import * as moment from 'moment';
 
 import { Application } from 'app/models/application';
 import { Comment } from 'app/models/comment';
