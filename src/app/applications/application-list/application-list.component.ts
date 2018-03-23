@@ -17,7 +17,7 @@ import { MainMapComponent } from 'app/map/main-map/main-map.component';
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
   @ViewChild(MainMapComponent) child: MainMapComponent;
-  private showOnlyOpenApps = false;
+  public showOnlyOpenApps = false;
   public applications: Array<Application> = [];
   public currentApp: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -70,7 +70,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return (item === this.currentApp);
   }
 
-  private redrawMap() {
+  public redrawMap() {
     const self = this;
     const apps = [];
     _.each(this.applications, function (app) {

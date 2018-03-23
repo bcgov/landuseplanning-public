@@ -6,12 +6,12 @@
     "ng": "ng",
     "prestart": "",
     "start": "ng serve -o",
-    "build": "npm run lint && ng build --env=prod",
+    "build": "npm run lint && ng build --prod --env=prod",
     "pretest": "",
     "test": "ng test",
     "lint": "ng lint --format=stylish",
     "e2e": "ng e2e",
-    "postinstall": "ng build --env=prod"
+    "postinstall": "ng build --prod --env=prod"
   },
   "private": true,
   "dependencies": {

@@ -34,7 +34,7 @@ import { SearchService } from 'app/services/search.service';
 import { MapModule } from 'app/map/map.module';
 import { ApplicationsModule } from 'app/applications/applications.module';
 import { CommentPeriod } from 'app/models/commentperiod';
-import { Search } from './models/search';
+import { Search } from 'app/models/search';
 
 @NgModule({
   declarations: [

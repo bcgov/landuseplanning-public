@@ -4,8 +4,6 @@ import { PageScrollConfig } from 'ng2-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs/Subscription';
 
-import { HomeComponent } from './home/home.component';
-import { SearchComponent } from './search/search.component';
 import { ApiService } from './services/api';
 
 @Component({
@@ -20,7 +18,7 @@ export class AppComponent implements OnInit {
   private sub: Subscription;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private cookieService: CookieService,
     private api: ApiService
   ) {
