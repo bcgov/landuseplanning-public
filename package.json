@@ -4,10 +4,10 @@
   "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
-    "prestart": "npm run lint",
+    "prestart": "",
     "start": "ng serve -o",
     "build": "npm run lint && ng build --env=prod",
-    "pretest": "npm run lint",
+    "pretest": "",
     "test": "ng test",
     "lint": "ng lint --format=stylish",
     "e2e": "ng e2e",
