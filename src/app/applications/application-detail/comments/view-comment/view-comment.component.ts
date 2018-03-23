@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -18,7 +18,10 @@ export interface DataModel {
   styleUrls: ['./view-comment.component.scss']
 })
 
-export class ViewCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel {
+// NOTE: normally, dialog components must not implement OnDestroy
+//       otherwise they don't return a result
+//       but in this case there is no result, so it's OK!
+export class ViewCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel, OnInit, OnDestroy {
   public title: string;
   public message: string;
   public commentId: string;
@@ -34,7 +37,6 @@ export class ViewCommentComponent extends DialogComponent<DataModel, boolean> im
     super(dialogService);
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.comment = null;
 
@@ -46,7 +48,6 @@ export class ViewCommentComponent extends DialogComponent<DataModel, boolean> im
       );
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
