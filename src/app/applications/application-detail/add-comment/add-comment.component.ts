@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { HttpEventType } from '@angular/common/http';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
@@ -22,7 +22,9 @@ export interface DataModel {
   styleUrls: ['./add-comment.component.scss']
 })
 
-export class AddCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel {
+// NOTE: dialog components must not implement OnDestroy
+//       otherwise they don't return a result
+export class AddCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel, OnInit, AfterViewInit {
   @ViewChild('iAgree') private iAgree: ElementRef;
   @ViewChild('contactName') private contactName: ElementRef;
   @ViewChild('comment2') private comment2: ElementRef;
@@ -48,14 +50,12 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     super(dialogService);
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.comment = new Comment();
     this.comment._commentPeriod = this.currentPeriod._id;
     this.comment.commentAuthor.requestedAnonymous = false;
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.focus(this.iAgree);
   }
