@@ -20,7 +20,7 @@ import * as _ from 'lodash';
 export class ApplicationDetailComponent implements OnInit, OnDestroy {
   readonly tabLinks = [
     { label: 'Application', link: 'application' },
-    { label: 'Commenting', link: 'comments' },
+    { label: 'Commenting', link: 'commenting' },
     { label: 'Decisions', link: 'decisions' }
   ];
   public layers: L.Layer[];
