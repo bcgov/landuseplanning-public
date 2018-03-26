@@ -84,7 +84,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   // TODO: delete if we don't need a hover action for list items
   private showCurrentApp(item) { }
 
-  // TODO: delete if we don't need a select action for list items
   private setCurrentApp(item) {
     const index = _.findIndex(this.applications, { _id: item._id });
     if (index >= 0) {
