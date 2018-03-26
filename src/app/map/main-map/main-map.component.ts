@@ -28,6 +28,9 @@ export class MainMapComponent implements OnInit {
   public layers: L.Layer[];
   private featureGroups: L.FeatureGroup[];
   public fg: L.FeatureGroup;
+  private baseMaps: {};
+  private control: L.Control;
+  private maxZoom = { maxZoom: 17 };
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +39,38 @@ export class MainMapComponent implements OnInit {
 
   ngOnInit() {
     this.featureGroups = [];
+
+    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+    });
+    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    const OpenMapSurfer_Roads = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+    const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
+      maxZoom: 13
+    });
+    const Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+      maxZoom: 16
+    });
+    this.map = L.map('map', {
+      layers: [World_Imagery]
+    });
+
+    // Setup the controls
+    this.baseMaps = {
+      'Ocean Base': Esri_OceanBasemap,
+      'Nat Geo World Map': Esri_NatGeoWorldMap,
+      'Open Surfer Roads': OpenMapSurfer_Roads,
+      'World Topographic': World_Topo_Map,
+      'World Imagery': World_Imagery
+    };
+    this.control = L.control.layers(this.baseMaps, null, { collapsed: false }).addTo(this.map);
   }
 
   showMaps(apps) {
@@ -68,7 +103,7 @@ export class MainMapComponent implements OnInit {
       // Update the bounds accordingly.
       const b = currentFG.getBounds();
       if (!_.isEmpty(b)) {
-        self.map.fitBounds(b);
+        self.map.fitBounds(b, self.maxZoom);
       }
     });
   }
@@ -76,12 +111,6 @@ export class MainMapComponent implements OnInit {
   drawMap(apps: Application[]) {
     const self = this;
     let globalBounds = null;
-
-    this.map = L.map('map').setView([53.505, -127.09], 4);
-
-    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; and the GIS User Community'
-    }).addTo(this.map);
 
     if (self.fg) {
       _.each(self.layers, function (layer) {
@@ -135,7 +164,7 @@ export class MainMapComponent implements OnInit {
             } else {
               globalBounds.extend(b);
             }
-            self.map.fitBounds(globalBounds);
+            self.map.fitBounds(globalBounds, self.maxZoom);
           }
           group.dispositionId = app.tantalisID;
           group.addTo(self.map);
@@ -175,7 +204,7 @@ export class MainMapComponent implements OnInit {
     });
     const b = currentFG.getBounds();
     if (!_.isEmpty(b)) {
-      self.map.fitBounds(b);
+      self.map.fitBounds(b, self.maxZoom);
     }
   }
 }
