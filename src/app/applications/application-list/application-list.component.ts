@@ -30,8 +30,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // get optional query parameter
-    if (this.route.snapshot.paramMap.has('showOnlyOpenApps')) {
+    // get optional route parameter (matrix URL notation)
+    if (this.route.snapshot.paramMap.get('showOnlyOpenApps') === 'true') {
       this.showOnlyOpenApps = true;
     }
 
