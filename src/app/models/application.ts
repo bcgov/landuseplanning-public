@@ -54,6 +54,8 @@ export class Application {
   content: Array<Content>;
   internal: Internal;
   isPublished = false;
+  // Transient
+  isVisible = true;
 
   documents: Array<Document>;
   currentPeriod: CommentPeriod;
@@ -95,7 +97,6 @@ export class Application {
     this.dispositionID           = obj && obj.dispositionID           || 0;
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
-
     this.content                 = obj && obj.content                 || [];
     this.internal                = obj && obj.internal                || new Internal();
 
