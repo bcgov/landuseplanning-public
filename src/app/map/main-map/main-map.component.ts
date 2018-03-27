@@ -1,4 +1,4 @@
-import { Component, Inject, Input, HostBinding, OnInit } from '@angular/core';
+import { Component, Inject, Input, Output, HostBinding, OnInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Application } from 'app/models/application';
 import { SearchService } from '../../services/search.service';
@@ -21,6 +21,7 @@ declare module 'leaflet' {
 export class MainMapComponent implements OnInit {
   // public properties
   @Input() animate = true;
+  @Output() visibleLayer = new EventEmitter<any>();
 
   // private fields
   private selectedId: string;
@@ -31,6 +32,9 @@ export class MainMapComponent implements OnInit {
   private baseMaps: {};
   private control: L.Control;
   private maxZoom = { maxZoom: 17 };
+  private isUser = false;
+  private markers = [];
+  private cachedMaps = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +42,30 @@ export class MainMapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    var resetViewControl = L.Control.extend({
+      options: {
+      position: 'topleft'
+      },
+      onAdd: function (map) {
+        var container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
+
+        container.style.backgroundColor = 'white';
+        container.title = 'Reset Map';
+        container.innerText = 'refresh';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.style.cursor = 'pointer';
+
+        container.onclick = function(){
+          _.each(self.featureGroups, function (fg) {
+            self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: true});
+          });
+          self.showMaps(self.cachedMaps);
+        }
+        return container;
+      },
+    });
+
     this.featureGroups = [];
 
     const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -62,6 +90,36 @@ export class MainMapComponent implements OnInit {
       layers: [World_Imagery]
     });
 
+    // Bounding box view?
+    var self = this;
+    this.map.on('dragend', function () {
+      if (self.isUser) {
+        self.isUser = false;
+        self.resetVisible();
+      }
+    });
+    this.map.on('zoomend', function() {
+      if (self.isUser) {
+        self.isUser = false;
+        self.resetVisible();
+      }
+    });
+    this.map.on('moveend', function() {
+      if (self.isUser) {
+        self.isUser = false;
+        self.resetVisible();
+      }
+    });
+    this.map.on('movestart', function() {
+      self.isUser = true;
+    });
+    this.map.on('dragstart', function() {
+      self.isUser = true;
+    });
+    this.map.on('drag', function() {
+      self.isUser = true;
+    });
+
     // Setup the controls
     this.baseMaps = {
       'Ocean Base': Esri_OceanBasemap,
@@ -71,10 +129,32 @@ export class MainMapComponent implements OnInit {
       'World Imagery': World_Imagery
     };
     this.control = L.control.layers(this.baseMaps, null, { collapsed: false }).addTo(this.map);
+
+    this.map.addControl(new resetViewControl());
+  }
+
+  resetVisible() {
+    var self = this;
+    var width = self.map.getBounds().getEast() - self.map.getBounds().getWest();
+    var height = self.map.getBounds().getNorth() - self.map.getBounds().getSouth();
+
+    const b = self.map.getBounds();
+    // Go through each layer turning on/off the layer.
+    _.each(self.featureGroups, function (fg) {
+      const fgBounds = fg.getBounds();
+      if (fgBounds && fgBounds.isValid() && b.intersects(fgBounds)) {
+        // Intersects, make sure the list item shows
+        self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: true});
+      } else {
+        // Doesn't intersect, make it hidden in the left nav.
+        self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: false});
+      }
+    });
   }
 
   showMaps(apps) {
     const self = this;
+    self.cachedMaps = apps;
     const includeDisps = [];
     _.each(apps, function(a) {
       // Build array of included disps.
@@ -110,6 +190,7 @@ export class MainMapComponent implements OnInit {
 
   drawMap(apps: Application[]) {
     const self = this;
+    self.cachedMaps = apps;
     let globalBounds = null;
 
     if (self.fg) {
@@ -181,30 +262,17 @@ export class MainMapComponent implements OnInit {
     const self = this;
     const currentFG = L.featureGroup();
     // Go through each layer turning on/off the layer.
-    _.each(this.featureGroups, function (fg) {
-      // Check each layergroup to see if it should be removed or not.
-      fg.eachLayer(function (l) {
-        self.map.removeLayer(l);
-      });
+    _.each(self.markers, function(mark) {
+      self.map.removeLayer(mark);
+    });
 
+    _.each(this.featureGroups, function (fg) {
       if (show) {
         if (fg.dispositionId === app.tantalisID) {
-          // Highlight it
-          fg.eachLayer(function (l) {
-            self.map.addLayer(l);
-            l.addTo(currentFG);
-          });
+          const marker = L.marker(fg.getBounds().getCenter()).addTo(self.map);
+          self.markers.push(marker);
         }
-      } else {
-        fg.eachLayer(function (l) {
-          currentFG.addTo(self.map.addLayer(l));
-          l.addTo(currentFG);
-        });
       }
     });
-    const b = currentFG.getBounds();
-    if (!_.isEmpty(b)) {
-      self.map.fitBounds(b, self.maxZoom);
-    }
   }
 }
