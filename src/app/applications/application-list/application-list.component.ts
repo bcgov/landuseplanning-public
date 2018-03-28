@@ -29,6 +29,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private commentPeriodService: CommentPeriodService // used in template
   ) { }
 
+  visibleLayer(app) {
+    // Toggle visibility of left-hand list items.
+    const self = this;
+    var f = _.find(self.applications, {tantalisID: app.tantalisID});
+    if (f) {
+      f.isVisible = app.isVisible;
+    }
+  }
+
   ngOnInit() {
     // get optional route parameter (matrix URL notation)
     if (this.route.snapshot.paramMap.get('showOnlyOpenApps') === 'true') {
@@ -82,7 +91,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   // TODO: delete if we don't need a hover action for list items
-  private showCurrentApp(item) { }
+  private showCurrentApp(item) {
+    // console.log('item', item);
+  }
 
   private setCurrentApp(item) {
     const index = _.findIndex(this.applications, { _id: item._id });

@@ -64,7 +64,7 @@ export class SearchService {
     //   return Observable.of(this.features);
     // }
 
-    console.log('dtid =', dtid);
+    // console.log('dtid =', dtid);
 
     return this.api.getBCGWDispositionTransactionId(dtid)
       .map(res => {
@@ -74,7 +74,7 @@ export class SearchService {
       .map((features: Feature[]) => {
         if (!features) { return null; }
 
-        console.log('new features =', features);
+        // console.log('new features =', features);
         this.features = features;
         return this.features;
       });
