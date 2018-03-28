@@ -1,6 +1,7 @@
 @import "~assets/styles/base.scss";
 
 :host {
+  @include flex(0 0 auto);
   display: block;
   background-position: center -8rem;
   background-size: 250%;
