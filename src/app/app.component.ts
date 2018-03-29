@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   loggedIn: String;
   hostname: String;
   private sub: Subscription;
+  private today: Date;
 
   constructor(
     public router: Router,
@@ -24,6 +25,9 @@ export class AppComponent implements OnInit {
   ) {
     // Used for sharing links.
     this.hostname = api.apiPath; // TODO: Wrong
+
+    const now = new Date();
+    this.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     PageScrollConfig.defaultScrollOffset = 50;
     PageScrollConfig.defaultEasingLogic = {
@@ -46,17 +50,17 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.loggedIn = this.cookieService.get('loggedIn');
 
-    this.router.events.subscribe((url: any) => {
+    this.router.events.subscribe(() => {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     });
   }
 
   showBanner(): boolean {
-    return !sessionStorage.hidePrcPilotBanner;
+    return (!localStorage.hidePrcPilotBannerDate || localStorage.hidePrcPilotBannerDate < this.today);
   }
 
   hideBanner() {
-    sessionStorage.hidePrcPilotBanner = true;
+    localStorage.hidePrcPilotBannerDate = this.today;
   }
 }
