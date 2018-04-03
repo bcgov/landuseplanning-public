@@ -32,7 +32,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   visibleLayer(app) {
     // Toggle visibility of left-hand list items.
     const self = this;
-    var f = _.find(self.applications, {tantalisID: app.tantalisID});
+    const f = _.find(self.applications, {tantalisID: app.tantalisID});
     if (f) {
       f.isVisible = app.isVisible;
     }

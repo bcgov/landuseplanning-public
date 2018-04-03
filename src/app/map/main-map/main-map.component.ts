@@ -42,6 +42,7 @@ export class MainMapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const self = this;
     const resetViewControl = L.Control.extend({
       options: {
       position: 'topleft'
@@ -61,7 +62,7 @@ export class MainMapComponent implements OnInit {
             self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: true});
           });
           self.showMaps(self.cachedMaps);
-        }
+        };
         return container;
       },
     });
@@ -91,7 +92,6 @@ export class MainMapComponent implements OnInit {
     });
 
     // Bounding box view?
-    const self = this;
     this.map.on('dragend', function () {
       if (self.isUser) {
         self.isUser = false;
