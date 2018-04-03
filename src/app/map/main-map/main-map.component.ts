@@ -42,12 +42,12 @@ export class MainMapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    var resetViewControl = L.Control.extend({
+    const resetViewControl = L.Control.extend({
       options: {
       position: 'topleft'
       },
       onAdd: function (map) {
-        var container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
+        const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
 
         container.style.backgroundColor = 'white';
         container.title = 'Reset Map';
@@ -91,7 +91,7 @@ export class MainMapComponent implements OnInit {
     });
 
     // Bounding box view?
-    var self = this;
+    const self = this;
     this.map.on('dragend', function () {
       if (self.isUser) {
         self.isUser = false;
@@ -134,9 +134,9 @@ export class MainMapComponent implements OnInit {
   }
 
   resetVisible() {
-    var self = this;
-    var width = self.map.getBounds().getEast() - self.map.getBounds().getWest();
-    var height = self.map.getBounds().getNorth() - self.map.getBounds().getSouth();
+    const self = this;
+    const width = self.map.getBounds().getEast() - self.map.getBounds().getWest();
+    const height = self.map.getBounds().getNorth() - self.map.getBounds().getSouth();
 
     const b = self.map.getBounds();
     // Go through each layer turning on/off the layer.
