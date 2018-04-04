@@ -51,8 +51,8 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
           if (data.application) {
             this.application = data.application;
             const self = this;
-            this.searchService.getByDTID(this.application.tantalisID.toString()).subscribe(
-              features => {
+            this.searchService.getByDTID(this.application.tantalisID).subscribe(
+                features => {
                 const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
                   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
                 });
