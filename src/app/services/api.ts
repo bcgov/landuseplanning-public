@@ -98,7 +98,6 @@ export class ApiService {
       'status',
       'tenureStage',
       'tantalisID',
-      'dispositionID',
       'type',
       'subtype',
 
@@ -147,7 +146,6 @@ export class ApiService {
       'status',
       'tenureStage',
       'tantalisID',
-      'dispositionID',
       'type',
       'subtype',
 
@@ -403,8 +401,8 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  getBCGWDispositionTransactionId(id: string) {
-    const fields = ['name'];
+  getBCGWDispositionTransactionId(id: number) {
+      const fields = ['name'];
     let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';

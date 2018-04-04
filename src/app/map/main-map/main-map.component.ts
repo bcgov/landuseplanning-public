@@ -45,7 +45,7 @@ export class MainMapComponent implements OnInit {
     const self = this;
     const resetViewControl = L.Control.extend({
       options: {
-      position: 'topleft'
+        position: 'topleft'
       },
       onAdd: function (map) {
         const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
@@ -57,9 +57,9 @@ export class MainMapComponent implements OnInit {
         container.style.height = '30px';
         container.style.cursor = 'pointer';
 
-        container.onclick = function(){
+        container.onclick = function () {
           _.each(self.featureGroups, function (fg) {
-            self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: true});
+            self.visibleLayer.next({ tantalisID: fg.dispositionId, isVisible: true });
           });
           self.showMaps(self.cachedMaps);
         };
@@ -98,25 +98,25 @@ export class MainMapComponent implements OnInit {
         self.resetVisible();
       }
     });
-    this.map.on('zoomend', function() {
+    this.map.on('zoomend', function () {
       if (self.isUser) {
         self.isUser = false;
         self.resetVisible();
       }
     });
-    this.map.on('moveend', function() {
+    this.map.on('moveend', function () {
       if (self.isUser) {
         self.isUser = false;
         self.resetVisible();
       }
     });
-    this.map.on('movestart', function() {
+    this.map.on('movestart', function () {
       self.isUser = true;
     });
-    this.map.on('dragstart', function() {
+    this.map.on('dragstart', function () {
       self.isUser = true;
     });
-    this.map.on('drag', function() {
+    this.map.on('drag', function () {
       self.isUser = true;
     });
 
@@ -144,10 +144,10 @@ export class MainMapComponent implements OnInit {
       const fgBounds = fg.getBounds();
       if (fgBounds && fgBounds.isValid() && b.intersects(fgBounds)) {
         // Intersects, make sure the list item shows
-        self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: true});
+        self.visibleLayer.next({ tantalisID: fg.dispositionId, isVisible: true });
       } else {
         // Doesn't intersect, make it hidden in the left nav.
-        self.visibleLayer.next({tantalisID: fg.dispositionId, isVisible: false});
+        self.visibleLayer.next({ tantalisID: fg.dispositionId, isVisible: false });
       }
     });
   }
@@ -156,7 +156,7 @@ export class MainMapComponent implements OnInit {
     const self = this;
     self.cachedMaps = apps;
     const includeDisps = [];
-    _.each(apps, function(a) {
+    _.each(apps, function (a) {
       // Build array of included disps.
       includeDisps.push(a.tantalisID);
     });
@@ -203,7 +203,7 @@ export class MainMapComponent implements OnInit {
     }
 
     _.each(apps, function (app) {
-      self.searchService.getByDTID(app.tantalisID.toString()).subscribe(
+      self.searchService.getByDTID(app.tantalisID).subscribe(
         features => {
           const group = L.featureGroup();
           _.each(features, function (feature) {
@@ -262,7 +262,7 @@ export class MainMapComponent implements OnInit {
     const self = this;
     const currentFG = L.featureGroup();
     // Go through each layer turning on/off the layer.
-    _.each(self.markers, function(mark) {
+    _.each(self.markers, function (mark) {
       self.map.removeLayer(mark);
     });
 

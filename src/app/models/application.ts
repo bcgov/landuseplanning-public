@@ -47,7 +47,6 @@ export class Application {
   status: string;
   tenureStage: string;
   tantalisID: number;
-  dispositionID: number;
   type: string;
   subtype: string;
 
@@ -93,8 +92,7 @@ export class Application {
     this.region                  = obj && obj.region                  || null;
     this.status                  = obj && obj.status                  || null;
     this.tenureStage             = obj && obj.tenureStage             || null;
-    this.tantalisID              = obj && obj.tantalisID              || 0;
-    this.dispositionID           = obj && obj.dispositionID           || 0;
+    this.tantalisID              = obj && obj.tantalisID              || null; // not zero
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
     this.content                 = obj && obj.content                 || [];
