@@ -29,11 +29,11 @@
             </div>
             <div class="col-6">
               <label>Tenure Type</label>
-              <p class="value">{{application.features[0].properties.TENURE_TYPE || "-" | titlecase}}</p>
+              <p class="value">{{application.type || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
               <label>Tenure Subtype</label>
-              <p class="value">{{application.features[0].properties.TENURE_SUBTYPE || "-" | titlecase}}</p>
+              <p class="value">{{application.subtype || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
               <label>Crown Land File</label>
@@ -66,7 +66,7 @@
           </div>
           <div class="col-6">
             <label>Location</label>
-            <p class="value">{{application.features[0].properties.TENURE_LOCATION || "-"}}</p>
+            <p class="value">{{application.location || "-"}}</p>
           </div>
           <div class="col-6">
             <label>Region</label>

@@ -144,11 +144,12 @@ export class ApplicationService {
         );
 
         // now get the shapes
-        promises.push(this.searchService.getByDTID(application.tantalisID.toString())
+        promises.push(this.searchService.getByDTID(application.tantalisID, forceReload)
           .toPromise()
           .then(features => {
             application.features = features;
-            // calculate areaHectares
+
+            // calculate Total Area (hectares)
             let areaHectares = 0;
             _.each(application.features, function (f) {
               if (f['properties']) {
@@ -156,6 +157,21 @@ export class ApplicationService {
               }
             });
             application.areaHectares = areaHectares;
+
+            // update application properties from first feature
+            if (application.features && application.features.length > 0) {
+              application.purpose = application.features[0].properties.TENURE_PURPOSE;
+              application.subpurpose = application.features[0].properties.TENURE_SUBPURPOSE;
+              application.type = application.features[0].properties.TENURE_TYPE;
+              application.subtype = application.features[0].properties.TENURE_SUBTYPE;
+              application.status = application.features[0].properties.TENURE_STATUS;
+              application.tenureStage = application.features[0].properties.TENURE_STAGE;
+              application.cl_file = +application.features[0].properties.CROWN_LANDS_FILE; // NOTE: unary operator
+              application.location = application.features[0].properties.TENURE_LOCATION;
+              application.businessUnit = application.features[0].properties.RESPONSIBLE_BUSINESS_UNIT;
+              application.tantalisID = application.features[0].properties.DISPOSITION_TRANSACTION_SID;
+              application.interestID = application.features[0].properties.INTRID_SID;
+            }
           })
         );
 
