@@ -203,7 +203,9 @@ export class MainMapComponent implements OnInit {
     }
 
     _.each(apps, function (app) {
-      self.searchService.getByDTID(app.tantalisID).subscribe(
+      // NB: always reload results to reduce chance of race condition
+      //     with drawing map and features
+      self.searchService.getByDTID(app.tantalisID, true).subscribe(
         features => {
           const group = L.featureGroup();
           _.each(features, function (feature) {
