@@ -17,18 +17,20 @@
 
             <ng-template ngFor let-item [ngForOf]="applications">
                 <div *ngIf="showThisApp(item)"
-                        class="list-group-item list-group-item-action"
-                        [class.active]="isCurrentApp(item)"
-                        [hidden]="!item.isVisible"
-                        (mouseover)="showCurrentApp(item)"
-                        (click)="setCurrentApp(item)">
+                    class="list-group-item list-group-item-action"
+                    [class.active]="isCurrentApp(item)"
+                    [hidden]="!item.isVisible"
+                    (mouseover)="showCurrentApp(item)"
+                    (click)="setCurrentApp(item)">
                     <h2>{{item.client || 'Unknown Client'}}</h2>
-                    <span class="badge"
-                        [ngClass]="{'badge-primary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
-                            'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
-                            'badge-danger' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
-                            'badge-success' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
+                    <span class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
+                                                    'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
+                                                    'badge-danger'    : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['CLOSED'],
+                                                    'badge-success'   : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['OPEN']}">
                         {{commentPeriodService.getStatus(item.currentPeriod)}}
+                        <div *ngIf="item.currentPeriod">
+                            {{item.currentPeriod.startDate | date:'mediumDate'}} - {{item.currentPeriod.endDate | date:'mediumDate'}}
+                        </div>
                     </span>
                     <ul class="nv-list">
                         <li>
