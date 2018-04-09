@@ -51,27 +51,30 @@ app-application-list:host {
     }
 
     .list-group-item {
-      padding: 1rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       border-radius: 0 !important;
 
       h2 {
-        margin-bottom: 0.15rem;
+        margin: 0;
         letter-spacing: 0;
         font-size: 1rem;
-        font-weight: 700
-      }
-
-      ul {
-        margin: 0.5rem 0;
+        font-weight: 700;
       }
 
       .badge {
         text-transform: uppercase;
+        line-height:  0.75rem;
         font-size: 0.725rem;
+        margin-top: 0.25rem;
 
         &-light {
           background: #ddd;
         }
+      }
+
+      ul {
+        line-height: 1rem;
+        margin-top: 0.25rem;
       }
 
       &__list,
@@ -80,7 +83,7 @@ app-application-list:host {
       }
 
       &__buttons {
-        margin-top: 0;
+        margin-top: 0.25rem;
         a {
           padding: 0.25rem 0rem;
         }
