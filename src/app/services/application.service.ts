@@ -198,7 +198,7 @@ export class ApplicationService {
             });
             application.areaHectares = areaHectares;
 
-            // update application properties from first feature
+            // cache application properties from first feature
             if (application.features && application.features.length > 0) {
               application.purpose = application.features[0].properties.TENURE_PURPOSE;
               application.subpurpose = application.features[0].properties.TENURE_SUBPURPOSE;
@@ -206,11 +206,8 @@ export class ApplicationService {
               application.subtype = application.features[0].properties.TENURE_SUBTYPE;
               application.status = application.features[0].properties.TENURE_STATUS;
               application.tenureStage = application.features[0].properties.TENURE_STAGE;
-              application.cl_file = +application.features[0].properties.CROWN_LANDS_FILE; // NOTE: unary operator
               application.location = application.features[0].properties.TENURE_LOCATION;
               application.businessUnit = application.features[0].properties.RESPONSIBLE_BUSINESS_UNIT;
-              application.tantalisID = application.features[0].properties.DISPOSITION_TRANSACTION_SID;
-              application.interestID = application.features[0].properties.INTRID_SID;
             }
           })
         );
