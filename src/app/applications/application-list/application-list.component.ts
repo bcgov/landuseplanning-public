@@ -26,7 +26,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private applicationService: ApplicationService, // used in template
-    private commentPeriodService: CommentPeriodService // used in template
+    private commentPeriodService: CommentPeriodService // also used in template
   ) { }
 
   visibleLayer(app) {
