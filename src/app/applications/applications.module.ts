@@ -7,7 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 // modules
 import { ApplicationsRoutingModule } from './applications-routing.module';
 import { MapModule } from 'app/map/map.module';
-import { SharedModule } from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared.module';
 
 // components
 import { ApplicationListComponent } from './application-list/application-list.component';
