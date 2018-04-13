@@ -12,7 +12,7 @@
     <div class="modal-content page1" *ngIf="this.currentPage === 1">
       <div class="modal-header">
         <h4 class="modal-title">Conditions</h4>
-        <button type="button" class="close close-submit-comment-pg1" aria-label="Close" (click)="close()">&times;</button>
+        <button type="button" class="close gtm-submit-comment_cancel-pg1" aria-label="Close" (click)="close()">&times;</button>
       </div>
 
       <div class="modal-body">
@@ -60,7 +60,7 @@
     <div class="modal-content page2" *ngIf="this.currentPage === 2">
       <div class="modal-header">
         <h4 class="modal-title">Personal Information</h4>
-        <button type="button" class="close close-submit-comment-pg2" aria-label="Close" (click)="close()">&times;</button>
+        <button type="button" class="close gtm-submit-comment-cancel-pg2" aria-label="Close" (click)="close()">&times;</button>
       </div>
 
       <div class="modal-body">
@@ -121,7 +121,7 @@
     <div class="modal-content page3" *ngIf="this.currentPage === 3">
       <div class="modal-header">
         <h4 class="modal-title">Your Comment</h4>
-        <button type="button" class="close close-submit-comment-pg3" aria-label="Close" (click)="close()">&times;</button>
+        <button type="button" class="close gtm-submit-comment-cancel-pg3" aria-label="Close" (click)="close()">&times;</button>
       </div>
 
       <div class="modal-body">
@@ -146,7 +146,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
-        <button type="button" class="btn btn-primary" (click)="p3_next()" [disabled]="!commentForm2.form.valid || submitting">Submit</button>
+        <button type="button" class="btn btn-primary gtm-submit-comment-submit" (click)="p3_next()" [disabled]="!commentForm2.form.valid || submitting">Submit</button>
       </div>
     </div>
   </form>
@@ -155,7 +155,7 @@
   <div class="modal-content page4" *ngIf="this.currentPage === 4">
     <div class="modal-header">
       <h4 class="modal-title">Confirmation</h4>
-      <button type="button" class="close close-submit-comment-pg4" aria-label="Close" (click)="close()">&times;</button>
+      <button type="button" class="close gtm-submit-comment-done" aria-label="Close" (click)="close()">&times;</button>
     </div>
 
     <div class="modal-body">
@@ -167,7 +167,7 @@
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+      <button type="button" class="btn btn-secondary gtm-submit-comment-done" (click)="close()">Close</button>
     </div>
   </div>
 </div>
