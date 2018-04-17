@@ -17,6 +17,7 @@ import { MainMapComponent } from 'app/map/main-map/main-map.component';
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
   @ViewChild(MainMapComponent) child: MainMapComponent;
+  private showOnlyOpenApps = false;
   public applications: Array<Application> = [];
   public currentApp: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -35,9 +36,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private router: Router,
     private applicationService: ApplicationService, // used in template
     private commentPeriodService: CommentPeriodService // also used in template
-  ) {
-    this.resetFilters(null); // init
-  }
+  ) { }
 
   public visibleLayer(app) {
     // toggle visibility of left-hand list items
@@ -50,10 +49,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // get optional route parameter (matrix URL notation)
-    if (this.route.snapshot.paramMap.get('showOnlyOpenApps') === 'true') {
-      this.cpStatusFilters['Closed'] = false;
-      this.cpStatusFilters['Not Open'] = false;
-    }
+    this.showOnlyOpenApps = (this.route.snapshot.paramMap.get('showOnlyOpenApps') === 'true');
+
+    this.resetFilters(null); // init
 
     // get data from route resolver
     this.route.data
@@ -115,20 +113,28 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   // TODO: fix case where there are no matching applications
-  // TODO: don't show this app if it's not visible on current map
   private showThisApp(item: Application) {
-    // console.log('purposeFilter =', this.purposeFilter);
-    const matchCPStatus = (this.cpStatusFilters['Closed'] && this.commentPeriodService.isClosed(item.currentPeriod))
-      || (this.cpStatusFilters['Not Open'] && this.commentPeriodService.isNotOpen(item.currentPeriod))
-      || (this.cpStatusFilters['Not Started'] && this.commentPeriodService.isNotStarted(item.currentPeriod))
-      || (this.cpStatusFilters['Open'] && this.commentPeriodService.isOpen(item.currentPeriod));
-    const matchAppStatus = true; // TODO
+    const matchCPStatus = (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod))
+      || (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod))
+      || (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod))
+      || (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN] && this.commentPeriodService.isNotOpen(item.currentPeriod));
+
+    const matchAppStatus = (this.appStatusFilters[this.applicationService.ACCEPTED] && this.applicationService.isAccepted(item.status))
+      || (this.appStatusFilters[this.applicationService.DECISION_MADE] && this.applicationService.isDecision(item.status) && !this.applicationService.isCancelled(item.status))
+      || (this.appStatusFilters[this.applicationService.CANCELLED] && this.applicationService.isCancelled(item.status))
+      || (this.appStatusFilters[this.applicationService.ABANDONED] && this.applicationService.isAbandoned(item.status))
+      || (this.appStatusFilters[this.applicationService.DISPOSITION_GOOD_STANDING] && this.applicationService.isDispGoodStanding(item.status))
+      || (this.appStatusFilters[this.applicationService.SUSPENDED] && this.applicationService.isSuspended(item.status));
+
     const matchApplicant = !this.applicantFilter || !item.client
       || item.client.match(new RegExp(this.applicantFilter, 'i'));
+
     const matchCLFile = !this.clFileFilter || !item.cl_file
       || item.cl_file.toString().match(new RegExp(this.clFileFilter.toString(), 'i'));
+
     const matchDispId = !this.dispIdFilter || !item.tantalisID ||
       item.tantalisID.toString().match(new RegExp(this.dispIdFilter.toString(), 'i'));
+
     const matchPurpose = !this.purposeFilter || !item.purpose || !item.subpurpose
       || item.purpose.match(new RegExp(this.purposeFilter, 'i'))
       || item.subpurpose.match(new RegExp(this.purposeFilter, 'i'));
@@ -136,30 +142,29 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return matchCPStatus && matchAppStatus && matchApplicant && matchCLFile && matchDispId && matchPurpose;
   }
 
-  public applyFilters(e: Event) {
-    if (e) {
-      e.preventDefault();
-      this.redrawMap();
-    }
-  }
+  // public applyFilters(e: Event) {
+  //   if (e) {
+  //     e.preventDefault();
+  //     this.redrawMap();
+  //   }
+  // }
 
-  // TODO: fix case where showOnlyOpenApps=true (see ngOnInit)
   public resetFilters(e: Event) {
     this.cpStatusFilters = {
-      'Open': true,
-      'Not Started': true,
-      'Closed': true,
-      'Not Open': true
+      [this.commentPeriodService.OPEN]: true,
+      [this.commentPeriodService.NOT_STARTED]: true,
+      [this.commentPeriodService.CLOSED]: !this.showOnlyOpenApps,
+      [this.commentPeriodService.NOT_OPEN]: !this.showOnlyOpenApps
     };
     this.cpStatusKeys = Object.keys(this.cpStatusFilters);
 
     this.appStatusFilters = {
-      'Application Under Review': true,
-      'Decision Made': true,
-      'Application Cancelled': true,
-      'Application Abandoned': true,
-      'Tenure: Disposition in Good Standing': true,
-      'Tenure: Suspended': true
+      [this.applicationService.ACCEPTED]: true,
+      [this.applicationService.DECISION_MADE]: true,
+      [this.applicationService.CANCELLED]: true,
+      [this.applicationService.ABANDONED]: true,
+      [this.applicationService.DISPOSITION_GOOD_STANDING]: true,
+      [this.applicationService.SUSPENDED]: true
     };
     this.appStatusKeys = Object.keys(this.appStatusFilters);
 

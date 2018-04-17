@@ -10,14 +10,21 @@ import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentPeriodService {
+  // statuses / short strings
+  readonly NOT_STARTED = 'Not Started';
+  readonly NOT_OPEN = 'Not Open';
+  readonly CLOSED = 'Closed';
+  readonly OPEN = 'Open';
+
   private commentPeriod: CommentPeriod = null;
-  public commentStatuses = {};
+  public commentStatuses: Array<string> = [];
 
   constructor(private api: ApiService) {
-    this.commentStatuses['NOT STARTED'] = 'Commenting Not Started';
-    this.commentStatuses['NOT OPEN'] = 'Not Open For Commenting';
-    this.commentStatuses['CLOSED'] = 'Commenting Closed';
-    this.commentStatuses['OPEN'] = 'Commenting Open';
+    // verbose strings
+    this.commentStatuses[this.NOT_STARTED] = 'Commenting Not Started';
+    this.commentStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
+    this.commentStatuses[this.CLOSED] = 'Commenting Closed';
+    this.commentStatuses[this.OPEN] = 'Commenting Open';
   }
 
   // get all comment periods for the specified application id
@@ -80,25 +87,9 @@ export class CommentPeriodService {
     return (sortedPeriods.length > 0) ? sortedPeriods[0] : null;
   }
 
-  isNotStarted(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses['NOT STARTED']);
-  }
-
-  isNotOpen(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses['NOT OPEN']);
-  }
-
-  isClosed(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses['CLOSED']);
-  }
-
-  isOpen(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses['OPEN']);
-  }
-
   getStatus(period: CommentPeriod): string {
     if (!period || !period.startDate || !period.endDate) {
-      return this.commentStatuses['NOT OPEN'];
+      return this.commentStatuses[this.NOT_OPEN];
     }
 
     const now = new Date();
@@ -107,11 +98,27 @@ export class CommentPeriodService {
     const endDate = new Date(period.endDate);
 
     if (endDate < today) {
-      return this.commentStatuses['CLOSED'];
+      return this.commentStatuses[this.CLOSED];
     } else if (startDate > today) {
-      return this.commentStatuses['NOT STARTED'];
+      return this.commentStatuses[this.NOT_STARTED];
     } else {
-      return this.commentStatuses['OPEN'];
+      return this.commentStatuses[this.OPEN];
     }
+  }
+
+  isNotOpen(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses[this.NOT_OPEN]);
+  }
+
+  isClosed(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses[this.CLOSED]);
+  }
+
+  isNotStarted(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses[this.NOT_STARTED]);
+  }
+
+  isOpen(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses[this.OPEN]);
   }
 }
