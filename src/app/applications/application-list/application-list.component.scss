@@ -1,116 +1,133 @@
 @import "~assets/styles/base.scss";
-
 app-application-list:host {
-  @include flex-box;
-  @include flex-direction(column);
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 2.5rem;
-  left: 0;
+    @include flex-box;
+    @include flex-direction(column);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 2.5rem;
+    left: 0;
 }
 
 .application-list {
-  @include flex-box();
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  .map-list-container {
     @include flex-box();
-    @include flex-direction(column);
-    @include flex(0 0 auto);
-    width: 26rem;
-    overflow: hidden;
-
-    &__options {
-      @include flex(0 0 auto);
-      padding: 1rem;
-      border-bottom: 1px solid #ccc;
-      
-      mat-slide-toggle {
-        white-space: normal;
-      }
-    }
-
-    .badge {
-      border: 1px solid transparent;
-
-      &-light,
-      &.undefined {
-        color: #666;
-        background-color: #ccc;
-      }
-    }
-
-    .list-group {
-      @include flex(1 1 auto);
-      overflow-y: scroll;
-    }
-
-    .list-group-item {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0 !important;
-
-      h2 {
-        margin: 0;
-        letter-spacing: 0;
-        font-size: 1rem;
-        font-weight: 700;
-      }
-
-      .badge {
-        text-transform: uppercase;
-        line-height:  0.75rem;
-        font-size: 0.725rem;
-        margin-top: 0.25rem;
-
-        &-light {
-          background: #ddd;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    .list-container {
+        @include flex-box();
+        @include flex-direction(column);
+        @include flex(0 0 auto);
+        width: 24rem;
+        overflow: hidden;
+        .accordion__collapse-header--column {
+            padding: 0.5rem 1rem;
+            width: 100%;
+            text-align: unset;
+            .material-icons {
+                vertical-align: bottom;
+            }
         }
-      }
-
-      ul {
-        line-height: 1rem;
-        margin-top: 0.25rem;
-      }
-
-      &__list,
-      &__buttons {
-        font-size: 0.875rem;
-      }
-
-      &__buttons {
-        margin-top: 0.25rem;
-        a {
-          padding: 0.25rem 0rem;
+        .list-container-options {
+            @include flex(0 0 auto);
+            padding: 0 1rem 1rem 1rem;
+            border-bottom: 1px solid #ccc;
+            // max-height: 40%;
+            // overflow-y: scroll;
+            
+            .dropdown {
+                margin: 0.5rem 0;
+            }
+            .dropdown-item {
+                padding: 0 0.75rem;
+                input {
+                    margin-right: 1rem;
+                }
+            }
+            .title {
+                font-size: medium;
+                font-weight: bold;
+                color: $primary;
+                margin: 0.25rem 0;
+            }
+            input[type=text],
+            input[type=number] {
+                height: 2rem;
+            }
+            input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            &__buttons>* {
+                margin-right: 1rem;
+            }
         }
-      }
-
-      &.active {
         .badge {
-          &-primary {
-            border-color: #fff;
-          }
-
-          &-light,
-          &.undefined {
-            color: #000;
-          }
+            border: 1px solid transparent;
+            &-light,
+            &.undefined {
+                color: #666;
+                background-color: #ccc;
+            }
         }
-        
-        a {
-          color: inherit;
-          border-color: #fff;
+        .list-group {
+            @include flex(1 1 auto);
+            overflow-y: scroll;
         }
-      }
+        .list-group-item {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0 !important;
+            h2 {
+                margin: 0;
+                letter-spacing: 0;
+                font-size: 1rem;
+                font-weight: 700;
+            }
+            .badge {
+                text-transform: uppercase;
+                line-height: 0.75rem;
+                font-size: 0.725rem;
+                margin-top: 0.25rem;
+                &-light {
+                    background: #ddd;
+                }
+            }
+            ul {
+                line-height: 1rem;
+                margin-top: 0.25rem;
+            }
+            &__list,
+            &__buttons {
+                font-size: 0.875rem;
+            }
+            &__buttons {
+                margin-top: 0.25rem;
+                a {
+                    padding: 0.25rem 0rem;
+                }
+            }
+            &.active {
+                .badge {
+                    &-primary {
+                        border-color: #fff;
+                    }
+                    &-light,
+                    &.undefined {
+                        color: #000;
+                    }
+                }
+                a {
+                    color: inherit;
+                    border-color: #fff;
+                }
+            }
+        }
     }
-  }
-
-  .map-container {
-    @include flex(1 1 auto);
-    position: relative;
-  }
+    .map-container {
+        @include flex(1 1 auto);
+        position: relative;
+    }
 }

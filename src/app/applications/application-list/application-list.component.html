@@ -1,13 +1,53 @@
 <div class="application-list">
 
-    <h1 class="sr-only">BC Public Review and Comment Application</h1>
+    <h1 class="sr-only">Public Review and Comment Application List</h1>
 
     <!-- APPLICATION LIST VIEW -->
-    <div class="map-list-container">
-        <div class="map-list-container__options">
-            <mat-slide-toggle color="primary" [checked]="showOnlyOpenApps" (change)="showOnlyOpenApps = $event.checked" (click)="redrawMap()">
-                Only show applications with an open or future comment period
-            </mat-slide-toggle>
+    <div class="list-container">
+        <a role="button" class="accordion__collapse-header--column toggle collapsed" data-toggle="collapse" href="#collapseOptions"
+            aria-expanded="false" aria-controls="collapseOptions">
+            <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Filters</span>
+            <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Filters</span>
+        </a>
+        <div class="collapse list-container-options pt-0" id="collapseOptions">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="cpStatusMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Comment Period Statuses ({{cpStatusCount()}})</button>
+                <div class="dropdown-menu" aria-labelledby="cpStatusMenuButton" (click)="$event.stopPropagation()">
+                    <label class="dropdown-item" *ngFor="let key of cpStatusKeys">
+                        <input type="checkbox" [checked]="cpStatusFilters[key]" (click)="cpStatusFilterClick(key)">{{key}}
+                    </label>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="appStatusMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Application Statuses ({{appStatusCount()}})</button>
+                <div class="dropdown-menu" aria-labelledby="appStatusMenuButton" (click)="$event.stopPropagation()">
+                    <label class="dropdown-item" *ngFor="let key of appStatusKeys">
+                        <input type="checkbox" [checked]="appStatusFilters[key]" (click)="appStatusFilterClick(key)">{{key}}
+                    </label>
+                </div>
+            </div>
+
+            <h2 class="title">Applicant</h2>
+            <input type="text" [(ngModel)]="applicantFilter" (keyup)="redrawMap()">
+
+            <h2 class="title">Crown Land File #</h2>
+            <input type="number" [(ngModel)]="clFileFilter" (keyup)="redrawMap()"
+                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+
+            <h2 class="title">Disposition ID</h2>
+            <input type="number" [(ngModel)]="dispIdFilter" (keyup)="redrawMap()"
+                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+
+            <h2 class="title">Purpose/Subpurpose</h2>
+            <input type="text" [(ngModel)]="purposeFilter" (keyup)="redrawMap()">
+
+            <div class="list-container-options__buttons mt-3">
+                <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyFilters($event)">Apply</button>
+                <a role="button" href="#" (click)="resetFilters($event)">Reset</a>
+            </div>
         </div>
 
         <div class="list-group" *ngIf="applications">
@@ -16,12 +56,7 @@
             </div>
 
             <ng-template ngFor let-item [ngForOf]="applications">
-                <div *ngIf="showThisApp(item)"
-                    class="list-group-item list-group-item-action"
-                    [class.active]="isCurrentApp(item)"
-                    [hidden]="!item.isVisible"
-                    (mouseover)="showCurrentApp(item)"
-                    (click)="setCurrentApp(item)">
+                <div *ngIf="showThisApp(item)" class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" [hidden]="!item.isVisible" (click)="setCurrentApp(item)">
                     <h2>{{item.client || 'Unknown Client'}}</h2>
                     <span class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT STARTED'],
                                                     'badge-secondary' : commentPeriodService.getStatus(item.currentPeriod) === commentPeriodService.commentStatuses['NOT OPEN'],
@@ -63,8 +98,6 @@
     </div>
 
     <!-- APPLICATION MAP VIEW -->
-    <app-main-map #mapref
-        class="map-container"
-        (visibleLayer)="visibleLayer($event)"></app-main-map>
+    <app-main-map #mapref class="map-container" (visibleLayer)="visibleLayer($event)"></app-main-map>
 
 </div>

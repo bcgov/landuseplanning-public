@@ -80,13 +80,20 @@ export class CommentPeriodService {
     return (sortedPeriods.length > 0) ? sortedPeriods[0] : null;
   }
 
-  isOpen(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses['OPEN']);
+  isNotStarted(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses['NOT STARTED']);
   }
 
-  isOpenNotStarted(period: CommentPeriod): boolean {
-    const status = this.getStatus(period);
-    return (status === this.commentStatuses['OPEN'] || status === this.commentStatuses['NOT STARTED']);
+  isNotOpen(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses['NOT OPEN']);
+  }
+
+  isClosed(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses['CLOSED']);
+  }
+
+  isOpen(period: CommentPeriod): boolean {
+    return (this.getStatus(period) === this.commentStatuses['OPEN']);
   }
 
   getStatus(period: CommentPeriod): string {
