@@ -56,8 +56,9 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // show banner anew every day
   showBanner(): boolean {
-    return (!localStorage.hidePrcPilotBannerDate || localStorage.hidePrcPilotBannerDate < this.today);
+    return (!localStorage.hidePrcPilotBannerDate || new Date(localStorage.hidePrcPilotBannerDate) < this.today);
   }
 
   hideBanner() {
