@@ -22,6 +22,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public currentApp: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
+  // public showFilters = true;
   public cpStatusFilters: Object; // array-like object
   public cpStatusKeys: string[] = null;
   public appStatusFilters: Object; // array-like object
@@ -51,7 +52,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     // get optional route parameter (matrix URL notation)
     this.showOnlyOpenApps = (this.route.snapshot.paramMap.get('showOnlyOpenApps') === 'true');
 
-    this.resetFilters(null); // init
+    // initialize filters
+    this.resetFilters(null);
 
     // get data from route resolver
     this.route.data
@@ -84,6 +86,14 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  // public getShowFilters(): boolean {
+  //   return (this.showFilters);
+  // }
+
+  // public setShowFilters(tf: boolean) {
+  //   this.showFilters = tf;
+  // }
+
   public isCurrentApp(item): boolean {
     return (item === this.currentApp);
   }
@@ -114,17 +124,31 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   // TODO: fix case where there are no matching applications
   private showThisApp(item: Application) {
-    const matchCPStatus = (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod))
-      || (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod))
-      || (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod))
-      || (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN] && this.commentPeriodService.isNotOpen(item.currentPeriod));
+    const matchCPStatus = (
+      this.cpStatusFilters[this.commentPeriodService.OPEN]
+      && this.commentPeriodService.isOpen(item.currentPeriod))
+      || (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED]
+        && this.commentPeriodService.isNotStarted(item.currentPeriod))
+      || (this.cpStatusFilters[this.commentPeriodService.CLOSED]
+        && this.commentPeriodService.isClosed(item.currentPeriod))
+      || (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN]
+        && this.commentPeriodService.isNotOpen(item.currentPeriod)
+      );
 
-    const matchAppStatus = (this.appStatusFilters[this.applicationService.ACCEPTED] && this.applicationService.isAccepted(item.status))
-      || (this.appStatusFilters[this.applicationService.DECISION_MADE] && this.applicationService.isDecision(item.status) && !this.applicationService.isCancelled(item.status))
-      || (this.appStatusFilters[this.applicationService.CANCELLED] && this.applicationService.isCancelled(item.status))
-      || (this.appStatusFilters[this.applicationService.ABANDONED] && this.applicationService.isAbandoned(item.status))
-      || (this.appStatusFilters[this.applicationService.DISPOSITION_GOOD_STANDING] && this.applicationService.isDispGoodStanding(item.status))
-      || (this.appStatusFilters[this.applicationService.SUSPENDED] && this.applicationService.isSuspended(item.status));
+    const matchAppStatus =
+      (this.appStatusFilters[this.applicationService.ACCEPTED]
+        && this.applicationService.isAccepted(item.status))
+      || (this.appStatusFilters[this.applicationService.DECISION_MADE]
+        && this.applicationService.isDecision(item.status)
+        && !this.applicationService.isCancelled(item.status))
+      || (this.appStatusFilters[this.applicationService.CANCELLED]
+        && this.applicationService.isCancelled(item.status))
+      || (this.appStatusFilters[this.applicationService.ABANDONED]
+        && this.applicationService.isAbandoned(item.status))
+      || (this.appStatusFilters[this.applicationService.DISPOSITION_GOOD_STANDING]
+        && this.applicationService.isDispGoodStanding(item.status))
+      || (this.appStatusFilters[this.applicationService.SUSPENDED]
+        && this.applicationService.isSuspended(item.status));
 
     const matchApplicant = !this.applicantFilter || !item.client
       || item.client.match(new RegExp(this.applicantFilter, 'i'));

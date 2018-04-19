@@ -6,10 +6,12 @@
     <div class="list-container">
         <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-filters collapsed" data-toggle="collapse" href="#collapseOptions"
             aria-expanded="false" aria-controls="collapseOptions">
+            <!-- [attr.aria-expanded]="getShowFilters()" [class.collapsed]="!getShowFilters()" (click)="setShowFilters(!getShowFilters())"> -->
             <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Filters</span>
             <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Filters</span>
         </a>
         <div class="collapse list-container-options pt-0" id="collapseOptions">
+            <!-- [class.show]="getShowFilters()"> -->
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="cpStatusMenuButton" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Comment Period Statuses ({{cpStatusCount()}})</button>
