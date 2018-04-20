@@ -1,5 +1,6 @@
 import { HostBinding, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+// import { Location } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
@@ -17,7 +18,7 @@ import { MainMapComponent } from 'app/map/main-map/main-map.component';
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
   @ViewChild(MainMapComponent) child: MainMapComponent;
-  private showOnlyOpenApps = false;
+  private showOnlyOpenApps: boolean;
   public applications: Array<Application> = [];
   public currentApp: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -33,8 +34,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public purposeFilter: string = null;
 
   constructor(
-    private route: ActivatedRoute,
+    // private location: Location,
     private router: Router,
+    private route: ActivatedRoute,
     private applicationService: ApplicationService, // used in template
     private commentPeriodService: CommentPeriodService // also used in template
   ) { }
@@ -49,8 +51,12 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // get optional route parameter (matrix URL notation)
-    this.showOnlyOpenApps = (this.route.snapshot.paramMap.get('showOnlyOpenApps') === 'true');
+    // get optional query parameter
+    this.route.queryParamMap
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(params => {
+        this.showOnlyOpenApps = (params.get('showOnlyOpenApps') === 'true');
+      });
 
     // initialize filters
     this.resetFilters(null);
@@ -205,11 +211,17 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   public cpStatusFilterClick(key: string) {
     this.cpStatusFilters[key] = !this.cpStatusFilters[key];
+
+    // FUTURE: change browser URL without reloading page (so query param is saved in history)
+
     this.redrawMap();
   }
 
   public appStatusFilterClick(key: string) {
     this.appStatusFilters[key] = !this.appStatusFilters[key];
+
+    // FUTURE: change browser URL without reloading page (so query param is saved in history)
+
     this.redrawMap();
   }
 
