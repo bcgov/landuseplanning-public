@@ -22,7 +22,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public appStatusKeys: Array<string> = [];
   private paramMap: ParamMap = null;
   private allApps: Array<Application> = [];
-  public filteredApps: Array<Application> = []; // TODO: add filtered property to allApps instead (single array)
+  public filteredApps: Array<Application> = []; // FUTURE: add filtered property to allApps instead (single array)
   public currentApp: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -41,6 +41,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private applicationService: ApplicationService, // used in template
     private commentPeriodService: CommentPeriodService // also used in template
   ) {
+    // populate the keys we want to display
     this.cpStatusKeys.push(this.commentPeriodService.OPEN);
     this.cpStatusKeys.push(this.commentPeriodService.NOT_STARTED);
     this.cpStatusKeys.push(this.commentPeriodService.CLOSED);
@@ -51,15 +52,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.appStatusKeys.push(this.applicationService.ABANDONED);
     this.appStatusKeys.push(this.applicationService.DISPOSITION_GOOD_STANDING);
     this.appStatusKeys.push(this.applicationService.SUSPENDED);
-  }
-
-  public visibleLayer(app) {
-    // toggle visibility of left-hand list items
-    const self = this;
-    const f = _.find(self.filteredApps, { tantalisID: app.tantalisID });
-    if (f) {
-      f.isVisible = app.isVisible;
-    }
   }
 
   ngOnInit() {
@@ -87,8 +79,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
             // apply initial filtering
             this.applyFilters(null);
 
-            // tell the main map to draw
-            this.child.drawMap(data.applications);
+            // draw the initial map
+            this.child.drawMap(this.filteredApps);
           } else {
             // applications not found --> navigate back to home
             alert('Uh-oh, couldn\'t load applications');
@@ -120,14 +112,12 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return (item === this.currentApp);
   }
 
-  public redrawMap() {
-    const apps = [];
-    this.filteredApps.forEach(app => {
-      if (this.showThisApp(app)) {
-        apps.push(app);
-      }
-    });
-    this.child.showMaps(apps);
+  // set visibility of specified list item
+  public visibleLayer(item) {
+    const app = _.find(this.filteredApps, { tantalisID: item.tantalisID });
+    if (app) {
+      app.isVisible = item.isVisible;
+    }
   }
 
   private setCurrentApp(item) {
@@ -144,8 +134,20 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO: fix case where there are no matching applications
+  public applyFilters(e: Event) {
+    this.filteredApps = this.allApps.filter(app => this.showThisApp(app));
+
+    // if called from UI, save new filters and redraw map
+    // otherwise this is part of init
+    if (e) {
+      this.saveFilters();
+      e.preventDefault();
+      this.child.drawMap(this.filteredApps);
+    }
+  }
+
   private showThisApp(item: Application) {
+    // if no option is selected, match all
     const allCpStatus = this.cpStatusKeys.every(key => {
       return (this.cpStatusFilters[key] === false);
     });
@@ -162,6 +164,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         && this.commentPeriodService.isNotOpen(item.currentPeriod))
     );
 
+    // if no option is selected, match all
     const allAppStatus = this.appStatusKeys.every(key => {
       return (this.appStatusFilters[key] === false);
     });
@@ -199,16 +202,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return matchCpStatus && matchAppStatus && matchApplicant && matchCLFile && matchDispId && matchPurpose;
   }
 
-  public applyFilters(e: Event) {
-    this.filteredApps = this.allApps.filter(app => this.showThisApp(app));
-
-    if (e) {
-      this.saveFilters();
-      e.preventDefault();
-      this.redrawMap();
-    }
-  }
-
   private saveFilters() {
     const params: Params = {};
 
@@ -217,7 +210,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         if (!params['cpStatus']) {
           params['cpStatus'] = key;
         } else {
-          params['cpStatus'] += '|' + key;
+          params['cpStatus'] += ',' + key;
         }
       }
     });
@@ -227,7 +220,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         if (!params['appStatus']) {
           params['appStatus'] = key;
         } else {
-          params['appStatus'] += '|' + key;
+          params['appStatus'] += ',' + key;
         }
       }
     });
@@ -254,15 +247,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   public resetFilters(e: Event) {
     // set cpStatus filters according to current param options
-    const cpStatus = this.paramMap.get('cpStatus') || '';
+    const cpStatuses = (this.paramMap.get('cpStatus') || '').split(',');
     this.cpStatusKeys.forEach(key => {
-      this.cpStatusFilters[key] = cpStatus.includes(key);
+      this.cpStatusFilters[key] = cpStatuses.includes(key);
     });
 
     // set appStatus filters according to current param options
-    const appStatus = this.paramMap.get('appStatus') || '';
+    const appStatuses = (this.paramMap.get('appStatus') || '').split(',');
     this.appStatusKeys.forEach(key => {
-      this.appStatusFilters[key] = appStatus.includes(key);
+      this.appStatusFilters[key] = appStatuses.includes(key);
     });
 
     this.applicantFilter = this.paramMap.get('applicant');
@@ -270,7 +263,11 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
     this.purposeFilter = this.paramMap.get('purpose');
 
-    this.applyFilters(e);
+    // if called from UI, apply new filters
+    // otherwise this is part of init
+    if (e) {
+      this.applyFilters(e);
+    }
   }
 
   public cpStatusCount(): number {
@@ -279,14 +276,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   public appStatusCount(): number {
     return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
-  }
-
-  public cpStatusFilterClick(key: string) {
-    this.cpStatusFilters[key] = !this.cpStatusFilters[key];
-  }
-
-  public appStatusFilterClick(key: string) {
-    this.appStatusFilters[key] = !this.appStatusFilters[key];
   }
 
 }

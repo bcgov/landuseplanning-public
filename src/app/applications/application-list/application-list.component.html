@@ -17,7 +17,7 @@
                     aria-expanded="false">Comment Period Statuses ({{cpStatusCount()}})</button>
                 <div class="dropdown-menu" aria-labelledby="cpStatusMenuButton" (click)="$event.stopPropagation()">
                     <label class="dropdown-item" *ngFor="let key of cpStatusKeys">
-                        <input class="gtm-filter-cp-status" type="checkbox" [checked]="cpStatusFilters[key]" (click)="cpStatusFilterClick(key)" name="{{key}}">
+                        <input class="gtm-filter-cp-status" type="checkbox" [(ngModel)]="cpStatusFilters[key]" name="{{key}}">
                         {{commentPeriodService.commentStatuses[key]}}
                     </label>
                 </div>
@@ -28,25 +28,23 @@
                     aria-expanded="false">Application Statuses ({{appStatusCount()}})</button>
                 <div class="dropdown-menu" aria-labelledby="appStatusMenuButton" (click)="$event.stopPropagation()">
                     <label class="dropdown-item" *ngFor="let key of appStatusKeys">
-                        <input class="gtm-filter-app-status" type="checkbox" [checked]="appStatusFilters[key]" (click)="appStatusFilterClick(key)" name="{{key}}">
+                        <input class="gtm-filter-app-status" type="checkbox" [(ngModel)]="appStatusFilters[key]" name="{{key}}">
                         {{applicationService.applicationStatuses[key]}}
                     </label>
                 </div>
             </div>
 
             <h2 class="title">Applicant</h2>
-            <input type="text" [(ngModel)]="applicantFilter" (keyup)="redrawMap()">
+            <input type="text" [(ngModel)]="applicantFilter">
 
             <h2 class="title">Crown Land File #</h2>
-            <input type="number" [(ngModel)]="clFileFilter" (keyup)="redrawMap()"
-                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+            <input type="number" [(ngModel)]="clFileFilter" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
 
             <h2 class="title">Disposition ID</h2>
-            <input type="number" [(ngModel)]="dispIdFilter" (keyup)="redrawMap()"
-                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+            <input type="number" [(ngModel)]="dispIdFilter" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
 
             <h2 class="title">Purpose/Subpurpose</h2>
-            <input type="text" [(ngModel)]="purposeFilter" (keyup)="redrawMap()">
+            <input type="text" [(ngModel)]="purposeFilter">
 
             <div class="list-container-options__buttons mt-2">
                 <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyFilters($event)" title="Apply filters">Filter</button>
@@ -60,7 +58,7 @@
             </div>
 
             <ng-template ngFor let-item [ngForOf]="filteredApps">
-                <div class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" [hidden]="!item.isVisible" (click)="setCurrentApp(item)">
+                <div *ngIf="item.isVisible" class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="setCurrentApp(item)">
                     <h2>{{item.client || 'Unknown Client'}}</h2>
                     <span class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
                                                     'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
