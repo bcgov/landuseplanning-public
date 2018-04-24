@@ -10,17 +10,17 @@ import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentPeriodService {
-  // statuses / short strings
-  readonly NOT_STARTED = 'Not Started';
-  readonly NOT_OPEN = 'Not Open';
-  readonly CLOSED = 'Closed';
-  readonly OPEN = 'Open';
+  // statuses / query param options
+  readonly NOT_STARTED = 'NS';
+  readonly NOT_OPEN = 'NO';
+  readonly CLOSED = 'CL';
+  readonly OPEN = 'OP';
 
-  private commentPeriod: CommentPeriod = null;
   public commentStatuses: Array<string> = [];
+  private commentPeriod: CommentPeriod = null;
 
   constructor(private api: ApiService) {
-    // verbose strings
+    // display strings
     this.commentStatuses[this.NOT_STARTED] = 'Commenting Not Started';
     this.commentStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
     this.commentStatuses[this.CLOSED] = 'Commenting Closed';
