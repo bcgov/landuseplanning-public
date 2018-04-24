@@ -35,7 +35,7 @@
 						<h3 class="feature-block__header">Find Applications Open for Comment</h3>
 						<p class="feature-block__body">Find relevant application details and provide your comments.</p>
 						<div>
-							<a class="btn slide-l-btn hero-btn inverted" routerLink="/applications" [queryParams]="{ showOnlyOpenApps: true }">
+							<a class="btn slide-l-btn hero-btn inverted" routerLink="/applications" [queryParams]="{ cpStatus: + 'OP|NS' }">
 								<i class="material-icons">list</i>
 								<span>View filtered list</span>
 							</a>
