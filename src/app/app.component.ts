@@ -13,6 +13,7 @@ import { ApiService } from './services/api';
 })
 
 export class AppComponent implements OnInit {
+  isSafari: boolean;
   loggedIn: string;
   hostname: string;
   private sub: Subscription;
@@ -23,6 +24,9 @@ export class AppComponent implements OnInit {
     private cookieService: CookieService,
     private api: ApiService
   ) {
+    // ref: https://stackoverflow.com/questions/5899783/detect-safari-using-jquery
+    this.isSafari = (/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
+
     // used for sharing links
     this.hostname = api.apiPath; // TODO: Wrong
 
