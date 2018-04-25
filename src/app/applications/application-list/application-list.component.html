@@ -5,7 +5,7 @@
     <!-- APPLICATION LIST VIEW -->
     <div class="list-container">
         <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-filters" data-toggle="collapse" href="#collapseOptions"
-            aria-expanded="false" aria-controls="collapseOptions">
+            aria-expanded="true" aria-controls="collapseOptions">
             <!-- [attr.aria-expanded]="getShowFilters()" [class.collapsed]="!getShowFilters()" (click)="setShowFilters(!getShowFilters())"> -->
             <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Filters</span>
             <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Filters</span>
@@ -13,8 +13,10 @@
         <div class="collapse list-container-options pt-0 show" id="collapseOptions">
             <!-- [class.show]="getShowFilters()"> -->
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="cpStatusMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Comment Period Statuses ({{cpStatusCount()}})</button>
+                <button class="btn dropdown-toggle" [ngClass]="(cpStatusCount() > 0) ? 'btn-primary' : 'btn-light'" type="button"
+                    id="cpStatusMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Comment Period Statuses ({{cpStatusCount()}})
+                </button>
                 <div class="dropdown-menu" aria-labelledby="cpStatusMenuButton" (click)="$event.stopPropagation()">
                     <label class="dropdown-item" *ngFor="let key of cpStatusKeys">
                         <input class="gtm-filter-cp-status" type="checkbox" [(ngModel)]="cpStatusFilters[key]" name="{{key}}">
@@ -24,8 +26,10 @@
             </div>
 
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="appStatusMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Application Statuses ({{appStatusCount()}})</button>
+                <button class="btn dropdown-toggle" [ngClass]="(appStatusCount() > 0) ? 'btn-primary' : 'btn-light'" type="button"
+                    id="appStatusMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Application Statuses ({{appStatusCount()}})
+                </button>
                 <div class="dropdown-menu" aria-labelledby="appStatusMenuButton" (click)="$event.stopPropagation()">
                     <label class="dropdown-item" *ngFor="let key of appStatusKeys">
                         <input class="gtm-filter-app-status" type="checkbox" [(ngModel)]="appStatusFilters[key]" name="{{key}}">
