@@ -3,17 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ApplicationDetailComponent } from './application-detail/application-detail.component';
-import { ApplicationListResolver, ApplicationDetailResolver } from './application-resolver.service';
+import { ApplicationDetailResolver } from './application-resolver.service';
 
 import { TAB_NAV_ROUTES } from './application-detail/application-detail-routes';
 
 const routes: Routes = [
   {
     path: 'applications',
-    component: ApplicationListComponent,
-    resolve: {
-      applications: ApplicationListResolver
-    }
+    component: ApplicationListComponent
   },
   {
     path: 'a/:appId',
@@ -31,7 +28,6 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
   providers: [
-    ApplicationListResolver,
     ApplicationDetailResolver
   ]
 })
