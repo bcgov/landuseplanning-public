@@ -56,8 +56,8 @@
             </div>
         </div>
 
-        <div class="list-group" *ngIf="filteredApps">
-            <div class="d-block w-100 text-center pt-3" *ngIf="filteredApps.length === 0">
+        <div class="list-group">
+            <div class="d-block w-100 text-center py-3" *ngIf="!appsCount()">
                 <em>No matching applications found.</em>
             </div>
 

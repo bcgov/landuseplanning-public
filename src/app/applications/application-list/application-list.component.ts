@@ -278,4 +278,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
   }
 
+  public appsCount(): number {
+    return this.filteredApps.filter(app => app.isVisible).length;
+  }
+
 }
