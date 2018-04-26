@@ -1,4 +1,5 @@
-import { HostBinding, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
@@ -13,11 +14,23 @@ import { MainMapComponent } from 'app/map/main-map/main-map.component';
 @Component({
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
-  styleUrls: ['./application-list.component.scss']
+  styleUrls: ['./application-list.component.scss'],
+  animations: [
+    trigger('visibility', [
+      transition(':enter', [   // :enter is alias to 'void => *'
+        animate('0.2s 0s', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [   // :leave is alias to '* => void'
+        animate('0.2s 0.75s', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
 
 export class ApplicationListComponent implements OnInit, OnDestroy {
   @ViewChild(MainMapComponent) child: MainMapComponent;
+
+  public loading = true;
   public cpStatusKeys: Array<string> = [];
   public appStatusKeys: Array<string> = [];
   private paramMap: ParamMap = null;
@@ -65,34 +78,29 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.resetFilters(null);
       });
 
-    // get data from route resolver
-    this.route.data
+    // get data
+    this.applicationService.getAll()
       .takeUntil(this.ngUnsubscribe)
-      .subscribe(
-        (data: { applications: Application[] }) => {
-          if (data.applications) {
-            // sort by newest first
-            this.allApps = data.applications.sort((a: Application, b: Application) => {
-              return (a.publishDate < b.publishDate) ? 1 : -1;
-            });
+      .subscribe(applications => {
+        // sort by newest first
+        this.allApps = applications.sort((a: Application, b: Application) => {
+          return (a.publishDate < b.publishDate) ? 1 : -1;
+        });
 
-            // apply initial filtering
-            this.applyFilters(null);
+        // apply initial filtering
+        this.applyFilters(null);
 
-            // draw the initial map
-            this.child.drawMap(this.filteredApps);
-          } else {
-            // applications not found --> navigate back to home
-            alert('Uh-oh, couldn\'t load applications');
-            this.router.navigate(['/']);
-          }
-        },
-        error => {
-          console.log(error);
-          alert('Uh-oh, couldn\'t load applications');
-          this.router.navigate(['/']);
-        }
-      );
+        // draw the initial map
+        this.child.drawMap(this.filteredApps);
+
+        this.loading = false;
+      }, error => {
+        console.log(error);
+        alert('Uh-oh, couldn\'t load applications');
+        this.loading = false;
+        // applications not found --> navigate back to home
+        this.router.navigate(['/']);
+      });
   }
 
   ngOnDestroy() {

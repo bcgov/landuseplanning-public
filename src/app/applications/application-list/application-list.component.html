@@ -1,9 +1,12 @@
 <div class="application-list">
-
+    <div class="spinner-container" *ngIf="loading" [@visibility]>
+        <div class="spinner-new rotating"></div>
+    </div>
+        
     <h1 class="sr-only">Public Review and Comment Application List</h1>
 
     <!-- APPLICATION LIST VIEW -->
-    <div class="list-container">
+    <div class="list-container" *ngIf="!loading">
         <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-filters" data-toggle="collapse" href="#collapseOptions"
             aria-expanded="true" aria-controls="collapseOptions">
             <!-- [attr.aria-expanded]="getShowFilters()" [class.collapsed]="!getShowFilters()" (click)="setShowFilters(!getShowFilters())"> -->
@@ -104,6 +107,6 @@
     </div>
 
     <!-- APPLICATION MAP VIEW -->
-    <app-main-map #mapref class="map-container" (visibleLayer)="visibleLayer($event)"></app-main-map>
+    <app-main-map class="map-container" (visibleLayer)="visibleLayer($event)"></app-main-map>
     
 </div>
