@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 // import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatProgressBarModule } from '@angular/material';
+import { MatSlideToggleModule, MatProgressBarModule } from '@angular/material';
 
 import { OrderByPipe } from 'app/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/pipes/newlines.pipe';
@@ -12,6 +12,7 @@ import { FileUploadComponent } from 'app/file-upload/file-upload.component';
   imports: [
     // CommonModule,
     BrowserModule,
+    MatSlideToggleModule,
     MatProgressBarModule
   ],
   declarations: [
@@ -21,6 +22,7 @@ import { FileUploadComponent } from 'app/file-upload/file-upload.component';
     FileUploadComponent
   ],
   exports: [
+    MatSlideToggleModule,
     MatProgressBarModule,
     OrderByPipe,
     NewlinesPipe,
