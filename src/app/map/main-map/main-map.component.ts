@@ -23,10 +23,8 @@ export class MainMapComponent implements OnInit {
   @Input() animate = true;
   @Output() visibleLayer = new EventEmitter<any>();
 
-  // private fields
   private selectedId: string;
   private map: L.Map;
-  public layers: L.Layer[];
   private featureGroups: L.FeatureGroup[];
   public fg: L.FeatureGroup;
   private baseMaps: {};
@@ -34,7 +32,7 @@ export class MainMapComponent implements OnInit {
   private maxZoom = { maxZoom: 17 };
   private isUser = false;
   private markers = [];
-  private cachedMaps = [];
+  private cachedMaps: Array<Application> = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,14 +47,12 @@ export class MainMapComponent implements OnInit {
       },
       onAdd: function (map) {
         const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
-
         container.style.backgroundColor = 'white';
         container.title = 'Reset Map';
         container.innerText = 'refresh';
         container.style.width = '30px';
         container.style.height = '30px';
         container.style.cursor = 'pointer';
-
         container.onclick = function () {
           _.each(self.featureGroups, function (fg) {
             self.visibleLayer.next({ tantalisID: fg.dispositionId, isVisible: true });
@@ -87,6 +83,7 @@ export class MainMapComponent implements OnInit {
       attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
       maxZoom: 16
     });
+
     this.map = L.map('map', {
       layers: [World_Imagery]
     });
@@ -120,7 +117,7 @@ export class MainMapComponent implements OnInit {
       self.isUser = true;
     });
 
-    // Setup the controls
+    // Set up the controls
     this.baseMaps = {
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
@@ -128,8 +125,8 @@ export class MainMapComponent implements OnInit {
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
-    this.control = L.control.layers(this.baseMaps, null, { collapsed: false }).addTo(this.map);
 
+    this.control = L.control.layers(this.baseMaps, null, { collapsed: false }).addTo(this.map);
     this.map.addControl(new resetViewControl());
   }
 
@@ -137,9 +134,9 @@ export class MainMapComponent implements OnInit {
     const self = this;
     const width = self.map.getBounds().getEast() - self.map.getBounds().getWest();
     const height = self.map.getBounds().getNorth() - self.map.getBounds().getSouth();
-
     const b = self.map.getBounds();
-    // Go through each layer turning on/off the layer.
+
+    // Go through each feature group, turning on/off the respective layer.
     _.each(self.featureGroups, function (fg) {
       const fgBounds = fg.getBounds();
       if (fgBounds && fgBounds.isValid() && b.intersects(fgBounds)) {
@@ -152,16 +149,18 @@ export class MainMapComponent implements OnInit {
     });
   }
 
-  showMaps(apps) {
+  showMaps(apps: Application[]) {
     const self = this;
     self.cachedMaps = apps;
-    const includeDisps = [];
-    _.each(apps, function (a) {
-      // Build array of included disps.
-      includeDisps.push(a.tantalisID);
+    const includeDisps: Array<number> = [];
+
+    // Build array of included disps.
+    _.each(apps, function (app) {
+      includeDisps.push(app.tantalisID);
     });
     const currentFG = L.featureGroup();
-    // Go through each layer turning on/off the layer.
+
+    // Go through each feature group, turning on/off the respective layer.
     _.each(this.featureGroups, function (fg) {
       // Check each layergroup to see if it should be removed or not.
       const found = _.find(includeDisps, function (i) {
@@ -169,21 +168,21 @@ export class MainMapComponent implements OnInit {
       });
       if (!found) {
         // Remove it.
-        fg.eachLayer(function (l) {
-          self.map.removeLayer(l);
+        fg.eachLayer(function (layer) {
+          self.map.removeLayer(layer);
         });
       } else {
         // Make sure it's added back in.
-        fg.eachLayer(function (l) {
-          self.map.addLayer(l);
-          l.addTo(currentFG);
+        fg.eachLayer(function (layer) {
+          self.map.addLayer(layer);
+          layer.addTo(currentFG);
         });
       }
 
       // Update the bounds accordingly.
-      const b = currentFG.getBounds();
-      if (!_.isEmpty(b)) {
-        self.map.fitBounds(b, self.maxZoom);
+      const bounds = currentFG.getBounds();
+      if (!_.isEmpty(bounds)) {
+        self.map.fitBounds(bounds, self.maxZoom);
       }
     });
   }
@@ -194,7 +193,7 @@ export class MainMapComponent implements OnInit {
     let globalBounds = null;
 
     if (self.fg) {
-      _.each(self.layers, function (layer) {
+      self.fg.eachLayer(function (layer) {
         self.map.removeLayer(layer);
       });
       self.fg.clearLayers();
@@ -239,13 +238,14 @@ export class MainMapComponent implements OnInit {
             self.fg.addLayer(layer);
             layer.addTo(group);
           });
-          const b = group.getBounds();
-          if (!_.isEmpty(b)) {
+
+          const bounds = group.getBounds();
+          if (!_.isEmpty(bounds)) {
             // Add marker to fg.
             if (!globalBounds) {
               globalBounds = group.getBounds();
             } else {
-              globalBounds.extend(b);
+              globalBounds.extend(bounds);
             }
             self.map.fitBounds(globalBounds, self.maxZoom);
           }
@@ -254,7 +254,7 @@ export class MainMapComponent implements OnInit {
           self.featureGroups.push(group);
         },
         error => {
-          console.log('error', error);
+          console.log('error =', error);
         }
       );
     });
@@ -262,10 +262,10 @@ export class MainMapComponent implements OnInit {
 
   highlightApplication(app: Application, show: boolean) {
     const self = this;
-    const currentFG = L.featureGroup();
-    // Go through each layer turning on/off the layer.
-    _.each(self.markers, function (mark) {
-      self.map.removeLayer(mark);
+
+    // turn off all markers
+    _.each(self.markers, function (marker) {
+      self.map.removeLayer(marker);
     });
 
     _.each(this.featureGroups, function (fg) {
