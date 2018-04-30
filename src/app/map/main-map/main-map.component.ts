@@ -217,9 +217,9 @@ export class MainMapComponent implements OnInit {
             const content = '<h3>' + featureObj.properties.TENURE_TYPE
               + '<br />'
               + featureObj.properties.TENURE_SUBTYPE + '</h3>'
-              + '<strong>ShapeID: </strong>' + featureObj.properties.INTRID_SID
+              + '<strong>Shape: </strong>' + featureObj.properties.INTRID_SID
               + '<br />'
-              + '<strong>Disposition: </strong>' + featureObj.properties.DISPOSITION_TRANSACTION_SID
+              + '<strong>Disposition Transaction ID: </strong>' + featureObj.properties.DISPOSITION_TRANSACTION_SID
               + '<br />'
               + '<strong>Purpose: </strong>' + featureObj.properties.TENURE_PURPOSE
               + '<br />'

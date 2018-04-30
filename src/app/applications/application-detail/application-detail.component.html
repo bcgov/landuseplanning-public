@@ -40,7 +40,7 @@
               <p class="value">{{application.cl_file || "-"}}</p>
             </div>
             <div class="col-6">
-              <label>Disposition ID</label>
+              <label>Disposition Txn ID</label>
               <p class="value">{{application.tantalisID || "-"}}</p>
             </div>
           </div>
@@ -55,8 +55,10 @@
         <section class="shape-info-item row">
           <div class="col-12">
             <label>GEOGRAPHIC SHAPE INFORMATION</label>
-            <div *ngIf="application.features">This application has
-              <strong>{{application.features.length}}</strong> shape {{application.features.length === 1 ? 'file (Interest)' : 'files (Interests)'}}.
+            <div *ngIf="application.features">
+              This application has
+              <strong>{{application.features.length}}</strong>
+              {{application.features.length === 1 ? 'shape (Interest).' : 'shapes (Interests).'}}
               <hr>
             </div>
           </div>
