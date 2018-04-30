@@ -18,8 +18,8 @@
 		<main class="col-lg-8">
 			<section class="mb-0">
 				<h2>About this Site</h2>
-				<p>This website is used to post Crown land application information for public review and comment, as per Section 32(2) of the
-					Land Act, and to support transparency in making decisions related to Crown land applications.
+				<p>This website is used to post Crown land application information for public review and comment, as per Section 32(2) of
+					the Land Act, and to support transparency in making decisions related to Crown land applications.
 				</p>
 				<p>This website has been launched as a pilot for the province's Skeena Region. We are looking for your feedback to improve
 					the site before launching province-wide over the next year. To share your thoughts, email us at
@@ -34,7 +34,7 @@
 						<h3 class="feature-block__header">Find Applications Open for Comment</h3>
 						<p class="feature-block__body">Find relevant application details and provide your comments.</p>
 						<div>
-							<a class="btn slide-l-btn hero-btn inverted" [routerLink]="['/applications', { showOnlyOpenApps: true }]">
+							<a class="btn slide-l-btn hero-btn inverted" routerLink="/applications" [queryParams]="{ cpStatus: + 'OP,NS' }">
 								<i class="material-icons">list</i>
 								<span>View filtered list</span>
 							</a>
@@ -61,8 +61,8 @@
 		<aside class="col-lg-4">
 			<div class="feature-block light pt-4">
 				<h3>Tell us what you think</h3>
-				<p class="feature-block__body">Public Review and Comment is evolving. More information and features will be added to this website on an ongoing basis. We
-					are looking for your feedback.</p>
+				<p class="feature-block__body">Public Review and Comment is evolving. More information and features will be added to this website on an ongoing basis.
+					We are looking for your feedback.</p>
 				<p class="mb-0">To share your thoughts, email us at
 					<a href="mailto:NRTS.PRC@gov.bc.ca">NRTS.PRC@gov.bc.ca</a>.</p>
 			</div>
