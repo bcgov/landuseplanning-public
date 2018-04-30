@@ -58,7 +58,7 @@
             <div *ngIf="application.features">
               This application has
               <strong>{{application.features.length}}</strong>
-              {{application.features.length === 1 ? 'shape (Interest).' : 'shapes (Interests).'}}
+              {{application.features.length === 1 ? 'shape.' : 'shapes.'}}
               <hr>
             </div>
           </div>
@@ -82,7 +82,7 @@
 
         <section class="feature-item row" *ngFor="let feature of application.features">
           <div class="col-12 mb-1">
-            <span class="title">Interest ID: {{feature.properties.INTRID_SID}}</span>
+            <span class="title">Shape ID: {{feature.properties.INTRID_SID}}</span>
           </div>
           <div class="col-6">
             <label>Type / Subtype</label>
