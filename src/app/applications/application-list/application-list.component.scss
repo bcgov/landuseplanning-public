@@ -22,14 +22,46 @@ app-application-list:host {
         @include flex(0 0 auto);
         width: 24rem;
         overflow: hidden;
+        .accordion__collapse-header--column {
+            padding: 0.5rem 1rem;
+            width: 100%;
+            text-align: unset;
+            .material-icons {
+                vertical-align: bottom;
+            }
+        }
         .list-container-options {
             @include flex(0 0 auto);
-            padding: 1rem;
+            padding: 0 1rem 1rem 1rem;
             border-bottom: 1px solid #ccc;
             // max-height: 40%;
             // overflow-y: scroll;
-            mat-slide-toggle {
-                white-space: normal;
+            .dropdown {
+                margin: 0.5rem 0;
+            }
+            .dropdown-item {
+                padding: 0 0.75rem;
+                input {
+                    margin-right: 1rem;
+                }
+            }
+            .title {
+                font-size: medium;
+                font-weight: bold;
+                color: $primary;
+                margin: 0.25rem 0;
+            }
+            input[type=text],
+            input[type=number] {
+                height: 2rem;
+            }
+            input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            &__buttons>* {
+                margin-right: 1rem;
             }
         }
         .badge {
