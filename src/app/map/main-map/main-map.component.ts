@@ -50,8 +50,10 @@ export class MainMapComponent implements OnInit {
         container.style.backgroundColor = 'white';
         container.title = 'Reset Map';
         container.innerText = 'refresh';
-        container.style.width = '30px';
-        container.style.height = '30px';
+        container.style.width = '34px';
+        container.style.height = '34px';
+        container.style.lineHeight = '30px';
+        container.style.textAlign = 'center';
         container.style.cursor = 'pointer';
         container.onclick = function () {
           _.each(self.featureGroups, function (fg) {
