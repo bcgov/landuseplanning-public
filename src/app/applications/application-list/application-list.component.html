@@ -39,23 +39,25 @@
                 </div>
             </div>
 
-            <h2 class="title">Applicant</h2>
-            <input type="text" [(ngModel)]="applicantFilter">
+            <label class="title d-block" for="applicantInput">Applicant</label>
+            <input type="text" id="applicantInput" [(ngModel)]="applicantFilter" [ngbTypeahead]="applicantSearch" [focusFirst]="false">
 
-            <h2 class="title">Crown Land File #</h2>
-            <input type="number" [(ngModel)]="clFileFilter" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
-                (mousewheel)="$event.preventDefault()">
+            <label class="title d-block" for="clFileInput">Crown Land File #</label>
+            <input type="number" id="clFileInput" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch" [focusFirst]="false"
+                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
 
-            <h2 class="title">Disposition ID</h2>
-            <input type="number" [(ngModel)]="dispIdFilter" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
-                (mousewheel)="$event.preventDefault()">
+            <label class="title d-block" for="dispIdInput">Disposition ID</label>
+            <input type="number" id="dispIdInput" [(ngModel)]="dispIdFilter" [ngbTypeahead]="dispIdSearch" [focusFirst]="false"
+                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
 
-            <h2 class="title">Purpose/Subpurpose</h2>
-            <input type="text" [(ngModel)]="purposeFilter">
+            <label class="title d-block" for="purposeInput">Purpose/Subpurpose</label>
+            <input type="text" id="purposeInput" [(ngModel)]="purposeFilter" [ngbTypeahead]="purposeSearch" [focusFirst]="false">
 
             <div class="list-container-options__buttons mt-2">
                 <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyFilters($event)" title="Apply filters">Filter</button>
+                <a role="button" href="#" (click)="clearFilters($event)" title="Clear filters">Clear</a>
                 <a role="button" href="#" (click)="resetFilters($event)" title="Reset filters">Reset</a>
+                <!-- <span>({{filteredApps && filteredApps.length}} apps)</span> -->
             </div>
         </div>
 

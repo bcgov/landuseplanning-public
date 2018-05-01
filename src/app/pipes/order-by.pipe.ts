@@ -28,8 +28,8 @@ export class OrderByPipe implements PipeTransform {
             }
 
             if (typeof aCompare === 'string') {
-                aCompare = aCompare.toLowerCase();
-                bCompare = bCompare.toLowerCase();
+                aCompare = aCompare.toUpperCase();
+                bCompare = bCompare.toUpperCase();
             }
 
             if (aCompare < bCompare) {

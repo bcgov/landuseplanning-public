@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
 import { Location } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 
@@ -36,6 +40,45 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public dispIdFilter: number = null;
   public purposeFilter: string = null;
 
+  private applicantTokens: Array<string> = [];
+  private purposeTokens: Array<string> = [];
+
+  //
+  // functions to return type-ahead results
+  // ref: https://ng-bootstrap.github.io/#/components/typeahead/api
+  //
+  applicantSearch = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .map(term => term.length < 1 ? []
+        : this.applicantTokens.filter(client => client.toUpperCase().indexOf(this.applicantFilter.toUpperCase()) > -1)
+      );
+
+  clFileSearch = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .map(term => term.length < 1 ? []
+        : this.allApps.map(app => app.cl_file).filter(cl_file => cl_file.toString().indexOf(this.clFileFilter.toString()) > -1)
+      );
+
+  dispIdSearch = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .map(term => term.length < 1 ? []
+        : this.allApps.map(app => app.tantalisID).filter(id => id.toString().indexOf(this.dispIdFilter.toString()) > -1)
+      );
+
+  purposeSearch = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .map(term => term.length < 1 ? []
+        : this.purposeTokens.filter(item => item && item.toUpperCase().indexOf(this.purposeFilter.toUpperCase()) > -1)
+      );
+
   constructor(
     private location: Location,
     private route: ActivatedRoute,
@@ -49,6 +92,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.cpStatusKeys.push(this.commentPeriodService.CLOSED);
     this.cpStatusKeys.push(this.commentPeriodService.NOT_OPEN);
 
+    this.appStatusKeys.push(this.applicationService.ACCEPTED);
     this.appStatusKeys.push(this.applicationService.DECISION_MADE);
     this.appStatusKeys.push(this.applicationService.CANCELLED);
     this.appStatusKeys.push(this.applicationService.ABANDONED);
@@ -75,6 +119,11 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.allApps = applications.sort((a: Application, b: Application) => {
           return (a.publishDate < b.publishDate) ? 1 : -1;
         });
+
+        // store tokens for faster future lookup
+        // (not needed for number properties)
+        this.allApps.forEach(app => this.applicantTokens.push(app.client.toUpperCase()));
+        this.allApps.forEach(app => this.purposeTokens.push((app.purpose || '').toUpperCase(), (app.subpurpose || '').toUpperCase()));
 
         // apply initial filtering
         this.applyFilters(null);
@@ -184,17 +233,17 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     );
 
     const matchApplicant = !this.applicantFilter || !item.client
-      || item.client.match(new RegExp(this.applicantFilter, 'i'));
+      || item.client.toUpperCase().indexOf(this.applicantFilter.toUpperCase()) > -1;
 
     const matchCLFile = !this.clFileFilter || !item.cl_file
-      || item.cl_file.toString().match(new RegExp(this.clFileFilter.toString(), 'i'));
+      || item.cl_file.toString().indexOf(this.clFileFilter.toString()) > -1;
 
     const matchDispId = !this.dispIdFilter || !item.tantalisID ||
-      item.tantalisID.toString().match(new RegExp(this.dispIdFilter.toString(), 'i'));
+      item.tantalisID.toString().indexOf(this.dispIdFilter.toString()) > -1;
 
     const matchPurpose = !this.purposeFilter || !item.purpose || !item.subpurpose
-      || item.purpose.match(new RegExp(this.purposeFilter, 'i'))
-      || item.subpurpose.match(new RegExp(this.purposeFilter, 'i'));
+      || item.purpose.toUpperCase().indexOf(this.purposeFilter.toUpperCase()) > -1
+      || item.subpurpose.toUpperCase().indexOf(this.purposeFilter.toUpperCase()) > -1;
 
     return matchCpStatus && matchAppStatus && matchApplicant && matchCLFile && matchDispId && matchPurpose;
   }
@@ -226,11 +275,13 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       params['applicant'] = this.applicantFilter;
     }
 
-    if (this.clFileFilter !== null) {
+    // check length in case user entered then deleted value
+    if (this.clFileFilter && this.clFileFilter.toString().length > 0) {
       params['clFile'] = this.clFileFilter;
     }
 
-    if (this.dispIdFilter !== null) {
+    // check length in case user entered then deleted value
+    if (this.dispIdFilter && this.dispIdFilter.toString().length > 0) {
       params['dispId'] = this.dispIdFilter;
     }
 
@@ -256,11 +307,30 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     });
 
     this.applicantFilter = this.paramMap.get('applicant');
-    // this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
-    this.clFileFilter = +this.paramMap.get('clFile') || null;
-    // this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
-    this.dispIdFilter = +this.paramMap.get('dispId') || null;
+    this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
+    this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
     this.purposeFilter = this.paramMap.get('purpose');
+
+    // if called from UI, apply new filters
+    // otherwise this is part of init
+    if (e) {
+      this.applyFilters(e);
+    }
+  }
+
+  public clearFilters(e: Event) {
+    this.cpStatusKeys.forEach(key => {
+      this.cpStatusFilters[key] = false;
+    });
+
+    this.appStatusKeys.forEach(key => {
+      this.appStatusFilters[key] = false;
+    });
+
+    this.applicantFilter = null;
+    this.clFileFilter = null;
+    this.dispIdFilter = null;
+    this.purposeFilter = null;
 
     // if called from UI, apply new filters
     // otherwise this is part of init
