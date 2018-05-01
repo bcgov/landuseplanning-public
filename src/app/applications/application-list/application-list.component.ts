@@ -79,7 +79,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 1 ? []
-        : this.purposeKeys.filter(key => key && key.indexOf(this.purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
+        : this.purposeKeys.filter(key => key.indexOf(this.purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
       );
 
   constructor(
@@ -123,14 +123,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
           return (a.publishDate < b.publishDate) ? 1 : -1;
         });
 
-        // store keys for faster future lookup (ie, filter lookahead)
-        this.applicantKeys = _.sortedUniq(this.allApps.map(app => app.client.toUpperCase()).sort());
-        this.clFileKeys = _.sortedUniq(this.allApps.map(app => app.cl_file).sort());
-        this.dispIdKeys = this.allApps.map(app => app.tantalisID).sort();
+        // store keys for faster filter lookahead
+        // don't include empty results, then sort results, and then remove duplicates
+        this.applicantKeys = _.sortedUniq(_.compact(this.allApps.map(app => app.client ? app.client.toUpperCase() : null)).sort());
+        this.clFileKeys = _.sortedUniq(_.compact(this.allApps.map(app => app.cl_file)).sort());
+        this.dispIdKeys = _.compact(this.allApps.map(app => app.tantalisID)).sort(); // should already be unique
 
         Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
           Constants.subpurposes[purpose].forEach(subpurpose => {
-            this.purposeKeys.push(purpose + ' / ' + subpurpose);
+            this.purposeKeys.push(purpose.toUpperCase() + ' / ' + subpurpose.toUpperCase());
           });
         });
 
