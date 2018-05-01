@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 
+import { Constants } from 'app/utils/constants';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
@@ -40,11 +41,13 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public dispIdFilter: number = null;
   public purposeFilter: string = null;
 
-  private applicantTokens: Array<string> = [];
-  private purposeTokens: Array<string> = [];
+  private applicantKeys: Array<string> = [];
+  private clFileKeys: Array<number> = [];
+  private dispIdKeys: Array<number> = [];
+  private purposeKeys: Array<string> = [];
 
   //
-  // functions to return type-ahead results
+  // (arrow) functions to return type-ahead results
   // ref: https://ng-bootstrap.github.io/#/components/typeahead/api
   //
   applicantSearch = (text$: Observable<string>) =>
@@ -52,7 +55,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 1 ? []
-        : this.applicantTokens.filter(client => client.toUpperCase().indexOf(this.applicantFilter.toUpperCase()) > -1)
+        : this.applicantKeys.filter(key => key.indexOf(this.applicantFilter.toUpperCase()) > -1) // .slice(0, 10)
       );
 
   clFileSearch = (text$: Observable<string>) =>
@@ -60,7 +63,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 1 ? []
-        : this.allApps.map(app => app.cl_file).filter(cl_file => cl_file.toString().indexOf(this.clFileFilter.toString()) > -1)
+        : this.clFileKeys.filter(key => key.toString().indexOf(this.clFileFilter.toString()) > -1) // .slice(0, 10)
       );
 
   dispIdSearch = (text$: Observable<string>) =>
@@ -68,7 +71,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 1 ? []
-        : this.allApps.map(app => app.tantalisID).filter(id => id.toString().indexOf(this.dispIdFilter.toString()) > -1)
+        : this.dispIdKeys.filter(key => key.toString().indexOf(this.dispIdFilter.toString()) > -1) // .slice(0, 10)
       );
 
   purposeSearch = (text$: Observable<string>) =>
@@ -76,7 +79,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 1 ? []
-        : this.purposeTokens.filter(item => item && item.toUpperCase().indexOf(this.purposeFilter.toUpperCase()) > -1)
+        : this.purposeKeys.filter(key => key && key.indexOf(this.purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
       );
 
   constructor(
@@ -120,10 +123,16 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
           return (a.publishDate < b.publishDate) ? 1 : -1;
         });
 
-        // store tokens for faster future lookup
-        // (not needed for number properties)
-        this.allApps.forEach(app => this.applicantTokens.push(app.client.toUpperCase()));
-        this.allApps.forEach(app => this.purposeTokens.push((app.purpose || '').toUpperCase(), (app.subpurpose || '').toUpperCase()));
+        // store keys for faster future lookup (ie, filter lookahead)
+        this.applicantKeys = _.sortedUniq(this.allApps.map(app => app.client.toUpperCase()).sort());
+        this.clFileKeys = _.sortedUniq(this.allApps.map(app => app.cl_file).sort());
+        this.dispIdKeys = this.allApps.map(app => app.tantalisID).sort();
+
+        Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
+          Constants.subpurposes[purpose].forEach(subpurpose => {
+            this.purposeKeys.push(purpose + ' / ' + subpurpose);
+          });
+        });
 
         // apply initial filtering
         this.applyFilters(null);
