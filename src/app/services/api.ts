@@ -349,7 +349,7 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  uploadDocument(formData: Object) {
+  uploadDocument(formData: FormData) {
     const fields = [
       'displayName',
       'internalURL',
@@ -384,7 +384,7 @@ export class ApiService {
   }
 
   getBCGWDispositionTransactionId(id: number) {
-      const fields = ['name'];
+    const fields = ['name'];
     let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';

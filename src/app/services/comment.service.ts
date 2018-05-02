@@ -45,7 +45,8 @@ export class CommentService {
           .then((allComments: Comment[][]) => {
             return _.flatten(allComments);
           });
-      });
+      })
+      .catch(this.api.handleError);
   }
 
   // get all comments for the specified comment period id
@@ -113,7 +114,8 @@ export class CommentService {
           this.comment = comment;
           return this.comment;
         });
-      });
+      })
+      .catch(this.api.handleError);
   }
 
   add(orig: Comment): Observable<Comment> {
