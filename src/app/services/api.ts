@@ -67,33 +67,21 @@ export class ApiService {
   //
   getApplications() {
     const fields = [
-      '_id',
-      'id',
-
-      '_addedBy',
-      '_updatedBy',
-      'dateAdded',
-      'dateUpdated',
-
       'agency',
-      'areaHectares',
       'cl_file',
-      'code',
-      'name',
       'client',
+      'code',
       'description',
+      'internal',
       'internalID',
-      'legalDescription',
       'latitude',
+      'legalDescription',
       'longitude',
-      'mapsheet',
+      'name',
       'postID',
       'publishDate',
       'region',
-      'tantalisID',
-
-      'internal'
-
+      'tantalisID'
     ];
     let queryString = 'application?fields=';
     _.each(fields, function (f) {
@@ -106,32 +94,21 @@ export class ApiService {
 
   getApplication(id: string) {
     const fields = [
-      '_id',
-      'id',
-
-      '_addedBy',
-      '_updatedBy',
-      'dateAdded',
-      'dateUpdated',
-
       'agency',
-      'areaHectares',
       'cl_file',
-      'code',
-      'name',
       'client',
+      'code',
       'description',
+      'internal',
       'internalID',
-      'legalDescription',
       'latitude',
+      'legalDescription',
       'longitude',
-      'mapsheet',
+      'name',
       'postID',
       'publishDate',
       'region',
-      'tantalisID',
-
-      'internal'
+      'tantalisID'
     ];
     let queryString = 'application/' + id + '?fields=';
     _.each(fields, function (f) {
@@ -349,7 +326,7 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  uploadDocument(formData: Object) {
+  uploadDocument(formData: FormData) {
     const fields = [
       'displayName',
       'internalURL',
@@ -384,7 +361,7 @@ export class ApiService {
   }
 
   getBCGWDispositionTransactionId(id: number) {
-      const fields = ['name'];
+    const fields = ['name'];
     let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';

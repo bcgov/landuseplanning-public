@@ -74,7 +74,7 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
-  upload(formData: Object): Observable<Document> {
+  add(formData: FormData): Observable<Document> {
     return this.api.uploadDocument(formData)
       .map(res => {
         const d = res.text() ? res.json() : null;

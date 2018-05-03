@@ -168,7 +168,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return (item === this.currentApp);
   }
 
-  // set visibility of specified list item
+  // event handler to set visibility of specified list item
   public visibleLayer(item) {
     const app = _.find(this.filteredApps, { tantalisID: item.tantalisID });
     if (app) {
