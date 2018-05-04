@@ -35,7 +35,7 @@ app-header {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    color: #003366;
+    color: $primary;
 
     button {
       @include flex(0 0 auto);

@@ -1,4 +1,5 @@
 @import "~assets/styles/base.scss";
+
 .tab-section {
     overflow-y: auto;
     >div {
@@ -30,7 +31,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: large;
-            color: #003366;
+            color: $primary;
         }
         .comment__date {
             padding-left: 0.25rem;
