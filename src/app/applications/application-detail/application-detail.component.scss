@@ -1,4 +1,5 @@
 @import "~assets/styles/base.scss";
+
 app-application-detail:host {
     display: block;
     z-index: 998;
@@ -7,7 +8,7 @@ app-application-detail:host {
 .application-detail {
     main {
         overflow-y: auto;
-        background-color: #fff;
+        background-color: $white;
         padding: 1rem;
         border: 1px #ccc solid;
         border-radius: 5px;
@@ -45,7 +46,7 @@ app-application-detail:host {
         }
         .organization-item {
             margin-top: 0;
-            color: #fff;
+            color: $white;
             background-color: #38598a;
             padding: 5px 10px;
             p {
@@ -95,7 +96,7 @@ app-application-detail:host {
         }
         >section {
             position: relative;
-            background-color: #fff;
+            background-color: $white;
             padding: 1rem;
             border: 1px #ccc solid;
             border-radius: 5px;

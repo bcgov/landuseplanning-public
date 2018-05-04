@@ -1,6 +1,5 @@
 @import "~assets/styles/base.scss";
 
-// HEADER ELEMENT
 header {
   &.app-header {
     @include clearfix;
@@ -38,7 +37,7 @@ header {
 
   &.collapsed {
     border: 2px solid transparent;
-    color: #FFF;
+    color: $white;
   }
 
   i {

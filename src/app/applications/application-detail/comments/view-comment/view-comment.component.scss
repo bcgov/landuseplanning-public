@@ -1,4 +1,5 @@
 @import "~assets/styles/base.scss";
+
 .modal-dialog {
     .modal-header {
         background-color: #f1f1f1;
@@ -10,7 +11,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: larger;
-            color: #003366;
+            color: $primary;
         }
     }
     .modal-body {

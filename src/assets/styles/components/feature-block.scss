@@ -36,7 +36,7 @@
     color: $feature-block-light-color;
 
     a:not[class^="btn"] {
-      color: #003366;
+      color: $feature-block-primary;
     }
   }
 
