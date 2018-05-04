@@ -69,15 +69,6 @@
             <ng-template ngFor let-item [ngForOf]="filteredApps">
                 <div *ngIf="item.isVisible" class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="setCurrentApp(item)">
                     <h2>{{item.client || 'Unknown Client'}}</h2>
-                    <span class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
-                                                    'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
-                                                    'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
-                                                    'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">
-                        {{item.cpStatus}}
-                        <div *ngIf="item.currentPeriod">
-                            {{item.currentPeriod.startDate | date:'mediumDate'}} - {{item.currentPeriod.endDate | date:'mediumDate'}}
-                        </div>
-                    </span>
                     <ul class="nv-list">
                         <li>
                             <span class="nv-list__item--name">Status</span>
@@ -100,8 +91,19 @@
                             <span class="nv-list__item--value" *ngIf="!item.type || !item.subtype">-</span>
                         </li>
                     </ul>
-                    <div class="list-group-item__buttons">
-                        <a (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]">Go to Application Details &nbsp; &rsaquo;</a>
+                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center mt-1">
+                        <span class="badge mt-0" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
+                                                             'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
+                                                             'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
+                                                             'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">{{item.cpStatus}}
+                            <div *ngIf="item.currentPeriod">
+                                {{item.currentPeriod.startDate | date:'mediumDate'}} - {{item.currentPeriod.endDate | date:'mediumDate'}}
+                            </div>
+                        </span>
+                        <a (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]" title="Go to application details">
+                            <i class="material-icons">forward</i>
+                            <!-- <i class="material-icons">play_circle_filled</i> -->
+                        </a>
                     </div>
                 </div>
             </ng-template>

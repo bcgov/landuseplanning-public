@@ -41,6 +41,10 @@ export class MainMapComponent implements OnInit {
 
   ngOnInit() {
     const self = this;
+
+    // refs:
+    //   https://leafletjs.com/examples/layers-control/
+    //   https://leafletjs.com/examples/extending/extending-3-controls.html
     const resetViewControl = L.Control.extend({
       options: {
         position: 'topleft'
