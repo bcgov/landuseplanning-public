@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageScrollConfig } from 'ng2-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 import { ApiService } from './services/api';
 
@@ -12,12 +13,12 @@ import { ApiService } from './services/api';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   isSafari: boolean;
   loggedIn: string;
   hostname: string;
-  private sub: Subscription;
   private today: Date;
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public router: Router,
@@ -54,10 +55,17 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.loggedIn = this.cookieService.get('loggedIn');
 
-    this.router.events.subscribe(() => {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    });
+    this.router.events
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   // show banner anew every day
