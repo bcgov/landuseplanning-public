@@ -122,6 +122,21 @@ export class ApiService {
   //
   // Organizations
   //
+  getOrganizations() {
+    const fields = [
+      '_addedBy',
+      'code',
+      'name'
+    ];
+    let queryString = 'organization?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
   getOrganization(id: string) {
     const fields = [
       '_addedBy',

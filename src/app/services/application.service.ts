@@ -65,7 +65,8 @@ export class ApplicationService {
     return this.getAllInternal()
       .map(applications => {
         return applications.length;
-      });
+      })
+      .catch(this.api.handleError);
   }
 
   // get all applications
@@ -145,7 +146,8 @@ export class ApplicationService {
         });
 
         return Promise.all(promises).then(() => { return applications; });
-      });
+      })
+      .catch(this.api.handleError);
   }
 
   // get just the applications

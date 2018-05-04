@@ -14,6 +14,19 @@ export class OrganizationService {
 
   constructor(private api: ApiService) { }
 
+  // get all organizations
+  getAll(): Observable<Organization[]> {
+    return this.api.getOrganizations()
+      .map(res => {
+        const organizations = res.text() ? res.json() : [];
+        organizations.forEach((org, index) => {
+          organizations[index] = new Organization(org);
+        });
+        return organizations;
+      })
+      .catch(this.api.handleError);
+  }
+
   // get a specific organization by its id
   getById(orgId: string, forceReload: boolean = false): Observable<Organization> {
     if (this.organization && this.organization._id === orgId && !forceReload) {
