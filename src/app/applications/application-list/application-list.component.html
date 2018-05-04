@@ -7,8 +7,8 @@
 
     <!-- APPLICATION LIST VIEW -->
     <div class="list-container" *ngIf="!loading">
-        <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-filters collapsed" data-toggle="collapse" href="#collapseOptions"
-            aria-expanded="false" aria-controls="collapseOptions">
+        <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-filters collapsed" data-toggle="collapse"
+            href="#collapseOptions" aria-expanded="false" aria-controls="collapseOptions">
             <!-- [attr.aria-expanded]="getShowFilters()" [class.collapsed]="!getShowFilters()" (click)="setShowFilters(!getShowFilters())"> -->
             <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Filters</span>
             <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Filters</span>
@@ -43,12 +43,12 @@
             <input type="text" id="applicantInput" [(ngModel)]="applicantFilter" [ngbTypeahead]="applicantSearch" [focusFirst]="false">
 
             <label class="title d-block" for="clFileInput">Crown Land File #</label>
-            <input type="number" id="clFileInput" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch" [focusFirst]="false"
-                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+            <input type="number" id="clFileInput" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()"
+                (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
 
             <label class="title d-block" for="dispIdInput">Disposition ID</label>
-            <input type="number" id="dispIdInput" [(ngModel)]="dispIdFilter" [ngbTypeahead]="dispIdSearch" [focusFirst]="false"
-                (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+            <input type="number" id="dispIdInput" [(ngModel)]="dispIdFilter" [ngbTypeahead]="dispIdSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()"
+                (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
 
             <label class="title d-block" for="purposeInput">Purpose/Subpurpose</label>
             <input type="text" id="purposeInput" [(ngModel)]="purposeFilter" [ngbTypeahead]="purposeSearch" [focusFirst]="false">
@@ -68,41 +68,48 @@
 
             <ng-template ngFor let-item [ngForOf]="filteredApps">
                 <div *ngIf="item.isVisible" class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="setCurrentApp(item)">
-                    <h2>{{item.client || 'Unknown Client'}}</h2>
-                    <ul class="nv-list">
+                    <ul class="list-group-item__list">
                         <li>
-                            <span class="nv-list__item--name">Status</span>
-                            <span class="nv-list__item--value">{{item.appStatus}}</span>
+                            <label>Client</label>
+                            <p class="value-large">{{item.client || 'Unknown Client'}}</p>
                         </li>
-                        <li class="nv-list_item">
-                            <span class="nv-list__item--name">Purpose</span>
-                            <span class="nv-list__item--value" *ngIf="item.purpose && item.subpurpose">
-                                <span>{{item.purpose | titlecase}}</span>
-                                <span>({{item.subpurpose | titlecase}})</span>
-                            </span>
-                            <span class="nv-list__item--value" *ngIf="!item.purpose || !item.subpurpose">-</span>
+                        <li>
+                            <label>Purpose / Subpurpose</label>
+                            <p class="value" *ngIf="item.purpose && item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</p>
+                            <p class="value" *ngIf="!item.purpose || !item.subpurpose">-</p>
                         </li>
-                        <li class="nv-list_item">
-                            <span class="nv-list__item--name">Tenure Type</span>
-                            <span class="nv-list__item--value" *ngIf="item.type && item.subtype">
-                                <span>{{item.type | titlecase}}</span>
-                                <span>({{item.subtype | titlecase}})</span>
-                            </span>
-                            <span class="nv-list__item--value" *ngIf="!item.type || !item.subtype">-</span>
+                        <li>
+                            <label>Disposition Transaction ID</label>
+                            <p class="value">{{item.tantalisID}}</p>
+                        </li>
+                        <!-- <li>
+                            <label>Crown Land File #</label>
+                            <p class="value">{{item.cl_file}}</p>
+                        </li> -->
+                        <li>
+                            <label>Status</label>
+                            <p class="value-large">{{item.appStatus}}</p>
                         </li>
                     </ul>
-                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center mt-1">
-                        <span class="badge mt-0" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
-                                                             'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
-                                                             'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
-                                                             'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">{{item.cpStatus}}
-                            <div *ngIf="item.currentPeriod">
-                                {{item.currentPeriod.startDate | date:'mediumDate'}} - {{item.currentPeriod.endDate | date:'mediumDate'}}
-                            </div>
-                        </span>
+                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center">
+                        <div class="badge mt-0" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
+                                                            'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
+                                                            'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
+                                                            'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">
+                            {{item.cpStatus}}
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
+                                : {{item.currentPeriod.startDate | date:'mediumDate'}}
+                            </span>
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">
+                                : {{item.currentPeriod.endDate | date:'mediumDate'}}
+                            </span>
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
+                                : {{item.currentPeriod.startDate | date:'MMM dd'}} - {{item.currentPeriod.endDate | date:'MMM dd'}}
+                            </span>
+                        </div>
                         <a (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]" title="Go to application details">
-                            <i class="material-icons">forward</i>
                             <!-- <i class="material-icons">play_circle_filled</i> -->
+                            <i class="material-icons">forward</i>
                         </a>
                     </div>
                 </div>
