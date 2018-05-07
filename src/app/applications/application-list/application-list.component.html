@@ -68,48 +68,49 @@
 
             <ng-template ngFor let-item [ngForOf]="filteredApps">
                 <div *ngIf="item.isVisible" class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="setCurrentApp(item)">
-                    <ul class="list-group-item__list">
-                        <li>
+                    <div class="row list-group-item__detail">
+                        <div class="col-12 mt-0">
                             <label>Client</label>
                             <p class="value-large">{{item.client || 'Unknown Client'}}</p>
-                        </li>
-                        <li>
+                        </div>
+                        <div class="col-12 mt-1">
                             <label>Purpose / Subpurpose</label>
                             <p class="value" *ngIf="item.purpose && item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</p>
                             <p class="value" *ngIf="!item.purpose || !item.subpurpose">-</p>
-                        </li>
-                        <li>
+                        </div>
+                        <div class="col-7 mt-1">
                             <label>Disposition Transaction ID</label>
                             <p class="value">{{item.tantalisID}}</p>
-                        </li>
-                        <!-- <li>
+                        </div>
+                        <div class="col-5 mt-1">
                             <label>Crown Land File #</label>
                             <p class="value">{{item.cl_file}}</p>
-                        </li> -->
-                        <li>
+                        </div>
+                        <div class="col-12 mt-1">
                             <label>Status</label>
                             <p class="value-large">{{item.appStatus}}</p>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                     <div class="list-group-item__buttons d-flex justify-content-between align-items-center">
-                        <div class="badge mt-0" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
+                        <div class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
                                                             'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
                                                             'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
                                                             'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">
                             {{item.cpStatus}}
-                            <span class="font-weight-normal" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
-                                : {{item.currentPeriod.startDate | date:'mediumDate'}}
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">: &nbsp;&nbsp;
+                                {{item.currentPeriod.startDate | date:'mediumDate'}}
                             </span>
-                            <span class="font-weight-normal" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">
-                                : {{item.currentPeriod.endDate | date:'mediumDate'}}
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">: &nbsp;&nbsp;
+                                {{item.currentPeriod.endDate | date:'mediumDate'}}
                             </span>
-                            <span class="font-weight-normal" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
-                                : {{item.currentPeriod.startDate | date:'MMM dd'}} - {{item.currentPeriod.endDate | date:'MMM dd'}}
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">: &nbsp;&nbsp;
+                                {{item.currentPeriod.startDate | date:'MMM dd'}} - {{item.currentPeriod.endDate | date:'MMM dd'}}
                             </span>
                         </div>
                         <a (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]" title="Go to application details">
                             <!-- <i class="material-icons">play_circle_filled</i> -->
-                            <i class="material-icons">forward</i>
+                            <i class="material-icons md-36">play_circle_outline</i>
+                            <!-- <i class="material-icons">forward</i> -->
                         </a>
                     </div>
                 </div>

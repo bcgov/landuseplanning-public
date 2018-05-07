@@ -8,6 +8,7 @@ app-application-detail:host {
 .application-detail {
     main {
         overflow-y: auto;
+        font-size: medium;
         background-color: $white;
         padding: 1rem;
         border: 1px #ccc solid;
@@ -28,8 +29,9 @@ app-application-detail:host {
         section:last-of-type {
             margin-bottom: 0;
         }
-        .title {
-            font-size: larger;
+        .app-status,
+        .shape-id {
+            font-size: 1.2rem;
             font-weight: bold;
             color: $primary;
             margin-bottom: 5px;
@@ -40,7 +42,7 @@ app-application-detail:host {
             margin-bottom: 0;
         }
         .value {
-            font-size: smaller;
+            font-size: 0.83rem;
             line-height: 1.25rem;
             margin-bottom: 5px;
         }

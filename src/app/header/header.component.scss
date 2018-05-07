@@ -27,7 +27,7 @@ header {
   padding: 0.5rem 0.4rem;
   border: 2px solid $gold;
   color: $gold;
-  font-size: 1rem;
+  font-size: medium;
   font-weight: 600;
   outline: none; // override user agent stylesheet default
   
@@ -49,7 +49,7 @@ header {
       display: inline-block;
       margin-top: 2px;
       margin-left: 0.25rem;
-      font-size: 0.85rem;
+      font-size: $mn-font-size;
       font-weight: 700;
       vertical-align: top;
     }
@@ -107,7 +107,7 @@ header {
         
         .dd-item-desc {
           display: block;
-          font-size: 0.75rem;
+          font-size: small;
           opacity: 0.5;
           transition: opacity 0.2s ease-out;
         }
@@ -209,7 +209,7 @@ header {
   color: $gold;
   padding: 0;
   top: 1rem;
-  font-size: 0.65rem;
+  font-size: x-small;
 }
 
 @media (min-width: 768px) {

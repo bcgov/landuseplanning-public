@@ -14,8 +14,8 @@
             </div>
           </div>
           <div class="row">
-            <div class="col">
-              <p class="title">{{applicationService.getStatus(application)}}</p>
+            <div class="col-12">
+              <p class="app-status">{{applicationService.getStatus(application)}}</p>
             </div>
           </div>
           <div class="row">
@@ -82,7 +82,7 @@
 
         <section class="feature-item row" *ngFor="let feature of application.features">
           <div class="col-12 mb-1">
-            <span class="title">Shape ID: {{feature.properties.INTRID_SID}}</span>
+            <span class="shape-id">Shape ID: {{feature.properties.INTRID_SID}}</span>
           </div>
           <div class="col-6">
             <label>Type / Subtype</label>

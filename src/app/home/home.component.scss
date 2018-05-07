@@ -57,7 +57,7 @@
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: xx-large;
     line-height: 2.25rem;
   }
 
@@ -73,7 +73,7 @@
       background: $white;
       border-color: $primary;
       color: $primary;
-      font-size: 0.85rem;
+      font-size: 0.875rem;
     }
   }
 }
@@ -90,11 +90,6 @@
       span:first-child {
         display: inline;
       }
-    }
-  
-    h2 {
-      font-size: 2.15rem;
-      line-height: 2.45rem;
     }
 
     &__action-btns {
@@ -123,6 +118,9 @@
 
   .feature-block {
     padding: 2rem 1.5rem;
+    .btn {
+      font-size: 0.875rem;
+    }
   }
 }
 
@@ -137,6 +135,9 @@
 
     .feature-block {
       height: 17.5rem;
+      .btn {
+        font-size: 0.875rem;
+      }
     }
   }
 }
