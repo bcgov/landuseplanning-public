@@ -2,6 +2,7 @@
 
 .tab-section {
     overflow-y: auto;
+    font-size: medium;
     >div {
         margin: 1em;
     }
@@ -9,7 +10,7 @@
         margin: 0;
     }
     .title {
-        font-size: larger;
+        font-size: 1.2rem;
         font-weight: bold;
         color: $primary;
         margin-bottom: 5px;

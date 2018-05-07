@@ -26,16 +26,8 @@ footer {
 
         h4 {
             margin-bottom: 1.25rem;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        h5 {
-            padding-top: 0.25rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            opacity: 0.5;
+            font-size: medium;
+            font-weight: bold;
         }
 
         p {
@@ -64,11 +56,6 @@ footer {
             &:hover {
                 color: $gold;
             }
-        }
-
-        .btn {
-            font-size: 0.875rem;
-            font-weight: 700;
         }
     }
 }

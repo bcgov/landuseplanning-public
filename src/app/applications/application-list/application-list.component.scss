@@ -21,7 +21,7 @@ app-application-list:host {
         @include flex-box();
         @include flex-direction(column);
         @include flex(0 0 auto);
-        width: 22rem;
+        width: 24rem;
         overflow: hidden;
         .accordion__collapse-header--column {
             padding: 0.5rem 1rem;
@@ -63,57 +63,43 @@ app-application-list:host {
                 margin-right: 1rem;
             }
         }
-        .badge {
-            border: 1px solid transparent;
-            &-light,
-            &.undefined {
-                color: #666;
-                background-color: #ccc;
-            }
-        }
         .list-group {
             @include flex(1 1 auto);
             overflow-y: scroll;
         }
         .list-group-item {
             border-radius: 0;
-            &__list {
-                line-height: 0.25rem;
-                margin-bottom: 0;
-                padding-left: 0;
-                list-style-type: none;
-                li {
-                    margin-bottom: 0.25rem;
-                    label {
-                        margin-bottom: 0;
-                        font-size: 0.75rem;
-                        color: $primary;
-                        font-weight: bold;
-                    }
-                    .value {
-                        margin: 0;
-                        font-size: 0.875rem;
-                    }
-                    .value-large {
-                        margin: 0;
-                        font-size: 1rem;
-                        font-weight: 700;
-                    }
+            padding: 0.75rem;
+            &__detail {
+                line-height: 0rem;
+                label {
+                    margin-bottom: 0;
+                    font-size: 13px;
+                    color: $primary;
+                    font-weight: bold;
+                }
+                .value {
+                    margin-bottom: 0;
+                    color: #666;
+                    font-size: 14px;
+                }
+                .value-large {
+                    margin-bottom: 0;
+                    color: #666;
+                    font-size: 16px;
+                    font-weight: bold;
                 }
             }
             &__buttons {
+                line-height: 0;
                 .badge {
+                    width: 255px;
                     text-transform: none;
                     line-height: 1.25rem;
-                    &-light {
-                        background: #ddd;
-                    }
+                    border: 1px solid transparent;
                 }
-                a {
-                    line-height: 0;
-                    i {
-                        font-size: 2.5rem;
-                    }
+                a:hover {
+                    color: $gold;
                 }
             }
             &.active {
@@ -125,6 +111,9 @@ app-application-list:host {
                 }
                 a {
                     color: inherit !important;
+                }
+                a:hover {
+                    color: $gold !important;
                 }
             }
         }
