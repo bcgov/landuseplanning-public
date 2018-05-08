@@ -98,7 +98,8 @@ export class SearchComponent implements OnInit {
     //         this.showAdvancedFields = true;
     //       }
 
-    //       // Needed in development mode - not required in prod.
+    //       // Force change detection since we changed a bound property after the normal check cycle and outside anything
+    //       // that would trigger a CD cycle - this will eliminate the error you get when running in dev mode.
     //       this._changeDetectionRef.detectChanges();
 
     //       // Get the applications
@@ -141,7 +142,8 @@ export class SearchComponent implements OnInit {
     //             this.showAdvancedFields = true;
     //           }
 
-    //           // Needed in development mode - not required in prod.
+    //           // Force change detection since we changed a bound property after the normal check cycle and outside anything
+    //           // that would trigger a CD cycle - this will eliminate the error you get when running in dev mode.
     //           this._changeDetectionRef.detectChanges();
 
     //           if (!_.isEmpty(this.terms.getParams())) {
@@ -195,7 +197,8 @@ export class SearchComponent implements OnInit {
 
     //       this.noMoreResults = (this.results.length === this.count) || (data[0].results.length === 0 && data[1].results.length === 0);
 
-    //       // Needed in development mode - not required in prod.
+    //       // Force change detection since we changed a bound property after the normal check cycle and outside anything
+    //       // that would trigger a CD cycle - this will eliminate the error you get when running in dev mode.
     //       this._changeDetectionRef.detectChanges();
     //     },
     //     error => console.log(error)
