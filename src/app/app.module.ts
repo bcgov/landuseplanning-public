@@ -37,6 +37,7 @@ import { ApplicationsModule } from 'app/applications/applications.module';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Search } from 'app/models/search';
 
+// for Leaflet map
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';

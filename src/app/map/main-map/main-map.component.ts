@@ -15,23 +15,24 @@ declare module 'leaflet' {
   selector: 'app-main-map',
   templateUrl: './main-map.component.html',
   styleUrls: ['./main-map.component.scss'],
-  providers: [
-  ]
+  providers: []
 })
 export class MainMapComponent implements OnInit {
-  // public properties
-  @Input() animate = true;
   @Output() visibleLayer = new EventEmitter<any>();
 
-  private selectedId: string;
   private map: L.Map;
-  private featureGroups: L.FeatureGroup[];
-  public fg: L.FeatureGroup;
-  private baseMaps: {};
-  private control: L.Control;
-  private maxZoom = 17;
+  private featureGroups: L.FeatureGroup[] = [];
+  public featureGroup: L.FeatureGroup;
+  private fitBoundsOptions: L.FitBoundsOptions = {
+    maxZoom: 17,
+    // disable animation to prevent known bug where zoom is sometimes incorrect
+    // ref: https://github.com/Leaflet/Leaflet/issues/3249
+    animate: false,
+    // right padding to keep right of shape in bounds
+    paddingBottomRight: [150, 0]
+  };
   private isUser = false;
-  private markers = [];
+  private markers: Array<any> = [];
   private cachedMaps: Array<Application> = [];
 
   constructor(
@@ -42,6 +43,7 @@ export class MainMapComponent implements OnInit {
   ngOnInit() {
     const self = this;
 
+    // custom control to reset map view
     // refs:
     //   https://leafletjs.com/examples/layers-control/
     //   https://leafletjs.com/examples/extending/extending-3-controls.html
@@ -52,7 +54,7 @@ export class MainMapComponent implements OnInit {
       onAdd: function (map) {
         const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
 
-        container.title = 'Reset Map';
+        container.title = 'Reset View';
         container.innerText = 'refresh'; // material icon name
         container.style.width = '34px';
         container.style.height = '34px';
@@ -73,18 +75,6 @@ export class MainMapComponent implements OnInit {
       },
     });
 
-    this.featureGroups = [];
-
-    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
-    });
-    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    });
-    const OpenMapSurfer_Roads = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
-      attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 20
-    });
     const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13
@@ -92,6 +82,16 @@ export class MainMapComponent implements OnInit {
     const Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
       maxZoom: 16
+    });
+    const OpenMapSurfer_Roads = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+      attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 20
+    });
+    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+    });
+    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 
     this.map = L.map('map', {
@@ -127,16 +127,17 @@ export class MainMapComponent implements OnInit {
       self.isUser = true;
     });
 
-    // Set up the controls
-    this.baseMaps = {
+    // add base maps layers control
+    const baseMaps = {
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
       'Open Surfer Roads': OpenMapSurfer_Roads,
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
+    L.control.layers(baseMaps, null, { collapsed: false }).addTo(this.map);
 
-    this.control = L.control.layers(this.baseMaps, null, { collapsed: false }).addTo(this.map);
+    // add reset view control
     this.map.addControl(new resetViewControl());
   }
 
@@ -161,7 +162,7 @@ export class MainMapComponent implements OnInit {
 
   showMaps(apps: Application[]) {
     const self = this;
-    self.cachedMaps = apps;
+    self.cachedMaps = apps; // to reset view
     const includeDisps: Array<number> = [];
 
     // Build array of included disps.
@@ -189,28 +190,26 @@ export class MainMapComponent implements OnInit {
         });
       }
 
-      // Update the bounds accordingly.
+      // update the bounds
       const bounds = currentFG.getBounds();
       if (!_.isEmpty(bounds)) {
-        // disable animation to prevent known bug where zoom is sometimes incorrect
-        // ref: https://github.com/Leaflet/Leaflet/issues/3249
-        self.map.fitBounds(bounds, { maxZoom: self.maxZoom, animate: false });
+        self.map.fitBounds(bounds, self.fitBoundsOptions);
       }
     });
   }
 
   drawMap(apps: Application[]) {
     const self = this;
-    self.cachedMaps = apps;
+    self.cachedMaps = apps; // to reset view
     let globalBounds = null;
 
-    if (self.fg) {
-      self.fg.eachLayer(function (layer) {
+    if (self.featureGroup) {
+      self.featureGroup.eachLayer(function (layer) {
         self.map.removeLayer(layer);
       });
-      self.fg.clearLayers();
+      self.featureGroup.clearLayers();
     } else {
-      self.fg = L.featureGroup();
+      self.featureGroup = L.featureGroup();
     }
 
     _.each(apps, function (app) {
@@ -247,11 +246,11 @@ export class MainMapComponent implements OnInit {
               + '<strong>Legal Description: </strong>' + featureObj.properties.TENURE_LEGAL_DESCRIPTION;
             const popup = L.popup(options).setContent(content);
             layer.bindPopup(popup);
-            self.fg.addLayer(layer);
+            self.featureGroup.addLayer(layer);
             layer.addTo(group);
           });
 
-          // Update the bounds accordingly.
+          // update the bounds
           const bounds = group.getBounds();
           if (!_.isEmpty(bounds)) {
             // Add current marker to feature group.
@@ -260,9 +259,7 @@ export class MainMapComponent implements OnInit {
             } else {
               globalBounds.extend(bounds);
             }
-            // disable animation to prevent known bug where zoom is sometimes incorrect
-            // ref: https://github.com/Leaflet/Leaflet/issues/3249
-            self.map.fitBounds(globalBounds, { maxZoom: self.maxZoom, animate: false });
+            self.map.fitBounds(globalBounds, self.fitBoundsOptions);
           }
 
           group.dispositionId = app.tantalisID;

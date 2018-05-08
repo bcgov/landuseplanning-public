@@ -15,7 +15,6 @@ import { MainMapComponent } from './main-map/main-map.component';
   exports: [
     MainMapComponent
   ],
-  providers: [
-  ]
+  providers: []
 })
 export class MapModule { }

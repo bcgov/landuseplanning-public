@@ -23,12 +23,14 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
     { label: 'Commenting', link: 'commenting' },
     { label: 'Decisions', link: 'decisions' }
   ];
-  public layers: L.Layer[];
-  public fg: L.FeatureGroup;
-  public map: L.Map;
-  private baseMaps: {};
-  private control: L.Control;
-  private maxZoom = { maxZoom: 17 };
+
+  public map: L.Map = null;
+  public featureGroup: L.FeatureGroup = null;
+  private fitBoundsOptions: L.FitBoundsOptions = {
+    maxZoom: 17,
+    // bottom padding to keep bottom of shape in bounds
+    paddingBottomRight: [0, 25]
+  };
 
   public application: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -49,29 +51,33 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: { application: Application }) => {
           if (data.application) {
-            this.application = data.application;
-
             const self = this;
+            self.application = data.application;
+
+            // custom control to reset map view
             const resetViewControl = L.Control.extend({
               options: {
                 position: 'topleft'
               },
               onAdd: function (map) {
                 const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
-                container.style.backgroundColor = 'white';
-                container.title = 'Reset Map';
-                container.innerText = 'refresh';
+
+                container.title = 'Reset View';
+                container.innerText = 'refresh'; // material icon name
                 container.style.width = '34px';
                 container.style.height = '34px';
                 container.style.lineHeight = '30px';
                 container.style.textAlign = 'center';
                 container.style.cursor = 'pointer';
+                container.style.backgroundColor = 'white';
+
                 container.onclick = function () {
-                  const bounds = self.fg.getBounds();
+                  const bounds = self.featureGroup.getBounds();
                   if (!_.isEmpty(bounds)) {
-                    self.map.fitBounds(bounds, self.maxZoom);
+                    self.map.fitBounds(bounds, self.fitBoundsOptions);
                   }
                 };
+
                 return container;
               },
             });
@@ -82,16 +88,6 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
               .takeUntil(this.ngUnsubscribe)
               .subscribe(
                 features => {
-                  const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
-                  });
-                  const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                  });
-                  const OpenMapSurfer_Roads = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
-                    maxZoom: 20,
-                    attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  });
                   const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
                     attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
                     maxZoom: 13
@@ -100,31 +96,44 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
                     attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
                     maxZoom: 16
                   });
+                  const OpenMapSurfer_Roads = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+                    attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    maxZoom: 20
+                  });
+                  const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+                  });
+                  const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                  });
 
                   self.map = L.map('map', {
                     layers: [World_Imagery]
                   });
 
-                  // set up the controls
-                  self.baseMaps = {
+                  // add base maps layers control
+                  const baseMaps = {
                     'Ocean Base': Esri_OceanBasemap,
                     'Nat Geo World Map': Esri_NatGeoWorldMap,
                     'Open Surfer Roads': OpenMapSurfer_Roads,
                     'World Topographic': World_Topo_Map,
                     'World Imagery': World_Imagery
                   };
-                  self.control = L.control.layers(self.baseMaps, null, { collapsed: true }).addTo(self.map);
+                  L.control.layers(baseMaps, null, { collapsed: true }).addTo(self.map);
+
+                  // add reset view control
                   self.map.addControl(new resetViewControl());
 
-                  if (self.fg) {
-                    _.each(self.layers, function (layer) {
+                  if (self.featureGroup) {
+                    self.featureGroup.eachLayer(function (layer) {
                       self.map.removeLayer(layer);
                     });
-                    self.fg.clearLayers();
+                    self.featureGroup.clearLayers();
                   } else {
-                    self.fg = L.featureGroup();
+                    self.featureGroup = L.featureGroup();
                   }
 
+                  // draw map
                   _.each(features, function (feature) {
                     const f = JSON.parse(JSON.stringify(feature));
                     // Needed to be valid GeoJSON
@@ -132,13 +141,14 @@ export class ApplicationDetailComponent implements OnInit, OnDestroy {
                     const featureObj: GeoJSON.Feature<any> = f;
                     const layer = L.geoJSON(featureObj);
                     const options = { maxWidth: 400 };
-                    self.fg.addLayer(layer);
+                    self.featureGroup.addLayer(layer);
                     layer.addTo(self.map);
                   });
 
-                  const bounds = self.fg.getBounds();
+                  // update the bounds
+                  const bounds = self.featureGroup.getBounds();
                   if (!_.isEmpty(bounds)) {
-                    self.map.fitBounds(bounds, self.maxZoom);
+                    self.map.fitBounds(bounds, self.fitBoundsOptions);
                   }
                 },
                 error => {
