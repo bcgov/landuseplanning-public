@@ -65,6 +65,7 @@ app-application-list:host {
         }
         .list-group {
             @include flex(1 1 auto);
+            overflow-x: hidden;
             overflow-y: scroll;
         }
         .list-group-item {
@@ -93,7 +94,7 @@ app-application-list:host {
             &__buttons {
                 line-height: 0;
                 .badge {
-                    width: 255px;
+                    // width: 255px;
                     text-transform: none;
                     line-height: 1.25rem;
                     border: 1px solid transparent;

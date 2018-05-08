@@ -29,7 +29,7 @@ export class MainMapComponent implements OnInit {
   public fg: L.FeatureGroup;
   private baseMaps: {};
   private control: L.Control;
-  private maxZoom = { maxZoom: 17 };
+  private maxZoom = 17;
   private isUser = false;
   private markers = [];
   private cachedMaps: Array<Application> = [];
@@ -51,20 +51,24 @@ export class MainMapComponent implements OnInit {
       },
       onAdd: function (map) {
         const container = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
-        container.style.backgroundColor = 'white';
+
         container.title = 'Reset Map';
-        container.innerText = 'refresh';
+        container.innerText = 'refresh'; // material icon name
         container.style.width = '34px';
         container.style.height = '34px';
         container.style.lineHeight = '30px';
         container.style.textAlign = 'center';
         container.style.cursor = 'pointer';
+        container.style.backgroundColor = 'white';
+
         container.onclick = function () {
+          // reset all list items to visible
           _.each(self.featureGroups, function (fg) {
             self.visibleLayer.next({ tantalisID: fg.dispositionId, isVisible: true });
           });
           self.showMaps(self.cachedMaps);
         };
+
         return container;
       },
     });
@@ -78,8 +82,8 @@ export class MainMapComponent implements OnInit {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
     const OpenMapSurfer_Roads = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
-      maxZoom: 20,
-      attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 20
     });
     const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
@@ -138,8 +142,8 @@ export class MainMapComponent implements OnInit {
 
   resetVisible() {
     const self = this;
-    const width = self.map.getBounds().getEast() - self.map.getBounds().getWest();
-    const height = self.map.getBounds().getNorth() - self.map.getBounds().getSouth();
+    // const width = self.map.getBounds().getEast() - self.map.getBounds().getWest();
+    // const height = self.map.getBounds().getNorth() - self.map.getBounds().getSouth();
     const b = self.map.getBounds();
 
     // Go through each feature group, turning on/off the respective layer.
@@ -188,7 +192,9 @@ export class MainMapComponent implements OnInit {
       // Update the bounds accordingly.
       const bounds = currentFG.getBounds();
       if (!_.isEmpty(bounds)) {
-        self.map.fitBounds(bounds, self.maxZoom);
+        // disable animation to prevent known bug where zoom is sometimes incorrect
+        // ref: https://github.com/Leaflet/Leaflet/issues/3249
+        self.map.fitBounds(bounds, { maxZoom: self.maxZoom, animate: false });
       }
     });
   }
@@ -245,16 +251,20 @@ export class MainMapComponent implements OnInit {
             layer.addTo(group);
           });
 
+          // Update the bounds accordingly.
           const bounds = group.getBounds();
           if (!_.isEmpty(bounds)) {
-            // Add marker to fg.
+            // Add current marker to feature group.
             if (!globalBounds) {
               globalBounds = group.getBounds();
             } else {
               globalBounds.extend(bounds);
             }
-            self.map.fitBounds(globalBounds, self.maxZoom);
+            // disable animation to prevent known bug where zoom is sometimes incorrect
+            // ref: https://github.com/Leaflet/Leaflet/issues/3249
+            self.map.fitBounds(globalBounds, { maxZoom: self.maxZoom, animate: false });
           }
+
           group.dispositionId = app.tantalisID;
           group.addTo(self.map);
           self.featureGroups.push(group);
@@ -274,13 +284,14 @@ export class MainMapComponent implements OnInit {
       self.map.removeLayer(marker);
     });
 
-    _.each(this.featureGroups, function (fg) {
-      if (show) {
+    if (show) {
+      // show only the subject marker
+      _.each(this.featureGroups, function (fg) {
         if (fg.dispositionId === app.tantalisID) {
           const marker = L.marker(fg.getBounds().getCenter()).addTo(self.map);
           self.markers.push(marker);
         }
-      }
-    });
+      });
+    }
   }
 }
