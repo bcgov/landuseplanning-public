@@ -90,27 +90,24 @@ app-home {
     left: 0;
   }
 
-  footer {
+  .app-footer {
     height: 2.5rem;
+    border: none;
 
-    &.app-footer {
-      border: none;
-
-      .container {
-        max-width: 100%;
-        padding-top: 0.65rem !important;
-        padding-bottom: 0.5rem !important;
-      }
+    .container {
+      max-width: 100%;
+      padding-top: 0.65rem !important;
+      padding-bottom: 0.5rem !important;
     }
-  }
 
-  .footer-info {
-    display: none;
-  }
+    .footer-info {
+      display: none;
+    }
 
-  .footer-admin {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
+    .footer-admin {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      border-top: 0 !important;
+    }
   }
 }
