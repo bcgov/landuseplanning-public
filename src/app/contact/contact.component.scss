@@ -1,8 +1,4 @@
 @import "~assets/styles/base.scss";
-@import "~assets/styles/components/aside.scss";
-@import "~assets/styles/components/card.scss";
-@import "~assets/styles/components/hero-banner.scss";
-@import "~assets/styles/components/lists.scss";
 
 :host {
   @include flex(1 1 auto);
