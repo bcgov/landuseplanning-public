@@ -1,86 +1,77 @@
 @import "~assets/styles/base.scss";
 
-footer {
-    &.app-footer {
-        border-top: 4px solid $gold;
-        background: $footer-bg;
-        color: $footer-color;
-        text-align: center;
+.app-footer {
+    border-top: 4px solid $gold;
+    background: $footer-bg;
+    color: $footer-color;
+    text-align: center;
 
-        .container {
-            padding-top: 3rem;
-            padding-bottom: 1rem;
-        }
+    .container {
+        padding: 1.5rem;
+    }
 
-        section {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid $bg-dark-border-color;
+    section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid $bg-dark-border-color;
 
-            &.last {
-                margin-bottom: 0;
-                padding-bottom: 0;
-                border-bottom: none;
-            }
-        }
-
-        h4 {
-            margin-bottom: 1.25rem;
-            font-size: medium;
-            font-weight: bold;
-        }
-
-        p {
-            font-size: 0.875rem;
-            line-height: 1.5rem;
-        }
-
-        ul {
-            padding: 0;
-            font-size: 0.875rem;
-            list-style-type: none;
-
-            &.last {
-                margin-bottom: 0;
-            }
-
-            li {
-                margin-bottom: 0.25rem;
-            }
-        }
-
-        a {
-            color: $white;
-
-            &:focus,
-            &:hover {
-                color: $gold;
-            }
+        &.last {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
         }
     }
-}
 
-@media (min-width: 560px) {
-    footer {
-        &.app-footer {
-            text-align: left;
+    h4 {
+        margin-bottom: 1.25rem;
+        font-size: medium;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+    }
+
+    ul {
+        padding: 0;
+        font-size: 0.875rem;
+        list-style-type: none;
+
+        li {
+            margin-bottom: 0.25rem;
         }
+    }
+
+    a {
+        color: $white;
+
+        &:focus,
+        &:hover {
+            color: $gold;
+        }
+    }
+
+    .nav-links {
+        margin: 0;
     }
 }
 
 @media (min-width: 768px) {
-    footer {
-        &.app-footer {
-            section {
-                margin-bottom: 0;
-                padding-bottom: 0;
-                border-bottom: none;
-            }
+    .app-footer {
+        text-align: left;
+    }
 
-            h4 {
-                padding-bottom: 1.25rem;
-                border-bottom: 1px solid $bg-dark-border-color;
-            }
+    .footer-info {
+        section {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        h4 {
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid $bg-dark-border-color;
         }
     }
 }
@@ -92,8 +83,7 @@ footer {
     text-align: center;
 
     .gov-links {
-        margin-top: 0;
-        margin-bottom: 1rem;
+        margin: 0;
         padding: 0;
 
         li {
@@ -119,9 +109,9 @@ footer {
     }
 }
 
-@media (min-width: 760px) {
+@media (min-width: 768px) {
     .footer-admin {
-        margin-top: 3rem;
+        margin-top: 1.5rem;
 
         .gov-links {
             float: left;
