@@ -1,11 +1,12 @@
 @import "~assets/styles/base.scss";
+
 .hero-banner {
     position: relative;
     height: 14rem;
     padding-top: 0;
     background-position: center;
     background-size: cover;
-    background-image: url("~assets/images/map.jpg");
+    background-image: url("~assets/images/hero-banner.jpg");
     background-repeat: no-repeat;
     &__content {
         // display: table-cell;
