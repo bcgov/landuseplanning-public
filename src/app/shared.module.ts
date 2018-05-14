@@ -6,7 +6,6 @@ import { MatProgressBarModule } from '@angular/material';
 import { OrderByPipe } from 'app/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/pipes/newlines.pipe';
 import { ObjectFilterPipe } from 'app/pipes/object-filter.pipe';
-import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 
 @NgModule({
   imports: [
@@ -17,15 +16,13 @@ import { FileUploadComponent } from 'app/file-upload/file-upload.component';
   declarations: [
     OrderByPipe,
     NewlinesPipe,
-    ObjectFilterPipe,
-    FileUploadComponent
+    ObjectFilterPipe
   ],
   exports: [
     MatProgressBarModule,
     OrderByPipe,
     NewlinesPipe,
-    ObjectFilterPipe,
-    FileUploadComponent
+    ObjectFilterPipe
   ]
 })
 

@@ -1,0 +1,55 @@
+<div id="applist-filters" class="leaflet-control-container leaflet-top leaflet-left leaflet-bottom" alt="Filters to limit displayed Crown Land applications">
+    <div class="list-container leaflet-control leaflet-custom-control">
+        <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-filters collapsed" data-toggle="collapse"
+            href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+            <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Filters</span>
+            <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Filters</span>
+            <span>{{isSomeFilter() ? '(*)' : ''}}</span>
+        </a>
+        <div class="collapse list-container-options pt-0" id="collapseFilters">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" [ngClass]="(cpStatusCount() > 0) ? 'btn-secondary' : 'btn-outline-secondary'" type="button"
+                    id="cpStatusMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Comment Period Statuses ({{cpStatusCount()}})
+                </button>
+                <div class="dropdown-menu" aria-labelledby="cpStatusMenuButton" (click)="$event.stopPropagation()">
+                    <label class="dropdown-item" *ngFor="let key of cpStatusKeys">
+                        <input class="gtm-filter-cp-status" type="checkbox" [(ngModel)]="cpStatusFilters[key]" name="{{key}}"> {{commentPeriodService.commentStatuses[key]}}
+                    </label>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" [ngClass]="(appStatusCount() > 0) ? 'btn-secondary' : 'btn-outline-secondary'" type="button"
+                    id="appStatusMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Application Statuses ({{appStatusCount()}})
+                </button>
+                <div class="dropdown-menu" aria-labelledby="appStatusMenuButton" (click)="$event.stopPropagation()">
+                    <label class="dropdown-item" *ngFor="let key of appStatusKeys">
+                        <input class="gtm-filter-app-status" type="checkbox" [(ngModel)]="appStatusFilters[key]" name="{{key}}"> {{applicationService.applicationStatuses[key]}}
+                    </label>
+                </div>
+            </div>
+
+            <label class="title d-block" for="applicantInput">Applicant</label>
+            <input type="text" id="applicantInput" [(ngModel)]="applicantFilter" [ngbTypeahead]="applicantSearch" [focusFirst]="false">
+
+            <label class="title d-block" for="clFileInput">Crown Land File #</label>
+            <input type="number" id="clFileInput" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()"
+                (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+
+            <label class="title d-block" for="dispIdInput">Disposition ID</label>
+            <input type="number" id="dispIdInput" [(ngModel)]="dispIdFilter" [ngbTypeahead]="dispIdSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()"
+                (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
+
+            <label class="title d-block" for="purposeInput">Purpose/Subpurpose</label>
+            <input type="text" id="purposeInput" [(ngModel)]="purposeFilter" [ngbTypeahead]="purposeSearch" [focusFirst]="false">
+
+            <div class="list-container-options__buttons mt-3">
+                <a role="button" href="#" (click)="clearFilters($event)" title="Clear filters">Clear</a>
+                <!-- <a role="button" href="#" (click)="resetFilters($event)" title="Reset filters">Reset</a> -->
+                <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyFilters($event)" title="Apply filters">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>

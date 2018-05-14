@@ -1,5 +1,4 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { CommentPeriodService } from './commentperiod.service';
 
 describe('CommentPeriodService', () => {

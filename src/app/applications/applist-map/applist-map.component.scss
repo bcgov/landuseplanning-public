@@ -1,0 +1,20 @@
+@import "~assets/styles/base.scss";
+
+.map-container {
+    #map {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        // outline: none;
+        // touch-action: none;
+        background-color: $map-bg;
+
+        // set border radius same as other leaflet-bar elements
+        // TODO: make this work
+        .leaflet-popup-content-wrapper {
+            border-radius: 4px;
+        }
+    }
+}

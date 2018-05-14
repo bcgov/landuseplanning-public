@@ -1,0 +1,121 @@
+<div class="application" id="anchor-point">
+  <div class="container" *ngIf="application">
+    <div class="row">
+      <main class="col-lg-5 application-info">
+        <section class="organization-item">
+          <p>{{application.client || '-'}}</p>
+        </section>
+
+        <section class="application-item">
+          <div class="application-item__commenting row">
+            <div class="col">
+              <label>{{commentPeriodService.getStatus(application.currentPeriod)}}</label>
+              <span *ngIf="application.currentPeriod">: {{application.currentPeriod.startDate | date:'mediumDate'}} - {{application.currentPeriod.endDate | date:'mediumDate'}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p class="app-status">{{applicationService.getStatus(application)}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <label>Purpose</label>
+              <p class="value">{{application.purpose || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Subpurpose</label>
+              <p class="value">{{application.subpurpose || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Tenure Type</label>
+              <p class="value">{{application.type || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Tenure Subtype</label>
+              <p class="value">{{application.subtype || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Crown Land File</label>
+              <p class="value">{{application.cl_file || "-"}}</p>
+            </div>
+            <div class="col-6">
+              <label>Disposition Txn ID</label>
+              <p class="value">{{application.tantalisID || "-"}}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="map-item">
+          <div class="map-container">
+            <div class="map" id="map"></div>
+          </div>
+        </section>
+
+        <section class="shape-info-item row">
+          <div class="col-12">
+            <label>GEOGRAPHIC SHAPE INFORMATION</label>
+            <div *ngIf="application.features">
+              This application has
+              <strong>{{application.features.length}}</strong>
+              {{application.features.length === 1 ? 'shape.' : 'shapes.'}}
+              <hr>
+            </div>
+          </div>
+          <div class="col-6">
+            <label>Total Area (ha)</label>
+            <p class="value">{{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</p>
+          </div>
+          <div class="col-6">
+            <label>Location</label>
+            <p class="value">{{application.location || "-"}}</p>
+          </div>
+          <div class="col-6">
+            <label>Region</label>
+            <p class="value">{{application.region || "-"}}</p>
+          </div>
+          <div class="col-6">
+            <label>Agency</label>
+            <p class="value">Crown Lands Allocation</p>
+          </div>
+        </section>
+
+        <section class="feature-item row" *ngFor="let feature of application.features">
+          <div class="col-12 mb-1">
+            <span class="shape-id">Shape ID: {{feature.properties.INTRID_SID}}</span>
+          </div>
+          <div class="col-6">
+            <label>Type / Subtype</label>
+            <p class="value">{{feature.properties.TENURE_TYPE || '-'}} / {{feature.properties.TENURE_SUBTYPE || '-'}}</p>
+          </div>
+          <div class="col-6">
+            <label>Area (ha)</label>
+            <p class="value">{{feature.properties.TENURE_AREA_IN_HECTARES ? (feature.properties.TENURE_AREA_IN_HECTARES | number:'1.2-2') : '-'}}</p>
+          </div>
+          <div class="col-12">
+            <label>Legal Description</label>
+            <p class="value" [innerHTML]="(feature.properties.TENURE_LEGAL_DESCRIPTION | newlines) || '-'"></p>
+          </div>
+        </section>
+      </main>
+
+      <aside class="col-lg-7 application-tabs">
+        <div>
+          <button type="button" class="btn btn-warning float-lg-right gtm-submit-comment" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application.currentPeriod)">Submit a Comment</button>
+        </div>
+        <section>
+          <div role="navigation">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
+                <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true" routerLinkActive="active">{{tabLink.label}}</a>
+              </li>
+            </ul>
+          </div>
+
+          <router-outlet></router-outlet>
+
+        </section>
+      </aside>
+    </div>
+  </div>
+</div>
