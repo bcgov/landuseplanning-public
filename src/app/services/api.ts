@@ -77,30 +77,20 @@ export class ApiService {
 
       'agency',
       'areaHectares',
-      'businessUnit',
       'cl_file',
       'code',
       'name',
       'client',
       'description',
-      'interestID',
       'internalID',
       'legalDescription',
-      'location',
       'latitude',
       'longitude',
       'mapsheet',
       'postID',
       'publishDate',
-      'purpose',
-      'subpurpose',
       'region',
-      'status',
-      'tenureStage',
       'tantalisID',
-      'dispositionID',
-      'type',
-      'subtype',
 
       'internal'
 
@@ -126,30 +116,20 @@ export class ApiService {
 
       'agency',
       'areaHectares',
-      'businessUnit',
       'cl_file',
       'code',
       'name',
       'client',
       'description',
-      'interestID',
       'internalID',
       'legalDescription',
-      'location',
       'latitude',
       'longitude',
       'mapsheet',
       'postID',
       'publishDate',
-      'purpose',
-      'subpurpose',
       'region',
-      'status',
-      'tenureStage',
       'tantalisID',
-      'dispositionID',
-      'type',
-      'subtype',
 
       'internal'
     ];
@@ -403,8 +383,8 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  getBCGWDispositionTransactionId(id: string) {
-    const fields = ['name'];
+  getBCGWDispositionTransactionId(id: number) {
+      const fields = ['name'];
     let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';

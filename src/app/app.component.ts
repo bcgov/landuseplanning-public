@@ -13,8 +13,8 @@ import { ApiService } from './services/api';
 })
 
 export class AppComponent implements OnInit {
-  loggedIn: String;
-  hostname: String;
+  loggedIn: string;
+  hostname: string;
   private sub: Subscription;
   private today: Date;
 
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
     private cookieService: CookieService,
     private api: ApiService
   ) {
-    // Used for sharing links.
+    // used for sharing links
     this.hostname = api.apiPath; // TODO: Wrong
 
     const now = new Date();

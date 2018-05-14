@@ -71,7 +71,47 @@ export class ApplicationService {
         applications.forEach((application, i) => {
           promises.push(this.commentPeriodService.getAllByApplicationId(applications[i]._id)
             .toPromise()
-            .then(periods => applications[i].currentPeriod = this.commentPeriodService.getCurrent(periods)));
+            .then(periods => {
+              const cp = this.commentPeriodService.getCurrent(periods);
+              applications[i].currentPeriod = cp;
+              // derive comment period status for app list display
+              applications[i]['cpStatus'] = this.commentPeriodService.getStatus(cp);
+            })
+          );
+        });
+
+        // now get the referenced data (features)
+        applications.forEach((application, i) => {
+          promises.push(this.searchService.getByDTID(application.tantalisID)
+            .toPromise()
+            .then(features => {
+              application.features = features;
+
+              // calculate Total Area (hectares)
+              let areaHectares = 0;
+              _.each(application.features, function (f) {
+                if (f['properties']) {
+                  areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
+                }
+              });
+              application.areaHectares = areaHectares;
+
+              // cache application properties from first feature
+              if (application.features && application.features.length > 0) {
+                application.purpose = application.features[0].properties.TENURE_PURPOSE;
+                application.subpurpose = application.features[0].properties.TENURE_SUBPURPOSE;
+                application.type = application.features[0].properties.TENURE_TYPE;
+                application.subtype = application.features[0].properties.TENURE_SUBTYPE;
+                application.status = application.features[0].properties.TENURE_STATUS;
+                application.tenureStage = application.features[0].properties.TENURE_STAGE;
+                application.location = application.features[0].properties.TENURE_LOCATION;
+                application.businessUnit = application.features[0].properties.RESPONSIBLE_BUSINESS_UNIT;
+              }
+
+              // derive application status for app list display
+              application['appStatus'] = this.getStatus(application);
+            })
+          );
         });
 
         return Promise.all(promises).then(() => { return applications; });
@@ -144,11 +184,12 @@ export class ApplicationService {
         );
 
         // now get the shapes
-        promises.push(this.searchService.getByDTID(application.tantalisID.toString())
+        promises.push(this.searchService.getByDTID(application.tantalisID, forceReload)
           .toPromise()
           .then(features => {
             application.features = features;
-            // calculate areaHectares
+
+            // calculate Total Area (hectares)
             let areaHectares = 0;
             _.each(application.features, function (f) {
               if (f['properties']) {
@@ -156,6 +197,18 @@ export class ApplicationService {
               }
             });
             application.areaHectares = areaHectares;
+
+            // cache application properties from first feature
+            if (application.features && application.features.length > 0) {
+              application.purpose = application.features[0].properties.TENURE_PURPOSE;
+              application.subpurpose = application.features[0].properties.TENURE_SUBPURPOSE;
+              application.type = application.features[0].properties.TENURE_TYPE;
+              application.subtype = application.features[0].properties.TENURE_SUBTYPE;
+              application.status = application.features[0].properties.TENURE_STATUS;
+              application.tenureStage = application.features[0].properties.TENURE_STAGE;
+              application.location = application.features[0].properties.TENURE_LOCATION;
+              application.businessUnit = application.features[0].properties.RESPONSIBLE_BUSINESS_UNIT;
+            }
           })
         );
 

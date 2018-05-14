@@ -26,34 +26,32 @@ export class Application {
 
   agency: string;
   areaHectares: number;
-  businessUnit: string;
+  businessUnit: string; // cached from features[0].properties
   cl_file: number;
   code: string;
   name: string;
   description: string;
-  interestID: number;
   internalID: number;
   legalDescription: string;
-  location: string;
+  location: string; // cached from features[0].properties
   latitude: number;
   longitude: number;
   mapsheet: string;
   postID: number;
   publishDate: Date;
   client: string;
-  purpose: string;
-  subpurpose: string;
+  purpose: string; // cached from features[0].properties
+  subpurpose: string; // cached from features[0].properties
   region: string;
-  status: string;
-  tenureStage: string;
+  status: string; // cached from features[0].properties
+  tenureStage: string; // cached from features[0].properties
   tantalisID: number;
-  dispositionID: number;
-  type: string;
-  subtype: string;
+  type: string; // cached from features[0].properties
+  subtype: string; // cached from features[0].properties
 
   content: Array<Content>;
   internal: Internal;
-  isPublished = false;
+  isVisible = true; // transient
 
   documents: Array<Document>;
   currentPeriod: CommentPeriod;
@@ -77,7 +75,6 @@ export class Application {
     this.name                    = obj && obj.name                    || null;
     this.client                  = obj && obj.client                  || null;
     this.description             = obj && obj.description             || null;
-    this.interestID              = obj && obj.interestID              || 0;
     this.internalID              = obj && obj.internalID              || 0;
     this.legalDescription        = obj && obj.legalDescription        || null;
     this.location                = obj && obj.location                || null;
@@ -91,23 +88,11 @@ export class Application {
     this.region                  = obj && obj.region                  || null;
     this.status                  = obj && obj.status                  || null;
     this.tenureStage             = obj && obj.tenureStage             || null;
-    this.tantalisID              = obj && obj.tantalisID              || 0;
-    this.dispositionID           = obj && obj.dispositionID           || 0;
+    this.tantalisID              = obj && obj.tantalisID              || null; // not zero
     this.type                    = obj && obj.type                    || null;
     this.subtype                 = obj && obj.subtype                 || null;
-
     this.content                 = obj && obj.content                 || [];
     this.internal                = obj && obj.internal                || new Internal();
-
-    // Wrap isPublished around the tags we receive for this object.
-    if (obj && obj.tags) {
-      const self = this;
-      _.each(obj.tags, function (tag) {
-        if (_.includes(tag, 'public')) {
-          self.isPublished = true;
-        }
-      });
-    }
 
     this.documents = [];
     this.currentPeriod = null;

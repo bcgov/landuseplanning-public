@@ -9,8 +9,9 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 import { TagInputModule } from 'ngx-chips';
+import { icon, Marker } from 'leaflet';
 
-import { SharedModule } from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 
 // components
@@ -35,6 +36,21 @@ import { MapModule } from 'app/map/map.module';
 import { ApplicationsModule } from 'app/applications/applications.module';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Search } from 'app/models/search';
+
+const iconRetinaUrl = 'assets/marker-icon-2x.png';
+const iconUrl = 'assets/marker-icon.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconDefault = icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
+Marker.prototype.options.icon = iconDefault;
 
 @NgModule({
   declarations: [
