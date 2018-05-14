@@ -14,7 +14,7 @@
     }
     .modal-body {
         padding: 30px;
-        max-height: 72vh; // worst-case (iPhone 6 Plus with bottom navigation bar)
+        max-height: 70vh; // worst-case (Pixel 2)
         overflow-y: auto;
     }
     .modal-footer {
