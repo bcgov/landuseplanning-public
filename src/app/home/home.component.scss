@@ -48,21 +48,19 @@
 
   h1 {
     margin: 0;
-    font-size: 2.5rem;
-    line-height: 2.25rem;
-
-    span:first-child {
-      display: block;
-    }
+    font-size: 2rem;
+    line-height: 1.75rem;
   }
 
   h2 {
-    font-size: 2rem;
-    line-height: 2.25rem;
+    font-size: 1.5rem;
+    line-height: 1.25rem;
   }
 
   .badge {
     color: $gold;
+    padding: 0;
+    font-size: 16px;
   }
 
   &__action-btns {
@@ -80,16 +78,21 @@
 
 @media (min-width: 768px) {
   .home-title-container {
-    padding-top: 4rem;
+    padding-top: 3rem;
     padding-bottom: 2rem;
   
     h1 {
-      font-size: 2.8rem;
-      line-height: 2.5rem;
+      font-size: 2.5rem;
+      line-height: 2.25rem;
+    }
 
-      span:first-child {
-        display: inline;
-      }
+    h2 {
+      font-size: 1.5rem;
+      line-height: 1.25rem;
+    }
+
+    .badge {
+      font-size: 20px;
     }
   
     h2 {
@@ -105,14 +108,7 @@
   }
 }
 
-@media (min-width: 1200px) {
-  .home-title-container {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-}
-
-// Feature Blocks
+// FEATURE BLOCKS
 .feature-blocks {
   margin-left: -0.5rem;
   margin-right: -0.5rem;
