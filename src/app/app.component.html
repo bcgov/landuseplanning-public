@@ -12,7 +12,7 @@
 <div class="app-body" id="scrollTop" [ngClass]="{'show-alert': showBanner(), 'footer-sm': (router.url.startsWith('/applications'))}">
 	<router-outlet></router-outlet>
 	<app-footer></app-footer>
-	<a href="#scrollTop" class="btn scroll-top-btn visible" pageScroll [pageScrollOffset]="0" [pageScrollDuration]="800">
+	<a href="#scrollTop" class="btn scroll-top-btn visible" pageScroll [pageScrollOffset]="100" [pageScrollDuration]="800">
 		<i class="material-icons">arrow_upward</i>
 	</a>
 </div>
