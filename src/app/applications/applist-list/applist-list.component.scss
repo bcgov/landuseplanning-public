@@ -1,0 +1,99 @@
+@import "~assets/styles/base.scss";
+
+#applist-list {
+    .leaflet-custom-control {
+        background-color: white;
+        border: 2px solid rgba(0,0,0,0.2);
+        border-radius: 4px;
+        background-clip: padding-box;
+        box-shadow: none;
+    }
+
+    .list-container {
+        // @include flex-box();
+        // @include flex-direction(column);
+        // @include flex(0 0 auto);
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        overflow-y: auto;
+    
+        .accordion__collapse-header--column {
+            width: 100%;
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            padding: 0.5rem 1rem 0.5rem 0.5rem;
+            text-align: unset;
+            .material-icons {
+                vertical-align: bottom;
+            }
+        }
+
+        .list-group {
+            // @include flex(1 1 auto);
+            width: 24rem;
+            max-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: none; // collapsed
+            &.show {
+                display: flex;
+            }
+        }
+
+        .list-group-item {
+            border-radius: 0;
+            padding: 0.75rem;
+            &__detail {
+                line-height: 0rem;
+                label {
+                    margin-bottom: 0;
+                    font-size: 13px;
+                    color: $primary;
+                    font-weight: bold;
+                }
+                .value {
+                    margin-bottom: 0;
+                    color: #666;
+                    font-size: 14px;
+                }
+                .value-large {
+                    margin-bottom: 0;
+                    color: #666;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+            }
+            &__buttons {
+                line-height: 0;
+                .badge {
+                    // width: 255px;
+                    text-transform: none;
+                    line-height: 1.25rem;
+                    border: 1px solid transparent;
+                }
+                .material-icons:hover {
+                    color: $gold;
+                    font-weight: bold;
+                }
+            }
+            &.active {
+                label {
+                    color: inherit !important;
+                }
+                p {
+                    color: inherit !important;
+                }
+                .badge-primary {
+                    border-color: $white !important;
+                }
+                a {
+                    color: inherit !important;
+                }
+                .material-icons:hover {
+                    color: $gold !important;
+                    font-weight: bold !important;
+                }
+            }
+        }
+    }
+}

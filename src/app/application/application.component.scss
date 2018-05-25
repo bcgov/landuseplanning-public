@@ -1,0 +1,139 @@
+@import "~assets/styles/base.scss";
+
+app-application:host {
+    display: block;
+    z-index: 998;
+}
+
+.application {
+    main {
+        overflow-y: auto;
+        font-size: medium;
+        background-color: $white;
+        padding: 1rem;
+        border: 1px #ccc solid;
+        border-radius: 5px;
+        section {
+            word-wrap: break-word;
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            margin-left: 0;
+            margin-right: 0;
+            >div {
+                padding: 0px;
+            }
+        }
+        section:last-of-type {
+            margin-bottom: 0;
+        }
+        .app-status,
+        .shape-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: $primary;
+            margin-bottom: 5px;
+        }
+        label {
+            font-weight: bold;
+            color: $primary;
+            margin-bottom: 0;
+        }
+        .value {
+            font-size: 0.83rem;
+            line-height: 1.25rem;
+            margin-bottom: 5px;
+        }
+        .organization-item {
+            margin-top: 0;
+            color: $white;
+            background-color: #38598a;
+            padding: 5px 10px;
+            p {
+                font-size: large;
+                font-weight: bold;
+                margin-bottom: 0;
+            }
+        }
+        .application-item {
+            &__commenting {
+                margin: -10px -10px 5px -10px;
+                background-color: #ddd;
+                .col {
+                    padding: 5px 10px;
+                }
+            }
+        }
+        .map-item {
+            padding: 0;
+            .map-container {
+                display: block;
+                position: relative;
+                overflow: hidden;
+                height: (300px - 33px); // to hide attribution
+            }
+            .map {
+                position: relative;
+                height: 300px;
+                outline: none;
+                touch-action: none;
+                background-color: $map-bg;
+            }
+        }
+        .shape-info-item {
+            hr {
+                margin: 1rem 0;
+            }
+        }
+    }
+    aside {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0;
+        padding: 0;
+        button {
+            margin-bottom: 1rem;
+        }
+        >section {
+            position: relative;
+            background-color: $white;
+            padding: 1rem;
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            min-height: 20rem;
+            ul.nav-tabs {
+                margin-bottom: 1.5rem;
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .application {
+        main {
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+@media (min-width: 992px) {
+    .application {
+        &:before {
+            content: " ";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            height: 68px;
+            border-bottom: 4px solid $gold;
+            background: $header-bg;
+        }
+        aside {
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+    }
+}

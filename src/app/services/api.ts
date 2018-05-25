@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { Comment } from 'app/models/comment';
@@ -59,7 +60,7 @@ export class ApiService {
   public handleError(error: any): ErrorObservable {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
     console.log('API error =', reason);
-    return Observable.throw(reason);
+    return Observable.throw(error);
   }
 
   //

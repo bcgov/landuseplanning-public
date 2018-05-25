@@ -1,5 +1,4 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { DecisionService } from './decision.service';
 
 describe('DecisionService', () => {

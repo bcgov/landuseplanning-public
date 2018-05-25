@@ -3,24 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { RouterModule } from '@angular/router';
 
 // modules
-import { ApplicationsRoutingModule } from './applications-routing.module';
-import { MapModule } from 'app/map/map.module';
 import { SharedModule } from 'app/shared.module';
 
 // components
-import { ApplicationListComponent } from './application-list/application-list.component';
-import { ApplicationDetailComponent } from './application-detail/application-detail.component';
-import { ApplicationTabContentComponent } from './application-detail/application/application-tab-content.component';
-import { CommentsTabContentComponent } from './application-detail/comments/comments-tab-content.component';
-import { DecisionsTabContentComponent } from './application-detail/decisions/decisions-tab-content.component';
-import { ViewCommentComponent } from './application-detail/comments/view-comment/view-comment.component';
-import { AddCommentComponent } from './application-detail/add-comment/add-comment.component';
+import { ApplicationsComponent } from './applications.component';
+import { ApplistListComponent } from './applist-list/applist-list.component';
+import { ApplistMapComponent } from './applist-map/applist-map.component';
+import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
 
-// services
-import { ApiService } from 'app/services/api';
-import { ApplicationService } from 'app/services/application.service';
+// other
+import { VarDirective } from 'app/utils/ng-var.directive';
 
 @NgModule({
   imports: [
@@ -28,32 +23,18 @@ import { ApplicationService } from 'app/services/application.service';
     FormsModule,
     NgbModule.forRoot(),
     NgxPaginationModule,
-    ApplicationsRoutingModule,
-    MapModule,
+    RouterModule,
     SharedModule
   ],
   declarations: [
-    ApplicationListComponent,
-    ApplicationDetailComponent,
-    ApplicationTabContentComponent,
-    CommentsTabContentComponent,
-    DecisionsTabContentComponent,
-    ViewCommentComponent,
-    AddCommentComponent
+    ApplicationsComponent,
+    ApplistListComponent,
+    ApplistMapComponent,
+    ApplistFiltersComponent,
+    VarDirective
   ],
   exports: [
-    ApplicationListComponent,
-    ApplicationDetailComponent,
-    ViewCommentComponent,
-    AddCommentComponent
-  ],
-  providers: [
-    ApiService,
-    ApplicationService
-  ],
-  entryComponents: [
-    ViewCommentComponent,
-    AddCommentComponent
+    ApplicationsComponent
   ]
 })
 

@@ -1,0 +1,62 @@
+<div id="applist-list" class="leaflet-control-container leaflet-top leaflet-left leaflet-bottom" alt="List of Crown Land applications, limited by filters and bound by map view">
+    <div class="list-container leaflet-control leaflet-custom-control" *ngVar="matchesVisibleCount(allApps) as listCount">
+        <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-applist" data-toggle="collapse" href="#collapseApplist"
+            aria-expanded="false" aria-controls="collapseApplist">
+            <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Applications {{listCount > 0 ? '(' + listCount + ')' : ''}}</span>
+            <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Applications {{listCount > 0 ? '(' + listCount + ')' : ''}}</span>
+        </a>
+        <div class="list-group collapse show" id="collapseApplist" *ngIf="gotChanges">
+            <div class="p-2 text-center font-italic" *ngIf="listCount == 0">
+                No matching applications
+            </div>
+            <ng-template ngFor let-item [ngForOf]="allApps">
+                <div class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="toggleCurrentApp(item)"
+                    *ngIf="item.isMatches && item.isVisible">
+                    <div class="row list-group-item__detail">
+                        <div class="col-12 mt-0">
+                            <label>Client</label>
+                            <p class="value-large">{{item.client || 'Unknown Client'}}</p>
+                        </div>
+                        <div class="col-12 mt-1">
+                            <label>Purpose / Subpurpose</label>
+                            <p class="value" *ngIf="item.purpose && item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</p>
+                            <p class="value" *ngIf="!item.purpose || !item.subpurpose">-</p>
+                        </div>
+                        <div class="col-7 mt-1">
+                            <label>Disposition Transaction ID</label>
+                            <p class="value">{{item.tantalisID}}</p>
+                        </div>
+                        <div class="col-5 mt-1">
+                            <label>Crown Land File #</label>
+                            <p class="value">{{item.cl_file}}</p>
+                        </div>
+                        <div class="col-12 mt-1">
+                            <label>Status</label>
+                            <p class="value-large">{{item.appStatus}}</p>
+                        </div>
+                    </div>
+                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center">
+                        <div class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
+                                                       'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
+                                                       'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
+                                                       'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">
+                            {{item.cpStatus}}
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
+                                :&nbsp;{{item.currentPeriod.startDate | date:'mediumDate'}}
+                            </span>
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">
+                                :&nbsp;{{item.currentPeriod.endDate | date:'mediumDate'}}
+                            </span>
+                            <span class="font-weight-normal" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
+                                :&nbsp;{{item.currentPeriod.startDate | date:'MMM dd'}} - {{item.currentPeriod.endDate | date:'MMM dd'}}
+                            </span>
+                        </div>
+                        <a (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]" title="Go to application details">
+                            <i class="material-icons md-36">arrow_forward</i>
+                        </a>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
