@@ -5,6 +5,7 @@ import 'rxjs/add/operator/takeUntil';
 
 import { Application } from 'app/models/application';
 import { ApiService } from 'app/services/api';
+import { ApplicationService } from 'app/services/application.service';
 
 @Component({
   templateUrl: './application-tab.component.html',
@@ -17,7 +18,8 @@ export class ApplicationTabComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private api: ApiService // used in template
+    private api: ApiService, // used in template
+    public applicationService: ApplicationService // used in template
   ) { }
 
   ngOnInit() {
