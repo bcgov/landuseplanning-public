@@ -8,6 +8,16 @@
     @return "#{$string}";
 }
 
+.files-info {
+    font-size: small;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.material-icons {
+    vertical-align: middle;
+}
+
 .dragarea {
     font-size: x-large;
     border: 3px dashed $fc-border-color;

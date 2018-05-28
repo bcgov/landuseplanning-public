@@ -216,7 +216,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // remove and clear all layers for all apps
     for (const fg of this.appsFG) {
       fg.removeFrom(this.map);
-      // this.map.removeLayer(fg);
       fg.clearLayers();
     }
 
@@ -270,9 +269,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         layer.bindPopup(popup);
         layer.addTo(appFG);
       });
-      self.appsFG.push(appFG); // save in list
+      self.appsFG.push(appFG); // save to list
       appFG.addTo(self.map); // add to map
       appFG.addTo(globalFG); // for bounds
+      // appFG.on('click', (event) => console.log('app =', app)); // FUTURE: highlight this app in list?
     });
 
     // fit the global bounds
@@ -294,13 +294,15 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
       this.marker = null;
     }
 
-    if (app.features.length > 0 && show) {
+    if (show && app.features.length) {
       // add the subject marker
       const fg = _.find(this.appsFG, { dispositionId: app.tantalisID });
       if (fg) {
         const center = fg.getBounds().getCenter();
-        this.marker = L.marker(center).addTo(this.map);
-
+        const markerOptions = {
+          // title: 'Click to go to application details'// FUTURE: add link to details?
+        };
+        this.marker = L.marker(center, markerOptions).addTo(this.map);
         // center map on this app
         // this.map.panTo(center); // disabled for now
       }
