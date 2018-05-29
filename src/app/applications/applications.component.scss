@@ -1,8 +1,6 @@
 @import "~assets/styles/base.scss";
 
 app-applications:host {
-    // @include flex-box();
-    // @include flex-direction(column);
     position: absolute;
     top: 0;
     right: 0;
@@ -11,18 +9,11 @@ app-applications:host {
 }
 
 .applications {
-    // @include flex-box();
+    @include flex-box();
+    @include flex-flow(column nowrap);
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-
-    app-applist-map {
-        @include flex(1 1 auto);
-        // position: relative;
-        // display: block;
-        // height: 100%;
-        // overflow: hidden;
-    }
 }

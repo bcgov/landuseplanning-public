@@ -1,20 +1,56 @@
 @import "~assets/styles/base.scss";
 
 .map-container {
-    #map {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        // outline: none;
-        // touch-action: none;
-        background-color: $map-bg;
+  #map {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $map-bg;
 
-        // set border radius same as other leaflet-bar elements
-        // TODO: make this work
-        .leaflet-popup-content-wrapper {
-            border-radius: 4px;
-        }
+    .leaflet-popup-content-wrapper {
+      border-radius: 4px;
     }
+  }
+}
+
+.pane2 {
+  @include flex-box();
+  @include flex-flow(column nowrap);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  .app-filters {
+    &__container {
+      @include flex(0 0 auto);
+    }
+  }
+
+  .map-container {
+    @include flex(1 1 auto);
+  }
+}
+
+.applist-map {
+  @include flex-box();
+  @include flex-flow(column nowrap);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.app-filters {
+  @include flex(0 0 auto);
+  background: #fff;
+}
+
+.pane2 {
+  @include flex(1 1 auto);
+  position: relative;
 }
