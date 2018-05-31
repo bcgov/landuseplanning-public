@@ -30,7 +30,7 @@
 
     p {
         font-size: 0.875rem;
-        line-height: 1.5rem;
+        line-height: 1.5;
     }
 
     ul {
@@ -87,7 +87,7 @@
             li {
                 display: inline-block;
                 margin: 0;
-                line-height: 1rem;
+                line-height: 1;
 
                 &:after {
                     position: relative;
