@@ -1,69 +1,109 @@
 @import "~assets/styles/base.scss";
-
-#applist-filters {
-  .leaflet-custom-control {
-    background-color: white;
-    border: 2px solid rgba(0,0,0,0.2);
-    border-radius: 4px;
-    background-clip: padding-box;
-    box-shadow: none;
-  }
-
-  .list-container {
-    .accordion__collapse-header--column {
-      padding: 0.5rem 1rem 0.5rem 0.5rem;
-      width: 100%;
-      text-align: unset;
-      .material-icons {
-        vertical-align: bottom;
-      }
+.app-filters {
+    &__container {
+        z-index: 1001;
     }
-
-    .list-container-options {
-      @include flex(0 0 auto);
-      padding: 0.5rem;
-      font-size: medium;
-
-      .dropdown {
-        margin: 0.5rem 0;
-      }
-      .dropdown-item {
-        padding: 0 0.75rem;
-        input {
-          margin-right: 1rem;
+    &__header {
+        .allFilters {
+            font-size: large;
+            font-weight: bold;
+            padding: 0.5rem;
         }
-      }
-      .title {
-        font-size: small;
-        font-weight: bold;
-        color: $primary;
-        margin: 0.25rem 0;
-      }
-      input[type=text],
-      input[type=number] {
-        // width: 100%;
-        height: 2rem;
-      }
-      input[type=number]::-webkit-inner-spin-button,
-      input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      &__buttons {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-      }
-      &__buttons>* {
-        margin-left: 1rem;
-      }
-
-      // make the drop-down menu display scroll-bar if too tall
-      // TODO: make this work
-      ngb-typeahead-window {
-        max-height: 100%;
-        overflow-y: auto;
-      }
+        .dropdown {
+            padding: 0.5rem;
+            z-index: 1002; // app-list is 1001
+        }
+        button {
+            font-size: x-small;
+            cursor: pointer;
+        }
+        .material-icons {
+            vertical-align: bottom;
+        }
+        .clickable {
+            font-size: small;
+        }
     }
-  }
+    &__body {
+        @include flex(0 0 auto);
+        padding: 0 1rem 1rem 1rem;
+        font-size: medium;
+        transition: all ease-out 0.2s;
+        /* TODO: make this work */
+        &.collapse {
+            transform: translateY(-100%);
+            &.show {
+                transform: translateY(0);
+            }
+        }
+        .row {
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: 66vh; // TODO: make this work properly
+        }
+        label {
+            display: block;
+        }
+        .title {
+            font-size: medium;
+            font-weight: bold;
+            color: $primary;
+            margin: 0.25rem 0;
+        }
+        input[type=text],
+        input[type=number] {
+            padding: 0;
+            height: 2rem;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        &-buttons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        &-buttons>* {
+            margin-left: 1rem;
+        }
+        /* make the drop-down menu display scroll-bar if too tall */
+        /* TODO: make this work */
+        ngb-typeahead-window {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .app-filters {
+        &__body {
+            .cpStatus,
+            .appStatus {
+                margin-bottom: 0.5rem;
+                padding-bottom: 0.5rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                border-bottom: 1px solid $black;
+            }
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .app-filters {
+        &__header {
+            .allFilters {
+                font-size: x-large;
+            }
+            button {
+                font-size: small;
+            }
+            .clickable {
+                font-size: medium;
+            }
+        }
+    }
 }
