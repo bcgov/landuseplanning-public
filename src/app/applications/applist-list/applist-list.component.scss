@@ -1,4 +1,5 @@
 @import "~assets/styles/base.scss";
+
 .app-list {
     &__container {
         @include flex-box();
@@ -8,28 +9,16 @@
         right: 0;
         bottom: 0;
         left: 0;
-        z-index: 9999;
+        z-index: 1001; // app-filters is 1002
         padding-right: 4rem;
         overflow: hidden;
         transition: all ease-out 0.2s;
         &.collapse {
             margin-left: (60px + 2px);
             transform: translateX(-100%);
-            .open-icon {
-                display: inline-block;
-            }
-            .close-icon {
-                display: none;
-            }
             &.show {
                 margin-left: 0;
                 transform: translateX(0);
-                .open-icon {
-                    display: none;
-                }
-                .close-icon {
-                    display: inline-block;
-                }
             }
         }
     }
@@ -45,6 +34,7 @@
             padding: 0;
             border-radius: 2px;
             box-shadow: unset;
+            cursor: pointer;
         }
     }
     &__body {
@@ -53,7 +43,7 @@
         border-top: 1px solid rgba(0, 0, 0, 0.2);
         border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     &__list {
         @include flex(1 1 auto);
@@ -62,22 +52,22 @@
             padding: 0.75rem;
             white-space: nowrap;
             &__detail {
-                line-height: 0rem;
+                line-height: 0;
                 label {
                     margin-bottom: 0;
-                    font-size: 13px;
+                    font-size: 11px;
                     color: $primary;
                     font-weight: bold;
                 }
                 .value {
                     margin-bottom: 0;
                     color: #666;
-                    font-size: 14px;
+                    font-size: 12px;
                 }
                 .value-large {
                     margin-bottom: 0;
                     color: #666;
-                    font-size: 16px;
+                    font-size: 14px;
                     font-weight: bold;
                 }
             }
@@ -86,8 +76,9 @@
                 .badge {
                     // width: 255px;
                     text-transform: none;
-                    line-height: 1.25rem;
+                    line-height: 1.5;
                     border: 1px solid transparent;
+                    font-size: 12px;
                 }
                 .material-icons:hover {
                     color: $gold;
@@ -131,6 +122,32 @@
             margin-left: 0.5rem;
             margin-bottom: 0;
             vertical-align: middle;
+        }
+    }
+}
+
+@media (min-width: 362px) {
+    .app-list {
+        &__list {
+            .list-group-item {
+                &__detail {
+                    label {
+                        font-size: 13px;
+                    }
+                    .value {
+                        font-size: 14px;
+                    }
+                    .value-large {
+                        font-size: 16px;
+                    }
+                }
+                &__buttons {
+                    line-height: 0;
+                    .badge {
+                        font-size: 14px;
+                    }
+                }
+            }
         }
     }
 }

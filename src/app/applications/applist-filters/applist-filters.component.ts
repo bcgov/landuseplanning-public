@@ -25,6 +25,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() allApps: Array<Application> = []; // from map component
     @Output() updateMatching = new EventEmitter(); // to map component
 
+    public isCollapsed = true;
     private gotChanges = false;
     private paramMap: ParamMap = null;
     private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -330,12 +331,12 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
     }
 
-    public isSomeFilter(): boolean {
-        return this.cpStatusCount() > 0
-            || this.appStatusCount() > 0
-            || (this.applicantFilter && this.applicantFilter.length > 0)
-            || (this.clFileFilter && this.clFileFilter.toString().length > 0)
-            || (this.dispIdFilter && this.dispIdFilter.toString().length > 0)
-            || (this.purposeFilter && this.purposeFilter.length > 0);
-    }
+    // public isSomeFilter(): boolean {
+    //     return this.cpStatusCount() > 0
+    //         || this.appStatusCount() > 0
+    //         || (this.applicantFilter && this.applicantFilter.length > 0)
+    //         || (this.clFileFilter && this.clFileFilter.toString().length > 0)
+    //         || (this.dispIdFilter && this.dispIdFilter.toString().length > 0)
+    //         || (this.purposeFilter && this.purposeFilter.length > 0);
+    // }
 }
