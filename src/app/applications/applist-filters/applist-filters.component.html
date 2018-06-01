@@ -2,10 +2,10 @@
 
     <div class="app-filters__header d-flex justify-content-between">
         <div class="filtersHeaderLeft d-flex align-items-center">
-            <div class="allFilters" *ngIf="!isCollapsed">
+            <div class="all-filters" *ngIf="!isCollapsed">
                 All Filters
             </div>
-            <div class="dropdown cpStatus" *ngIf="isCollapsed">
+            <div class="dropdown cp-status" *ngIf="isCollapsed">
                 <button class="btn dropdown-toggle" [ngClass]="(cpStatusCount() > 0) ? 'btn-secondary' : 'btn-outline-secondary'" type="button"
                     id="cpStatusMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Commenting ({{cpStatusCount()}})
@@ -16,7 +16,7 @@
                     </label>
                 </div>
             </div>
-            <div class="dropdown appStatus d-none d-sm-block" *ngIf="isCollapsed">
+            <div class="dropdown app-status d-none d-sm-block" *ngIf="isCollapsed">
                 <button class="btn dropdown-toggle" [ngClass]="(appStatusCount() > 0) ? 'btn-secondary' : 'btn-outline-secondary'" type="button"
                     id="appStatusMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Application Status ({{appStatusCount()}})
@@ -35,25 +35,27 @@
             <button type="button" class="btn btn-primary p-2 gtm-apply-filters" (click)="applyFilters($event)" title="Apply filters">Apply</button>
             <a role="button" class="clickable p-2 gtm-show-filters" (click)="isCollapsed = false" [attr.aria-expanded]="!isCollapsed"
                 aria-controls="applist-filters" *ngIf="isCollapsed" title="Show all filters">
-                <i class="material-icons">arrow_drop_down</i>
+                <!-- <i class="material-icons">arrow_drop_down</i> -->
+                <!-- <i class="material-icons">filter_list</i> -->
+                <img class="filter-icon" src="assets/images/noun_539837_cc.svg" height="48" width="48">
             </a>
             <a role="button" class="clickable p-2 gtm-hide-filters" (click)="isCollapsed = true" [attr.aria-expanded]="!isCollapsed"
                 aria-controls="applist-filters" *ngIf="!isCollapsed" title="Hide all filters">
-                <i class="material-icons">arrow_drop_up</i>
+                <i class="material-icons">close</i>
             </a>
         </div>
     </div>
 
     <div class="app-filters__body" id="applist-filters" [ngbCollapse]="isCollapsed">
         <div class="row">
-            <div class="col-sm-4 cpStatus">
+            <div class="col-sm-4 cp-status">
                 <label class="title d-block">Comment Period Status</label>
                 <label *ngFor="let key of cpStatusKeys">
                     <input class="gtm-filter-cp-status" type="checkbox" [(ngModel)]="cpStatusFilters[key]" name="{{key}}"> {{commentPeriodService.commentStatuses[key]}}
                 </label>
             </div>
 
-            <div class="col-sm-4 appStatus">
+            <div class="col-sm-4 app-status">
                 <label class="title d-block">Application Status</label>
                 <label *ngFor="let key of appStatusKeys">
                     <input class="gtm-filter-app-status" type="checkbox" [(ngModel)]="appStatusFilters[key]" name="{{key}}"> {{applicationService.applicationStatuses[key]}}
