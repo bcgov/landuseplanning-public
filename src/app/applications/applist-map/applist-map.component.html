@@ -1,10 +1,15 @@
-<div class="map-container">
-    <div class="spinner-container" *ngIf="loading">
-        <div class="spinner-new rotating"></div>
+<div class="applist-map">
+
+    <app-applist-filters class="app-filters" [allApps]="allApps" (updateMatching)="onUpdateMatching($event)"></app-applist-filters>
+
+    <div class="pane2">
+        <app-applist-list class="app-list" [allApps]="allApps" (setCurrentApp)="highlightApplication($event, true)" (unsetCurrentApp)="highlightApplication($event, false)"></app-applist-list>
+        <div class="map-container">
+            <div class="spinner-container" *ngIf="loading">
+                <div class="spinner-new rotating"></div>
+            </div>
+            <div id="map" name="Map of BC that displays Crown Land applications"></div>
+        </div>
     </div>
 
-    <div id="map" alt="Map of BC that displays Crown Land applications">
-        <app-applist-list [allApps]="allApps" (setCurrentApp)="highlightApplication($event, true)" (unsetCurrentApp)="highlightApplication($event, false)"></app-applist-list>
-        <app-applist-filters [allApps]="allApps" (updateMatching)="onUpdateMatching($event)"></app-applist-filters>
-    </div>
 </div>

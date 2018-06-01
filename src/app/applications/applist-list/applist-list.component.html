@@ -1,11 +1,15 @@
-<div id="applist-list" class="leaflet-control-container leaflet-top leaflet-left leaflet-bottom" alt="List of Crown Land applications, limited by filters and bound by map view">
-    <div class="list-container leaflet-control leaflet-custom-control" *ngVar="matchesVisibleCount(allApps) as listCount">
-        <a role="button" class="accordion__collapse-header--column toggle gtm-show-hide-applist" data-toggle="collapse" href="#collapseApplist"
-            aria-expanded="false" aria-controls="collapseApplist">
-            <span class="open-icon"><i class="material-icons">arrow_drop_down</i>Show Applications {{listCount > 0 ? '(' + listCount + ')' : ''}}</span>
-            <span class="close-icon"><i class="material-icons">arrow_drop_up</i>Hide Applications {{listCount > 0 ? '(' + listCount + ')' : ''}}</span>
-        </a>
-        <div class="list-group collapse show" id="collapseApplist" *ngIf="gotChanges">
+<div class="app-list__container" id="applist-list" [ngbCollapse]="isCollapsed" name="List of Crown Land applications, limited by filters and bound by map view">
+
+    <div class="app-list__toggle" *ngIf="gotChanges">
+        <button class="btn btn-light" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="applist-list"
+            title="Show/hide list of applications">
+            <i class="material-icons open-icon">format_indent_increase</i>
+            <i class="material-icons close-icon">format_indent_decrease</i>
+        </button>
+    </div>
+
+    <div class="app-list__body" *ngVar="matchesVisibleCount(allApps) as listCount">
+        <div class="app-list__list list-group" *ngIf="gotChanges">
             <div class="p-2 text-center font-italic" *ngIf="listCount == 0">
                 No matching applications
             </div>
@@ -59,4 +63,20 @@
             </ng-template>
         </div>
     </div>
+
+    <div class="app-list__options" *ngVar="matchesVisibleCount(allApps) as listCount">
+        <div class="p-2" *ngIf="gotChanges">
+            <div class="w-100 text-right" *ngIf="listCount == 0">
+                No results to show
+            </div>
+            <div class="w-100 text-right" *ngIf="listCount > 0">
+                Showing results 1 - {{listCount}}
+            </div>
+            <!-- <div class="w-100">
+                <input type="checkbox" id="syncResults" name="syncResults" [(ngModel)]="syncResultsModel" #syncResults />
+                <label for="syncResults">Update results when map moves</label>
+            </div> -->
+        </div>
+    </div>
+
 </div>

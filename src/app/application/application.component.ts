@@ -65,7 +65,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
               onAdd: function (map) {
                 const element = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
 
-                element.title = 'Reset View';
+                element.title = 'Reset view';
                 element.innerText = 'refresh'; // material icon name
                 element.style.width = '34px';
                 element.style.height = '34px';

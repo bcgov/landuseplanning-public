@@ -91,13 +91,13 @@ app-home {
   }
 
   .app-footer {
-    height: 2.5rem;
+    height: 3rem; // height of 2-line footer
     border: none;
 
     .container {
       max-width: 100%;
-      padding-top: 0.65rem !important;
-      padding-bottom: 0.5rem !important;
+      padding-top: 3px !important;
+      padding-bottom: 3px !important;
     }
 
     .footer-info {
@@ -108,6 +108,14 @@ app-home {
       margin-top: 0 !important;
       padding-top: 0 !important;
       border-top: 0 !important;
+    }
+  }
+}
+
+@media (min-width: 483px) {
+  .footer-sm /deep/ {
+    .app-footer {
+      height: 1.75rem; // height of single line footer
     }
   }
 }

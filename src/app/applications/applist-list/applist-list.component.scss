@@ -1,48 +1,66 @@
 @import "~assets/styles/base.scss";
-
-#applist-list {
-    .leaflet-custom-control {
-        background-color: white;
-        border: 2px solid rgba(0,0,0,0.2);
-        border-radius: 4px;
-        background-clip: padding-box;
-        box-shadow: none;
-    }
-
-    .list-container {
-        // @include flex-box();
-        // @include flex-direction(column);
-        // @include flex(0 0 auto);
-        display: flex;
-        flex-direction: column;
-        max-height: 100%;
-        overflow-y: auto;
-    
-        .accordion__collapse-header--column {
-            width: 100%;
-            border-bottom: 1px solid rgba(0,0,0,.125);
-            padding: 0.5rem 1rem 0.5rem 0.5rem;
-            text-align: unset;
-            .material-icons {
-                vertical-align: bottom;
+.app-list {
+    &__container {
+        @include flex-box();
+        @include flex-flow(column nowrap);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 9999;
+        padding-right: 4rem;
+        overflow: hidden;
+        transition: all ease-out 0.2s;
+        &.collapse {
+            margin-left: (60px + 2px);
+            transform: translateX(-100%);
+            .open-icon {
+                display: inline-block;
             }
-        }
-
-        .list-group {
-            // @include flex(1 1 auto);
-            width: 24rem;
-            max-height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            display: none; // collapsed
+            .close-icon {
+                display: none;
+            }
             &.show {
-                display: flex;
+                margin-left: 0;
+                transform: translateX(0);
+                .open-icon {
+                    display: none;
+                }
+                .close-icon {
+                    display: inline-block;
+                }
             }
         }
-
+    }
+    &__toggle {
+        position: absolute;
+        top: 5px;
+        right: (10px + 2px);
+        width: 44px;
+        height: 44px;
+        .btn {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border-radius: 2px;
+            box-shadow: unset;
+        }
+    }
+    &__body {
+        @include flex(1 1 auto);
+        background-color: $white;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    &__list {
+        @include flex(1 1 auto);
         .list-group-item {
             border-radius: 0;
             padding: 0.75rem;
+            white-space: nowrap;
             &__detail {
                 line-height: 0rem;
                 label {
@@ -94,6 +112,33 @@
                     font-weight: bold !important;
                 }
             }
+        }
+        // .list-group-item:first-child {
+        //     border-top: 0;
+        // }
+        // .list-group-item:last-child {
+        //     border-bottom: 0;
+        // }
+    }
+    &__options {
+        font-size: small;
+        background-color: $white;
+        cursor: pointer;
+        input[type="checkbox"] {
+            vertical-align: middle;
+        }
+        label {
+            margin-left: 0.5rem;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+    }
+}
+
+@media (min-width: 500px) {
+    .app-list {
+        &__container {
+            max-width: 25rem;
         }
     }
 }
