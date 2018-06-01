@@ -4,7 +4,7 @@ app-applications:host {
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 2.5rem; // height of footer
+    bottom: 3rem; // height of 2-line footer
     left: 0;
 }
 
@@ -16,4 +16,10 @@ app-applications:host {
     right: 0;
     bottom: 0;
     left: 0;
+}
+
+@media (min-width: 483px) {
+    app-applications:host {
+        bottom: 1.75rem; // height of single-line footer
+    }
 }
