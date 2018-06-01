@@ -4,7 +4,7 @@
         z-index: 1001;
     }
     &__header {
-        .allFilters {
+        .all-filters {
             font-size: large;
             font-weight: bold;
             padding: 0.5rem;
@@ -12,6 +12,9 @@
         .dropdown {
             padding: 0.5rem;
             z-index: 1002; // app-list is 1001
+        }
+        input[type=checkbox] {
+            margin-right: 0.5rem
         }
         button {
             font-size: x-small;
@@ -22,6 +25,9 @@
         }
         .clickable {
             font-size: small;
+        }
+        .filter-icon {
+            margin: -8px;
         }
     }
     &__body {
@@ -48,7 +54,10 @@
             font-size: medium;
             font-weight: bold;
             color: $primary;
-            margin: 0.25rem 0;
+            margin: 0.5rem 0;
+        }
+        input[type=checkbox] {
+            margin-right: 0.5rem
         }
         input[type=text],
         input[type=number] {
@@ -80,8 +89,8 @@
 @media (max-width: 575px) {
     .app-filters {
         &__body {
-            .cpStatus,
-            .appStatus {
+            .cp-status,
+            .app-status {
                 margin-bottom: 0.5rem;
                 padding-bottom: 0.5rem;
                 margin-left: 1rem;
@@ -95,7 +104,7 @@
 @media (min-width: 400px) {
     .app-filters {
         &__header {
-            .allFilters {
+            .all-filters {
                 font-size: x-large;
             }
             button {
