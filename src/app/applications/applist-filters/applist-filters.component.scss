@@ -48,7 +48,10 @@
             font-size: medium;
             font-weight: bold;
             color: $primary;
-            margin: 0.25rem 0;
+            margin: 0.5rem 0;
+        }
+        input[type=checkbox] {
+            margin-right: 0.5rem
         }
         input[type=text],
         input[type=number] {

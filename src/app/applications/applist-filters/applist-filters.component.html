@@ -48,14 +48,14 @@
         <div class="row">
             <div class="col-sm-4 cpStatus">
                 <label class="title d-block">Comment Period Status</label>
-                <label class="" *ngFor="let key of cpStatusKeys">
+                <label *ngFor="let key of cpStatusKeys">
                     <input class="gtm-filter-cp-status" type="checkbox" [(ngModel)]="cpStatusFilters[key]" name="{{key}}"> {{commentPeriodService.commentStatuses[key]}}
                 </label>
             </div>
 
             <div class="col-sm-4 appStatus">
                 <label class="title d-block">Application Status</label>
-                <label class="" *ngFor="let key of appStatusKeys">
+                <label *ngFor="let key of appStatusKeys">
                     <input class="gtm-filter-app-status" type="checkbox" [(ngModel)]="appStatusFilters[key]" name="{{key}}"> {{applicationService.applicationStatuses[key]}}
                 </label>
             </div>
