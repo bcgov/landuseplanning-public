@@ -7,7 +7,7 @@
         .all-filters {
             font-size: large;
             font-weight: bold;
-            padding: 0.5rem;
+            padding-left: 1rem;
         }
         .dropdown {
             padding: 0.5rem;
@@ -15,6 +15,14 @@
         }
         input[type=checkbox] {
             margin-right: 0.5rem
+        }
+        input[type=number] {
+            height: 2rem;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
         button {
             font-size: x-small;
@@ -25,9 +33,6 @@
         }
         .clickable {
             font-size: small;
-        }
-        .filter-icon {
-            margin: -8px;
         }
     }
     &__body {

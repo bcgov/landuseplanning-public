@@ -27,21 +27,32 @@
                     </label>
                 </div>
             </div>
+            <div class="dropdown d-none d-md-block" *ngIf="isCollapsed">
+                <input type="number" id="clFileInput1" placeholder="Crown Land File #" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch"
+                    [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
+                    (mousewheel)="$event.preventDefault()">
+            </div>
+
         </div>
 
         <div class="filtersHeaderRight d-flex align-items-center">
-            <a role="button" class="clickable p-2" (click)="clearFilters($event)" title="Clear filters">Clear</a>
-            <a role="button" class="clickable p-2" (click)="resetFilters($event)" title="Reset filters">Reset</a>
-            <button type="button" class="btn btn-primary p-2 gtm-apply-filters" (click)="applyFilters($event)" title="Apply filters">Apply</button>
+            <a role="button" class="clickable p-2" (click)="clearFilters($event); isCollapsed = true" title="Clear filters">Clear</a>
+            <!-- <a role="button" class="clickable p-2" (click)="resetFilters($event); isCollapsed = true" title="Reset filters">Reset</a> -->
+            <button type="button" class="btn btn-primary p-2 gtm-apply-filters" (click)="applyFilters($event); isCollapsed = true" title="Apply filters">Apply</button>
             <a role="button" class="clickable p-2 gtm-show-filters" (click)="isCollapsed = false" [attr.aria-expanded]="!isCollapsed"
                 aria-controls="applist-filters" *ngIf="isCollapsed" title="Show all filters">
                 <!-- <i class="material-icons">arrow_drop_down</i> -->
                 <!-- <i class="material-icons">filter_list</i> -->
-                <img class="filter-icon" src="assets/images/noun_539837_cc.svg" height="48" width="48">
+                <!-- <img class="filter-icon" src="assets/images/noun_539837_cc.svg" height="48" width="48"> -->
+                <img class="filter-icon" src="assets/images/noun_348669_cc.svg" height="36" width="36">
             </a>
-            <a role="button" class="clickable p-2 gtm-hide-filters" (click)="isCollapsed = true" [attr.aria-expanded]="!isCollapsed"
+            <!-- <a role="button" class="clickable p-2 gtm-hide-filters" (click)="isCollapsed = true" [attr.aria-expanded]="!isCollapsed"
                 aria-controls="applist-filters" *ngIf="!isCollapsed" title="Hide all filters">
-                <i class="material-icons">close</i>
+                <i class="material-icons md-36">close</i>
+            </a> -->
+            <a role="button" class="clickable p-2" (click)="resetFilters($event); isCollapsed = true" [attr.aria-expanded]="!isCollapsed"
+                aria-controls="applist-filters" *ngIf="!isCollapsed" title="Cancel">
+                <i class="material-icons md-36">close</i>
             </a>
         </div>
     </div>
@@ -69,8 +80,8 @@
                 </div>
 
                 <div>
-                    <label class="title d-block" for="clFileInput">Crown Land File #</label>
-                    <input type="number" id="clFileInput" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()"
+                    <label class="title d-block" for="clFileInput2">Crown Land File #</label>
+                    <input type="number" id="clFileInput2" [(ngModel)]="clFileFilter" [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()"
                         (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
                 </div>
 
