@@ -18,7 +18,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() unsetCurrentApp = new EventEmitter(); // to map component
 
   public isCollapsed = false;
-  private gotChanges = false;
+  public gotChanges = false;
   private currentApp: Application = null;
 
   constructor(
