@@ -58,7 +58,9 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         element.style.lineHeight = '30px';
         element.style.textAlign = 'center';
         element.style.cursor = 'pointer';
-        element.style.backgroundColor = 'white';
+        element.style.backgroundColor = '#fff';
+        element.onmouseover = () => element.style.backgroundColor = '#f4f4f4';
+        element.onmouseout = () => element.style.backgroundColor = '#fff';
         element.onclick = () => self.resetView();
 
         // prevent underlying map actions for these events

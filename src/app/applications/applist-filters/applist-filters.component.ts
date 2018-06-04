@@ -25,7 +25,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() allApps: Array<Application> = []; // from map component
     @Output() updateMatching = new EventEmitter(); // to map component
 
-    public isCollapsed = true;
+    public isFiltersCollapsed = true;
+    public isCpStatusCollapsed = true;
+    public isAppStatusCollapsed = true;
     private gotChanges = false;
     private paramMap: ParamMap = null;
     private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -41,11 +43,22 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private purposeKeys: Array<string> = [];
 
     public cpStatusFilters: Object = {}; // array-like object
+    public _cpStatusFilters: Object = {}; // for Cancel feature
+
     public appStatusFilters: Object = {}; // array-like object
+    public _appStatusFilters: Object = {}; // for Cancel feature
+
     public applicantFilter: string = null;
+    public _applicantFilter: string = null; // for Cancel feature
+
     public clFileFilter: number = null;
+    public _clFileFilter: number = null; // for Cancel feature
+
     public dispIdFilter: number = null;
+    public _dispIdFilter: number = null; // for Cancel feature
+
     public purposeFilter: string = null;
+    public _purposeFilter: string = null; // for Cancel feature
 
     //
     // (arrow) functions to return type-ahead results
@@ -56,7 +69,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             .debounceTime(200)
             .distinctUntilChanged()
             .map(term => term.length < 1 ? []
-                : this.applicantKeys.filter(key => key.indexOf(this.applicantFilter.toUpperCase()) > -1) // .slice(0, 10)
+                : this.applicantKeys.filter(key => key.indexOf(this._applicantFilter.toUpperCase()) > -1) // .slice(0, 10)
             );
 
     public clFileSearch = (text$: Observable<string>) =>
@@ -64,7 +77,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             .debounceTime(200)
             .distinctUntilChanged()
             .map(term => term.length < 1 ? []
-                : this.clFileKeys.filter(key => key.toString().indexOf(this.clFileFilter.toString()) > -1) // .slice(0, 10)
+                : this.clFileKeys.filter(key => key.toString().indexOf(this._clFileFilter.toString()) > -1) // .slice(0, 10)
             );
 
     public dispIdSearch = (text$: Observable<string>) =>
@@ -72,7 +85,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             .debounceTime(200)
             .distinctUntilChanged()
             .map(term => term.length < 1 ? []
-                : this.dispIdKeys.filter(key => key.toString().indexOf(this.dispIdFilter.toString()) > -1) // .slice(0, 10)
+                : this.dispIdKeys.filter(key => key.toString().indexOf(this._dispIdFilter.toString()) > -1) // .slice(0, 10)
             );
 
     public purposeSearch = (text$: Observable<string>) =>
@@ -80,7 +93,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             .debounceTime(200)
             .distinctUntilChanged()
             .map(term => term.length < 1 ? []
-                : this.purposeKeys.filter(key => key.indexOf(this.purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
+                : this.purposeKeys.filter(key => key.indexOf(this._purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
             );
 
     constructor(
@@ -117,11 +130,11 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.paramMap = paramMap;
 
                 // set filters according to paramMap (which may change on routing)
-                this.resetFilters(null);
+                this.internalResetAllFilters(false);
 
                 // apply filters (once we have initial app list)
                 if (this.gotChanges) {
-                    this.applyFilters(null);
+                    this.internalApplyAllFilters(false);
                 }
             });
     }
@@ -143,7 +156,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             });
 
             // apply filtering
-            this.applyFilters(null);
+            this.internalApplyAllFilters(false);
         }
     }
 
@@ -152,7 +165,36 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.ngUnsubscribe.complete();
     }
 
-    public applyFilters(e: Event) {
+    //
+    // The following are to "Apply" the temporary filters: copy the temporary values to the actual variables, etc.
+    //
+    public applyCpStatusFilters() {
+        this.cpStatusFilters = { ...this._cpStatusFilters };
+        this.internalApplyAllFilters(true);
+    }
+
+    public applyAppStatusFilters() {
+        this.appStatusFilters = { ...this._appStatusFilters };
+        this.internalApplyAllFilters(true);
+    }
+
+    public applyClFileFilter() {
+        this.clFileFilter = this._clFileFilter;
+        this.internalApplyAllFilters(true);
+    }
+
+    public applyAllFilters() {
+        this.cpStatusFilters = { ...this._cpStatusFilters };
+        this.appStatusFilters = { ...this._appStatusFilters };
+        this.applicantFilter = this._applicantFilter;
+        this.clFileFilter = this._clFileFilter;
+        this.dispIdFilter = this._dispIdFilter;
+        this.purposeFilter = this._purposeFilter;
+
+        this.internalApplyAllFilters(true);
+    }
+
+    private internalApplyAllFilters(doSave: boolean) {
         this.allApps.forEach(app => app.isMatches = this.showThisApp(app));
 
         // notify map component
@@ -160,9 +202,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         // if called from UI, save new filters
         // otherwise this is part of init or change event
-        if (e) {
+        if (doSave) {
             this.saveFilters();
-            e.preventDefault();
         }
     }
 
@@ -273,7 +314,32 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.location.go(this.router.createUrlTree([], { relativeTo: this.route, queryParams: params }).toString());
     }
 
-    public resetFilters(e: Event) {
+    //
+    // The following are to "Cancel" the temporary filters: just reset the values.
+    //
+    public cancelCpStatusFilters() {
+        this._cpStatusFilters = { ...this.cpStatusFilters };
+    }
+
+    public cancelAppStatusFilters() {
+        this._appStatusFilters = { ...this.appStatusFilters };
+    }
+
+    public cancelAllFilters(e: Event) {
+        this._cpStatusFilters = { ...this.cpStatusFilters };
+        this._appStatusFilters = { ...this.appStatusFilters };
+        this._applicantFilter = this.applicantFilter;
+        this._clFileFilter = this.clFileFilter;
+        this._dispIdFilter = this.dispIdFilter;
+        this._purposeFilter = this.purposeFilter;
+    }
+
+    public resetAllFilters() {
+        this.internalResetAllFilters(true);
+    }
+
+    // (re)sets all filters from current param map
+    private internalResetAllFilters(doApply: boolean) {
         if (this.paramMap) {
             // set cpStatus filters according to current param options
             const cpStatuses = (this.paramMap.get('cpStatus') || '').split(',');
@@ -291,35 +357,48 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
             this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
             this.purposeFilter = this.paramMap.get('purpose');
+
+            // copy all data from actual to temporary properties
+            this._cpStatusFilters = { ...this.cpStatusFilters };
+            this._appStatusFilters = { ...this.appStatusFilters };
+            this._applicantFilter = this.applicantFilter;
+            this._clFileFilter = this.clFileFilter;
+            this._dispIdFilter = this.dispIdFilter;
+            this._purposeFilter = this.purposeFilter;
         }
 
         // if called from UI, apply new filters
-        // otherwise this is part of init
-        if (e) {
-            this.applyFilters(e);
-            e.preventDefault();
+        // otherwise this was called internally (eg, init)
+        if (doApply) {
+            this.internalApplyAllFilters(true);
         }
     }
 
-    public clearFilters(e: Event) {
+    //
+    // The following are to "Clear" the temporary filters.
+    //
+    public clearCpStatusFilters() {
         this.cpStatusKeys.forEach(key => {
-            this.cpStatusFilters[key] = false;
+            this._cpStatusFilters[key] = false;
         });
+    }
 
+    public clearAppStatusFilters() {
         this.appStatusKeys.forEach(key => {
-            this.appStatusFilters[key] = false;
+            this._appStatusFilters[key] = false;
         });
+    }
 
-        this.applicantFilter = null;
-        this.clFileFilter = null;
-        this.dispIdFilter = null;
-        this.purposeFilter = null;
+    public clearAllFilters(doApply: boolean) {
+        this.clearCpStatusFilters();
+        this.clearAppStatusFilters();
+        this._applicantFilter = null;
+        this._clFileFilter = null;
+        this._dispIdFilter = null;
+        this._purposeFilter = null;
 
-        // if called from UI, apply new filters
-        // otherwise this is part of init
-        if (e) {
-            this.applyFilters(e);
-            e.preventDefault();
+        if (doApply) {
+            this.applyAllFilters();
         }
     }
 
@@ -331,12 +410,40 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
     }
 
-    // public isSomeFilter(): boolean {
-    //     return this.cpStatusCount() > 0
-    //         || this.appStatusCount() > 0
-    //         || (this.applicantFilter && this.applicantFilter.length > 0)
-    //         || (this.clFileFilter && this.clFileFilter.toString().length > 0)
-    //         || (this.dispIdFilter && this.dispIdFilter.toString().length > 0)
-    //         || (this.purposeFilter && this.purposeFilter.length > 0);
-    // }
+    private applicantFilterCount(): number {
+        return (this.applicantFilter && this.applicantFilter.length > 0) ? 1 : 0;
+    }
+
+    private clFileFilterCount(): number {
+        return (this.clFileFilter && this.clFileFilter.toString().length > 0) ? 1 : 0;
+    }
+
+    private dispIdFilterCount(): number {
+        return (this.dispIdFilter && this.dispIdFilter.toString().length > 0) ? 1 : 0;
+    }
+
+    private purposeFilterCount(): number {
+        return (this.purposeFilter && this.purposeFilter.length > 0) ? 1 : 0;
+    }
+
+    public filterCount(): number {
+        return this.cpStatusCount()
+            + this.appStatusCount()
+            + this.applicantFilterCount()
+            + this.clFileFilterCount()
+            + this.dispIdFilterCount()
+            + this.purposeFilterCount();
+    }
+
+    public matchesVisibleCount(apps: Application[]): number {
+        return apps.filter(a => a.isMatches && a.isVisible).length;
+    }
+
+    public cpStatusHasChanges(): boolean {
+        return !_.isEqual(this._cpStatusFilters, this.cpStatusFilters);
+    }
+
+    public appStatusHasChanges(): boolean {
+        return !_.isEqual(this._appStatusFilters, this.appStatusFilters);
+    }
 }

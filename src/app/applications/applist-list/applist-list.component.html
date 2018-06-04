@@ -8,38 +8,38 @@
         </button>
     </div>
 
-    <div class="app-list__body" *ngVar="matchesVisibleCount(allApps) as listCount">
+    <div class="app-list__body" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
         <div class="app-list__list list-group" *ngIf="gotChanges">
-            <div class="p-2 text-center font-italic" *ngIf="listCount == 0">
+            <div class="p-2 text-center font-italic" *ngIf="numMatchesVisible == 0">
                 No matching applications
             </div>
             <ng-template ngFor let-item [ngForOf]="allApps">
                 <div class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="toggleCurrentApp(item)"
                     *ngIf="item.isMatches && item.isVisible">
                     <div class="row list-group-item__detail">
-                        <div class="col-12 mt-0">
+                        <div class="col-12">
                             <label>Client</label>
                             <p class="value-large">{{item.client || 'Unknown Client'}}</p>
                         </div>
-                        <div class="col-12 mt-1">
+                        <div class="col-12 pt-1">
                             <label>Purpose / Subpurpose</label>
                             <p class="value" *ngIf="item.purpose && item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</p>
                             <p class="value" *ngIf="!item.purpose || !item.subpurpose">-</p>
                         </div>
-                        <div class="col-7 mt-1">
+                        <div class="col-sm-7 pt-1">
                             <label>Disposition Transaction ID</label>
                             <p class="value">{{item.tantalisID}}</p>
                         </div>
-                        <div class="col-5 mt-1">
+                        <div class="col-sm-5 pt-1">
                             <label>Crown Land File #</label>
                             <p class="value">{{item.cl_file}}</p>
                         </div>
-                        <div class="col-12 mt-1">
+                        <div class="col-12 pt-1">
                             <label>Status</label>
                             <p class="value-large">{{item.appStatus}}</p>
                         </div>
                     </div>
-                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center">
+                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center pt-1">
                         <div class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
                                                        'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
                                                        'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
@@ -55,7 +55,7 @@
                                 :&nbsp;{{item.currentPeriod.startDate | date:'MMM dd'}} - {{item.currentPeriod.endDate | date:'MMM dd'}}
                             </span>
                         </div>
-                        <a (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]" title="Go to application details">
+                        <a class="app-link" (click)="$event.stopPropagation();" [routerLink]="['/a', item._id]" title="Go to application details">
                             <i class="material-icons md-36">arrow_forward</i>
                         </a>
                     </div>
@@ -64,13 +64,13 @@
         </div>
     </div>
 
-    <div class="app-list__options" *ngVar="matchesVisibleCount(allApps) as listCount">
+    <div class="app-list__options" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
         <div class="p-2" *ngIf="gotChanges">
-            <div class="w-100 text-right" *ngIf="listCount == 0">
+            <div class="w-100 text-right" *ngIf="numMatchesVisible == 0">
                 No results to show
             </div>
-            <div class="w-100 text-right" *ngIf="listCount > 0">
-                Showing results 1 - {{listCount}}
+            <div class="w-100 text-right" *ngIf="numMatchesVisible > 0">
+                Showing results 1 - {{numMatchesVisible}}
             </div>
             <div class="w-100">
                 <!-- <input type="checkbox" id="syncResults" name="syncResults" [(ngModel)]="syncResultsModel" #syncResults /> -->
