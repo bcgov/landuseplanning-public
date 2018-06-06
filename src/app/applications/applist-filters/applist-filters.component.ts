@@ -28,7 +28,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public isFiltersCollapsed = true;
     public isCpStatusCollapsed = true;
     public isAppStatusCollapsed = true;
-    private gotChanges = false;
+    public gotChanges = false;
     private paramMap: ParamMap = null;
     private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
