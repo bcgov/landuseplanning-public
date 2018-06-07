@@ -72,7 +72,9 @@ export class ApplicationComponent implements OnInit, OnDestroy {
                 element.style.lineHeight = '30px';
                 element.style.textAlign = 'center';
                 element.style.cursor = 'pointer';
-                element.style.backgroundColor = 'white';
+                element.style.backgroundColor = '#fff';
+                element.onmouseover = () => element.style.backgroundColor = '#f4f4f4';
+                element.onmouseout = () => element.style.backgroundColor = '#fff';
 
                 element.onclick = function () {
                   // fit the bounds for this app

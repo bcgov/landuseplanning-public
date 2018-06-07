@@ -34,7 +34,7 @@ import { VarDirective } from 'app/utils/ng-var.directive';
     VarDirective
   ],
   exports: [
-    ApplicationsComponent
+    // ApplicationsComponent // DON'T NEED TO EXPORT?
   ]
 })
 

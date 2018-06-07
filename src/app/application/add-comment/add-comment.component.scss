@@ -51,6 +51,7 @@
         }
         textarea {
             min-height: 36px;
+            resize: vertical;
         }
         app-file-upload {
             display: inline-block;

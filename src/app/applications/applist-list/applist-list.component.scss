@@ -33,7 +33,7 @@
             height: 100%;
             padding: 0;
             border-radius: 2px;
-            box-shadow: unset;
+            // box-shadow: unset; // NB: this button can receive focus
             cursor: pointer;
         }
     }
@@ -41,7 +41,6 @@
         @include flex(1 1 auto);
         background-color: $white;
         border-top: 1px solid rgba(0, 0, 0, 0.2);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         overflow-x: hidden;
         overflow-y: auto;
     }
@@ -49,10 +48,9 @@
         @include flex(1 1 auto);
         .list-group-item {
             border-radius: 0;
-            padding: 0.75rem;
-            white-space: nowrap;
+            padding: 0.5rem 0.75rem;
             &__detail {
-                line-height: 0;
+                line-height: 1;
                 label {
                     margin-bottom: 0;
                     font-size: 11px;
@@ -63,12 +61,14 @@
                     margin-bottom: 0;
                     color: #666;
                     font-size: 12px;
+                    line-height: 1;
                 }
                 .value-large {
                     margin-bottom: 0;
                     color: #666;
                     font-size: 14px;
                     font-weight: bold;
+                    line-height: 1;
                 }
             }
             &__buttons {
@@ -80,9 +80,11 @@
                     border: 1px solid transparent;
                     font-size: 12px;
                 }
+                .app-link {
+                    font-size: 0; // to fix focus bottom border issue
+                }
                 .material-icons:hover {
-                    color: $gold;
-                    font-weight: bold;
+                    background-color: rgba(0,0,0,.15);
                 }
             }
             &.active {
@@ -112,9 +114,9 @@
         // }
     }
     &__options {
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
         font-size: small;
         background-color: $white;
-        cursor: pointer;
         input[type="checkbox"] {
             vertical-align: middle;
         }
