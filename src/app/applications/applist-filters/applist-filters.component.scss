@@ -1,4 +1,5 @@
-@import "~assets/styles/base.scss";
+@import "~assets/styles/base/base.scss";
+
 .app-filters {
     &__container {
         z-index: 1001;
@@ -66,6 +67,7 @@
         #filterIcon {
             width: 24px;
             height: 24px;
+            border-radius: 2px;
             &:hover {
                 background-color: rgba(0,0,0,.15);
             }
@@ -118,6 +120,7 @@
         input[type=text],
         input[type=number] {
             height: 2rem;
+            width: 13rem;
             margin: 0 1rem 0.5rem 1rem;
         }
         input[type=number]::-webkit-inner-spin-button,

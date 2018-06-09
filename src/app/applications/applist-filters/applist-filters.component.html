@@ -122,8 +122,8 @@
                 </div>
 
                 <div>
-                    <label class="title d-block" for="dispIdInput">Disposition ID</label>
-                    <input type="number" class="gtm-filter-disposition-id" id="dispIdInput" placeholder="Disposition ID" [(ngModel)]="_dispIdFilter"
+                    <label class="title d-block" for="dispIdInput">Disposition Transaction ID</label>
+                    <input type="number" class="gtm-filter-disposition-id" id="dispIdInput" placeholder="Disposition Transaction ID" [(ngModel)]="_dispIdFilter"
                         [ngbTypeahead]="dispIdSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
                         (mousewheel)="$event.preventDefault()">
                 </div>
