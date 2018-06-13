@@ -93,17 +93,20 @@
                 Your email and phone are never public.)</label>
             </div> -->
 
-            <div class="form-group col-lg-6 required">
+            <!-- Email is required if Phone isn't entered (or is invalid) -->
+            <div class="form-group col-lg-6" [ngClass]="(!phone.value?.length || phone.invalid) ? 'required' : 'optional'">
               <label for="email" class="control-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="first.last@email.com" required aria-required="true"
+              <input type="email" class="form-control" id="email" name="email" placeholder="first.last@email.com" [required]="!phone.value?.length || phone.invalid"
                 [(ngModel)]="comment.commentAuthor.internal.email" #email="ngModel" />
-              <div [hidden]="email.valid || email.untouched" class="alert alert-danger">Email is required</div>
+              <div [hidden]="email.valid || email.untouched" class="alert alert-danger">Email or Phone is required</div>
             </div>
 
-            <div class="form-group col-lg-6 optional">
+            <!-- Phone is required if Email isn't entered (or is invalid) -->
+            <div class="form-group col-lg-6" [ngClass]="(!email.value?.length || email.invalid) ? 'required' : 'optional'">
               <label for="phone" class="control-label">Phone</label>
-              <input type="tel" class="form-control" id="phone" name="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="comment.commentAuthor.internal.phone"
-                #phone="ngModel" />
+              <input type="tel" class="form-control" id="phone" name="phone" placeholder="xxx-xxx-xxxx" [required]="!email.value?.length || email.invalid"
+                [(ngModel)]="comment.commentAuthor.internal.phone" #phone="ngModel" />
+              <div [hidden]="phone.valid || phone.untouched" class="alert alert-danger">Email or Phone is required</div>
             </div>
           </div>
         </fieldset>
@@ -129,7 +132,7 @@
           <div class="row">
             <div class="form-group col-12 required">
               <label for="comment" class="control-label">Comment</label>
-              <textarea class="form-control" id="comment" name="comment" rows="10" required aria-required="true" [(ngModel)]="comment.comment"
+              <textarea class="form-control" id="comment" name="comment" rows="10" multi-line required aria-required="true" [(ngModel)]="comment.comment"
                 #comment2="ngModel"></textarea>
               <div [hidden]="comment2.valid || comment2.pristine" class="alert alert-danger">Comment is required</div>
             </div>
