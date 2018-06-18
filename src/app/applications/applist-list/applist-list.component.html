@@ -73,9 +73,8 @@
                 Showing results 1 - {{numMatchesVisible}}
             </div>
             <div class="w-100">
-                <!-- <input type="checkbox" id="syncResults" name="syncResults" [(ngModel)]="syncResultsModel" #syncResults /> -->
-                <input type="checkbox" id="syncResults" checked disabled />
-                <label for="syncResults">Update results when map moves</label>
+                <input type="checkbox" id="updateResultsCheckbox" [(ngModel)]="doUpdateResults" (change)="updateResultsChange.emit(doUpdateResults)" />
+                <label for="updateResultsCheckbox">Update results when map moves</label>
             </div>
         </div>
     </div>

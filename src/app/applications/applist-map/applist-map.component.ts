@@ -36,6 +36,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   };
   private isUser = false; // to track map change events
   private gotChanges = false; // to reduce initial map change event handling
+  private doUpdateResults: boolean = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -165,7 +166,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
   /**
    * Sets which apps are currently visible.
-   * Call setVisibleDebounced() instead.
+   * NB: Call setVisibleDebounced() instead!
    */
   private setVisible() {
     // console.log('resetting visible');
@@ -175,7 +176,12 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     for (const fg of this.appsFG) {
       const fgBounds = fg.getBounds();
 
-      if (fgBounds && !fgBounds.isValid()) {
+      if (!this.doUpdateResults) {
+        // show all items even if map moves
+        const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
+        if (app) { app.isVisible = true; }
+
+      } else if (fgBounds && !fgBounds.isValid()) {
         // item without features - make item visible
         const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
         if (app) { app.isVisible = true; }
@@ -331,5 +337,13 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
       // (re)draw the matching apps
       this.drawMap();
     }, 0, apps);
+  }
+
+  /**
+   * Event handler called when list component Update Results checkbox has changed.
+   */
+  public onUpdateResultsChange(doUpdateResults: boolean) {
+    this.doUpdateResults = doUpdateResults;
+    this.setVisibleDebounced();
   }
 }

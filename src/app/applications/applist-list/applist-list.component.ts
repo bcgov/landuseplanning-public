@@ -16,10 +16,12 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() allApps: Array<Application> = []; // from map component
   @Output() setCurrentApp = new EventEmitter(); // to map component
   @Output() unsetCurrentApp = new EventEmitter(); // to map component
+  @Output() updateResultsChange = new EventEmitter(); // to map component
 
   public isCollapsed = false;
   public gotChanges = false;
   private currentApp: Application = null;
+  public doUpdateResults = true; // bound to checkbox - initial state
 
   constructor(
     private commentPeriodService: CommentPeriodService // used in template
@@ -35,6 +37,9 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnChanges(changes: SimpleChanges) {
     if (!changes.allApps.firstChange && changes.allApps.currentValue) {
       this.gotChanges = true;
+
+      // sync initial state to map
+      this.updateResultsChange.emit(this.doUpdateResults);
     }
   }
 

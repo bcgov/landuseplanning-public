@@ -1,4 +1,4 @@
-@import "~assets/styles/base.scss";
+@import "~assets/styles/base/base.scss";
 
 .app-list {
     &__container {
@@ -83,8 +83,11 @@
                 .app-link {
                     font-size: 0; // to fix focus bottom border issue
                 }
-                .material-icons:hover {
-                    background-color: rgba(0,0,0,.15);
+                .material-icons {
+                    border-radius: 2px;
+                    &:hover {
+                        background-color: rgba(0,0,0,.15);
+                    }
                 }
             }
             &.active {

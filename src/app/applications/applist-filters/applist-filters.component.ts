@@ -325,7 +325,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this._appStatusFilters = { ...this.appStatusFilters };
     }
 
-    public cancelAllFilters(e: Event) {
+    public cancelAllFilters() {
         this._cpStatusFilters = { ...this.cpStatusFilters };
         this._appStatusFilters = { ...this.appStatusFilters };
         this._applicantFilter = this.applicantFilter;
