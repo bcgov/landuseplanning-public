@@ -1,9 +1,8 @@
 .btn {
     border-radius: 0.25rem;
-    //background: transparent;
-    //color: $primary;
     font-weight: 400;
     transition: all linear 0.2s;
+    cursor: pointer;
 
     &.inverted {
         color: $white;

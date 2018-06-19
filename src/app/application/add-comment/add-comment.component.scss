@@ -7,58 +7,6 @@
         left: 25%;
         width: 50%;
     }
-    .modal-header {
-        background-color: #f1f1f1;
-        button {
-            cursor: pointer;
-        }
-    }
-    .modal-body {
-        padding: 30px;
-        max-height: 70vh; // worst-case (Pixel 2)
-        overflow-y: auto;
-    }
-    .modal-footer {
-        background-color: #f1f1f1;
-        button {
-            cursor: pointer;
-        }
-    }
-    .page1,
-    .page2,
-    .page3 {
-        .form-group.required .control-label:after {
-            white-space: pre;
-            content: " *";
-            color: red;
-        }
-        .form-group.optional .control-label:after {
-            white-space: pre;
-            content: " (optional)";
-            font-weight: normal;
-        }
-        .control-label {
-            font-weight: bold;
-        }
-        .form-check {
-            padding-left: 35px;
-        }
-        .form-check * {
-            cursor: pointer;
-        }
-        input[type="checkbox"] {
-            height: 20px;
-            width: 20px;
-        }
-        textarea {
-            min-height: 36px;
-            resize: vertical;
-        }
-        app-file-upload {
-            display: inline-block;
-            width: 100%;
-        }
-    }
     .page4 {
         img {
             width: 100px;
@@ -70,4 +18,9 @@
 
 .comment-textarea {
     height: 18.75rem;
+}
+
+app-file-upload {
+    display: inline-block;
+    width: 100%;
 }

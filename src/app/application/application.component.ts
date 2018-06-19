@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from 'ng2-bootstrap-modal';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as L from 'leaflet';
-import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
@@ -40,7 +39,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dialogService: DialogService,
+    private modalService: NgbModal,
     private searchService: SearchService,
     private applicationService: ApplicationService, // used in template
     private commentPeriodService: CommentPeriodService // used in template
@@ -193,25 +192,18 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   private addComment() {
     if (this.application.currentPeriod) {
-      this.dialogService.addDialog(AddCommentComponent,
-        {
-          currentPeriod: this.application.currentPeriod
-        }, {
-          // index: 0,
-          // autoCloseTimeout: 10000,
-          // closeByClickingOutside: true,
-          backdropColor: 'rgba(0, 0, 0, 0.5)'
-        })
-        .takeUntil(this.ngUnsubscribe)
-        .subscribe((isConfirmed) => {
-          // // we get dialog result
-          // if (isConfirmed) {
-          //   // TODO: reload page?
-          //   console.log('saved');
-          // } else {
-          //   console.log('canceled');
-          // }
-        });
+      // open modal
+      const modal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      // set input parameter
+      (<AddCommentComponent>modal.componentInstance).currentPeriod = this.application.currentPeriod;
+      // check result
+      modal.result.then((result) => {
+        // saved
+        console.log(`Success, result = ${result}`);
+      }, (reason) => {
+        // canceled
+        console.log(`Error, reason = ${reason}`); // see ModalDismissReasons
+      });
     }
   }
 }
