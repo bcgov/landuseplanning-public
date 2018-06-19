@@ -14,8 +14,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { SharedModule } from 'app/shared.module';
 import { ApplicationModule } from 'app/application/application.module';
 import { ApplicationsModule } from 'app/applications/applications.module';
-import { icon, Marker } from 'leaflet';
-
 import { AppRoutingModule } from 'app/app-routing.module';
 
 // components
@@ -36,21 +34,6 @@ import { DocumentService } from 'app/services/document.service';
 import { OrganizationService } from 'app/services/organization.service';
 import { SearchService } from 'app/services/search.service';
 import { ConfigService } from 'app/services/config.service';
-
-const iconRetinaUrl = 'assets/marker-icon-2x.png';
-const iconUrl = 'assets/marker-icon.png';
-const shadowUrl = 'assets/marker-shadow.png';
-const iconDefault = icon({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  tooltipAnchor: [16, -28],
-  shadowSize: [41, 41]
-});
-Marker.prototype.options.icon = iconDefault;
 
 @NgModule({
   imports: [
