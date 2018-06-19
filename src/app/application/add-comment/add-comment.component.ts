@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import { Component, Input, OnInit } from '@angular/core';
+// import { HttpEventType } from '@angular/common/http';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
@@ -11,27 +11,13 @@ import { CommentPeriod } from 'app/models/commentperiod';
 import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
 
-export interface DataModel {
-  title: string; // not used
-  message: string; // not used
-  currentPeriod: CommentPeriod;
-}
-
 @Component({
   templateUrl: './add-comment.component.html',
   styleUrls: ['./add-comment.component.scss']
 })
 
-// NOTE: dialog components must not implement OnDestroy
-//       otherwise they don't return a result
-export class AddCommentComponent extends DialogComponent<DataModel, boolean> implements DataModel, OnInit, AfterViewInit {
-  @ViewChild('iAgree') private iAgree: ElementRef;
-  @ViewChild('contactName') private contactName: ElementRef;
-  @ViewChild('comment2') private comment2: ElementRef;
-
-  public title: string;
-  public message: string;
-  public currentPeriod: CommentPeriod;
+export class AddCommentComponent implements OnInit {
+  @Input() currentPeriod: CommentPeriod;
 
   public submitting = false;
   private progressValue: number;
@@ -42,13 +28,10 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   public files: Array<File> = [];
 
   constructor(
-    public renderer: Renderer,
-    public dialogService: DialogService,
+    public activeModal: NgbActiveModal,
     private commentService: CommentService,
     private documentService: DocumentService
-  ) {
-    super(dialogService);
-  }
+  ) { }
 
   ngOnInit() {
     this.comment = new Comment();
@@ -56,28 +39,20 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
     this.comment.commentAuthor.requestedAnonymous = false;
   }
 
-  ngAfterViewInit() {
-    this.focus(this.iAgree);
-  }
-
   private p1_next() {
     this.currentPage++;
-    this.focus(this.contactName);
   }
 
   private p2_back() {
     this.currentPage--;
-    this.focus(this.iAgree);
   }
 
   private p2_next() {
     this.currentPage++;
-    this.focus(this.comment2);
   }
 
   private p3_back() {
     this.currentPage--;
-    this.focus(this.contactName);
   }
 
   private p3_next() {
@@ -129,13 +104,11 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
         return Observable.forkJoin(observables).toPromise();
       })
       .then(() => {
-        this.result = true;
         this.submitting = false;
         this.currentPage++;
       })
       .catch(error => {
         alert('Uh-oh, error submitting comment');
-        this.result = false;
         this.submitting = false;
       });
   }
@@ -155,13 +128,5 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
       }
     });
     return bytes;
-  }
-
-  // see https://stackoverflow.com/questions/34522306/focus-on-newly-added-input-element
-  private focus(elem: ElementRef) {
-    // console.log('elem =', elem);
-    if (elem && elem.nativeElement) {
-      this.renderer.invokeElementMethod(elem.nativeElement, 'focus', []);
-    }
   }
 }
