@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
 import { ApiService } from './services/api';
+import { ConfigService } from './services/config.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     public router: Router,
     private cookieService: CookieService,
-    private api: ApiService
+    private api: ApiService,
+    private configService: ConfigService
   ) {
     // ref: https://stackoverflow.com/questions/5899783/detect-safari-using-jquery
     this.isSafari = (/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
@@ -50,6 +52,8 @@ export class AppComponent implements OnInit, OnDestroy {
         return c / 2 * (-Math.pow(2, -8 * --t) + 2) + b;
       }
     };
+
+    this.configService.init();
   }
 
   ngOnInit() {
@@ -64,16 +68,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.configService.destroy();
+
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
   // show banner anew every day
   showBanner(): boolean {
-    return (!localStorage.hidePrcPilotBannerDate || new Date(localStorage.hidePrcPilotBannerDate) < this.today);
+    return (!window.localStorage.hidePrcPilotBannerDate || new Date(window.localStorage.hidePrcPilotBannerDate) < this.today);
   }
 
   hideBanner() {
-    localStorage.hidePrcPilotBannerDate = this.today;
+    window.localStorage.hidePrcPilotBannerDate = this.today;
   }
 }

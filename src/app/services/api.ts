@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import * as _ from 'lodash';
-
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import 'rxjs/add/observable/throw';
+import * as _ from 'lodash';
 
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
@@ -12,14 +11,16 @@ import { Document } from 'app/models/document';
 @Injectable()
 export class ApiService {
   // public token: string;
+  public isMS: boolean; // IE, Edge, etc
   public apiPath: string;
   public adminUrl: string;
   public env: 'local' | 'dev' | 'test' | 'demo' | 'prod';
 
   constructor(private http: Http) {
-    const { hostname } = window.location;
-    // const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
     // this.token = currentUser && currentUser.token;
+    this.isMS = window.navigator.msSaveOrOpenBlob ? true : false;
+    const { hostname } = window.location;
     switch (hostname) {
       case 'localhost':
         // Local
@@ -415,18 +416,18 @@ export class ApiService {
   //
   // Private
   //
-  private get(apiRoute: string, options?: Object) {
+  private get(apiRoute: string, options?: object) {
     return this.http.get(`${this.apiPath}/${apiRoute}`, options || null);
   }
 
-  private put(apiRoute: string, body?: Object, options?: Object) {
+  private put(apiRoute: string, body?: object, options?: object) {
     return this.http.put(`${this.apiPath}/${apiRoute}`, body || null, options || null);
   }
 
-  private post(apiRoute: string, body?: Object, options?: Object) {
+  private post(apiRoute: string, body?: object, options?: object) {
     return this.http.post(`${this.apiPath}/${apiRoute}`, body || null, options || null);
   }
-  private delete(apiRoute: string, body?: Object, options?: Object) {
+  private delete(apiRoute: string, body?: object, options?: object) {
     return this.http.delete(`${this.apiPath}/${apiRoute}`, options || null);
   }
 }

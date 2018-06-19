@@ -8,7 +8,7 @@ import { ApplicationService } from '../services/application.service';
 })
 
 export class HomeComponent implements OnInit {
-  numApplications: Number;
+  numApplications: number;
 
   constructor(private applicationService: ApplicationService) { }
 

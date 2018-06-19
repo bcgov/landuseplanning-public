@@ -141,12 +141,12 @@ export class AddCommentComponent extends DialogComponent<DataModel, boolean> imp
   }
 
   // approximate size (keys + data)
-  private sizeof(object: Object) {
+  private sizeof(o: object) {
     let bytes = 0;
 
-    Object.keys(object).forEach(key => {
+    Object.keys(o).forEach(key => {
       bytes += key.length;
-      const obj = object[key];
+      const obj = o[key];
       switch (typeof obj) {
         case 'boolean': bytes += 4; break;
         case 'number': bytes += 8; break;
