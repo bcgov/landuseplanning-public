@@ -144,7 +144,7 @@
           <div class="row">
             <div class="form-group col-12 required">
               <label for="comment" class="control-label">Comment</label>
-              <textarea class="form-control" id="comment" name="comment" rows="10" multi-line required aria-required="true" [(ngModel)]="comment.comment"
+              <textarea class="comment-textarea form-control" id="comment" name="comment" multi-line required aria-required="true" [(ngModel)]="comment.comment"
                 #comment2="ngModel"></textarea>
               <div [hidden]="comment2.valid || comment2.pristine" class="alert alert-danger">Comment is required</div>
             </div>
