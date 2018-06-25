@@ -14,6 +14,7 @@ import { Constants } from 'app/utils/constants';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { ConfigService } from 'app/services/config.service';
 
 @Component({
     selector: 'app-applist-filters',
@@ -25,7 +26,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() allApps: Array<Application> = []; // from map component
     @Output() updateMatching = new EventEmitter(); // to map component
 
-    public isFiltersCollapsed = true;
+    public isFiltersCollapsed: boolean;
     public isCpStatusCollapsed = true;
     public isAppStatusCollapsed = true;
     public gotChanges = false;
@@ -42,11 +43,11 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private dispIdKeys: Array<number> = [];
     private purposeKeys: Array<string> = [];
 
-    public cpStatusFilters: Object = {}; // array-like object
-    public _cpStatusFilters: Object = {}; // for Cancel feature
+    public cpStatusFilters: object = {}; // array-like object
+    public _cpStatusFilters: object = {}; // for Cancel feature
 
-    public appStatusFilters: Object = {}; // array-like object
-    public _appStatusFilters: Object = {}; // for Cancel feature
+    public appStatusFilters: object = {}; // array-like object
+    public _appStatusFilters: object = {}; // for Cancel feature
 
     public applicantFilter: string = null;
     public _applicantFilter: string = null; // for Cancel feature
@@ -101,7 +102,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private applicationService: ApplicationService,
-        private commentPeriodService: CommentPeriodService // also used in template
+        private commentPeriodService: CommentPeriodService, // also used in template
+        private configService: ConfigService
     ) {
         // populate the keys we want to display
         this.cpStatusKeys.push(this.commentPeriodService.OPEN);
@@ -118,6 +120,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.isFiltersCollapsed = !this.configService.isApplistFiltersVisible;
+
         // prevent underlying map actions for these events
         const element = <HTMLElement>document.getElementById('applist-filters');
         L.DomEvent.disableClickPropagation(element); // includes double-click
@@ -129,13 +133,11 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe(paramMap => {
                 this.paramMap = paramMap;
 
-                // set filters according to paramMap (which may change on routing)
+                // set filters according to paramMap
                 this.internalResetAllFilters(false);
 
-                // apply filters (once we have initial app list)
-                if (this.gotChanges) {
-                    this.internalApplyAllFilters(false);
-                }
+                // apply filters
+                this.internalApplyAllFilters(false);
             });
     }
 
@@ -445,5 +447,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
     public appStatusHasChanges(): boolean {
         return !_.isEqual(this._appStatusFilters, this.appStatusFilters);
+    }
+
+    public onShowHideClick() {
+        this.configService.isApplistFiltersVisible = !this.isFiltersCollapsed;
     }
 }

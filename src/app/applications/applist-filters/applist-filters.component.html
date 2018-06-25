@@ -76,9 +76,9 @@
             <a role="button" class="clickable px-2" (click)="clearAllFilters(isFiltersCollapsed)" title="Clear filters" *ngVar="filterCount() as filtCnt">
                 Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
             </a>
-            <a id="cancelButton" role="button" class="clickable px-2" *ngIf="!isFiltersCollapsed" (click)="cancelAllFilters();isFiltersCollapsed=true">Cancel</a>
-            <button id="applyButton" type="button" class="btn btn-primary gtm-apply-filters" *ngIf="!isFiltersCollapsed" (click)="applyAllFilters();isFiltersCollapsed=true">Apply</button>
-            <a role="button" class="clickable gtm-show-filters" *ngIf="isFiltersCollapsed" (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false"
+            <a id="cancelButton" role="button" class="clickable px-2" *ngIf="!isFiltersCollapsed" (click)="cancelAllFilters();isFiltersCollapsed=true;onShowHideClick()">Cancel</a>
+            <button id="applyButton" type="button" class="btn btn-primary gtm-apply-filters" *ngIf="!isFiltersCollapsed" (click)="applyAllFilters();isFiltersCollapsed=true;onShowHideClick()">Apply</button>
+            <a role="button" class="clickable gtm-show-filters" *ngIf="isFiltersCollapsed" (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false;onShowHideClick()"
                 [attr.aria-expanded]="!isFiltersCollapsed" aria-controls="applist-filters" title="Show all filters">
                 <img id="filterIcon" src="assets/images/noun_348669_cc.svg">
             </a>

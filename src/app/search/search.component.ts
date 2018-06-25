@@ -1,11 +1,9 @@
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 import { ApiService } from 'app/services/api';
 import { Application } from 'app/models/application';

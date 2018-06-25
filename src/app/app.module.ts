@@ -9,7 +9,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
-import { icon, Marker } from 'leaflet';
 
 // modules
 import { SharedModule } from 'app/shared.module';
@@ -34,22 +33,7 @@ import { DecisionService } from 'app/services/decision.service';
 import { DocumentService } from 'app/services/document.service';
 import { OrganizationService } from 'app/services/organization.service';
 import { SearchService } from 'app/services/search.service';
-
-// for Leaflet map
-const iconRetinaUrl = 'assets/marker-icon-2x.png';
-const iconUrl = 'assets/marker-icon.png';
-const shadowUrl = 'assets/marker-shadow.png';
-const iconDefault = icon({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  tooltipAnchor: [16, -28],
-  shadowSize: [41, 41]
-});
-Marker.prototype.options.icon = iconDefault;
+import { ConfigService } from 'app/services/config.service';
 
 @NgModule({
   imports: [
@@ -84,7 +68,8 @@ Marker.prototype.options.icon = iconDefault;
     DecisionService,
     DocumentService,
     OrganizationService,
-    SearchService
+    SearchService,
+    ConfigService
   ],
   bootstrap: [
     AppComponent

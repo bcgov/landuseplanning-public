@@ -2,7 +2,9 @@ import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, S
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Application } from 'app/models/application';
 import { SearchService } from 'app/services/search.service';
+import { ConfigService } from 'app/services/config.service';
 import { Subject } from 'rxjs/Subject';
+import 'leaflet.markercluster';
 import * as L from 'leaflet';
 import * as _ from 'lodash';
 
@@ -11,6 +13,24 @@ declare module 'leaflet' {
     dispositionId: number;
   }
 }
+
+const markerIconYellow = L.icon({
+  iconUrl: 'assets/images/marker-icon-yellow.svg',
+  iconRetinaUrl: 'assets/images/marker-icon-2x-yellow.svg',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28]
+});
+
+const markerIconYellowLg = L.icon({
+  iconUrl: 'assets/images/marker-icon-yellow-lg.svg',
+  iconRetinaUrl: 'assets/images/marker-icon-2x-yellow-lg.svg',
+  iconSize: [50, 82],
+  iconAnchor: [25, 82],
+  // popupAnchor: [1, -34], // TODO: update
+  // tooltipAnchor: [16, -28] // TODO: update
+});
 
 @Component({
   selector: 'app-applist-map',
@@ -25,9 +45,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   public loading = true; // for spinner
   private map: L.Map = null;
   private appsFG: L.FeatureGroup[] = []; // groups of layers for each app
-  private marker: L.Marker = null; // for highlighting an app
+  private currentMarker: L.Marker = null; // for highlighting an app
+  public currentApp: Application = null; // for highlighting an app
+  private markersCG = L.markerClusterGroup();
   private fitBoundsOptions: L.FitBoundsOptions = {
-    // maxZoom: 17, // TODO: unclear why this is needed
     // disable animation to prevent known bug where zoom is sometimes incorrect
     // ref: https://github.com/Leaflet/Leaflet/issues/3249
     // animate: false, // TODO: seems to work correctly currently
@@ -41,7 +62,8 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private configService: ConfigService
   ) { }
 
   public ngOnInit() {
@@ -282,11 +304,18 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         const popup = L.popup(popupOptions).setContent(htmlContent);
         layer.bindPopup(popup);
         layer.addTo(appFG);
+
+        const marker = L.marker(appFG.getBounds().getCenter())
+          .setIcon(markerIconYellow)
+          .on('click', L.Util.bind(self.onMarkerClick, self, app))
+          .addTo(self.markersCG);
       });
       self.appsFG.push(appFG); // save to list
       appFG.addTo(self.map); // add to map
       appFG.addTo(globalFG); // for bounds
       // appFG.on('click', (event) => console.log('app =', app)); // FUTURE: highlight this app in list?
+
+      self.markersCG.addTo(self.map);
     });
 
     // fit the global bounds
@@ -301,31 +330,62 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Event handler called when list component selects or unselects an app.
    */
+  // TODO: this should do the same thing as clicking on a pin
+  // TODO: pin should get larger and details popup should display
+  // TODO: clicking on pin should select app in list
   public highlightApplication(app: Application, show: boolean) {
+
+    //
+    // TODO: find subject marker, then size it accordingly
+    //
+
     // remove existing marker, if any
-    if (this.marker) {
-      this.marker.removeFrom(this.map);
-      this.marker = null;
+    if (this.currentMarker) {
+      this.currentMarker.removeFrom(this.map);
+      this.currentMarker = null;
     }
 
     if (show && app.features.length) {
-      // add the subject marker
       const fg = _.find(this.appsFG, { dispositionId: app.tantalisID });
       if (fg) {
         const center = fg.getBounds().getCenter();
-        const markerOptions = {
-          // title: 'Click to go to application details'// FUTURE: add link to details?
-        };
-        this.marker = L.marker(center, markerOptions).addTo(this.map);
-        // center map on this app
-        // this.map.panTo(center); // disabled for now
+
+        // add new marker
+        this.currentMarker = L.marker(center)
+          .setIcon(markerIconYellowLg)
+          .on('click', L.Util.bind(this.onMarkerClick, this, app))
+          .addTo(this.map);
+
+        this.centerMap(center);
       }
     }
+  }
+
+  private onMarkerClick(...args: any[]) {
+    const app = args[0] as Application;
+    const marker = args[1].target as L.Marker;
+
+    this.currentApp = app; // update selected item in app list
+    // marker.setIcon(markerIconYellowLg);
+    this.centerMap(marker.getLatLng());
+  }
+
+  /**
+   * Center map on specified point, applying offset if needed.
+   */
+  // TODO: register for list/filter changes and apply offset accordingly?
+  private centerMap(latlng: L.LatLng) {
+    let point = this.map.latLngToLayerPoint(latlng);
+
+    if (this.configService.isApplistListVisible) { point = point.subtract([(336 / 2), 0]); } // TODO: retrieve actual width of list pane
+    if (this.configService.isApplistFiltersVisible) { point = point.add([0, (281 / 2)]); } // TODO: retrieve actual height of filters pane
+    this.map.panTo(this.map.layerPointToLatLng(point));
   }
 
   /**
    * Event handler called when filters component updates list of matching apps.
    */
+  // FUTURE: move Update Matching to common config and register for changes?
   public onUpdateMatching(apps: Application[]) {
     // console.log('map: got changed matching apps from filters');
 
@@ -342,6 +402,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Event handler called when list component Update Results checkbox has changed.
    */
+  // FUTURE: move Update Results to common config and register for changes?
   public onUpdateResultsChange(doUpdateResults: boolean) {
     this.doUpdateResults = doUpdateResults;
     this.setVisibleDebounced();
