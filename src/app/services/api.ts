@@ -14,7 +14,7 @@ export class ApiService {
   // public token: string;
   public apiPath: string;
   public adminUrl: string;
-  public env: 'local' | 'dev' | 'test' | 'demo' | 'prod';
+  public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'prod';
 
   constructor(private http: Http) {
     const { hostname } = window.location;
@@ -47,6 +47,13 @@ export class ApiService {
         this.apiPath = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/admin/';
         this.env = 'demo';
+        break;
+
+      case 'nrts-prc-scale.pathfinder.gov.bc.ca':
+        // Demo
+        this.apiPath = 'https://nrts-prc-scale.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://nrts-prc-scale.pathfinder.gov.bc.ca/admin/';
+        this.env = 'scale';
         break;
 
       default:
