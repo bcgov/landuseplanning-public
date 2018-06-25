@@ -13,7 +13,7 @@ export class ApiService {
   // public token: string;
   public apiPath: string;
   public adminUrl: string;
-  public env: 'local' | 'dev' | 'test' | 'demo' | 'prod';
+  public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'prod';
 
   constructor(private http: Http) {
     const { hostname } = window.location;
