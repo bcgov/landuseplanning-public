@@ -47,7 +47,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   private appsFG: L.FeatureGroup[] = []; // groups of layers for each app
   private currentMarker: L.Marker = null; // for highlighting an app
   public currentApp: Application = null; // for highlighting an app
-  private markersCG = L.markerClusterGroup();
+  // private markersCG = L.markerClusterGroup();
   private fitBoundsOptions: L.FitBoundsOptions = {
     // disable animation to prevent known bug where zoom is sometimes incorrect
     // ref: https://github.com/Leaflet/Leaflet/issues/3249
@@ -305,17 +305,17 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         layer.bindPopup(popup);
         layer.addTo(appFG);
 
-        const marker = L.marker(appFG.getBounds().getCenter())
-          .setIcon(markerIconYellow)
-          .on('click', L.Util.bind(self.onMarkerClick, self, app))
-          .addTo(self.markersCG);
+        // const marker = L.marker(appFG.getBounds().getCenter())
+        //   .setIcon(markerIconYellow)
+        //   .on('click', L.Util.bind(self.onMarkerClick, self, app))
+        //   .addTo(self.markersCG);
       });
       self.appsFG.push(appFG); // save to list
       appFG.addTo(self.map); // add to map
       appFG.addTo(globalFG); // for bounds
       // appFG.on('click', (event) => console.log('app =', app)); // FUTURE: highlight this app in list?
 
-      self.markersCG.addTo(self.map);
+      // self.markersCG.addTo(self.map);
     });
 
     // fit the global bounds
@@ -351,10 +351,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         const center = fg.getBounds().getCenter();
 
         // add new marker
-        this.currentMarker = L.marker(center)
-          .setIcon(markerIconYellowLg)
-          .on('click', L.Util.bind(this.onMarkerClick, this, app))
-          .addTo(this.map);
+        // this.currentMarker = L.marker(center)
+        //   .setIcon(markerIconYellowLg)
+        //   .on('click', L.Util.bind(this.onMarkerClick, this, app))
+        //   .addTo(this.map);
 
         this.centerMap(center);
       }
