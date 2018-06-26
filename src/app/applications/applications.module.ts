@@ -14,6 +14,9 @@ import { ApplistListComponent } from './applist-list/applist-list.component';
 import { ApplistMapComponent } from './applist-map/applist-map.component';
 import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
 
+// other
+import { VarDirective } from 'app/utils/ng-var.directive';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -27,7 +30,8 @@ import { ApplistFiltersComponent } from './applist-filters/applist-filters.compo
     ApplicationsComponent,
     ApplistListComponent,
     ApplistMapComponent,
-    ApplistFiltersComponent
+    ApplistFiltersComponent,
+    VarDirective
   ],
   exports: [
     // ApplicationsComponent // DON'T NEED TO EXPORT?
