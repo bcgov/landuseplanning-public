@@ -18,6 +18,23 @@ import { SearchService } from './search.service';
 
 @Injectable()
 export class ApplicationService {
+  // statuses / query param options
+  readonly ABANDONED = 'AB';
+  readonly ACCEPTED = 'AC';
+  readonly ALLOWED = 'AL';
+  readonly CANCELLED = 'CA';
+  readonly DISALLOWED = 'DI';
+  readonly DISPOSITION_GOOD_STANDING = 'DG';
+  readonly OFFER_ACCEPTED = 'OA';
+  readonly OFFER_NOT_ACCEPTED = 'ON';
+  readonly OFFERED = 'OF';
+  readonly SUSPENDED = 'SU';
+  // special combination status (see isDecision below)
+  readonly DECISION_MADE = 'DE';
+  // special status when no data
+  readonly UNKNOWN = 'UN';
+
+  public applicationStatuses: Array<string> = [];
   private application: Application = null;
 
   constructor(
@@ -27,14 +44,29 @@ export class ApplicationService {
     private commentPeriodService: CommentPeriodService,
     private decisionService: DecisionService,
     private searchService: SearchService
-  ) { }
+  ) {
+    // display strings
+    this.applicationStatuses[this.ABANDONED] = 'Application Abandoned';
+    this.applicationStatuses[this.ACCEPTED] = 'Application Under Review';
+    this.applicationStatuses[this.ALLOWED] = 'Decision: Allowed';
+    this.applicationStatuses[this.CANCELLED] = 'Application Cancelled';
+    this.applicationStatuses[this.DISALLOWED] = 'Decision: Not Approved';
+    this.applicationStatuses[this.DISPOSITION_GOOD_STANDING] = 'Tenure: Disposition in Good Standing';
+    this.applicationStatuses[this.OFFER_ACCEPTED] = 'Decision: Offer Accepted';
+    this.applicationStatuses[this.OFFER_NOT_ACCEPTED] = 'Decision: Offer Not Accepted';
+    this.applicationStatuses[this.OFFERED] = 'Decision: Offered';
+    this.applicationStatuses[this.SUSPENDED] = 'Tenure: Suspended';
+    this.applicationStatuses[this.DECISION_MADE] = 'Decision Made';
+    this.applicationStatuses[this.UNKNOWN] = 'Unknown Application Status';
+  }
 
   // get count of applications
   getCount(): Observable<number> {
     return this.getAllInternal()
       .map(applications => {
         return applications.length;
-      });
+      })
+      .catch(this.api.handleError);
   }
 
   // get all applications
@@ -87,14 +119,13 @@ export class ApplicationService {
             .then(features => {
               application.features = features;
 
-              // calculate Total Area (hectares)
-              let areaHectares = 0;
+              // calculate Total Area (hectares) from all features
+              application.areaHectares = 0;
               _.each(application.features, function (f) {
                 if (f['properties']) {
-                  areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
+                  application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
                 }
               });
-              application.areaHectares = areaHectares;
 
               // cache application properties from first feature
               if (application.features && application.features.length > 0) {
@@ -115,7 +146,8 @@ export class ApplicationService {
         });
 
         return Promise.all(promises).then(() => { return applications; });
-      });
+      })
+      .catch(this.api.handleError);
   }
 
   // get just the applications
@@ -189,14 +221,13 @@ export class ApplicationService {
           .then(features => {
             application.features = features;
 
-            // calculate Total Area (hectares)
-            let areaHectares = 0;
+            // calculate Total Area (hectares) from all features
+            application.areaHectares = 0;
             _.each(application.features, function (f) {
               if (f['properties']) {
-                areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
+                application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
               }
             });
-            application.areaHectares = areaHectares;
 
             // cache application properties from first feature
             if (application.features && application.features.length > 0) {
@@ -223,33 +254,55 @@ export class ApplicationService {
   // returns application status based on status code
   getStatus(application: Application): string {
     if (!application || !application.status) {
-      return 'Unknown Application Status';
+      return this.applicationStatuses[this.UNKNOWN]; // no data
     }
 
     switch (application.status.toUpperCase()) {
-      case 'ABANDONED': return 'Application Abandoned';
-      case 'ACCEPTED': return 'Application Under Review';
-      case 'ALLOWED': return 'Decision: Allowed';
-      case 'CANCELLED': return 'Application Cancelled';
-      case 'DISALLOWED': return 'Decision: Not Approved';
-      case 'DISPOSITION IN GOOD STANDING': return 'Tenure: Disposition in Good Standing';
-      case 'OFFER ACCEPTED': return 'Decision: Offer Accepted';
-      case 'OFFER NOT ACCEPTED': return 'Decision: Offer Not Accepted';
-      case 'OFFERED': return 'Decision: Offered';
-      case 'SUSPENDED': return 'Tenure: Suspended';
+      case 'ABANDONED': return this.applicationStatuses[this.ABANDONED];
+      case 'ACCEPTED': return this.applicationStatuses[this.ACCEPTED];
+      case 'ALLOWED': return this.applicationStatuses[this.ALLOWED];
+      case 'CANCELLED': return this.applicationStatuses[this.CANCELLED];
+      case 'DISALLOWED': return this.applicationStatuses[this.DISALLOWED];
+      case 'DISPOSITION IN GOOD STANDING': return this.applicationStatuses[this.DISPOSITION_GOOD_STANDING];
+      case 'OFFER ACCEPTED': return this.applicationStatuses[this.OFFER_ACCEPTED];
+      case 'OFFER NOT ACCEPTED': return this.applicationStatuses[this.OFFER_NOT_ACCEPTED];
+      case 'OFFERED': return this.applicationStatuses[this.OFFERED];
+      case 'SUSPENDED': return this.applicationStatuses[this.SUSPENDED];
     }
 
     // else return current status in title case
     return _.startCase(_.camelCase(application.status));
   }
 
+  isAccepted(status: string): boolean {
+    return (status && status.toUpperCase() === 'ACCEPTED');
+  }
+
+  // NOTE: a decision may or may not include Cancelled
+  // see code that uses this helper
   isDecision(status: string): boolean {
-    const s = status.toUpperCase();
+    const s = (status && status.toUpperCase());
     return (s === 'ALLOWED'
       || s === 'CANCELLED'
       || s === 'DISALLOWED'
       || s === 'OFFER ACCEPTED'
       || s === 'OFFER NOT ACCEPTED'
       || s === 'OFFERED');
+  }
+
+  isCancelled(status: string): boolean {
+    return (status && status.toUpperCase() === 'CANCELLED');
+  }
+
+  isAbandoned(status: string): boolean {
+    return (status && status.toUpperCase() === 'ABANDONED');
+  }
+
+  isDispGoodStanding(status: string): boolean {
+    return (status && status.toUpperCase() === 'DISPOSITION IN GOOD STANDING');
+  }
+
+  isSuspended(status: string): boolean {
+    return (status && status.toUpperCase() === 'SUSPENDED');
   }
 }

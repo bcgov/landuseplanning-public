@@ -1,4 +1,4 @@
-@import "~assets/styles/base.scss";
+@import "~assets/styles/base/base.scss";
 
 :host {
   @include flex(0 0 auto);
@@ -39,7 +39,7 @@
   }
 }
 
-// Home Title Container
+// HOME TITLE CONTAINER
 .home-title-container {
   .container {
     padding-top: 2rem;
@@ -49,12 +49,10 @@
   h1 {
     margin: 0;
     font-size: 2rem;
-    line-height: 1.75rem;
   }
 
   h2 {
     font-size: 1.5rem;
-    line-height: 1.25rem;
   }
 
   .badge {
@@ -68,10 +66,10 @@
 
     .btn {
       width: 100%;
-      background: #fff;
-      border-color: #003366;
-      color: #003366;
-      font-size: 0.85rem;
+      background: $white;
+      border-color: $primary;
+      color: $primary;
+      font-size: 0.875rem;
     }
   }
 }
@@ -83,21 +81,14 @@
   
     h1 {
       font-size: 2.5rem;
-      line-height: 2.25rem;
     }
 
     h2 {
       font-size: 1.5rem;
-      line-height: 1.25rem;
     }
 
     .badge {
       font-size: 20px;
-    }
-  
-    h2 {
-      font-size: 2.15rem;
-      line-height: 2.45rem;
     }
 
     &__action-btns {
@@ -119,6 +110,9 @@
 
   .feature-block {
     padding: 2rem 1.5rem;
+    .btn {
+      font-size: 0.875rem;
+    }
   }
 }
 
@@ -133,6 +127,9 @@
 
     .feature-block {
       height: 17.5rem;
+      .btn {
+        font-size: 0.875rem;
+      }
     }
   }
 }

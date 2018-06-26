@@ -1,0 +1,201 @@
+<!-- only show when submitting larger submissions -->
+<div class="spinner-container full-screen" *ngIf="submitting && (totalSize > 100000)">
+  <div class="progress-new">
+    <span>Submitting . . .</span>
+    <mat-progress-bar color="primary" mode="buffer" [value]="progressValue" [bufferValue]="progressBufferValue"></mat-progress-bar>
+  </div>
+</div>
+
+<!-- FIRST PAGE -->
+<form #preCommentForm="ngForm">
+  <div class="modal-content page1" *ngIf="this.currentPage === 1">
+    <div class="modal-header">
+      <h4 class="modal-title">Conditions</h4>
+      <button type="button" class="close gtm-submit-comment_cancel-pg1" aria-label="Close" (click)="activeModal.dismiss('dismissed page1')">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <h5>How It Works</h5>
+      <!-- <p>All accepted comments submitted to the Public Review and Comment Website will be published online within one week
+        of receipt. Commenters can choose whether they want their name to be published along with their comments or whether
+        they wish to remain anonymous to other commenters. Comments are not accepted if they are profane, abusive, or do
+        not relate to the matter being consulted upon as stated in our Moderation Policy.</p>
+      <p>All comments will be provided to the decision maker. The decision maker may also respond with follow up questions
+        (e.g. if the decision maker wants more information).</p> -->
+      <p>Your comments, including but not limited to your opinion, name, phone number, email and mailing address, are collected
+        by the Ministry of Forests, Lands, and Natural Resource Operations &amp; Rural Development (the Ministry) under
+        Section 26(c) of the
+        <em>Freedom of Information and Protection of Privacy Act</em> for the purposes of collecting your thoughts on Crown
+        Land applications. Your personal information may be used by the Ministry to contact you to follow up on your comments.
+        Should you have any questions about the collection of personal information, please contact:
+      </p>
+      <p>
+        Dean Hardman
+        <br>5th Floor - 727 Fisgard Street
+        <br>Victoria BC V8W 9R1
+        <br>Canada
+        <br>
+        <strong>250-893-0884</strong>
+      </p>
+
+      <div class="row">
+        <div class="form-check col-12">
+          <!-- <label for="iAgree" class="form-check-label">I agree. By ticking this checkbox, I am conclusively deemed to have read and agreed unconditionally to the above
+          Moderation Policy and Terms of Use.</label> -->
+          <label for="iAgree" class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="iAgree" name="iAgree" [(ngModel)]="iAgreeModel" #iAgree />
+            I agree.
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- SECOND PAGE -->
+  <form #commentForm1="ngForm">
+    <div class="modal-content page2" *ngIf="this.currentPage === 2">
+      <div class="modal-header">
+        <h4 class="modal-title">Personal Information</h4>
+        <button type="button" class="close gtm-submit-comment-cancel-pg2" aria-label="Close" (click)="close()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <fieldset>
+          <div class="row">
+            <div class="form-group col-lg-6 required">
+              <label for="contactName" class="control-label">Name</label>
+              <input type="text" class="form-control" id="contactName" name="contactName" maxlength="50" placeholder="First Last" required
+                aria-required="true" [(ngModel)]="comment.commentAuthor.contactName" #contactName="ngModel" />
+              <div [hidden]="contactName.valid || contactName.untouched" class="alert alert-danger">Name is required</div>
+            </div>
+
+            <div class="form-group col-lg-6 required">
+              <label for="location" class="control-label">Location</label>
+              <input type="text" class="form-control" id="location" name="location" maxlength="50" placeholder="City" required aria-required="true"
+                [(ngModel)]="comment.commentAuthor.location" #location="ngModel" />
+              <div [hidden]="location.valid || location.untouched" class="alert alert-danger">Location is required</div>
+            </div>
+
+<!-- SECOND PAGE -->
+<form #commentForm1="ngForm">
+  <div class="modal-content page2" *ngIf="this.currentPage === 2">
+    <div class="modal-header">
+      <h4 class="modal-title">Personal Information</h4>
+      <button type="button" class="close gtm-submit-comment-cancel-pg2" aria-label="Close" (click)="activeModal.dismiss('dismissed page2')">&times;</button>
+    </div>
+
+            <!-- <div class="form-check col-lg-12">
+              <input type="checkbox" class="form-check-input" id="requestedAnonymous" name="requestedAnonymous" [(ngModel)]="comment.commentAuthor.requestedAnonymous"
+                #requestedAnonymous="ngModel" />
+              <label for="requestedAnonymous" class="form-check-label">Make me anonymous. (Checking this option will hide your name, location and organization on the public site.
+                Your email and phone are never public.)</label>
+            </div> -->
+
+            <div class="form-group col-lg-6 required">
+              <label for="email" class="control-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="first.last@email.com" required aria-required="true"
+                [(ngModel)]="comment.commentAuthor.internal.email" #email="ngModel" />
+              <div [hidden]="email.valid || email.untouched" class="alert alert-danger">Email is required</div>
+            </div>
+          </div>
+
+            <div class="form-group col-lg-6 optional">
+              <label for="phone" class="control-label">Phone</label>
+              <input type="tel" class="form-control" id="phone" name="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="comment.commentAuthor.internal.phone"
+                #phone="ngModel" />
+            </div>
+          </div>
+
+          <div class="form-group col-lg-12 optional">
+            <label for="orgName" class="control-label">Organization</label>
+            <input type="text" class="form-control" id="orgName" name="orgName" maxlength="100" placeholder="Org Name" [(ngModel)]="comment.commentAuthor.orgName"
+              #orgName="ngModel" />
+          </div>
+
+      <div class="modal-body">
+        <fieldset>
+          <div class="row">
+            <div class="form-group col-12 required">
+              <label for="comment" class="control-label">Comment</label>
+              <textarea class="form-control" id="comment" name="comment" rows="10" required aria-required="true" [(ngModel)]="comment.comment"
+                #comment2="ngModel"></textarea>
+              <div [hidden]="comment2.valid || comment2.pristine" class="alert alert-danger">Comment is required</div>
+            </div>
+          </div>
+
+          <!-- Phone is required if Email isn't entered (or is invalid) -->
+          <div class="form-group col-lg-6" [ngClass]="(!email.value?.length || email.invalid) ? 'required' : 'optional'">
+            <label for="phone" class="control-label">Phone</label>
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="xxx-xxx-xxxx" [required]="!email.value?.length || email.invalid"
+              [(ngModel)]="comment.commentAuthor.internal.phone" #phone="ngModel" pattern="[0-9]{3}[- \.][0-9]{3}[- \.][0-9]{4}" />
+            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
+              <div *ngIf="phone.errors?.required">Email or Phone is required</div>
+              <div *ngIf="phone.invalid">Phone is invalid</div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="p2_back()">Back</button>
+      <button type="button" class="btn btn-primary" (click)="p2_next()" [disabled]="!commentForm1.form.valid">Next</button>
+    </div>
+  </div>
+</form>
+
+<!-- THIRD PAGE -->
+<form #commentForm2="ngForm">
+  <div class="modal-content page3" *ngIf="this.currentPage === 3">
+    <div class="modal-header">
+      <h4 class="modal-title">Your Comment</h4>
+      <button type="button" class="close gtm-submit-comment-cancel-pg3" aria-label="Close" (click)="activeModal.dismiss('dismissed page3')">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <fieldset>
+        <div class="row">
+          <div class="form-group col-12 required">
+            <label for="comment" class="control-label">Comment</label>
+            <textarea class="form-control" id="comment" name="comment" rows="10" multi-line required aria-required="true" [(ngModel)]="comment.comment"
+              #comment2="ngModel"></textarea>
+            <div [hidden]="comment2.valid || comment2.pristine" class="alert alert-danger">Comment is required</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="upload-attachments form-group no-margin col-12 optional">
+            <label for="attachments" class="control-label">Attachments</label>
+            <app-file-upload [(files)]="files"></app-file-upload>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="p3_back()">Back</button>
+      <button type="button" class="btn btn-primary gtm-submit-comment-submit" (click)="p3_next()" [disabled]="!commentForm2.form.valid || submitting">Submit</button>
+    </div>
+  </div>
+</form>
+
+<!-- FOURTH PAGE -->
+<div class="modal-content page4" *ngIf="this.currentPage === 4">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmation</h4>
+    <!-- clicking this Close button means submitted succeeded, so close() instead of dismiss() -->
+    <button type="button" class="close gtm-submit-comment-done" aria-label="Close" (click)="activeModal.close('closed page4')">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <div style="text-align: center;">
+      <h3>Thank you for your comment!</h3>
+      <p>All comments will be provided to the decision maker.</p>
+      <img src="assets/images/check.png">
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary gtm-submit-comment-done" (click)="activeModal.close('closed page4')">Close</button>
+  </div>
+</div>

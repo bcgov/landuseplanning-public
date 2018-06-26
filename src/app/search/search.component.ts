@@ -1,11 +1,9 @@
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 import { ApiService } from 'app/services/api';
 import { Application } from 'app/models/application';
@@ -98,7 +96,8 @@ export class SearchComponent implements OnInit {
     //         this.showAdvancedFields = true;
     //       }
 
-    //       // Needed in development mode - not required in prod.
+    //       // Force change detection since we changed a bound property after the normal check cycle and outside anything
+    //       // that would trigger a CD cycle - this will eliminate the error you get when running in dev mode.
     //       this._changeDetectionRef.detectChanges();
 
     //       // Get the applications
@@ -141,7 +140,8 @@ export class SearchComponent implements OnInit {
     //             this.showAdvancedFields = true;
     //           }
 
-    //           // Needed in development mode - not required in prod.
+    //           // Force change detection since we changed a bound property after the normal check cycle and outside anything
+    //           // that would trigger a CD cycle - this will eliminate the error you get when running in dev mode.
     //           this._changeDetectionRef.detectChanges();
 
     //           if (!_.isEmpty(this.terms.getParams())) {
@@ -195,7 +195,8 @@ export class SearchComponent implements OnInit {
 
     //       this.noMoreResults = (this.results.length === this.count) || (data[0].results.length === 0 && data[1].results.length === 0);
 
-    //       // Needed in development mode - not required in prod.
+    //       // Force change detection since we changed a bound property after the normal check cycle and outside anything
+    //       // that would trigger a CD cycle - this will eliminate the error you get when running in dev mode.
     //       this._changeDetectionRef.detectChanges();
     //     },
     //     error => console.log(error)

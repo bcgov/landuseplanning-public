@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import * as _ from 'lodash';
-
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import 'rxjs/add/observable/throw';
+import * as _ from 'lodash';
 
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
@@ -11,14 +11,16 @@ import { Document } from 'app/models/document';
 @Injectable()
 export class ApiService {
   // public token: string;
+  public isMS: boolean; // IE, Edge, etc
   public apiPath: string;
   public adminUrl: string;
   public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'prod';
 
   constructor(private http: Http) {
-    const { hostname } = window.location;
-    // const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
     // this.token = currentUser && currentUser.token;
+    this.isMS = window.navigator.msSaveOrOpenBlob ? true : false;
+    const { hostname } = window.location;
     switch (hostname) {
       case 'localhost':
         // Local
@@ -66,7 +68,7 @@ export class ApiService {
   public handleError(error: any): ErrorObservable {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
     console.log('API error =', reason);
-    return Observable.throw(reason);
+    return Observable.throw(error);
   }
 
   //
@@ -74,33 +76,21 @@ export class ApiService {
   //
   getApplications() {
     const fields = [
-      '_id',
-      'id',
-
-      '_addedBy',
-      '_updatedBy',
-      'dateAdded',
-      'dateUpdated',
-
       'agency',
-      'areaHectares',
       'cl_file',
-      'code',
-      'name',
       'client',
+      'code',
       'description',
+      'internal',
       'internalID',
-      'legalDescription',
       'latitude',
+      'legalDescription',
       'longitude',
-      'mapsheet',
+      'name',
       'postID',
       'publishDate',
       'region',
-      'tantalisID',
-
-      'internal'
-
+      'tantalisID'
     ];
     let queryString = 'application?fields=';
     _.each(fields, function (f) {
@@ -113,32 +103,21 @@ export class ApiService {
 
   getApplication(id: string) {
     const fields = [
-      '_id',
-      'id',
-
-      '_addedBy',
-      '_updatedBy',
-      'dateAdded',
-      'dateUpdated',
-
       'agency',
-      'areaHectares',
       'cl_file',
-      'code',
-      'name',
       'client',
+      'code',
       'description',
+      'internal',
       'internalID',
-      'legalDescription',
       'latitude',
+      'legalDescription',
       'longitude',
-      'mapsheet',
+      'name',
       'postID',
       'publishDate',
       'region',
-      'tantalisID',
-
-      'internal'
+      'tantalisID'
     ];
     let queryString = 'application/' + id + '?fields=';
     _.each(fields, function (f) {
@@ -152,6 +131,21 @@ export class ApiService {
   //
   // Organizations
   //
+  getOrganizations() {
+    const fields = [
+      '_addedBy',
+      'code',
+      'name'
+    ];
+    let queryString = 'organization?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
   getOrganization(id: string) {
     const fields = [
       '_addedBy',
@@ -356,7 +350,7 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  uploadDocument(formData: Object) {
+  uploadDocument(formData: FormData) {
     const fields = [
       'displayName',
       'internalURL',
@@ -391,7 +385,7 @@ export class ApiService {
   }
 
   getBCGWDispositionTransactionId(id: number) {
-      const fields = ['name'];
+    const fields = ['name'];
     let queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
@@ -429,18 +423,18 @@ export class ApiService {
   //
   // Private
   //
-  private get(apiRoute: string, options?: Object) {
+  private get(apiRoute: string, options?: object) {
     return this.http.get(`${this.apiPath}/${apiRoute}`, options || null);
   }
 
-  private put(apiRoute: string, body?: Object, options?: Object) {
+  private put(apiRoute: string, body?: object, options?: object) {
     return this.http.put(`${this.apiPath}/${apiRoute}`, body || null, options || null);
   }
 
-  private post(apiRoute: string, body?: Object, options?: Object) {
+  private post(apiRoute: string, body?: object, options?: object) {
     return this.http.post(`${this.apiPath}/${apiRoute}`, body || null, options || null);
   }
-  private delete(apiRoute: string, body?: Object, options?: Object) {
+  private delete(apiRoute: string, body?: object, options?: object) {
     return this.http.delete(`${this.apiPath}/${apiRoute}`, options || null);
   }
 }

@@ -1,0 +1,210 @@
+@import "~assets/styles/base/base.scss";
+
+.app-filters {
+    &__container {
+        z-index: 1001;
+    }
+
+    &__header {
+        padding: 0.5rem 0.5rem 0 0.5rem;
+
+        .all-filters {
+            font-size: large;
+            font-weight: bold;
+        }
+        .cp-status,
+        .app-status {
+            padding-right: 0.5rem;
+            z-index: 1002; // app-list is 1001
+            button {
+                line-height: 18px; // same as mat icon font size
+            }
+            input[type=checkbox] {
+                margin-right: 0.5rem
+            }            
+        }
+        .cl-file {
+            z-index: 1002; // app-list is 1001
+            input[type=number] {
+                height: 2.25rem;
+            }
+            input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        }
+        // input[type="checkbox"] {
+        //     height: 1rem;
+        //     width: 1rem;
+        //     vertical-align: middle;
+        // }
+        button {
+            font-size: x-small;
+            cursor: pointer;
+        }
+        /* TODO: make header collapses work properly */
+        .collapse.show {
+            position: absolute;
+            background-color: $white;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.15);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            border-radius: 0.25rem;
+        }
+        .material-icons {
+            vertical-align: bottom;
+            color: $black;
+            font-size: calc(20px - 2px); // subtract my borders
+        }
+        .clickable {
+            font-size: small;
+        }
+        #cancelButton {
+            border-left: 1px solid rgba(0,0,0,0.2);
+        }
+        #filterIcon {
+            width: 24px;
+            height: 24px;
+            border-radius: 2px;
+            &:hover {
+                background-color: rgba(0,0,0,.15);
+            }
+        }
+        #applyButton {
+            line-height: calc(20px - 2px); // same as mat icon size minus my borders
+        }
+    }
+
+    &__count {
+        text-align: center;
+        font-size: small;
+        font-style: italic;
+        margin: 1px;
+        background-color: $lightgray;
+    }
+
+    &__body {
+        @include flex(0 0 auto);
+        padding: 0 1rem 1rem 1rem;
+        font-size: medium;
+        transition: all ease-out 0.2s;
+        /* TODO: make this work */
+        &.collapse {
+            transform: translateY(-100%);
+            &.show {
+                transform: translateY(0);
+            }
+        }
+        .row {
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: 66vh; // TODO: make this work properly
+        }
+        label {
+            display: block;
+        }
+        .title {
+            font-size: medium;
+            font-weight: bold;
+            color: $primary;
+        }
+        .cp-status .title,
+        .app-status .title {
+            margin-left: -1rem;
+        }
+        input[type=checkbox] {
+            margin-right: 0.5rem
+        }
+        input[type=text],
+        input[type=number] {
+            height: 2rem;
+            width: 13rem;
+            margin: 0 1rem 0.5rem 1rem;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        &-buttons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        &-buttons>* {
+            margin-left: 1rem;
+        }
+        /* make the drop-down menus display scroll-bar if too tall */
+        /* TODO: make this work */
+        ngb-typeahead-window {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .app-filters {
+        &__header {
+            padding: 0.5rem 1rem 0 1rem;
+
+            .all-filters {
+                font-size: x-large;
+            }
+            .cp-status,
+            .app-status {
+                button {
+                    line-height: 24px; // same as mat icon font size
+                }
+            }    
+            button {
+                font-size: small;
+            }
+            .material-icons {
+                font-size: calc(24px - 2px); // subtract my borders
+            }
+            .clickable {
+                font-size: medium;
+            }
+            #filterIcon {
+                width: 36px;
+                height: 36px;
+            }
+            #applyButton {
+                line-height: calc(24px - 2px); // same as mat icon size minus my borders
+            }
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .app-filters {
+        &__body {
+            .cp-status,
+            .app-status {
+                margin-bottom: 0.5rem;
+                padding-bottom: 0.5rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                border-bottom: 1px solid $black;
+            }
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    .app-filters {
+        &__body {
+            .cp-status .title,
+            .app-status .title {
+                margin-left: 0;
+            }
+            input[type=text],
+            input[type=number] {
+                margin-left: 0;
+            }
+        }
+    }
+}

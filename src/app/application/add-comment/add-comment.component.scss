@@ -1,0 +1,26 @@
+@import "~assets/styles/base/base.scss";
+
+.modal-dialog {
+    .progress-new {
+        position: absolute;
+        top: 40%;
+        left: 25%;
+        width: 50%;
+    }
+    .page4 {
+        img {
+            width: 100px;
+            height: 100px;
+            margin: 1rem;
+        }
+    }
+}
+
+.comment-textarea {
+    height: 18.75rem;
+}
+
+app-file-upload {
+    display: inline-block;
+    width: 100%;
+}

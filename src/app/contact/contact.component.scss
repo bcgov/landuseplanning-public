@@ -1,4 +1,4 @@
-@import "~assets/styles/base.scss";
+@import "~assets/styles/base/base.scss";
 
 :host {
   @include flex(1 1 auto);
@@ -39,51 +39,45 @@
   }
 }
 
-.container {
-  padding-top: 2rem;
-}
-
-@media (min-width: 768px) {
-  .container {
-    padding-top: 5rem;
-    padding-bottom: 3rem;
-  }
-}
-
+// CONTACT TITLE CONTAINER
 .contact-title-container {
-  padding-bottom: 0;
+  .container {
+    padding-top: 2rem;
+    padding-bottom: 0;
+  }
 
   h1 {
-    margin-bottom: 2rem;
+    margin: 0;
     font-size: 2.5rem;
-    line-height: 2.25rem;
-
-    span:first-child {
-      display: block;
-    }
   }
 }
 
 @media (min-width: 768px) {
   .contact-title-container {
+    padding-top: 4rem;
+
     h1 {
-      margin-bottom: 2rem;
-      line-height: 2.5rem;
       font-size: 2.8rem;
     }
   }
-}
+} 
 
 @media (min-width: 1200px) {
   .contact-title-container {
-    h1 {
-      margin-bottom: 2rem;
-    }
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  section {
+    padding-top: 2rem;
   }
 }
 
 aside {
   margin-top: 1rem;
+  font-size: medium;
 
   .feature-block {
     min-height: 14rem;

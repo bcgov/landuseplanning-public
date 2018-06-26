@@ -1,0 +1,140 @@
+<div class="app-filters__container" name="Filters to limit displayed Crown Land applications">
+
+    <div class="app-filters__header d-flex justify-content-between">
+        <div class="d-flex align-items-center">
+            <div class="all-filters" *ngIf="!isFiltersCollapsed">
+                All Filters
+            </div>
+
+            <!-- COMMENT PERIOD STATUS FILTERS COLLAPSE -->
+            <div class="cp-status" *ngIf="isFiltersCollapsed">
+                <div *ngVar="cpStatusCount() as numCpStatus">
+                    <button type="button" class="btn" [ngClass]="(numCpStatus > 0) ? 'btn-secondary' : 'btn-outline-secondary'" id="cpStatusFilterButton"
+                        (click)="isAppStatusCollapsed=true;isCpStatusCollapsed=!isCpStatusCollapsed" [attr.aria-expanded]="!isCpStatusCollapsed"
+                        aria-controls="applist-cpstatus-filters" title="Comment Status filters">
+                        Commenting ({{numCpStatus}})
+                        <i class="material-icons" *ngIf="isCpStatusCollapsed">arrow_drop_down</i>
+                        <i class="material-icons" *ngIf="!isCpStatusCollapsed">arrow_drop_up</i>
+                    </button>
+
+                    <div id="applist-cpstatus-filters" [ngbCollapse]="isCpStatusCollapsed">
+                        <div aria-labelledby="cpStatusFilterButton" (click)="$event.stopPropagation()">
+                            <label class="dropdown-item" *ngFor="let key of cpStatusKeys">
+                                <input type="checkbox" class="gtm-filter-cp-status" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> {{commentPeriodService.commentStatuses[key]}}
+                            </label>
+                        </div>
+                        <div class="float-right mt-2 mr-3" *ngVar="cpStatusHasChanges() as hasChanges">
+                            <a role="button" class="clickable p-2" (click)="clearCpStatusFilters()" *ngIf="!hasChanges && numCpStatus > 0">Clear</a>
+                            <a role="button" class="clickable p-2" (click)="cancelCpStatusFilters();isCpStatusCollapsed=true" *ngIf="hasChanges || numCpStatus == 0">Cancel</a>
+                            <button type="button" class="btn btn-primary p-2 gtm-apply-filters" (click)="applyCpStatusFilters();isCpStatusCollapsed=true">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APPLICATION STATUS FILTERS COLLAPSE -->
+            <div class="app-status d-none d-sm-block" *ngIf="isFiltersCollapsed">
+                <div *ngVar="appStatusCount() as numAppStatus">
+                    <button type="button" class="btn" [ngClass]="(numAppStatus > 0) ? 'btn-secondary' : 'btn-outline-secondary'" id="appStatusFilterButton"
+                        (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=!isAppStatusCollapsed" [attr.aria-expanded]="!isAppStatusCollapsed"
+                        aria-controls="applist-appstatus-filters" title="Application Status filters">
+                        Application Status ({{numAppStatus}})
+                        <i class="material-icons" *ngIf="isAppStatusCollapsed">arrow_drop_down</i>
+                        <i class="material-icons" *ngIf="!isAppStatusCollapsed">arrow_drop_up</i>
+                    </button>
+
+                    <div id="applist-appstatus-filters" [ngbCollapse]="isAppStatusCollapsed">
+                        <div aria-labelledby="appStatusFilterButton" (click)="$event.stopPropagation()">
+                            <label class="dropdown-item" *ngFor="let key of appStatusKeys">
+                                <input type="checkbox" class="gtm-filter-app-status" [(ngModel)]="_appStatusFilters[key]" name="{{key}}"> {{applicationService.applicationStatuses[key]}}
+                            </label>
+                            <div class="float-right mt-2 mr-3" *ngVar="appStatusHasChanges() as hasChanges">
+                                <a role="button" class="clickable p-2" (click)="clearAppStatusFilters()" *ngIf="!hasChanges && numAppStatus > 0">Clear</a>
+                                <a role="button" class="clickable p-2" (click)="cancelAppStatusFilters();isAppStatusCollapsed=true" *ngIf="hasChanges || numAppStatus == 0">Cancel</a>
+                                <button type="button" class="btn btn-primary p-2 gtm-apply-filters" (click)="applyAppStatusFilters();isAppStatusCollapsed=true">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CROWN LAND FILE # INPUT GROUP -->
+            <div class="cl-file d-none d-md-flex input-group" *ngIf="isFiltersCollapsed">
+                <input type="number" class="gtm-filter-cl-file" id="clFileInput3" placeholder="Crown Land File #" [(ngModel)]="_clFileFilter"
+                    [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
+                    (mousewheel)="$event.preventDefault()" (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true"
+                    title="Crown Land File #">
+                <div class="input-group-btn">
+                    <!-- *ngIf="clFileFilterCount() > 0" -->
+                    <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyClFileFilter()">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="d-flex align-items-center">
+            <a role="button" class="clickable px-2" (click)="clearAllFilters(isFiltersCollapsed)" title="Clear filters" *ngVar="filterCount() as filtCnt">
+                Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
+            </a>
+            <a id="cancelButton" role="button" class="clickable px-2" *ngIf="!isFiltersCollapsed" (click)="cancelAllFilters();isFiltersCollapsed=true;onShowHideClick()">Cancel</a>
+            <button id="applyButton" type="button" class="btn btn-primary gtm-apply-filters" *ngIf="!isFiltersCollapsed" (click)="applyAllFilters();isFiltersCollapsed=true;onShowHideClick()">Apply</button>
+            <a role="button" class="clickable gtm-show-filters" *ngIf="isFiltersCollapsed" (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false;onShowHideClick()"
+                [attr.aria-expanded]="!isFiltersCollapsed" aria-controls="applist-filters" title="Show all filters">
+                <img id="filterIcon" src="assets/images/noun_348669_cc.svg">
+            </a>
+        </div>
+    </div>
+
+    <div class="app-filters__count" *ngIf="gotChanges && isFiltersCollapsed">
+        <div *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
+            {{numMatchesVisible > 0 ? numMatchesVisible : 'No'}} applications shown
+        </div>
+    </div>
+
+    <div class="app-filters__body" id="applist-filters" [ngbCollapse]="isFiltersCollapsed">
+        <div class="row">
+            <div class="col-sm-4 cp-status">
+                <label class="title d-block">Comment Period Status</label>
+                <label *ngFor="let key of cpStatusKeys">
+                    <input class="gtm-filter-cp-status" type="checkbox" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> {{commentPeriodService.commentStatuses[key]}}
+                </label>
+            </div>
+
+            <div class="col-sm-4 app-status">
+                <label class="title d-block">Application Status</label>
+                <label *ngFor="let key of appStatusKeys">
+                    <input class="gtm-filter-app-status" type="checkbox" [(ngModel)]="_appStatusFilters[key]" name="{{key}}"> {{applicationService.applicationStatuses[key]}}
+                </label>
+            </div>
+
+            <div class="col-sm-4">
+                <div>
+                    <label class="title d-block" for="applicantInput">Applicant</label>
+                    <input type="text" class="gtm-filter-applicant" id="applicantInput" placeholder="Applicant Name" [(ngModel)]="_applicantFilter"
+                        [ngbTypeahead]="applicantSearch" [focusFirst]="false">
+                </div>
+
+                <div>
+                    <label class="title d-block" for="clFileInput2">Crown Land File #</label>
+                    <input type="number" class="gtm-filter-cl-file" id="clFileInput2" placeholder="Crown Land File #" [(ngModel)]="_clFileFilter"
+                        [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
+                        (mousewheel)="$event.preventDefault()">
+                </div>
+
+                <div>
+                    <label class="title d-block" for="dispIdInput">Disposition Transaction ID</label>
+                    <input type="number" class="gtm-filter-disposition-id" id="dispIdInput" placeholder="Disposition Transaction ID" [(ngModel)]="_dispIdFilter"
+                        [ngbTypeahead]="dispIdSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
+                        (mousewheel)="$event.preventDefault()">
+                </div>
+
+                <div>
+                    <label class="title d-block" for="purposeInput">Purpose / Subpurpose</label>
+                    <input type="text" class="gtm-filter-purpose" id="purposeInput" placeholder="Purpose / Subpurpose" [(ngModel)]="_purposeFilter"
+                        [ngbTypeahead]="purposeSearch" [focusFirst]="false">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

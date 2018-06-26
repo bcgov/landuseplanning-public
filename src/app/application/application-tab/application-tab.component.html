@@ -1,0 +1,31 @@
+<div class="tab-pane" role="tabpanel">
+    <section class="tab-section" *ngIf="application">
+        <div class="status mb-3">
+            {{applicationService.getStatus(application)}}
+        </div>
+
+        <div>
+            <h2 class="title">Description</h2>
+            <p [innerHTML]="(application.description || '-') | newlines"></p>
+        </div>
+
+        <div>
+            <h2 class="title">Application Documents</h2>
+            <div *ngIf="application.documents.length === 0">
+                <em>No documents have been uploaded for this application.</em>
+            </div>
+
+            <div class="row">
+                <div class="col-12" *ngFor="let document of application?.documents">
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-right" *ngIf="application.publishDate">
+            <p class="value">Published on {{application.publishDate | date:'longDate'}}</p>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,41 @@
+@import "~assets/styles/base/base.scss";
+
+.applist-map {
+    @include flex-box();
+    @include flex-flow(column nowrap);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.app-filters {
+    @include flex(0 0 auto);
+    background: #fff;
+}
+
+.pane2 {
+    @include flex(1 1 auto);
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    .map-container {
+        @include flex(1 1 auto);
+        #map {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: $map-bg;
+
+            .leaflet-popup-content-wrapper {
+                border-radius: 4px;
+            }
+        }
+    }
+}

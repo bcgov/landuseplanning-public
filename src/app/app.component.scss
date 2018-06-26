@@ -1,5 +1,4 @@
-@import "~assets/styles/base.scss";
-@import "~assets/styles/layout.scss";
+@import "~assets/styles/base/base.scss";
 
 :host {
   display: block;
@@ -35,7 +34,7 @@ app-header {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    color: #003366;
+    color: $primary;
 
     button {
       @include flex(0 0 auto);
@@ -90,27 +89,32 @@ app-home {
     left: 0;
   }
 
-  footer {
-    height: 2.5rem;
+  .app-footer {
+    height: 3rem; // height of 2-line footer
+    border: none;
 
-    &.app-footer {
-      border: none;
+    .container {
+      max-width: 100%;
+      padding-top: 3px !important;
+      padding-bottom: 3px !important;
+    }
 
-      .container {
-        max-width: 100%;
-        padding-top: 0.65rem !important;
-        padding-bottom: 0.5rem !important;
-      }
+    .footer-info {
+      display: none;
+    }
+
+    .footer-admin {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      border-top: 0 !important;
     }
   }
+}
 
-  .footer-links {
-    display: none;
-  }
-
-  .footer-admin {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
+@media (min-width: 483px) {
+  .footer-sm /deep/ {
+    .app-footer {
+      height: 1.75rem; // height of single line footer
+    }
   }
 }
