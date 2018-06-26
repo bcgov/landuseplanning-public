@@ -49,12 +49,32 @@
         </div>
       </div>
     </div>
+  </form>
 
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="p1_next()" [disabled]="!iAgreeModel">Next</button>
-    </div>
-  </div>
-</form>
+  <!-- SECOND PAGE -->
+  <form #commentForm1="ngForm">
+    <div class="modal-content page2" *ngIf="this.currentPage === 2">
+      <div class="modal-header">
+        <h4 class="modal-title">Personal Information</h4>
+        <button type="button" class="close gtm-submit-comment-cancel-pg2" aria-label="Close" (click)="close()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <fieldset>
+          <div class="row">
+            <div class="form-group col-lg-6 required">
+              <label for="contactName" class="control-label">Name</label>
+              <input type="text" class="form-control" id="contactName" name="contactName" maxlength="50" placeholder="First Last" required
+                aria-required="true" [(ngModel)]="comment.commentAuthor.contactName" #contactName="ngModel" />
+              <div [hidden]="contactName.valid || contactName.untouched" class="alert alert-danger">Name is required</div>
+            </div>
+
+            <div class="form-group col-lg-6 required">
+              <label for="location" class="control-label">Location</label>
+              <input type="text" class="form-control" id="location" name="location" maxlength="50" placeholder="City" required aria-required="true"
+                [(ngModel)]="comment.commentAuthor.location" #location="ngModel" />
+              <div [hidden]="location.valid || location.untouched" class="alert alert-danger">Location is required</div>
+            </div>
 
 <!-- SECOND PAGE -->
 <form #commentForm1="ngForm">
@@ -64,26 +84,28 @@
       <button type="button" class="close gtm-submit-comment-cancel-pg2" aria-label="Close" (click)="activeModal.dismiss('dismissed page2')">&times;</button>
     </div>
 
-    <div class="modal-body">
-      <fieldset>
-        <div class="row">
-          <div class="form-group col-lg-6 required">
-            <label for="contactName" class="control-label">Name</label>
-            <input type="text" class="form-control" id="contactName" name="contactName" maxlength="50" placeholder="First Last" required
-              aria-required="true" [(ngModel)]="comment.commentAuthor.contactName" #contactName="ngModel" minlength="4" />
-            <div *ngIf="contactName.invalid && (contactName.dirty || contactName.touched)" class="alert alert-danger">
-              <div *ngIf="contactName.errors?.required">Name is required</div>
-              <div *ngIf="contactName.errors?.minlength">Name must be at least 4 characters</div>
+            <!-- <div class="form-check col-lg-12">
+              <input type="checkbox" class="form-check-input" id="requestedAnonymous" name="requestedAnonymous" [(ngModel)]="comment.commentAuthor.requestedAnonymous"
+                #requestedAnonymous="ngModel" />
+              <label for="requestedAnonymous" class="form-check-label">Make me anonymous. (Checking this option will hide your name, location and organization on the public site.
+                Your email and phone are never public.)</label>
+            </div> -->
+
+            <!-- Email is required if Phone isn't entered (or is invalid) -->
+            <div class="form-group col-lg-6" [ngClass]="(!phone.value?.length || phone.invalid) ? 'required' : 'optional'">
+              <label for="email" class="control-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="first.last@email.com" [required]="!phone.value?.length || phone.invalid"
+                [(ngModel)]="comment.commentAuthor.internal.email" #email="ngModel" />
+              <div [hidden]="email.valid || email.untouched" class="alert alert-danger">Email or Phone is required</div>
             </div>
           </div>
 
-          <div class="form-group col-lg-6 required">
-            <label for="location" class="control-label">Location</label>
-            <input type="text" class="form-control" id="location" name="location" maxlength="50" placeholder="City" required aria-required="true"
-              [(ngModel)]="comment.commentAuthor.location" #location="ngModel" minlength="4" />
-            <div *ngIf="location.invalid && (location.dirty || location.touched)" class="alert alert-danger">
-              <div *ngIf="location.errors?.required">Location is required</div>
-              <div *ngIf="location.errors?.minlength">Location must be at least 4 characters</div>
+            <!-- Phone is required if Email isn't entered (or is invalid) -->
+            <div class="form-group col-lg-6" [ngClass]="(!email.value?.length || email.invalid) ? 'required' : 'optional'">
+              <label for="phone" class="control-label">Phone</label>
+              <input type="tel" class="form-control" id="phone" name="phone" placeholder="xxx-xxx-xxxx" [required]="!email.value?.length || email.invalid"
+                [(ngModel)]="comment.commentAuthor.internal.phone" #phone="ngModel" />
+              <div [hidden]="phone.valid || phone.untouched" class="alert alert-danger">Email or Phone is required</div>
             </div>
           </div>
 
