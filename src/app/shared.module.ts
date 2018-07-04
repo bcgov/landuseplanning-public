@@ -8,6 +8,7 @@ import { NewlinesPipe } from 'app/pipes/newlines.pipe';
 import { ObjectFilterPipe } from 'app/pipes/object-filter.pipe';
 
 import { VarDirective } from 'app/utils/ng-var.directive';
+import { DragMoveDirective } from 'app/utils/drag-move.directive';
 
 @NgModule({
   imports: [
@@ -19,14 +20,16 @@ import { VarDirective } from 'app/utils/ng-var.directive';
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
-    VarDirective
+    VarDirective,
+    DragMoveDirective
   ],
   exports: [
     MatProgressBarModule,
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
-    VarDirective
+    VarDirective,
+    DragMoveDirective
   ]
 })
 
