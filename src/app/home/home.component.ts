@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ApplicationService } from '../services/application.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -7,15 +6,12 @@ import { ApplicationService } from '../services/application.service';
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent implements OnInit {
-  numApplications: number;
+export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor(private applicationService: ApplicationService) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.applicationService.getCount().subscribe(
-      value => this.numApplications = value,
-      error => console.log('ERROR =', 'could not count applications')
-    );
-  }
+  ngOnInit() { }
+
+  ngOnDestroy() { }
+
 }
