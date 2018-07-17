@@ -281,28 +281,26 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
           }
         });
         const popupOptions = {
-          maxWidth: 360, // worst case (Pixel 2)
-          className: '' // FUTURE: for better styling control
+          maxWidth: 400, // worst case (Pixel 2)
+          className: 'map-popup-content',
+          autoPanPadding: L.point(40, 40)
         };
-        const htmlContent = '<h3>' + featureObj.properties.TENURE_TYPE
-          + '<br />'
-          + featureObj.properties.TENURE_SUBTYPE + '</h3>'
-          + '<strong>Shape: </strong>' + featureObj.properties.INTRID_SID
-          + '<br />'
-          + '<strong>Disposition Transaction ID: </strong>' + featureObj.properties.DISPOSITION_TRANSACTION_SID
-          + '<br />'
-          + '<strong>Purpose: </strong>' + featureObj.properties.TENURE_PURPOSE
-          + '<br />'
-          + '<strong>Sub Purpose: </strong>' + featureObj.properties.TENURE_SUBPURPOSE
-          + '<br />'
-          + '<strong>Stage: </strong>' + featureObj.properties.TENURE_STAGE
-          + '<br />'
-          + '<strong>Status: </strong>' + featureObj.properties.TENURE_STATUS
-          + '<br />'
-          + '<strong>Hectares: </strong>' + featureObj.properties.TENURE_AREA_IN_HECTARES
-          + '<br />'
-          + '<br />'
-          + '<strong>Legal Description: </strong>' + featureObj.properties.TENURE_LEGAL_DESCRIPTION;
+        const htmlContent =
+          '<div class="app-detail-title">'
+          + '<span class="client-name__label">Client Name</span>'
+          + '<span class="client-name__value">' + app.client + '</span>'
+          + '</div>'
+          + '<div class="app-details">'
+          + '<div>'
+          + '<span class="value">' + app.description + '</span>'
+          + '</div>'
+          + '<hr class="mt-3 mb-3">'
+          + '<ul class="nv-list">'
+          + '<li><span class="name">Crown Lands File #:</span><span class="value"' + featureObj.properties.CROWN_LANDS_FILE + '</span></li>'
+          + '<li><span class="name">Disposition Transaction ID:</span><span class="value">' + featureObj.properties.DISPOSITION_TRANSACTION_SID + '</span></li>'
+          + '<li><span class="name">Location:</span><span class="value">' + app.location + '</span></li>'
+          + '</ul>'
+          + '</div>';
         const popup = L.popup(popupOptions).setContent(htmlContent);
         layer.bindPopup(popup);
         layer.addTo(appFG);
