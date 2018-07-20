@@ -1,5 +1,4 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
-import * as L from 'leaflet';
 import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
@@ -14,10 +13,10 @@ import { ConfigService } from 'app/services/config.service';
 
 export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
-  @Input() allApps: Array<Application> = []; // from map component
-  @Output() setCurrentApp = new EventEmitter(); // to map component
-  @Output() unsetCurrentApp = new EventEmitter(); // to map component
-  @Output() updateResultsChange = new EventEmitter(); // to map component
+  @Input() allApps: Array<Application> = []; // from applications component
+  @Output() setCurrentApp = new EventEmitter(); // to applications component
+  @Output() unsetCurrentApp = new EventEmitter(); // to applications component
+  @Output() updateResultsChange = new EventEmitter(); // to applications component
 
   private currentApp: Application = null; // for selecting app in list
   public gotChanges = false;
@@ -32,12 +31,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
     return this.elementRef.nativeElement.childNodes[0].clientWidth; // div#applist-list.app-list__container
   }
 
-  public ngOnInit() {
-    // prevent underlying map actions for these events
-    const element = <HTMLElement>document.getElementById('applist-list');
-    L.DomEvent.disableClickPropagation(element); // includes double-click
-    L.DomEvent.disableScrollPropagation(element);
-  }
+  public ngOnInit() { }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {

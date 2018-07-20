@@ -1,8 +1,36 @@
-<div class="applications">
-    <div class="spinner-container" *ngIf="loading">
-      <div class="spinner-new rotating"></div>
+<div class="applications-view" [ngClass]="configService.isApplistListVisible ? 'app-list-open':'app-list-closed'">
+  <h1 class="sr-only">Public Review and Comment Applications</h1>
+
+  <div class="spinner-container" *ngIf="loading">
+    <div class="spinner-new rotating"></div>
+  </div>
+
+  <app-applist-filters class="app-filters" #appfilters
+    [allApps]="allApps"
+    (updateMatching)="onUpdateMatching($event)">
+  </app-applist-filters>
+
+  <div class="app-list-map-container">
+    <div class="app-list-container">
+      <app-applist-list class="app-list" #applist
+        [allApps]="allApps"
+        (setCurrentApp)="highlightApplication($event, true)"
+        (unsetCurrentApp)="highlightApplication($event, false)"
+        (updateResultsChange)="onUpdateResultsChange()">
+      </app-applist-list>
+      <button class="toggle-app-list-btn btn" title="Show/hide list of applications" type="button"
+        (click)="toggleAppList();$event.stopPropagation();" aria-controls="applist-list">
+        <i class="material-icons">{{configService.isApplistListVisible ? 'keyboard_arrow_left':'keyboard_arrow_right'}}</i>
+      </button>
     </div>
 
-    <h1 class="sr-only">Public Review and Comment Applications</h1>
-    <app-applist-map [allApps]="allApps"></app-applist-map>
+    <div class="overlay" (click)="toggleAppList();$event.stopPropagation();"></div>
+
+    <app-applist-map class="app-map" #appmap
+      [allApps]="allApps"
+      [applist]="applist"
+      [appfilters]="appfilters">
+    </app-applist-map>
+  </div>
+
 </div>
