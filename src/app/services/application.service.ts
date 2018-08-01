@@ -296,7 +296,9 @@ export class ApplicationService {
       || s === 'DISALLOWED'
       || s === 'OFFER ACCEPTED'
       || s === 'OFFER NOT ACCEPTED'
-      || s === 'OFFERED');
+      || s === 'OFFERED'
+      || s === 'DISPOSITION IN GOOD STANDING'
+    );
   }
 
   isCancelled(status: string): boolean {
