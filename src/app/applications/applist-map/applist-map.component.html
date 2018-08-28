@@ -1,17 +1,38 @@
-<div class="applist-map">
+<div class="applist-map" [ngClass]="configService.isApplistListVisible ? 'app-list-open':'app-list-closed'">
 
-    <div class="spinner-container" *ngIf="loading">
-        <div class="spinner-new rotating"></div>
+    <!-- Application Filters Component -->
+    <app-applist-filters class="app-filters" 
+      [allApps]="allApps" 
+      (updateMatching)="onUpdateMatching($event)">
+    </app-applist-filters>
+  
+    <!-- Main Stuff -->
+    <div class="list-map-container">
+      
+      <div class="list-container">
+        
+        <!-- Application List Component -->
+        <app-applist-list class="app-list" 
+          [allApps]="allApps" 
+          [currentApp]="currentApp" 
+          (setCurrentApp)="highlightApplication($event, true)" 
+          (unsetCurrentApp)="highlightApplication($event, false)"
+          (updateResultsChange)="onUpdateResultsChange($event)">
+        </app-applist-list>
+  
+        <!-- List Container Toggle -->
+        <button class="toggle-list-btn btn" title="Show/hide list of applications" type="button" 
+          (click)="toggleAppList();$event.stopPropagation();" aria-controls="applist-list">
+          <i class="material-icons">{{configService.isApplistListVisible ? 'keyboard_arrow_left':'keyboard_arrow_right'}}</i>
+        </button>
+  
+      </div>
+  
+      <div class="map-container">
+        <div id="map" name="Map of BC that displays Crown Land applications"></div>
+      </div>
+  
+      <div class="overlay" (click)="toggleAppList();$event.stopPropagation();"></div>
     </div>
-
-    <app-applist-filters class="app-filters" [allApps]="allApps" (updateMatching)="onUpdateMatching($event)"></app-applist-filters>
-
-    <div class="pane2">
-        <app-applist-list class="app-list" [allApps]="allApps" [currentApp]="currentApp" (setCurrentApp)="highlightApplication($event, true)" (unsetCurrentApp)="highlightApplication($event, false)"
-            (updateResultsChange)="onUpdateResultsChange($event)"></app-applist-list>
-        <div class="map-container">
-            <div id="map" name="Map of BC that displays Crown Land applications"></div>
-        </div>
-    </div>
-
-</div>
+  
+  </div>

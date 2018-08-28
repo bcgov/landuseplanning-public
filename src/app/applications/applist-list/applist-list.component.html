@@ -1,84 +1,86 @@
-<div class="app-list__container" id="applist-list" [ngbCollapse]="isListCollapsed" name="List of Crown Land applications, limited by filters and bound by map view">
-
-    <div class="app-list__toggle" *ngIf="gotChanges">
-        <button class="btn btn-light" type="button" (click)="isListCollapsed=!isListCollapsed;onShowHideClick();$event.stopPropagation();"
-            [attr.aria-expanded]="!isListCollapsed" aria-controls="applist-list" title="Show/hide list of applications">
-            <i class="material-icons" *ngIf="isListCollapsed">format_indent_increase</i>
-            <!-- arrow_right -->
-            <i class="material-icons" *ngIf="!isListCollapsed">format_indent_decrease</i>
-            <!-- arrow_left -->
-        </button>
-    </div>
+<div class="app-list__container" id="applist-list" name="List of Crown Land applications, limited by filters and bound by map view">
 
     <div class="app-list__body" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
-        <div class="app-list__list list-group" *ngIf="gotChanges">
-            <div class="p-2 text-center font-italic" *ngIf="numMatchesVisible == 0">
-                No matching applications
-            </div>
-            <ng-template ngFor let-item [ngForOf]="allApps">
-                <div class="list-group-item list-group-item-action" [class.active]="isCurrentApp(item)" (click)="toggleCurrentApp(item);$event.stopPropagation();"
-                    *ngIf="item.isMatches && item.isVisible">
-                    <div class="row list-group-item__detail">
-                        <div class="col-12">
-                            <label>Client</label>
-                            <p class="value-large">{{item.client || 'Unknown Client'}}</p>
-                        </div>
-                        <div class="col-12 pt-1">
-                            <label>Purpose / Subpurpose</label>
-                            <p class="value" *ngIf="item.purpose && item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</p>
-                            <p class="value" *ngIf="!item.purpose || !item.subpurpose">-</p>
-                        </div>
-                        <div class="col-sm-7 pt-1">
-                            <label>Disposition Transaction ID</label>
-                            <p class="value">{{item.tantalisID}}</p>
-                        </div>
-                        <div class="col-sm-5 pt-1">
-                            <label>Crown Land File #</label>
-                            <p class="value">{{item.cl_file}}</p>
-                        </div>
-                        <div class="col-12 pt-1">
-                            <label>Status</label>
-                            <p class="value-large">{{item.appStatus}}</p>
-                        </div>
-                    </div>
-                    <div class="list-group-item__buttons d-flex justify-content-between align-items-center pt-1">
-                        <div class="badge" [ngClass]="{'badge-primary'   : commentPeriodService.isNotStarted(item.currentPeriod),
-                                                       'badge-secondary' : commentPeriodService.isNotOpen(item.currentPeriod),
-                                                       'badge-danger'    : commentPeriodService.isClosed(item.currentPeriod),
-                                                       'badge-success'   : commentPeriodService.isOpen(item.currentPeriod)}">
-                            {{item.cpStatus}}
-                            <span class="font-weight-normal" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
-                                :&nbsp;{{item.currentPeriod.startDate | date:'mediumDate'}}
-                            </span>
-                            <span class="font-weight-normal" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">
-                                :&nbsp;{{item.currentPeriod.endDate | date:'mediumDate'}}
-                            </span>
-                            <span class="font-weight-normal" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
-                                :&nbsp;{{item.currentPeriod.startDate | date:'MMM dd'}} - {{item.currentPeriod.endDate | date:'MMM dd'}}
-                            </span>
-                        </div>
-                        <a class="app-link" (click)="$event.stopPropagation()" [routerLink]="['/a', item._id]" title="Go to application details">
-                            <i class="material-icons md-36">arrow_forward</i>
-                        </a>
-                    </div>
+      <div class="app-list__list" *ngIf="gotChanges">
+        
+        <div class="no-results" *ngIf="numMatchesVisible == 0">
+          No matching applications
+        </div>
+
+        <ng-template ngFor let-item [ngForOf]="allApps">
+          <div class="app-card list-group-item" [class.active]="isCurrentApp(item)" 
+            (click)="toggleCurrentApp(item);$event.stopPropagation();"
+            *ngIf="item.isMatches && item.isVisible">
+            
+            <!-- Application Details -->
+            <ul class="app-card__details">
+              <li>
+                <span class="key">Client</span>
+                <span class="value client-name">{{item.client || 'Unknown Client'}}</span>
+              </li>
+              <li>
+                <span class="key">Purpose / Subpurpose</span>
+                <!-- TODO: Need a better way of handling values that are not available-->
+                <span class="value">
+                  <span *ngIf="item.purpose || item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</span>
+                  <span *ngIf="!item.purpose || !item.subpurpose">Not Available</span>
+                </span>
+              </li>
+              <li>
+                <span class="key">Disposition Transaction ID</span>
+                <span class="value">{{item.tantalisID}}</span>
+              </li>
+              <li>
+                <span class="key">Crown Land File #</span>
+                <!-- TODO: Need a better way of handling values that are not available - See Above -->
+                <span class="value">{{item.cl_file || 'Not Available'}}</span>
+              </li>
+              <li>
+                <span class="key">Status</span>
+                <span class="value">{{item.appStatus}}</span>
+              </li>
+            </ul>
+            
+            <!-- Application Card Actions -->
+            <div class="app-card__actions d-flex justify-content-between">
+              <div class="badges">
+                <div class="comment-status-badge badge" 
+                  [ngClass]="{
+                    'badge-primary': commentPeriodService.isNotStarted(item.currentPeriod),
+                    'badge-secondary': commentPeriodService.isNotOpen(item.currentPeriod),
+                    'badge-danger': commentPeriodService.isClosed(item.currentPeriod),
+                    'badge-success': commentPeriodService.isOpen(item.currentPeriod)}">
+                  {{item.cpStatus}}
+                  <span class="date" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
+                    :&nbsp;{{item.currentPeriod.startDate | date:'mediumDate'}}
+                  </span>
+                  <span class="date" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">
+                    :&nbsp;{{item.currentPeriod.endDate | date:'mediumDate'}}
+                  </span>
+                  <span class="date" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
+                                  :&nbsp;{{item.currentPeriod.startDate | date:'MMM d'}} - {{item.currentPeriod.endDate | date:'MMM d'}}
+                  </span>
                 </div>
-            </ng-template>
-        </div>
+              </div>
+              <a class="app-details-link btn" (click)="$event.stopPropagation()" [routerLink]="['/a', item._id]" title="Go to application details">
+                <i class="material-icons md-24">arrow_forward</i>
+              </a>
+            </div>
+          </div>
+        </ng-template>
+      </div>
     </div>
-
+  
     <div class="app-list__options" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
-        <div class="p-2" *ngIf="gotChanges">
-            <div class="w-100 text-right" *ngIf="numMatchesVisible == 0">
-                No results to show
-            </div>
-            <div class="w-100 text-right" *ngIf="numMatchesVisible > 0">
-                Showing results 1 - {{numMatchesVisible}}
-            </div>
-            <div class="w-100">
-                <input type="checkbox" id="updateResultsCheckbox" [(ngModel)]="doUpdateResults" (change)="updateResultsChange.emit(doUpdateResults)" />
-                <label for="updateResultsCheckbox">Update results when map moves</label>
-            </div>
+      <div *ngIf="gotChanges">
+        <div class="text-right" [innerHTML]="!numMatchesVisible ? 'No Results' : 'Showing results 1 - ' + numMatchesVisible"></div>
+        <div class="form-check">
+          <label class="form-check-label" for="updateResultsCheckbox">
+            <input class="form-check-input" type="checkbox" id="updateResultsCheckbox" [(ngModel)]="doUpdateResults" (change)="updateResultsChange.emit(doUpdateResults);$event.stopPropagation()" />
+            Update results when map moves
+          </label>
         </div>
+      </div>
     </div>
-
-</div>
+  
+  </div>

@@ -1,4 +1,3 @@
-
 // Form Label & Validation Variants
 .control-label {
   font-weight: bold;
@@ -24,6 +23,12 @@
   }
 }
 
+// Fieldset/Legend
+legend {
+  float: left; // position legend inside the bounding box of the fieldset
+  font-size: 1rem;
+  font-weight: bold;
+}
 
 // Form Items
 .form-control {
@@ -43,7 +48,6 @@
     margin-top: 0.35rem;
   }
 }
-
 
 // Input types
 input {
@@ -71,6 +75,14 @@ select {
   }
 }
 
+// Number
+input[type="number"] {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 
 // Textarea
 textarea {

@@ -63,7 +63,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private searchService: SearchService,
-    private configService: ConfigService
+    public configService: ConfigService
   ) { }
 
   public ngOnInit() {
@@ -406,5 +406,9 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   public onUpdateResultsChange(doUpdateResults: boolean) {
     this.doUpdateResults = doUpdateResults;
     this.setVisibleDebounced();
+  }
+
+  public toggleAppList() {
+    this.configService.isApplistListVisible = !this.configService.isApplistListVisible;
   }
 }
