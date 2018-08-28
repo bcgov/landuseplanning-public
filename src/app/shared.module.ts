@@ -7,6 +7,8 @@ import { OrderByPipe } from 'app/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/pipes/newlines.pipe';
 import { ObjectFilterPipe } from 'app/pipes/object-filter.pipe';
 
+import { VarDirective } from 'app/utils/ng-var.directive';
+
 @NgModule({
   imports: [
     // CommonModule,
@@ -16,13 +18,15 @@ import { ObjectFilterPipe } from 'app/pipes/object-filter.pipe';
   declarations: [
     OrderByPipe,
     NewlinesPipe,
-    ObjectFilterPipe
+    ObjectFilterPipe,
+    VarDirective
   ],
   exports: [
     MatProgressBarModule,
     OrderByPipe,
     NewlinesPipe,
-    ObjectFilterPipe
+    ObjectFilterPipe,
+    VarDirective
   ]
 })
 

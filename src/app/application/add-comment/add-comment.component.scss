@@ -24,3 +24,11 @@ app-file-upload {
     display: inline-block;
     width: 100%;
 }
+
+input[type=checkbox] {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    vertical-align: text-bottom;
+    margin-right: 10px;
+}
