@@ -1,4 +1,8 @@
 <div class="applications">
+    <div class="spinner-container" *ngIf="loading">
+      <div class="spinner-new rotating"></div>
+    </div>
+
     <h1 class="sr-only">Public Review and Comment Applications</h1>
     <app-applist-map [allApps]="allApps"></app-applist-map>
 </div>

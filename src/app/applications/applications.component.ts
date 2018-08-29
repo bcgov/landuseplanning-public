@@ -14,6 +14,7 @@ import { ApplicationService } from 'app/services/application.service';
 })
 
 export class ApplicationsComponent implements OnInit, OnDestroy {
+  public loading = true; // for spinner
   public allApps: Array<Application> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -31,6 +32,7 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
         this.allApps = applications.sort((a: Application, b: Application) => {
           return (a.publishDate < b.publishDate) ? 1 : -1;
         });
+        this.loading = false;
       }, error => {
         console.log(error);
         alert('Uh-oh, couldn\'t load applications');

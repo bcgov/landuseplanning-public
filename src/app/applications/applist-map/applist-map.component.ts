@@ -42,7 +42,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
   @Input() allApps: Array<Application> = []; // from applications component
 
-  public loading = true; // for spinner
   private map: L.Map = null;
   private appsFG: L.FeatureGroup[] = []; // groups of layers for each app
   private currentMarker: L.Marker = null; // for highlighting an app
@@ -328,8 +327,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.map.fitBounds(this.defaultBounds, this.fitBoundsOptions);
     }
-
-    this.loading = false;
   }
 
   /**
