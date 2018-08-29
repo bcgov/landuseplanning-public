@@ -143,3 +143,86 @@ $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
     }
   }
 }
+
+// Popup
+::ng-deep {
+  .leaflet-container {
+    a.leaflet-popup-close-button {
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.35rem 0;
+      width: 2rem;
+      height: 2rem;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: normal;
+      opacity: 0.5;
+
+      &:hover,
+      &:focus {
+        color: #fff;
+        opacity: 1;
+      }
+    }
+  }
+  
+  .leaflet-popup-content-wrapper {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .leaflet-popup-content {
+    margin: 0;
+  }
+
+  .leaflet-popup-close-button {
+    font-size: 2rem;
+  }
+
+  .map-popup-content {
+    font-size: 0.8rem;
+
+    .app-details {
+      padding: 1rem;
+    }
+
+    .nv-list {
+      li {
+        overflow: hidden;
+        font-size: inherit;
+
+        + li {
+          margin-top: 0.2rem;
+        }
+      }
+
+      .name, 
+      .value {
+        display: inline-block;
+        width: 50%;
+        vertical-align: top;
+        text-transform: normal;
+      }
+    }
+
+    .app-detail-title {
+      padding: 0.75rem 1rem;
+      background: #003366;
+      color: #fff;
+      font-weight: bold;
+
+      span {
+        display: block;
+      }
+
+      .client-name__value {
+        font-size: 1rem;
+      }
+    }
+
+    .name {
+      display: block;
+      font-weight: bold;
+    }
+  }
+}
