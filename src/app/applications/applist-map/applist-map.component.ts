@@ -31,8 +31,8 @@ const markerIconYellowLg = L.icon({
   iconRetinaUrl: 'assets/images/marker-icon-2x-yellow-lg.svg',
   iconSize: [50, 82],
   iconAnchor: [25, 82],
-  // popupAnchor: [1, -34], // TODO: update
-  // tooltipAnchor: [16, -28] // TODO: update
+  // popupAnchor: [1, -34], // TODO: update, if needed
+  // tooltipAnchor: [16, -28] // TODO: update, if needed
 });
 
 @Component({
@@ -45,29 +45,22 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
   @Input() allApps: Array<Application> = []; // from applications component
   @ViewChild('applist') applist;
+  @ViewChild('appfilters') appfilters;
 
   private map: L.Map = null;
-  private appsFG: L.FeatureGroup[] = []; // list of FGs (containing layers) for each app
-  private markers: L.Marker[] = []; // list of markers
+  private fgList: L.FeatureGroup[] = []; // list of app FGs (each containing feature layers)
+  private markerList: L.Marker[] = []; // list of markers
   private currentMarker: L.Marker = null; // for removing previous marker
   private markerClusterGroup = L.markerClusterGroup({
     showCoverageOnHover: false,
-    maxClusterRadius: 40,
-    // iconCreateFunction: this.clusterCreate
+    maxClusterRadius: 40, // NB: change to 0 to disable clustering
+    // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
   });
-  private fitBoundsOptions: L.FitBoundsOptions = {
-    // disable animation to prevent known bug where zoom is sometimes incorrect
-    // ref: https://github.com/Leaflet/Leaflet/issues/3249
-    // animate: false, // TODO: seems to work correctly currently
-    // right padding to keep right of shape in bounds
-    // paddingBottomRight: [150, 10] // TODO: no longer needed?
-  };
   private isUser = false; // to track map change events
   private gotChanges = false; // to reduce initial map change event handling
-  private doUpdateResults: boolean = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
-  private defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
+  readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
 
   constructor(
     public configService: ConfigService
@@ -80,11 +73,11 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   // }
 
   public ngOnInit() {
-    const self = this; // for nested functions
+    const self = this; // for closure function below
 
     // custom control to reset map view
     const resetViewControl = L.Control.extend({
-      onAdd: function (map) {
+      onAdd: function () {
         const element = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
 
         element.title = 'Reset view';
@@ -134,28 +127,28 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.map = L.map('map', {
-      layers: [World_Imagery],
-      zoomControl: false
+      zoomControl: false,
+      maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)) // the world
     });
 
     // map state change events
     this.map.on('zoomstart', function () {
-      self.isUser = true;
-    });
+      this.isUser = true;
+    }, this);
     this.map.on('movestart', function () {
-      self.isUser = true;
-    });
+      this.isUser = true;
+    }, this);
     this.map.on('resize', function () {
-      self.isUser = true;
-    });
+      this.isUser = true;
+    }, this);
     // NB: moveend is called after zoomstart, movestart and resize
     this.map.on('moveend', function () {
-      // only reset visible after init
-      if (self.gotChanges && self.isUser) {
-        self.isUser = false;
-        self.setVisibleDebounced();
+      // only set visible after init
+      if (this.gotChanges && this.isUser) {
+        this.isUser = false;
+        this.setVisibleDebounced();
       }
-    });
+    }, this);
 
     // add reset view control
     this.map.addControl(new resetViewControl());
@@ -164,14 +157,29 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     L.control.zoom({ position: 'topright' }).addTo(this.map);
 
     // add base maps layers control
-    const baseMaps = {
+    const baseLayers = {
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
       'Open Surfer Roads': OpenMapSurfer_Roads,
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
-    L.control.layers(baseMaps).addTo(this.map);
+    L.control.layers(baseLayers).addTo(this.map);
+
+    // load base layer
+    for (const key of Object.keys(baseLayers)) {
+      if (key === this.configService.baseLayerName) {
+        this.map.addLayer(baseLayers[key]);
+        break;
+      }
+    }
+
+    // save any future base layer changes
+    this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
+      this.configService.baseLayerName = e.name;
+    }, this);
+
+    // TODO: restore map bounds / center / zoom ?
 
     // add scale control
     L.control.scale({ position: 'bottomright' }).addTo(this.map);
@@ -194,7 +202,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
   /**
    * Called on map state change events.
-   * Actual function executes no more than once per 250ms.
+   * Actual function executes no more than once every 250ms.
    */
   // tslint:disable-next-line:member-ordering
   private setVisibleDebounced = _.debounce(this.setVisible, 250);
@@ -204,14 +212,18 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
    * NB: Call setVisibleDebounced() instead!
    */
   private setVisible() {
-    // console.log('resetting visible');
-    // console.log('zoom =', this.map.getZoom());
+    // console.log('setting visible');
     const bounds = this.map.getBounds();
 
-    for (const fg of this.appsFG) {
+    // central place to save map bounds / center /zoom
+    this.configService.mapBounds = bounds;
+    this.configService.mapCenter = this.map.getCenter();
+    this.configService.mapZoom = this.map.getZoom();
+
+    for (const fg of this.fgList) {
       const fgBounds = fg.getBounds();
 
-      if (!this.doUpdateResults) {
+      if (!this.configService.doUpdateResults) {
         // show all items even if map moves
         const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
         if (app) { app.isVisible = true; }
@@ -236,23 +248,32 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // NB: change detection will update all components bound to apps list
   }
 
+  private fitGlobalBounds(globalBounds: L.LatLngBounds) {
+    // use padding to adjust for list and/or filters
+    const x = this.configService.isApplistListVisible ? this.applist.clientWidth : 0;
+    const y = 0; // this.appfilters.clientHeight; // FUTURE: offset for filter pane, if needed
+    const fitBoundsOptions: L.FitBoundsOptions = { paddingTopLeft: L.point(x, y) };
+
+    if (globalBounds && globalBounds.isValid()) {
+      this.map.fitBounds(globalBounds, fitBoundsOptions);
+    } else {
+      this.map.fitBounds(this.defaultBounds, fitBoundsOptions);
+    }
+  }
+
   /**
    * Resets map view to display all apps.
    */
   private resetView() {
+    // console.log('resetting view');
     const globalFG = L.featureGroup();
 
-    for (const fg of this.appsFG) {
+    for (const fg of this.fgList) {
       fg.addTo(globalFG);
     }
 
     // fit the global bounds
-    const globalBounds = globalFG.getBounds();
-    if (globalBounds && globalBounds.isValid()) {
-      this.map.fitBounds(globalBounds, this.fitBoundsOptions);
-    } else {
-      this.map.fitBounds(this.defaultBounds, this.fitBoundsOptions);
-    }
+    this.fitGlobalBounds(globalFG.getBounds());
   }
 
   /**
@@ -260,11 +281,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
    */
   private drawMap() {
     // console.log('drawing map, allApps =', this.allApps);
-    const self = this; // for nested functions
     const globalFG = L.featureGroup();
 
     // remove and clear all layers for all apps
-    for (const fg of this.appsFG) {
+    for (const fg of this.fgList) {
       fg.removeFrom(this.map);
       fg.clearLayers();
     }
@@ -274,8 +294,8 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     this.markerClusterGroup.clearLayers();
 
     // empty the lists
-    this.appsFG.length = 0;
-    this.markers.length = 0;
+    this.fgList.length = 0;
+    this.markerList.length = 0;
 
     this.allApps.filter(a => a.isMatches).forEach(app => {
       const appFG = L.featureGroup(); // layers for current app
@@ -289,7 +309,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         const featureObj: GeoJSON.Feature<any> = feature;
         const layer = L.geoJSON(featureObj, {
           filter: function (geoJsonFeature) {
-            return true; // FUTURE: could use this to make feature invisible (not shown on map)
+            return true; // FUTURE: make this feature invisible (not shown on map), if needed
           }
         });
         const popupOptions = {
@@ -317,20 +337,20 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         layer.bindPopup(popup);
         layer.addTo(appFG);
       });
-      self.appsFG.push(appFG); // save to list
-      appFG.addTo(self.map); // add to map
+      this.fgList.push(appFG); // save to list
+      appFG.addTo(this.map); // add this FG to map
       appFG.addTo(globalFG); // for bounds
-      // appFG.on('click', (event) => console.log('app =', app)); // FUTURE: highlight this app in list?
+      // appFG.on('click', L.Util.bind(this._onFeatureGroupClick, this, app)); // FUTURE: for FG action, if needed
 
       // add marker
       const appBounds = appFG.getBounds();
       if (appBounds && appBounds.isValid()) {
         const marker = L.marker(appBounds.getCenter(), { title: app.client })
           .setIcon(markerIconYellow)
-          .on('click', L.Util.bind(self.onMarkerClick, self, app));
+          .on('click', L.Util.bind(this._onMarkerClick, this, app));
         marker.dispositionId = app.tantalisID;
-        self.markers.push(marker); // save to list
-        marker.addTo(self.markerClusterGroup);
+        this.markerList.push(marker); // save to list
+        marker.addTo(this.markerClusterGroup);
       }
     });
 
@@ -338,15 +358,16 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     this.markerClusterGroup.addTo(this.map);
 
     // fit the global bounds
-    const globalBounds = globalFG.getBounds();
-    if (globalBounds && globalBounds.isValid()) {
-      this.map.fitBounds(globalBounds, this.fitBoundsOptions);
-    } else {
-      this.map.fitBounds(this.defaultBounds, this.fitBoundsOptions);
-    }
+    this.fitGlobalBounds(globalFG.getBounds());
   }
 
-  private onMarkerClick(...args: any[]) {
+  private _onFeatureGroupClick(...args: any[]) {
+    // const app = args[0] as Application;
+    // const fg = args[1].target as L.FeatureGroup;
+    // TODO: implement, if needed
+  }
+
+  private _onMarkerClick(...args: any[]) {
     const app = args[0] as Application;
     // const marker = args[1].target as L.Marker;
 
@@ -365,11 +386,12 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
     // set icon on new marker
     if (show) {
-      const marker = _.find(this.markers, { dispositionId: app.tantalisID });
+      const marker = _.find(this.markerList, { dispositionId: app.tantalisID });
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(markerIconYellowLg);
         this.centerMap(marker.getLatLng());
+        // TODO: show zoom in to this app
       }
     }
   }
@@ -377,19 +399,20 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Center map on specified point, applying offset if needed.
    */
-  // TODO: register for list/filter changes and apply offset accordingly?
+  // TODO: register for list/filter changes and apply offset accordingly ?
   private centerMap(latlng: L.LatLng) {
     let point = this.map.latLngToLayerPoint(latlng);
 
-    if (this.configService.isApplistListVisible) { point = point.subtract([(336 / 2), 0]); } // TODO: retrieve actual width of list pane
-    if (this.configService.isApplistFiltersVisible) { point = point.add([0, (281 / 2)]); } // TODO: retrieve actual height of filters pane
+    if (this.configService.isApplistListVisible) { point = point.subtract([(this.applist.clientWidth / 2), 0]); }
+    // if (this.configService.isApplistFiltersVisible) { point = point.subtract([0, (this.appfilters.clientHeight / 2)]); } // FUTURE: offset for filter pane, if needed
+
     this.map.panTo(this.map.layerPointToLatLng(point));
   }
 
   /**
    * Event handler called when filters component updates list of matching apps.
    */
-  // FUTURE: move Update Matching to common config and register for changes?
+  // FUTURE: move Update Matching to common config and register for changes ?
   public onUpdateMatching(apps: Application[]) {
     // can't update properties in current change detection cycle
     // so do it in another event
@@ -398,19 +421,21 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
       // (re)draw the matching apps
       this.drawMap();
-    }, 0, apps);
+    }, 0);
   }
 
   /**
-   * Event handler called when list component Update Results checkbox has changed.
+   * Event handler called when Update Results checkbox has changed.
    */
-  // FUTURE: move Update Results to common config and register for changes?
-  public onUpdateResultsChange(doUpdateResults: boolean) {
-    this.doUpdateResults = doUpdateResults;
+  // FUTURE: change doUpdateResults to observable and subscribe to changes ?
+  public onUpdateResultsChange() {
     this.setVisibleDebounced();
   }
 
   public toggleAppList() {
     this.configService.isApplistListVisible = !this.configService.isApplistListVisible;
+    const x = this.configService.isApplistListVisible ? -this.applist.clientWidth / 2 : this.applist.clientWidth / 2;
+    const y = 0;
+    this.map.panBy(L.point(x, y));
   }
 }

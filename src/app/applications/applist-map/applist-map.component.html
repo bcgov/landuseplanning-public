@@ -1,7 +1,7 @@
 <div class="applist-map" [ngClass]="configService.isApplistListVisible ? 'app-list-open':'app-list-closed'">
 
     <!-- Application Filters Component -->
-    <app-applist-filters class="app-filters" 
+    <app-applist-filters class="app-filters" #appfilters
       [allApps]="allApps" 
       (updateMatching)="onUpdateMatching($event)">
     </app-applist-filters>
@@ -16,7 +16,7 @@
           [allApps]="allApps" 
           (setCurrentApp)="highlightApplication($event, true)" 
           (unsetCurrentApp)="highlightApplication($event, false)"
-          (updateResultsChange)="onUpdateResultsChange($event)">
+          (updateResultsChange)="onUpdateResultsChange()">
         </app-applist-list>
   
         <!-- List Container Toggle -->
