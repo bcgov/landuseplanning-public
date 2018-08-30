@@ -32,12 +32,13 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
         this.allApps = applications.sort((a: Application, b: Application) => {
           return (a.publishDate < b.publishDate) ? 1 : -1;
         });
-        this.loading = false;
       }, error => {
         console.log(error);
         alert('Uh-oh, couldn\'t load applications');
         // applications not found --> navigate back to home
         this.router.navigate(['/']);
+      }, () => {
+        this.loading = false;
       });
   }
 
