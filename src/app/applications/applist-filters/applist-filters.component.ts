@@ -7,7 +7,6 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
-import * as L from 'leaflet';
 import * as _ from 'lodash';
 
 import { Constants } from 'app/utils/constants';
@@ -23,8 +22,8 @@ import { ConfigService } from 'app/services/config.service';
 })
 export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     // NB: this component is bound to the same list of apps as the other components
-    @Input() allApps: Array<Application> = []; // from map component
-    @Output() updateMatching = new EventEmitter(); // to map component
+    @Input() allApps: Array<Application> = []; // from applications component
+    @Output() updateMatching = new EventEmitter(); // to applications component
 
     public isFiltersCollapsed: boolean;
     public isCpStatusCollapsed = true;
@@ -139,11 +138,6 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this.isFiltersCollapsed = !this.configService.isApplistFiltersVisible;
-
-        // prevent underlying map actions for these events
-        const element = <HTMLElement>document.getElementById('applist-filters');
-        L.DomEvent.disableClickPropagation(element); // includes double-click
-        L.DomEvent.disableScrollPropagation(element);
 
         // get optional query parameters
         this.route.queryParamMap
