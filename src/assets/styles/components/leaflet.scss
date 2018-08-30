@@ -1,0 +1,30 @@
+#map {
+    .my-cluster {
+        margin-left: -20px !important;
+        margin-top: -18px !important;
+        width: 40px !important;
+        height: 36px !important;
+        border-radius: 5px;
+        background-color: greenyellow;
+        opacity: 0.8 !important;
+        text-align: center;
+        font-size: 24px;
+    }
+    /*
+     * small = 1-9 markers in cluster
+     * medium = 10-99 markers in cluster
+     * large = 100+ markers in cluster
+     */
+    .marker-cluster-small,
+    .marker-cluster-medium,
+    .marker-cluster-large {
+        // background-color: rgba(100, 149, 237, 0.8) !important; // cornflowerblue
+        background-color: rgba(135, 206, 250, 0.8) !important; // lightskyblue
+        div {
+            // background-color: rgba(0, 191, 255, 0.8) !important; // deepskyblue
+            // background-color: rgba(65, 105, 225, 0.8) !important; // royalblue
+            background-color: rgba(30, 144, 255, 0.8) !important; // dodgerblue
+            color: $white;
+        }
+    }
+}

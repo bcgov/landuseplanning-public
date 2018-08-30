@@ -12,9 +12,8 @@
       <div class="list-container">
         
         <!-- Application List Component -->
-        <app-applist-list class="app-list" 
+        <app-applist-list class="app-list" #applist
           [allApps]="allApps" 
-          [currentApp]="currentApp" 
           (setCurrentApp)="highlightApplication($event, true)" 
           (unsetCurrentApp)="highlightApplication($event, false)"
           (updateResultsChange)="onUpdateResultsChange($event)">

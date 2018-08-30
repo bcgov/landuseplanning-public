@@ -86,6 +86,8 @@ export class ApplicationService {
   }
 
   // get all applications
+  // TODO: instead of using promises to get all data at once, use observables and DEEP-OBSERVE changes
+  // see https://github.com/angular/angular/issues/11704
   getAll(): Observable<Application[]> {
     // first get the applications
     return this.getAllInternal()
