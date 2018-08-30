@@ -80,6 +80,7 @@ export class ApplicationService {
   }
 
   // get count of applications
+  // FUTURE: use dedicated API for this because we don't need any data
   getCount(): Observable<number> {
     return this.getAllInternal()
       .map(applications => {
