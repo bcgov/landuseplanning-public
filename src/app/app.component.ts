@@ -76,10 +76,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // show banner anew every day
   showBanner(): boolean {
-    return (!window.localStorage.hidePrcPilotBannerDate || new Date(window.localStorage.hidePrcPilotBannerDate) < this.today);
+    return (!window.localStorage['hidePrcPilotBannerDate'] || new Date(window.localStorage['hidePrcPilotBannerDate']) < this.today);
   }
 
   hideBanner() {
-    window.localStorage.hidePrcPilotBannerDate = this.today;
+    window.localStorage['hidePrcPilotBannerDate'] = this.today;
   }
 }
