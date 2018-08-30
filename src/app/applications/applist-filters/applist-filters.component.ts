@@ -34,6 +34,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
     // search keys for drop-down menus
+    public regionKeys: Array<string> = [];
     public cpStatusKeys: Array<string> = [];
     public appStatusKeys: Array<string> = [];
 
@@ -43,23 +44,26 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private dispIdKeys: Array<number> = [];
     private purposeKeys: Array<string> = [];
 
+    public regionFilters: object = {}; // array-like object
+    public _regionFilters: object = {}; // temporary filters for Cancel feature
+
     public cpStatusFilters: object = {}; // array-like object
-    public _cpStatusFilters: object = {}; // for Cancel feature
+    public _cpStatusFilters: object = {}; // temporary filters for Cancel feature
 
     public appStatusFilters: object = {}; // array-like object
-    public _appStatusFilters: object = {}; // for Cancel feature
+    public _appStatusFilters: object = {}; // temporary filters for Cancel feature
 
     public applicantFilter: string = null;
-    public _applicantFilter: string = null; // for Cancel feature
+    public _applicantFilter: string = null; // temporary filters for Cancel feature
 
     public clFileFilter: number = null;
-    public _clFileFilter: number = null; // for Cancel feature
+    public _clFileFilter: number = null; // temporary filters for Cancel feature
 
     public dispIdFilter: number = null;
-    public _dispIdFilter: number = null; // for Cancel feature
+    public _dispIdFilter: number = null; // temporary filters for Cancel feature
 
     public purposeFilter: string = null;
-    public _purposeFilter: string = null; // for Cancel feature
+    public _purposeFilter: string = null; // temporary filters for Cancel feature
 
     //
     // (arrow) functions to return type-ahead results
@@ -106,6 +110,15 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private configService: ConfigService
     ) {
         // populate the keys we want to display
+        this.regionKeys.push(this.applicationService.CARIBOO);
+        this.regionKeys.push(this.applicationService.KOOTENAY);
+        this.regionKeys.push(this.applicationService.LOWER_MAINLAND);
+        this.regionKeys.push(this.applicationService.OMENICA);
+        this.regionKeys.push(this.applicationService.PEACE);
+        this.regionKeys.push(this.applicationService.SKEENA);
+        this.regionKeys.push(this.applicationService.SOUTHERN_INTERIOR);
+        this.regionKeys.push(this.applicationService.VANCOUVER_ISLAND);
+
         this.cpStatusKeys.push(this.commentPeriodService.OPEN);
         this.cpStatusKeys.push(this.commentPeriodService.NOT_STARTED);
         this.cpStatusKeys.push(this.commentPeriodService.CLOSED);
@@ -214,13 +227,31 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         let retVal = true; // for short-circuiting checks
 
         // if no option is selected, match all
-        const allCpStatus = this.cpStatusKeys.every(key => {
+        const allRegions = this.regionKeys.every(key => {
+            return (this.regionFilters[key] === false);
+        });
+
+        // check for matching region
+        retVal = retVal && (
+            allRegions ||
+            (this.regionFilters[this.applicationService.CARIBOO] && (item.region === this.applicationService.CARIBOO)) ||
+            (this.regionFilters[this.applicationService.KOOTENAY] && (item.region === this.applicationService.KOOTENAY)) ||
+            (this.regionFilters[this.applicationService.LOWER_MAINLAND] && (item.region === this.applicationService.LOWER_MAINLAND)) ||
+            (this.regionFilters[this.applicationService.OMENICA] && (item.region === this.applicationService.OMENICA)) ||
+            (this.regionFilters[this.applicationService.PEACE] && (item.region === this.applicationService.PEACE)) ||
+            (this.regionFilters[this.applicationService.SKEENA] && (item.region === this.applicationService.SKEENA)) ||
+            (this.regionFilters[this.applicationService.SOUTHERN_INTERIOR] && (item.region === this.applicationService.SOUTHERN_INTERIOR)) ||
+            (this.regionFilters[this.applicationService.VANCOUVER_ISLAND] && (item.region === this.applicationService.VANCOUVER_ISLAND))
+        );
+
+        // if no option is selected, match all
+        const allCpStatuses = this.cpStatusKeys.every(key => {
             return (this.cpStatusFilters[key] === false);
         });
 
         // check for matching Comment Period Status
         retVal = retVal && (
-            allCpStatus ||
+            allCpStatuses ||
             (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod)) ||
             (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod)) ||
             (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod)) ||
@@ -228,13 +259,13 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         );
 
         // if no option is selected, match all
-        const allAppStatus = this.appStatusKeys.every(key => {
+        const allAppStatuses = this.appStatusKeys.every(key => {
             return (this.appStatusFilters[key] === false);
         });
 
         // check for matching Application Status
         retVal = retVal && (
-            allAppStatus ||
+            allAppStatuses ||
             (this.appStatusFilters[this.applicationService.ACCEPTED] && this.applicationService.isAccepted(item.status)) ||
             (this.appStatusFilters[this.applicationService.DECISION_MADE] && this.applicationService.isDecision(item.status) && !this.applicationService.isCancelled(item.status)) ||
             (this.appStatusFilters[this.applicationService.CANCELLED] && this.applicationService.isCancelled(item.status)) ||
@@ -273,6 +304,16 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
     private saveFilters() {
         const params: Params = {}; // array-like object
+
+        this.regionKeys.forEach(key => {
+            if (this.regionFilters[key]) {
+                if (!params['regions']) {
+                    params['regions'] = key;
+                } else {
+                    params['regions'] += ',' + key;
+                }
+            }
+        });
 
         this.cpStatusKeys.forEach(key => {
             if (this.cpStatusFilters[key]) {
@@ -343,6 +384,12 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     // (re)sets all filters from current param map
     private internalResetAllFilters(doApply: boolean) {
         if (this.paramMap) {
+            // set region filters
+            const regions = (this.paramMap.get('regions') || '').split(',');
+            this.regionKeys.forEach(key => {
+                this.regionFilters[key] = regions.includes(key);
+            });
+
             // set cpStatus filters according to current param options
             const cpStatuses = (this.paramMap.get('cpStatus') || '').split(',');
             this.cpStatusKeys.forEach(key => {
