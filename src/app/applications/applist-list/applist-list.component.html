@@ -2,16 +2,16 @@
 
     <div class="app-list__body" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
       <div class="app-list__list" *ngIf="gotChanges">
-        
+
         <div class="no-results" *ngIf="numMatchesVisible == 0">
           No matching applications
         </div>
 
         <ng-template ngFor let-item [ngForOf]="allApps">
-          <div class="app-card list-group-item" [class.active]="isCurrentApp(item)" 
+          <div class="app-card list-group-item" [class.active]="isCurrentApp(item)"
             (click)="toggleCurrentApp(item);$event.stopPropagation();"
             *ngIf="item.isMatches && item.isVisible">
-            
+
             <!-- Application Details -->
             <ul class="app-card__details">
               <li>
@@ -20,7 +20,7 @@
               </li>
               <li>
                 <span class="key">Purpose / Subpurpose</span>
-                <!-- TODO: Need a better way of handling values that are not available-->
+                <!-- TODO: Need a better way of handling values that are not available - see also below -->
                 <span class="value">
                   <span *ngIf="item.purpose || item.subpurpose">{{item.purpose | titlecase}} / {{item.subpurpose | titlecase}}</span>
                   <span *ngIf="!item.purpose || !item.subpurpose">Not Available</span>
@@ -32,7 +32,7 @@
               </li>
               <li>
                 <span class="key">Crown Land File #</span>
-                <!-- TODO: Need a better way of handling values that are not available - See Above -->
+                <!-- TODO: Need a better way of handling values that are not available - see also above -->
                 <span class="value">{{item.cl_file || 'Not Available'}}</span>
               </li>
               <li>
@@ -40,11 +40,11 @@
                 <span class="value">{{item.appStatus}}</span>
               </li>
             </ul>
-            
+
             <!-- Application Card Actions -->
             <div class="app-card__actions d-flex justify-content-between">
               <div class="badges">
-                <div class="comment-status-badge badge" 
+                <div class="comment-status-badge badge"
                   [ngClass]="{
                     'badge-primary': commentPeriodService.isNotStarted(item.currentPeriod),
                     'badge-secondary': commentPeriodService.isNotOpen(item.currentPeriod),
@@ -58,7 +58,7 @@
                     :&nbsp;{{item.currentPeriod.endDate | date:'mediumDate'}}
                   </span>
                   <span class="date" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
-                                  :&nbsp;{{item.currentPeriod.startDate | date:'MMM d'}} - {{item.currentPeriod.endDate | date:'MMM d'}}
+                    :&nbsp;{{item.currentPeriod.startDate | date:'MMM d'}} - {{item.currentPeriod.endDate | date:'MMM d'}}
                   </span>
                 </div>
               </div>
@@ -74,9 +74,9 @@
     <div class="app-list__options" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
       <div *ngIf="gotChanges">
         <div class="text-right" [innerHTML]="!numMatchesVisible ? 'No Results' : 'Showing results 1 - ' + numMatchesVisible"></div>
-        <div class="form-check" aria-labelledby="updateResultsCheckbox" (click)="$event.stopPropagation()">
-          <label class="form-check-label" for="updateResultsCheckbox">
-            <input class="form-check-input" type="checkbox" id="updateResultsCheckbox" [(ngModel)]="doUpdateResults" (change)="updateResultsChange.emit(doUpdateResults)" />
+        <div class="form-check" aria-labelledby="updateResultsCheckbox">
+          <label class="form-check-label" for="updateResultsCheckbox" (click)="$event.stopPropagation()">
+            <input class="form-check-input" type="checkbox" id="updateResultsCheckbox" [(ngModel)]="configService.doUpdateResults" (change)="updateResultsChange.emit()" />
             Update results when map moves
           </label>
         </div>

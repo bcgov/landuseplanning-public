@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
 import * as _ from 'lodash';
 
@@ -19,14 +19,18 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() unsetCurrentApp = new EventEmitter(); // to map component
   @Output() updateResultsChange = new EventEmitter(); // to map component
 
-  private currentApp: Application = null;
+  private currentApp: Application = null; // for selecting app in list
   public gotChanges = false;
-  public doUpdateResults = true; // bound to checkbox - initial state
 
   constructor(
     private commentPeriodService: CommentPeriodService, // used in template
-    private configService: ConfigService
+    private configService: ConfigService, // used in template
+    private elementRef: ElementRef
   ) { }
+
+  get clientWidth(): number {
+    return this.elementRef.nativeElement.childNodes[0].clientWidth; // div#applist-list.app-list__container
+  }
 
   public ngOnInit() {
     // prevent underlying map actions for these events
@@ -36,14 +40,9 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.currentApp && !changes.currentApp.firstChange && changes.currentApp.currentValue) {
-      console.log('got currentApp change');
-      // nothing to do
-    } else if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
+    if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
+      // console.log('got allApps change');
       this.gotChanges = true;
-
-      // sync initial state to map
-      this.updateResultsChange.emit(this.doUpdateResults);
     }
   }
 

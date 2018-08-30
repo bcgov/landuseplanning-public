@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
@@ -107,7 +107,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private router: Router,
         private applicationService: ApplicationService,
         private commentPeriodService: CommentPeriodService, // also used in template
-        private configService: ConfigService
+        private configService: ConfigService,
+        private elementRef: ElementRef
     ) {
         // populate the keys we want to display
         this.regionKeys.push(this.applicationService.CARIBOO);
@@ -130,6 +131,10 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.appStatusKeys.push(this.applicationService.ABANDONED);
         this.appStatusKeys.push(this.applicationService.DISPOSITION_GOOD_STANDING);
         this.appStatusKeys.push(this.applicationService.SUSPENDED);
+    }
+
+    get clientHeight(): number {
+      return this.elementRef.nativeElement.childNodes[0].clientHeight; // div#applist-filters.app-filters__container
     }
 
     public ngOnInit() {
