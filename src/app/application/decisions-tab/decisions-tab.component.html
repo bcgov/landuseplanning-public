@@ -4,13 +4,13 @@
             {{applicationService.getStatus(application)}}
         </div>
 
-        <div *ngIf="!applicationService.isDecision(application.status)">
-            No decisions have been made for this application at this time.
-        </div>
-
-        <div *ngIf="applicationService.isDecision(application.status)">
-            <div *ngIf="!application.decision">
+        <div>
+            <div *ngIf="!application.decision && applicationService.isDecision(application.status)">
                 No decisions documents are available at this time. Please check back for updates to this information.
+            </div>
+
+            <div *ngIf="!application.decision && !applicationService.isDecision(application.status)">
+                No decisions have been made for this application at this time.
             </div>
 
             <div *ngIf="application.decision">
