@@ -10,7 +10,11 @@
       "assets": [
         "assets",
         "favicon.ico",
-        { "glob": "**/*", "input": "../node_modules/leaflet/dist/images/", "output": "./assets/images/" }
+        {
+          "glob": "**/*",
+          "input": "../node_modules/leaflet/dist/images/",
+          "output": "./assets/images/"
+        }
       ],
       "index": "index.html",
       "main": "main.ts",

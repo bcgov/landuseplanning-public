@@ -7,9 +7,9 @@ describe('ApplicationTabComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApplicationTabComponent ]
+      declarations: [ApplicationTabComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
