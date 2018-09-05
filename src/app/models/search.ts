@@ -17,7 +17,7 @@ export class Search {
 
   constructor(search?: any, hostname?: any) {
     this._id            = search && search._id            || null;
-    this.totalFeatures  = search && search.totalFeatures  || null;
+    this.totalFeatures  = search && search.totalFeatures  || 0;
     this.crs            = search && search.crs            || null;
     this.type           = search && search.type           || null;
     this.date           = search && search.date           || null;

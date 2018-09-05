@@ -1,10 +1,13 @@
 <div class="app-list__container" id="applist-list" name="List of Crown Land applications, limited by filters and bound by map view">
 
     <div class="app-list__body" *ngVar="matchesVisibleCount(allApps) as numMatchesVisible">
+
+      <!-- Scrollable Content -->
       <div class="app-list__list" *ngIf="gotChanges">
 
+        <!-- No Results -->
         <div class="no-results" *ngIf="numMatchesVisible == 0">
-          No matching applications
+          <strong>No applications found</strong>
         </div>
 
         <ng-template ngFor let-item [ngForOf]="allApps">
@@ -37,7 +40,7 @@
               </li>
               <li>
                 <span class="key">Status</span>
-                <span class="value">{{item['appStatus']}}</span>
+                <span class="value">{{item['appStatus'] || 'Unknown'}}</span>
               </li>
             </ul>
 
@@ -50,7 +53,7 @@
                     'badge-secondary': commentPeriodService.isNotOpen(item.currentPeriod),
                     'badge-danger': commentPeriodService.isClosed(item.currentPeriod),
                     'badge-success': commentPeriodService.isOpen(item.currentPeriod)}">
-                  {{item['cpStatus']}}
+                  {{item['cpStatus'] || 'Unknown'}}
                   <span class="date" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
                     :&nbsp;{{item.currentPeriod.startDate | date:'mediumDate'}}
                   </span>

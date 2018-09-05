@@ -83,43 +83,74 @@ export class ApplicationService {
     this.regions[this.VANCOUVER_ISLAND] = 'West Coast, Nanaimo';
   }
 
+  // get just the applications (for fast mapping)
+  getAll(pageNum: number = 0, pageSize: number = 1000000, regionFilters: object = {}, cpStatusFilters: object = {}, appStatusFilters: object = {},
+    applicantFilter: string = null, clFileFilter: string = null, dispIdFilter: string = null, purposeFilter: string = null): Observable<Application[]> {
+    const regions: Array<string> = [];
+    const cpStatuses: Array<string> = [];
+    const appStatuses: Array<string> = [];
+
+    // convert array-like objects to arrays
+    Object.keys(regionFilters).forEach(key => { if (regionFilters[key]) { regions.push(key); } });
+    Object.keys(cpStatusFilters).forEach(key => { if (cpStatusFilters[key]) { cpStatuses.push(key); } });
+    Object.keys(appStatusFilters).forEach(key => { if (appStatusFilters[key]) { appStatuses.push(key); } });
+
+    return this.api.getApplications(pageNum, pageSize, regions, cpStatuses, appStatuses, applicantFilter, clFileFilter, dispIdFilter, purposeFilter)
+      .map(res => {
+        const applications = res.text() ? res.json() : [];
+        applications.forEach((application, i) => {
+          applications[i] = new Application(application);
+          // FUTURE: derive region code, etc ?
+        });
+        return applications;
+      })
+      .catch(this.api.handleError);
+  }
+
   // get count of applications
-  // FUTURE: use dedicated API for this because we don't need any data
   getCount(): Observable<number> {
-    return this.getAllInternal()
-      .map(applications => {
+    return this.api.getApplicationsNoFields()
+      .map(res => {
+        const applications = res.text() ? res.json() : [];
         return applications.length;
       })
       .catch(this.api.handleError);
   }
 
-  // get all applications
+  // get all applications and related data
   // TODO: instead of using promises to get all data at once, use observables and DEEP-OBSERVE changes
   // see https://github.com/angular/angular/issues/11704
-  getAll(): Observable<Application[]> {
+  getAllFull(pageNum: number = 0, pageSize: number = 1000000, regionFilters: object = {}, cpStatusFilters: object = {}, appStatusFilters: object = {},
+    applicantFilter: string = null, clFileFilter: string = null, dispIdFilter: string = null, purposeFilter: string = null): Observable<Application[]> {
     // first get the applications
-    return this.getAllInternal()
+    return this.getAll(pageNum, pageSize, regionFilters, cpStatusFilters, appStatusFilters, applicantFilter, clFileFilter, dispIdFilter, purposeFilter)
       .mergeMap(applications => {
         if (applications.length === 0) {
           return Observable.of([] as Application[]);
         }
 
-        // replace \\n (JSON format) with newlines in each application
+        const promises: Array<Promise<any>> = [];
+
         applications.forEach((application) => {
+          // replace \\n (JSON format) with newlines
           if (application.description) {
             application.description = application.description.replace(/\\n/g, '\n');
           }
           if (application.legalDescription) {
             application.legalDescription = application.legalDescription.replace(/\\n/g, '\n');
           }
-        });
 
-        const promises: Array<Promise<any>> = [];
+          // derive region code
+          application.region = this.getRegionCode(application.businessUnit);
 
-        // FUTURE: now get the organization for each application
+          // derive application status for display
+          application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
 
-        // now get the current comment period for each application
-        applications.forEach((application) => {
+          // FUTURE: now get the organization
+
+          // NB: we don't get documents here
+
+          // now get the current comment period
           promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
             .toPromise()
             .then(periods => {
@@ -129,10 +160,10 @@ export class ApplicationService {
               application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
             })
           );
-        });
 
-        // now get the referenced data (features)
-        applications.forEach((application) => {
+          // NB: we don't get the decision here
+
+          // now get the shapes (features)
           promises.push(this.featureService.getByApplicationId(application._id)
             .toPromise()
             .then(features => {
@@ -145,30 +176,11 @@ export class ApplicationService {
                   application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
                 }
               });
-
-              // derive region code
-              application.region = this.getRegionCode(application.businessUnit);
-
-              // derive application status for display
-              application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
             })
           );
         });
 
         return Promise.all(promises).then(() => { return applications; });
-      })
-      .catch(this.api.handleError);
-  }
-
-  // get just the applications
-  private getAllInternal(): Observable<Application[]> {
-    return this.api.getApplications()
-      .map(res => {
-        const applications = res.text() ? res.json() : [];
-        applications.forEach((application, i) => {
-          applications[i] = new Application(application);
-        });
-        return applications;
       })
       .catch(this.api.handleError);
   }
@@ -179,7 +191,7 @@ export class ApplicationService {
       return Observable.of(this.application);
     }
 
-    // first get the application data
+    // first get the application
     return this.api.getApplication(appId)
       .map(res => {
         const applications = res.text() ? res.json() : [];
@@ -189,6 +201,8 @@ export class ApplicationService {
       .mergeMap(application => {
         if (!application) { return Observable.of(null as Application); }
 
+        const promises: Array<Promise<any>> = [];
+
         // replace \\n (JSON format) with newlines
         if (application.description) {
           application.description = application.description.replace(/\\n/g, '\n');
@@ -197,7 +211,11 @@ export class ApplicationService {
           application.legalDescription = application.legalDescription.replace(/\\n/g, '\n');
         }
 
-        const promises: Array<Promise<any>> = [];
+        // derive region code
+        application.region = this.getRegionCode(application.businessUnit);
+
+        // derive application status for display
+        application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
 
         // FUTURE: now get the organization
 
@@ -224,7 +242,7 @@ export class ApplicationService {
           .then(decision => application.decision = decision)
         );
 
-        // now get the shapes
+        // now get the shapes (features)
         promises.push(this.featureService.getByApplicationId(application._id)
           .toPromise()
           .then(features => {
@@ -237,12 +255,6 @@ export class ApplicationService {
                 application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
               }
             });
-
-            // derive region code
-            application.region = this.getRegionCode(application.businessUnit);
-
-            // derive application status for display
-            application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
           })
         );
 

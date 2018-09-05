@@ -31,8 +31,8 @@ export class DecisionsTabComponent implements OnInit, OnDestroy {
           if (data.application) {
             this.application = data.application;
           } else {
-            // application not found --> navigate back to application list
             alert('Uh-oh, couldn\'t load application');
+            // application not found --> navigate back to application list
             this.router.navigate(['/applications']);
           }
         }
