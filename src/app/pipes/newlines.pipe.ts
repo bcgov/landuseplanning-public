@@ -6,6 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'newlines'
 })
+
 export class NewlinesPipe implements PipeTransform {
   transform(value: string): string {
     const input = value || '';

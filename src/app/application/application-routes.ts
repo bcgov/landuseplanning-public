@@ -5,21 +5,21 @@ import { CommentingTabComponent } from './commenting-tab/commenting-tab.componen
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
 
 export const ApplicationRoutes: Routes = [
-    {
-        path: '',
-        redirectTo: 'application',
-        pathMatch: 'full'
-    },
-    {
-        path: 'application',
-        component: ApplicationTabComponent
-    },
-    {
-        path: 'commenting',
-        component: CommentingTabComponent
-    },
-    {
-        path: 'decisions',
-        component: DecisionsTabComponent
-    }
+  {
+    path: '',
+    redirectTo: 'application',
+    pathMatch: 'full'
+  },
+  {
+    path: 'application',
+    component: ApplicationTabComponent
+  },
+  {
+    path: 'commenting',
+    component: CommentingTabComponent
+  },
+  {
+    path: 'decisions',
+    component: DecisionsTabComponent
+  }
 ];

@@ -44,7 +44,7 @@ export class SearchArray {
   }
 
   sort() {
-    this.items.sort(function(a: Search, b: Search) {
+    this.items.sort(function (a: Search, b: Search) {
       const aDate = a && a.date ? new Date(a.date).getTime() : 0;
       const bDate = b && b.date ? new Date(b.date).getTime() : 0;
       return bDate - aDate;
