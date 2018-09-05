@@ -64,12 +64,12 @@ import { ConfigService } from 'app/services/config.service';
     ApplicationService,
     CommentService,
     CommentPeriodService,
+    ConfigService,
     DecisionService,
     DocumentService,
     OrganizationService,
     SearchService,
-    FeatureService,
-    ConfigService
+    FeatureService
   ],
   bootstrap: [
     AppComponent
