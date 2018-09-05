@@ -56,7 +56,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
     // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
   });
-  private oldSize: L.Point = null; // for map resizing
+  private isUser = false; // to track map change events
   private gotChanges = false; // to reduce initial map change event handling
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -127,38 +127,25 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.map = L.map('map', {
-      zoomControl: false, // will be added manually (below)
-      maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
-      zoomSnap: 0.1 // for greater granularity when fitting bounds
+      zoomControl: false,
+      maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)) // the world
     });
 
     // map state change events
-    // this.map.on('zoomstart', function () {
-    //   console.log('zoomstart');
-    // }, this);
-
-    // this.map.on('movestart', function () {
-    //   console.log('movestart');
-    // }, this);
-
-    this.map.on('resize', function (e: L.ResizeEvent) {
-      // console.log('resize, e =', e);
-      if (this.oldSize === null) {
-        this.oldSize = e.oldSize;
-      }
+    this.map.on('zoomstart', function () {
+      this.isUser = true;
     }, this);
-
+    this.map.on('movestart', function () {
+      this.isUser = true;
+    }, this);
+    this.map.on('resize', function () {
+      this.isUser = true;
+    }, this);
     // NB: moveend is called after zoomstart, movestart and resize
     this.map.on('moveend', function () {
-      // console.log('moveend');
-      if (this.oldSize !== null) {
-        // zoom to approximately the same scale as before resize
-        const scale = this.distance(this.map.getSize()) / this.distance(this.oldSize);
-        const zoom = this.map.getScaleZoom(scale, this.map.getZoom());
-        this.oldSize = null; // must clear this before calling setZoom()
-        this.map.setZoom(zoom);
-      } else {
-        // update list of visible apps
+      // only set visible after init
+      if (this.gotChanges && this.isUser) {
+        this.isUser = false;
         this.setVisibleDebounced();
       }
     }, this);
@@ -168,9 +155,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
     // add zoom control
     L.control.zoom({ position: 'topright' }).addTo(this.map);
-
-    // add scale control
-    L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
     // add base maps layers control
     const baseLayers = {
@@ -195,13 +179,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
       this.configService.baseLayerName = e.name;
     }, this);
 
-    // FUTURE: restore map bounds / center / zoom ?
-    // this.fitGlobalBounds(this.configService.mapBounds);
-    // this.map.setView(this.configService.mapCenter, this.configService.mapZoom);
-  }
+    // TODO: restore map bounds / center / zoom ?
 
-  private distance(size: L.Point): number {
-    return Math.sqrt(size.x * size.x + size.y * size.y);
+    // add scale control
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -220,7 +201,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * May be called on map state change events.
+   * Called on map state change events.
    * Actual function executes no more than once every 250ms.
    */
   // tslint:disable-next-line:member-ordering
@@ -267,20 +248,14 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // NB: change detection will update all components bound to apps list
   }
 
-  private fitGlobalBounds(bounds: L.LatLngBounds) {
-    // console.log('fitting bounds');
+  private fitGlobalBounds(globalBounds: L.LatLngBounds) {
     // use padding to adjust for list and/or filters
     const x = this.configService.isApplistListVisible ? this.applist.clientWidth : 0;
-    const y = this.appfilters.clientHeight; // filters are always visible
-    const fitBoundsOptions: L.FitBoundsOptions = {
-      paddingTopLeft: L.point(x, y),
-      // disable animation to prevent known bug where zoom is sometimes incorrect
-      // ref: https://github.com/Leaflet/Leaflet/issues/3249
-      animate: false
-    };
+    const y = 0; // this.appfilters.clientHeight; // FUTURE: offset for filter pane, if needed
+    const fitBoundsOptions: L.FitBoundsOptions = { paddingTopLeft: L.point(x, y) };
 
-    if (bounds && bounds.isValid()) {
-      this.map.fitBounds(bounds, fitBoundsOptions);
+    if (globalBounds && globalBounds.isValid()) {
+      this.map.fitBounds(globalBounds, fitBoundsOptions);
     } else {
       this.map.fitBounds(this.defaultBounds, fitBoundsOptions);
     }
@@ -326,7 +301,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
       const appFG = L.featureGroup(); // layers for current app
       appFG.dispositionId = app.tantalisID;
 
-      // THIS WILL BE TEMPORARILY DISABLED - DO NOT DELETE
       // draw features for this app
       app.features.forEach(f => {
         const feature = JSON.parse(JSON.stringify(f));
@@ -430,7 +404,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     let point = this.map.latLngToLayerPoint(latlng);
 
     if (this.configService.isApplistListVisible) { point = point.subtract([(this.applist.clientWidth / 2), 0]); }
-    point = point.subtract([0, (this.appfilters.clientHeight / 2)]); // filters are always visible
+    // if (this.configService.isApplistFiltersVisible) { point = point.subtract([0, (this.appfilters.clientHeight / 2)]); } // FUTURE: offset for filter pane, if needed
 
     this.map.panTo(this.map.layerPointToLatLng(point));
   }
