@@ -20,7 +20,6 @@ import { AppRoutingModule } from 'app/app-routing.module';
 import { AppComponent } from 'app/app.component';
 import { HomeComponent } from 'app/home/home.component';
 import { ContactComponent } from 'app/contact/contact.component';
-import { SearchComponent } from 'app/search/search.component';
 import { HeaderComponent } from 'app/header/header.component';
 import { FooterComponent } from 'app/footer/footer.component';
 
@@ -55,7 +54,6 @@ import { ConfigService } from 'app/services/config.service';
     AppComponent,
     HomeComponent,
     ContactComponent,
-    SearchComponent,
     HeaderComponent,
     FooterComponent
   ],
