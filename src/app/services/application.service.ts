@@ -300,7 +300,7 @@ export class ApplicationService {
    */
   getStatusString(statusCode: string): string {
     if (statusCode) {
-      switch (statusCode.toUpperCase()) {
+      switch (statusCode) {
         case this.ABANDONED: return this.applicationStatuses[this.ABANDONED];
         case this.ACCEPTED: return this.applicationStatuses[this.ACCEPTED];
         case this.ALLOWED: return this.applicationStatuses[this.ALLOWED];
@@ -319,38 +319,37 @@ export class ApplicationService {
     return null;
   }
 
-  isAccepted(status: string): boolean {
-    return (status && status.toUpperCase() === 'ACCEPTED');
+  isAccepted(statusCode: string): boolean {
+    return (statusCode === this.ACCEPTED);
   }
 
   // NOTE: a decision may or may not include Cancelled
   // see code that uses this helper
-  isDecision(status: string): boolean {
-    const s = (status && status.toUpperCase());
-    return (s === 'ALLOWED'
-      || s === 'CANCELLED'
-      || s === 'DISALLOWED'
-      || s === 'OFFER ACCEPTED'
-      || s === 'OFFER NOT ACCEPTED'
-      || s === 'OFFERED'
-      || s === 'DISPOSITION IN GOOD STANDING'
+  isDecision(statusCode: string): boolean {
+    return (statusCode === this.ALLOWED
+      || statusCode === this.CANCELLED
+      || statusCode === this.DISALLOWED
+      || statusCode === this.OFFER_ACCEPTED
+      || statusCode === this.OFFER_NOT_ACCEPTED
+      || statusCode === this.OFFERED
+      || statusCode === this.DISPOSITION_GOOD_STANDING
     );
   }
 
-  isCancelled(status: string): boolean {
-    return (status && status.toUpperCase() === 'CANCELLED');
+  isCancelled(statusCode: string): boolean {
+    return (statusCode === this.CANCELLED);
   }
 
-  isAbandoned(status: string): boolean {
-    return (status && status.toUpperCase() === 'ABANDONED');
+  isAbandoned(statusCode: string): boolean {
+    return (statusCode === this.ABANDONED);
   }
 
-  isDispGoodStanding(status: string): boolean {
-    return (status && status.toUpperCase() === 'DISPOSITION IN GOOD STANDING');
+  isDispGoodStanding(statusCode: string): boolean {
+    return (statusCode === this.DISPOSITION_GOOD_STANDING);
   }
 
-  isSuspended(status: string): boolean {
-    return (status && status.toUpperCase() === 'SUSPENDED');
+  isSuspended(statusCode: string): boolean {
+    return (statusCode === this.SUSPENDED);
   }
 
   /**
