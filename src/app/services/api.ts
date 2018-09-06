@@ -97,14 +97,21 @@ export class ApiService {
       'description',
       'internal',
       'internalID',
-      'latitude',
+      'centroid',
       'legalDescription',
-      'longitude',
       'name',
       'postID',
       'publishDate',
       'region',
-      'tantalisID'
+      'tantalisID',
+      'purpose',
+      'subpurpose',
+      'type',
+      'subtype',
+      'status',
+      'tenureStage',
+      'location',
+      'businessUnit'
     ];
     let queryString = 'application?fields=';
     _.each(fields, function (f) {
@@ -124,16 +131,64 @@ export class ApiService {
       'description',
       'internal',
       'internalID',
-      'latitude',
+      'centroid',
       'legalDescription',
-      'longitude',
       'name',
       'postID',
       'publishDate',
       'region',
-      'tantalisID'
+      'tantalisID',
+      'purpose',
+      'subpurpose',
+      'type',
+      'subtype',
+      'status',
+      'tenureStage',
+      'location',
+      'businessUnit'
     ];
     let queryString = 'application/' + id + '?fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
+  //
+  // Features
+  //
+  getFeaturesByTantalisId(tantalisID: number) {
+    const fields = [
+      'type',
+      'tags',
+      'geometry',
+      'geometryName',
+      'properties',
+      'isDeleted',
+      'applicationID'
+    ];
+    let queryString = 'feature?isDeleted=false&tantalisId=' + tantalisID + '&fields=';
+    _.each(fields, function (f) {
+      queryString += f + '|';
+    });
+    // Trim the last |
+    queryString = queryString.replace(/\|$/, '');
+    return this.get(queryString);
+  }
+
+  getFeaturesByApplicationId(applicationId: string) {
+    const fields = [
+      'type',
+      'tags',
+      'geometry',
+      'geometryName',
+      'properties',
+      'isDeleted',
+      'applicationID'
+    ];
+    let queryString = 'feature?isDeleted=false&applicationId=' + applicationId + '&fields=';
     _.each(fields, function (f) {
       queryString += f + '|';
     });

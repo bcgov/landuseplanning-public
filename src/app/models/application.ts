@@ -24,9 +24,8 @@ export class Application {
   id: string; // objectid (same as _id)
   internal: Internal;
   internalID: number;
-  latitude: number;
+  centroid: string;
   legalDescription: string;
-  longitude: number;
   name: string;
   postID: number;
   publishDate: Date;
@@ -66,9 +65,8 @@ export class Application {
     this.id                      = obj && obj.id                      || null;
     this.internal                = obj && obj.internal                || new Internal();
     this.internalID              = obj && obj.internalID              || 0;
-    this.latitude                = obj && obj.latitude                || 0.00;
+    this.centroid                = obj && obj.centroid                || [];
     this.legalDescription        = obj && obj.legalDescription        || null;
-    this.longitude               = obj && obj.longitude               || 0.00;
     this.name                    = obj && obj.name                    || null;
     this.postID                  = obj && obj.postID                  || null;
     this.publishDate             = obj && obj.publishDate             || null;
