@@ -153,8 +153,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
+  // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
-    if (!changes.allApps.firstChange && changes.allApps.currentValue) {
+    if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
       this.gotChanges = true;
 
       // store keys for faster filter lookahead
@@ -481,10 +482,6 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       + this.clFileFilterCount()
       + this.dispIdFilterCount()
       + this.purposeFilterCount();
-  }
-
-  public matchesVisibleCount(apps: Application[]): number {
-    return apps.filter(a => a.isMatches && a.isVisible).length;
   }
 
   public cpStatusHasChanges(): boolean {

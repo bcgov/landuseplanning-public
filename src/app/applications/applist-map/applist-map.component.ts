@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
+import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import 'leaflet';
 import 'leaflet.markercluster';
@@ -49,6 +50,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() applist;
   @Input() appfilters;
 
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
   private map: L.Map = null;
   private fgList: L.FeatureGroup[] = []; // list of app FGs (each containing feature layers)
   private markerList: L.Marker[] = []; // list of markers
@@ -64,6 +66,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
 
   constructor(
+    public snackBar: MatSnackBar,
     public applicationService: ApplicationService,
     public configService: ConfigService
   ) { }
@@ -196,9 +199,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // this.map.setView(this.configService.mapCenter, this.configService.mapZoom);
   }
 
+  // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
-      // console.log('map: got changed apps from applications');
+      // console.log('map: got changed apps from applications component');
 
       this.gotChanges = true;
 
@@ -312,6 +316,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     this.fgList.length = 0;
     this.markerList.length = 0;
 
+    // TODO: delete isMatches (everywhere) when API performs filtering
     this.allApps.filter(a => a.isMatches).forEach(app => {
       const appFG = L.featureGroup(); // layers for current app
       appFG.dispositionId = app.tantalisID;
@@ -377,9 +382,49 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
   private onMarkerClick(...args: any[]) {
     const app = args[0] as Application;
-    // const marker = args[1].target as L.Marker;
+    const marker = args[1].target as L.Marker;
 
     this.applist.toggleCurrentApp(app); // update selected item in app list
+
+    const popupOptions = {
+      maxWidth: 400, // worst case (Pixel 2)
+      className: 'map-popup-content', // FUTURE: for better styling control, if needed
+      autoPanPadding: L.point(40, 40)
+    };
+    // NB: although this currently takes about a second to display, when we use a
+    //     component/template for the popup then the data will "fill in" as we get it
+    this.snackBarRef = this.snackBar.open('Loading application ...');
+    this.applicationService.getById(app._id)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        application => {
+          this.snackBarRef.dismiss();
+          const htmlContent =
+            '<div class="app-detail-title">'
+            + '<span class="client-name__label">Client Name</span>'
+            + '<span class="client-name__value">' + (application.client || '-') + '</span>'
+            + '</div>'
+            + '<div class="app-details">'
+            + '<div>'
+            + '<span class="value">' + (application.description || '-') + '</span>'
+            + '</div>'
+            + '<hr class="mt-3 mb-3">'
+            + '<ul class="nv-list">'
+            + '<li><span class="name">Crown Lands File #:</span><span class="value">' + (application.cl_file || '-') + '</span></li>'
+            + '<li><span class="name">Disposition Transaction ID:</span><span class="value">' + (application.tantalisID || '-') + '</span></li>'
+            + '<li><span class="name">Location:</span><span class="value">' + (application.location || '-') + '</span></li>'
+            + '</ul>'
+            + '</div>';
+          L.popup(popupOptions)
+            .setLatLng(marker.getLatLng())
+            .setContent(htmlContent)
+            .openOn(this.map);
+        },
+        error => {
+          this.snackBarRef = this.snackBar.open('Uh-oh, couldn\'t load application', null, { duration: 3000 });
+          console.log(error);
+        }
+      );
   }
 
   /**

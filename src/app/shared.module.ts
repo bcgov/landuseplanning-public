@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 // import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatProgressBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material';
 
 import { OrderByPipe } from 'app/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/pipes/newlines.pipe';
@@ -14,7 +15,8 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
   imports: [
     // CommonModule,
     BrowserModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   declarations: [
     OrderByPipe,
@@ -25,6 +27,7 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
   ],
   exports: [
     MatProgressBarModule,
+    MatSnackBarModule,
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,

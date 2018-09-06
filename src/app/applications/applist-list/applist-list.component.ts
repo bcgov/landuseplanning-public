@@ -33,9 +33,10 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() { }
 
+  // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
-      // console.log('got allApps change');
+      // console.log('list: got changed apps from applications component');
       this.gotChanges = true;
     }
   }
@@ -61,6 +62,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  // TODO: delete isMatches (everywhere) when API performs filtering
   public matchesVisibleCount(apps: Application[]): number {
     return apps.filter(a => a.isMatches && a.isVisible).length;
   }
