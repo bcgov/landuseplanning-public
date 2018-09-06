@@ -22,7 +22,7 @@
               <div class="form-check" *ngFor="let key of cpStatusKeys">
                 <label class="form-check-label">
                   <input class="form-check-input gtm-filter-cp-status " type="checkbox" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> 
-                  {{commentPeriodService.commentStatuses[key]}}
+                  {{commentPeriodService.getStatusString(key)}}
                 </label>
               </div>
             </div>
@@ -52,7 +52,7 @@
               <div class="form-check" *ngFor="let key of appStatusKeys">
                 <label class="form-check-label">
                   <input class="gtm-filter-app-status form-check-input" type="checkbox" [(ngModel)]="_appStatusFilters[key]" name="{{key}}"> 
-                  {{applicationService.applicationStatuses[key]}}
+                  {{applicationService.getStatusString(key)}}
                 </label>
               </div>
               <div class="dropdown-button-bar" *ngVar="appStatusHasChanges() as hasChanges">
@@ -106,6 +106,7 @@
       </span>
 
     </div>
+
   </div>
 
   <!-- Application Filter Inputs / All Filters -->
@@ -117,7 +118,7 @@
       <div class="form-check" *ngFor="let key of cpStatusKeys">
         <label class="form-check-label" for="{{key}}">
           <input class="form-check-input gtm-filter-cp-status" type="checkbox" name="{{key}}" id="{{key}}" [(ngModel)]="_cpStatusFilters[key]"> 
-          {{commentPeriodService.commentStatuses[key]}}
+          {{commentPeriodService.getStatusString(key)}}
         </label>
       </div>
     </fieldset>
@@ -128,7 +129,7 @@
       <div class="form-check" *ngFor="let key of appStatusKeys">
         <label class="form-check-label" for="{{key}}">
           <input class="form-check-input gtm-filter-app-status" type="checkbox" name="{{key}}" id="{{key}}" [(ngModel)]="_appStatusFilters[key]">
-          {{applicationService.applicationStatuses[key]}}
+          {{applicationService.getStatusString(key)}}
         </label>
       </div>
     </fieldset>
@@ -167,4 +168,5 @@
     </fieldset>
 
   </div>
+
 </div>

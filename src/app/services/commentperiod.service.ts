@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -16,15 +15,15 @@ export class CommentPeriodService {
   readonly CLOSED = 'CL';
   readonly OPEN = 'OP';
 
-  public commentStatuses: Array<string> = [];
-  private commentPeriod: CommentPeriod = null;
+  private commentPeriodStatuses: Array<string> = []; // use helper to get these
+  private commentPeriod: CommentPeriod = null; // for caching
 
   constructor(private api: ApiService) {
-    // display strings
-    this.commentStatuses[this.NOT_STARTED] = 'Commenting Not Started';
-    this.commentStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
-    this.commentStatuses[this.CLOSED] = 'Commenting Closed';
-    this.commentStatuses[this.OPEN] = 'Commenting Open';
+    // user-friendly strings for display
+    this.commentPeriodStatuses[this.NOT_STARTED] = 'Commenting Not Started';
+    this.commentPeriodStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
+    this.commentPeriodStatuses[this.CLOSED] = 'Commenting Closed';
+    this.commentPeriodStatuses[this.OPEN] = 'Commenting Open';
   }
 
   // get all comment periods for the specified application id
@@ -87,38 +86,54 @@ export class CommentPeriodService {
     return (sortedPeriods.length > 0) ? sortedPeriods[0] : null;
   }
 
-  getStatus(period: CommentPeriod): string {
-    if (!period || !period.startDate || !period.endDate) {
-      return this.commentStatuses[this.NOT_OPEN];
+  /**
+   * Given a comment period, returns status abbreviation.
+   */
+  getStatusCode(commentPeriod: CommentPeriod): string {
+    if (!commentPeriod || !commentPeriod.startDate || !commentPeriod.endDate) {
+      return this.NOT_OPEN;
     }
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const startDate = new Date(period.startDate);
-    const endDate = new Date(period.endDate);
+    const startDate = new Date(commentPeriod.startDate);
+    const endDate = new Date(commentPeriod.endDate);
 
     if (endDate < today) {
-      return this.commentStatuses[this.CLOSED];
+      return this.CLOSED;
     } else if (startDate > today) {
-      return this.commentStatuses[this.NOT_STARTED];
+      return this.NOT_STARTED;
     } else {
-      return this.commentStatuses[this.OPEN];
+      return this.OPEN;
     }
   }
 
-  isNotOpen(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses[this.NOT_OPEN]);
+  /**
+     * Given a status code, returns user-friendly status string.
+     */
+  getStatusString(statusCode: string): string {
+    switch (statusCode) {
+      case this.NOT_STARTED: return this.commentPeriodStatuses[this.NOT_STARTED];
+      case this.NOT_OPEN: return this.commentPeriodStatuses[this.NOT_OPEN];
+      case this.CLOSED: return this.commentPeriodStatuses[this.CLOSED];
+      case this.OPEN: return this.commentPeriodStatuses[this.OPEN];
+    }
+    return null;
   }
 
-  isClosed(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses[this.CLOSED]);
+  isNotOpen(commentPeriod: CommentPeriod): boolean {
+    return (this.getStatusCode(commentPeriod) === this.NOT_OPEN);
   }
 
-  isNotStarted(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses[this.NOT_STARTED]);
+  isClosed(commentPeriod: CommentPeriod): boolean {
+    return (this.getStatusCode(commentPeriod) === this.CLOSED);
   }
 
-  isOpen(period: CommentPeriod): boolean {
-    return (this.getStatus(period) === this.commentStatuses[this.OPEN]);
+  isNotStarted(commentPeriod: CommentPeriod): boolean {
+    return (this.getStatusCode(commentPeriod) === this.NOT_STARTED);
+  }
+
+  isOpen(commentPeriod: CommentPeriod): boolean {
+    return (this.getStatusCode(commentPeriod) === this.OPEN);
   }
 }
