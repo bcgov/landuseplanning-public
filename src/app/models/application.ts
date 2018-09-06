@@ -45,6 +45,7 @@ export class Application {
 
   areaHectares: number; // calculated from all features
 
+  // TODO: delete isMatches (everywhere) when API performs filtering
   isMatches = true; // whether this application matches current filters
   isVisible = true; // whether this application is visible on map
 
