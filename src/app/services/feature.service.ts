@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -15,11 +14,11 @@ export class FeatureService {
   getByDTID(tantalisId: number): Observable<Feature[]> {
     return this.api.getFeaturesByTantalisId(tantalisId)
       .map(res => {
-        const feature = res.text() ? res.json() : [];
-        feature.forEach((feature, index) => {
+        const features = res.text() ? res.json() : [];
+        features.forEach((feature, index) => {
           feature[index] = new Feature(feature);
         });
-        return feature;
+        return features;
       })
       .catch(this.api.handleError);
   }
@@ -27,11 +26,11 @@ export class FeatureService {
   getByApplicationId(applicationId: string): Observable<Feature[]> {
     return this.api.getFeaturesByApplicationId(applicationId)
       .map(res => {
-        const feature = res.text() ? res.json() : [];
-        feature.forEach((feature, index) => {
+        const features = res.text() ? res.json() : [];
+        features.forEach((feature, index) => {
           feature[index] = new Feature(feature);
         });
-        return feature;
+        return features;
       })
       .catch(this.api.handleError);
   }

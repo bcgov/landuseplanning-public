@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Application } from 'app/models/application';
 
 @Pipe({
   name: 'objectFilter'
@@ -7,10 +6,11 @@ import { Application } from 'app/models/application';
 
 export class ObjectFilterPipe implements PipeTransform {
 
-  transform(value: Application[], q: string) {
+  transform(value: any[], q: string) {
     if (!q || q === '') {
       return value;
     }
+    // NB: item must have 'name' property
     return value.filter(item => -1 < item.name.toUpperCase().indexOf(q.toUpperCase()));
   }
 }

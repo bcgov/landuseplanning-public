@@ -9,13 +9,13 @@
         <section class="application-item">
           <div class="application-item__commenting row">
             <div class="col">
-              <label>{{commentPeriodService.getStatusString(commentPeriodService.getStatusCode(application.currentPeriod))}}</label>
+              <label>{{application['cpStatus']}}</label>
               <span *ngIf="application.currentPeriod">: {{application.currentPeriod.startDate | date:'mediumDate'}} - {{application.currentPeriod.endDate | date:'mediumDate'}}</span>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <p class="app-status">{{applicationService.getStatusString(application.status)}}</p>
+              <p class="app-status">{{application['appStatus']}}</p>
             </div>
           </div>
           <div class="row">

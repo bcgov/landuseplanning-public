@@ -52,7 +52,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
   private map: L.Map = null;
-  private fgList: L.FeatureGroup[] = []; // list of app FGs (each containing feature layers)
   private markerList: L.Marker[] = []; // list of markers
   private currentMarker: L.Marker = null; // for removing previous marker
   private markerClusterGroup = L.markerClusterGroup({
@@ -132,7 +131,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.map = L.map('map', {
-      zoomControl: false, // will be added manually (below)
+      zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
       zoomSnap: 0.1 // for greater granularity when fitting bounds
     });
@@ -260,11 +259,13 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
   private fitGlobalBounds(bounds: L.LatLngBounds) {
     // console.log('fitting bounds');
-    // use padding to adjust for list and/or filters
     const x = this.configService.isApplistListVisible ? this.applist.clientWidth : 0;
     const y = this.appfilters.clientHeight; // filters are always visible
     const fitBoundsOptions: L.FitBoundsOptions = {
+      // use top/left padding to adjust for list and/or filters
       paddingTopLeft: L.point(x, y),
+      // use bottom padding to keep shapes in bounds
+      paddingBottomRight: [0, 25],
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false
@@ -278,15 +279,11 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Resets map view to display all shape layers and markers.
+   * Resets map view to display all markers.
    */
   private resetView() {
     // console.log('resetting view');
     const globalFG = L.featureGroup();
-
-    for (const fg of this.fgList) {
-      fg.addTo(globalFG);
-    }
 
     for (const marker of this.markerList) {
       marker.addTo(globalFG);
@@ -303,71 +300,18 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('drawing map, allApps =', this.allApps);
     const globalFG = L.featureGroup();
 
-    // remove and clear all shape layers
-    for (const fg of this.fgList) {
-      fg.removeFrom(this.map);
-      fg.clearLayers();
-    }
-
-    // clear all markers
+    // clear all markers and empty the list
     this.markerClusterGroup.clearLayers();
-
-    // empty the lists
-    this.fgList.length = 0;
     this.markerList.length = 0;
 
     // TODO: delete isMatches (everywhere) when API performs filtering
     this.allApps.filter(a => a.isMatches).forEach(app => {
-      const appFG = L.featureGroup(); // layers for current app
-      appFG.dispositionId = app.tantalisID;
-
-      // THIS WILL BE TEMPORARILY DISABLED - DO NOT DELETE
-      // draw features for this app
-      app.features.forEach(f => {
-        const feature = JSON.parse(JSON.stringify(f));
-        // needs to be valid GeoJSON
-        delete f.geometry_name;
-        const featureObj: GeoJSON.Feature<any> = feature;
-        const layer = L.geoJSON(featureObj, {
-          filter: function (geoJsonFeature) {
-            return true; // FUTURE: make this feature invisible (not shown on map), if needed
-          }
-        });
-        // const popupOptions = {
-        //   maxWidth: 400, // worst case (Pixel 2)
-        //   className: 'map-popup-content',
-        //   autoPanPadding: L.point(40, 40)
-        // };
-        // const htmlContent =
-        //   '<div class="app-detail-title">'
-        //   + '<span class="client-name__label">Client Name</span>'
-        //   + '<span class="client-name__value">' + app.client + '</span>'
-        //   + '</div>'
-        //   + '<div class="app-details">'
-        //   + '<div>'
-        //   + '<span class="value">' + app.description + '</span>'
-        //   + '</div>'
-        //   + '<hr class="mt-3 mb-3">'
-        //   + '<ul class="nv-list">'
-        //   + '<li><span class="name">Crown Lands File #:</span><span class="value"' + featureObj.properties.CROWN_LANDS_FILE + '</span></li>'
-        //   + '<li><span class="name">Disposition Transaction ID:</span><span class="value">' + featureObj.properties.DISPOSITION_TRANSACTION_SID + '</span></li>'
-        //   + '<li><span class="name">Location:</span><span class="value">' + app.location + '</span></li>'
-        //   + '</ul>'
-        //   + '</div>';
-        // const popup = L.popup(popupOptions).setContent(htmlContent);
-        // layer.bindPopup(popup);
-        layer.addTo(appFG);
-      });
-      this.fgList.push(appFG); // save to list
-      // appFG.addTo(this.map); // add this FG to map
-
-      // add marker (centered on shapes for now)
-      const appBounds = appFG.getBounds();
-      if (appBounds && appBounds.isValid()) {
+      // add marker
+      if (app.centroid.length === 2) { // safety check
         const title = `${app.client}\n`
-          + `${this.applicationService.getStatusString(app.status)}\n`
+          + `${app['appStatus']}\n`
           + `${app.location}\n`;
-        const marker = L.marker(appBounds.getCenter(), { title: title })
+        const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
           .setIcon(markerIconYellow)
           .on('click', L.Util.bind(this.onMarkerClick, this, app));
         marker.dispositionId = app.tantalisID;

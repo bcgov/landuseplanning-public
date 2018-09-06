@@ -91,27 +91,21 @@ export class ApiService {
   getApplications() {
     const fields = [
       'agency',
+      'businessUnit',
+      'centroid',
       'cl_file',
       'client',
-      'code',
       'description',
-      'internal',
-      'internalID',
-      'centroid',
       'legalDescription',
-      'name',
-      'postID',
-      'publishDate',
-      'region',
-      'tantalisID',
-      'purpose',
-      'subpurpose',
-      'type',
-      'subtype',
-      'status',
-      'tenureStage',
       'location',
-      'businessUnit'
+      'publishDate',
+      'purpose',
+      'status',
+      'subpurpose',
+      'subtype',
+      'tantalisID',
+      'tenureStage',
+      'type'
     ];
     let queryString = 'application?fields=';
     _.each(fields, function (f) {
@@ -125,27 +119,21 @@ export class ApiService {
   getApplication(id: string) {
     const fields = [
       'agency',
+      'businessUnit',
+      'centroid',
       'cl_file',
       'client',
-      'code',
       'description',
-      'internal',
-      'internalID',
-      'centroid',
       'legalDescription',
-      'name',
-      'postID',
-      'publishDate',
-      'region',
-      'tantalisID',
-      'purpose',
-      'subpurpose',
-      'type',
-      'subtype',
-      'status',
-      'tenureStage',
       'location',
-      'businessUnit'
+      'publishDate',
+      'purpose',
+      'status',
+      'subpurpose',
+      'subtype',
+      'tantalisID',
+      'tenureStage',
+      'type'
     ];
     let queryString = 'application/' + id + '?fields=';
     _.each(fields, function (f) {
@@ -161,42 +149,27 @@ export class ApiService {
   //
   getFeaturesByTantalisId(tantalisID: number) {
     const fields = [
-      'type',
-      'tags',
+      'applicationID',
       'geometry',
       'geometryName',
       'properties',
-      'isDeleted',
-      'applicationID'
+      'type'
     ];
-    let queryString = 'feature?isDeleted=false&tantalisId=' + tantalisID + '&fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
+    const queryString = `feature?tantalisId=${tantalisID}&fields=${this.buildValues(fields)}`;
     return this.get(queryString);
   }
 
   getFeaturesByApplicationId(applicationId: string) {
     const fields = [
-      'type',
-      'tags',
+      'applicationID',
       'geometry',
       'geometryName',
       'properties',
-      'isDeleted',
-      'applicationID'
+      'type'
     ];
-    let queryString = 'feature?isDeleted=false&applicationId=' + applicationId + '&fields=';
-    _.each(fields, function (f) {
-      queryString += f + '|';
-    });
-    // Trim the last |
-    queryString = queryString.replace(/\|$/, '');
+    const queryString = `feature?applicationId=${applicationId}&fields=${this.buildValues(fields)}`;
     return this.get(queryString);
   }
-
   //
   // Organizations
   //
@@ -490,8 +463,17 @@ export class ApiService {
   }
 
   //
-  // Private
+  // Local helpers
   //
+  private buildValues(collection: any[]): string {
+    let values = '';
+    _.each(collection, function (a) {
+      values += a + '|';
+    });
+    // trim the last |
+    return values.replace(/\|$/, '');
+  }
+
   private get(apiRoute: string, options?: object) {
     return this.http.get(`${this.apiPath}/${apiRoute}`, options || null);
   }
