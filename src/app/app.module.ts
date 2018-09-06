@@ -32,6 +32,7 @@ import { DecisionService } from 'app/services/decision.service';
 import { DocumentService } from 'app/services/document.service';
 import { OrganizationService } from 'app/services/organization.service';
 import { SearchService } from 'app/services/search.service';
+import { FeatureService } from 'app/services/feature.service';
 import { ConfigService } from 'app/services/config.service';
 
 @NgModule({
@@ -67,6 +68,7 @@ import { ConfigService } from 'app/services/config.service';
     DocumentService,
     OrganizationService,
     SearchService,
+    FeatureService,
     ConfigService
   ],
   bootstrap: [
