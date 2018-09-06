@@ -10,10 +10,10 @@
 
         <div class="card card-body d-flex flex-row justify-content-between" *ngIf="application?.currentPeriod">
             <div>
-                <label class="title">{{commentPeriodService.getStatus(application.currentPeriod)}}</label>
+              <label class="title">{{commentPeriodService.getStatusString(commentPeriodService.getStatusCode(application.currentPeriod))}}</label>
                 <p class="mb-0">{{application.currentPeriod.startDate | date:'mediumDate'}} - {{application.currentPeriod.endDate | date:'mediumDate'}}</p>
             </div>
-            <div *ngIf="commentPeriodService.getStatus(application.currentPeriod) === commentPeriodService.commentStatuses['OPEN']">
+            <div *ngIf="commentPeriodService.isOpen(application.currentPeriod)">
                 <div class="badge badge-secondary p-3">{{daysRemaining}}</div>
             </div>
         </div>
