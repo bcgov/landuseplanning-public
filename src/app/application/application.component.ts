@@ -9,7 +9,7 @@ import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { AddCommentComponent } from './add-comment/add-comment.component';
-import { SearchService } from 'app/services/search.service';
+import { FeatureService } from 'app/services/feature.service';
 
 @Component({
   selector: 'app-application',
@@ -40,7 +40,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private searchService: SearchService,
+    private featureService: FeatureService,
     private applicationService: ApplicationService, // used in template
     private commentPeriodService: CommentPeriodService // used in template
   ) { }
@@ -91,7 +91,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
               },
             });
 
-            this.searchService.getByDTID(this.application.tantalisID, true)
+            this.featureService.getByDTID(this.application.tantalisID)
               .takeUntil(this.ngUnsubscribe)
               .subscribe(
                 features => {
