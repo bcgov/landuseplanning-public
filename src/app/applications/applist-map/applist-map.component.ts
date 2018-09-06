@@ -1,10 +1,12 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
-import { Application } from 'app/models/application';
-import { ConfigService } from 'app/services/config.service';
 import { Subject } from 'rxjs/Subject';
 import 'leaflet';
 import 'leaflet.markercluster';
 import * as _ from 'lodash';
+
+import { Application } from 'app/models/application';
+import { ApplicationService } from 'app/services/application.service';
+import { ConfigService } from 'app/services/config.service';
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
@@ -56,12 +58,13 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
     // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
   });
-  private gotChanges = false; // to reduce initial map change event handling
+  private gotChanges = false; // to reduce initial map event handling
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
 
   constructor(
+    public applicationService: ApplicationService,
     public configService: ConfigService
   ) { }
 
@@ -147,9 +150,14 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // NB: moveend is called after zoomstart, movestart and resize
     this.map.on('moveend', function () {
       // console.log('moveend');
-      // update list of visible apps
-      this.setVisibleDebounced();
+      // only set visible after init
+      if (this.gotChanges) {
+        this.setVisibleDebounced();
+      }
     }, this);
+
+    // add markers group
+    this.map.addLayer(this.markerClusterGroup);
 
     // add reset view control
     this.map.addControl(new resetViewControl());
@@ -189,7 +197,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (!changes.allApps.firstChange && changes.allApps.currentValue) {
+    if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
       // console.log('map: got changed apps from applications');
 
       this.gotChanges = true;
@@ -216,35 +224,30 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
    */
   private setVisible() {
     // console.log('setting visible');
-    const bounds = this.map.getBounds();
+    const mapBounds = this.map.getBounds();
 
-    // central place to save map bounds / center /zoom
-    this.configService.mapBounds = bounds;
-    this.configService.mapCenter = this.map.getCenter();
-    this.configService.mapZoom = this.map.getZoom();
+    // FUTURE: central place to save map bounds / center /zoom ?
+    // this.configService.mapBounds = mapBounds;
+    // this.configService.mapCenter = this.map.getCenter();
+    // this.configService.mapZoom = this.map.getZoom();
 
-    for (const fg of this.fgList) {
-      const fgBounds = fg.getBounds();
+    for (const marker of this.markerList) {
+      const app = _.find(this.allApps, { tantalisID: marker.dispositionId });
+      if (app) {
+        const markerLatLng = marker.getLatLng();
 
-      if (!this.configService.doUpdateResults) {
-        // show all items even if map moves
-        const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
-        if (app) { app.isVisible = true; }
+        if (!this.configService.doUpdateResults) {
+          // show all items even if map moves
+          app.isVisible = true;
 
-      } else if (fgBounds && !fgBounds.isValid()) {
-        // item without features - make item visible
-        const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
-        if (app) { app.isVisible = true; }
+        } else if (mapBounds.contains(markerLatLng)) {
+          // map contains marker - make item visible
+          app.isVisible = true;
 
-      } else if (fgBounds && fgBounds.isValid() && bounds.intersects(fgBounds)) {
-        // bounds intersect - make item visible
-        const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
-        if (app) { app.isVisible = true; }
-
-      } else {
-        // invalid bounds, or bounds don't intersect - make item hidden
-        const app = _.find(this.allApps, { tantalisID: fg.dispositionId });
-        if (app) { app.isVisible = false; }
+        } else {
+          // map doesn't contains marker - make item hidden and unload it from list
+          app.isVisible = false;
+        }
       }
     }
 
@@ -271,7 +274,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Resets map view to display all apps.
+   * Resets map view to display all shape layers and markers.
    */
   private resetView() {
     // console.log('resetting view');
@@ -279,6 +282,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
     for (const fg of this.fgList) {
       fg.addTo(globalFG);
+    }
+
+    for (const marker of this.markerList) {
+      marker.addTo(globalFG);
     }
 
     // fit the global bounds
@@ -292,14 +299,13 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('drawing map, allApps =', this.allApps);
     const globalFG = L.featureGroup();
 
-    // remove and clear all layers for all apps
+    // remove and clear all shape layers
     for (const fg of this.fgList) {
       fg.removeFrom(this.map);
       fg.clearLayers();
     }
 
-    // remove and clear all markers
-    this.markerClusterGroup.removeFrom(this.map);
+    // clear all markers
     this.markerClusterGroup.clearLayers();
 
     // empty the lists
@@ -322,62 +328,54 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
             return true; // FUTURE: make this feature invisible (not shown on map), if needed
           }
         });
-        const popupOptions = {
-          maxWidth: 400, // worst case (Pixel 2)
-          className: 'map-popup-content',
-          autoPanPadding: L.point(40, 40)
-        };
-        const htmlContent =
-          '<div class="app-detail-title">'
-          + '<span class="client-name__label">Client Name</span>'
-          + '<span class="client-name__value">' + app.client + '</span>'
-          + '</div>'
-          + '<div class="app-details">'
-          + '<div>'
-          + '<span class="value">' + app.description + '</span>'
-          + '</div>'
-          + '<hr class="mt-3 mb-3">'
-          + '<ul class="nv-list">'
-          + '<li><span class="name">Crown Lands File #:</span><span class="value"' + featureObj.properties.CROWN_LANDS_FILE + '</span></li>'
-          + '<li><span class="name">Disposition Transaction ID:</span><span class="value">' + featureObj.properties.DISPOSITION_TRANSACTION_SID + '</span></li>'
-          + '<li><span class="name">Location:</span><span class="value">' + app.location + '</span></li>'
-          + '</ul>'
-          + '</div>';
-        const popup = L.popup(popupOptions).setContent(htmlContent);
-        layer.bindPopup(popup);
+        // const popupOptions = {
+        //   maxWidth: 400, // worst case (Pixel 2)
+        //   className: 'map-popup-content',
+        //   autoPanPadding: L.point(40, 40)
+        // };
+        // const htmlContent =
+        //   '<div class="app-detail-title">'
+        //   + '<span class="client-name__label">Client Name</span>'
+        //   + '<span class="client-name__value">' + app.client + '</span>'
+        //   + '</div>'
+        //   + '<div class="app-details">'
+        //   + '<div>'
+        //   + '<span class="value">' + app.description + '</span>'
+        //   + '</div>'
+        //   + '<hr class="mt-3 mb-3">'
+        //   + '<ul class="nv-list">'
+        //   + '<li><span class="name">Crown Lands File #:</span><span class="value"' + featureObj.properties.CROWN_LANDS_FILE + '</span></li>'
+        //   + '<li><span class="name">Disposition Transaction ID:</span><span class="value">' + featureObj.properties.DISPOSITION_TRANSACTION_SID + '</span></li>'
+        //   + '<li><span class="name">Location:</span><span class="value">' + app.location + '</span></li>'
+        //   + '</ul>'
+        //   + '</div>';
+        // const popup = L.popup(popupOptions).setContent(htmlContent);
+        // layer.bindPopup(popup);
         layer.addTo(appFG);
       });
       this.fgList.push(appFG); // save to list
-      appFG.addTo(this.map); // add this FG to map
-      appFG.addTo(globalFG); // for bounds
-      // appFG.on('click', L.Util.bind(this._onFeatureGroupClick, this, app)); // FUTURE: for FG action, if needed
+      // appFG.addTo(this.map); // add this FG to map
 
-      // add marker
+      // add marker (centered on shapes for now)
       const appBounds = appFG.getBounds();
       if (appBounds && appBounds.isValid()) {
-        const marker = L.marker(appBounds.getCenter(), { title: app.client })
+        const title = `${app.client}\n`
+          + `${this.applicationService.getStatusString(app.status)}\n`
+          + `${app.location}\n`;
+        const marker = L.marker(appBounds.getCenter(), { title: title })
           .setIcon(markerIconYellow)
-          .on('click', L.Util.bind(this._onMarkerClick, this, app));
+          .on('click', L.Util.bind(this.onMarkerClick, this, app));
         marker.dispositionId = app.tantalisID;
         this.markerList.push(marker); // save to list
-        marker.addTo(this.markerClusterGroup);
+        this.markerClusterGroup.addLayer(marker); // save to marker/clusters layer
       }
     });
 
-    // add markers group to map
-    this.markerClusterGroup.addTo(this.map);
-
-    // fit the global bounds
-    this.fitGlobalBounds(globalFG.getBounds());
+    // fit view to shapes/markers
+    this.resetView();
   }
 
-  private _onFeatureGroupClick(...args: any[]) {
-    // const app = args[0] as Application;
-    // const fg = args[1].target as L.FeatureGroup;
-    // TODO: implement, if needed
-  }
-
-  private _onMarkerClick(...args: any[]) {
+  private onMarkerClick(...args: any[]) {
     const app = args[0] as Application;
     // const marker = args[1].target as L.Marker;
 
@@ -432,8 +430,10 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     setTimeout(() => {
       // NB: change detection will update all components bound to apps list
 
-      // (re)draw the matching apps
-      this.drawMap();
+      // (re)draw the matching apps (only after init)
+      if (this.gotChanges) {
+        this.drawMap();
+      }
     }, 0);
   }
 
