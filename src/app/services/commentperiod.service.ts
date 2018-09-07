@@ -79,11 +79,9 @@ export class CommentPeriodService {
       .catch(this.api.handleError);
   }
 
-  // returns current (latest) period
-  // assumes if there's an open period, there isn't also future one
+  // returns first period - multiple comment periods are currently not suported
   getCurrent(periods: CommentPeriod[]): CommentPeriod {
-    const sortedPeriods = periods.sort((a, b) => a.startDate < b.startDate ? 1 : 0);
-    return (sortedPeriods.length > 0) ? sortedPeriods[0] : null;
+    return (periods.length > 0) ? periods[0] : null;
   }
 
   /**

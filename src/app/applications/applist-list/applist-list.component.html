@@ -37,7 +37,7 @@
               </li>
               <li>
                 <span class="key">Status</span>
-                <span class="value">{{item.appStatus}}</span>
+                <span class="value">{{item['appStatus']}}</span>
               </li>
             </ul>
 
@@ -50,7 +50,7 @@
                     'badge-secondary': commentPeriodService.isNotOpen(item.currentPeriod),
                     'badge-danger': commentPeriodService.isClosed(item.currentPeriod),
                     'badge-success': commentPeriodService.isOpen(item.currentPeriod)}">
-                  {{item.cpStatus}}
+                  {{item['cpStatus']}}
                   <span class="date" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
                     :&nbsp;{{item.currentPeriod.startDate | date:'mediumDate'}}
                   </span>

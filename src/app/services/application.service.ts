@@ -105,12 +105,12 @@ export class ApplicationService {
         }
 
         // replace \\n (JSON format) with newlines in each application
-        applications.forEach((application, i) => {
-          if (applications[i].description) {
-            applications[i].description = applications[i].description.replace(/\\n/g, '\n');
+        applications.forEach((application) => {
+          if (application.description) {
+            application.description = application.description.replace(/\\n/g, '\n');
           }
-          if (applications[i].legalDescription) {
-            applications[i].legalDescription = applications[i].legalDescription.replace(/\\n/g, '\n');
+          if (application.legalDescription) {
+            application.legalDescription = application.legalDescription.replace(/\\n/g, '\n');
           }
         });
 
@@ -119,20 +119,20 @@ export class ApplicationService {
         // FUTURE: now get the organization for each application
 
         // now get the current comment period for each application
-        applications.forEach((application, i) => {
-          promises.push(this.commentPeriodService.getAllByApplicationId(applications[i]._id)
+        applications.forEach((application) => {
+          promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
             .toPromise()
             .then(periods => {
               const cp = this.commentPeriodService.getCurrent(periods);
-              applications[i].currentPeriod = cp;
-              // derive comment period status for app list display
-              applications[i]['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+              application.currentPeriod = cp;
+              // derive comment period status for display
+              application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
             })
           );
         });
 
         // now get the referenced data (features)
-        applications.forEach((application, i) => {
+        applications.forEach((application) => {
           promises.push(this.featureService.getByApplicationId(application._id)
             .toPromise()
             .then(features => {
@@ -146,8 +146,11 @@ export class ApplicationService {
                 }
               });
 
-              // derive application status for app list display
-              application['appStatus'] = this.getStatusString(application.status);
+              // derive region code
+              application.region = this.getRegionCode(application.businessUnit);
+
+              // derive application status for display
+              application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
             })
           );
         });
@@ -213,7 +216,6 @@ export class ApplicationService {
             // derive comment period status for display
             application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
           })
-
         );
 
         // now get the decision
@@ -223,7 +225,7 @@ export class ApplicationService {
         );
 
         // now get the shapes
-        promises.push(this.featureService.getByDTID(application.tantalisID)
+        promises.push(this.featureService.getByApplicationId(application._id)
           .toPromise()
           .then(features => {
             application.features = features;
@@ -236,8 +238,11 @@ export class ApplicationService {
               }
             });
 
+            // derive region code
+            application.region = this.getRegionCode(application.businessUnit);
+
             // derive application status for display
-            application['appStatus'] = this.getStatusString(application.status);
+            application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
           })
         );
 
@@ -331,19 +336,19 @@ export class ApplicationService {
   }
 
   /**
-   * Given a region code, returns user-friendly region string.
+   * Returns region abbreviation.
    */
-  getRegionString(regionCode: string): string {
-    switch (regionCode) {
-      case this.CARIBOO: return this.regions[this.CARIBOO];
-      case this.KOOTENAY: return this.regions[this.KOOTENAY];
-      case this.LOWER_MAINLAND: return this.regions[this.LOWER_MAINLAND];
-      case this.OMENICA: return this.regions[this.OMENICA];
-      case this.PEACE: return this.regions[this.PEACE];
-      case this.SKEENA: return this.regions[this.SKEENA];
-      case this.SOUTHERN_INTERIOR: return this.regions[this.SOUTHERN_INTERIOR];
-      case this.VANCOUVER_ISLAND: return this.regions[this.VANCOUVER_ISLAND];
+  getRegionCode(businessUnit: string): string {
+    if (businessUnit) {
+      return businessUnit.toUpperCase().split(' ')[0];
     }
     return null;
+  }
+
+  /**
+   * Given a region code, returns user-friendly region string.
+   */
+  getRegionString(abbrev: string): string {
+    return this.regions[abbrev]; // returns null if not found
   }
 }

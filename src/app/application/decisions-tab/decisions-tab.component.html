@@ -1,7 +1,7 @@
 <div class="tab-pane" role="tabpanel">
     <section class="tab-section" *ngIf="application">
         <div class="status mb-3">
-          {{applicationService.getStatusString(application.status)}}
+          {{application['appStatus']}}
         </div>
 
         <div>
