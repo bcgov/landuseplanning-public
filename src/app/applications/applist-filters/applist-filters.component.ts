@@ -264,20 +264,22 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     // check for matching Application Status
+    const appStatusCode = this.applicationService.getStatusCode(item.status);
     retVal = retVal && (
       allAppStatuses ||
-      (this.appStatusFilters[this.applicationService.ACCEPTED] && this.applicationService.isAccepted(item.status)) ||
-      (this.appStatusFilters[this.applicationService.DECISION_MADE] && this.applicationService.isDecision(item.status) && !this.applicationService.isCancelled(item.status)) ||
-      (this.appStatusFilters[this.applicationService.CANCELLED] && this.applicationService.isCancelled(item.status)) ||
-      (this.appStatusFilters[this.applicationService.ABANDONED] && this.applicationService.isAbandoned(item.status)) ||
-      (this.appStatusFilters[this.applicationService.DISPOSITION_GOOD_STANDING] && this.applicationService.isDispGoodStanding(item.status)) ||
-      (this.appStatusFilters[this.applicationService.SUSPENDED] && this.applicationService.isSuspended(item.status))
+      (this.appStatusFilters[this.applicationService.ACCEPTED] && this.applicationService.isAccepted(appStatusCode)) ||
+      (this.appStatusFilters[this.applicationService.DECISION_MADE] && this.applicationService.isDecision(appStatusCode) && !this.applicationService.isCancelled(appStatusCode)) ||
+      (this.appStatusFilters[this.applicationService.CANCELLED] && this.applicationService.isCancelled(appStatusCode)) ||
+      (this.appStatusFilters[this.applicationService.ABANDONED] && this.applicationService.isAbandoned(appStatusCode)) ||
+      (this.appStatusFilters[this.applicationService.DISPOSITION_GOOD_STANDING] && this.applicationService.isDispGoodStanding(appStatusCode)) ||
+      (this.appStatusFilters[this.applicationService.SUSPENDED] && this.applicationService.isSuspended(appStatusCode))
     );
 
     // check for matching Applicant
+    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
     retVal = retVal && (
       !this.applicantFilter || !item.client ||
-      item.client.toUpperCase().indexOf(this.applicantFilter.toUpperCase()) > -1
+      item.client.toUpperCase().indexOf(applicantFilter.toUpperCase()) > -1
     );
 
     // check for matching CL File
@@ -292,11 +294,12 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       item.tantalisID.toString().indexOf(this.dispIdFilter.toString()) > -1
     );
 
-    // check for matching Purpose or Sub-purpose
+    // check for matching Purpose / Sub-purpose
+    const purposeSubpurpose = `${item.purpose} / ${item.subpurpose}`;
+    const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
     retVal = retVal && (
       !this.purposeFilter || !item.purpose || !item.subpurpose ||
-      item.purpose.toUpperCase().indexOf(this.purposeFilter.toUpperCase()) > -1 ||
-      item.subpurpose.toUpperCase().indexOf(this.purposeFilter.toUpperCase()) > -1
+      purposeSubpurpose.toUpperCase().indexOf(purposeFilter.toUpperCase()) > -1
     );
 
     return retVal;
@@ -335,8 +338,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    if (this.applicantFilter) {
-      params['applicant'] = this.applicantFilter;
+    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
+    if (applicantFilter) {
+      params['applicant'] = applicantFilter;
     }
 
     // check length in case user entered then deleted value
@@ -349,8 +353,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       params['dispId'] = this.dispIdFilter;
     }
 
-    if (this.purposeFilter) {
-      params['purpose'] = this.purposeFilter;
+    const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
+    if (purposeFilter) {
+      params['purpose'] = purposeFilter;
     }
 
     // change browser URL without reloading page (so any query params are saved in history)
@@ -460,7 +465,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private applicantFilterCount(): number {
-    return (this.applicantFilter && this.applicantFilter.length > 0) ? 1 : 0;
+    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
+    return applicantFilter ? 1 : 0;
   }
 
   private clFileFilterCount(): number {
@@ -472,7 +478,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private purposeFilterCount(): number {
-    return (this.purposeFilter && this.purposeFilter.length > 0) ? 1 : 0;
+    const purposeFilter = this.purposeFilter && this.purposeFilter.trim();  // returns null or empty
+    return purposeFilter ? 1 : 0;
   }
 
   public filterCount(): number {
