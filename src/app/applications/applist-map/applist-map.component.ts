@@ -1,5 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
-import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
+import { Component, OnInit, OnChanges, OnDestroy, Input, ApplicationRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'leaflet';
 import 'leaflet.markercluster';
@@ -8,6 +7,7 @@ import * as _ from 'lodash';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
+import { AppDetailPopupComponent } from 'app/applications/app-detail-popup/app-detail-popup.component';
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
@@ -50,7 +50,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() applist;
   @Input() appfilters;
 
-  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
   private map: L.Map = null;
   private markerList: L.Marker[] = []; // list of markers
   private currentMarker: L.Marker = null; // for removing previous marker
@@ -65,9 +64,11 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
 
   constructor(
-    public snackBar: MatSnackBar,
+    private appRef: ApplicationRef,
     public applicationService: ApplicationService,
-    public configService: ConfigService
+    public configService: ConfigService,
+    private injector: Injector,
+    private resolver: ComponentFactoryResolver
   ) { }
 
   // // for creating custom cluster icon
@@ -331,44 +332,23 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     this.applist.toggleCurrentApp(app); // update selected item in app list
 
     const popupOptions = {
-      maxWidth: 400, // worst case (Pixel 2)
-      className: 'map-popup-content', // FUTURE: for better styling control, if needed
+      maxWidth: 400,
+      className: 'map-popup-content',
       autoPanPadding: L.point(40, 40)
     };
-    // NB: although this currently takes about a second to display, when we use a
-    //     component/template for the popup then the data will "fill in" as we get it
-    this.snackBarRef = this.snackBar.open('Loading application ...');
-    this.applicationService.getById(app._id)
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(
-        application => {
-          this.snackBarRef.dismiss();
-          const htmlContent =
-            '<div class="app-detail-title">'
-            + '<span class="client-name__label">Client Name</span>'
-            + '<span class="client-name__value">' + (application.client || '-') + '</span>'
-            + '</div>'
-            + '<div class="app-details">'
-            + '<div>'
-            + '<span class="value">' + (application.description || '-') + '</span>'
-            + '</div>'
-            + '<hr class="mt-3 mb-3">'
-            + '<ul class="nv-list">'
-            + '<li><span class="name">Crown Lands File #:</span><span class="value">' + (application.cl_file || '-') + '</span></li>'
-            + '<li><span class="name">Disposition Transaction ID:</span><span class="value">' + (application.tantalisID || '-') + '</span></li>'
-            + '<li><span class="name">Location:</span><span class="value">' + (application.location || '-') + '</span></li>'
-            + '</ul>'
-            + '</div>';
-          L.popup(popupOptions)
-            .setLatLng(marker.getLatLng())
-            .setContent(htmlContent)
-            .openOn(this.map);
-        },
-        error => {
-          this.snackBarRef = this.snackBar.open('Uh-oh, couldn\'t load application', null, { duration: 3000 });
-          console.log(error);
-        }
-      );
+
+    // compile marker popup
+    const compFactory = this.resolver.resolveComponentFactory(AppDetailPopupComponent);
+    const compRef = compFactory.create(this.injector);
+    compRef.instance.app = app;
+    this.appRef.attachView(compRef.hostView);
+    compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
+    const div = document.createElement('div').appendChild(compRef.location.nativeElement);
+
+    L.popup(popupOptions)
+      .setLatLng(marker.getLatLng())
+      .setContent(div)
+      .openOn(this.map);
   }
 
   /**

@@ -5,14 +5,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { RouterModule } from '@angular/router';
 
-// modules
+// Modules
 import { SharedModule } from 'app/shared.module';
 
-// components
+// Components
 import { ApplicationsComponent } from './applications.component';
 import { ApplistListComponent } from './applist-list/applist-list.component';
 import { ApplistMapComponent } from './applist-map/applist-map.component';
 import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
+import { AppDetailPopupComponent } from './app-detail-popup/app-detail-popup.component';
 
 @NgModule({
   imports: [
@@ -27,10 +28,11 @@ import { ApplistFiltersComponent } from './applist-filters/applist-filters.compo
     ApplicationsComponent,
     ApplistListComponent,
     ApplistMapComponent,
-    ApplistFiltersComponent
+    ApplistFiltersComponent,
+    AppDetailPopupComponent
   ],
-  exports: [
-    // ApplicationsComponent // DON'T NEED TO EXPORT?
+  entryComponents: [
+    AppDetailPopupComponent
   ]
 })
 
