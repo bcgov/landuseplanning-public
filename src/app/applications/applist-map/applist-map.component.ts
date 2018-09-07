@@ -331,13 +331,23 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
 
     // this.applist.toggleCurrentApp(app); // update selected item in app list // FUTURE ?
 
+    // if there's already a popup, delete it
+    let popup = marker.getPopup();
+    if (popup) {
+      const wasOpen = popup.isOpen();
+      popup.remove();
+      marker.unbindPopup();
+      if (wasOpen) { return; }
+    }
+
     const popupOptions = {
       maxWidth: 400,
       className: 'map-popup-content',
-      autoPanPadding: L.point(40, 40)
+      autoPanPaddingTopLeft: L.point(40, 95),
+      autoPanPaddingBottomRight: L.point(60, 0)
     };
 
-    // compile marker popup
+    // compile marker popup component
     const compFactory = this.resolver.resolveComponentFactory(AppDetailPopupComponent);
     const compRef = compFactory.create(this.injector);
     compRef.instance.app = app;
@@ -345,10 +355,12 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
     const div = document.createElement('div').appendChild(compRef.location.nativeElement);
 
-    L.popup(popupOptions)
+    popup = L.popup(popupOptions)
       .setLatLng(marker.getLatLng())
-      .setContent(div)
-      .openOn(this.map);
+      .setContent(div);
+
+    // bind popup to marker so it automatically closes when marker is removed
+    marker.bindPopup(popup).openPopup();
   }
 
   /**
