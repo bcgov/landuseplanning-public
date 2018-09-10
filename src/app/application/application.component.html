@@ -9,13 +9,13 @@
         <section class="application-item">
           <div class="application-item__commenting row">
             <div class="col">
-              <label>{{application['cpStatus']}}</label>
+              <label>{{application['cpStatus'] || 'Unknown Comment Period Status'}}</label>
               <span *ngIf="application.currentPeriod">: {{application.currentPeriod.startDate | date:'mediumDate'}} - {{application.currentPeriod.endDate | date:'mediumDate'}}</span>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <p class="app-status">{{application['appStatus']}}</p>
+              <p class="app-status">{{application['appStatus'] || 'Unknown Application Status'}}</p>
             </div>
           </div>
           <div class="row">

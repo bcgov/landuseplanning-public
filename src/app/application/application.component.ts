@@ -51,8 +51,8 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
           if (data.application) {
             this.application = data.application;
           } else {
-            // application not found --> navigate back to application list
             alert('Uh-oh, couldn\'t load application');
+            // application not found --> navigate back to application list
             this.router.navigate(['/applications']);
           }
         }
@@ -152,7 +152,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     // add scale control
     L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-    // draw features for this app
+    // draw application features
     this.application.features.forEach(f => {
       const feature = JSON.parse(JSON.stringify(f));
       // needs to be valid GeoJSON

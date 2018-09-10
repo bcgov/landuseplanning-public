@@ -15,11 +15,22 @@ import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 
+export interface FiltersType {
+  regionFilters: object;
+  cpStatusFilters: object;
+  appStatusFilters: object;
+  applicantFilter: string;
+  clFileFilter: string;
+  dispIdFilter: string;
+  purposeFilter: string;
+}
+
 @Component({
   selector: 'app-applist-filters',
   templateUrl: './applist-filters.component.html',
   styleUrls: ['./applist-filters.component.scss']
 })
+
 export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
   @Input() allApps: Array<Application> = []; // from applications component
@@ -160,6 +171,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
       // store keys for faster filter lookahead
       // don't include empty results, then sort results, and then remove duplicates
+      // NB: these look only at currently-loaded apps -- not all the possible apps in the system
       this.applicantKeys = _.sortedUniq(_.compact(this.allApps.map(app => app.client ? app.client.toUpperCase() : null)).sort());
       this.clFileKeys = _.sortedUniq(_.compact(this.allApps.map(app => app.cl_file)).sort());
       this.dispIdKeys = _.compact(this.allApps.map(app => app.tantalisID)).sort(); // should already be unique
@@ -180,9 +192,27 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  // FOR FUTURE USE
+  public getFilters(): FiltersType {
+    return {
+      regionFilters: this.regionFilters,
+      cpStatusFilters: this.cpStatusFilters,
+      appStatusFilters: this.appStatusFilters,
+      applicantFilter: this.applicantFilter && this.applicantFilter.trim(),
+      clFileFilter: this.clFileFilter ? this.clFileFilter.toString() : null,
+      dispIdFilter: this.dispIdFilter ? this.dispIdFilter.toString() : null,
+      purposeFilter: this.purposeFilter && this.purposeFilter.trim()
+    };
+  }
+
   //
   // The following are to "Apply" the temporary filters: copy the temporary values to the actual variables, etc.
   //
+  public applyRegionFilters() {
+    this.regionFilters = { ...this._regionFilters };
+    this.internalApplyAllFilters(true);
+  }
+
   public applyCpStatusFilters() {
     this.cpStatusFilters = { ...this._cpStatusFilters };
     this.internalApplyAllFilters(true);
@@ -199,6 +229,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public applyAllFilters() {
+    this.regionFilters = { ...this._regionFilters };
     this.cpStatusFilters = { ...this._cpStatusFilters };
     this.appStatusFilters = { ...this._appStatusFilters };
     this.applicantFilter = this._applicantFilter;
@@ -320,20 +351,20 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
     this.cpStatusKeys.forEach(key => {
       if (this.cpStatusFilters[key]) {
-        if (!params['cpStatus']) {
-          params['cpStatus'] = key;
+        if (!params['cpStatuses']) {
+          params['cpStatuses'] = key;
         } else {
-          params['cpStatus'] += ',' + key;
+          params['cpStatuses'] += ',' + key;
         }
       }
     });
 
     this.appStatusKeys.forEach(key => {
       if (this.appStatusFilters[key]) {
-        if (!params['appStatus']) {
-          params['appStatus'] = key;
+        if (!params['appStatuses']) {
+          params['appStatuses'] = key;
         } else {
-          params['appStatus'] += ',' + key;
+          params['appStatuses'] += ',' + key;
         }
       }
     });
@@ -365,6 +396,10 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   //
   // The following are to "Cancel" the temporary filters: just reset the values.
   //
+  public cancelRegionFilters() {
+    this._regionFilters = { ...this.regionFilters };
+  }
+
   public cancelCpStatusFilters() {
     this._cpStatusFilters = { ...this.cpStatusFilters };
   }
@@ -374,6 +409,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public cancelAllFilters() {
+    this._regionFilters = { ...this.regionFilters };
     this._cpStatusFilters = { ...this.cpStatusFilters };
     this._appStatusFilters = { ...this.appStatusFilters };
     this._applicantFilter = this.applicantFilter;
@@ -389,20 +425,20 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // (re)sets all filters from current param map
   private internalResetAllFilters(doApply: boolean) {
     if (this.paramMap) {
-      // set region filters
+      // set region filters according to current param options
       const regions = (this.paramMap.get('regions') || '').split(',');
       this.regionKeys.forEach(key => {
         this.regionFilters[key] = regions.includes(key);
       });
 
       // set cpStatus filters according to current param options
-      const cpStatuses = (this.paramMap.get('cpStatus') || '').split(',');
+      const cpStatuses = (this.paramMap.get('cpStatuses') || '').split(',');
       this.cpStatusKeys.forEach(key => {
         this.cpStatusFilters[key] = cpStatuses.includes(key);
       });
 
       // set appStatus filters according to current param options
-      const appStatuses = (this.paramMap.get('appStatus') || '').split(',');
+      const appStatuses = (this.paramMap.get('appStatuses') || '').split(',');
       this.appStatusKeys.forEach(key => {
         this.appStatusFilters[key] = appStatuses.includes(key);
       });
@@ -413,6 +449,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       this.purposeFilter = this.paramMap.get('purpose');
 
       // copy all data from actual to temporary properties
+      this._regionFilters = { ...this.regionFilters };
       this._cpStatusFilters = { ...this.cpStatusFilters };
       this._appStatusFilters = { ...this.appStatusFilters };
       this._applicantFilter = this.applicantFilter;
@@ -431,6 +468,12 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   //
   // The following are to "Clear" the temporary filters.
   //
+  public clearRegionFilters() {
+    this.regionKeys.forEach(key => {
+      this._regionFilters[key] = false;
+    });
+  }
+
   public clearCpStatusFilters() {
     this.cpStatusKeys.forEach(key => {
       this._cpStatusFilters[key] = false;
@@ -444,6 +487,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public clearAllFilters(doApply: boolean) {
+    this.clearRegionFilters();
     this.clearCpStatusFilters();
     this.clearAppStatusFilters();
     this._applicantFilter = null;
@@ -454,6 +498,10 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     if (doApply) {
       this.applyAllFilters();
     }
+  }
+
+  public regionCount(): number {
+    return this.regionKeys.filter(key => this.regionFilters[key]).length;
   }
 
   public cpStatusCount(): number {
@@ -483,12 +531,17 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public filterCount(): number {
-    return this.cpStatusCount()
+    return this.regionCount()
+      + this.cpStatusCount()
       + this.appStatusCount()
       + this.applicantFilterCount()
       + this.clFileFilterCount()
       + this.dispIdFilterCount()
       + this.purposeFilterCount();
+  }
+
+  public regionHasChanges(): boolean {
+    return !_.isEqual(this._regionFilters, this.regionFilters);
   }
 
   public cpStatusHasChanges(): boolean {

@@ -1,10 +1,6 @@
 <div class="applications-view" [ngClass]="configService.isApplistListVisible ? 'app-list-open':'app-list-closed'">
   <h1 class="sr-only">Public Review and Comment Applications</h1>
 
-  <div class="spinner-container" *ngIf="loading">
-    <div class="spinner-new rotating"></div>
-  </div>
-
   <app-applist-filters class="app-filters" #appfilters
     [allApps]="allApps"
     (updateMatching)="onUpdateMatching($event)">

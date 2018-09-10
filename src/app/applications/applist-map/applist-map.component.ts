@@ -265,8 +265,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     const fitBoundsOptions: L.FitBoundsOptions = {
       // use top/left padding to adjust for list and/or filters
       paddingTopLeft: L.point(x, y),
-      // use bottom padding to keep shapes in bounds
-      paddingBottomRight: [0, 25],
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false

@@ -78,9 +78,9 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
                 }
               );
           } else {
-            // application not found --> navigate back to application list
             alert('Uh-oh, couldn\'t load application');
             this.loading = false;
+            // application not found --> navigate back to application list
             this.router.navigate(['/applications']);
           }
         }
