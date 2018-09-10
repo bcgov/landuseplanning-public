@@ -18,7 +18,6 @@ export class AppComponent implements OnInit, OnDestroy {
   isSafari: boolean;
   loggedIn: string;
   hostname: string;
-  private today: Date;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -32,9 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // used for sharing links
     this.hostname = api.apiPath; // TODO: Wrong
-
-    const now = new Date();
-    this.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     PageScrollConfig.defaultScrollOffset = 50;
     PageScrollConfig.defaultEasingLogic = {
@@ -72,14 +68,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  // show banner anew every day
-  showBanner(): boolean {
-    return (!window.localStorage['hidePrcPilotBannerDate'] || new Date(window.localStorage['hidePrcPilotBannerDate']) < this.today);
-  }
-
-  hideBanner() {
-    window.localStorage['hidePrcPilotBannerDate'] = this.today;
   }
 }
