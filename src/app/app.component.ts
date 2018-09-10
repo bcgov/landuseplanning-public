@@ -73,4 +73,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+  // show banner anew every day
+  showBanner(): boolean {
+    return (!window.localStorage['hidePrcPilotBannerDate'] || new Date(window.localStorage['hidePrcPilotBannerDate']) < this.today);
+  }
+
+  hideBanner() {
+    window.localStorage['hidePrcPilotBannerDate'] = this.today;
+  }
 }
