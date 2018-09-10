@@ -153,9 +153,9 @@ main {
 }
 
 .content-btn-alt {
-  padding: 0.6rem 1rem;
-  color: #5091cd;
-  border: 2px solid #5091cd;
+  padding: 0.5rem 1rem;
+  color: #0275d8;
+  border: 2px solid #0275d8;
   background: transparent;
   text-transform: uppercase;
   font-size: 0.85rem;
@@ -164,8 +164,8 @@ main {
   &:focus,
   &:hover {
     color: $white;
-    border-color: #5091cd;
-    background: #5091cd;
+    border-color: #0275d8;
+    background: #0275d8;
   }
 }
 
@@ -176,6 +176,7 @@ main {
   right: 1rem;
   padding: 0.5rem;
   opacity: 0;
+  color: #003366;
   border-color: $gold;
   background: $gold;
   transform: translateY(1rem);

@@ -3,96 +3,75 @@
 :host {
   @include flex(1 1 auto);
   display: block;
-  background-position: center -8rem;
-  background-size: 250%;
-  background-image: url("~assets/images/map.jpg");
-  background-repeat: no-repeat;
+  background: $bg-default;
 }
 
-@media (min-width: 768px) and
-       (orientation: portrait) {
-  :host {
-      background-size: 200%;
-      background-position: center -15rem;
+.block-container {
+  @include clearfix();
+  margin: -0.75rem;
+}
+
+// Contact Blocks
+.block {
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.9375rem;
+  vertical-align: bottom;
+
+  .inner-block {
+    padding: 2rem;
+    border-radius: 0.4rem;
+    background: #f7f8fa;
+  }
+  
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.25rem;
+  }
+
+  a {
+    display: inline-block;
+    font-weight: 600;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #007bff;
+  }
+
+  .icon-container {
+    margin-bottom: 1rem;
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    border: 4px solid #007bff;
+    text-align: center;
+
+    i {
+      margin-top: 0.6rem;
+      color: #007bff;
+      font-size: 32px;
+    }
   }
 }
 
 @media (min-width: 1024px) {
-  :host {
-      background-position: center -20rem;
-      background-size: 170%;
-  }
-}
+  .block {
+    width: 33.333%;
+    float: left;
 
-@media (min-width: 1200px) {
-  :host {
-      background-position: center -25rem;
-      background-size: 170%;
-  }
-}
-
-@media (min-width: 1200px) and
-       (min-height: 900px) {
-  :host {
-      background-position: center -25rem;
-      background-size: 125%;
-  }
-}
-
-// CONTACT TITLE CONTAINER
-.contact-title-container {
-  .container {
-    padding-top: 2rem;
-    padding-bottom: 0;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 2.5rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .contact-title-container {
-    padding-top: 4rem;
-
-    h1 {
-      font-size: 2.8rem;
+    .inner-block {
+      padding: 2rem;
+      border-radius: 0.4rem;
+      background: #f7f8fa;
+      height: 17rem;
     }
-  }
-} 
-
-@media (min-width: 1200px) {
-  .contact-title-container {
-    padding-top: 3rem;
-    padding-bottom: 1rem;
-  }
-}
-
-@media (min-width: 992px) {
-  section {
-    padding-top: 2rem;
-  }
-}
-
-aside {
-  margin-top: 1rem;
-  font-size: medium;
-
-  .feature-block {
-    min-height: 14rem;
-    padding: 1.5rem 2rem 2rem 1.5rem;
-    text-align: left;
-    box-shadow: 0.2rem 0.2rem 0.4rem #999;
-  }
-
-  ul {
-    padding-left: 1.25rem;
-  }
-}
-
-@media (min-width: 768px) {
-  aside {
-    margin-top: 0.5rem;
   }
 }
