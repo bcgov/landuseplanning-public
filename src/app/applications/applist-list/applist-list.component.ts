@@ -16,19 +16,18 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() allApps: Array<Application> = []; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
-  @Output() updateResultsChange = new EventEmitter(); // to applications component
 
   private currentApp: Application = null; // for selecting app in list
   public gotChanges = false;
 
   constructor(
-    private commentPeriodService: CommentPeriodService, // used in template
-    private configService: ConfigService, // used in template
+    public commentPeriodService: CommentPeriodService, // used in template
+    public configService: ConfigService, // used in template
     private elementRef: ElementRef
   ) { }
 
   get clientWidth(): number {
-    return this.elementRef.nativeElement.childNodes[0].clientWidth; // div#applist-list.app-list__container
+    return this.elementRef.nativeElement.firstElementChild.clientHeight; // div.app-list__container
   }
 
   public ngOnInit() { }
@@ -50,7 +49,6 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   public toggleCurrentApp(item: Application) {
     const index = _.findIndex(this.allApps, { _id: item._id });
     if (index >= 0) {
-      // this.allApps.splice(index, 1, item); // NOT NEEDED
       if (!this.isCurrentApp(item)) {
         this.currentApp = item; // set
         this.setCurrentApp.emit(item);

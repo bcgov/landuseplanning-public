@@ -116,7 +116,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private applicationService: ApplicationService,
-    private commentPeriodService: CommentPeriodService, // also used in template
+    public commentPeriodService: CommentPeriodService, // also used in template
     private configService: ConfigService,
     private elementRef: ElementRef
   ) {
@@ -144,7 +144,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   get clientHeight(): number {
-    return this.elementRef.nativeElement.childNodes[0].clientHeight; // div#applist-filters.app-filters__container
+    return this.elementRef.nativeElement.firstElementChild.clientHeight; // div.app-filters__container
   }
 
   public ngOnInit() {

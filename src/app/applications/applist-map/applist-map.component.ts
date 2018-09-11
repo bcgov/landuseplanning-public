@@ -240,16 +240,12 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
       if (app) {
         const markerLatLng = marker.getLatLng();
 
-        if (!this.configService.doUpdateResults) {
-          // show all items even if map moves
-          app.isVisible = true;
-
-        } else if (mapBounds.contains(markerLatLng)) {
-          // map contains marker - make item visible
+        if (mapBounds.contains(markerLatLng)) {
+          // map contains marker - make item visible in list
           app.isVisible = true;
 
         } else {
-          // map doesn't contains marker - make item hidden and unload it from list
+          // map doesn't contains marker - make item hidden in list
           app.isVisible = false;
         }
       }
@@ -414,14 +410,6 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
         this.drawMap();
       }
     }, 0);
-  }
-
-  /**
-   * Called when Update Results checkbox has changed.
-   */
-  // FUTURE: change doUpdateResults to observable and subscribe to changes ?
-  public onUpdateResultsChange() {
-    this.setVisibleDebounced();
   }
 
   /**

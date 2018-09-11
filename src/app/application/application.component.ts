@@ -38,8 +38,8 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private applicationService: ApplicationService, // used in template
-    private commentPeriodService: CommentPeriodService // used in template
+    public applicationService: ApplicationService, // used in template
+    public commentPeriodService: CommentPeriodService // used in template
   ) { }
 
   ngOnInit() {
