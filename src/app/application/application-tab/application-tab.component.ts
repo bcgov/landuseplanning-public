@@ -17,7 +17,7 @@ export class ApplicationTabComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private api: ApiService // used in template
+    public api: ApiService // used in template
   ) { }
 
   ngOnInit() {

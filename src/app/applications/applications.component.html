@@ -11,8 +11,7 @@
       <app-applist-list class="app-list" #applist
         [allApps]="allApps"
         (setCurrentApp)="highlightApplication($event, true)"
-        (unsetCurrentApp)="highlightApplication($event, false)"
-        (updateResultsChange)="onUpdateResultsChange()">
+        (unsetCurrentApp)="highlightApplication($event, false)">
       </app-applist-list>
       <button class="toggle-app-list-btn btn" title="Show/hide list of applications" type="button"
         (click)="toggleAppList();$event.stopPropagation();" aria-controls="applist-list">

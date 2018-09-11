@@ -113,11 +113,6 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
   public highlightApplication(app: Application, show: boolean) { this.appmap.highlightApplication(app, show); }
 
   /**
-   * Event handler called when Update Results checkbox has changed.
-   */
-  public onUpdateResultsChange() { this.appmap.setVisibleDebounced(); }
-
-  /**
    * Called when list component visibility is toggled.
    */
   public toggleAppList() { this.appmap.toggleAppList(); }

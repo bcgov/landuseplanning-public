@@ -21,7 +21,7 @@
             <div aria-labelledby="cpStatusFilterButton" (click)="$event.stopPropagation()">
               <div class="form-check" *ngFor="let key of cpStatusKeys">
                 <label class="form-check-label">
-                  <input class="form-check-input gtm-filter-cp-status " type="checkbox" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> 
+                  <input class="gtm-filter-cp-status form-check-input" type="checkbox" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> 
                   {{commentPeriodService.getStatusString(key)}}
                 </label>
               </div>
@@ -72,10 +72,9 @@
 
         <!-- Crown Land File Input -->
         <div class="clf-input filter-control input-group float-left">
-          <input class="form-control gtm-filter-cl-file" type="number" placeholder="Crown Lands File # (eg: 1234567)" id="clFileInput3" [(ngModel)]="_clFileFilter"
-            [ngbTypeahead]="clFileSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
-            (mousewheel)="$event.preventDefault()" (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true"
-            title="Crown Lands File Number">
+          <input class="gtm-filter-cl-file form-control" type="number" placeholder="Crown Lands File # (eg: 1234567)" id="clFileInput3" [(ngModel)]="_clFileFilter"
+            (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()"
+            (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true" title="Crown Lands File Number">
           <div class="input-group-btn">
             <!-- *ngIf="clFileFilterCount() > 0" -->
             <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyClFileFilter()">Apply</button>
@@ -87,11 +86,12 @@
 
     <!-- ACTIONS -->
     <div class="filter-actions d-flex align-items-center">
-      <a class="btn btn-link" role="button" title="Clear filters" (click)="clearAllFilters(isFiltersCollapsed)" *ngVar="filterCount() as filtCnt">
+      <a class="btn btn-link" role="button" title="Clear filters" (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt">
         Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
       </a>
       <!-- Remove Inline Block Spacing -->
-      <a class="toggle-filter-btn btn btn-light" role="button" title="Show all filters" *ngIf="isFiltersCollapsed" (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false;onShowHideClick()"
+      <a class="toggle-filter-btn btn btn-light" role="button" title="Show all filters" *ngIf="isFiltersCollapsed"
+        (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false;onShowHideClick()"
         [attr.aria-expanded]="!isFiltersCollapsed" aria-controls="applist-filters">Show all filters
       </a>
 
@@ -138,32 +138,23 @@
     <fieldset class="additional-filters">
         <div class="form-group typeahead-container">
           <label for="applicantInput">Applicant Name</label>
-          <input type="text" class="form-control gtm-filter-applicant " placeholder="Applicant Name" id="applicantInput" 
-            [(ngModel)]="_applicantFilter"
-            [ngbTypeahead]="applicantSearch" 
-            [focusFirst]="false">
+          <input type="text" class="form-control gtm-filter-applicant " placeholder="Applicant Name" id="applicantInput" [(ngModel)]="_applicantFilter"
+          [ngbTypeahead]="applicantSearch" [focusFirst]="false">
         </div>
-        <div class="form-group typeahead-container">
+        <div class="form-group">
           <label for="clFileInput2">Crown Land File #</label>
-          <input type="number" class="form-control gtm-filter-cl-file " placeholder="Crown Land File #" id="clFileInput2" 
-            [(ngModel)]="_clFileFilter"
-            [ngbTypeahead]="clFileSearch" 
-            [focusFirst]="false" 
-            (keydown.arrowup)="$event.preventDefault()" 
-            (keydown.arrowdown)="$event.preventDefault()"
-            (mousewheel)="$event.preventDefault()">
+          <input type="number" class="form-control gtm-filter-cl-file " placeholder="Crown Land File #" id="clFileInput2" [(ngModel)]="_clFileFilter"
+            (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
         </div>
-        <div class="form-group typeahead-container">
+        <div class="form-group">
           <label for="dispIdInput">Disposition Transaction ID</label>
           <input type="number" class="form-control gtm-filter-disposition-id" placeholder="Disposition Transaction ID" id="dispIdInput" [(ngModel)]="_dispIdFilter"
-            [ngbTypeahead]="dispIdSearch" [focusFirst]="false" (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()"
-            (mousewheel)="$event.preventDefault()">
+            (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
         </div>
         <div class="form-group typeahead-container">
           <label for="purposeInput">Purpose / Subpurpose</label>
           <input type="text" class="form-control gtm-filter-purpose" placeholder="Purpose / Subpurpose" id="purposeInput" [(ngModel)]="_purposeFilter"
-            [ngbTypeahead]="purposeSearch" 
-            [focusFirst]="false">
+            [ngbTypeahead]="purposeSearch" [focusFirst]="false">
         </div>
     </fieldset>
 

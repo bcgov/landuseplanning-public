@@ -38,7 +38,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private commentService: CommentService,
-    private commentPeriodService: CommentPeriodService, // used in template
+    public commentPeriodService: CommentPeriodService, // used in template
     private dialogService: DialogService
   ) { }
 
