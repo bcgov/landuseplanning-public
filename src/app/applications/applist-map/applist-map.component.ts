@@ -323,7 +323,7 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
     const app = args[0] as Application;
     const marker = args[1].target as L.Marker;
 
-    // this.applist.toggleCurrentApp(app); // update selected item in app list // FUTURE ?
+    this.applist.toggleCurrentApp(app); // update selected item in app list
 
     // if there's already a popup, delete it
     let popup = marker.getPopup();
@@ -373,8 +373,8 @@ export class ApplistMapComponent implements OnInit, OnChanges, OnDestroy {
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(markerIconYellowLg);
-        // this.centerMap(marker.getLatLng()); // FUTURE ?
-        // FUTURE: zoom in to this app/marker ?
+        this.centerMap(marker.getLatLng());
+        // TODO: show zoom in to this app
       }
     }
   }
