@@ -1,6 +1,6 @@
 @import "~assets/styles/base/base.scss";
 
-$map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
+$toggle-list-anim-duration: 0.2s;
 
 .map-container {
   @include flex(1 1 auto);
@@ -12,6 +12,7 @@ $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
     bottom: 0;
     left: 0;
     background-color: $map-bg;
+    transition: left ease-out $toggle-list-anim-duration;
 
     .leaflet-popup-content-wrapper {
       border-radius: 4px;

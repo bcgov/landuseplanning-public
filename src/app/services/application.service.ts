@@ -163,21 +163,8 @@ export class ApplicationService {
 
           // NB: we don't get the decision here
 
-          // now get the shapes (features)
-          promises.push(this.featureService.getByApplicationId(application._id)
-            .toPromise()
-            .then(features => {
-              application.features = features;
+          // NB: we don't get the shapes (features) here
 
-              // calculate Total Area (hectares) from all features
-              application.areaHectares = 0;
-              _.each(application.features, function (f) {
-                if (f['properties']) {
-                  application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
-                }
-              });
-            })
-          );
         });
 
         return Promise.all(promises).then(() => { return applications; });

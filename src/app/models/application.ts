@@ -31,6 +31,8 @@ export class Application {
   // TODO: delete isMatches (everywhere) when API performs filtering
   isMatches = true; // whether this application matches current filters
   isVisible = true; // whether this application is visible on map
+                    // default is true - for apps without centroid (ie, no features)
+  isLoaded = false; // whether app is loaded in list
 
   // associated data
   documents: Array<Document> = [];

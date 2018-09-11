@@ -21,19 +21,19 @@
             <div aria-labelledby="cpStatusFilterButton" (click)="$event.stopPropagation()">
               <div class="form-check" *ngFor="let key of cpStatusKeys">
                 <label class="form-check-label">
-                  <input class="gtm-filter-cp-status form-check-input" type="checkbox" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> 
+                  <input class="form-check-input gtm-filter-cp-status" type="checkbox" [(ngModel)]="_cpStatusFilters[key]" name="{{key}}"> 
                   {{commentPeriodService.getStatusString(key)}}
                 </label>
               </div>
             </div>
             <div class="dropdown-button-bar" *ngVar="cpStatusHasChanges() as hasChanges">
-              <a class="btn btn-link" role="button" (click)="clearCpStatusFilters()" *ngIf="!hasChanges && numCpStatus > 0">
+              <a class="btn btn-link" role="button" (click)="clearCpStatusFilters()" *ngIf="!hasChanges && numCpStatus > 0" [class.disabled]="loading">
                 Clear
               </a>
               <a class="btn btn-link" role="button" (click)="cancelCpStatusFilters();isCpStatusCollapsed=true" *ngIf="hasChanges || numCpStatus == 0">
                 Cancel
               </a>
-              <button class="btn btn-primary" type="button" (click)="applyCpStatusFilters();isCpStatusCollapsed=true">
+              <button class="btn btn-primary" type="button" (click)="applyCpStatusFilters();isCpStatusCollapsed=true" [disabled]="loading">
                 Apply
               </button>
             </div>
@@ -51,18 +51,18 @@
             <div aria-labelledby="appStatusFilterButton" (click)="$event.stopPropagation()">
               <div class="form-check" *ngFor="let key of appStatusKeys">
                 <label class="form-check-label">
-                  <input class="gtm-filter-app-status form-check-input" type="checkbox" [(ngModel)]="_appStatusFilters[key]" name="{{key}}"> 
+                  <input class="form-check-input gtm-filter-app-status" type="checkbox" [(ngModel)]="_appStatusFilters[key]" name="{{key}}"> 
                   {{applicationService.getStatusString(key)}}
                 </label>
               </div>
               <div class="dropdown-button-bar" *ngVar="appStatusHasChanges() as hasChanges">
-                <a class="btn btn-link" role="button" (click)="clearAppStatusFilters()" *ngIf="!hasChanges && numAppStatus > 0">
+                <a class="btn btn-link" role="button" (click)="clearAppStatusFilters()" *ngIf="!hasChanges && numAppStatus > 0" [class.disabled]="loading">
                   Clear
                 </a>
                 <a class="btn btn-link" role="button" (click)="cancelAppStatusFilters();isAppStatusCollapsed=true" *ngIf="hasChanges || numAppStatus == 0">
                   Cancel
                 </a>
-                <button class="btn btn-primary" type="button" (click)="applyAppStatusFilters();isAppStatusCollapsed=true">
+                <button class="btn btn-primary" type="button" (click)="applyAppStatusFilters();isAppStatusCollapsed=true" [disabled]="loading">
                   Apply
                 </button>
               </div>
@@ -72,12 +72,12 @@
 
         <!-- Crown Land File Input -->
         <div class="clf-input filter-control input-group float-left">
-          <input class="gtm-filter-cl-file form-control" type="number" placeholder="Crown Lands File # (eg: 1234567)" id="clFileInput3" [(ngModel)]="_clFileFilter"
+          <input class="form-control gtm-filter-cl-file" type="number" placeholder="Crown Lands File # (eg: 1234567)" id="clFileInput3" [(ngModel)]="_clFileFilter"
             (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()"
-            (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true" title="Crown Lands File Number">
+            (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true" title="Crown Lands File Number" [disabled]="loading">
           <div class="input-group-btn">
             <!-- *ngIf="clFileFilterCount() > 0" -->
-            <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyClFileFilter()">Apply</button>
+            <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyClFileFilter()" [disabled]="loading">Apply</button>
           </div>
         </div>
       </div>
@@ -86,7 +86,8 @@
 
     <!-- ACTIONS -->
     <div class="filter-actions d-flex align-items-center">
-      <a class="btn btn-link" role="button" title="Clear filters" (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt">
+      <a class="btn btn-link" role="button" title="Clear filters" (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt"
+        [class.disabled]="loading">
         Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
       </a>
       <!-- Remove Inline Block Spacing -->
@@ -100,7 +101,8 @@
         <a class="btn btn-link" role="button" title="Cancel" id="cancelButton" (click)="cancelAllFilters();isFiltersCollapsed=true;onShowHideClick()">
           Cancel
         </a>
-        <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();isFiltersCollapsed=true;onShowHideClick()">
+        <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();isFiltersCollapsed=true;onShowHideClick()"
+          [disabled]="loading">
           Apply
         </button>
       </span>
