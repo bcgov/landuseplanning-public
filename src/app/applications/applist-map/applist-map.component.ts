@@ -302,7 +302,7 @@ export class ApplistMapComponent implements OnInit, AfterViewInit, OnChanges, On
       // add marker
       if (app.centroid.length === 2) { // safety check
         const title = `${app.client}\n`
-          + `${app['appStatus']}\n`
+          + `${app.appStatus}\n`
           + `${app.location}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
           .setIcon(markerIconYellow)

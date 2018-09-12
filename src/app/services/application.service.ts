@@ -143,8 +143,8 @@ export class ApplicationService {
           // derive region code
           application.region = this.getRegionCode(application.businessUnit);
 
-          // derive application status for display
-          application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
+          // user-friendly application status
+          application.appStatus = this.getStatusString(this.getStatusCode(application.status));
 
           // FUTURE: now get the organization
 
@@ -156,8 +156,8 @@ export class ApplicationService {
             .then(periods => {
               const cp = this.commentPeriodService.getCurrent(periods);
               application.currentPeriod = cp;
-              // derive comment period status for display
-              application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+              // user-friendly comment period status
+              application.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
             })
           );
 
@@ -201,8 +201,8 @@ export class ApplicationService {
         // derive region code
         application.region = this.getRegionCode(application.businessUnit);
 
-        // derive application status for display
-        application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
+        // user-friendly application status
+        application.appStatus = this.getStatusString(this.getStatusCode(application.status));
 
         // FUTURE: now get the organization
 
@@ -218,8 +218,8 @@ export class ApplicationService {
           .then(periods => {
             const cp = this.commentPeriodService.getCurrent(periods);
             application.currentPeriod = cp;
-            // derive comment period status for display
-            application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+            // user-friendly comment period status
+            application.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
           })
         );
 

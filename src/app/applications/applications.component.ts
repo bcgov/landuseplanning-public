@@ -101,7 +101,7 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
             .finally(() => {
               this.snackBarRef.dismiss();
               this.isLoading = false;
-              console.log('getting apps took', (new Date()).getTime() - start, 'ms');
+              console.log('got', this.allApps.length, 'apps in', (new Date()).getTime() - start, 'ms');
             })
             .subscribe(applications => {
               this.allApps = _.concat(this.allApps, applications);

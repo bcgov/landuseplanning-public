@@ -25,14 +25,16 @@ export class Application {
   tenureStage: string;
   type: string;
 
-  region: string; // derived from Business Unit
+  region: string; // region code derived from Business Unit
+  appStatus: string; // user-friendly application status
+  cpStatus: string; // user-friendly comment period status
   areaHectares: number; // calculated from all features
 
   // TODO: delete isMatches (everywhere) when API performs filtering
   isMatches = true; // whether this application matches current filters
   isVisible = true; // whether this application is visible on map
                     // default is true - for apps without centroid (ie, no features)
-  isLoaded = false; // whether app is loaded in list
+  isLoaded = false; // whether this application is loaded in list
 
   // associated data
   documents: Array<Document> = [];
@@ -59,6 +61,8 @@ export class Application {
     this.type                    = obj && obj.type                    || null;
 
     this.region                  = obj && obj.region                  || null;
+    this.appStatus               = obj && obj.appStatus               || null;
+    this.cpStatus                = obj && obj.cpStatus                || null;
     this.areaHectares            = obj && obj.areaHectares            || null;
 
     if (obj && obj.centroid) {
