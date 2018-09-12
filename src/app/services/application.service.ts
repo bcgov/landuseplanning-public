@@ -143,8 +143,8 @@ export class ApplicationService {
           // derive region code
           application.region = this.getRegionCode(application.businessUnit);
 
-          // derive application status for display
-          application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
+          // user-friendly application status
+          application.appStatus = this.getStatusString(this.getStatusCode(application.status));
 
           // FUTURE: now get the organization
 
@@ -156,28 +156,15 @@ export class ApplicationService {
             .then(periods => {
               const cp = this.commentPeriodService.getCurrent(periods);
               application.currentPeriod = cp;
-              // derive comment period status for display
-              application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+              // user-friendly comment period status
+              application.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
             })
           );
 
           // NB: we don't get the decision here
 
-          // now get the shapes (features)
-          promises.push(this.featureService.getByApplicationId(application._id)
-            .toPromise()
-            .then(features => {
-              application.features = features;
+          // NB: we don't get the shapes (features) here
 
-              // calculate Total Area (hectares) from all features
-              application.areaHectares = 0;
-              _.each(application.features, function (f) {
-                if (f['properties']) {
-                  application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
-                }
-              });
-            })
-          );
         });
 
         return Promise.all(promises).then(() => { return applications; });
@@ -214,8 +201,8 @@ export class ApplicationService {
         // derive region code
         application.region = this.getRegionCode(application.businessUnit);
 
-        // derive application status for display
-        application['appStatus'] = this.getStatusString(this.getStatusCode(application.status));
+        // user-friendly application status
+        application.appStatus = this.getStatusString(this.getStatusCode(application.status));
 
         // FUTURE: now get the organization
 
@@ -231,8 +218,8 @@ export class ApplicationService {
           .then(periods => {
             const cp = this.commentPeriodService.getCurrent(periods);
             application.currentPeriod = cp;
-            // derive comment period status for display
-            application['cpStatus'] = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+            // user-friendly comment period status
+            application.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
           })
         );
 

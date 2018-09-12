@@ -13,16 +13,17 @@ import { ConfigService } from 'app/services/config.service';
 
 export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
-  @Input() allApps: Array<Application> = []; // from applications component
+  @Input() applications: Array<Application> = []; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
   private currentApp: Application = null; // for selecting app in list
-  public gotChanges = false;
+  public loading = false;
+  private numToLoad = 0;
 
   constructor(
     public commentPeriodService: CommentPeriodService, // used in template
-    public configService: ConfigService, // used in template
+    public configService: ConfigService,
     private elementRef: ElementRef
   ) { }
 
@@ -34,9 +35,12 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
-      // console.log('list: got changed apps from applications component');
-      this.gotChanges = true;
+    if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
+      // console.log('list: got visible apps from map component');
+      // console.log('# visible apps =', this.applications.length);
+
+      this.numToLoad = this.configService.listPageSize; // init/reset
+      this.setLoaded();
     }
   }
 
@@ -47,12 +51,11 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public toggleCurrentApp(item: Application) {
-    const index = _.findIndex(this.allApps, { _id: item._id });
+    const index = _.findIndex(this.applications, { _id: item._id });
     if (index >= 0) {
       if (!this.isCurrentApp(item)) {
         this.currentApp = item; // set
         this.setCurrentApp.emit(item);
-
       } else {
         this.currentApp = null; // unset
         this.unsetCurrentApp.emit(item);
@@ -60,8 +63,27 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  // TODO: delete isMatches (everywhere) when API performs filtering
-  public matchesVisibleCount(apps: Application[]): number {
-    return apps.filter(a => a.isMatches && a.isVisible).length;
+  public loadedApps(): Array<Application> {
+    return this.applications.filter(a => a.isLoaded);
+  }
+
+  public appsWithShapes(): Array<Application> {
+    return this.applications.filter(a => a.centroid.length === 2);
+  }
+
+  public onLoadStart() { this.loading = true; }
+
+  public onLoadEnd() { this.loading = false; }
+
+  public loadMore() {
+    this.numToLoad += this.configService.listPageSize;
+    this.setLoaded();
+  }
+
+  private setLoaded() {
+    // set first 'n' apps as 'loaded'
+    for (let i = 0; i < this.applications.length; i++) {
+      this.applications[i].isLoaded = (i <= this.numToLoad);
+    }
   }
 }

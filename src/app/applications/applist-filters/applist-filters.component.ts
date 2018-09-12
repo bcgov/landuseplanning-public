@@ -33,13 +33,13 @@ export interface FiltersType {
 
 export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
-  @Input() allApps: Array<Application> = []; // from applications component
+  @Input() applications: Array<Application> = []; // from applications component
   @Output() updateMatching = new EventEmitter(); // to applications component
 
   public isFiltersCollapsed: boolean;
   public isCpStatusCollapsed = true;
   public isAppStatusCollapsed = true;
-  public gotChanges = false;
+  public loading = false;
   private paramMap: ParamMap = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -50,8 +50,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
   // search keys for text boxes
   private applicantKeys: Array<string> = [];
-  private clFileKeys: Array<number> = [];
-  private dispIdKeys: Array<number> = [];
+  // private clFileKeys: Array<number> = []; // NOT CURRENTLY USED
+  // private dispIdKeys: Array<number> = []; // NOT CURRENTLY USED
   private purposeKeys: Array<string> = [];
 
   public regionFilters: object = {}; // array-like object
@@ -87,21 +87,23 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         : this.applicantKeys.filter(key => key.indexOf(this._applicantFilter.toUpperCase()) > -1) // .slice(0, 10)
       );
 
-  public clFileSearch = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term.length < 1 ? []
-        : this.clFileKeys.filter(key => key.toString().indexOf(this._clFileFilter.toString()) > -1) // .slice(0, 10)
-      );
+  // NOT CURRENTLY USED
+  // public clFileSearch = (text$: Observable<string>) =>
+  //   text$
+  //     .debounceTime(200)
+  //     .distinctUntilChanged()
+  //     .map(term => term.length < 1 ? []
+  //       : this.clFileKeys.filter(key => key.toString().indexOf(this._clFileFilter.toString()) > -1) // .slice(0, 10)
+  //     );
 
-  public dispIdSearch = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term.length < 1 ? []
-        : this.dispIdKeys.filter(key => key.toString().indexOf(this._dispIdFilter.toString()) > -1) // .slice(0, 10)
-      );
+  // NOT CURRENTLY USED
+  // public dispIdSearch = (text$: Observable<string>) =>
+  //   text$
+  //     .debounceTime(200)
+  //     .distinctUntilChanged()
+  //     .map(term => term.length < 1 ? []
+  //       : this.dispIdKeys.filter(key => key.toString().indexOf(this._dispIdFilter.toString()) > -1) // .slice(0, 10)
+  //     );
 
   public purposeSearch = (text$: Observable<string>) =>
     text$
@@ -158,31 +160,30 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         // set filters according to paramMap
         this.internalResetAllFilters(false);
-
-        // apply filters
-        this.internalApplyAllFilters(false);
       });
+
+    // load this list just once as it doesn't change
+    Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
+      Constants.subpurposes[purpose].forEach(subpurpose => {
+        this.purposeKeys.push(purpose.toUpperCase() + ' / ' + subpurpose.toUpperCase());
+      });
+    });
   }
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.allApps && !changes.allApps.firstChange && changes.allApps.currentValue) {
-      this.gotChanges = true;
+    if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
+      // console.log('filters: got apps from applications component');
+      // console.log('# apps =', this.applications.length);
 
       // store keys for faster filter lookahead
       // don't include empty results, then sort results, and then remove duplicates
       // NB: these look only at currently-loaded apps -- not all the possible apps in the system
-      this.applicantKeys = _.sortedUniq(_.compact(this.allApps.map(app => app.client ? app.client.toUpperCase() : null)).sort());
-      this.clFileKeys = _.sortedUniq(_.compact(this.allApps.map(app => app.cl_file)).sort());
-      this.dispIdKeys = _.compact(this.allApps.map(app => app.tantalisID)).sort(); // should already be unique
+      this.applicantKeys = _.sortedUniq(_.compact(this.applications.map(app => app.client ? app.client.toUpperCase() : null)).sort());
+      // this.clFileKeys = _.sortedUniq(_.compact(this.applications.map(app => app.cl_file)).sort()); // NOT CURRENTLY USED
+      // this.dispIdKeys = _.compact(this.applications.map(app => app.tantalisID)).sort(); // should already be unique // NOT CURRENTLY USED
 
-      Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
-        Constants.subpurposes[purpose].forEach(subpurpose => {
-          this.purposeKeys.push(purpose.toUpperCase() + ' / ' + subpurpose.toUpperCase());
-        });
-      });
-
-      // apply filtering
+      // (re)apply filtering
       this.internalApplyAllFilters(false);
     }
   }
@@ -241,10 +242,10 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private internalApplyAllFilters(doSave: boolean) {
-    this.allApps.forEach(app => app.isMatches = this.showThisApp(app));
+    this.applications.forEach(app => app.isMatches = this.showThisApp(app));
 
     // notify map component
-    this.updateMatching.emit(this.allApps);
+    this.updateMatching.emit();
 
     // if called from UI, save new filters
     // otherwise this is part of init or change event
@@ -486,7 +487,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  public clearAllFilters(doApply: boolean) {
+  public clearAllFilters() {
     this.clearRegionFilters();
     this.clearCpStatusFilters();
     this.clearAppStatusFilters();
@@ -495,9 +496,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this._dispIdFilter = null;
     this._purposeFilter = null;
 
-    if (doApply) {
-      this.applyAllFilters();
-    }
+    this.applyAllFilters();
   }
 
   public regionCount(): number {
@@ -555,4 +554,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public onShowHideClick() {
     this.configService.isApplistFiltersVisible = !this.isFiltersCollapsed;
   }
+
+  public onLoadStart() { this.loading = true; }
+
+  public onLoadEnd() { this.loading = false; }
 }

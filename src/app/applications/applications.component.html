@@ -2,14 +2,14 @@
   <h1 class="sr-only">Public Review and Comment Applications</h1>
 
   <app-applist-filters class="app-filters" #appfilters
-    [allApps]="allApps"
-    (updateMatching)="onUpdateMatching($event)">
+    [applications]="filterApps"
+    (updateMatching)="updateMatching()">
   </app-applist-filters>
 
   <div class="app-list-map-container">
     <div class="app-list-container">
       <app-applist-list class="app-list" #applist
-        [allApps]="allApps"
+        [applications]="listApps"
         (setCurrentApp)="highlightApplication($event, true)"
         (unsetCurrentApp)="highlightApplication($event, false)">
       </app-applist-list>
@@ -22,9 +22,11 @@
     <div class="overlay" (click)="toggleAppList();$event.stopPropagation();"></div>
 
     <app-applist-map class="app-map" #appmap
-      [allApps]="allApps"
+      [applications]="mapApps"
       [applist]="applist"
-      [appfilters]="appfilters">
+      [appfilters]="appfilters"
+      (updateVisible)="updateVisible()"
+      (reloadApps)="reloadApps()">
     </app-applist-map>
   </div>
 

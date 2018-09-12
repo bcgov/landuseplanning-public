@@ -12,23 +12,22 @@ export class ConfigService {
   // defaults
   private _isApplistListVisible = false;
   private _isApplistFiltersVisible = false;
-  private _doUpdateResults = true;
+  private _listPageSize = 10;
+
   // TODO: store these in URL instead
   private _baseLayerName = 'World Imagery'; // NB: must match a valid base layer name
   private _mapBounds: L.LatLngBounds = null;
-  private _mapCenter: L.LatLng = null;
-  private _mapZoom: number = null;
 
   constructor() { }
 
   // called by app constructor
   public init() {
-    // FUTURE: load settings from window.localStorage?
+    // FUTURE: load settings from window.localStorage ?
   }
 
   // called by app constructor - for future use
   public destroy() {
-    // FUTURE: save settings to window.localStorage?
+    // FUTURE: save settings to window.localStorage ?
   }
 
   get isApplistListVisible(): boolean { return this._isApplistListVisible; }
@@ -37,19 +36,13 @@ export class ConfigService {
   get isApplistFiltersVisible(): boolean { return this._isApplistFiltersVisible; }
   set isApplistFiltersVisible(val: boolean) { this._isApplistFiltersVisible = val; }
 
-  get doUpdateResults(): boolean { return this._doUpdateResults; }
-  set doUpdateResults(val: boolean) { this._doUpdateResults = val; }
+  get listPageSize(): number { return this._listPageSize; }
+  set listPageSize(val: number) { this._listPageSize = val; }
 
   get baseLayerName(): string { return this._baseLayerName; }
   set baseLayerName(val: string) { this._baseLayerName = val; }
 
   get mapBounds(): L.LatLngBounds { return this._mapBounds; }
   set mapBounds(val: L.LatLngBounds) { this._mapBounds = val; }
-
-  get mapCenter(): L.LatLng { return this._mapCenter; }
-  set mapCenter(val: L.LatLng) { this._mapCenter = val; }
-
-  get mapZoom(): number { return this._mapZoom; }
-  set mapZoom(val: number) { this._mapZoom = val; }
 
 }
