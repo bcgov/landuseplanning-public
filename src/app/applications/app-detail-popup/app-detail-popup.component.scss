@@ -1,1 +1,10 @@
 @import "~assets/styles/base/base.scss";
+
+a {
+  font-size: 0.8rem;
+
+  &.btn-primary {
+    color: #fff;
+    font-weight: 600;
+  }
+}

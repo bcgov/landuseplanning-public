@@ -7,7 +7,7 @@
     <span class="value">{{app?.description || '-'}}</span>
   </div>
   <hr class="mt-3 mb-3">
-  <ul class="nv-list">
+  <ul class="nv-list mb-3">
     <li>
       <span class="name">Crown Lands File #:</span>
       <span class="value">{{app?.cl_file || '-'}}</span>
@@ -21,4 +21,7 @@
       <span class="value">{{app?.location || '-'}}</span>
     </li>
   </ul>
-</div> 
+  <a class="btn btn-primary" [routerLink]="['/a', app?._id]" title="View more information about this application">
+    View Application Details
+  </a>
+</div>
