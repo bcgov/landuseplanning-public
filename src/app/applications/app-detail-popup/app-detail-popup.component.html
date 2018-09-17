@@ -4,7 +4,7 @@
 </div>
 <div class="app-details">
   <div>
-    <span class="value">{{app?.description || '-'}}</span>
+    <div class="value" style="width: 100%;" [clamp]="4">{{app?.description || '-'}}</div>
   </div>
   <hr class="mt-3 mb-3">
   <ul class="nv-list mb-3">

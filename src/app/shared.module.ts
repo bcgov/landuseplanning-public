@@ -7,6 +7,7 @@ import { MatSnackBarModule } from '@angular/material';
 import { OrderByPipe } from 'app/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/pipes/newlines.pipe';
 import { ObjectFilterPipe } from 'app/pipes/object-filter.pipe';
+import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 
 import { VarDirective } from 'app/utils/ng-var.directive';
 import { DragMoveDirective } from 'app/utils/drag-move.directive';
@@ -16,7 +17,8 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
     // CommonModule,
     BrowserModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxTextOverflowClampModule
   ],
   declarations: [
     OrderByPipe,
@@ -28,6 +30,7 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
   exports: [
     MatProgressBarModule,
     MatSnackBarModule,
+    NgxTextOverflowClampModule,
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
