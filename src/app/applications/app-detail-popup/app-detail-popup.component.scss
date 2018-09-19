@@ -84,3 +84,13 @@ ul {
 .app-danger {
   color: red;
 }
+
+// Link to Application Details
+.app-link {
+  font-size: 0.8rem;
+
+  &.btn-primary {
+    color: #fff;
+    font-weight: 600;
+  }
+}
