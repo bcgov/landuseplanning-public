@@ -1,10 +1,86 @@
 @import "~assets/styles/base/base.scss";
 
-a {
-  font-size: 0.8rem;
+// Title
+.popup-title {
+  padding: 0.75rem 1rem;
+  background: #003366;
+  color: #fff;
+  font-weight: bold;
 
-  &.btn-primary {
-    color: #fff;
-    font-weight: 600;
+  span {
+    display: block;
   }
+
+  .client-name__value {
+    font-size: 1rem;
+  }
+}
+
+// Body
+.popup-body {
+  padding: 1rem;
+  line-height: 1.15rem;
+  font-size: 0.8rem;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font-size: inherit;
+}
+
+// Status
+.status-container {
+  li {
+    i {
+      margin-top: -0.2rem;
+      margin-right: 0.25rem;
+      vertical-align: middle;
+    }
+
+    span {
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    + li {
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+// Key/Value Pairs
+.meta-container {
+  position: relative;
+  overflow: hidden;
+
+  ul {
+    li {
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      + li {
+        margin-top: 0.2rem;
+      }
+    }
+  }
+
+  .key {
+    font-weight: bold;
+  }
+}
+
+
+// Status Variants
+.cp-active {
+  color: #28a745;
+}
+
+.cp-inactive {
+  color: #ccc;
+}
+
+.app-danger {
+  color: red;
 }

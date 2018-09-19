@@ -1,27 +1,79 @@
-<div class="app-detail-title">
+<div class="popup-title">
   <span class="client-name__label">Client Name</span>
-  <span class="client-name__value">{{app?.client}}</span>
+  <span class="client-name__value">{{app?.client || '-'}}</span>
 </div>
-<div class="app-details">
-  <div>
-    <div class="value" style="width: 100%;" [clamp]="4">{{app?.description || '-'}}</div>
+
+<div class="popup-body">
+  <div class="app-details">
+    <div class="meta-container">
+      <ul>
+        <li class="mb-3" *ngIf="app?.description">
+          <div class="value" [clamp]="4" [innerHTML]="app?.description"></div>
+        </li>
+        <li>
+          <span class="key">Crown Land File No.:</span>
+          <span class="value">{{app?.cl_file || '-'}}</span>
+        </li>
+        <li>
+          <span class="key">Disposition Transaction ID:</span>
+          <span class="value">{{app?.tantalisID || '-'}}</span>
+        </li>
+        <li>
+          <span class="key">Location:</span>
+          <span class="value">{{app?.location || '-'}}</span>
+        </li>
+      </ul>
+    </div>
+
+    <hr class="mt-3 mb-3">
+
+    <!-- Status -->
+    <ul class="status-container mt-2">
+      <li>
+        <i class="material-icons">
+          {{app?.cpStatus === 'Commenting Open' ? 'comment' : 'highlight_off'}}
+        </i>
+        <span>{{app?.cpStatus}}</span>
+      </li>
+      <li>
+        <!-- Under Review -->
+        <i class="material-icons" title="{{app?.appStatus}}" 
+          *ngIf="app?.status == 'ACCEPTED'">
+          access_time
+        </i>
+        <!-- Allowed / Decision Made-->
+        <i class="material-icons" title="{{app.appStatus}}" 
+          *ngIf="app?.status == 'ALLOWED' 
+          || app?.status == 'DECISION MADE'">
+          error_outline
+        </i>
+        <!-- Tenure: Disposition in Good Standing / Offered / Offer Accepted -->
+        <i class="material-icons" title="{{app?.appStatus}}" 
+          *ngIf="app?.status == 'DISPOSITION IN GOOD STANDING'
+            || app?.status == 'OFFERED'
+            || app?.status == 'OFFER ACCEPTED'">
+          check
+        </i>
+        <!-- Cancelled -->
+        <i class="material-icons" title="{{app?.appStatus}}" 
+          *ngIf="app?.status == 'CANCELLED'">
+          cancel
+        </i>
+        <!-- Disallowed / Suspended-->
+        <i class="material-icons" title="{{app?.appStatus}}" 
+          *ngIf="app?.status == 'DISALLOWED' 
+          || app?.status == 'SUSPENDED'">
+          warning
+        </i>
+        <!-- Unknown -->
+        <i class="material-icons" title="{{app?.appStatus}}" 
+          *ngIf="app?.status == 'UNKNOWN'">
+          warning
+        </i>
+        <span>{{app?.appStatus}}</span>
+      </li>
+
+    </ul>
+
   </div>
-  <hr class="mt-3 mb-3">
-  <ul class="nv-list mb-3">
-    <li>
-      <span class="name">Crown Lands File #:</span>
-      <span class="value">{{app?.cl_file || '-'}}</span>
-    </li>
-    <li>
-      <span class="name">Disposition Transaction ID:</span>
-      <span class="value">{{app?.tantalisID || '-'}}</span>
-    </li>
-    <li>
-      <span class="name">Location:</span>
-      <span class="value">{{app?.location || '-'}}</span>
-    </li>
-  </ul>
-  <a class="btn btn-primary" [routerLink]="['/a', app?._id]" title="View more information about this application">
-    View Application Details
-  </a>
 </div>
