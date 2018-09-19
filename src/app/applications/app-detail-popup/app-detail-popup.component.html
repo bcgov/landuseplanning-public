@@ -28,7 +28,7 @@
     <hr class="mt-3 mb-3">
 
     <!-- Status -->
-    <ul class="status-container mt-2">
+    <ul class="status-container mt-2 mb-3">
       <li>
         <i class="material-icons">
           {{app?.cpStatus === 'Commenting Open' ? 'comment' : 'highlight_off'}}
@@ -72,8 +72,9 @@
         </i>
         <span>{{app?.appStatus}}</span>
       </li>
-
     </ul>
-
+    <a class="app-link btn btn-sm btn-primary" [routerLink]="['/a', app?._id]" title="View more information about this application">
+      View Application Details
+    </a>
   </div>
 </div>
