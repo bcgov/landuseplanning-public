@@ -3,7 +3,12 @@
 $toggle-list-anim-duration: 0.2s;
 
 .map-container {
-  @include flex(1 1 auto);
+  //@include flex(1 1 auto);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   
   #map {
     position: absolute;

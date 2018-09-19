@@ -6,7 +6,10 @@
     color: $footer-color;
 
     .container {
-        padding: 1.5rem;
+        padding-top: 3rem;
+        padding-right: 1.5rem;
+        padding-bottom: 1.5rem;
+        padding-left: 1.5rem;
     }
 
     section {
@@ -114,6 +117,57 @@
             .gov-links {
                 text-align: left;
             }
+        }
+    }
+}
+
+.app-footer--sm  {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2rem;
+    border: none;
+
+    .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+
+    .footer-admin {
+        margin: 0;
+        padding-top: 0.4rem;
+        padding-bottom: 0;
+        border: none;
+    }
+
+    .footer-info {
+        display: none;
+    }
+
+    ul {
+        font-size: 0.65rem;
+    }
+}
+
+.app-footer-sm {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .app-footer--sm {
+        font-size: 0.825rem;
+
+        .container {
+            padding: 0 1rem;
+        }
+
+        .footer-admin {
+            padding-top: 0.3rem;
+        }
+
+        ul {
+            font-size: 0.825rem;
         }
     }
 }

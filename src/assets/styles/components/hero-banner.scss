@@ -1,139 +1,162 @@
+@import "~assets/styles/base/base.scss";
+
 .hero-banner {
   position: relative;
-  height: 14rem;
-  padding-top: 0;
-  background-position: center;
-  background-size: cover;
-  background-image: url("~assets/images/hero-banner.jpg");
-  background-repeat: no-repeat;
+  background-color: rgba($header-bg, 1);
+  background-image: url("~assets/images/prc-hero-banner-img.jpg");
+  background-position: center bottom;
+  background-size: 350%;
+  box-shadow: 0 0 4rem #00264d inset;
 
-  &__content {
-    // display: table-cell;
-    // vertical-align: middle;
-    color: $font-gray;
+  .container {
+    display: table;
+    min-height: 20rem;
 
-    h1 {
-      font-size: xx-large;
-      line-height: 2rem;
-      span {
-        display: inline-block;
-      }
+    &-inner {
+      display: table-row;
+    }
+  }
+}
+
+.hero-banner__content {
+  display: table-cell;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  vertical-align: middle;
+  color: #fff;
+
+  h1 {
+    margin-bottom: 1.15rem;
+    line-height: 2.15rem;
+    font-size: 2.25rem;
+
+    .version {
+      margin-top: -0.2rem;
+      display: inline-block;
+      color: $gold;
+      font-size: 0.875rem;
+      font-weight: 700;
+      vertical-align: top;
     }
 
-    h2 {
-      font-size: x-large;
-      line-height: 1.5rem;
-      span {
-        display: inline-block;
+    .wb {
+      display: block;
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+    line-height: 1.5rem;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+}
+
+.hero-banner__actions {
+  margin-top: 1.75rem;
+}
+
+.hero-banner__actions-title {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.hero-banner__actions-buttons {
+  @include flex-box();
+
+  .btn {
+    @include flex(1 1 auto);
+    padding: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+
+    + span {
+      @include flex(0 0 auto);
+      padding: 0.65rem 0.4rem;
+      vertical-align: middle;
+    }
+  }
+}
+
+@media (min-width: 567px) {
+  .hero-banner {
+    .container {
+      min-height: 20rem;
+    }
+  }
+
+  .hero-banner__content {
+    h1 {
+      .wb {
+        display: inline;
+      }
+    }
+  }
+
+  .hero-banner__actions-buttons {
+    .btn {
+      @include flex(0 0 8rem);
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-banner {
+    background-size: 200%;
+
+    .container {
+      padding-top: 67px;
+      min-height: 30rem;
+    }
+  }
+
+  .hero-banner__content {
+    padding-top: 2rem;
+
+    h1 {
+      line-height: 2.8rem;
+      font-size: 2.65rem;
+
+      .version {
+        margin-top: -0.4rem;
       }
     }
 
     p {
-      font-size: 0.9375rem;
-      font-weight: 300;
-      line-height: 1.4rem;
-      margin-bottom: 1.5rem;
-    }
-
-    strong {
-      color: $gold;
-      font-weight: 700;
-    }
-
-    .badge {
-      color: $gold;
-    }
-
-    &--cta-btns {
-      @include clearfix();
-      margin-top: 2rem;
-
-      .btn {
-        padding: 0.5rem;
-        min-width: 7rem;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        font-weight: 700;
-
-        + span {
-          display: inline-block;
-          margin: 0.25rem;
-        }
-      }
-    }
-  }
-
-  a:not[class^="btn"] {
-    color: $gold;
-  }
-
-  &.auto-size {
-    height: auto;
-    min-height: auto;
-  }
-}
-
-@media (min-width: 575px) {}
-
-@media (min-width: 768px) {
-  .hero-banner {
-    height: 17rem;
-    padding-top: 2rem;
-    
-    &__content {
-      h1 {
-        font-size: 2.5rem;
-        line-height: 2.5rem;
-      }
-
-      h2 {
-        font-size: 1.8rem;
-        line-height: 1.8rem;
-      }
-
-      p {
-        font-size: 1.2rem;
-        line-height: 1.8rem;
-      }
-
-      &--cta-btns {
-        margin-top: 2.4rem;
-      }
+      line-height: 1.75rem;
+      font-size: 1.25rem;
     }
   }
 }
 
-@media (min-width: 992px) {
+
+.alt-image {
+  background-position: center bottom;
+  background-size: 350%;
+}
+
+@media (min-width: 1024px) {
   .hero-banner {
-    height: 22rem;
-    padding-top: 4rem;
-
-    &__content {
-      h1 {
-        font-size: 2.8rem;
-        line-height: 2.8rem;
-      }
-
-      h2 {
-        line-height: 2rem;
-        font-size: xx-large;
-      }
-
-      &--cta-btns {
-        margin-top: 3rem;
-      }
-    }
+    background-size: 150%;
   }
 }
 
 @media (min-width: 1200px) {
-  .hero-banner {
-    height: 24rem;
+  .hero-banner{
+    background-size: 120%;
+  }
+}
 
-    &__content {
-      &--cta-btns {
-        margin-top: 4rem;
-      }
-    }
+@media (min-width: 1600px) {
+  .hero-banner {
+    background-position: center -15rem;
+  }
+}
+
+@media (min-width: 1900px) {
+  .hero-banner {
+    background-size: 100%;
   }
 }

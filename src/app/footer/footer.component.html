@@ -1,4 +1,5 @@
-<footer class="app-footer" id="footer">
+<footer class="app-footer" id="footer"
+  [ngClass]="{'app-footer--sm': (router.url.startsWith('/applications'))}">
   <div class="container">
     <div class="footer-info row">
       <div class="col-md-4">
@@ -12,7 +13,7 @@
         <section>
           <h4>Navigate</h4>
           <ul class="nav-links">
-            <li><a routerLink="/applications">List Applications</a></li>
+            <li><a routerLink="/applications">Find Applications</a></li>
             <li><a routerLink="/contact">Contact Us</a></li>
           </ul>
         </section>

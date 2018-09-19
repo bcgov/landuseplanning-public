@@ -4,25 +4,8 @@
   display: block;
   @include flex-box();
   @include flex-direction(column);
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow-y: hidden;
-}
-
-
-app-header {
-  @include flex(0 0 auto);
-}
-
-.app-body {
-  @include flex-box();
-  @include flex(1 1 auto);
-  @include flex-direction(column);
-  position: relative;
-  overflow-y: scroll;
+  min-height: 100vh;
+  background: #003366;
 }
 
 .pilot-alert-container /deep/ {
@@ -72,44 +55,4 @@ app-header {
 
 app-home {
   display: block;
-}
-
-.footer-sm /deep/ {
-  overflow: hidden;
-
-  app-footer {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .app-footer {
-    height: 3rem; // height of 2-line footer
-    border: none;
-
-    .container {
-      max-width: 100%;
-      padding-top: 3px !important;
-      padding-bottom: 3px !important;
-    }
-
-    .footer-info {
-      display: none;
-    }
-
-    .footer-admin {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-      border-top: 0 !important;
-    }
-  }
-}
-
-@media (min-width: 483px) {
-  .footer-sm /deep/ {
-    .app-footer {
-      height: 1.75rem; // height of single line footer
-    }
-  }
 }

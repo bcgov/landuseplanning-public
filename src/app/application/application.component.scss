@@ -1,9 +1,11 @@
 @import "~assets/styles/base/base.scss";
 
-app-application:host {
+:host {
+    @include flex(1 1 auto);
     display: block;
-    z-index: 998;
-}
+    padding-top: 6rem;
+    background: $bg-default;
+}  
 
 .application {
     main {
@@ -92,7 +94,6 @@ app-application:host {
         display: flex;
         flex-direction: column;
         margin-top: 0;
-        padding: 0;
         button {
             margin-bottom: 1rem;
         }
@@ -114,26 +115,6 @@ app-application:host {
     .application {
         main {
             margin-bottom: 1rem;
-        }
-    }
-}
-
-@media (min-width: 992px) {
-    .application {
-        &:before {
-            content: " ";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 999;
-            height: 68px;
-            border-bottom: 4px solid $gold;
-            background: $header-bg;
-        }
-        aside {
-            padding-right: 15px;
-            padding-left: 15px;
         }
     }
 }

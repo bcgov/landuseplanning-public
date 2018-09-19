@@ -3,6 +3,28 @@
     background-color: $bg-dark;
 }
 
+.bg-default {
+    background-color: $bg-default;
+}
+
 .bg-dark-link {
     color: $bg-dark-link-color;
+}
+
+.clickable {
+    cursor: pointer !important;
+    color: $link-color !important;
+    
+    &:focus,
+    &:hover {
+      text-decoration: underline !important;
+    }
+}
+
+// Named Anchors
+.pg-anchor[id]:before {
+    content:" ";
+    display:block;
+    height: 98px;
+    margin:-98px 0 0;
 }

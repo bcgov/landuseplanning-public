@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from 'app/services/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -8,7 +9,8 @@ import { ApiService } from 'app/services/api';
 })
 
 export class FooterComponent {
-
-  constructor(public api: ApiService) { }
-
+  constructor(
+    public api: ApiService,
+    public router: Router,
+  ) { }
 }

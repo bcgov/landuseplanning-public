@@ -1,27 +1,46 @@
 @import "~assets/styles/base/base.scss";
 
-header {
-  &.app-header {
-    @include clearfix;
-    padding: 0;
+.app-header {
+  @include clearfix;
+  padding: 0;
+  border-bottom: 4px solid $gold;
+  background: $header-bg;
+  color: $header-font-color;
+  z-index: 1001;
+}
+
+@media (min-width: 768px) {
+  .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    border-bottom-style: solid;
+    border-bottom-width: 0;
+    border-bottom-color: rgba(#5475a7, 0.4);
+    background-color: transparent;
+    transition: all linear 0.2s;
+  }
+
+  .app-header--flex {
+    @include flex(0 0 auto);
+    position: relative;
+    border-bottom-width: 4px;
+    border-bottom-color: $gold;
+    background: $header-bg;
+    color: $header-font-color;
+  }
+
+  .app-header--solid {
     border-bottom: 4px solid $gold;
     background: $header-bg;
     color: $header-font-color;
-    z-index: 1001;
   }
 }
 
-@media (min-width:768px) {
-  header {
-    &.app-header {
-      border-bottom-style: solid;
-      border-bottom-width: 4px;
-      border-bottom-color: $gold;
-      background-color: $header-bg;
-    }
-  }
-}
 
+// Navbar Toggle Button
 .navbar-toggler {
   margin-right: 0.5rem;
   padding: 0.5rem 0.4rem;
@@ -46,8 +65,8 @@ header {
     margin-bottom: -0.25rem;
 
     + span {
-      display: inline-block;
-      margin-top: 2px;
+      display: none;
+      margin-top: 1px;
       margin-left: 0.25rem;
       font-size: $mn-font-size;
       font-weight: 700;
@@ -55,6 +74,17 @@ header {
     }
   }
 }
+
+@media (min-width: 420px) {
+  .navbar-toggler {
+    i {
+      + span {
+        display: inline-block;
+      }
+    }
+  }
+}
+
 
 // NAVBAR
 .navbar {
@@ -130,13 +160,13 @@ header {
 
 @media (min-width: 768px) {
   .navbar {
-    // background: transparent;
+    background: transparent;
     
     .navbar-nav {
       margin-top: 0;
       
       .nav-link {
-        height: 4rem; // 60px to match the branding height
+        height: 4.2rem; // 60px to match the branding height
         padding: 0.5rem 0.75rem !important;
         border-top: none;
         span {
@@ -193,40 +223,48 @@ header {
   }
 }
 
-// NAVBAR BRAND
+// Navbar Brand
 .navbar-brand {
   margin: 0;
-  width: 233px; // use PX dimensions here to ensure exact match to image
-  height: 3rem;
+  height: 3.4375rem;
   background-image: url("~assets/images/bcgov-header-horiz-SM.png");
-  background-position-y: 0.5rem;
+  background-position: 10px center;
   background-repeat: no-repeat;
-  background-size: auto;
+}
 
-  .badge {
+.navbar-brand__title {
+  margin-top: 0.8rem;
+  margin-left: 115px;
+  display: inline-block;
+  color: #fff;
+  font-size: 0.875rem;
+
+  .version {
+    margin-top: 0.2rem;
+    display: inline-block;
     color: $gold;
-    padding: 0;
-    top: 12px;
-    left: 233px + 2px;
-    font-size: x-small;
+    font-size: 0.5rem;
+    font-weight: 700;
+    vertical-align: top;
   }
 }
 
 @media (min-width: 768px) {
   .navbar-brand {
-    width: 339px; // use PX dimensions here to ensure exact match to image
-    height: 4rem;
+    height: 4.2rem;
     background-image: url("~assets/images/bcgov-header-horiz-LG.png");
-    background-position-y: 0.4rem;
-
-    .badge {
-      top: 16px;
-      left: 339px + 2px;
-      font-size: 0.875rem;
-    }
+    background-position: 15px center;
   }
-  .badge {
-    top: 1.5rem;
-    font-size: 0.875rem;
+
+  .navbar-brand__title {
+    margin-left: 160px;
+    margin-top: 0.8rem;
+    font-size: 1.25rem;
+    font-weight: 400;
+    
+    .version {
+      margin-top: 0.2rem;
+      font-size: 0.7375rem;
+    }
   }
 }
