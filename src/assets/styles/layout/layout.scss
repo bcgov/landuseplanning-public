@@ -63,3 +63,12 @@ hr {
   margin-bottom: 2.25rem;
   border-width: 2px;
 }
+
+@media (min-width: 1600px) {
+  main {
+    .container {
+      padding-top: 2.5rem;
+      padding-bottom: 2.75rem;
+    }
+  }
+}
