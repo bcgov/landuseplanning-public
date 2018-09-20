@@ -6,7 +6,7 @@
     color: $footer-color;
 
     .container {
-        padding-top: 3rem;
+        padding-top: 1.5rem;
         padding-right: 1.5rem;
         padding-bottom: 1.5rem;
         padding-left: 1.5rem;
@@ -53,35 +53,21 @@
     a {
         color: $footer-color;
 
+        &.feedback-link {
+            color: $gold;
+        }
+
         &:focus,
         &:hover {
             color: $gold;
         }
     }
-}
 
-@media (min-width: 768px) {
-    .app-footer {
-        section {
-            text-align: left;
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        h4 {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid $bg-dark-border-color;
-        }
-    }
-}
-
-.app-footer {
     .footer-admin {
         margin-top: 1.5rem;
         padding-top: 1.5rem;
         border-top: 1px solid $bg-dark-border-color;
-
+        
         .gov-links {
             text-align: center;
             margin: 0;
@@ -113,6 +99,18 @@
 
 @media (min-width: 768px) {
     .app-footer {
+        section {
+            text-align: left;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        h4 {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid $bg-dark-border-color;
+        }
+
         .footer-admin {
             .gov-links {
                 text-align: left;
