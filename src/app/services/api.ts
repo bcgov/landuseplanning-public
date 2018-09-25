@@ -238,9 +238,7 @@ export class ApiService {
       '_addedBy',
       '_application',
       'startDate',
-      'endDate',
-      'description',
-      'internal'
+      'endDate'
     ];
     const queryString = 'commentperiod?_application=' + appId + '&fields=' + this.buildValues(fields);
     return this.get(queryString);
@@ -251,9 +249,7 @@ export class ApiService {
       '_addedBy',
       '_application',
       'startDate',
-      'endDate',
-      'description',
-      'internal'
+      'endDate'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.get(queryString);
