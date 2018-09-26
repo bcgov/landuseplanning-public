@@ -30,10 +30,10 @@
               <a class="btn btn-link" role="button" (click)="clearCpStatusFilters()" *ngIf="!hasChanges && numCpStatus > 0" [class.disabled]="loading">
                 Clear
               </a>
-              <a class="btn btn-link" role="button" (click)="cancelCpStatusFilters();isCpStatusCollapsed=true" *ngIf="hasChanges || numCpStatus == 0">
+              <a class="btn btn-link" role="button" (click)="cancelCpStatusFilters()" *ngIf="hasChanges || numCpStatus == 0">
                 Cancel
               </a>
-              <button class="btn btn-primary" type="button" (click)="applyCpStatusFilters();isCpStatusCollapsed=true" [disabled]="loading">
+              <button class="btn btn-primary" type="button" (click)="applyCpStatusFilters();" [disabled]="loading">
                 Apply
               </button>
             </div>
@@ -59,10 +59,10 @@
                 <a class="btn btn-link" role="button" (click)="clearAppStatusFilters()" *ngIf="!hasChanges && numAppStatus > 0" [class.disabled]="loading">
                   Clear
                 </a>
-                <a class="btn btn-link" role="button" (click)="cancelAppStatusFilters();isAppStatusCollapsed=true" *ngIf="hasChanges || numAppStatus == 0">
+                <a class="btn btn-link" role="button" (click)="cancelAppStatusFilters()" *ngIf="hasChanges || numAppStatus == 0">
                   Cancel
                 </a>
-                <button class="btn btn-primary" type="button" (click)="applyAppStatusFilters();isAppStatusCollapsed=true" [disabled]="loading">
+                <button class="btn btn-primary" type="button" (click)="applyAppStatusFilters()" [disabled]="loading">
                   Apply
                 </button>
               </div>

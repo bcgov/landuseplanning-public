@@ -212,16 +212,19 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public applyRegionFilters() {
     this.regionFilters = { ...this._regionFilters };
     this.internalApplyAllFilters(true);
+    // this.isRegionCollapsed = true; // FUTURE
   }
 
   public applyCpStatusFilters() {
     this.cpStatusFilters = { ...this._cpStatusFilters };
     this.internalApplyAllFilters(true);
+    this.isCpStatusCollapsed = true;
   }
 
   public applyAppStatusFilters() {
     this.appStatusFilters = { ...this._appStatusFilters };
     this.internalApplyAllFilters(true);
+    this.isAppStatusCollapsed = true;
   }
 
   public applyClFileFilter() {
@@ -399,14 +402,17 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   //
   public cancelRegionFilters() {
     this._regionFilters = { ...this.regionFilters };
+    // this.isRegionCollapsed = true; // FUTURE
   }
 
   public cancelCpStatusFilters() {
     this._cpStatusFilters = { ...this.cpStatusFilters };
+    this.isCpStatusCollapsed = true;
   }
 
   public cancelAppStatusFilters() {
     this._appStatusFilters = { ...this.appStatusFilters };
+    this.isAppStatusCollapsed = true;
   }
 
   public cancelAllFilters() {
@@ -473,18 +479,21 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.regionKeys.forEach(key => {
       this._regionFilters[key] = false;
     });
+    this.applyRegionFilters();
   }
 
   public clearCpStatusFilters() {
     this.cpStatusKeys.forEach(key => {
       this._cpStatusFilters[key] = false;
     });
+    this.applyCpStatusFilters();
   }
 
   public clearAppStatusFilters() {
     this.appStatusKeys.forEach(key => {
       this._appStatusFilters[key] = false;
     });
+    this.applyAppStatusFilters();
   }
 
   public clearAllFilters() {
