@@ -12,7 +12,7 @@
         </li>
         <li>
           <span class="key">Crown Land File No.:</span>
-          <span class="value">{{app?.cl_file || '-'}}</span>
+          <span class="value">{{(app && app['clFile']) || '-'}}</span>
         </li>
         <li>
           <span class="key">Disposition Transaction:</span>

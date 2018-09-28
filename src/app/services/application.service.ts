@@ -146,6 +146,11 @@ export class ApplicationService {
           // user-friendly application status
           application.appStatus = this.getStatusString(this.getStatusCode(application.status));
 
+          // 7-digit CL File number for display
+          if (application.cl_file) {
+            application['clFile'] = application.cl_file.toString().padStart(7, '0');
+          }
+
           // FUTURE: now get the organization
 
           // NB: we don't get documents here
@@ -203,6 +208,11 @@ export class ApplicationService {
 
         // user-friendly application status
         application.appStatus = this.getStatusString(this.getStatusCode(application.status));
+
+        // 7-digit CL File number for display
+        if (application.cl_file) {
+          application['clFile'] = application.cl_file.toString().padStart(7, '0');
+        }
 
         // FUTURE: now get the organization
 
