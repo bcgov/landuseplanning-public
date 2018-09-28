@@ -41,13 +41,6 @@ export class CommentPeriodService {
           return [] as CommentPeriod[];
         }
 
-        // replace \\n (JSON format) with newlines in each comment period
-        periods.forEach((period, i) => {
-          if (periods[i].description) {
-            periods[i].description = periods[i].description.replace(/\\n/g, '\n');
-          }
-        });
-
         return periods;
       })
       .catch(this.api.handleError);
@@ -67,11 +60,6 @@ export class CommentPeriodService {
       })
       .map((period: CommentPeriod) => {
         if (!period) { return null as CommentPeriod; }
-
-        // replace \\n (JSON format) with newlines
-        if (period.description) {
-          period.description = period.description.replace(/\\n/g, '\n');
-        }
 
         this.commentPeriod = period;
         return this.commentPeriod;
