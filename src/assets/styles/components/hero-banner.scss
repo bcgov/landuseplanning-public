@@ -62,10 +62,7 @@
 }
 
 .hero-banner__actions-buttons {
-  @include flex-box();
-
   .btn {
-    @include flex(1 1 auto);
     padding: 0.5rem;
     text-transform: uppercase;
     font-size: 0.85rem;
@@ -92,12 +89,6 @@
       .wb {
         display: inline;
       }
-    }
-  }
-
-  .hero-banner__actions-buttons {
-    .btn {
-      @include flex(0 0 8rem);
     }
   }
 }

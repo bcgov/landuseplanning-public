@@ -2,11 +2,12 @@
 
 .app-header {
   @include clearfix;
+  position: relative;
   padding: 0;
   border-bottom: 4px solid $gold;
   background: $header-bg;
   color: $header-font-color;
-  z-index: 1001;
+  z-index: 1005;
 }
 
 @media (min-width: 768px) {

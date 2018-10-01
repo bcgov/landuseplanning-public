@@ -27,13 +27,19 @@
               </div>
             </div>
             <div class="dropdown-button-bar" *ngVar="cpStatusHasChanges() as hasChanges">
-              <a class="btn btn-link" role="button" (click)="clearCpStatusFilters()" *ngIf="!hasChanges && numCpStatus > 0" [class.disabled]="loading">
+              <button class="btn btn-light no-default" role="button" 
+                (click)="clearCpStatusFilters()" 
+                *ngIf="!hasChanges && numCpStatus > 0" [class.disabled]="loading">
                 Clear
-              </a>
-              <a class="btn btn-link" role="button" (click)="cancelCpStatusFilters()" *ngIf="hasChanges || numCpStatus == 0">
+              </button>
+              <button class="btn btn-light no-default" role="button" 
+                (click)="cancelCpStatusFilters()" 
+                *ngIf="hasChanges || numCpStatus == 0">
                 Cancel
-              </a>
-              <button class="btn btn-primary" type="button" (click)="applyCpStatusFilters();" [disabled]="loading">
+              </button>
+              <button class="btn btn-primary" type="button" 
+                (click)="applyCpStatusFilters();" 
+                [disabled]="loading">
                 Apply
               </button>
             </div>
@@ -56,13 +62,20 @@
                 </label>
               </div>
               <div class="dropdown-button-bar" *ngVar="appStatusHasChanges() as hasChanges">
-                <a class="btn btn-link" role="button" (click)="clearAppStatusFilters()" *ngIf="!hasChanges && numAppStatus > 0" [class.disabled]="loading">
+                <button class="btn btn-light no-default" role="button" 
+                  (click)="clearAppStatusFilters()" 
+                  *ngIf="!hasChanges && numAppStatus > 0" 
+                  [class.disabled]="loading">
                   Clear
-                </a>
-                <a class="btn btn-link" role="button" (click)="cancelAppStatusFilters()" *ngIf="hasChanges || numAppStatus == 0">
+                </button>
+                <button class="btn btn-light no-default" role="button" 
+                  (click)="cancelAppStatusFilters()" 
+                  *ngIf="hasChanges || numAppStatus == 0">
                   Cancel
-                </a>
-                <button class="btn btn-primary" type="button" (click)="applyAppStatusFilters()" [disabled]="loading">
+                </button>
+                <button class="btn btn-primary" type="button" 
+                  (click)="applyAppStatusFilters()" 
+                  [disabled]="loading">
                   Apply
                 </button>
               </div>
@@ -85,27 +98,32 @@
     </div>
 
     <!-- ACTIONS -->
-    <div class="filter-actions d-flex align-items-center">
-      <a class="btn btn-link" role="button" title="Clear filters" (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt"
+    <div class="filter-actions">
+      <button class="btn btn-light no-default" role="button" title="Clear filters" 
+        (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt"
         [class.disabled]="loading">
         Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
-      </a>
+      </button>
       <!-- Remove Inline Block Spacing -->
-      <a class="toggle-filter-btn btn btn-light" role="button" title="Show all filters" *ngIf="isFiltersCollapsed"
+      <button class="toggle-filter-btn btn btn-light" role="button" title="Show all filters" 
+        *ngIf="isFiltersCollapsed"
         (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false;onShowHideClick()"
-        [attr.aria-expanded]="!isFiltersCollapsed" aria-controls="applist-filters">Show all filters
-      </a>
+        [attr.aria-expanded]="!isFiltersCollapsed" aria-controls="applist-filters">
+        <i class="material-icons">
+          tune
+        </i>
+      </button>
 
       <!-- Show when filters are open -->
-      <span class="all-filter-actions" *ngIf="!isFiltersCollapsed">
-        <a class="btn btn-link" role="button" title="Cancel" id="cancelButton" (click)="cancelAllFilters();isFiltersCollapsed=true;onShowHideClick()">
+      <div class="all-filter-actions" *ngIf="!isFiltersCollapsed">
+        <button class="btn btn-light no-default" role="button" title="Cancel" id="cancelButton" (click)="cancelAllFilters();isFiltersCollapsed=true;onShowHideClick()">
           Cancel
-        </a>
+        </button>
         <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();isFiltersCollapsed=true;onShowHideClick()"
           [disabled]="loading">
           Apply
         </button>
-      </span>
+      </div>
 
     </div>
 
