@@ -22,7 +22,6 @@
   }
 
   i {
-    vertical-align: middle;
     + span {
       vertical-align: middle;
     }
@@ -194,4 +193,16 @@ main {
   background: $gold;
   font-size: 0.9375rem;
   font-weight: 700;
+}
+
+// Overrides
+.no-default {
+  border-color: transparent;
+  background: transparent;
+}
+
+.btn-light {
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
 }
