@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter, ApplicationRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
+import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'leaflet';
 import 'leaflet.markercluster';
@@ -44,7 +45,7 @@ const markerIconYellowLg = L.icon({
   styleUrls: ['./applist-map.component.scss']
 })
 
-export class ApplistMapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
   @Input() applications: Array<Application> = []; // from applications component
   @Input() applist; // from applications component
@@ -67,6 +68,7 @@ export class ApplistMapComponent implements OnInit, AfterViewInit, OnChanges, On
 
   constructor(
     private appRef: ApplicationRef,
+    private elementRef: ElementRef,
     public applicationService: ApplicationService,
     public configService: ConfigService,
     private injector: Injector,
@@ -79,7 +81,8 @@ export class ApplistMapComponent implements OnInit, AfterViewInit, OnChanges, On
   //   return L.divIcon({ html: html, className: 'my-cluster', iconSize: L.point(40, 40) });
   // }
 
-  public ngOnInit() {
+  // create map after view (which contains map id) is initialized
+  ngAfterViewInit() {
     const self = this; // for closure function below
 
     // custom control to reset map view
@@ -192,13 +195,23 @@ export class ApplistMapComponent implements OnInit, AfterViewInit, OnChanges, On
     this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
       this.configService.baseLayerName = e.name;
     }, this);
+
+    setTimeout(this.fixMap.bind(this), 50);
   }
 
-  ngAfterViewInit() {
-    this.fitBounds(); // use default bounds
+  // to avoid timing conflict with animations (resulting in small map tile at top left of page),
+  // ensure map component is visible in the DOM then update it; otherwise wait a bit...
+  // ref: https://github.com/Leaflet/Leaflet/issues/4835
+  // ref: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+  private fixMap() {
+    if (this.elementRef.nativeElement.offsetParent) {
+      this.fitBounds(); // use default bounds
 
-    // FUTURE: restore map bounds here ?
-    // this.fitBounds(this.configService.mapBounds);
+      // FUTURE: restore map bounds here ?
+      // this.fitBounds(this.configService.mapBounds);
+    } else {
+      setTimeout(this.fixMap.bind(this), 50);
+    }
   }
 
   // called when apps list changes
