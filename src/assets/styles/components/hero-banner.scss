@@ -10,6 +10,7 @@
 
   .container {
     display: table;
+    height: 1px; // Fix Firefox - won't correnctly render min-height unless an initial value is added
     min-height: 20rem;
 
     &-inner {
