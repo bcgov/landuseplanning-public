@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
@@ -26,16 +26,12 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
   public application: Application = null;
   public map: L.Map = null;
   public appFG = L.featureGroup(); // group of layers for subject app
-  private fitBoundsOptions: L.FitBoundsOptions = {
-    // disable animation to prevent known bug where zoom is sometimes incorrect
-    // ref: https://github.com/Leaflet/Leaflet/issues/3249
-    animate: false,
-    // use bottom padding to keep shape in bounds
-    paddingBottomRight: [0, 25]
-  };
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
+  readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
+
   constructor(
+    private elementRef: ElementRef,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
@@ -84,11 +80,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
         element.onmouseout = () => element.style.backgroundColor = '#fff';
 
         element.onclick = function () {
-          // fit the bounds for this app
-          const bounds = self.appFG.getBounds();
-          if (bounds && bounds.isValid()) {
-            self.map.fitBounds(bounds, self.fitBoundsOptions);
-          }
+          self.fitBounds(self.appFG.getBounds());
         };
 
         // prevent underlying map actions for these events
@@ -129,6 +121,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = L.map('map', {
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
+      zoomSnap: 0.1 // for greater granularity when fitting bounds
     });
 
     // NB: don't need to handle map change events
@@ -139,6 +132,9 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // add zoom control
     L.control.zoom({ position: 'topleft' }).addTo(this.map);
+
+    // add scale control
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
     // add base maps layers control
     const baseLayers = {
@@ -163,9 +159,6 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
       this.configService.baseLayerName = e.name;
     }, this);
 
-    // add scale control
-    L.control.scale({ position: 'bottomright' }).addTo(this.map);
-
     // draw application features
     if (this.application) {
       this.application.features.forEach(f => {
@@ -179,10 +172,34 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.map.addLayer(this.appFG);
 
-    // fit the bounds
-    const bounds = this.appFG.getBounds();
+    this.fixMap();
+  }
+
+  // to avoid timing conflict with animations (resulting in small map tile at top left of page),
+  // ensure map component is visible in the DOM then update it; otherwise wait a bit...
+  // ref: https://github.com/Leaflet/Leaflet/issues/4835
+  // ref: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+  private fixMap() {
+    if (this.elementRef.nativeElement.offsetParent) {
+      this.fitBounds(this.appFG.getBounds());
+    } else {
+      setTimeout(this.fixMap.bind(this), 50);
+    }
+  }
+
+  private fitBounds(bounds: L.LatLngBounds = null) {
+    const fitBoundsOptions: L.FitBoundsOptions = {
+      // disable animation to prevent known bug where zoom is sometimes incorrect
+      // ref: https://github.com/Leaflet/Leaflet/issues/3249
+      animate: false,
+      // use bottom padding to keep shape in bounds
+      paddingBottomRight: [0, 35]
+    };
+
     if (bounds && bounds.isValid()) {
-      this.map.fitBounds(bounds, this.fitBoundsOptions);
+      this.map.fitBounds(bounds, fitBoundsOptions);
+    } else {
+      this.map.fitBounds(this.defaultBounds, fitBoundsOptions);
     }
   }
 
