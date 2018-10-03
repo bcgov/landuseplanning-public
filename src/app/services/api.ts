@@ -99,6 +99,7 @@ export class ApiService {
     clFile: string, dispId: string, purpose: string) {
     const fields = [
       'agency',
+      'areaHectares',
       'businessUnit',
       'centroid',
       'cl_file',
@@ -106,6 +107,7 @@ export class ApiService {
       'description',
       'legalDescription',
       'location',
+      'name',
       'publishDate',
       'purpose',
       'status',
@@ -134,6 +136,7 @@ export class ApiService {
   getApplication(id: string) {
     const fields = [
       'agency',
+      'areaHectares',
       'businessUnit',
       'centroid',
       'cl_file',
@@ -141,6 +144,7 @@ export class ApiService {
       'description',
       'legalDescription',
       'location',
+      'name',
       'publishDate',
       'purpose',
       'status',

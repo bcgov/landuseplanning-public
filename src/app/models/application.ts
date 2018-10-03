@@ -9,6 +9,7 @@ export class Application {
 
   // the following are retrieved from the API
   agency: string;
+  areaHectares: number;
   businessUnit: string;
   centroid: Array<number> = []; // [lng, lat]
   cl_file: number;
@@ -16,6 +17,7 @@ export class Application {
   description: string;
   legalDescription: string;
   location: string;
+  name: string; // MAY BE OBSOLETE
   publishDate: Date;
   purpose: string;
   status: string;
@@ -28,7 +30,6 @@ export class Application {
   region: string; // region code derived from Business Unit
   appStatus: string; // user-friendly application status
   cpStatus: string; // user-friendly comment period status
-  areaHectares: number; // calculated from all features
 
   // TODO: delete isMatches (everywhere) when API performs filtering
   isMatches = true; // whether this application matches current filters
@@ -45,12 +46,14 @@ export class Application {
   constructor(obj?: any) {
     this._id                     = obj && obj._id                     || null;
     this.agency                  = obj && obj.agency                  || null;
+    this.areaHectares            = obj && obj.areaHectares            || null;
     this.businessUnit            = obj && obj.businessUnit            || null;
     this.cl_file                 = obj && obj.cl_file                 || null;
     this.client                  = obj && obj.client                  || null;
     this.description             = obj && obj.description             || null;
     this.legalDescription        = obj && obj.legalDescription        || null;
     this.location                = obj && obj.location                || null;
+    this.name                    = obj && obj.name                    || null;
     this.publishDate             = obj && obj.publishDate             || null;
     this.purpose                 = obj && obj.purpose                 || null;
     this.status                  = obj && obj.status                  || null;
@@ -63,7 +66,6 @@ export class Application {
     this.region                  = obj && obj.region                  || null;
     this.appStatus               = obj && obj.appStatus               || null;
     this.cpStatus                = obj && obj.cpStatus                || null;
-    this.areaHectares            = obj && obj.areaHectares            || null;
 
     if (obj && obj.centroid) {
       obj.centroid.forEach(num => {
