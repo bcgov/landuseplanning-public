@@ -153,14 +153,16 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
     // draw application features
-    this.application.features.forEach(f => {
-      const feature = JSON.parse(JSON.stringify(f));
-      // needs to be valid GeoJSON
-      delete feature.geometry_name;
-      const featureObj: GeoJSON.Feature<any> = feature;
-      const layer = L.geoJSON(featureObj, {});
-      this.appFG.addLayer(layer);
-    });
+    if (this.application) {
+      this.application.features.forEach(f => {
+        const feature = JSON.parse(JSON.stringify(f));
+        // needs to be valid GeoJSON
+        delete feature.geometry_name;
+        const featureObj: GeoJSON.Feature<any> = feature;
+        const layer = L.geoJSON(featureObj, {});
+        this.appFG.addLayer(layer);
+      });
+    }
     this.map.addLayer(this.appFG);
 
     // fit the bounds
@@ -171,6 +173,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.map) { this.map.remove(); }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
