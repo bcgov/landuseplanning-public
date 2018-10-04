@@ -196,7 +196,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.configService.baseLayerName = e.name;
     }, this);
 
-    setTimeout(this.fixMap.bind(this), 50);
+    this.fixMap();
   }
 
   // to avoid timing conflict with animations (resulting in small map tile at top left of page),
