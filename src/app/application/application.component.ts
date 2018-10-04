@@ -6,6 +6,7 @@ import 'rxjs/add/operator/takeUntil';
 import * as L from 'leaflet';
 
 import { Application } from 'app/models/application';
+import { ConfigService } from 'app/services/config.service';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { AddCommentComponent } from './add-comment/add-comment.component';
@@ -38,6 +39,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
+    public configService: ConfigService,
     public applicationService: ApplicationService, // used in template
     public commentPeriodService: CommentPeriodService // used in template
   ) { }
@@ -125,7 +127,6 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.map = L.map('map', {
-      layers: [World_Imagery],
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
     });
@@ -140,14 +141,27 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
     L.control.zoom({ position: 'topleft' }).addTo(this.map);
 
     // add base maps layers control
-    const baseMaps = {
+    const baseLayers = {
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
       'Open Surfer Roads': OpenMapSurfer_Roads,
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
-    L.control.layers(baseMaps).addTo(this.map);
+    L.control.layers(baseLayers).addTo(this.map);
+
+    // load base layer
+    for (const key of Object.keys(baseLayers)) {
+      if (key === this.configService.baseLayerName) {
+        this.map.addLayer(baseLayers[key]);
+        break;
+      }
+    }
+
+    // save any future base layer changes
+    this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
+      this.configService.baseLayerName = e.name;
+    }, this);
 
     // add scale control
     L.control.scale({ position: 'bottomright' }).addTo(this.map);
