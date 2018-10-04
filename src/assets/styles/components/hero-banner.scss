@@ -31,15 +31,6 @@
     line-height: 2.15rem;
     font-size: 2.25rem;
 
-    .version {
-      margin-top: -0.2rem;
-      display: inline-block;
-      color: $gold;
-      font-size: 0.875rem;
-      font-weight: 700;
-      vertical-align: top;
-    }
-
     .wb {
       display: block;
     }
@@ -50,6 +41,7 @@
     line-height: 1.5rem;
     font-size: 1rem;
     font-weight: 300;
+    orphans: 3;
   }
 }
 
@@ -78,18 +70,16 @@
   }
 }
 
+@media (min-width: 400px) {
+  .hero-banner {
+    background-size: 300%;
+  }
+}
+
 @media (min-width: 567px) {
   .hero-banner {
     .container {
       min-height: 20rem;
-    }
-  }
-
-  .hero-banner__content {
-    h1 {
-      .wb {
-        display: inline;
-      }
     }
   }
 }
@@ -110,10 +100,6 @@
     h1 {
       line-height: 2.8rem;
       font-size: 2.65rem;
-
-      .version {
-        margin-top: -0.4rem;
-      }
     }
 
     p {
@@ -121,12 +107,6 @@
       font-size: 1.25rem;
     }
   }
-}
-
-
-.alt-image {
-  background-position: center bottom;
-  background-size: 350%;
 }
 
 @media (min-width: 1024px) {
