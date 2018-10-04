@@ -332,16 +332,13 @@ export class ApplicationService {
    * Returns region abbreviation.
    */
   getRegionCode(businessUnit: string): string {
-    if (businessUnit) {
-      return businessUnit.toUpperCase().split(' ')[0];
-    }
-    return null;
+    return businessUnit && businessUnit.toUpperCase().split(' ')[0];
   }
 
   /**
    * Given a region code, returns user-friendly region string.
    */
   getRegionString(abbrev: string): string {
-    return this.regions[abbrev]; // returns null if not found
+    return abbrev && this.regions[abbrev]; // returns null if not found
   }
 }

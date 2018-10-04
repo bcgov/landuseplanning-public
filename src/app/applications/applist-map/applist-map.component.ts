@@ -229,6 +229,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   public ngOnDestroy() {
+    if (this.map) { this.map.remove(); }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
