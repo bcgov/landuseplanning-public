@@ -47,6 +47,9 @@
         </section>
 
         <section class="map-item">
+          <div class="map-item__no-results" *ngIf="!application.features || application.features.length === 0">
+            <span class="no-results-msg">No map available</span>
+          </div>
           <div class="map-container">
             <div class="map" id="map"></div>
           </div>
@@ -76,7 +79,13 @@
           </div>
           <div class="col-6">
             <label>Agency</label>
-            <p class="value">Crown Land Allocation</p>
+            <p class="value">{{application.agency || "-"}}</p>
+          </div>
+          <!-- if no features, display Legal Description here -->
+          <!-- otherwise it's displayed in shape section below -->
+          <div class="col-12" *ngIf="!application.features || application.features.length === 0">
+            <label>Legal Description</label>
+            <p class="value" [innerHTML]="(application.legalDescription | newlines) || '-'"></p>
           </div>
         </section>
 

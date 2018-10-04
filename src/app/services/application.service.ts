@@ -12,7 +12,6 @@ import { ApiService } from './api';
 import { DocumentService } from './document.service';
 import { CommentPeriodService } from './commentperiod.service';
 import { DecisionService } from './decision.service';
-import { SearchService } from './search.service';
 import { FeatureService } from './feature.service';
 
 @Injectable()
@@ -56,7 +55,6 @@ export class ApplicationService {
     private documentService: DocumentService,
     private commentPeriodService: CommentPeriodService,
     private decisionService: DecisionService,
-    private searchService: SearchService,
     private featureService: FeatureService
   ) {
     // user-friendly strings for display
@@ -151,11 +149,9 @@ export class ApplicationService {
             application['clFile'] = application.cl_file.toString().padStart(7, '0');
           }
 
-          // FUTURE: now get the organization
+          // NB: we don't get the documents here
 
-          // NB: we don't get documents here
-
-          // now get the current comment period
+          // get the current comment period
           promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
             .toPromise()
             .then(periods => {
@@ -168,7 +164,7 @@ export class ApplicationService {
 
           // NB: we don't get the decision here
 
-          // NB: we don't get the shapes (features) here
+          // NB: we don't get the features here
 
         });
 
@@ -214,15 +210,13 @@ export class ApplicationService {
           application['clFile'] = application.cl_file.toString().padStart(7, '0');
         }
 
-        // FUTURE: now get the organization
-
-        // now get the documents
+        // get the documents
         promises.push(this.documentService.getAllByApplicationId(application._id)
           .toPromise()
           .then(documents => application.documents = documents)
         );
 
-        // now get the current comment period
+        // get the current comment period
         promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
           .toPromise()
           .then(periods => {
@@ -233,26 +227,16 @@ export class ApplicationService {
           })
         );
 
-        // now get the decision
+        // get the decision
         promises.push(this.decisionService.getByApplicationId(application._id, forceReload)
           .toPromise()
           .then(decision => application.decision = decision)
         );
 
-        // now get the shapes (features)
+        // get the features
         promises.push(this.featureService.getByApplicationId(application._id)
           .toPromise()
-          .then(features => {
-            application.features = features;
-
-            // calculate Total Area (hectares) from all features
-            application.areaHectares = 0;
-            _.each(application.features, function (f) {
-              if (f['properties']) {
-                application.areaHectares += f['properties'].TENURE_AREA_IN_HECTARES;
-              }
-            });
-          })
+          .then(features => application.features = features)
         );
 
         return Promise.all(promises).then(() => {
