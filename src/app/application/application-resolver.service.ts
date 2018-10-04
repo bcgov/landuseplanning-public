@@ -12,7 +12,11 @@ export class ApplicationResolver implements Resolve<Application> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Application> {
     const appId = route.paramMap.get('appId');
-    return this.applicationService.getById(appId)
-      .catch(err => { return Observable.of(null as Application); });
+
+    // force-reload so we always have latest data
+    return this.applicationService.getById(appId, true)
+      .catch(err => {
+        return Observable.of(null as Application);
+      });
   }
 }
