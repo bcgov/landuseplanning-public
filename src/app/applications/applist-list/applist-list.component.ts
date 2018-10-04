@@ -28,7 +28,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   ) { }
 
   get clientWidth(): number {
-    return this.elementRef.nativeElement.firstElementChild.clientHeight; // div.app-list__container
+    return this.elementRef.nativeElement.firstElementChild.clientWidth; // div.app-list__container
   }
 
   public ngOnInit() { }

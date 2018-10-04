@@ -164,5 +164,7 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
   /**
    * Called when list component visibility is toggled.
    */
-  public toggleAppList() { this.appmap.toggleAppList(); }
+  public toggleAppList() {
+    this.configService.isApplistListVisible = !this.configService.isApplistListVisible;
+  }
 }
