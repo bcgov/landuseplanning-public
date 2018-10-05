@@ -113,6 +113,14 @@
   .hero-banner {
     background-size: 150%;
   }
+
+  .hero-banner__content {
+    h1 {
+      .wb {
+        display: inline;
+      }
+    }
+  }
 }
 
 @media (min-width: 1200px) {
