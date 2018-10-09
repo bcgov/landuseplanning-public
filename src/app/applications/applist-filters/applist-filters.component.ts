@@ -145,8 +145,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.appStatusKeys.push(this.applicationService.SUSPENDED);
   }
 
+  // full height = top of app-applist-filters.app-filters + height of div.app-filters__header
   get clientHeight(): number {
-    return this.elementRef.nativeElement.firstElementChild.clientHeight; // div.app-filters__container
+    return this.elementRef.nativeElement.offsetTop + this.elementRef.nativeElement.firstElementChild.firstElementChild.clientHeight;
   }
 
   public ngOnInit() {
