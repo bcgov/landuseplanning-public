@@ -1,15 +1,15 @@
 <div class="app-filters__container d-flex flex-column" name="Filters to limit displayed Crown land applications"
-  [ngClass]="isFiltersCollapsed ? 'closed':'open'">
+  [ngClass]="configService.isApplicationsFiltersVisible ? 'open':'closed'">
 
   <div class="app-filters__header d-flex justify-content-between">
     <div class="d-flex align-items-center">
       
       <!-- Filter Actions Bar -->
-      <div class="app-filters__title" *ngIf="!isFiltersCollapsed">
+      <div class="app-filters__title" *ngIf="configService.isApplicationsFiltersVisible">
         All Filters
       </div>
 
-      <div class="filter-actions-bar clearfix" *ngIf="isFiltersCollapsed">
+      <div class="filter-actions-bar clearfix" *ngIf="!configService.isApplicationsFiltersVisible">
         <!-- Comment Period Dropdown -->
         <div class="filter-control dropdown float-left" *ngVar="cpStatusCount() as numCpStatus">
           <button class="btn dropdown-toggle" type="button" [ngClass]="(numCpStatus > 0) ? 'btn-secondary' : 'btn-outline-secondary'" id="cpStatusFilterButton"
@@ -99,26 +99,24 @@
     <!-- ACTIONS -->
     <div class="filter-actions">
       <button class="btn btn-light no-default" role="button" title="Clear filters" 
-        (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt"
+        (click)="clearAllFilters();configService.isApplicationsFiltersVisible=false" *ngVar="filterCount() as filtCnt"
         [class.disabled]="loading || filtCnt == 0">
         Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
       </button>
       <!-- Remove Inline Block Spacing -->
       <button class="toggle-filter-btn btn btn-light" role="button" title="Show all filters" 
-        *ngIf="isFiltersCollapsed"
-        (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;isFiltersCollapsed=false;onShowHideClick()"
-        [attr.aria-expanded]="!isFiltersCollapsed" aria-controls="applist-filters">
-        <i class="material-icons">
-          tune
-        </i>
+        *ngIf="!configService.isApplicationsFiltersVisible"
+        (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=true;configService.isApplicationsFiltersVisible=true"
+        [attr.aria-expanded]="configService.isApplicationsFiltersVisible" aria-controls="applist-filters">
+        <i class="material-icons">tune</i>
       </button>
 
       <!-- Show when filters are open -->
-      <div class="all-filter-actions" *ngIf="!isFiltersCollapsed">
-        <button class="btn btn-light no-default" role="button" title="Cancel" id="cancelButton" (click)="cancelAllFilters();isFiltersCollapsed=true;onShowHideClick()">
+      <div class="all-filter-actions" *ngIf="configService.isApplicationsFiltersVisible">
+        <button class="btn btn-light no-default" role="button" title="Cancel" id="cancelButton" (click)="cancelAllFilters();configService.isApplicationsFiltersVisible=false">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();isFiltersCollapsed=true;onShowHideClick()"
+        <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();configService.isApplicationsFiltersVisible=false"
           [disabled]="loading">
           Apply
         </button>
@@ -129,7 +127,7 @@
   </div>
 
   <!-- Application Filter Inputs / All Filters -->
-  <div class="app-filters__body" id="applist-filters" [ngbCollapse]="isFiltersCollapsed">
+  <div class="app-filters__body" id="applist-filters" [ngbCollapse]="!configService.isApplicationsFiltersVisible">
       
     <!-- Comment Period -->
     <fieldset (click)="$event.stopPropagation()">

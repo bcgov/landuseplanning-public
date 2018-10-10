@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ElementRef } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
-import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
@@ -14,6 +12,7 @@ import { Constants } from 'app/utils/constants';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
+import { UrlService } from 'app/services/url.service';
 
 export interface FiltersType {
   regions: Array<string>;
@@ -40,11 +39,10 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
 
-  public isFiltersCollapsed: boolean;
+  public isRegionCollapsed = true;
   public isCpStatusCollapsed = true;
   public isAppStatusCollapsed = true;
   public loading = true; // init
-  private paramMap: ParamMap = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   // search keys for drop-down menus
@@ -52,7 +50,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   public cpStatusKeys: Array<string> = [];
   public appStatusKeys: Array<string> = [];
 
-  // search key for text box
+  // search keys for text boxes
   private purposeKeys: Array<string> = [];
   private subpurposeKeys: Array<string> = [];
 
@@ -81,8 +79,9 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   public _subpurposeFilter: string = null; // temporary filters for Cancel feature
 
   public publishFromFilter: Date = null;
-  public publishToFilter: Date = null;
   public _publishFromFilter: Date = null; // temporary filters for Cancel feature
+
+  public publishToFilter: Date = null;
   public _publishToFilter: Date = null; // temporary filters for Cancel feature
 
   // (arrow) functions to return type-ahead results
@@ -104,12 +103,10 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
       );
 
   constructor(
-    private location: Location,
-    private route: ActivatedRoute,
-    private router: Router,
     private applicationService: ApplicationService,
     public commentPeriodService: CommentPeriodService, // also used in template
-    private configService: ConfigService,
+    public configService: ConfigService, // used in template
+    private urlService: UrlService,
     private elementRef: ElementRef
   ) {
     // populate the keys we want to display
@@ -131,6 +128,14 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.appStatusKeys.push(this.applicationService.ABANDONED);
     this.appStatusKeys.push(this.applicationService.DISPOSITION_GOOD_STANDING);
     this.appStatusKeys.push(this.applicationService.SUSPENDED);
+
+    // watch for URL param changes
+    this.urlService.onNavEnd$
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        // load initial and updated filters
+        this._resetAllFilters(false);
+      });
   }
 
   // full height = top of app-applist-filters.app-filters + height of div.app-filters__header
@@ -139,18 +144,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.isFiltersCollapsed = !this.configService.isApplicationsFiltersVisible;
-
-    // get optional query parameters
-    this.route.queryParamMap
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(paramMap => {
-        this.paramMap = paramMap;
-
-        // set filters according to paramMap
-        this._resetAllFilters(false);
-      });
-
     // load these lists just once as they don't change
     // build array of purposes only
     Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
@@ -244,73 +237,49 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   private _saveFilters() {
-    const params: Params = {}; // array-like object
-
+    let regions: string = null;
     this.regionKeys.forEach(key => {
       if (this.regionFilters[key]) {
-        if (!params['regions']) {
-          params['regions'] = key;
+        if (!regions) {
+          regions = key;
         } else {
-          params['regions'] += ',' + key;
+          regions += ',' + key;
         }
       }
     });
+    this.urlService.save('regions', regions);
 
+    let cpStatuses: string = null;
     this.cpStatusKeys.forEach(key => {
       if (this.cpStatusFilters[key]) {
-        if (!params['cpStatuses']) {
-          params['cpStatuses'] = key;
+        if (!cpStatuses) {
+          cpStatuses = key;
         } else {
-          params['cpStatuses'] += ',' + key;
+          cpStatuses += ',' + key;
         }
       }
     });
+    this.urlService.save('cpStatuses', cpStatuses);
 
+    let appStatuses: string = null;
     this.appStatusKeys.forEach(key => {
       if (this.appStatusFilters[key]) {
-        if (!params['appStatuses']) {
-          params['appStatuses'] = key;
+        if (!appStatuses) {
+          appStatuses = key;
         } else {
-          params['appStatuses'] += ',' + key;
+          appStatuses += ',' + key;
         }
       }
     });
+    this.urlService.save('appStatuses', appStatuses);
 
-    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
-    if (applicantFilter) {
-      params['applicant'] = applicantFilter;
-    }
-
-    // check length in case user entered then deleted value
-    if (this.clFileFilter && this.clFileFilter.toString().length > 0) {
-      params['clFile'] = this.clFileFilter;
-    }
-
-    // check length in case user entered then deleted value
-    if (this.dispIdFilter && this.dispIdFilter.toString().length > 0) {
-      params['dispId'] = this.dispIdFilter;
-    }
-
-    const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
-    if (purposeFilter) {
-      params['purpose'] = purposeFilter;
-    }
-
-    const subpurposeFilter = this.subpurposeFilter && this.subpurposeFilter.trim(); // returns null or empty
-    if (subpurposeFilter) {
-      params['subpurpose'] = subpurposeFilter;
-    }
-
-    if (this.publishFromFilter) {
-      params['publishFrom'] = moment(this.publishFromFilter).format('YYYY-MM-DD');
-    }
-
-    if (this.publishToFilter) {
-      params['publishTo'] = moment(this.publishToFilter).format('YYYY-MM-DD');
-    }
-
-    // change browser URL without reloading page (so any query params are saved in history)
-    this.location.go(this.router.createUrlTree([], { relativeTo: this.route, queryParams: params }).toString());
+    this.urlService.save('applicant', this.applicantFilter && this.applicantFilter.trim());
+    this.urlService.save('clFile', this.clFileFilter && this.clFileFilter.toString());
+    this.urlService.save('dispId', this.dispIdFilter && this.dispIdFilter.toString());
+    this.urlService.save('purpose', this.purposeFilter && this.purposeFilter.trim());
+    this.urlService.save('subpurpose', this.subpurposeFilter && this.subpurposeFilter.trim());
+    this.urlService.save('publishFrom', this.publishFromFilter && moment(this.publishFromFilter).format('YYYY-MM-DD'));
+    this.urlService.save('publishTo', this.publishToFilter && moment(this.publishToFilter).format('YYYY-MM-DD'));
   }
 
   //
@@ -318,7 +287,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   //
   public cancelRegionFilters() {
     this._regionFilters = { ...this.regionFilters };
-    // this.isRegionCollapsed = true; // FUTURE
+    this.isRegionCollapsed = true;
   }
 
   public cancelCpStatusFilters() {
@@ -344,47 +313,45 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this._publishToFilter = this.publishToFilter;
   }
 
-  // (re)sets all filters from current param map
+  // (re)sets all filters from current URL
   private _resetAllFilters(doApply: boolean) {
-    if (this.paramMap) {
-      // set region filters according to current param options
-      const regions = (this.paramMap.get('regions') || '').split(',');
-      this.regionKeys.forEach(key => {
-        this.regionFilters[key] = regions.includes(key);
-      });
+    // set region filters according to current param options
+    const regions = (this.urlService.query('regions') || '').split(',');
+    this.regionKeys.forEach(key => {
+      this.regionFilters[key] = regions.includes(key);
+    });
 
-      // set cpStatus filters according to current param options
-      const cpStatuses = (this.paramMap.get('cpStatuses') || '').split(',');
-      this.cpStatusKeys.forEach(key => {
-        this.cpStatusFilters[key] = cpStatuses.includes(key);
-      });
+    // set cpStatus filters according to current param options
+    const cpStatuses = (this.urlService.query('cpStatuses') || '').split(',');
+    this.cpStatusKeys.forEach(key => {
+      this.cpStatusFilters[key] = cpStatuses.includes(key);
+    });
 
-      // set appStatus filters according to current param options
-      const appStatuses = (this.paramMap.get('appStatuses') || '').split(',');
-      this.appStatusKeys.forEach(key => {
-        this.appStatusFilters[key] = appStatuses.includes(key);
-      });
+    // set appStatus filters according to current param options
+    const appStatuses = (this.urlService.query('appStatuses') || '').split(',');
+    this.appStatusKeys.forEach(key => {
+      this.appStatusFilters[key] = appStatuses.includes(key);
+    });
 
-      this.applicantFilter = this.paramMap.get('applicant');
-      this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
-      this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
-      this.purposeFilter = this.paramMap.get('purpose');
-      this.subpurposeFilter = this.paramMap.get('subpurpose');
-      this.publishFromFilter = this.paramMap.get('publishFrom') ? moment(this.paramMap.get('publishFrom')).toDate() : null;
-      this.publishToFilter = this.paramMap.get('publishTo') ? moment(this.paramMap.get('publishTo')).toDate() : null;
+    this.applicantFilter = this.urlService.query('applicant');
+    this.clFileFilter = this.urlService.query('clFile') ? +this.urlService.query('clFile') : null;
+    this.dispIdFilter = this.urlService.query('dispId') ? +this.urlService.query('dispId') : null;
+    this.purposeFilter = this.urlService.query('purpose');
+    this.subpurposeFilter = this.urlService.query('subpurpose');
+    this.publishFromFilter = this.urlService.query('publishFrom') ? moment(this.urlService.query('publishFrom')).toDate() : null;
+    this.publishToFilter = this.urlService.query('publishTo') ? moment(this.urlService.query('publishTo')).toDate() : null;
 
-      // copy all data from actual to temporary properties
-      this._regionFilters = { ...this.regionFilters };
-      this._cpStatusFilters = { ...this.cpStatusFilters };
-      this._appStatusFilters = { ...this.appStatusFilters };
-      this._applicantFilter = this.applicantFilter;
-      this._clFileFilter = this.clFileFilter;
-      this._dispIdFilter = this.dispIdFilter;
-      this._purposeFilter = this.purposeFilter;
-      this._subpurposeFilter = this.subpurposeFilter;
-      this._publishFromFilter = this.publishFromFilter;
-      this._publishToFilter = this.publishToFilter;
-    }
+    // copy all data from actual to temporary properties
+    this._regionFilters = { ...this.regionFilters };
+    this._cpStatusFilters = { ...this.cpStatusFilters };
+    this._appStatusFilters = { ...this.appStatusFilters };
+    this._applicantFilter = this.applicantFilter;
+    this._clFileFilter = this.clFileFilter;
+    this._dispIdFilter = this.dispIdFilter;
+    this._purposeFilter = this.purposeFilter;
+    this._subpurposeFilter = this.subpurposeFilter;
+    this._publishFromFilter = this.publishFromFilter;
+    this._publishToFilter = this.publishToFilter;
 
     // if called from UI, apply new filters
     // otherwise this was called internally (eg, init)
@@ -493,10 +460,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
   public appStatusHasChanges(): boolean {
     return !_.isEqual(this._appStatusFilters, this.appStatusFilters);
-  }
-
-  public onShowHideClick() {
-    this.configService.isApplicationsFiltersVisible = !this.isFiltersCollapsed;
   }
 
   public onLoadStart() { this.loading = true; }

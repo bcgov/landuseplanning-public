@@ -33,7 +33,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private elementRef: ElementRef,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
     public configService: ConfigService,
@@ -43,7 +43,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     // get data from route resolver
-    this.route.data
+    this.activatedRoute.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         (data: { application: Application }) => {

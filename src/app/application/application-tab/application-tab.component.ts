@@ -15,14 +15,14 @@ export class ApplicationTabComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     public api: ApiService // used in template
   ) { }
 
   ngOnInit() {
     // get application
-    this.route.parent.data
+    this.activatedRoute.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         (data: { application: Application }) => {

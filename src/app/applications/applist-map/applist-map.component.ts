@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
+import { UrlService } from 'app/services/url.service';
 import { AppDetailPopupComponent } from 'app/applications/app-detail-popup/app-detail-popup.component';
 
 declare module 'leaflet' {
@@ -62,9 +63,8 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
     // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
   });
-  private loading = false;
-  private gotChanges = false;
   private oldZoom: number = null;
+  private isMapReady = false;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
@@ -74,9 +74,30 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     private elementRef: ElementRef,
     public applicationService: ApplicationService,
     public configService: ConfigService,
+    public urlService: UrlService,
     private injector: Injector,
     private resolver: ComponentFactoryResolver
-  ) { }
+  ) {
+    this.urlService.onNavEnd$
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        // console.log('nav end event');
+        // // try to load new map state
+        // if (this.isMapReady) {
+        //   const lat = this.urlService.query('lat');
+        //   const lng = this.urlService.query('lng');
+        //   const zoom = this.urlService.query('zoom');
+
+        //   if (lat && lng && zoom) {
+        //     console.log('...updating map state');
+        //     this.map.setView(L.latLng(+lat, +lng), +zoom);
+        //   } else {
+        //     console.log('...fitting default bounds');
+        //     this.fitBounds(); // default bounds
+        //   }
+        // }
+      });
+  }
 
   // // for creating custom cluster icon
   // private clusterCreate(cluster): L.Icon | L.DivIcon {
@@ -98,7 +119,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
-        element.onclick = () => self.fitBounds(); // use default bounds
+        element.onclick = () => self.resetView();
         element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
@@ -142,6 +163,9 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       attributionControl: false
     });
 
+    // identify when map has initialized with a view
+    this.map.whenReady(() => this.isMapReady = true);
+
     // map state change events
     this.map.on('zoomstart', function () {
       // console.log('zoomstart');
@@ -157,22 +181,31 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // }, this);
 
     // NB: moveend is called after zoomstart, movestart and resize
-    this.map.on('moveend', function () {
+    // NB: fitBounds() also ends up here
+    this.map.on('moveend', () => {
       // console.log('moveend');
 
-      // ignore initial map draw
-      if (this.gotChanges) {
-        // const newZoom = this.map.getZoom();
-        // const doReQuery = newZoom <= this.oldZoom; // ignore zooming in
-        // this.oldZoom = newZoom;
-        // this.setVisible(doReQuery);
-        if (this.isMapReady) { this.setVisible(true); }
-      }
-    }, this);
+      // notify applications component of updated coordinates
+      // const newZoom = this.map.getZoom();
+      // const doEmit = newZoom <= this.oldZoom; // ignore zooming in
+      // this.oldZoom = newZoom;
+      // if (doEmit) { this.emitCoordinates(); }
+      if (this.isMapReady) { this.emitCoordinates(); }
+
+      // FUTURE
+      // // save map state
+      // if (this.isMapReady) {
+      //   console.log('...saving map state');
+      //   const center = this.map.getCenter();
+      //   const zoom = this.map.getZoom();
+      //   this.urlService.save('lat', center.lat.toFixed(4).toString());
+      //   this.urlService.save('lng', center.lng.toFixed(4).toString());
+      //   this.urlService.save('zoom', zoom.toFixed(1).toString());
+      // }
+    });
 
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
-
 
     // add base maps layers control
     const baseLayers = {
@@ -205,9 +238,9 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     // save any future base layer changes
-    this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
+    this.map.on('baselayerchange', (e: L.LayersControlEvent) => {
       this.configService.baseLayerName = e.name;
-    }, this);
+    });
 
     this.fixMap();
   }
@@ -217,11 +250,21 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   // ref: https://github.com/Leaflet/Leaflet/issues/4835
   // ref: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
   private fixMap() {
-    if (this.elementRef.nativeElement.offsetParent) {
-      this.fitBounds(); // use default bounds
+    // console.log('fixing map');
 
-      // FUTURE: restore map bounds here ?
-      // this.fitBounds(this.configService.mapBounds);
+    if (this.elementRef.nativeElement.offsetParent) {
+      // try to restore map state
+      const lat = this.urlService.query('lat');
+      const lng = this.urlService.query('lng');
+      const zoom = this.urlService.query('zoom');
+
+      if (lat && lng && zoom) {
+        // console.log('...setting map state');
+        this.map.setView(L.latLng(+lat, +lng), +zoom); // NOTE: unary operators
+      } else {
+        // console.log('...fitting default bounds');
+        this.fitBounds(); // default bounds
+      }
     } else {
       setTimeout(this.fixMap.bind(this), 50);
     }
@@ -232,15 +275,19 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // update map only if it's visible
     if (this.configService.isApplicationsMapVisible) {
       if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
-        this.gotChanges = true;
         // console.log('map: got changed apps =', changes.applications);
 
-        // FUTURE: for better performance, if an app is both deleted and added, ignore it (or reassign it)
+        // FUTURE: for better performance and to reduce flashing markers,
+        //         if an app is both deleted and added then ignore it (or reassign it)
         // _.intersection()?
         // _.without()?
         // _.xor()?
         const deletedApps = _.differenceBy(changes.applications.previousValue as Array<Application>, changes.applications.currentValue as Array<Application>, '_id');
         const addedApps = _.differenceBy(changes.applications.currentValue as Array<Application>, changes.applications.previousValue as Array<Application>, '_id');
+        // console.log('deleted =', deletedApps);
+        // console.log('added =', addedApps);
+        // console.log('without =', _.without(changes.applications.previousValue as Array<Application>, ...changes.applications.currentValue as Array<Application>));
+        // console.log('xor =', _.xor(changes.applications.previousValue as Array<Application>, changes.applications.currentValue as Array<Application>));
 
         // (re)draw the matching apps
         this.drawMap(deletedApps, addedApps);
@@ -249,6 +296,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   // when map becomes visible, draw all apps
+  // TODO: or just emit current bounds and cause a reload?
   public onMapVisible() {
     // delete any old apps
     this.markerList.forEach(marker => {
@@ -267,40 +315,46 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   /**
-   * Sets which apps are currently visible.
-   * Actual function executes no more than once every 250ms.
+   * Resets map view.
    */
-  // tslint:disable-next-line:member-ordering
-  private setVisible = _.debounce(this._setVisible, 250);
+  private resetView() {
+    // console.log('resetting view');
+    this.fitBounds(); // default bounds
+
+    // FUTURE
+    // // clear map state
+    // console.log('clearing map state');
+    // this.urlService.save('lat', null);
+    // this.urlService.save('lng', null);
+    // this.urlService.save('zoom', null);
+
+    // this.reloadApps.emit(); // FUTURE: reload apps ?
+  }
 
   /**
-   * NB: Call setVisible() instead!
+   * Emits an event to notify applications component of updated coordinates.
+   * Debounced function executes when 250ms have elapsed since last call.
    */
-  private _setVisible(doReQuery: boolean) {
+  // tslint:disable-next-line:member-ordering
+  private emitCoordinates = _.debounce(this._emitCoordinates, 250);
+
+  // NB: Call emitCoordinates() instead!
+  private _emitCoordinates() {
     // console.log('setting visible');
-    const mapBounds = this.map.getBounds();
-
-    // FUTURE: save map bounds here
-    // this.configService.mapBounds = mapBounds;
-
-    // notify applications component
-    if (doReQuery) {
-      this.updateCoordinates.emit(this.getCoordinates(mapBounds));
-    }
+    this.updateCoordinates.emit(this.getCoordinates());
   }
 
   /**
    * Returns coordinates in GeoJSON format that specify map bounding box.
    */
-  public getCoordinates(bounds: L.LatLngBounds = null): string {
-    if (!bounds) {
-      if (this.elementRef.nativeElement.offsetParent) {
-        // actual bounds
-        bounds = this.map.getBounds();
-      } else {
-        // map not ready yet - use default
-        bounds = this.defaultBounds;
-      }
+  public getCoordinates(): string {
+    let bounds: L.LatLngBounds;
+    if (this.elementRef.nativeElement.offsetParent) {
+      // actual bounds
+      bounds = this.map.getBounds();
+    } else {
+      // map not ready yet - use default
+      bounds = this.defaultBounds;
     }
 
     // OLD CODE WITH WORKAROUND FOR API $GEOWITHIN PROJECTION BEHAVIOUR
@@ -358,8 +412,6 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
    */
   private drawMap(deletedApps: Application[], addedApps: Application[]) {
     // console.log('drawing map');
-    // console.log('deleted =', deletedApps);
-    // console.log('added =', addedApps);
 
     // remove deleted apps from list and map
     deletedApps.forEach(app => {
@@ -464,8 +516,8 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  public onLoadStart() { this.loading = true; }
+  public onLoadStart() { }
 
-  public onLoadEnd() { this.loading = false; }
+  public onLoadEnd() { }
 
 }

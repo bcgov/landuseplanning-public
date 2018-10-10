@@ -35,7 +35,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private commentService: CommentService,
     public commentPeriodService: CommentPeriodService, // used in template
@@ -44,7 +44,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // get application
-    this.route.parent.data
+    this.activatedRoute.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         (data: { application: Application }) => {

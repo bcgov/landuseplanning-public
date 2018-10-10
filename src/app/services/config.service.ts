@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as L from 'leaflet';
 
 //
 // This service/class provides a centralized place to persist config values
@@ -17,7 +16,6 @@ export class ConfigService {
 
   // TODO: store these in URL instead
   private _baseLayerName = 'World Topographic'; // NB: must match a valid base layer name
-  private _mapBounds: L.LatLngBounds = null;
 
   constructor() { }
 
@@ -45,8 +43,5 @@ export class ConfigService {
 
   get baseLayerName(): string { return this._baseLayerName; }
   set baseLayerName(val: string) { this._baseLayerName = val; }
-
-  get mapBounds(): L.LatLngBounds { return this._mapBounds; }
-  set mapBounds(val: L.LatLngBounds) { this._mapBounds = val; }
 
 }

@@ -225,7 +225,11 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.configService.isApplicationsMapVisible = false;
     } else {
       this.configService.isApplicationsMapVisible = true;
-      this.appmap.onMapVisible();
+      // make map visible in next timeslice
+      // to visually separate panel opening from data loading
+      setTimeout(() => {
+        this.appmap.onMapVisible();
+      });
     }
   }
 
