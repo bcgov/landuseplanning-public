@@ -8,7 +8,7 @@
     <div class="meta-container">
       <ul>
         <li class="mb-3" *ngIf="app?.description">
-          <div class="value" [clamp]="4" [innerHTML]="app?.description"></div>
+          <div class="value" [clamp]="4" [innerHTML]="app.description"></div>
         </li>
         <li>
           <span class="key">Crown Land File:</span>
@@ -30,44 +30,45 @@
     <!-- Status -->
     <ul class="status-container mt-2 mb-3">
       <li>
-        <i class="material-icons">
-          {{app?.cpStatus === 'Commenting Open' ? 'comment' : 'highlight_off'}}
+        <i class="material-icons" title="{{app?.cpStatus}}">
+          {{commentPeriodService.isOpen(app?.currentPeriod) ? 'comment' : 'highlight_off'}}
         </i>
         <span>{{app?.cpStatus}}</span>
       </li>
-      <li>
-        <!-- Under Review -->
-        <i class="material-icons" title="{{app?.appStatus}}" 
-          *ngIf="app?.status == 'ACCEPTED'">
+      <li *ngVar="applicationService.getStatusCode(app?.status) as appStatusCode">
+        <!-- Application Under Review -->
+        <i class="material-icons" title="{{app?.appStatus}}"
+          *ngIf="applicationService.isAccepted(appStatusCode)">
           access_time
         </i>
-        <!-- Allowed / Decision Made-->
-        <i class="material-icons" title="{{app.appStatus}}" 
-          *ngIf="app?.status == 'ALLOWED' 
-          || app?.status == 'DECISION MADE'">
+        <!-- Decision: Allowed -->
+        <i class="material-icons" title="{{app?.appStatus}}"
+          *ngIf="applicationService.isAllowed(appStatusCode)">
           error_outline
         </i>
-        <!-- Tenure: Disposition in Good Standing / Offered / Offer Accepted -->
-        <i class="material-icons" title="{{app?.appStatus}}" 
-          *ngIf="app?.status == 'DISPOSITION IN GOOD STANDING'
-            || app?.status == 'OFFERED'
-            || app?.status == 'OFFER ACCEPTED'">
+        <!-- Tenure: Disposition in Good Standing / Decision: Offered / Decision: Offer Accepted -->
+        <i class="material-icons" title="{{app?.appStatus}}"
+          *ngIf="applicationService.isDispGoodStanding(appStatusCode)
+            || applicationService.isOffered(appStatusCode)
+            || applicationService.isOfferAccepted(appStatusCode)">
           check
         </i>
-        <!-- Cancelled -->
-        <i class="material-icons" title="{{app?.appStatus}}" 
-          *ngIf="app?.status == 'CANCELLED'">
+        <!-- Application Cancelled / Application Abandoned / Decision: Offer Not Accepted -->
+        <i class="material-icons" title="{{app?.appStatus}}"
+          *ngIf="applicationService.isCancelled(appStatusCode)
+          || applicationService.isAbandoned(appStatusCode)
+          || applicationService.isOfferNotAccepted(appStatusCode)">
           cancel
         </i>
-        <!-- Disallowed / Suspended-->
-        <i class="material-icons" title="{{app?.appStatus}}" 
-          *ngIf="app?.status == 'DISALLOWED' 
-          || app?.status == 'SUSPENDED'">
+        <!-- Decision: Not Approved / Tenure: Suspended-->
+        <i class="material-icons" title="{{app?.appStatus}}"
+          *ngIf="applicationService.isDisallowed(appStatusCode)
+          || applicationService.isSuspended(appStatusCode)">
           warning
         </i>
-        <!-- Unknown -->
-        <i class="material-icons" title="{{app?.appStatus}}" 
-          *ngIf="app?.status == 'UNKNOWN'">
+        <!-- Unknown Application Status -->
+        <i class="material-icons" title="{{app?.appStatus}}"
+          *ngIf="applicationService.isUnknown(appStatusCode)">
           warning
         </i>
         <span>{{app?.appStatus}}</span>
