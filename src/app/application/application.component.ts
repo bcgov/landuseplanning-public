@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as L from 'leaflet';
@@ -27,6 +27,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
   public map: L.Map = null;
   public appFG = L.featureGroup(); // group of layers for subject app
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+  private ngbModal: NgbModalRef = null;
 
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
 
@@ -204,6 +205,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.ngbModal) { this.ngbModal.dismiss('component destroyed'); }
     if (this.map) { this.map.remove(); }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -219,16 +221,16 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
   private addComment() {
     if (this.application.currentPeriod) {
       // open modal
-      const modal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
       // set input parameter
-      (<AddCommentComponent>modal.componentInstance).currentPeriod = this.application.currentPeriod;
+      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.application.currentPeriod;
       // check result
-      modal.result.then((result) => {
+      this.ngbModal.result.then((value) => {
         // saved
-        console.log(`Success, result = ${result}`);
+        console.log(`Success, value = ${value}`);
       }, (reason) => {
-        // canceled
-        console.log(`Error, reason = ${reason}`); // see ModalDismissReasons
+        // cancelled
+        console.log(`Cancelled, reason = ${reason}`); // see ModalDismissReasons
       });
     }
   }
