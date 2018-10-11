@@ -277,11 +277,9 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private fitBounds(bounds: L.LatLngBounds = null) {
     // console.log('fitting bounds');
-    const x = this.configService.isApplistListVisible ? this.applist.clientWidth : 0;
-    const y = this.appfilters.clientHeight; // filters are always visible
     const fitBoundsOptions: L.FitBoundsOptions = {
-      // use top/left padding to adjust for list and/or filters
-      paddingTopLeft: L.point(x, y),
+      // use top padding to adjust for filters header (which is always visible)
+      paddingTopLeft: L.point(0, this.appfilters.clientHeight),
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false
@@ -404,7 +402,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       point = point.subtract([(this.applist.clientWidth / 2), 0]);
     }
 
-    point = point.subtract([0, (this.appfilters.clientHeight / 2)]); // filters are always visible
+    point = point.subtract([0, (this.appfilters.clientHeight / 2)]); // filters header is always visible
 
     this.map.panTo(this.map.layerPointToLatLng(point));
   }
