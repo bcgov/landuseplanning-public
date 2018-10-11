@@ -22,16 +22,14 @@ export class ApplicationService {
   readonly ACCEPTED = 'AC';
   readonly ALLOWED = 'AL';
   readonly CANCELLED = 'CA';
+  readonly DECISION_MADE = 'DE'; // special combination status (see isDecision below)
   readonly DISALLOWED = 'DI';
   readonly DISPOSITION_GOOD_STANDING = 'DG';
   readonly OFFER_ACCEPTED = 'OA';
   readonly OFFER_NOT_ACCEPTED = 'ON';
   readonly OFFERED = 'OF';
   readonly SUSPENDED = 'SU';
-  // special combination status (see isDecision below)
-  readonly DECISION_MADE = 'DE';
-  // special status when no data
-  readonly UNKNOWN = 'UN';
+  readonly UNKNOWN = 'UN'; // special status when no data
 
   // regions / query param options
   readonly CARIBOO = 'CA';
@@ -62,13 +60,13 @@ export class ApplicationService {
     this.applicationStatuses[this.ACCEPTED] = 'Application Under Review';
     this.applicationStatuses[this.ALLOWED] = 'Decision: Allowed';
     this.applicationStatuses[this.CANCELLED] = 'Application Cancelled';
+    this.applicationStatuses[this.DECISION_MADE] = 'Decision Made';
     this.applicationStatuses[this.DISALLOWED] = 'Decision: Not Approved';
     this.applicationStatuses[this.DISPOSITION_GOOD_STANDING] = 'Tenure: Disposition in Good Standing';
     this.applicationStatuses[this.OFFER_ACCEPTED] = 'Decision: Offer Accepted';
     this.applicationStatuses[this.OFFER_NOT_ACCEPTED] = 'Decision: Offer Not Accepted';
     this.applicationStatuses[this.OFFERED] = 'Decision: Offered';
     this.applicationStatuses[this.SUSPENDED] = 'Tenure: Suspended';
-    this.applicationStatuses[this.DECISION_MADE] = 'Decision Made';
     this.applicationStatuses[this.UNKNOWN] = 'Unknown Application Status';
 
     this.regions[this.CARIBOO] = 'Cariboo, Williams Lake';
@@ -248,9 +246,9 @@ export class ApplicationService {
   }
 
   /**
-     * Given a status string, returns status abbreviation.
-     * TODO: this should be done in the API (same as region)
-     */
+   * Given a status string, returns status abbreviation.
+   * TODO: this should be done in the API (same as region)
+   */
   getStatusCode(statusString: string): string {
     if (statusString) {
       switch (statusString.toUpperCase()) {
@@ -281,13 +279,13 @@ export class ApplicationService {
         case this.ACCEPTED: return this.applicationStatuses[this.ACCEPTED];
         case this.ALLOWED: return this.applicationStatuses[this.ALLOWED];
         case this.CANCELLED: return this.applicationStatuses[this.CANCELLED];
+        case this.DECISION_MADE: return this.applicationStatuses[this.DECISION_MADE];
         case this.DISALLOWED: return this.applicationStatuses[this.DISALLOWED];
         case this.DISPOSITION_GOOD_STANDING: return this.applicationStatuses[this.DISPOSITION_GOOD_STANDING];
         case this.OFFER_ACCEPTED: return this.applicationStatuses[this.OFFER_ACCEPTED];
         case this.OFFER_NOT_ACCEPTED: return this.applicationStatuses[this.OFFER_NOT_ACCEPTED];
         case this.OFFERED: return this.applicationStatuses[this.OFFERED];
         case this.SUSPENDED: return this.applicationStatuses[this.SUSPENDED];
-        case this.DECISION_MADE: return this.applicationStatuses[this.DECISION_MADE];
         case this.UNKNOWN: return this.applicationStatuses[this.UNKNOWN];
       }
       return statusCode; // not one of the above, but return it anyway
@@ -295,8 +293,20 @@ export class ApplicationService {
     return null;
   }
 
+  isAbandoned(statusCode: string): boolean {
+    return (statusCode === this.ABANDONED);
+  }
+
   isAccepted(statusCode: string): boolean {
     return (statusCode === this.ACCEPTED);
+  }
+
+  isAllowed(statusCode: string): boolean {
+    return (statusCode === this.ALLOWED);
+  }
+
+  isCancelled(statusCode: string): boolean {
+    return (statusCode === this.CANCELLED);
   }
 
   // NOTE: a decision may or may not include Cancelled
@@ -312,20 +322,32 @@ export class ApplicationService {
     );
   }
 
-  isCancelled(statusCode: string): boolean {
-    return (statusCode === this.CANCELLED);
-  }
-
-  isAbandoned(statusCode: string): boolean {
-    return (statusCode === this.ABANDONED);
+  isDisallowed(statusCode: string): boolean {
+    return (statusCode === this.DISALLOWED);
   }
 
   isDispGoodStanding(statusCode: string): boolean {
     return (statusCode === this.DISPOSITION_GOOD_STANDING);
   }
 
+  isOfferAccepted(statusCode: string): boolean {
+    return (statusCode === this.OFFER_ACCEPTED);
+  }
+
+  isOfferNotAccepted(statusCode: string): boolean {
+    return (statusCode === this.OFFER_NOT_ACCEPTED);
+  }
+
+  isOffered(statusCode: string): boolean {
+    return (statusCode === this.OFFERED);
+  }
+
   isSuspended(statusCode: string): boolean {
     return (statusCode === this.SUSPENDED);
+  }
+
+  isUnknown(statusCode: string): boolean {
+    return (statusCode === this.UNKNOWN);
   }
 
   /**
