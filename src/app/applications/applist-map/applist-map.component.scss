@@ -52,9 +52,14 @@ $toggle-list-anim-duration: 0.2s;
     border-radius: 0.2rem;
   }
 
+  .leaflet-popup {
+    margin-bottom: 60px;
+  }
+
   .leaflet-popup-content {
     width: 20rem !important;
     margin: 0;
+    overflow: hidden;
   }
 
   .leaflet-popup-close-button {
