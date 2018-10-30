@@ -49,15 +49,23 @@ $toggle-list-anim-duration: 0.2s;
   
   .leaflet-popup-content-wrapper {
     padding: 0;
-    border-radius: 0;
+    border-radius: 0.2rem;
   }
 
   .leaflet-popup-content {
-    width: 24rem !important;
+    width: 20rem !important;
     margin: 0;
   }
 
   .leaflet-popup-close-button {
     font-size: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  ::ng-deep {
+    .leaflet-popup-content {
+      width: 24rem !important;
+    }
   }
 }

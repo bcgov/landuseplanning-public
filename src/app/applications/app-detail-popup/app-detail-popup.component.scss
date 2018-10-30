@@ -1,73 +1,132 @@
 @import "~assets/styles/base/base.scss";
 
-// Title
+$popup-border-radius: 0.2rem;
+$popup-title-color: #fff;
+$popup-title-bg: #003366;
+
 .popup-title {
-  padding: 0.75rem 1rem;
-  background: #003366;
-  color: #fff;
-  font-weight: bold;
+  padding-top: 0.75rem;
+  padding-right: 2rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  border-top-right-radius: $popup-border-radius;
+  border-top-left-radius: $popup-border-radius;
+  background: $popup-title-bg;
+  color: $popup-title-color;
 
   span {
     display: block;
   }
-
-  .client-name__value {
-    font-size: 1rem;
-  }
 }
 
-// Body
 .popup-body {
   padding: 1rem;
-  line-height: 1.15rem;
-  font-size: 0.8rem;
-}
+  border-bottom-right-radius: $popup-border-radius;
+  border-bottom-left-radius: $popup-border-radius;
 
-ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  font-size: inherit;
-}
-
-// Status
-.status-container {
-  li {
-    i {
-      margin-top: -0.2rem;
-      margin-right: 0.25rem;
-      vertical-align: middle;
-    }
-
-    span {
-      font-weight: bold;
-      text-transform: capitalize;
-    }
-
-    + li {
-      margin-top: 0.25rem;
-    }
+  ul {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
+    font-size: inherit;
   }
 }
 
-// Key/Value Pairs
+.client-name__label {
+  font-weight: 700;
+}
+
+.client-name__value {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 700;
+}
+
+.app-link {
+  color: #fff;
+}
+
 .meta-container {
   position: relative;
   overflow: hidden;
 
-  ul {
-    li {
-      overflow: hidden;
-      text-overflow: ellipsis;
+  li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-      + li {
-        margin-top: 0.2rem;
-      }
+  li.app-description {
+    margin-bottom: 0.5em;
+  }
+
+  li:not(.app-description) {
+    white-space: nowrap;
+
+    + li {
+      margin-top: 0.1em;
     }
   }
 
   .key {
-    font-weight: bold;
+    padding-right: 0.25em;
+    font-weight: 700;
+  }
+}
+
+.status-container {
+  li {
+    @include flex-box();
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 700;
+  }
+
+  i {
+    @include flex(0 0 auto);
+    margin-right: 0.2rem;
+    font-size: 21px;
+  }
+
+  span {
+    @include flex(1 1 auto);
+  }
+}
+
+.client-name__label {
+  font-size: 0.75em;
+}
+
+.client-name__value {
+  font-size: 0.875em;
+}
+
+.popup-body {
+  line-height: 1.4em;
+  font-size: 0.875em;
+}
+
+.app-link {
+  margin-top: 0.875em;
+  font-size: 1em;
+}
+
+hr {
+  margin-top: 0.875em;
+  margin-bottom: 0.875em;
+}
+
+@media (max-width: 1023px) {
+  .popup-content {
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .popup-content {
+    font-size: 1rem;
   }
 }
 
@@ -83,14 +142,4 @@ ul {
 
 .app-danger {
   color: red;
-}
-
-// Link to Application Details
-.app-link {
-  font-size: 0.8rem;
-
-  &.btn-primary {
-    color: #fff;
-    font-weight: 600;
-  }
 }
