@@ -23,18 +23,19 @@ const L = window['L'];
 
 const markerIconYellow = L.icon({
   iconUrl: 'assets/images/marker-icon-yellow.svg',
-  iconRetinaUrl: 'assets/images/marker-icon-2x-yellow.svg',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+  // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
+  // iconRetinaUrl: 'assets/images/marker-icon-2x-yellow.svg',
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
   tooltipAnchor: [16, -28]
 });
 
 const markerIconYellowLg = L.icon({
   iconUrl: 'assets/images/marker-icon-yellow-lg.svg',
-  iconRetinaUrl: 'assets/images/marker-icon-2x-yellow-lg.svg',
-  iconSize: [50, 82],
-  iconAnchor: [25, 82],
+  // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
+  // iconRetinaUrl: 'assets/images/marker-icon-yellow-lg.svg',
+  iconSize: [48, 48],
+  iconAnchor: [24, 48],
   // popupAnchor: [1, -34], // TODO: update, if needed
   // tooltipAnchor: [16, -28] // TODO: update, if needed
 });
@@ -345,10 +346,9 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     const popupOptions = {
-      maxWidth: 400,
       className: 'map-popup-content',
-      autoPanPaddingTopLeft: L.point(40, 95),
-      autoPanPaddingBottomRight: L.point(60, 0)
+      autoPanPaddingTopLeft: L.point(40, 150),
+      autoPanPaddingBottomRight: L.point(40, 20)
     };
 
     // compile marker popup component
@@ -383,7 +383,6 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(markerIconYellowLg);
-        this.centerMap(marker.getLatLng());
         // FUTURE: zoom in to this app/marker ?
         // FUTURE: show the marker popup ?
         // this.onMarkerClick(app, { target: marker });
