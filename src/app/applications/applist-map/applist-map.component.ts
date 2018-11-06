@@ -88,20 +88,16 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     // custom control to reset map view
     const resetViewControl = L.Control.extend({
+      options: {
+        position: 'bottomright'
+      },
       onAdd: function () {
-        const element = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
+        const element = L.DomUtil.create('button');
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
-        element.style.width = '34px';
-        element.style.height = '34px';
-        element.style.lineHeight = '30px';
-        element.style.textAlign = 'center';
-        element.style.cursor = 'pointer';
-        element.style.backgroundColor = '#fff';
-        element.onmouseover = () => element.style.backgroundColor = '#f4f4f4';
-        element.onmouseout = () => element.style.backgroundColor = '#fff';
         element.onclick = () => self.resetView();
+        element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
         L.DomEvent.disableClickPropagation(element); // includes double-click
@@ -140,7 +136,8 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.map = L.map('map', {
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
-      zoomSnap: 0.1 // for greater granularity when fitting bounds
+      zoomSnap: 0.1, // for greater granularity when fitting bounds
+      attributionControl: false
     });
 
     // map state change events
@@ -165,14 +162,6 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
 
-    // add reset view control
-    this.map.addControl(new resetViewControl());
-
-    // add zoom control
-    L.control.zoom({ position: 'topright' }).addTo(this.map);
-
-    // add scale control
-    L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
     // add base maps layers control
     const baseLayers = {
@@ -182,7 +171,19 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
-    L.control.layers(baseLayers).addTo(this.map);
+    L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
+
+    // map attribution
+    L.control.attribution({position: 'bottomright'}).addTo(this.map);
+
+    // add scale control
+    L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+
+    // add zoom control
+    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+
+    // add reset view control
+    this.map.addControl(new resetViewControl());
 
     // load base layer
     for (const key of Object.keys(baseLayers)) {
