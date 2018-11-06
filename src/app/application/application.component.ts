@@ -225,13 +225,16 @@ export class ApplicationComponent implements OnInit, AfterViewInit, OnDestroy {
       // set input parameter
       (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.application.currentPeriod;
       // check result
-      this.ngbModal.result.then((value) => {
-        // saved
-        console.log(`Success, value = ${value}`);
-      }, (reason) => {
-        // cancelled
-        console.log(`Cancelled, reason = ${reason}`); // see ModalDismissReasons
-      });
+      this.ngbModal.result.then(
+        value => {
+          // saved
+          console.log(`Success, value = ${value}`);
+        },
+        reason => {
+          // cancelled
+          console.log(`Cancelled, reason = ${reason}`);
+        }
+      );
     }
   }
 }

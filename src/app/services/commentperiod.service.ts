@@ -82,12 +82,10 @@ export class CommentPeriodService {
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const startDate = new Date(commentPeriod.startDate);
-    const endDate = new Date(commentPeriod.endDate);
 
-    if (endDate < today) {
+    if (commentPeriod.endDate < today) {
       return this.CLOSED;
-    } else if (startDate > today) {
+    } else if (commentPeriod.startDate > today) {
       return this.NOT_STARTED;
     } else {
       return this.OPEN;

@@ -8,6 +8,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 import { Constants } from 'app/utils/constants';
 import { Application } from 'app/models/application';
@@ -23,6 +24,8 @@ export interface FiltersType {
   clFileFilter: string;
   dispIdFilter: string;
   purposeFilter: string;
+  publishFromFilter: Date;
+  publishToFilter: Date;
 }
 
 @Component({
@@ -35,6 +38,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
   @Input() applications: Array<Application> = []; // from applications component
   @Output() updateMatching = new EventEmitter(); // to applications component
+
+  readonly minDate = moment('2018-03-23').toDate(); // first app created
+  readonly maxDate = moment().toDate(); // today
 
   public isFiltersCollapsed: boolean;
   public isCpStatusCollapsed = true;
@@ -74,6 +80,11 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
   public purposeFilter: string = null;
   public _purposeFilter: string = null; // temporary filters for Cancel feature
+
+  public publishFromFilter: Date = null;
+  public publishToFilter: Date = null;
+  public _publishFromFilter: Date = null; // temporary filters for Cancel feature
+  public _publishToFilter: Date = null; // temporary filters for Cancel feature
 
   //
   // (arrow) functions to return type-ahead results
@@ -203,7 +214,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       applicantFilter: this.applicantFilter && this.applicantFilter.trim(),
       clFileFilter: this.clFileFilter ? this.clFileFilter.toString() : null,
       dispIdFilter: this.dispIdFilter ? this.dispIdFilter.toString() : null,
-      purposeFilter: this.purposeFilter && this.purposeFilter.trim()
+      purposeFilter: this.purposeFilter && this.purposeFilter.trim(),
+      publishFromFilter: this.publishFromFilter,
+      publishToFilter: this.publishToFilter
     };
   }
 
@@ -241,6 +254,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.clFileFilter = this._clFileFilter;
     this.dispIdFilter = this._dispIdFilter;
     this.purposeFilter = this._purposeFilter;
+    this.publishFromFilter = this._publishFromFilter;
+    this.publishToFilter = this._publishToFilter;
 
     this.internalApplyAllFilters(true);
   }
@@ -338,6 +353,16 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       purposeSubpurpose.toUpperCase().indexOf(purposeFilter.toUpperCase()) > -1
     );
 
+    // check for Publish Date range
+    if (retVal && item.publishDate) {
+      const publishDay = moment(item.publishDate).startOf('day').toDate(); // date only
+      retVal = (
+        (!this.publishFromFilter || publishDay >= this.publishFromFilter)
+        &&
+        (!this.publishToFilter || publishDay <= this.publishToFilter)
+      );
+    }
+
     return retVal;
   }
 
@@ -394,6 +419,14 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       params['purpose'] = purposeFilter;
     }
 
+    if (this.publishFromFilter) {
+      params['publishFrom'] = moment(this.publishFromFilter).format('YYYY-MM-DD');
+    }
+
+    if (this.publishToFilter) {
+      params['publishTo'] = moment(this.publishToFilter).format('YYYY-MM-DD');
+    }
+
     // change browser URL without reloading page (so any query params are saved in history)
     this.location.go(this.router.createUrlTree([], { relativeTo: this.route, queryParams: params }).toString());
   }
@@ -424,6 +457,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this._clFileFilter = this.clFileFilter;
     this._dispIdFilter = this.dispIdFilter;
     this._purposeFilter = this.purposeFilter;
+    this._publishFromFilter = this.publishFromFilter;
+    this._publishToFilter = this.publishToFilter;
   }
 
   public resetAllFilters() {
@@ -455,6 +490,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
       this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
       this.purposeFilter = this.paramMap.get('purpose');
+      this.publishFromFilter = this.paramMap.get('publishFrom') ? moment(this.paramMap.get('publishFrom')).toDate() : null;
+      this.publishToFilter = this.paramMap.get('publishTo') ? moment(this.paramMap.get('publishTo')).toDate() : null;
 
       // copy all data from actual to temporary properties
       this._regionFilters = { ...this.regionFilters };
@@ -464,6 +501,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       this._clFileFilter = this.clFileFilter;
       this._dispIdFilter = this.dispIdFilter;
       this._purposeFilter = this.purposeFilter;
+      this._publishFromFilter = this.publishFromFilter;
+      this._publishToFilter = this.publishToFilter;
     }
 
     // if called from UI, apply new filters
@@ -505,6 +544,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this._clFileFilter = null;
     this._dispIdFilter = null;
     this._purposeFilter = null;
+    this._publishFromFilter = null;
+    this._publishToFilter = null;
 
     this.applyAllFilters();
   }
@@ -539,6 +580,10 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     return purposeFilter ? 1 : 0;
   }
 
+  private publishFilterCount(): number {
+    return (this.publishFromFilter || this.publishToFilter) ? 1 : 0;
+  }
+
   public filterCount(): number {
     return this.regionCount()
       + this.cpStatusCount()
@@ -546,7 +591,8 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       + this.applicantFilterCount()
       + this.clFileFilterCount()
       + this.dispIdFilterCount()
-      + this.purposeFilterCount();
+      + this.purposeFilterCount()
+      + this.publishFilterCount();
   }
 
   public regionHasChanges(): boolean {
