@@ -16,7 +16,7 @@
     main {
         overflow-y: auto;
         font-size: medium;
-        background-color: $white;
+        background-color: #fff;
         padding: 1rem;
         border: 1px #ccc solid;
         border-radius: 5px;
@@ -55,7 +55,7 @@
         }
         .organization-item {
             margin-top: 0;
-            color: $white;
+            color: #fff;
             background-color: #38598a;
             padding: 5px 10px;
             p {
@@ -121,7 +121,7 @@
         }
         >section {
             position: relative;
-            background-color: $white;
+            background-color: #fff;
             padding: 1rem;
             border: 1px #ccc solid;
             border-radius: 5px;
