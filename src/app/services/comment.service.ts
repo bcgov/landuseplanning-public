@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toPromise';
@@ -12,7 +11,6 @@ import { ApiService } from './api';
 import { CommentPeriodService } from './commentperiod.service';
 import { DocumentService } from './document.service';
 import { Comment } from 'app/models/comment';
-import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentService {
@@ -58,24 +56,7 @@ export class CommentService {
         comments.forEach((comment, i) => {
           comments[i] = new Comment(comment);
         });
-        return comments;
-      })
-      .map((comments: Comment[]) => {
-        if (comments.length === 0) {
-          return [] as Comment[];
-        }
-
-        // replace \\n (JSON format) with newlines in each comment
-        comments.forEach((comment, i) => {
-          if (comments[i].comment) {
-            comments[i].comment = comments[i].comment.replace(/\\n/g, '\n');
-          }
-          if (comments[i].review && comments[i].review.reviewerNotes) {
-            comments[i].review.reviewerNotes = comments[i].review.reviewerNotes.replace(/\\n/g, '\n');
-          }
-        });
-
-        return comments;
+        return comments as Comment[];
       })
       .catch(this.api.handleError);
   }
@@ -96,14 +77,6 @@ export class CommentService {
       })
       .mergeMap(comment => {
         if (!comment) { return Observable.of(null as Comment); }
-
-        // replace \\n (JSON format) with newlines
-        if (comment.comment) {
-          comment.comment = comment.comment.replace(/\\n/g, '\n');
-        }
-        if (comment.review && comment.review.reviewerNotes) {
-          comment.review.reviewerNotes = comment.review.reviewerNotes.replace(/\\n/g, '\n');
-        }
 
         // now get the comment documents
         const promise = this.documentService.getAllByCommentId(comment._id)

@@ -105,10 +105,10 @@ export class ApplicationService {
 
   // get count of applications
   getCount(): Observable<number> {
-    return this.api.getApplicationsNoFields()
+    return this.api.getCountApplications()
       .map(res => {
-        const applications = res.text() ? res.json() : [];
-        return applications.length;
+        // retrieve the count from the response headers
+        return parseInt(res.headers.get('x-total-count'), 10);
       })
       .catch(this.api.handleError);
   }
@@ -128,14 +128,6 @@ export class ApplicationService {
         const promises: Array<Promise<any>> = [];
 
         applications.forEach((application) => {
-          // replace \\n (JSON format) with newlines
-          if (application.description) {
-            application.description = application.description.replace(/\\n/g, '\n');
-          }
-          if (application.legalDescription) {
-            application.legalDescription = application.legalDescription.replace(/\\n/g, '\n');
-          }
-
           // derive region code
           application.region = this.getRegionCode(application.businessUnit);
 
@@ -188,14 +180,6 @@ export class ApplicationService {
         if (!application) { return Observable.of(null as Application); }
 
         const promises: Array<Promise<any>> = [];
-
-        // replace \\n (JSON format) with newlines
-        if (application.description) {
-          application.description = application.description.replace(/\\n/g, '\n');
-        }
-        if (application.legalDescription) {
-          application.legalDescription = application.legalDescription.replace(/\\n/g, '\n');
-        }
 
         // derive region code
         application.region = this.getRegionCode(application.businessUnit);

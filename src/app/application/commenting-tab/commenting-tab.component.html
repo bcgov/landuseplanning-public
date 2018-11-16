@@ -26,7 +26,7 @@
                 <div class="list-group-item flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <div class="comment__author">
-                            <div *ngIf="item.commentAuthor && item.commentAuthor.tags; else anonymous">
+                            <div *ngIf="item.commentAuthor && item.commentAuthor.requestedAnonymous !== true; else anonymous">
                                 <span>{{item.commentAuthor.contactName}}</span>
                                 <span *ngIf="item.commentAuthor.orgName">({{item.commentAuthor.orgName}})</span>
                                 <span *ngIf="item.commentAuthor.location">, {{item.commentAuthor.location}}</span>
