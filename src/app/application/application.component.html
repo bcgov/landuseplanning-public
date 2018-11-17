@@ -9,7 +9,7 @@
         <section class="application-item">
           <div class="application-item__commenting row">
             <div class="col">
-              <label>{{application?.cpStatus || 'Unknown Comment Period Status'}}</label>
+              <label>{{commentPeriodService.getStatusString(application?.cpStatusCode) || 'Unknown Comment Period Status'}}</label>
               <span *ngIf="application?.currentPeriod">: {{application?.currentPeriod.startDate | date:'mediumDate'}} - {{application?.currentPeriod.endDate | date:'mediumDate'}}</span>
             </div>
           </div>
@@ -110,7 +110,7 @@
 
       <aside class="col-lg-7 application-tabs">
         <div>
-          <button type="button" class="btn btn-warning float-lg-right gtm-submit-comment" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application?.currentPeriod)">Submit a Comment</button>
+          <button type="button" class="btn btn-warning float-lg-right gtm-submit-comment" (click)="addComment()" *ngIf="commentPeriodService.isOpen(application?.cpStatusCode)">Submit a Comment</button>
         </div>
         <section>
           <div role="navigation">

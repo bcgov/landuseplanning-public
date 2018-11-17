@@ -1,7 +1,9 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
+import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 
@@ -12,16 +14,18 @@ import { ConfigService } from 'app/services/config.service';
 })
 
 export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
-  // NB: this component is bound to the same list of apps as the other components
+
   @Input() applications: Array<Application> = []; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
   private currentApp: Application = null; // for selecting app in list
-  public loading = false;
-  private numToLoad = 0;
+  public loading = true; // init
+  private numToShow = 0;
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
+    public applicationService: ApplicationService,
     public commentPeriodService: CommentPeriodService, // used in template
     public configService: ConfigService,
     private elementRef: ElementRef
@@ -35,16 +39,34 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
-      // console.log('list: got visible apps from map component');
-      // console.log('# visible apps =', this.applications.length);
+    // update list only if it's visible
+    if (this.configService.isApplicationsListVisible) {
+      if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
+        // console.log('list: got visible apps from map component');
+        // console.log('# visible apps =', this.applications.length);
 
-      this.numToLoad = this.configService.listPageSize; // init/reset
-      this.setLoaded();
+        // start of loading is when we get a new list of apps
+        // or when applications component starts data querying (see below)
+        this.loading = true;
+        this.numToShow = this.configService.listPageSize; // init/reset
+        this.setLoaded();
+      }
     }
   }
 
-  public ngOnDestroy() { }
+  // when list becomes visible, reload all apps
+  public onListVisible() {
+    // start of loading is when list becomes visible
+    // or when applications component starts data querying (see below)
+    this.loading = true;
+    this.numToShow = this.configService.listPageSize; // init/reset
+    this.setLoaded();
+  }
+
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   private isCurrentApp(item: Application): boolean {
     return (item === this.currentApp);
@@ -71,19 +93,43 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
     return this.applications.filter(a => a.centroid.length === 2);
   }
 
-  public onLoadStart() { this.loading = true; }
+  public onLoadStart() {
+    // start of loading is when applications component starts data querying
+    // or when we get a new list of apps (see above)
+    this.loading = true;
+  }
 
-  public onLoadEnd() { this.loading = false; }
+  public onLoadEnd() {
+    // end of loading is set below
+  }
 
   public loadMore() {
-    this.numToLoad += this.configService.listPageSize;
+    this.numToShow += this.configService.listPageSize;
     this.setLoaded();
   }
 
   private setLoaded() {
-    // set first 'n' apps as 'loaded'
-    for (let i = 0; i < this.applications.length; i++) {
-      this.applications[i].isLoaded = (i < this.numToLoad);
+    let isNoneLoaded = true;
+    // fully load first 'n' apps
+    for (let i = 0; i < this.applications.length && i < this.numToShow; i++) {
+      if (!this.applications[i].isLoaded) {
+        isNoneLoaded = false;
+        this.applicationService.getById(this.applications[i]._id, true)
+          .takeUntil(this.ngUnsubscribe)
+          .subscribe(
+            app => {
+              this.applications[i] = app;
+              this.applications[i].isLoaded = true;
+              // end of loading is when we have loaded some of our data
+              this.loading = false;
+            },
+            error => console.log(error)
+          );
+      }
+    }
+    if (isNoneLoaded) {
+      this.loading = false;
     }
   }
+
 }

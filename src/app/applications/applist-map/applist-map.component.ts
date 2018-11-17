@@ -47,12 +47,12 @@ const markerIconYellowLg = L.icon({
 })
 
 export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy {
-  // NB: this component is bound to the same list of apps as the other components
+
   @Input() applications: Array<Application> = []; // from applications component
   @Input() applist; // from applications component
   @Input() appfilters; // from applications component
-  @Output() updateVisible = new EventEmitter(); // to applications component
-  @Output() reloadApps = new EventEmitter(); // to applications component
+  @Output() toggleCurrentApp = new EventEmitter(); // to applications component
+  @Output() updateCoordinates = new EventEmitter(); // to applications component
 
   private map: L.Map = null;
   private markerList: Array<L.Marker> = []; // list of markers
@@ -63,6 +63,8 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
   });
   private loading = false;
+  private gotChanges = false;
+  private oldZoom: number = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
@@ -96,7 +98,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
-        element.onclick = () => self.resetView();
+        element.onclick = () => self.fitBounds(); // use default bounds
         element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
@@ -141,9 +143,10 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
 
     // map state change events
-    // this.map.on('zoomstart', function () {
-    //   console.log('zoomstart');
-    // }, this);
+    this.map.on('zoomstart', function () {
+      // console.log('zoomstart');
+      this.oldZoom = this.map.getZoom();
+    }, this);
 
     // this.map.on('movestart', function () {
     //   console.log('movestart');
@@ -156,7 +159,15 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // NB: moveend is called after zoomstart, movestart and resize
     this.map.on('moveend', function () {
       // console.log('moveend');
-      this.setVisibleDebounced();
+
+      // ignore initial map draw
+      if (this.gotChanges) {
+        // const newZoom = this.map.getZoom();
+        // const doReQuery = newZoom <= this.oldZoom; // ignore zooming in
+        // this.oldZoom = newZoom;
+        // this.setVisible(doReQuery);
+        if (this.isMapReady) { this.setVisible(true); }
+      }
     }, this);
 
     // add markers group
@@ -174,7 +185,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
 
     // map attribution
-    L.control.attribution({position: 'bottomright'}).addTo(this.map);
+    L.control.attribution({ position: 'bottomright' }).addTo(this.map);
 
     // add scale control
     L.control.scale({ position: 'bottomleft' }).addTo(this.map);
@@ -218,16 +229,35 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
-      // console.log('map: got filtered apps from filters component');
-      // console.log('# filtered apps =', this.applications.length);
+    // update map only if it's visible
+    if (this.configService.isApplicationsMapVisible) {
+      if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
+        this.gotChanges = true;
+        // console.log('map: got changed apps =', changes.applications);
 
-      const deletedApps = _.difference(changes.applications.previousValue, changes.applications.currentValue) as Array<Application>;
-      const addedApps = _.difference(changes.applications.currentValue, changes.applications.previousValue) as Array<Application>;
+        // FUTURE: for better performance, if an app is both deleted and added, ignore it (or reassign it)
+        // _.intersection()?
+        // _.without()?
+        // _.xor()?
+        const deletedApps = _.differenceBy(changes.applications.previousValue as Array<Application>, changes.applications.currentValue as Array<Application>, '_id');
+        const addedApps = _.differenceBy(changes.applications.currentValue as Array<Application>, changes.applications.previousValue as Array<Application>, '_id');
 
-      // (re)draw the matching apps
-      this.drawMap(deletedApps, addedApps);
+        // (re)draw the matching apps
+        this.drawMap(deletedApps, addedApps);
+      }
     }
+  }
+
+  // when map becomes visible, draw all apps
+  public onMapVisible() {
+    // delete any old apps
+    this.markerList.forEach(marker => {
+      this.markerClusterGroup.removeLayer(marker);
+    });
+    this.markerList = []; // empty the list
+
+    // draw all new apps
+    this.drawMap([], this.applications);
   }
 
   public ngOnDestroy() {
@@ -237,44 +267,73 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   /**
-    * Resets map view.
-    */
-  private resetView() {
-    // console.log('resetting view');
-    this.fitBounds(); // use default bounds
-    // this.reloadApps.emit(); // FUTURE: reload apps ?
-  }
-
-  /**
    * Sets which apps are currently visible.
    * Actual function executes no more than once every 250ms.
    */
   // tslint:disable-next-line:member-ordering
-  private setVisibleDebounced = _.debounce(this.setVisible, 250);
+  private setVisible = _.debounce(this._setVisible, 250);
 
   /**
-   * NB: Call setVisibleDebounced() instead!
+   * NB: Call setVisible() instead!
    */
-  private setVisible() {
+  private _setVisible(doReQuery: boolean) {
     // console.log('setting visible');
     const mapBounds = this.map.getBounds();
 
-    // FUTURE: save map bounds here ?
+    // FUTURE: save map bounds here
     // this.configService.mapBounds = mapBounds;
 
-    // update visibility for apps with markers only
-    // ie, leave apps without markers 'visible' (as initialized)
-    for (const marker of this.markerList) {
-      const app = _.find(this.applications, { tantalisID: marker.dispositionId });
-      if (app) {
-        const markerLatLng = marker.getLatLng();
-        // app is visible if map contains its marker
-        app.isVisible = mapBounds.contains(markerLatLng);
+    // notify applications component
+    if (doReQuery) {
+      this.updateCoordinates.emit(this.getCoordinates(mapBounds));
+    }
+  }
+
+  /**
+   * Returns coordinates in GeoJSON format that specify map bounding box.
+   */
+  public getCoordinates(bounds: L.LatLngBounds = null): string {
+    if (!bounds) {
+      if (this.elementRef.nativeElement.offsetParent) {
+        // actual bounds
+        bounds = this.map.getBounds();
+      } else {
+        // map not ready yet - use default
+        bounds = this.defaultBounds;
       }
     }
 
-    // notify list component
-    this.updateVisible.emit();
+    // OLD CODE WITH WORKAROUND FOR API $GEOWITHIN PROJECTION BEHAVIOUR
+    const west = bounds.getWest();
+    const south = bounds.getSouth();
+    const east = bounds.getEast();
+    const north = bounds.getNorth();
+
+    // build coordinates using right hand rule (CCW)
+    let coordinates = '';
+    coordinates += this.latLngToCoord(bounds.getSouthWest()) + ','; // bottom left
+    for (let x = Math.ceil(west); x < east; x++) {
+      coordinates += this.latLngToCoord(L.latLng(south, x)) + ','; // along the bottom
+    }
+    coordinates += this.latLngToCoord(bounds.getSouthEast()) + ','; // bottom right
+    coordinates += this.latLngToCoord(bounds.getNorthEast()) + ','; // topright
+    for (let x = Math.floor(east); x > west; x--) {
+      coordinates += this.latLngToCoord(L.latLng(north, x)) + ','; // along the top
+    }
+    coordinates += this.latLngToCoord(bounds.getNorthWest()) + ','; // topleft
+    coordinates += this.latLngToCoord(bounds.getSouthWest()) + ','; // bottom left
+
+    // remove last comma and convert to a GeoJSON coordinates string
+    // console.log('coordinates = ', coordinates);
+    return `[[${coordinates.slice(0, -1)}]]`;
+
+    // NEW CODE (USING API $BOX QUERY)
+    // // return box parameters
+    // return `[${this.latLngToCoord(bounds.getSouthWest())},${this.latLngToCoord(bounds.getNorthEast())}]`;
+  }
+
+  private latLngToCoord(ll: L.LatLng): string {
+    return `[${ll.lng},${ll.lat}]`;
   }
 
   private fitBounds(bounds: L.LatLngBounds = null) {
@@ -295,12 +354,12 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   /**
-    * Removes deleted / draws added applications.
-    */
+   * Removes deleted / draws added applications.
+   */
   private drawMap(deletedApps: Application[], addedApps: Application[]) {
     // console.log('drawing map');
-    // console.log('deleted =', this.deleted);
-    // console.log('added =', this.added);
+    // console.log('deleted =', deletedApps);
+    // console.log('added =', addedApps);
 
     // remove deleted apps from list and map
     deletedApps.forEach(app => {
@@ -316,7 +375,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       // add marker
       if (app.centroid.length === 2) { // safety check
         const title = `${app.client}\n`
-          + `${app.appStatus}\n`
+          + `${app.purpose || '-'} / ${app.subpurpose || '-'}\n`
           + `${app.location}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
           .setIcon(markerIconYellow)
@@ -327,15 +386,29 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     });
 
-    // set visible apps
-    this.setVisibleDebounced();
+    // DOESN'T WORK QUITE RIGHT -- ALSO NEEDS TO BE CALLED WHEN MOVING/ZOOMING AROUND THE MAP
+    // // FOR FUTURE USE
+    // // get number visible on map
+    // let count = 0;
+    // const mapBounds = this.map.getBounds();
+    // for (const marker of this.markerList) {
+    //   const app = _.find(this.applications, { tantalisID: marker.dispositionId });
+    //   if (app) {
+    //     // app is visible if map contains its marker
+    //     if (mapBounds.contains(marker.getLatLng())) {
+    //       count++;
+    //     }
+    //   }
+    // }
+    // console.log('numberVisible =', count);
   }
 
   private onMarkerClick(...args: any[]) {
     const app = args[0] as Application;
     const marker = args[1].target as L.Marker;
 
-    this.applist.toggleCurrentApp(app); // update selected item in app list
+    // update selected item in app list
+    this.toggleCurrentApp.emit(app);
 
     // if there's already a popup, delete it
     let popup = marker.getPopup();
@@ -355,7 +428,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // compile marker popup component
     const compFactory = this.resolver.resolveComponentFactory(AppDetailPopupComponent);
     const compRef = compFactory.create(this.injector);
-    compRef.instance.app = app;
+    compRef.instance.id = app._id;
     this.appRef.attachView(compRef.hostView);
     compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
     const div = document.createElement('div').appendChild(compRef.location.nativeElement);
@@ -391,23 +464,8 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  /**
-   * Center map on specified point, applying offset if needed.
-   */
-  // TODO: register for list/filter changes and apply offset accordingly ?
-  private centerMap(latlng: L.LatLng) {
-    let point = this.map.latLngToLayerPoint(latlng);
-
-    if (this.configService.isApplistListVisible) {
-      point = point.subtract([(this.applist.clientWidth / 2), 0]);
-    }
-
-    point = point.subtract([0, (this.appfilters.clientHeight / 2)]); // filters header is always visible
-
-    this.map.panTo(this.map.layerPointToLatLng(point));
-  }
-
   public onLoadStart() { this.loading = true; }
 
   public onLoadEnd() { this.loading = false; }
+
 }

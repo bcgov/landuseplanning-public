@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
@@ -11,21 +11,21 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { Constants } from 'app/utils/constants';
-import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 
 export interface FiltersType {
-  regionFilters: object;
-  cpStatusFilters: object;
-  appStatusFilters: object;
-  applicantFilter: string;
-  clFileFilter: string;
-  dispIdFilter: string;
-  purposeFilter: string;
-  publishFromFilter: Date;
-  publishToFilter: Date;
+  regions: Array<string>;
+  cpStatuses: Array<string>;
+  appStatuses: Array<string>;
+  applicant: string;
+  clFile: string;
+  dispId: string;
+  purpose: string;
+  subpurpose: string;
+  publishFrom: Date;
+  publishTo: Date;
 }
 
 @Component({
@@ -34,10 +34,8 @@ export interface FiltersType {
   styleUrls: ['./applist-filters.component.scss']
 })
 
-export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
-  // NB: this component is bound to the same list of apps as the other components
-  @Input() applications: Array<Application> = []; // from applications component
-  @Output() updateMatching = new EventEmitter(); // to applications component
+export class ApplistFiltersComponent implements OnInit, OnDestroy {
+  @Output() updateFilters = new EventEmitter(); // to applications component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
@@ -45,7 +43,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public isFiltersCollapsed: boolean;
   public isCpStatusCollapsed = true;
   public isAppStatusCollapsed = true;
-  public loading = false;
+  public loading = true; // init
   private paramMap: ParamMap = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -54,11 +52,9 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public cpStatusKeys: Array<string> = [];
   public appStatusKeys: Array<string> = [];
 
-  // search keys for text boxes
-  private applicantKeys: Array<string> = [];
-  // private clFileKeys: Array<number> = []; // NOT CURRENTLY USED
-  // private dispIdKeys: Array<number> = []; // NOT CURRENTLY USED
+  // search key for text box
   private purposeKeys: Array<string> = [];
+  private subpurposeKeys: Array<string> = [];
 
   public regionFilters: object = {}; // array-like object
   public _regionFilters: object = {}; // temporary filters for Cancel feature
@@ -81,47 +77,30 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public purposeFilter: string = null;
   public _purposeFilter: string = null; // temporary filters for Cancel feature
 
+  public subpurposeFilter: string = null;
+  public _subpurposeFilter: string = null; // temporary filters for Cancel feature
+
   public publishFromFilter: Date = null;
   public publishToFilter: Date = null;
   public _publishFromFilter: Date = null; // temporary filters for Cancel feature
   public _publishToFilter: Date = null; // temporary filters for Cancel feature
 
-  //
   // (arrow) functions to return type-ahead results
   // ref: https://ng-bootstrap.github.io/#/components/typeahead/api
-  //
-  public applicantSearch = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term.length < 1 ? []
-        : this.applicantKeys.filter(key => key.indexOf(this._applicantFilter.toUpperCase()) > -1) // .slice(0, 10)
-      );
-
-  // NOT CURRENTLY USED
-  // public clFileSearch = (text$: Observable<string>) =>
-  //   text$
-  //     .debounceTime(200)
-  //     .distinctUntilChanged()
-  //     .map(term => term.length < 1 ? []
-  //       : this.clFileKeys.filter(key => key.toString().indexOf(this._clFileFilter.toString()) > -1) // .slice(0, 10)
-  //     );
-
-  // NOT CURRENTLY USED
-  // public dispIdSearch = (text$: Observable<string>) =>
-  //   text$
-  //     .debounceTime(200)
-  //     .distinctUntilChanged()
-  //     .map(term => term.length < 1 ? []
-  //       : this.dispIdKeys.filter(key => key.toString().indexOf(this._dispIdFilter.toString()) > -1) // .slice(0, 10)
-  //     );
-
   public purposeSearch = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 1 ? []
         : this.purposeKeys.filter(key => key.indexOf(this._purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
+      );
+
+  public subpurposeSearch = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .map(term => term.length < 1 ? []
+        : this.subpurposeKeys.filter(key => key.indexOf(this._subpurposeFilter.toUpperCase()) > -1) // .slice(0, 10)
       );
 
   constructor(
@@ -144,8 +123,6 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.regionKeys.push(this.applicationService.VANCOUVER_ISLAND);
 
     this.cpStatusKeys.push(this.commentPeriodService.OPEN);
-    this.cpStatusKeys.push(this.commentPeriodService.NOT_STARTED);
-    this.cpStatusKeys.push(this.commentPeriodService.CLOSED);
     this.cpStatusKeys.push(this.commentPeriodService.NOT_OPEN);
 
     this.appStatusKeys.push(this.applicationService.ACCEPTED);
@@ -162,7 +139,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    this.isFiltersCollapsed = !this.configService.isApplistFiltersVisible;
+    this.isFiltersCollapsed = !this.configService.isApplicationsFiltersVisible;
 
     // get optional query parameters
     this.route.queryParamMap
@@ -171,33 +148,20 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.paramMap = paramMap;
 
         // set filters according to paramMap
-        this.internalResetAllFilters(false);
+        this._resetAllFilters(false);
       });
 
-    // load this list just once as it doesn't change
+    // load these lists just once as they don't change
+    // build array of purposes only
+    Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
+      this.purposeKeys.push(purpose.toUpperCase());
+    });
+    // build array of subpurposes only
     Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
       Constants.subpurposes[purpose].forEach(subpurpose => {
-        this.purposeKeys.push(purpose.toUpperCase() + ' / ' + subpurpose.toUpperCase());
+        this.subpurposeKeys.push(subpurpose.toUpperCase());
       });
     });
-  }
-
-  // called when apps list changes
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
-      // console.log('filters: got apps from applications component');
-      // console.log('# apps =', this.applications.length);
-
-      // store keys for faster filter lookahead
-      // don't include empty results, then sort results, and then remove duplicates
-      // NB: these look only at currently-loaded apps -- not all the possible apps in the system
-      this.applicantKeys = _.sortedUniq(_.compact(this.applications.map(app => app.client ? app.client.toUpperCase() : null)).sort());
-      // this.clFileKeys = _.sortedUniq(_.compact(this.applications.map(app => app.cl_file)).sort()); // NOT CURRENTLY USED
-      // this.dispIdKeys = _.compact(this.applications.map(app => app.tantalisID)).sort(); // should already be unique // NOT CURRENTLY USED
-
-      // (re)apply filtering
-      this.internalApplyAllFilters(false);
-    }
   }
 
   public ngOnDestroy() {
@@ -205,168 +169,81 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  // FOR FUTURE USE
   public getFilters(): FiltersType {
+    // convert array-like objects to arrays
+    const regions: Array<string> = [];
+    Object.keys(this.regionFilters).forEach(key => { if (this.regionFilters[key]) { regions.push(key); } });
+
+    const cpStatuses: Array<string> = [];
+    Object.keys(this.cpStatusFilters).forEach(key => { if (this.cpStatusFilters[key]) { cpStatuses.push(key); } });
+
+    const appStatuses: Array<string> = [];
+    Object.keys(this.appStatusFilters).forEach(key => { if (this.appStatusFilters[key]) { appStatuses.push(key); } });
+
     return {
-      regionFilters: this.regionFilters,
-      cpStatusFilters: this.cpStatusFilters,
-      appStatusFilters: this.appStatusFilters,
-      applicantFilter: this.applicantFilter && this.applicantFilter.trim(),
-      clFileFilter: this.clFileFilter ? this.clFileFilter.toString() : null,
-      dispIdFilter: this.dispIdFilter ? this.dispIdFilter.toString() : null,
-      purposeFilter: this.purposeFilter && this.purposeFilter.trim(),
-      publishFromFilter: this.publishFromFilter,
-      publishToFilter: this.publishToFilter
+      regions: regions,
+      cpStatuses: cpStatuses,
+      appStatuses: appStatuses,
+      applicant: this.applicantFilter && this.applicantFilter.trim() || null, // convert empty string to null
+      clFile: this.clFileFilter ? this.clFileFilter.toString() : null,
+      dispId: this.dispIdFilter ? this.dispIdFilter.toString() : null,
+      purpose: this.purposeFilter && this.purposeFilter.trim() || null, // convert empty string to null
+      subpurpose: this.subpurposeFilter && this.subpurposeFilter.trim() || null, // convert empty string to null
+      publishFrom: this.publishFromFilter ? moment(this.publishFromFilter).startOf('day').toDate() : null,
+      publishTo: this.publishToFilter ? moment(this.publishToFilter).endOf('day').toDate() : null
     };
   }
 
   //
   // The following are to "Apply" the temporary filters: copy the temporary values to the actual variables, etc.
   //
-  public applyRegionFilters() {
+  public applyRegionFilters(doApply: boolean = true) {
     this.regionFilters = { ...this._regionFilters };
-    this.internalApplyAllFilters(true);
+    if (doApply) { this._applyAllFilters(); }
     // this.isRegionCollapsed = true; // FUTURE
   }
 
-  public applyCpStatusFilters() {
+  public applyCpStatusFilters(doApply: boolean = true) {
     this.cpStatusFilters = { ...this._cpStatusFilters };
-    this.internalApplyAllFilters(true);
+    if (doApply) { this._applyAllFilters(); }
     this.isCpStatusCollapsed = true;
   }
 
-  public applyAppStatusFilters() {
+  public applyAppStatusFilters(doApply: boolean = true) {
     this.appStatusFilters = { ...this._appStatusFilters };
-    this.internalApplyAllFilters(true);
+    if (doApply) { this._applyAllFilters(); }
     this.isAppStatusCollapsed = true;
   }
 
-  public applyClFileFilter() {
+  public applyClFileFilter(doApply: boolean = true) {
     this.clFileFilter = this._clFileFilter;
-    this.internalApplyAllFilters(true);
+    if (doApply) { this._applyAllFilters(); }
   }
 
-  public applyAllFilters() {
-    this.regionFilters = { ...this._regionFilters };
-    this.cpStatusFilters = { ...this._cpStatusFilters };
-    this.appStatusFilters = { ...this._appStatusFilters };
+  public applyAllFilters(doApply: boolean = true) {
+    this.applyRegionFilters(false);
+    this.applyCpStatusFilters(false);
+    this.applyAppStatusFilters(false);
     this.applicantFilter = this._applicantFilter;
     this.clFileFilter = this._clFileFilter;
     this.dispIdFilter = this._dispIdFilter;
     this.purposeFilter = this._purposeFilter;
+    this.subpurposeFilter = this._subpurposeFilter;
     this.publishFromFilter = this._publishFromFilter;
     this.publishToFilter = this._publishToFilter;
 
-    this.internalApplyAllFilters(true);
+    if (doApply) { this._applyAllFilters(); }
   }
 
-  private internalApplyAllFilters(doSave: boolean) {
-    this.applications.forEach(app => app.isMatches = this.showThisApp(app));
+  private _applyAllFilters() {
+    // notify applications component
+    this.updateFilters.emit(this.getFilters());
 
-    // notify map component
-    this.updateMatching.emit();
-
-    // if called from UI, save new filters
-    // otherwise this is part of init or change event
-    if (doSave) {
-      this.saveFilters();
-    }
+    // save new filters
+    this._saveFilters();
   }
 
-  // returns 'true' if all filters match
-  private showThisApp(item: Application): boolean {
-    let retVal = true; // for short-circuiting checks
-
-    // if no option is selected, match all
-    const allRegions = this.regionKeys.every(key => {
-      return (this.regionFilters[key] === false);
-    });
-
-    // check for matching region
-    retVal = retVal && (
-      allRegions ||
-      (this.regionFilters[this.applicationService.CARIBOO] && (item.region === this.applicationService.CARIBOO)) ||
-      (this.regionFilters[this.applicationService.KOOTENAY] && (item.region === this.applicationService.KOOTENAY)) ||
-      (this.regionFilters[this.applicationService.LOWER_MAINLAND] && (item.region === this.applicationService.LOWER_MAINLAND)) ||
-      (this.regionFilters[this.applicationService.OMENICA] && (item.region === this.applicationService.OMENICA)) ||
-      (this.regionFilters[this.applicationService.PEACE] && (item.region === this.applicationService.PEACE)) ||
-      (this.regionFilters[this.applicationService.SKEENA] && (item.region === this.applicationService.SKEENA)) ||
-      (this.regionFilters[this.applicationService.SOUTHERN_INTERIOR] && (item.region === this.applicationService.SOUTHERN_INTERIOR)) ||
-      (this.regionFilters[this.applicationService.VANCOUVER_ISLAND] && (item.region === this.applicationService.VANCOUVER_ISLAND))
-    );
-
-    // if no option is selected, match all
-    const allCpStatuses = this.cpStatusKeys.every(key => {
-      return (this.cpStatusFilters[key] === false);
-    });
-
-    // check for matching Comment Period Status
-    retVal = retVal && (
-      allCpStatuses ||
-      (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod)) ||
-      (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod)) ||
-      (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod)) ||
-      (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN] && this.commentPeriodService.isNotOpen(item.currentPeriod))
-    );
-
-    // if no option is selected, match all
-    const allAppStatuses = this.appStatusKeys.every(key => {
-      return (this.appStatusFilters[key] === false);
-    });
-
-    // check for matching Application Status
-    const appStatusCode = this.applicationService.getStatusCode(item.status);
-    retVal = retVal && (
-      allAppStatuses ||
-      (this.appStatusFilters[this.applicationService.ACCEPTED] && this.applicationService.isAccepted(appStatusCode)) ||
-      (this.appStatusFilters[this.applicationService.DECISION_MADE] && this.applicationService.isDecision(appStatusCode) && !this.applicationService.isCancelled(appStatusCode)) ||
-      (this.appStatusFilters[this.applicationService.CANCELLED] && this.applicationService.isCancelled(appStatusCode)) ||
-      (this.appStatusFilters[this.applicationService.ABANDONED] && this.applicationService.isAbandoned(appStatusCode)) ||
-      (this.appStatusFilters[this.applicationService.DISPOSITION_GOOD_STANDING] && this.applicationService.isDispGoodStanding(appStatusCode)) ||
-      (this.appStatusFilters[this.applicationService.SUSPENDED] && this.applicationService.isSuspended(appStatusCode))
-    );
-
-    // check for matching Applicant
-    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
-    retVal = retVal && (
-      !this.applicantFilter || !item.client ||
-      item.client.toUpperCase().indexOf(applicantFilter.toUpperCase()) > -1
-    );
-
-    // check for matching CL File
-    retVal = retVal && (
-      !this.clFileFilter || !item.cl_file ||
-      item.cl_file.toString().indexOf(this.clFileFilter.toString()) > -1
-    );
-
-    // check for matching Disposition ID
-    retVal = retVal && (
-      !this.dispIdFilter || !item.tantalisID ||
-      item.tantalisID.toString().indexOf(this.dispIdFilter.toString()) > -1
-    );
-
-    // check for matching Purpose / Sub-purpose
-    const purposeSubpurpose = `${item.purpose} / ${item.subpurpose}`;
-    const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
-    retVal = retVal && (
-      !this.purposeFilter || !item.purpose || !item.subpurpose ||
-      purposeSubpurpose.toUpperCase().indexOf(purposeFilter.toUpperCase()) > -1
-    );
-
-    // check for Publish Date range
-    if (retVal && item.publishDate) {
-      const publishDay = moment(item.publishDate).startOf('day').toDate(); // date only
-      retVal = (
-        (!this.publishFromFilter || publishDay >= this.publishFromFilter)
-        &&
-        (!this.publishToFilter || publishDay <= this.publishToFilter)
-      );
-    }
-
-    return retVal;
-  }
-
-  private saveFilters() {
+  private _saveFilters() {
     const params: Params = {}; // array-like object
 
     this.regionKeys.forEach(key => {
@@ -419,6 +296,11 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       params['purpose'] = purposeFilter;
     }
 
+    const subpurposeFilter = this.subpurposeFilter && this.subpurposeFilter.trim(); // returns null or empty
+    if (subpurposeFilter) {
+      params['subpurpose'] = subpurposeFilter;
+    }
+
     if (this.publishFromFilter) {
       params['publishFrom'] = moment(this.publishFromFilter).format('YYYY-MM-DD');
     }
@@ -450,23 +332,20 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public cancelAllFilters() {
-    this._regionFilters = { ...this.regionFilters };
-    this._cpStatusFilters = { ...this.cpStatusFilters };
-    this._appStatusFilters = { ...this.appStatusFilters };
+    this.cancelRegionFilters();
+    this.cancelCpStatusFilters();
+    this.cancelAppStatusFilters();
     this._applicantFilter = this.applicantFilter;
     this._clFileFilter = this.clFileFilter;
     this._dispIdFilter = this.dispIdFilter;
     this._purposeFilter = this.purposeFilter;
+    this._subpurposeFilter = this.subpurposeFilter;
     this._publishFromFilter = this.publishFromFilter;
     this._publishToFilter = this.publishToFilter;
   }
 
-  public resetAllFilters() {
-    this.internalResetAllFilters(true);
-  }
-
   // (re)sets all filters from current param map
-  private internalResetAllFilters(doApply: boolean) {
+  private _resetAllFilters(doApply: boolean) {
     if (this.paramMap) {
       // set region filters according to current param options
       const regions = (this.paramMap.get('regions') || '').split(',');
@@ -490,6 +369,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
       this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
       this.purposeFilter = this.paramMap.get('purpose');
+      this.subpurposeFilter = this.paramMap.get('subpurpose');
       this.publishFromFilter = this.paramMap.get('publishFrom') ? moment(this.paramMap.get('publishFrom')).toDate() : null;
       this.publishToFilter = this.paramMap.get('publishTo') ? moment(this.paramMap.get('publishTo')).toDate() : null;
 
@@ -501,53 +381,55 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       this._clFileFilter = this.clFileFilter;
       this._dispIdFilter = this.dispIdFilter;
       this._purposeFilter = this.purposeFilter;
+      this._subpurposeFilter = this.subpurposeFilter;
       this._publishFromFilter = this.publishFromFilter;
       this._publishToFilter = this.publishToFilter;
     }
 
     // if called from UI, apply new filters
     // otherwise this was called internally (eg, init)
-    if (doApply) {
-      this.internalApplyAllFilters(true);
-    }
+    if (doApply) { this._applyAllFilters(); }
   }
 
   //
   // The following are to "Clear" the temporary filters.
   //
-  public clearRegionFilters() {
+  public clearRegionFilters(doApply: boolean = true) {
     this.regionKeys.forEach(key => {
       this._regionFilters[key] = false;
     });
-    this.applyRegionFilters();
+    this.applyRegionFilters(doApply);
   }
 
-  public clearCpStatusFilters() {
+  public clearCpStatusFilters(doApply: boolean = true) {
     this.cpStatusKeys.forEach(key => {
       this._cpStatusFilters[key] = false;
     });
-    this.applyCpStatusFilters();
+    this.applyCpStatusFilters(doApply);
   }
 
-  public clearAppStatusFilters() {
+  public clearAppStatusFilters(doApply: boolean = true) {
     this.appStatusKeys.forEach(key => {
       this._appStatusFilters[key] = false;
     });
-    this.applyAppStatusFilters();
+    this.applyAppStatusFilters(doApply);
   }
 
   public clearAllFilters() {
-    this.clearRegionFilters();
-    this.clearCpStatusFilters();
-    this.clearAppStatusFilters();
-    this._applicantFilter = null;
-    this._clFileFilter = null;
-    this._dispIdFilter = null;
-    this._purposeFilter = null;
-    this._publishFromFilter = null;
-    this._publishToFilter = null;
+    if (this.filterCount() > 0) {
+      this.clearRegionFilters(false);
+      this.clearCpStatusFilters(false);
+      this.clearAppStatusFilters(false);
+      this._applicantFilter = null;
+      this._clFileFilter = null;
+      this._dispIdFilter = null;
+      this._purposeFilter = null;
+      this._subpurposeFilter = null;
+      this._publishFromFilter = null;
+      this._publishToFilter = null;
 
-    this.applyAllFilters();
+      this.applyAllFilters(true);
+    }
   }
 
   public regionCount(): number {
@@ -562,25 +444,30 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
   }
 
-  private applicantFilterCount(): number {
+  public applicantFilterCount(): number {
     const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
     return applicantFilter ? 1 : 0;
   }
 
-  private clFileFilterCount(): number {
+  public clFileFilterCount(): number {
     return (this.clFileFilter && this.clFileFilter.toString().length > 0) ? 1 : 0;
   }
 
-  private dispIdFilterCount(): number {
+  public dispIdFilterCount(): number {
     return (this.dispIdFilter && this.dispIdFilter.toString().length > 0) ? 1 : 0;
   }
 
-  private purposeFilterCount(): number {
+  public purposeFilterCount(): number {
     const purposeFilter = this.purposeFilter && this.purposeFilter.trim();  // returns null or empty
     return purposeFilter ? 1 : 0;
   }
 
-  private publishFilterCount(): number {
+  public subpurposeFilterCount(): number {
+    const subpurposeFilter = this.subpurposeFilter && this.subpurposeFilter.trim();  // returns null or empty
+    return subpurposeFilter ? 1 : 0;
+  }
+
+  public publishFilterCount(): number {
     return (this.publishFromFilter || this.publishToFilter) ? 1 : 0;
   }
 
@@ -592,6 +479,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       + this.clFileFilterCount()
       + this.dispIdFilterCount()
       + this.purposeFilterCount()
+      + this.subpurposeFilterCount()
       + this.publishFilterCount();
   }
 
@@ -608,7 +496,7 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public onShowHideClick() {
-    this.configService.isApplistFiltersVisible = !this.isFiltersCollapsed;
+    this.configService.isApplicationsFiltersVisible = !this.isFiltersCollapsed;
   }
 
   public onLoadStart() { this.loading = true; }

@@ -3,7 +3,7 @@
     <div class="app-list__body">
   
       <!-- Initial Loading Indicator -->
-      <div class="spinner-container" *ngIf="loading && loadedApps().length === 0">
+      <div class="spinner-container" *ngIf="loading">
         <div class="spinner spinner-sm rotating"></div>
         <span class="spinner__msg">Loading applications...</span>
       </div>
@@ -18,7 +18,7 @@
         <ul class="app-list__list">
           <ng-template ngFor let-item [ngForOf]="loadedApps()">
             <li class="app-card list-group-item" [class.active]="isCurrentApp(item)"
-              (click)="toggleCurrentApp(item);$event.stopPropagation();" *ngIf="item.isVisible">
+              (click)="toggleCurrentApp(item);$event.stopPropagation();">
   
               <!-- Application Details -->
               <ul class="app-card__details">
@@ -55,22 +55,14 @@
               <!-- Application Card Actions -->
               <div class="app-card__actions d-flex justify-content-between">
                 <div class="badges">
-                  <div class="comment-status-badge badge"
-                    [ngClass]="{
-                      'badge-primary': commentPeriodService.isNotStarted(item.currentPeriod),
-                      'badge-secondary': commentPeriodService.isNotOpen(item.currentPeriod),
-                      'badge-danger': commentPeriodService.isClosed(item.currentPeriod),
-                      'badge-success': commentPeriodService.isOpen(item.currentPeriod)}">
-                      {{item.cpStatus || 'Unknown'}}
-                    <span class="date" *ngIf="commentPeriodService.isNotStarted(item.currentPeriod)">
-                      :&nbsp;{{item.currentPeriod.startDate | date:'mediumDate'}}
-                    </span>
-                    <span class="date" *ngIf="commentPeriodService.isClosed(item.currentPeriod)">
-                      :&nbsp;{{item.currentPeriod.endDate | date:'mediumDate'}}
-                    </span>
-                    <span class="date" *ngIf="commentPeriodService.isOpen(item.currentPeriod)">
+                  <div class="comment-status-badge badge badge-success" *ngIf="commentPeriodService.isOpen(item.cpStatusCode)">
+                    {{commentPeriodService.getStatusString(item.cpStatusCode)}}
+                    <span class="date">
                       :&nbsp;{{item.currentPeriod.startDate | date:'MMM d'}} - {{item.currentPeriod.endDate | date:'MMM d'}}
                     </span>
+                  </div>
+                  <div class="comment-status-badge badge badge-secondary" *ngIf="commentPeriodService.isNotOpen(item.cpStatusCode)">
+                    {{commentPeriodService.getStatusString(item.cpStatusCode)}}
                   </div>
                 </div>
                 <a class="app-details-link btn" (click)="$event.stopPropagation()" [routerLink]="['/a', item._id]" title="Go to application details">

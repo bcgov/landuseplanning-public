@@ -10,8 +10,9 @@ import * as L from 'leaflet';
 export class ConfigService {
 
   // defaults
-  private _isApplistListVisible = false;
-  private _isApplistFiltersVisible = false;
+  private _isApplicationsListVisible = false;
+  private _isApplicationsFiltersVisible = false;
+  private _isApplicationsMapVisible = true;
   private _listPageSize = 10;
 
   // TODO: store these in URL instead
@@ -30,11 +31,14 @@ export class ConfigService {
     // FUTURE: save settings to window.localStorage ?
   }
 
-  get isApplistListVisible(): boolean { return this._isApplistListVisible; }
-  set isApplistListVisible(val: boolean) { this._isApplistListVisible = val; }
+  get isApplicationsListVisible(): boolean { return this._isApplicationsListVisible; }
+  set isApplicationsListVisible(val: boolean) { this._isApplicationsListVisible = val; }
 
-  get isApplistFiltersVisible(): boolean { return this._isApplistFiltersVisible; }
-  set isApplistFiltersVisible(val: boolean) { this._isApplistFiltersVisible = val; }
+  get isApplicationsFiltersVisible(): boolean { return this._isApplicationsFiltersVisible; }
+  set isApplicationsFiltersVisible(val: boolean) { this._isApplicationsFiltersVisible = val; }
+
+  get isApplicationsMapVisible(): boolean { return this._isApplicationsMapVisible; }
+  set isApplicationsMapVisible(val: boolean) { this._isApplicationsMapVisible = val; }
 
   get listPageSize(): number { return this._listPageSize; }
   set listPageSize(val: number) { this._listPageSize = val; }

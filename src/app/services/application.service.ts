@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
+import { FiltersType } from 'app/applications/applist-filters/applist-filters.component';
 import { Application } from 'app/models/application';
 import { ApiService } from './api';
 import { DocumentService } from './document.service';
@@ -16,6 +20,7 @@ import { FeatureService } from './feature.service';
 
 @Injectable()
 export class ApplicationService {
+
   //#region Constants
   // statuses / query param options
   readonly ABANDONED = 'AB';
@@ -79,86 +84,116 @@ export class ApplicationService {
     this.regions[this.VANCOUVER_ISLAND] = 'West Coast, Nanaimo';
   }
 
-  // get just the applications (for fast mapping)
-  getAll(pageNum: number = 0, pageSize: number = 1000000, regionFilters: object = {}, cpStatusFilters: object = {}, appStatusFilters: object = {},
-    applicantFilter: string = null, clFileFilter: string = null, dispIdFilter: string = null, purposeFilter: string = null): Observable<Application[]> {
-    const regions: Array<string> = [];
-    const cpStatuses: Array<string> = [];
-    const appStatuses: Array<string> = [];
+  // get count of applications
+  // FUTURE: filter by bounding box
+  getCount(filters: FiltersType, coordinates: string): Observable<number> {
+    // assign publish date filters
+    const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
+    const publishUntil = filters.publishTo ? filters.publishTo.toISOString() : null;
 
-    // convert array-like objects to arrays
-    Object.keys(regionFilters).forEach(key => { if (regionFilters[key]) { regions.push(key); } });
-    Object.keys(cpStatusFilters).forEach(key => { if (cpStatusFilters[key]) { cpStatuses.push(key); } });
-    Object.keys(appStatusFilters).forEach(key => { if (appStatusFilters[key]) { appStatuses.push(key); } });
+    // handle comment period filtering
+    const cpOpen = filters.cpStatuses.includes(this.commentPeriodService.OPEN);
+    const cpNotOpen = filters.cpStatuses.includes(this.commentPeriodService.NOT_OPEN);
 
-    return this.api.getApplications(pageNum, pageSize, regions, cpStatuses, appStatuses, applicantFilter, clFileFilter, dispIdFilter, purposeFilter)
+    // if both cpOpen and cpNotOpen or neither cpOpen nor cpNotOpen then use no cpStart or cpEnd filters
+    if ((cpOpen && cpNotOpen) || (!cpOpen && !cpNotOpen)) {
+      return this.api.getCountApplications(filters.regions, null, null, null, null, filters.appStatuses, filters.applicant,
+        filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+        .map(res => {
+          // retrieve the count from the response headers
+          return parseInt(res.headers.get('x-total-count'), 10);
+        })
+        .catch(this.api.handleError);
+    }
+
+    const now = moment();
+    // watch out -- Moment mutates objects!
+    const yesterday = now.clone().subtract(1, 'days');
+    const tomorrow = now.clone().add(1, 'days');
+
+    // if cpOpen then filter by cpStart <= today && cpEnd >= today
+    if (cpOpen) {
+      return this.api.getCountApplications(filters.regions, null, now.endOf('day').toISOString(), now.startOf('day').toISOString(), null,
+        filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+        .map(res => {
+          // retrieve the count from the response headers
+          return parseInt(res.headers.get('x-total-count'), 10);
+        })
+        .catch(this.api.handleError);
+    }
+
+    // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
+    // NB: this doesn't return apps without comment periods
+    const closed = this.api.getCountApplications(filters.regions, null, null, null, yesterday.endOf('day').toISOString(),
+      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+      .map(res => parseInt(res.headers.get('x-total-count'), 10));
+    const future = this.api.getCountApplications(filters.regions, tomorrow.startOf('day').toISOString(), null, null, null,
+      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+      .map(res => parseInt(res.headers.get('x-total-count'), 10));
+
+    return Observable.combineLatest(closed, future, (v1, v2) => v1 + v2)
+      .catch(this.api.handleError);
+  }
+
+  // get just the applications
+  // FUTURE: filter by bounding box
+  getAll(pageNum: number = 0, pageSize: number = 1000, filters: FiltersType, coordinates: string): Observable<Application[]> {
+    // assign publish date filters
+    const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
+    const publishUntil = filters.publishTo ? filters.publishTo.toISOString() : null;
+
+    // handle comment period filtering
+    const cpOpen = filters.cpStatuses.includes(this.commentPeriodService.OPEN);
+    const cpNotOpen = filters.cpStatuses.includes(this.commentPeriodService.NOT_OPEN);
+
+    // if both cpOpen and cpNotOpen or neither cpOpen nor cpNotOpen then use no cpStart or cpEnd filters
+    if ((cpOpen && cpNotOpen) || (!cpOpen && !cpNotOpen)) {
+      return this.api.getApplications(pageNum, pageSize, filters.regions, null, null, null, null, filters.appStatuses, filters.applicant,
+        filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+        .map(res => {
+          const applications = res.text() ? res.json() : [];
+          applications.forEach((application, i) => {
+            applications[i] = new Application(application);
+          });
+          return applications as Application[];
+        })
+        .catch(this.api.handleError);
+    }
+
+    const now = moment();
+    // watch out -- Moment mutates objects!
+    const yesterday = now.clone().subtract(1, 'days');
+    const tomorrow = now.clone().add(1, 'days');
+
+    // if cpOpen then filter by cpStart <= today && cpEnd >= today
+    if (cpOpen) {
+      return this.api.getApplications(pageNum, pageSize, filters.regions, null, now.endOf('day').toISOString(), now.startOf('day').toISOString(),
+        null, filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+        .map(res => {
+          const applications = res.text() ? res.json() : [];
+          applications.forEach((application, i) => {
+            applications[i] = new Application(application);
+          });
+          return applications as Application[];
+        })
+        .catch(this.api.handleError);
+    }
+
+    // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
+    // NB: this doesn't return apps without comment periods
+    const closed = this.api.getApplications(pageNum, pageSize, filters.regions, null, null, null, yesterday.endOf('day').toISOString(),
+      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
+    const future = this.api.getApplications(pageNum, pageSize, filters.regions, tomorrow.startOf('day').toISOString(), null, null, null,
+      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
+
+    return Observable.merge(closed, future)
       .map(res => {
+        // console.log('res =', res);
         const applications = res.text() ? res.json() : [];
         applications.forEach((application, i) => {
           applications[i] = new Application(application);
-          // FUTURE: derive region code, etc ?
         });
-        return applications;
-      })
-      .catch(this.api.handleError);
-  }
-
-  // get count of applications
-  getCount(): Observable<number> {
-    return this.api.getCountApplications()
-      .map(res => {
-        // retrieve the count from the response headers
-        return parseInt(res.headers.get('x-total-count'), 10);
-      })
-      .catch(this.api.handleError);
-  }
-
-  // get all applications and related data
-  // TODO: instead of using promises to get all data at once, use observables and DEEP-OBSERVE changes
-  // see https://github.com/angular/angular/issues/11704
-  getAllFull(pageNum: number = 0, pageSize: number = 1000000, regionFilters: object = {}, cpStatusFilters: object = {}, appStatusFilters: object = {},
-    applicantFilter: string = null, clFileFilter: string = null, dispIdFilter: string = null, purposeFilter: string = null): Observable<Application[]> {
-    // first get the applications
-    return this.getAll(pageNum, pageSize, regionFilters, cpStatusFilters, appStatusFilters, applicantFilter, clFileFilter, dispIdFilter, purposeFilter)
-      .mergeMap(applications => {
-        if (applications.length === 0) {
-          return Observable.of([] as Application[]);
-        }
-
-        const promises: Array<Promise<any>> = [];
-
-        applications.forEach((application) => {
-          // derive region code
-          application.region = this.getRegionCode(application.businessUnit);
-
-          // user-friendly application status
-          application.appStatus = this.getStatusString(this.getStatusCode(application.status));
-
-          // 7-digit CL File number for display
-          if (application.cl_file) {
-            application['clFile'] = application.cl_file.toString().padStart(7, '0');
-          }
-
-          // NB: we don't get the documents here
-
-          // get the current comment period
-          promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
-            .toPromise()
-            .then(periods => {
-              const cp = this.commentPeriodService.getCurrent(periods);
-              application.currentPeriod = cp;
-              // user-friendly comment period status
-              application.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
-            })
-          );
-
-          // NB: we don't get the decision here
-
-          // NB: we don't get the features here
-
-        });
-
-        return Promise.all(promises).then(() => { return applications; });
+        return applications as Application[];
       })
       .catch(this.api.handleError);
   }
@@ -202,10 +237,10 @@ export class ApplicationService {
         promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
           .toPromise()
           .then(periods => {
-            const cp = this.commentPeriodService.getCurrent(periods);
+            const cp = this.commentPeriodService.getCurrent(periods); // may be null
             application.currentPeriod = cp;
-            // user-friendly comment period status
-            application.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+            // comment period status code
+            application.cpStatusCode = this.commentPeriodService.getStatusCode(cp);
           })
         );
 
@@ -347,4 +382,5 @@ export class ApplicationService {
   getRegionString(abbrev: string): string {
     return abbrev && this.regions[abbrev]; // returns null if not found
   }
+
 }

@@ -9,21 +9,19 @@ import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentPeriodService {
+
   // statuses / query param options
-  readonly NOT_STARTED = 'NS';
-  readonly NOT_OPEN = 'NO';
-  readonly CLOSED = 'CL';
+  // use helpers to compare against these
   readonly OPEN = 'OP';
+  readonly NOT_OPEN = 'NO';
 
   private commentPeriodStatuses: Array<string> = []; // use helper to get these
   private commentPeriod: CommentPeriod = null; // for caching
 
   constructor(private api: ApiService) {
     // user-friendly strings for display
-    this.commentPeriodStatuses[this.NOT_STARTED] = 'Commenting Not Started';
-    this.commentPeriodStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
-    this.commentPeriodStatuses[this.CLOSED] = 'Commenting Closed';
     this.commentPeriodStatuses[this.OPEN] = 'Commenting Open';
+    this.commentPeriodStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
   }
 
   // get all comment periods for the specified application id
@@ -76,48 +74,35 @@ export class CommentPeriodService {
    * Given a comment period, returns status abbreviation.
    */
   getStatusCode(commentPeriod: CommentPeriod): string {
-    if (!commentPeriod || !commentPeriod.startDate || !commentPeriod.endDate) {
-      return this.NOT_OPEN;
+    if (commentPeriod && commentPeriod.startDate && commentPeriod.endDate) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // eg, 'Tue Nov 20 2018 00:00:00 GMT-0800'
+
+      if (commentPeriod.startDate <= today && commentPeriod.endDate >= today) {
+        return this.OPEN;
+      }
     }
 
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    if (commentPeriod.endDate < today) {
-      return this.CLOSED;
-    } else if (commentPeriod.startDate > today) {
-      return this.NOT_STARTED;
-    } else {
-      return this.OPEN;
-    }
+    return this.NOT_OPEN;
   }
 
   /**
-     * Given a status code, returns user-friendly status string.
-     */
+   * Given a status code, returns user-friendly status string.
+   */
   getStatusString(statusCode: string): string {
     switch (statusCode) {
-      case this.NOT_STARTED: return this.commentPeriodStatuses[this.NOT_STARTED];
-      case this.NOT_OPEN: return this.commentPeriodStatuses[this.NOT_OPEN];
-      case this.CLOSED: return this.commentPeriodStatuses[this.CLOSED];
       case this.OPEN: return this.commentPeriodStatuses[this.OPEN];
+      case this.NOT_OPEN: return this.commentPeriodStatuses[this.NOT_OPEN];
     }
     return null;
   }
 
-  isNotOpen(commentPeriod: CommentPeriod): boolean {
-    return (this.getStatusCode(commentPeriod) === this.NOT_OPEN);
+  isOpen(statusCode: string): boolean {
+    return (statusCode === this.OPEN);
   }
 
-  isClosed(commentPeriod: CommentPeriod): boolean {
-    return (this.getStatusCode(commentPeriod) === this.CLOSED);
+  isNotOpen(statusCode: string): boolean {
+    return (statusCode === this.NOT_OPEN);
   }
 
-  isNotStarted(commentPeriod: CommentPeriod): boolean {
-    return (this.getStatusCode(commentPeriod) === this.NOT_STARTED);
-  }
-
-  isOpen(commentPeriod: CommentPeriod): boolean {
-    return (this.getStatusCode(commentPeriod) === this.OPEN);
-  }
 }

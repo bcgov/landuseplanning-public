@@ -89,7 +89,6 @@
             (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()"
             (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true" title="Crown Land File Number" [disabled]="loading">
           <div class="input-group-btn">
-            <!-- *ngIf="clFileFilterCount() > 0" -->
             <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyClFileFilter()" [disabled]="loading">Apply</button>
           </div>
         </div>
@@ -101,7 +100,7 @@
     <div class="filter-actions">
       <button class="btn btn-light no-default" role="button" title="Clear filters" 
         (click)="clearAllFilters();isFiltersCollapsed=true" *ngVar="filterCount() as filtCnt"
-        [class.disabled]="loading">
+        [class.disabled]="loading || filtCnt == 0">
         Clear {{filtCnt > 0 ? '(' + filtCnt + ')' : ''}}
       </button>
       <!-- Remove Inline Block Spacing -->
@@ -158,8 +157,7 @@
     <fieldset class="additional-filters" (click)="$event.stopPropagation()">
         <div class="form-group typeahead-container">
           <label for="applicantInput">Applicant Name</label>
-          <input type="text" class="form-control gtm-filter-applicant " placeholder="Applicant Name" id="applicantInput" [(ngModel)]="_applicantFilter"
-          [ngbTypeahead]="applicantSearch" [focusFirst]="false">
+          <input type="text" class="form-control gtm-filter-applicant " placeholder="Applicant Name" id="applicantInput" [(ngModel)]="_applicantFilter">
         </div>
         <div class="form-group">
           <label for="clFileInput2">Crown land File #</label>
@@ -172,11 +170,16 @@
             (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
         </div>
         <div class="form-group typeahead-container">
-          <label for="purposeInput">Purpose / Subpurpose</label>
-          <input type="text" class="form-control gtm-filter-purpose" placeholder="Purpose / Subpurpose" id="purposeInput" [(ngModel)]="_purposeFilter"
+          <label for="purposeInput">Purpose</label>
+          <input type="text" class="form-control gtm-filter-purpose" placeholder="Purpose" id="purposeInput" [(ngModel)]="_purposeFilter"
             [ngbTypeahead]="purposeSearch" [focusFirst]="false">
         </div>
-        <!-- <div class="form-group">
+        <div class="form-group typeahead-container">
+          <label for="subpurposeInput">Subpurpose</label>
+          <input type="text" class="form-control gtm-filter-subpurpose" placeholder="Subpurpose" id="subpurposeInput" [(ngModel)]="_subpurposeFilter"
+            [ngbTypeahead]="subpurposeSearch" [focusFirst]="false">
+        </div>
+        <div class="form-group">
           <label>Published Between</label>
           <div class="date-range">
             <div class="form-group mb-0">
@@ -191,7 +194,7 @@
                 [minDate]="_publishFromFilter ? _publishFromFilter : minDate"></app-date-input>
             </div>
           </div>
-        </div> -->
+        </div>
     </fieldset>
 
   </div>

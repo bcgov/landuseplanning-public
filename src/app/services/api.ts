@@ -90,13 +90,33 @@ export class ApiService {
   //
   // Applications
   //
-  getCountApplications() {
-    const queryString = `application`;
+  getCountApplications(regions: string[], cpStartSince: string, cpStartUntil: string, cpEndSince: string, cpEndUntil: string,
+    appStatuses: string[], applicant: string, clFile: string, dispId: string, purpose: string, subpurpose: string,
+    publishSince: string, publishUntil: string, coordinates: string) {
+    let queryString = `application?`;
+    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
+    if (cpStartSince !== null) { queryString += `cpStart[since]=${cpStartSince}&`; }
+    if (cpStartUntil !== null) { queryString += `cpStart[until]=${cpStartUntil}&`; }
+    if (cpEndSince !== null) { queryString += `cpEnd[since]=${cpEndSince}&`; }
+    if (cpEndUntil !== null) { queryString += `cpEnd[until]=${cpEndUntil}&`; }
+    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
+    if (applicant !== null) { queryString += `client=${applicant}&`; }
+    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
+    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
+    if (purpose !== null) { queryString += `purpose[eq]=${purpose}&`; }
+    if (subpurpose !== null) { queryString += `subpurpose[eq]=${subpurpose}&`; }
+    if (publishSince !== null) { queryString += `publishDate[since]=${publishSince}&`; }
+    if (publishUntil !== null) { queryString += `publishDate[until]=${publishUntil}&`; }
+    if (coordinates !== null) { queryString += `centroid=${coordinates}&`; }
+    // trim the last ? or &
+    queryString = queryString.slice(0, -1);
+
     return this.http.head(`${this.apiPath}/${queryString}`);
   }
 
-  getApplications(pageNum: number, pageSize: number, regions: string[], cpStatuses: string[], appStatuses: string[], applicant: string,
-    clFile: string, dispId: string, purpose: string) {
+  getApplications(pageNum: number, pageSize: number, regions: string[], cpStartSince: string, cpStartUntil: string, cpEndSince: string,
+    cpEndUntil: string, appStatuses: string[], applicant: string, clFile: string, dispId: string, purpose: string, subpurpose: string,
+    publishSince: string, publishUntil: string, coordinates: string) {
     const fields = [
       'agency',
       'areaHectares',
@@ -122,12 +142,19 @@ export class ApiService {
     if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
     if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
     if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
-    if (cpStatuses !== null && cpStatuses.length > 0) { queryString += `cpStatuses=${this.buildValues(cpStatuses)}&`; }
+    if (cpStartSince !== null) { queryString += `cpStart[since]=${cpStartSince}&`; }
+    if (cpStartUntil !== null) { queryString += `cpStart[until]=${cpStartUntil}&`; }
+    if (cpEndSince !== null) { queryString += `cpEnd[since]=${cpEndSince}&`; }
+    if (cpEndUntil !== null) { queryString += `cpEnd[until]=${cpEndUntil}&`; }
     if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
     if (applicant !== null) { queryString += `client=${applicant}&`; }
     if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
     if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
-    if (purpose !== null) { queryString += `purpose=${purpose}&`; }
+    if (purpose !== null) { queryString += `purpose[eq]=${purpose}&`; }
+    if (subpurpose !== null) { queryString += `subpurpose[eq]=${subpurpose}&`; }
+    if (publishSince !== null) { queryString += `publishDate[since]=${publishSince}&`; }
+    if (publishUntil !== null) { queryString += `publishDate[until]=${publishUntil}&`; }
+    if (coordinates !== null) { queryString += `centroid=${coordinates}&`; }
     queryString += `fields=${this.buildValues(fields)}`;
 
     return this.get(queryString);
