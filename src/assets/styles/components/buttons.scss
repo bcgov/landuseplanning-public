@@ -5,8 +5,8 @@
   cursor: pointer;
 
   &.inverted {
-    color: $white;
-    border: 2px solid $white;
+    color: #fff;
+    border: 2px solid #fff;
     background: transparent;
     text-transform: uppercase;
     font-weight: 700;
@@ -166,7 +166,7 @@ main {
 
   &:focus,
   &:hover {
-    color: $white;
+    color: #fff;
     border-color: #0275d8;
     background: #0275d8;
   }
@@ -212,5 +212,35 @@ main {
 .btn-light {
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+}
+
+// Icon Button
+.btn-icon {
+  min-width: 2.5rem !important;
+  padding-top: 0.35rem;
+  padding-right: 0;
+  padding-bottom: 0.35rem;
+  padding-left: 0;
+  overflow: hidden;
+  color: #808080;
+  background: transparent;
+  transition: all ease-out 0.2s;
+  cursor: pointer;
+
+  i {
+    margin-top: -0.1rem;
+    vertical-align: middle;
+  }
+  
+  .btn-txt {
+    visibility: hidden;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: #000;
+    background: #eee;
   }
 }

@@ -1,9 +1,36 @@
 // Form Label & Validation Variants
 .control-label {
-  font-weight: bold;
+  margin-bottom: 0.3rem;
+  font-size: 0.875rem;
+  font-weight: 700;
 
   &:after {
     white-space: pre;
+  }
+}
+
+.form-text {
+  margin-top: 0.4rem;
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.invalid-feedback {
+  margin-top: 0.4rem;
+}
+
+.form-control-container {
+  position: relative;
+
+  .validation-icon {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    bottom: 0.2rem;
+    padding-top: 0.4rem;
+    width: 2.5rem;
+    background: #fff;
+    text-align: center;
   }
 }
 
@@ -41,7 +68,9 @@ legend {
 }
 
 .form-check {
-  cursor: pointer;
+  label {
+    cursor: pointer;
+  }
 
   input {
     margin-top: 0.35rem;
@@ -53,6 +82,7 @@ input {
   &.form-control {
     height: $fc-height;
   }
+  &[type="tel"],
   &[type="text"],
   &[type="email"],
   &[type="number"] {
@@ -87,7 +117,10 @@ input[type="number"] {
 }
 
 // Textarea
-textarea {
+textarea.form-control {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+
   @include placeholder {
     color: $fc-placeholder-color;
   }

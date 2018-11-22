@@ -1,20 +1,33 @@
 .modal-header {
-  background-color: $modal-header-bg;
-  
+  @include flex-box();
+  justify-content: flex-end;
+  padding-top: 1rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1rem;
+  padding-left: 1.5rem;
+
   .modal-title {
-    font-weight: 600;
+    @include flex(1 1 auto);
+    margin-top: 0.4rem;
   }
 
-  .close {
-    cursor: pointer;
+  .close-btn {
+    @include flex(0 0 auto);
+    margin-top: 0;
+    margin-right: -0.75rem;
   }
-}
-
-.modal-body {
-  background-color: $modal-bg;
-  padding: 2rem;
 }
 
 .modal-footer {
-  background-color: $modal-footer-bg;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.modal-title {
+  letter-spacing: -0.03rem;
+  line-height: 1.65rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
 }

@@ -1,31 +1,33 @@
-<div class="files-info">
-  Maximum of {{maxFiles}} files, up to {{maxSize}}MB each.
-  <br> Acceptable file types: {{fileExt}}
+<div class="form-text">
+  <div>Maximum of {{maxFiles}} files, up to {{maxSize}}MB each.</div>
+  <div>Acceptable file types: {{fileExt}}</div>
 </div>
 
-<div draggable="true" ngClass="{{dragDropClass}}">
-  <div class="row">
-    <div class="col-md-12 text-center">
-      <i class="material-icons">file_upload</i>
-      <a href="javascript:void(0)" (click)="file.click()">Click to browse</a> or drag files here
-      <input type="file" #file [multiple]="(maxFiles > 1)" (change)="onFileChange($event)" style="display:none" />
+<div class="file-upload" draggable="true" ngClass="{{dragDropClass}}">
+  <input type="file" #file [multiple]="(maxFiles > 1)" (change)="onFileChange($event)" />
+  <div class="file-upload__target">
+    <div class="file-upload__prompt">
+      <i class="file-upload__prompt-icon material-icons">file_upload</i>
+      <span><a href="javascript:void(0)" (click)="file.click()">Click to browse</a> or drag files here.</span>
     </div>
   </div>
 </div>
 
-<div *ngIf="files.length > 0" class="files-list">
-  <ul>
+<ul class="doc-list" *ngIf="files.length > 0">
     <li *ngFor="let f of files">
-      <span class="name">{{f.name}}</span>
-      <span class="value">
-        <button type="button" class="btn btn-danger btn-xs" (click)="removeFile(f)" title="Remove this file">
-          <i class="material-icons">clear</i>
-          <span>Remove</span>
+      <span class="cell icon">
+        <i class="material-icons">insert_drive_file</i>
+      </span>
+      <span class="cell name" [title]="f.name || ''">
+        <span class="cell__txt-content">{{f.name}}</span>
+      </span>
+      <span class="cell actions">
+        <button class="btn btn-icon" type="button" title="Remove this file" (click)="removeFile(f)">
+          <i class="material-icons">delete</i>
         </button>
       </span>
     </li>
-  </ul>
-</div>
+</ul>
 
 <div *ngIf="errors.length > 0" class="errors-list">
   <ul>
