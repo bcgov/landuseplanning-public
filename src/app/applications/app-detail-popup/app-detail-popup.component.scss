@@ -4,23 +4,11 @@ $popup-border-radius: 0.2rem;
 $popup-title-color: #fff;
 $popup-title-bg: #003366;
 
-.popup-title {
-  padding-top: 0.75rem;
-  padding-right: 2rem;
-  padding-bottom: 0.75rem;
-  padding-left: 1rem;
-  border-top-right-radius: $popup-border-radius;
-  border-top-left-radius: $popup-border-radius;
-  background: $popup-title-bg;
-  color: $popup-title-color;
-
-  span {
-    display: block;
-  }
+.popup-content {
+  padding: 1rem;
 }
 
 .popup-body {
-  padding: 1rem;
   border-bottom-right-radius: $popup-border-radius;
   border-bottom-left-radius: $popup-border-radius;
 
@@ -32,16 +20,57 @@ $popup-title-bg: #003366;
   }
 }
 
-.client-name__label {
-  font-weight: 700;
+// Title Section Contents
+.file-number {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
 }
 
-.client-name__value {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-weight: 700;
+.applicant-name {
+  line-height: 1.4rem;
+  font-size: 1.25rem; // 18px
+  font-weight: 600;
 }
+
+.purpose {
+  color: #999;
+  line-height: 1.4rem;
+  text-transform: capitalize;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+// Status 
+.status-container {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  padding: 0;
+  font-size: 0.875rem;
+
+  li {
+    @include flex-box();
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 400;
+  }
+
+  li + li {
+    margin-top: 0.2rem;
+  }
+
+  i {
+    @include flex(0 0 auto);
+    margin-right: 0.2rem;
+    font-size: 21px;
+  }
+
+  span {
+    @include flex(1 1 auto);
+  }
+}
+
 
 .app-link {
   color: #fff;
@@ -74,43 +103,14 @@ $popup-title-bg: #003366;
   }
 }
 
-.status-container {
-  li {
-    @include flex-box();
-    align-items: center;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 700;
-  }
-
-  i {
-    @include flex(0 0 auto);
-    margin-right: 0.2rem;
-    font-size: 21px;
-  }
-
-  span {
-    @include flex(1 1 auto);
-  }
-}
-
-.client-name__label {
-  font-size: 0.75em;
-}
-
-.client-name__value {
-  font-size: 0.875em;
-}
-
 .popup-body {
   line-height: 1.4em;
   font-size: 0.875em;
 }
 
 .app-link {
-  margin-top: 0.875em;
-  font-size: 1em;
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
 }
 
 hr {
@@ -120,7 +120,7 @@ hr {
 
 @media (max-width: 1023px) {
   .popup-content {
-    font-size: 0.85rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -128,18 +128,4 @@ hr {
   .popup-content {
     font-size: 1rem;
   }
-}
-
-
-// Status Variants
-.cp-active {
-  color: #28a745;
-}
-
-.cp-inactive {
-  color: #ccc;
-}
-
-.app-danger {
-  color: red;
 }

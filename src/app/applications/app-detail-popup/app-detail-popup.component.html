@@ -1,81 +1,57 @@
-<div class="popup-content">
-  <div class="popup-title" *ngIf="app">
-    <span class="client-name__label">Applicant</span>
-    <span class="client-name__value">{{app.client || '-'}}</span>
-  </div>
-  <div class="popup-body" *ngIf="app">
-    <div class="app-details">
-      <div class="meta-container">
-        <ul>
-          <li class="app-description" *ngIf="app.description">
-            <div class="value" [clamp]="3" [innerHTML]="app.description"></div>
-          </li>
-          <li>
-            <span class="key">Crown Land File:</span>
-            <span class="value">{{(app['clFile']) || '-'}}</span>
-          </li>
-          <li>
-            <span class="key">Disposition Transaction:</span>
-            <span class="value">{{app.tantalisID || '-'}}</span>
-          </li>
-          <li>
-            <span class="key">Location:</span>
-            <span class="value">{{app.location || '-'}}</span>
-          </li>
-        </ul>
-      </div>
+<div class="popup-content" *ngIf="app">
+  <div class="file-number">Crown Land File: {{app['clFile'] || '-'}}</div>
 
-      <hr>
-
-      <!-- Status -->
-      <ul class="status-container">
-        <li *ngVar="commentPeriodService.getStatusString(app.cpStatusCode) as cpStatus">
-          <i class="material-icons" title="{{cpStatus}}">
-            {{commentPeriodService.isOpen(app.cpStatusCode) ? 'comment' : 'highlight_off'}}
-          </i><span>{{cpStatus}}</span>
-        </li>
-        <li *ngVar="applicationService.getStatusCode(app.status) as appStatusCode">
-          <!-- Application Under Review -->
-          <i class="material-icons" title="{{app.appStatus}}"
-            *ngIf="applicationService.isAccepted(appStatusCode)">
-            access_time
-          </i>
-          <!-- Decision: Allowed -->
-          <i class="material-icons" title="{{app.appStatus}}"
-            *ngIf="applicationService.isAllowed(appStatusCode)">
-            error_outline
-          </i>
-          <!-- Tenure: Disposition in Good Standing / Decision: Offered / Decision: Offer Accepted -->
-          <i class="material-icons" title="{{app.appStatus}}"
-            *ngIf="applicationService.isDispGoodStanding(appStatusCode)
-              || applicationService.isOffered(appStatusCode)
-              || applicationService.isOfferAccepted(appStatusCode)">
-            check
-          </i>
-          <!-- Application Cancelled / Application Abandoned / Decision: Offer Not Accepted -->
-          <i class="material-icons" title="{{app.appStatus}}"
-            *ngIf="applicationService.isCancelled(appStatusCode)
-            || applicationService.isAbandoned(appStatusCode)
-            || applicationService.isOfferNotAccepted(appStatusCode)">
-            cancel
-          </i>
-          <!-- Decision: Not Approved / Tenure: Suspended-->
-          <i class="material-icons" title="{{app.appStatus}}"
-            *ngIf="applicationService.isDisallowed(appStatusCode)
-            || applicationService.isSuspended(appStatusCode)">
-            warning
-          </i>
-          <!-- Unknown Application Status -->
-          <i class="material-icons" title="{{app.appStatus}}"
-            *ngIf="applicationService.isUnknown(appStatusCode)">
-            warning
-          </i>
-          <span>{{app.appStatus}}</span>
-        </li>
-      </ul>
-      <a class="app-link btn btn-primary" [routerLink]="['/a', app._id]" title="View more information about this application">
-        View Application Details
-      </a>
-    </div>
+  <div>
+    <div class="applicant-name">{{app.client || '-'}}</div>
+    <div class="purpose">{{app.purpose | lowercase}} {{app.subpurpose | lowercase}}</div>
   </div>
+
+  <ul class="status-container">
+    <li *ngVar="commentPeriodService.getStatusString(app.cpStatusCode) as cpStatus">
+      <i class="material-icons" title="{{app.cpStatus}}">
+        {{commentPeriodService.isOpen(app.cpStatusCode) ? 'comment' : 'highlight_off'}}
+      </i>
+      <span>{{cpStatus}}</span>
+    </li>
+    <li *ngVar="applicationService.getStatusCode(app.status) as appStatusCode">
+      <!-- Application Under Review -->
+      <i class="material-icons" title="{{app.appStatus}}"
+        *ngIf="applicationService.isAccepted(appStatusCode)">
+        access_time
+      </i>
+      <!-- Decision: Allowed -->
+      <i class="material-icons" title="{{app.appStatus}}"
+        *ngIf="applicationService.isAllowed(appStatusCode)">
+        error_outline
+      </i>
+      <!-- Tenure: Disposition in Good Standing / Decision: Offered / Decision: Offer Accepted -->
+      <i class="material-icons" title="{{app.appStatus}}"
+        *ngIf="applicationService.isDispGoodStanding(appStatusCode)
+          || applicationService.isOffered(appStatusCode)
+          || applicationService.isOfferAccepted(appStatusCode)">
+        check
+      </i>
+      <!-- Application Cancelled / Application Abandoned / Decision: Offer Not Accepted -->
+      <i class="material-icons" title="{{app.appStatus}}"
+        *ngIf="applicationService.isCancelled(appStatusCode)
+        || applicationService.isAbandoned(appStatusCode)
+        || applicationService.isOfferNotAccepted(appStatusCode)">
+        cancel
+      </i>
+      <!-- Decision: Not Approved / Tenure: Suspended-->
+      <i class="material-icons" title="{{app.appStatus}}"
+        *ngIf="applicationService.isDisallowed(appStatusCode)
+        || applicationService.isSuspended(appStatusCode)">
+        warning
+      </i>
+      <!-- Unknown Application Status -->
+      <i class="material-icons" title="{{app.appStatus}}"
+        *ngIf="applicationService.isUnknown(appStatusCode)">
+        warning
+      </i>
+      <span>{{app.appStatus}}</span>
+    </li>
+  </ul>
+
+  <button class="app-link btn btn-sm btn-primary" [routerLink]="['/a', app._id]">View Application Details</button>
 </div>

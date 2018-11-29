@@ -1,43 +1,45 @@
 @import "~assets/styles/base/base.scss";
 
-$toggle-list-anim-duration: 0.2s;
+$toggle-list-anim-duration:     0.2s;
+$popup-close-button-color:      #000;
+$popoup-close-button-hover-bg:  #eee;
+$map-control-button-bg:         #fff;
 
 .map-container {
+  flex: 1 1;
+}
+
+#map {
+  display: block;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  
-  #map {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: $map-bg;
-    transition: left ease-out $toggle-list-anim-duration;
-  }
 }
 
 // Map Control Customization
 ::ng-deep {
   .leaflet-container {
+    font-family: "myriad-pro", Calibri, Arial, 'sans serif';
+
     a.leaflet-popup-close-button {
       top: 0.5rem;
       right: 0.5rem;
-      padding: 0.35rem 0;
+      padding: 0.5rem 0;
       width: 2rem;
       height: 2rem;
-      color: #fff;
+      color: $popup-close-button-color;
       font-size: 1.5rem;
       font-weight: normal;
-      opacity: 0.5;
+      border-radius: 0.25rem;
+      transition: all ease-out 0.2s;
 
-      &:hover,
-      &:focus {
-        color: #fff;
-        opacity: 1;
+      &:active,
+      &:focus,
+      &:hover {
+        color: $popup-close-button-color;
+        background: $popoup-close-button-hover-bg;
       }
     }
   }
@@ -73,7 +75,7 @@ $toggle-list-anim-duration: 0.2s;
     padding: 0;
     width: 30px;
     height: 30px;
-    background: #fff;
+    background: $map-control-button-bg;
     text-align: center;
     line-height: 30px;
     border-radius: 2px;
