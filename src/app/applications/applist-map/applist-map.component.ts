@@ -22,8 +22,8 @@ declare module 'leaflet' {
 
 const L = window['L'];
 
-const markerIconYellow = L.icon({
-  iconUrl: 'assets/images/marker-icon-yellow.svg',
+const markerIcon = L.icon({
+  iconUrl: 'assets/images/baseline-location-24px.svg',
   // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
   // iconRetinaUrl: 'assets/images/marker-icon-2x-yellow.svg',
   iconSize: [36, 36],
@@ -31,8 +31,8 @@ const markerIconYellow = L.icon({
   tooltipAnchor: [16, -28]
 });
 
-const markerIconYellowLg = L.icon({
-  iconUrl: 'assets/images/marker-icon-yellow-lg.svg',
+const markerIconLg = L.icon({
+  iconUrl: 'assets/images/baseline-location_on-24px.svg',
   // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
   // iconRetinaUrl: 'assets/images/marker-icon-yellow-lg.svg',
   iconSize: [48, 48],
@@ -430,7 +430,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
           + `${app.purpose || '-'} / ${app.subpurpose || '-'}\n`
           + `${app.location}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
-          .setIcon(markerIconYellow)
+          .setIcon(markerIcon)
           .on('click', L.Util.bind(this.onMarkerClick, this, app));
         marker.dispositionId = app.tantalisID;
         this.markerList.push(marker); // save to list
@@ -499,7 +499,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   public onHighlightApplication(app: Application, show: boolean) {
     // reset icon on previous marker, if any
     if (this.currentMarker) {
-      this.currentMarker.setIcon(markerIconYellow);
+      this.currentMarker.setIcon(markerIcon);
       this.currentMarker = null;
     }
 
@@ -508,7 +508,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       const marker = _.find(this.markerList, { dispositionId: app.tantalisID });
       if (marker) {
         this.currentMarker = marker;
-        marker.setIcon(markerIconYellowLg);
+        marker.setIcon(markerIconLg);
         // FUTURE: zoom in to this app/marker ?
         // FUTURE: show the marker popup ?
         // this.onMarkerClick(app, { target: marker });
