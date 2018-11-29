@@ -64,18 +64,19 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
     private renderer: Renderer2
   ) {
 
-    // Add a class to the body tag here to limit the height of the viewport when on the Applications page
+    // add a class to the body tag here to limit the height of the viewport when on the Applications page
     this.router.events
-    .subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const currentUrlSlug = event.url.slice(1);
-        if (currentUrlSlug === 'applications') {
-          this.renderer.addClass(document.body, 'no-scroll');
-        } else {
-          this.renderer.removeClass(document.body, 'no-scroll');
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          const currentUrlSlug = event.url.slice(1);
+          if (currentUrlSlug === 'applications') {
+            this.renderer.addClass(document.body, 'no-scroll');
+          } else {
+            this.renderer.removeClass(document.body, 'no-scroll');
+          }
         }
-      }
-    });
+      });
   }
 
   ngOnInit() {
