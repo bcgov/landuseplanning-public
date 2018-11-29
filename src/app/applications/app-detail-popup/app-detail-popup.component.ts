@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { ConfigService } from 'app/services/config.service';
 
 @Component({
   selector: 'app-detail-popup',
@@ -12,13 +13,17 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 })
 
 export class AppDetailPopupComponent implements OnInit, OnDestroy {
+
+  @Output() setCurrentApp = new EventEmitter(); // to applications component
+
   public id: string;
   public app: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public applicationService: ApplicationService, // also used in template
-    public commentPeriodService: CommentPeriodService // used in template
+    public commentPeriodService: CommentPeriodService, // used in template
+    public configService: ConfigService
   ) { }
 
   ngOnInit() {
@@ -35,4 +40,11 @@ export class AppDetailPopupComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+  public showAppDetails() {
+    this.configService.isSidePanelVisible = true;
+    this.configService.isAppDetailsVisible = true;
+    this.setCurrentApp.emit(this.app);
+  }
+
 }

@@ -1,0 +1,160 @@
+<div class="flex-panel" *ngIf="!isLoading && !application">
+  <div class="flex-panel__header">
+    <h3 class="title">No application selected</h3>
+  </div>
+</div>
+
+<div class="flex-panel" *ngIf="isLoading">
+  <em>Loading application details...</em>
+</div>
+
+<div class="flex-panel" *ngIf="application">
+  <div class="flex-panel__header">
+    <div class="file-number">Crown Land File: {{(application && application['clFile']) || '-'}}</div>
+    <div>
+      <div class="applicant-name">{{application?.client || '-'}}</div>
+      <div class="purpose">{{application?.purpose | lowercase}} {{application?.subpurpose | lowercase}}</div>
+    </div>
+    <ul class="status-container" style="display: none;">
+      <li *ngIf="commentPeriodService.isOpen(application?.currentPeriod)">
+        <i class="material-icons" title="{{application?.cpStatus}}">
+          {{commentPeriodService.isOpen(application?.currentPeriod) ? 'comment' : 'highlight_off'}}
+        </i><span>{{application?.cpStatus}}</span>
+      </li>
+      <li *ngVar="applicationService.getStatusCode(application?.status) as appStatusCode">
+        <!-- Application Under Review -->
+        <i class="material-icons" title="{{application?.appStatus}}"
+          *ngIf="applicationService.isAccepted(appStatusCode)">
+          access_time
+        </i>
+        <!-- Decision: Allowed -->
+        <i class="material-icons" title="{{application?.appStatus}}"
+          *ngIf="applicationService.isAllowed(appStatusCode)">
+          error_outline
+        </i>
+        <!-- Tenure: Disposition in Good Standing / Decision: Offered / Decision: Offer Accepted -->
+        <i class="material-icons" title="{{application?.appStatus}}"
+          *ngIf="applicationService.isDispGoodStanding(appStatusCode)
+            || applicationService.isOffered(appStatusCode)
+            || applicationService.isOfferAccepted(appStatusCode)">
+          check
+        </i>
+        <!-- Application Cancelled / Application Abandoned / Decision: Offer Not Accepted -->
+        <i class="material-icons" title="{{application?.appStatus}}"
+          *ngIf="applicationService.isCancelled(appStatusCode)
+          || applicationService.isAbandoned(appStatusCode)
+          || applicationService.isOfferNotAccepted(appStatusCode)">
+          cancel
+        </i>
+        <!-- Decision: Not Approved / Tenure: Suspended-->
+        <i class="material-icons" title="{{application?.appStatus}}"
+          *ngIf="applicationService.isDisallowed(appStatusCode)
+          || applicationService.isSuspended(appStatusCode)">
+          warning
+        </i>
+        <!-- Unknown Application Status -->
+        <i class="material-icons" title="{{application?.appStatus}}"
+          *ngIf="applicationService.isUnknown(appStatusCode)">
+          warning
+        </i>
+        <span>{{application?.appStatus}}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="flex-panel__scroll">
+    <div class="app-details-info">
+      <div class="commenting-info-container" *ngIf="application?.currentPeriod">
+        <div>This application is currently accepting comments for the next <strong>{{daysRemaining}}</strong> (closing on {{application?.currentPeriod.endDate | date:'mediumDate'}})</div>
+        <button class="btn btn-primary" (click)="addComment()">Submit a Comment</button>
+      </div>
+      <ngb-tabset>
+        <ngb-tab>
+          <ng-template ngbTabTitle>
+            Application Details
+          </ng-template>
+          <ng-template ngbTabContent>
+            <section>
+              <h4>About this application</h4>
+              <p class="description">{{application?.description || "No description available"}}</p>
+              <ul class="meta-container">
+                <li>
+                  <div class="key">Application Status:</div>
+                  <div class="value">{{application?.appStatus}}</div>
+                </li>
+                <li>
+                  <div class="key">Applicant Name:</div>
+                  <div class="value">{{application?.client}}</div>
+                </li>
+                <li>
+                  <div class="key">Disposition Transaction:</div>
+                  <div class="value">{{application?.tantalisID || '-'}}</div>
+                </li>
+                <li>
+                  <div class="key">Tenure:</div>
+                  <div class="value">{{application?.type | lowercase}} / {{application?.subtype | lowercase}}</div>
+                </li>
+                <li>
+                  <div class="key">Purpose/Subpurpose:</div>
+                  <div class="value">{{application?.purpose | lowercase}} / {{application?.subpurpose | lowercase}}</div>
+                </li>
+                <li>
+                  <div class="key">Location:</div>
+                  <div class="value">{{application?.location | lowercase}}</div>
+                </li>
+              </ul>
+            </section>
+            <section>
+              <h4>Application Documents</h4>
+              <ul class="document-list">
+                <li *ngFor="let document of application.documents">
+                  <a [href]="api.getDocumentUrl(document)" [title]="document.displayName || ''" target="_blank">
+                    <i class="material-icons md-18">
+                      insert_drive_file
+                    </i>
+                    <span>{{document.documentFileName}}</span>
+                  </a>
+                </li>
+              </ul>
+            </section>
+            <section>
+              <h4>Application Decision</h4>
+              <div *ngIf="!application.decision && !applicationService.isDecision(application.status)">
+                No decisions have been made for this application at this time.
+              </div>
+              <ul class="document-list" *ngIf="application.decision">
+                <li *ngFor="let document of application.decision.documents">
+                  <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                    <i class="material-icons md-18">
+                      insert_drive_file
+                    </i>
+                    <span>{{document.documentFileName}}</span>
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab>
+          <ng-template ngbTabTitle>
+            Shape Information
+          </ng-template>
+          <ng-template ngbTabContent>
+            <section>
+              <!--
+              <p *ngIf="application?.features">This application has <strong>{{application.features.length}}</strong> {{application.features.length === 1 ? 'shape.' : 'shapes.'}}</p>
+              -->
+              <ul class="shapefile-list">
+                <li *ngFor="let feature of application?.features">
+                  <div class="shapefile-list__id">Shape ID: {{feature.properties.INTRID_SID}}</div>
+                  <div>Type/Subtype: {{application.type || '-'}} / {{application.subtype || '-'}}</div>
+                  <div>Area (ha): {{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</div>
+                  <div>Legal Description: <span [innerHTML]="(feature.properties.TENURE_LEGAL_DESCRIPTION | newlines) || '-'"></span></div>
+                </li>
+              </ul>
+            </section>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+  </div>
+</div>

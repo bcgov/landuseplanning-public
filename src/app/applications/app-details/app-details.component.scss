@@ -1,0 +1,179 @@
+@import "~assets/styles/base/base.scss";
+
+.app-detail {
+  line-height: normal;
+}
+
+section {
+  h4 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+section + section {
+  margin-top: 2rem;
+}
+
+// Title Contents
+.file-number {
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.applicant-name {
+  line-height: 1.5rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02rem;
+}
+
+.purpose {
+  color: #999;
+  text-transform: capitalize;
+  line-height: 1.5rem;
+  font-size: 1.37rem;
+  font-weight: 600;
+  letter-spacing: -0.02rem;
+}
+
+// Status 
+.status-container {
+  margin-top: 0.9rem;
+  margin-bottom: 0;
+  padding: 0;
+  font-size: 0.875rem;
+
+  li {
+    @include flex-box();
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 400;
+  }
+
+  li + li {
+    margin-top: 0.2rem;
+  }
+
+  i {
+    @include flex(0 0 auto);
+    margin-right: 0.2rem;
+    font-size: 21px;
+  }
+
+  span {
+    @include flex(1 1 auto);
+  }
+}
+
+.app-details-info {
+  line-height: 1.25rem;
+  font-size: 0.85rem;
+}
+
+// Meta
+.meta-container {
+  position: relative;
+  overflow: hidden;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding: 0;
+  display: table;
+  width: 100%;
+
+  li {
+    display: table-row;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  li + li {
+    margin-top: 0.25rem;
+  }
+
+  .key {
+    display: table-cell;
+    padding-right: 1em;
+  }
+
+  .value {
+    display: table-cell;
+    text-transform: capitalize;
+    font-style: italic;
+  }
+}
+
+:host ::ng-deep {
+  .nav-item {
+    width: 50%;
+    text-align: center;
+  }
+}
+
+.document-list {
+  padding: 0;
+  margin: 0 -0.2rem;
+
+  li {
+    margin: 0.2rem;
+    display: block;
+
+    a {
+      display: block;
+      padding: 0.5rem;
+      padding-right: 0.75rem;
+      border-radius: 0.2rem;
+      background: #fff;
+      font-size: 0.8rem;
+      transition: all ease-out 0.2s;
+    }
+
+    a:hover {
+      color: #fff;
+      background: #007bff;
+      text-decoration: none;
+    }
+
+    i, span {
+      display: inline;
+      vertical-align: middle;
+    }
+  }
+}
+
+.shapefile-list {
+  margin-top: -0.5rem;
+  margin-bottom: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li {
+    padding: 0.5rem 0;
+  }
+}
+
+.shapefile-list__id {
+  font-weight: 700;
+}
+
+.commenting-info-container {
+  margin: -1.5rem;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  background: #fff;
+
+  .btn {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    width: 100%;
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+}

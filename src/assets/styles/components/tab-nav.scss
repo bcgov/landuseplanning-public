@@ -1,66 +1,39 @@
+$tab-border-width: 4px;
+
 .nav-tabs {
-    @include flex-flow(row wrap);
-    border-bottom: none;
-
-    .nav-link {
-        padding: 0.75rem 0.2rem;
-        border: none;
-        background: $tab-sm-bg;
-        text-align: center;
-        text-transform: uppercase;
-        font-weight: 700;
-        transition: all ease-in 0.2s;
-    }
+  width: 100%;
+  border-bottom: none;
 }
 
-@media (max-width: 767px) {
-    .nav-tabs {
-        margin: -0.15rem;
-
-        .nav-link {
-            margin: 0.15rem;
-            border-radius: 0;
-
-            &.active {
-                color: $tab-sm-active-color;
-                background-color: $tab-sm-active-bg;
-            }
-        }
-    }
+.nav-tabs .nav-item {
+  margin-bottom: calc(#{$tab-border-width} * -1);
 }
 
-@media (min-width: 768px) {
-    .nav-tabs {
-        @include flex-flow(row nowrap);
-        margin-bottom: 2.5rem;
-        border-bottom: 2px solid $tab-nav-border-color;
-        background-color: $tab-nav-bg;
+.nav-tabs .nav-link {
+  padding: 0.4rem 1rem;
+  color: #999;
+  border: none;
+  border-bottom: $tab-border-width solid #eee;
+  border-radius: 0;
+  background: transparent;
+  letter-spacing: -0.02rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: all ease-out 0.2s;
+}
 
-        .nav-item {
-            margin-bottom: -2px;
-            display: inline-block;
-            width: auto;
-        }
+.nav-tabs .nav-link:hover {
+  border-color: #eee;
+}
 
-        .nav-link {
-            position: relative;
-            padding: 0.75rem;
-            color: rgba($tab-color, 0.8);
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            background-color: transparent;
-            font-size: 0.85rem;
+.nav-tabs .nav-link.active {
+  color: #007bff;
+  border-bottom-color: #007bff;
+  background: transparent;
+}
 
-            &:hover {
-                background-color: $tab-hover-bg;
-                box-shadow: 0 -2px 0 $tab-nav-border-color inset;
-            }
-
-            &.active {
-                color: $tab-color;
-                background-color: $tab-active-bg;
-                box-shadow: 0 2px 0 $tab-nav-border-color inset, 2px 0 $tab-nav-border-color inset, -2px 0 $tab-nav-border-color inset;
-            }
-        }
-    }
+.tab-pane {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }

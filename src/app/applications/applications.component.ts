@@ -29,6 +29,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('appmap') appmap;
   @ViewChild('applist') applist;
   @ViewChild('appfilters') appfilters;
+  // @ViewChild('appdetail') appdetail; // FUTURE
 
   // FUTURE: change this to an observable and components subscribe to changes ?
   // ref: https://github.com/escardin/angular2-community-faq/blob/master/services.md#how-do-i-communicate-between-components-using-a-shared-service
@@ -53,6 +54,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public apps: Array<Application> = [];
   public totalNumber = 0;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+  public currentAppId: string = null; // TODO: set this when list item is clicked
 
   constructor(
     public snackBar: MatSnackBar,
@@ -64,7 +66,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     // add a class to the body tag here to limit the height of the viewport when on the Applications page
     this.router.events
       .takeUntil(this.ngUnsubscribe)
-      .subscribe((event) => {
+      .subscribe(event => {
         if (event instanceof NavigationEnd) {
           const currentUrlSlug = event.url.slice(1);
           if (currentUrlSlug === 'applications') {
@@ -188,17 +190,10 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Event handler called when list component selects or unselects an app.
-   */
-  public highlightApplication(app: Application, show: boolean) {
-    this.appmap.onHighlightApplication(app, show);
-  }
-
-  /**
    * Event handler called when map component selects or unselects a marker.
    */
   public toggleCurrentApp(app: Application) {
-    this.applist.toggleCurrentApp(app);
+    // this.applist.toggleCurrentApp(app); // DO NOT TOGGLE LIST ITEM AT THIS TIME
   }
 
   /**
@@ -231,6 +226,28 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.appmap.onMapVisible();
       });
     }
+  }
+
+  /**
+   * Event handler called when list or map component selects or unselects an app.
+   */
+  public highlightApplication(app: Application, show: boolean) {
+    // do something on the map:
+    this.appmap.onHighlightApplication(app, show);
+
+    // do something on the detail pane:
+    if (show) {
+      this.configService.isAppDetailsVisible = true;
+      this.currentAppId = app._id;
+    } else {
+      this.configService.isAppDetailsVisible = false;
+      this.currentAppId = null;
+    }
+  }
+
+  public showDetails() {
+    this.configService.isSidePanelVisible = true;
+    this.configService.isAppDetailsVisible = true;
   }
 
 }

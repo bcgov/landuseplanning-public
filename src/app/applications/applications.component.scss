@@ -11,12 +11,6 @@ app-applications:host {
   left: 0;
 }
 
-@media (min-width: 768px) {
-  app-applications:host {
-    top: 4.2rem;            
-  }
-}
-
 .applications-view {
   @include flex-box();
   @include flex-flow(column nowrap);
@@ -25,119 +19,141 @@ app-applications:host {
   height: 100%;
 }
 
-// Application Filters
-.app-filters {
+@media (min-width: 1024px) {
+  .applications-view {
+    @include flex-flow(row nowrap);
+  }
+}
+
+// Side Navigation
+$side-nav-bg: #0050a1;
+$side-nav-color: #fff;
+
+.side-nav {
   @include flex(0 0 auto);
-  display: block;
-  z-index: 1004;
-}
-
-@media (min-width: 1200px) {
-  .app-filters {
-    position: absolute;
-    top: 0.5rem;
-    left: 50%;
-    margin-left: -24rem;
-    width: 48rem;
-    z-index: 999;
-    box-shadow: $map-component-shadow;
-    transition: left ease-out $toggle-list-anim-duration;
-  }
-}
-
-// List Container
-.app-list-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 3rem;
+  position: relative;
   z-index: 1002;
-  transform: translateX(-100%) translateX(-3rem);
-  transition: transform ease-out $toggle-list-anim-duration;
-  border-top: 1px solid #ddd;
+  order: 0;
+  background: $side-nav-bg;
 }
 
-// List Container {
-@media (min-width: 768px) {
-  .app-list-container {
-    width: 22rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  .app-list-container {
-    border-top: none;
-  }
-}
-
-.toggle-app-list-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: -39px;
+.side-nav ul {
+  margin: 0;
   padding: 0;
-  width: 40px;
-  height: 3rem;
-  z-index: 1003;
-  box-shadow: $map-component-shadow;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  background: #fff;
-  transition: left ease-out $toggle-list-anim-duration; 
-  clip: rect(0,3.5rem,3.5rem,0);
+  background: $side-nav-bg;
+  list-style-type: none;
+}
+
+.side-nav ul li {
+  display: inline-block;
+}
+
+.side-nav .btn {
+  display: block;
+  width: 6rem;
+  height: 4.5rem;
+  color: rgba($side-nav-color, 0.6);
+  background: $side-nav-bg;
+  border-radius: 0;
+  border: none;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
 
   i {
-    margin-top: 0.4rem;
-    margin-right: 0.1rem;
-    font-size: 1.875rem;
+    vertical-align: top;
   }
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0,0,0,0.5);
-  opacity: 0;
-  transform: translateX(-100%);
-  transition: opacity ease-out $toggle-list-anim-duration;
+@media (min-width: 1024px) {
+  .side-nav {
+    width: 6rem;
+    height: 100%;
+    border-bottom: none;
+
+    li {
+      display: block;
+    }
+  }
+
+  .side-nav .btn.active {
+    color: $side-nav-color;
+    border: none;
+    background: lighten($side-nav-bg, 10%);
+    box-shadow: none;
+  }
 }
 
+// Side Panel
+$side-panel-width-lg: 28rem;
+$side-panel-bg: #fff;
 
-// Container for the List and Map components
-.app-list-map-container {
+.side-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  overflow-x: hidden;
+  transform: translateX(-100%);
+  transition: transform ease-out 0.2s;
+  z-index: 1001;
+  background: $side-panel-bg;
+
+  &.open {
+    transform: translateX(0);
+  }
+
+  ::ng-deep {
+    .flex-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .side-panel {
+    @include flex(0 0 auto);
+    position: relative;
+    width: 0;
+    transform: none;
+    transition: width ease-out 0.2s;
+    box-shadow: 0 0.5rem 0.5rem #ccc;
+
+    &.open {
+      width: $side-panel-width-lg;
+    }
+
+    ::ng-deep {
+      .flex-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+        width: $side-panel-width-lg;
+      }
+    }
+  }
+}
+
+.side-panel__close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 0.75rem;
+  z-index: 10000;
+}
+
+.main-panel {
   @include flex(1 1 auto);
   position: relative;
 }
 
-// Application List Open / Closed State
-.app-list-open {
-  .app-list-container {
-    box-shadow: $map-component-shadow;
-    transform: translateX(0) translateX(-3rem);
-  }
-
-  .overlay {
-    z-index: 1001;
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @media (min-width: 768px) {
-  .app-list-open {
-    .overlay {
-      display: none;
-    }
-  }
-}
-
-@media (min-width: 1200px) {
-  .app-list-open {
-    .app-filters {
-      left: calc(50% + 12.5rem);
-    }
+  app-applications:host {
+    top: 4.2rem;            
   }
 }

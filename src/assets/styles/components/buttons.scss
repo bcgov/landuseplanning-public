@@ -243,24 +243,18 @@ main {
   padding-bottom: 0.35rem;
   padding-left: 0;
   overflow: hidden;
-  color: #808080;
   background: transparent;
   transition: all ease-out 0.2s;
   cursor: pointer;
 
   i {
-    margin-top: -0.1rem;
+    margin-top: -0.25rem;
     vertical-align: middle;
   }
   
-  .btn-txt {
-    visibility: hidden;
-  }
-
   &:active,
   &:focus,
   &:hover {
-    color: #000;
     background: #eee;
   }
 }

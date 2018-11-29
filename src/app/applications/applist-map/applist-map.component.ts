@@ -54,6 +54,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() appfilters; // from applications component
   @Output() toggleCurrentApp = new EventEmitter(); // to applications component
   @Output() updateCoordinates = new EventEmitter(); // to applications component
+  @Output() setCurrentApp = new EventEmitter(); // to applications component
 
   private map: L.Map = null;
   private markerList: Array<L.Marker> = []; // list of markers
@@ -207,6 +208,15 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
 
+    // // add reset view control
+    // this.map.addControl(new resetViewControl());
+
+    // // add zoom control
+    // L.control.zoom({ position: 'topright' }).addTo(this.map);
+
+    // // add scale control
+    // L.control.scale({ position: 'bottomright' }).addTo(this.map);
+
     // add base maps layers control
     const baseLayers = {
       'Ocean Base': Esri_OceanBasemap,
@@ -327,8 +337,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // this.urlService.save('lat', null);
     // this.urlService.save('lng', null);
     // this.urlService.save('zoom', null);
-
-    // this.reloadApps.emit(); // FUTURE: reload apps ?
+    // this.emitCoordinates();
   }
 
   /**
@@ -393,8 +402,6 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   private fitBounds(bounds: L.LatLngBounds = null) {
     // console.log('fitting bounds');
     const fitBoundsOptions: L.FitBoundsOptions = {
-      // use top padding to adjust for filters header (which is always visible)
-      paddingTopLeft: L.point(0, this.appfilters.clientHeight),
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false
@@ -473,7 +480,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     const popupOptions = {
       className: 'map-popup-content',
-      autoPanPaddingTopLeft: L.point(40, 150),
+      autoPanPaddingTopLeft: L.point(40, 250),
       autoPanPaddingBottomRight: L.point(40, 20)
     };
 
@@ -481,6 +488,8 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     const compFactory = this.resolver.resolveComponentFactory(AppDetailPopupComponent);
     const compRef = compFactory.create(this.injector);
     compRef.instance.id = app._id;
+    // emit to own handler when component emits
+    compRef.instance.setCurrentApp.subscribe(a => this.setCurrentApp.emit(a));
     this.appRef.attachView(compRef.hostView);
     compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
     const div = document.createElement('div').appendChild(compRef.location.nativeElement);

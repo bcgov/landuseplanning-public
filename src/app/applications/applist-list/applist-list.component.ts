@@ -79,8 +79,9 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
         this.currentApp = item; // set
         this.setCurrentApp.emit(item);
       } else {
-        this.currentApp = null; // unset
-        this.unsetCurrentApp.emit(item);
+        // DO NOT UNSET DETAILS AT THIS TIME
+        // this.currentApp = null; // unset
+        // this.unsetCurrentApp.emit(item);
       }
     }
   }

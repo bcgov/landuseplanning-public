@@ -22,27 +22,27 @@ $popup-title-bg: #003366;
 
 // Title Section Contents
 .file-number {
-  margin-bottom: 0.75rem;
-  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
 }
 
 .applicant-name {
-  line-height: 1.4rem;
-  font-size: 1.25rem; // 18px
+  line-height: 1.25rem;
+  font-size: 1.15rem; // 18px
   font-weight: 600;
 }
 
 .purpose {
   color: #999;
-  line-height: 1.4rem;
+  line-height: 1.25rem;
   text-transform: capitalize;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
 }
 
 // Status 
 .status-container {
-  margin-top: 1rem;
+  margin-top: 0.8em;
   margin-bottom: 0;
   padding: 0;
   font-size: 0.875rem;
@@ -69,11 +69,6 @@ $popup-title-bg: #003366;
   span {
     @include flex(1 1 auto);
   }
-}
-
-
-.app-link {
-  color: #fff;
 }
 
 .meta-container {
@@ -108,11 +103,6 @@ $popup-title-bg: #003366;
   font-size: 0.875em;
 }
 
-.app-link {
-  margin-top: 0.875rem;
-  font-size: 0.875rem;
-}
-
 hr {
   margin-top: 0.875em;
   margin-bottom: 0.875em;
@@ -128,4 +118,11 @@ hr {
   .popup-content {
     font-size: 1rem;
   }
+}
+
+.app-link {
+  margin-top: 1rem;
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 700;
 }

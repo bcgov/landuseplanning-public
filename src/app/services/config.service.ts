@@ -12,6 +12,8 @@ export class ConfigService {
   private _isApplicationsListVisible = false;
   private _isApplicationsFiltersVisible = false;
   private _isApplicationsMapVisible = true;
+  private _isSidePanelVisible = false;
+  private _isAppDetailsVisible = false;
   private _listPageSize = 10;
 
   // TODO: store these in URL instead
@@ -37,6 +39,14 @@ export class ConfigService {
 
   get isApplicationsMapVisible(): boolean { return this._isApplicationsMapVisible; }
   set isApplicationsMapVisible(val: boolean) { this._isApplicationsMapVisible = val; }
+
+  // applications page side panel visiblity
+  get isSidePanelVisible(): boolean { return this._isSidePanelVisible; }
+  set isSidePanelVisible(val: boolean) { this._isSidePanelVisible = val; }
+
+  // applications page details panel visibility
+  get isAppDetailsVisible(): boolean { return this._isAppDetailsVisible; }
+  set isAppDetailsVisible(val: boolean) { this._isAppDetailsVisible = val; }
 
   get listPageSize(): number { return this._listPageSize; }
   set listPageSize(val: number) { this._listPageSize = val; }
