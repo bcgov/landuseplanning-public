@@ -1,3 +1,6 @@
+//
+// this is the data structure as returned by BCGW
+//
 export class Feature {
   geometry: {
     type: string;
@@ -32,10 +35,10 @@ export class Feature {
   type: string;
 
   constructor(obj?: any) {
-    this.geometry       = obj && obj.geometry       || null;
-    this.geometry_name  = obj && obj.geometry_name  || null;
-    this.id             = obj && obj.id             || null;
-    this.properties     = obj && obj.properties     || null;
-    this.type           = obj && obj.type           || null;
+    this.geometry      = obj && obj.geometry      || null;
+    this.geometry_name = obj && obj.geometry_name || null;
+    this.id            = obj && obj.id            || null;
+    this.properties    = obj && obj.properties    || null;
+    this.type          = obj && obj.type          || null;
   }
 }

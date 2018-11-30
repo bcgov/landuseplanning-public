@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toPromise';
@@ -36,11 +35,6 @@ export class DecisionService {
       .mergeMap(decision => {
         if (!decision) { return Observable.of(null as Decision); }
 
-        // replace \\n (JSON format) with newlines
-        if (decision.description) {
-          decision.description = decision.description.replace(/\\n/g, '\n');
-        }
-
         // now get the decision documents
         const promise = this.documentService.getAllByDecisionId(decision._id)
           .toPromise()
@@ -69,11 +63,6 @@ export class DecisionService {
       })
       .mergeMap(decision => {
         if (!decision) { return Observable.of(null as Decision); }
-
-        // replace \\n (JSON format) with newlines
-        if (decision.description) {
-          decision.description = decision.description.replace(/\\n/g, '\n');
-        }
 
         // now get the decision documents
         const promise = this.documentService.getAllByDecisionId(decision._id)

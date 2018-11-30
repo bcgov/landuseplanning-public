@@ -90,9 +90,9 @@ export class ApiService {
   //
   // Applications
   //
-  getApplicationsNoFields() {
-    const queryString = 'application?pageNum=0&pageSize=1000000';
-    return this.get(queryString);
+  getCountApplications() {
+    const queryString = `application`;
+    return this.http.head(`${this.apiPath}/${queryString}`);
   }
 
   getApplications(pageNum: number, pageSize: number, regions: string[], cpStatuses: string[], appStatuses: string[], applicant: string,
@@ -190,7 +190,6 @@ export class ApiService {
   getOrganizations() {
     const fields = [
       '_addedBy',
-      'code',
       'name'
     ];
     const queryString = 'organization?fields=' + this.buildValues(fields);
@@ -200,7 +199,6 @@ export class ApiService {
   getOrganization(id: string) {
     const fields = [
       '_addedBy',
-      'code',
       'name'
     ];
     const queryString = 'organization/' + id + '?fields=' + this.buildValues(fields);
@@ -214,7 +212,6 @@ export class ApiService {
     const fields = [
       '_addedBy',
       '_application',
-      'code',
       'name',
       'description'
     ];
@@ -226,7 +223,6 @@ export class ApiService {
     const fields = [
       '_addedBy',
       '_application',
-      'code',
       'name',
       'description'
     ];
@@ -347,9 +343,9 @@ export class ApiService {
 
   uploadDocument(formData: FormData) {
     const fields = [
+      'documentFileName',
       'displayName',
       'internalURL',
-      'documentFileName',
       'internalMime'
     ];
     const queryString = 'document/?fields=' + this.buildValues(fields);

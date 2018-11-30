@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { ApiService } from './api';
-import { Search } from 'app/models/search';
+import { SearchResults } from 'app/models/search';
 import { Feature } from 'app/models/feature';
 import { Client } from 'app/models/client';
 
 @Injectable()
 export class SearchService {
   private clients: Array<Client> = null;
-  private search: Search = null;
+  private search: SearchResults = null;
   private features: Array<Feature> = null;
 
   constructor(private api: ApiService) { }
@@ -43,7 +42,7 @@ export class SearchService {
   }
 
   // get search results by CL file #
-  getByCLFile(clfile: string, forceReload: boolean = false): Observable<Search> {
+  getByCLFile(clfile: string, forceReload: boolean = false): Observable<SearchResults> {
     if (!forceReload && this.search && this.search.features && this.search.features.length > 0 && this.search.features[0].properties
       && this.search.features[0].properties.CROWN_LANDS_FILE === clfile) {
       return Observable.of(this.search);
@@ -51,9 +50,9 @@ export class SearchService {
 
     return this.api.getBCGWCrownLands(clfile)
       .map(res => {
-        return res.text() ? new Search(res.json()) : null;
+        return res.text() ? new SearchResults(res.json()) : null;
       })
-      .map((search: Search) => {
+      .map((search: SearchResults) => {
         if (!search) { return null; }
 
         this.search = search;
@@ -72,7 +71,7 @@ export class SearchService {
 
     return this.api.getBCGWDispositionTransactionId(dtid)
       .map(res => {
-        const results = res.text() ? new Search(res.json()) : null;
+        const results = res.text() ? new SearchResults(res.json()) : null;
         return results.features;
       })
       .map((features: Feature[]) => {

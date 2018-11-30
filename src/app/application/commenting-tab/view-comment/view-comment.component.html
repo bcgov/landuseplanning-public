@@ -10,7 +10,7 @@
     <div class="modal-header" *ngIf="comment">
       <div>
         <div class="comment-author">
-          <div *ngIf="comment.commentAuthor && comment.commentAuthor.tags; else anonymous">
+          <div *ngIf="comment.commentAuthor && comment.commentAuthor.requestedAnonymous !== true; else anonymous">
             {{comment.commentAuthor.contactName}}
             <span *ngIf="comment.commentAuthor.orgName">({{comment.commentAuthor.orgName}})</span>
             <span *ngIf="comment.commentAuthor.location">, {{comment.commentAuthor.location}}</span>
