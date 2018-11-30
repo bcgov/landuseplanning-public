@@ -16,7 +16,7 @@ import { CommentingTabComponent } from './commenting-tab/commenting-tab.componen
 import { ViewCommentComponent } from './commenting-tab/view-comment/view-comment.component';
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
 import { AddCommentComponent } from './add-comment/add-comment.component';
-import { FileUploadComponent } from './add-comment/file-upload/file-upload.component';
+import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 
 @NgModule({
   imports: [
@@ -36,9 +36,6 @@ import { FileUploadComponent } from './add-comment/file-upload/file-upload.compo
     DecisionsTabComponent,
     AddCommentComponent,
     FileUploadComponent
-  ],
-  exports: [
-    // ApplicationComponent // DON'T NEED TO EXPORT?
   ],
   entryComponents: [
     ViewCommentComponent,

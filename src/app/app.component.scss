@@ -1,64 +1,19 @@
 @import "~assets/styles/base/base.scss";
 
-body {
-  :host {
-    display: block;
-    @include flex-box();
-    @include flex-direction(column);
-    min-height: 100vh;
-    background: #003366;
-  }
+
+:host {
+  display: block;
+  @include flex-box();
+  @include flex-direction(column);
+  min-height: 100vh;
+  background: #003366;
 }
 
-body.no-scroll {
+.no-scroll {
   :host {
     min-height: auto;
     max-height: 100vh;
-  }
-}
-
-.pilot-alert-container /deep/ {
-  .alert {
-    @include flex-box();
-    margin-bottom: 0;
-    border-bottom: 4px solid $gold;
-    background-color: $gold;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    color: $primary;
-
-    button {
-      @include flex(0 0 auto);
-      position: relative;
-      margin-top: -0.2rem;
-      padding: 0;
-      width: 2rem;
-      height: 2rem;
-      order: 3;
-      opacity: 1;
-
-      span {
-        display: inline-block;
-        margin-top: -0.3rem;
-        vertical-align: top;
-        font-size: 1.75rem;
-      }
-    }
-
-    &__icon {
-      @include flex(0 0 auto);
-      margin-right: 0.5rem;
-      order: 1
-    }
-
-    &__msg {
-      @include flex(1 1 auto);
-      padding-top: 0.1rem;
-      line-height: 1.25rem;
-      font-size: 0.875rem;
-      order: 2;
-    }
+    overflow: hidden;
   }
 }
 

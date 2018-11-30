@@ -14,6 +14,7 @@ import { ApplistListComponent } from './applist-list/applist-list.component';
 import { ApplistMapComponent } from './applist-map/applist-map.component';
 import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
 import { AppDetailPopupComponent } from './app-detail-popup/app-detail-popup.component';
+import { DateInputComponent } from 'app/date-input/date-input.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { AppDetailPopupComponent } from './app-detail-popup/app-detail-popup.com
     ApplistListComponent,
     ApplistMapComponent,
     ApplistFiltersComponent,
-    AppDetailPopupComponent
+    AppDetailPopupComponent,
+    DateInputComponent
   ],
   entryComponents: [
     AppDetailPopupComponent

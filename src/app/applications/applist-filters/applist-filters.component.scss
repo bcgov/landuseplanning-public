@@ -22,6 +22,10 @@ $app-filters-font-lg: 0.9375rem;
     height: 2.3rem;
     font-size: $app-filters-font-sm;
   }
+
+  legend {
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -195,5 +199,36 @@ $app-filters-font-lg: 0.9375rem;
 @media (max-width: 768px) {
   .clf-input {
     display: none;
+  }
+}
+
+// Date Range 
+.date-range {
+  @include flex-box();
+  @include clearfix();
+
+  .form-group {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .spacer {
+    margin-top: 0.75rem;
+    display: inline-block;
+    width: 3rem;
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 768px){
+  .date-range {
+    @include flex-direction(column);
+
+    .spacer {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
   }
 }
