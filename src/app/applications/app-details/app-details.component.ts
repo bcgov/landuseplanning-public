@@ -1,13 +1,15 @@
 import { Component, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import * as moment from 'moment';
 
 import { Application } from 'app/models/application';
 import { ConfigService } from 'app/services/config.service';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { AddCommentComponent } from 'app/application/add-comment/add-comment.component';
 import { ApiService } from 'app/services/api';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-details',
@@ -22,10 +24,10 @@ export class AppDetailsComponent implements OnChanges, OnDestroy {
   public application: Application;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   public daysRemaining = '?';
-  // private ngbModal: NgbModalRef = null;
+  private ngbModal: NgbModalRef = null;
 
   constructor(
-    // private modalService: NgbModal,
+    private modalService: NgbModal,
     public configService: ConfigService,
     public applicationService: ApplicationService, // used in template
     public commentPeriodService: CommentPeriodService, // used in template
@@ -70,21 +72,24 @@ export class AppDetailsComponent implements OnChanges, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  // private addComment() {
-  //   if (this.application.currentPeriod) {
-  //     // open modal
-  //     this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
-  //     // set input parameter
-  //     (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.application.currentPeriod;
-  //     // check result
-  //     this.ngbModal.result.then((value) => {
-  //       // saved
-  //       console.log(`Success, value = ${value}`);
-  //     }, (reason) => {
-  //       // cancelled
-  //       console.log(`Cancelled, reason = ${reason}`); // see ModalDismissReasons
-  //     });
-  //   }
-  // }
+  private addComment() {
+    if (this.application.currentPeriod) {
+      // open modal
+      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      // set input parameter
+      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.application.currentPeriod;
+      // check result
+      this.ngbModal.result.then(
+        value => {
+          // saved
+          console.log(`Success, value = ${value}`);
+        },
+        reason => {
+          // cancelled
+          console.log(`Cancelled, reason = ${reason}`);
+        }
+      );
+    }
+  }
 
 }

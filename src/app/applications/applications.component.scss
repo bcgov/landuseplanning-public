@@ -32,7 +32,6 @@ $side-nav-color: #fff;
 .side-nav {
   @include flex(0 0 auto);
   position: relative;
-  z-index: 1002;
   order: 0;
   background: $side-nav-bg;
 }
@@ -67,6 +66,7 @@ $side-nav-color: #fff;
 
 @media (min-width: 1024px) {
   .side-nav {
+    z-index: 1002;
     width: 6rem;
     height: 100%;
     border-bottom: none;
@@ -85,7 +85,7 @@ $side-nav-color: #fff;
 }
 
 // Side Panel
-$side-panel-width-lg: 28rem;
+$side-panel-width-lg: 30rem;
 $side-panel-bg: #fff;
 
 .side-panel {
