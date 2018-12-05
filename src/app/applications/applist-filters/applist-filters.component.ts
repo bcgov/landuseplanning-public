@@ -19,8 +19,7 @@ export interface FiltersType {
   cpStatuses: Array<string>;
   appStatuses: Array<string>;
   applicant: string;
-  clFile: string;
-  dispId: string;
+  clidDtid: string;
   purpose: string;
   subpurpose: string;
   publishFrom: Date;
@@ -66,11 +65,8 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   public applicantFilter: string = null;
   public _applicantFilter: string = null; // temporary filters for Cancel feature
 
-  public clFileFilter: number = null;
-  public _clFileFilter: number = null; // temporary filters for Cancel feature
-
-  public dispIdFilter: number = null;
-  public _dispIdFilter: number = null; // temporary filters for Cancel feature
+  public clidDtidFilter: number = null;
+  public _clidDtidFilter: number = null; // temporary filters for Cancel feature
 
   public purposeFilter: string = null;
   public _purposeFilter: string = null; // temporary filters for Cancel feature
@@ -178,8 +174,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
       cpStatuses: cpStatuses,
       appStatuses: appStatuses,
       applicant: this.applicantFilter && this.applicantFilter.trim() || null, // convert empty string to null
-      clFile: this.clFileFilter ? this.clFileFilter.toString() : null,
-      dispId: this.dispIdFilter ? this.dispIdFilter.toString() : null,
+      clidDtid: this.clidDtidFilter ? this.clidDtidFilter.toString() : null,
       purpose: this.purposeFilter && this.purposeFilter.trim() || null, // convert empty string to null
       subpurpose: this.subpurposeFilter && this.subpurposeFilter.trim() || null, // convert empty string to null
       publishFrom: this.publishFromFilter ? moment(this.publishFromFilter).startOf('day').toDate() : null,
@@ -208,16 +203,9 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.isAppStatusCollapsed = true;
   }
 
-  public applyClFileFilter(doApply: boolean = true) {
-    this.clFileFilter = this._clFileFilter;
+  public applyClidDtidFilter(doApply: boolean = true) {
+    this.clidDtidFilter = this._clidDtidFilter;
     if (doApply) { this._applyAllFilters(); }
-  }
-
-  public applyClFileFilterSm(doApply: boolean = true) {
-    this.clFileFilter = this._clFileFilter;
-    if (doApply) { this._applyAllFilters(); }
-
-    this.configService.isSidePanelVisible = false;
   }
 
   public applyAllFilters(doApply: boolean = true) {
@@ -225,8 +213,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.applyCpStatusFilters(false);
     this.applyAppStatusFilters(false);
     this.applicantFilter = this._applicantFilter;
-    this.clFileFilter = this._clFileFilter;
-    this.dispIdFilter = this._dispIdFilter;
+    this.clidDtidFilter = this._clidDtidFilter;
     this.purposeFilter = this._purposeFilter;
     this.subpurposeFilter = this._subpurposeFilter;
     this.publishFromFilter = this._publishFromFilter;
@@ -281,8 +268,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.urlService.save('appStatuses', appStatuses);
 
     this.urlService.save('applicant', this.applicantFilter && this.applicantFilter.trim());
-    this.urlService.save('clFile', this.clFileFilter && this.clFileFilter.toString());
-    this.urlService.save('dispId', this.dispIdFilter && this.dispIdFilter.toString());
+    this.urlService.save('clidDtid', this.clidDtidFilter && this.clidDtidFilter.toString());
     this.urlService.save('purpose', this.purposeFilter && this.purposeFilter.trim());
     this.urlService.save('subpurpose', this.subpurposeFilter && this.subpurposeFilter.trim());
     this.urlService.save('publishFrom', this.publishFromFilter && moment(this.publishFromFilter).format('YYYY-MM-DD'));
@@ -312,8 +298,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.cancelCpStatusFilters();
     this.cancelAppStatusFilters();
     this._applicantFilter = this.applicantFilter;
-    this._clFileFilter = this.clFileFilter;
-    this._dispIdFilter = this.dispIdFilter;
+    this._clidDtidFilter = this.clidDtidFilter;
     this._purposeFilter = this.purposeFilter;
     this._subpurposeFilter = this.subpurposeFilter;
     this._publishFromFilter = this.publishFromFilter;
@@ -341,8 +326,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     });
 
     this.applicantFilter = this.urlService.query('applicant');
-    this.clFileFilter = this.urlService.query('clFile') ? +this.urlService.query('clFile') : null;
-    this.dispIdFilter = this.urlService.query('dispId') ? +this.urlService.query('dispId') : null;
+    this.clidDtidFilter = this.urlService.query('clidDtid') ? +this.urlService.query('clidDtid') : null;
     this.purposeFilter = this.urlService.query('purpose');
     this.subpurposeFilter = this.urlService.query('subpurpose');
     this.publishFromFilter = this.urlService.query('publishFrom') ? moment(this.urlService.query('publishFrom')).toDate() : null;
@@ -353,8 +337,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this._cpStatusFilters = { ...this.cpStatusFilters };
     this._appStatusFilters = { ...this.appStatusFilters };
     this._applicantFilter = this.applicantFilter;
-    this._clFileFilter = this.clFileFilter;
-    this._dispIdFilter = this.dispIdFilter;
+    this._clidDtidFilter = this.clidDtidFilter;
     this._purposeFilter = this.purposeFilter;
     this._subpurposeFilter = this.subpurposeFilter;
     this._publishFromFilter = this.publishFromFilter;
@@ -395,8 +378,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
       this.clearCpStatusFilters(false);
       this.clearAppStatusFilters(false);
       this._applicantFilter = null;
-      this._clFileFilter = null;
-      this._dispIdFilter = null;
+      this._clidDtidFilter = null;
       this._purposeFilter = null;
       this._subpurposeFilter = null;
       this._publishFromFilter = null;
@@ -423,12 +405,8 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     return applicantFilter ? 1 : 0;
   }
 
-  public clFileFilterCount(): number {
-    return (this.clFileFilter && this.clFileFilter.toString().length > 0) ? 1 : 0;
-  }
-
-  public dispIdFilterCount(): number {
-    return (this.dispIdFilter && this.dispIdFilter.toString().length > 0) ? 1 : 0;
+  public clidDtidFilterCount(): number {
+    return (this.clidDtidFilter && this.clidDtidFilter.toString().length > 0) ? 1 : 0;
   }
 
   public purposeFilterCount(): number {
@@ -450,8 +428,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
       + this.cpStatusCount()
       + this.appStatusCount()
       + this.applicantFilterCount()
-      + this.clFileFilterCount()
-      + this.dispIdFilterCount()
+      + this.clidDtidFilterCount()
       + this.purposeFilterCount()
       + this.subpurposeFilterCount()
       + this.publishFilterCount();

@@ -3,6 +3,9 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/merge';
 import * as _ from 'lodash';
 
 import { Comment } from 'app/models/comment';
@@ -91,8 +94,8 @@ export class ApiService {
   // Applications
   //
   getCountApplications(regions: string[], cpStartSince: string, cpStartUntil: string, cpEndSince: string, cpEndUntil: string,
-    appStatuses: string[], applicant: string, clFile: string, dispId: string, purpose: string, subpurpose: string,
-    publishSince: string, publishUntil: string, coordinates: string) {
+    appStatuses: string[], applicant: string, clidDtid: string, purpose: string, subpurpose: string, publishSince: string,
+    publishUntil: string, coordinates: string): Observable<number> {
     let queryString = `application?`;
     if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
     if (cpStartSince !== null) { queryString += `cpStart[since]=${cpStartSince}&`; }
@@ -101,22 +104,33 @@ export class ApiService {
     if (cpEndUntil !== null) { queryString += `cpEnd[until]=${cpEndUntil}&`; }
     if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
     if (applicant !== null) { queryString += `client=${applicant}&`; }
-    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
-    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
     if (purpose !== null) { queryString += `purpose[eq]=${purpose}&`; }
     if (subpurpose !== null) { queryString += `subpurpose[eq]=${subpurpose}&`; }
     if (publishSince !== null) { queryString += `publishDate[since]=${publishSince}&`; }
     if (publishUntil !== null) { queryString += `publishDate[until]=${publishUntil}&`; }
     if (coordinates !== null) { queryString += `centroid=${coordinates}&`; }
-    // trim the last ? or &
-    queryString = queryString.slice(0, -1);
 
-    return this.http.head(`${this.apiPath}/${queryString}`);
+    if (clidDtid === null) {
+      // trim the last ? or &
+      queryString = queryString.slice(0, -1);
+
+      // retrieve the count from the response headers
+      return this.http.head(`${this.apiPath}/${queryString}`)
+        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+    } else {
+      // query for both CLID and DTID
+      const clid = this.http.head(`${this.apiPath}/${queryString}cl_file=${clidDtid}`)
+        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+      const dtid = this.http.head(`${this.apiPath}/${queryString}tantalisId=${clidDtid}`)
+        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+
+      return Observable.combineLatest(clid, dtid, (v1, v2) => v1 + v2);
+    }
   }
 
   getApplications(pageNum: number, pageSize: number, regions: string[], cpStartSince: string, cpStartUntil: string, cpEndSince: string,
-    cpEndUntil: string, appStatuses: string[], applicant: string, clFile: string, dispId: string, purpose: string, subpurpose: string,
-    publishSince: string, publishUntil: string, coordinates: string) {
+    cpEndUntil: string, appStatuses: string[], applicant: string, clidDtid: string, purpose: string, subpurpose: string, publishSince: string,
+    publishUntil: string, coordinates: string) {
     const fields = [
       'agency',
       'areaHectares',
@@ -148,8 +162,6 @@ export class ApiService {
     if (cpEndUntil !== null) { queryString += `cpEnd[until]=${cpEndUntil}&`; }
     if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
     if (applicant !== null) { queryString += `client=${applicant}&`; }
-    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
-    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
     if (purpose !== null) { queryString += `purpose[eq]=${purpose}&`; }
     if (subpurpose !== null) { queryString += `subpurpose[eq]=${subpurpose}&`; }
     if (publishSince !== null) { queryString += `publishDate[since]=${publishSince}&`; }
@@ -157,7 +169,14 @@ export class ApiService {
     if (coordinates !== null) { queryString += `centroid=${coordinates}&`; }
     queryString += `fields=${this.buildValues(fields)}`;
 
-    return this.get(queryString);
+    if (clidDtid === null) {
+      return this.get(queryString);
+    } else {
+      // query for both CLID and DTID
+      const clid = this.get(queryString + `&cl_file=${clidDtid}`);
+      const dtid = this.get(queryString + `&tantalisId=${clidDtid}`);
+      return Observable.merge(clid, dtid);
+    }
   }
 
   getApplication(id: string) {
@@ -361,34 +380,6 @@ export class ApiService {
 
   getDocumentUrl(document: Document): string {
     return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
-  }
-
-  //
-  // Crown Lands files
-  //
-  getBCGWCrownLands(id: string) {
-    const fields = [
-      'name',
-      'isImported'
-    ];
-    const queryString = 'search/bcgw/crownLandsId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getBCGWDispositionTransactionId(id: number) {
-    const fields = [
-      'name'
-    ];
-    const queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getClientsInfoByDispositionId(id: number) {
-    const fields = [
-      'name'
-    ];
-    const queryString = 'search/bcgw/getClientsInfoByDispositionId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
   }
 
   //

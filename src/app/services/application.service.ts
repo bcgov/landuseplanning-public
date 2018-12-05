@@ -84,8 +84,7 @@ export class ApplicationService {
     this.regions[this.VANCOUVER_ISLAND] = 'West Coast, Nanaimo';
   }
 
-  // get count of applications
-  // FUTURE: filter by bounding box
+  // get count of matching applications
   getCount(filters: FiltersType, coordinates: string): Observable<number> {
     // assign publish date filters
     const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
@@ -98,11 +97,7 @@ export class ApplicationService {
     // if both cpOpen and cpNotOpen or neither cpOpen nor cpNotOpen then use no cpStart or cpEnd filters
     if ((cpOpen && cpNotOpen) || (!cpOpen && !cpNotOpen)) {
       return this.api.getCountApplications(filters.regions, null, null, null, null, filters.appStatuses, filters.applicant,
-        filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
-        .map(res => {
-          // retrieve the count from the response headers
-          return parseInt(res.headers.get('x-total-count'), 10);
-        })
+        filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
         .catch(this.api.handleError);
     }
 
@@ -114,29 +109,22 @@ export class ApplicationService {
     // if cpOpen then filter by cpStart <= today && cpEnd >= today
     if (cpOpen) {
       return this.api.getCountApplications(filters.regions, null, now.endOf('day').toISOString(), now.startOf('day').toISOString(), null,
-        filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
-        .map(res => {
-          // retrieve the count from the response headers
-          return parseInt(res.headers.get('x-total-count'), 10);
-        })
+        filters.appStatuses, filters.applicant, filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
         .catch(this.api.handleError);
     }
 
     // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
     // NB: this doesn't return apps without comment periods
     const closed = this.api.getCountApplications(filters.regions, null, null, null, yesterday.endOf('day').toISOString(),
-      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
-      .map(res => parseInt(res.headers.get('x-total-count'), 10));
+      filters.appStatuses, filters.applicant, filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
     const future = this.api.getCountApplications(filters.regions, tomorrow.startOf('day').toISOString(), null, null, null,
-      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
-      .map(res => parseInt(res.headers.get('x-total-count'), 10));
+      filters.appStatuses, filters.applicant, filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
 
     return Observable.combineLatest(closed, future, (v1, v2) => v1 + v2)
       .catch(this.api.handleError);
   }
 
-  // get just the applications
-  // FUTURE: filter by bounding box
+  // get matching applications without their meta (documents, comment period, decisions, etc)
   getAll(pageNum: number = 0, pageSize: number = 1000, filters: FiltersType, coordinates: string): Observable<Application[]> {
     // assign publish date filters
     const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
@@ -149,7 +137,7 @@ export class ApplicationService {
     // if both cpOpen and cpNotOpen or neither cpOpen nor cpNotOpen then use no cpStart or cpEnd filters
     if ((cpOpen && cpNotOpen) || (!cpOpen && !cpNotOpen)) {
       return this.api.getApplications(pageNum, pageSize, filters.regions, null, null, null, null, filters.appStatuses, filters.applicant,
-        filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+        filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
         .map(res => {
           const applications = res.text() ? res.json() : [];
           applications.forEach((application, i) => {
@@ -168,7 +156,7 @@ export class ApplicationService {
     // if cpOpen then filter by cpStart <= today && cpEnd >= today
     if (cpOpen) {
       return this.api.getApplications(pageNum, pageSize, filters.regions, null, now.endOf('day').toISOString(), now.startOf('day').toISOString(),
-        null, filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
+        null, filters.appStatuses, filters.applicant, filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates)
         .map(res => {
           const applications = res.text() ? res.json() : [];
           applications.forEach((application, i) => {
@@ -182,13 +170,12 @@ export class ApplicationService {
     // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
     // NB: this doesn't return apps without comment periods
     const closed = this.api.getApplications(pageNum, pageSize, filters.regions, null, null, null, yesterday.endOf('day').toISOString(),
-      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
+      filters.appStatuses, filters.applicant, filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
     const future = this.api.getApplications(pageNum, pageSize, filters.regions, tomorrow.startOf('day').toISOString(), null, null, null,
-      filters.appStatuses, filters.applicant, filters.clFile, filters.dispId, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
+      filters.appStatuses, filters.applicant, filters.clidDtid, filters.purpose, filters.subpurpose, publishSince, publishUntil, coordinates);
 
     return Observable.merge(closed, future)
       .map(res => {
-        // console.log('res =', res);
         const applications = res.text() ? res.json() : [];
         applications.forEach((application, i) => {
           applications[i] = new Application(application);

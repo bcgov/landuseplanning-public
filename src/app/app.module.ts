@@ -30,7 +30,6 @@ import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DecisionService } from 'app/services/decision.service';
 import { DocumentService } from 'app/services/document.service';
-import { SearchService } from 'app/services/search.service';
 import { FeatureService } from 'app/services/feature.service';
 import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
@@ -68,7 +67,6 @@ import { UrlService } from 'app/services/url.service';
     UrlService,
     DecisionService,
     DocumentService,
-    SearchService,
     FeatureService
   ],
   bootstrap: [
