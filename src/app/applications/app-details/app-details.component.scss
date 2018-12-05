@@ -4,16 +4,24 @@
   line-height: normal;
 }
 
+.flex-panel__header {
+  border-bottom: 1px solid #eee;
+}
+
+.flex-panel__scroll {
+  background: #f1f3f5;
+}
+
+section + section {
+  margin-top: 2rem;
+}
+
 section {
   h4 {
     margin-bottom: 0.75rem;
     font-size: 1rem;
     font-weight: 600;
   }
-}
-
-section + section {
-  margin-top: 2rem;
 }
 
 // Title Contents
@@ -163,8 +171,8 @@ section + section {
 
 .commenting-info-container {
   margin: -1.5rem;
-  margin-top: -1rem;
-  margin-bottom: 1rem;
+  margin-top: -1.5rem;
+  margin-bottom: 1.25rem;
   padding: 1.5rem;
   background: #fff;
 

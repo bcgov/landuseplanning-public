@@ -245,9 +245,18 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // show application details interface
   public showDetails() {
     this.configService.isSidePanelVisible = true;
     this.configService.isAppDetailsVisible = true;
+    this.configService.isFindAppsVisible = false;
+  }
+
+  // show find applications interface
+  public showFind() {
+    this.configService.isSidePanelVisible = true;
+    this.configService.isAppDetailsVisible = false;
+    this.configService.isFindAppsVisible = true;
   }
 
 }

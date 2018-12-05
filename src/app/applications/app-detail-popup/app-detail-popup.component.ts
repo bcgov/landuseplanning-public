@@ -44,6 +44,7 @@ export class AppDetailPopupComponent implements OnInit, OnDestroy {
   public showAppDetails() {
     this.configService.isSidePanelVisible = true;
     this.configService.isAppDetailsVisible = true;
+    this.configService.isFindAppsVisible = false;
     this.setCurrentApp.emit(this.app);
   }
 

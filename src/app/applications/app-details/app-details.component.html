@@ -63,10 +63,10 @@
   </div>
   <div class="flex-panel__scroll">
     <div class="app-details-info">
-      <div class="commenting-info-container" *ngIf="application?.currentPeriod">
+      <section class="commenting-info-container" *ngIf="application?.currentPeriod">
         <div>This application is currently accepting comments for the next <strong>{{daysRemaining}}</strong> (closing on {{application?.currentPeriod.endDate | date:'mediumDate'}})</div>
         <button class="btn btn-primary" (click)="addComment()">Submit a Comment</button>
-      </div>
+      </section>
       <ngb-tabset>
         <ngb-tab>
           <ng-template ngbTabTitle>

@@ -1,6 +1,4 @@
 .btn {
-  border-radius: 0.25rem;
-  font-weight: 400;
   transition: all linear 0.2s;
   cursor: pointer;
 
@@ -8,21 +6,16 @@
     color: #fff;
     border: 2px solid #fff;
     background: transparent;
-    text-transform: uppercase;
-    font-weight: 700;
 
     &:active,
     &:focus,
     &:hover {
       border-color: $gold;
       background: darken($gold, 8%);
-      text-transform: uppercase;
-      font-weight: 700;
     }
   }
 
   i {
-    //vertical-align: middle;
     + span {
       vertical-align: middle;
     }
@@ -42,18 +35,9 @@
 
 .btn-inverted {
   background: darken($gold, 5%);
-  text-transform: uppercase;
   font-size: 0.9375rem;
   font-weight: 700;
 }
-
-// Main Button
-main {
-  .btn-default {
-    padding: 0.5rem;
-  }
-}
-
 
 // Slide Buttons
 .slide-r-btn,
@@ -188,13 +172,6 @@ main {
   }
 }
 
-// Submit Button
-.submit-btn {
-  border-color: $gold;
-  background: $gold;
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
 
 // Fix active and focus stats for btn-light
 .btn-light {
@@ -203,35 +180,6 @@ main {
   &:active,
   &:focus {
     box-shadow: 0 0 0 0.2rem #ccc;
-  }
-}
-
-.btn-icon {
-  min-width: 2.5rem !important;
-  padding-top: 0.35rem;
-  padding-right: 0;
-  padding-bottom: 0.35rem;
-  padding-left: 0;
-  overflow: hidden;
-  color: #808080;
-  background: transparent;
-  transition: all ease-out 0.2s;
-  cursor: pointer;
-
-  i {
-    margin-top: -0.1rem;
-    vertical-align: middle;
-  }
-  
-  .btn-txt {
-    visibility: hidden;
-  }
-
-  &:active,
-  &:focus,
-  &:hover {
-    color: #000;
-    background: #eee;
   }
 }
 
@@ -255,6 +203,7 @@ main {
   &:active,
   &:focus,
   &:hover {
+    color: #000;
     background: #eee;
   }
 }

@@ -13,21 +13,17 @@ app-applications:host {
 
 .applications-view {
   @include flex-box();
-  @include flex-flow(column nowrap);
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-@media (min-width: 1024px) {
-  .applications-view {
-    @include flex-flow(row nowrap);
-  }
-}
-
 // Side Navigation
 $side-nav-bg: #0050a1;
 $side-nav-color: #fff;
+$side-nav-item-height-sm: 4.5rem;
+$side-nav-item-width-lg: 6rem;
+$side-nav-item-height-lg: 5.5rem;
 
 .side-nav {
   @include flex(0 0 auto);
@@ -37,20 +33,22 @@ $side-nav-color: #fff;
 }
 
 .side-nav ul {
+  @include flex-box();
   margin: 0;
   padding: 0;
   background: $side-nav-bg;
   list-style-type: none;
 }
 
-.side-nav ul li {
-  display: inline-block;
+.side-nav-item {
+  @include flex(1 1 auto);
+  height: $side-nav-item-height-sm;
 }
 
-.side-nav .btn {
+.side-nav-item .btn {
   display: block;
-  width: 6rem;
-  height: 4.5rem;
+  width: 100%;
+  height: 100%;
   color: rgba($side-nav-color, 0.6);
   background: $side-nav-bg;
   border-radius: 0;
@@ -60,27 +58,33 @@ $side-nav-color: #fff;
   font-weight: 700;
 
   i {
+    margin-bottom: 0.1rem;
     vertical-align: top;
   }
+
+}
+
+.side-nav-item.active .btn {
+  color: $side-nav-color;
+  border: none;
+  background: lighten($side-nav-bg, 10%);
+  box-shadow: none;
 }
 
 @media (min-width: 1024px) {
   .side-nav {
     z-index: 1002;
-    width: 6rem;
     height: 100%;
     border-bottom: none;
-
-    li {
-      display: block;
-    }
   }
 
-  .side-nav .btn.active {
-    color: $side-nav-color;
-    border: none;
-    background: lighten($side-nav-bg, 10%);
-    box-shadow: none;
+  .side-nav ul {
+    @include flex-direction(column);
+  }
+
+  .side-nav-item {
+    width: $side-nav-item-width-lg;
+    height: $side-nav-item-height-lg;
   }
 }
 
@@ -91,7 +95,7 @@ $side-panel-bg: #fff;
 .side-panel {
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: $side-nav-item-height-sm;
   width: 100%;
   overflow-x: hidden;
   transform: translateX(-100%);
@@ -118,6 +122,7 @@ $side-panel-bg: #fff;
   .side-panel {
     @include flex(0 0 auto);
     position: relative;
+    bottom: 0;
     width: 0;
     transform: none;
     transition: width ease-out 0.2s;
@@ -142,8 +147,8 @@ $side-panel-bg: #fff;
 
 .side-panel__close-btn {
   position: absolute;
-  top: 1rem;
-  right: 0.75rem;
+  top: 1.25rem;
+  right: 1rem;
   z-index: 10000;
 }
 
@@ -155,5 +160,41 @@ $side-panel-bg: #fff;
 @media (min-width: 768px) {
   app-applications:host {
     top: 4.2rem;            
+  }
+}
+
+@media (max-width: 1023px) {
+  .applications-view {
+    @include flex-flow(column nowrap);
+  }
+
+  .side-nav {
+    order: 3;
+  }
+
+  .side-panel {
+    order: 1;
+  }
+
+  .main-panel {
+    order: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .applications-view {
+    @include flex-flow(row nowrap);
+  }
+
+  .side-nav {
+    order: 0;
+  }
+
+  .side-panel {
+    order: 1;
+  }
+
+  .main-panel {
+    order: 2;
   }
 }

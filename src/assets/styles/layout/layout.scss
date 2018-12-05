@@ -81,11 +81,8 @@ hr {
 
 .flex-panel__header {
   @include flex(0 0 auto);
-  padding-top: 1.25rem;
-  padding-right: 1.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 1.5rem;
-  border-bottom: 1px solid #dee2e6;
+  padding: 1.5rem;
+  // border-bottom: 1px solid #dee2e6;
 
   .title {
     margin: 0;
@@ -97,12 +94,8 @@ hr {
 
 .flex-panel__scroll {
   @include flex(1 1 auto);
-  padding-top: 1rem;
-  padding-right: 1.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 1.5rem;
+  padding: 1.5rem;
   overflow-y: auto;
-  background: #f1f3f5;
 }
 
 .flex-panel__footer {

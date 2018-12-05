@@ -213,6 +213,13 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     if (doApply) { this._applyAllFilters(); }
   }
 
+  public applyClFileFilterSm(doApply: boolean = true) {
+    this.clFileFilter = this._clFileFilter;
+    if (doApply) { this._applyAllFilters(); }
+
+    this.configService.isSidePanelVisible = false;
+  }
+
   public applyAllFilters(doApply: boolean = true) {
     this.applyRegionFilters(false);
     this.applyCpStatusFilters(false);

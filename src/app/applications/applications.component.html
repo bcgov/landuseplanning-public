@@ -3,10 +3,19 @@
 
   <div class="side-nav">
     <ul>
-      <li>
-        <button class="btn btn-light" [ngClass]="{'active': configService.isAppDetailsVisible && configService.isSidePanelVisible}" 
-          (click)="showDetails()">
+      <li class="side-nav-item" 
+        [ngClass]="{'active': configService.isFindAppsVisible && configService.isSidePanelVisible}">
+        <button class="btn" 
+          (click)="showFind();">
           <i class="material-icons">search</i>
+          <div>Find</div>
+        </button>
+      </li>
+      <li class="side-nav-item" 
+        [ngClass]="{'active': configService.isAppDetailsVisible && configService.isSidePanelVisible}">
+        <button class="btn" 
+          (click)="showDetails();">
+          <i class="material-icons">info</i>
           <div>Details</div>
         </button>
       </li>
@@ -17,14 +26,17 @@
     <button class="side-panel__close-btn btn btn-icon" (click)="configService.isSidePanelVisible=false; $event.stopPropagation();">
       <i class="material-icons">close</i>
     </button>
-    <app-details #appdetail [appId]="currentAppId"></app-details>
+    <app-details #appdetail 
+      [appId]="currentAppId" 
+      [hidden]="!configService.isAppDetailsVisible">
+    </app-details>
+    <app-applist-filters #appfilters 
+      (updateFilters)="updateFilters($event)"
+      [hidden]="!configService.isFindAppsVisible">
+    </app-applist-filters>
   </div>
 
   <div class="main-panel">
-    <app-applist-filters class="app-filters" style="display: none;" #appfilters
-      (updateFilters)="updateFilters($event)">
-    </app-applist-filters>
-
     <app-applist-list class="app-list" style="display: none;" #applist
       [applications]="apps"
       (setCurrentApp)="highlightApplication($event, true)"
