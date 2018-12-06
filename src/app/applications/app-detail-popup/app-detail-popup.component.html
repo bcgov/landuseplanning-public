@@ -14,41 +14,12 @@
       <span>{{cpStatus}}</span>
     </li>
     <li *ngVar="applicationService.getStatusCode(app.status) as appStatusCode">
-      <!-- Application Under Review -->
-      <i class="material-icons" title="{{app.appStatus}}"
-        *ngIf="applicationService.isAccepted(appStatusCode)">
-        access_time
-      </i>
-      <!-- Decision: Allowed -->
-      <i class="material-icons" title="{{app.appStatus}}"
-        *ngIf="applicationService.isAllowed(appStatusCode)">
-        error_outline
-      </i>
-      <!-- Tenure: Disposition in Good Standing / Decision: Offered / Decision: Offer Accepted -->
-      <i class="material-icons" title="{{app.appStatus}}"
-        *ngIf="applicationService.isDispGoodStanding(appStatusCode)
-          || applicationService.isOffered(appStatusCode)
-          || applicationService.isOfferAccepted(appStatusCode)">
-        check
-      </i>
-      <!-- Application Cancelled / Application Abandoned / Decision: Offer Not Accepted -->
-      <i class="material-icons" title="{{app.appStatus}}"
-        *ngIf="applicationService.isCancelled(appStatusCode)
-        || applicationService.isAbandoned(appStatusCode)
-        || applicationService.isOfferNotAccepted(appStatusCode)">
-        cancel
-      </i>
-      <!-- Decision: Not Approved / Tenure: Suspended-->
-      <i class="material-icons" title="{{app.appStatus}}"
-        *ngIf="applicationService.isDisallowed(appStatusCode)
-        || applicationService.isSuspended(appStatusCode)">
-        warning
-      </i>
-      <!-- Unknown Application Status -->
-      <i class="material-icons" title="{{app.appStatus}}"
-        *ngIf="applicationService.isUnknown(appStatusCode)">
-        warning
-      </i>
+      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isAbandoned(appStatusCode)">block</i>
+      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isApplicationUnderReview(appStatusCode)">access_time</i>
+      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isApplicationReviewComplete(appStatusCode)">error_outline</i>
+      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isDecisionApproved(appStatusCode)">check</i>
+      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isDecisionNotApproved(appStatusCode)">clear</i>
+      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isUnknown(appStatusCode)">warning</i>
       <span>{{app.appStatus}}</span>
     </li>
   </ul>

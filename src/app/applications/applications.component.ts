@@ -131,6 +131,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
             observables.push(this.applicationService.getAll(page, PAGE_SIZE, this.filters, this.coordinates));
           }
 
+          // TODO: this fails when there are 0 results (this.apps is not updated)
+
           // get all observables sequentially
           Observable.concat(...observables)
             .takeUntil(this.ngUnsubscribe)

@@ -15,7 +15,6 @@ import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
 
 export interface FiltersType {
-  regions: Array<string>;
   cpStatuses: Array<string>;
   appStatuses: Array<string>;
   applicant: string;
@@ -38,23 +37,18 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
 
-  public isRegionCollapsed = true;
   public isCpStatusCollapsed = true;
   public isAppStatusCollapsed = true;
   public loading = true; // init
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   // search keys for drop-down menus
-  public regionKeys: Array<string> = [];
   public cpStatusKeys: Array<string> = [];
   public appStatusKeys: Array<string> = [];
 
   // search keys for text boxes
   private purposeKeys: Array<string> = [];
   private subpurposeKeys: Array<string> = [];
-
-  public regionFilters: object = {}; // array-like object
-  public _regionFilters: object = {}; // temporary filters for Cancel feature
 
   public cpStatusFilters: object = {}; // array-like object
   public _cpStatusFilters: object = {}; // temporary filters for Cancel feature
@@ -106,24 +100,24 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef
   ) {
     // populate the keys we want to display
-    this.regionKeys.push(this.applicationService.CARIBOO);
-    this.regionKeys.push(this.applicationService.KOOTENAY);
-    this.regionKeys.push(this.applicationService.LOWER_MAINLAND);
-    this.regionKeys.push(this.applicationService.OMENICA);
-    this.regionKeys.push(this.applicationService.PEACE);
-    this.regionKeys.push(this.applicationService.SKEENA);
-    this.regionKeys.push(this.applicationService.SOUTHERN_INTERIOR);
-    this.regionKeys.push(this.applicationService.VANCOUVER_ISLAND);
-
     this.cpStatusKeys.push(this.commentPeriodService.OPEN);
     this.cpStatusKeys.push(this.commentPeriodService.NOT_OPEN);
 
-    this.appStatusKeys.push(this.applicationService.ACCEPTED);
-    this.appStatusKeys.push(this.applicationService.DECISION_MADE);
-    this.appStatusKeys.push(this.applicationService.CANCELLED);
+    this.appStatusKeys.push(this.applicationService.APPLICATION_UNDER_REVIEW);
+    this.appStatusKeys.push(this.applicationService.APPLICATION_REVIEW_COMPLETE);
+    this.appStatusKeys.push(this.applicationService.DECISION_APPROVED);
+    this.appStatusKeys.push(this.applicationService.DECISION_NOT_APPROVED);
     this.appStatusKeys.push(this.applicationService.ABANDONED);
-    this.appStatusKeys.push(this.applicationService.DISPOSITION_GOOD_STANDING);
-    this.appStatusKeys.push(this.applicationService.SUSPENDED);
+
+    Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
+      this.purposeKeys.push(purpose.toUpperCase());
+    });
+
+    Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
+      Constants.subpurposes[purpose].forEach(subpurpose => {
+        this.subpurposeKeys.push(subpurpose.toUpperCase());
+      });
+    });
 
     // watch for URL param changes
     this.urlService.onNavEnd$
@@ -139,19 +133,7 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     return this.elementRef.nativeElement.offsetTop + this.elementRef.nativeElement.firstElementChild.firstElementChild.clientHeight;
   }
 
-  public ngOnInit() {
-    // load these lists just once as they don't change
-    // build array of purposes only
-    Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
-      this.purposeKeys.push(purpose.toUpperCase());
-    });
-    // build array of subpurposes only
-    Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
-      Constants.subpurposes[purpose].forEach(subpurpose => {
-        this.subpurposeKeys.push(subpurpose.toUpperCase());
-      });
-    });
-  }
+  public ngOnInit() { }
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -160,9 +142,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
   public getFilters(): FiltersType {
     // convert array-like objects to arrays
-    const regions: Array<string> = [];
-    Object.keys(this.regionFilters).forEach(key => { if (this.regionFilters[key]) { regions.push(key); } });
-
     const cpStatuses: Array<string> = [];
     Object.keys(this.cpStatusFilters).forEach(key => { if (this.cpStatusFilters[key]) { cpStatuses.push(key); } });
 
@@ -170,7 +149,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     Object.keys(this.appStatusFilters).forEach(key => { if (this.appStatusFilters[key]) { appStatuses.push(key); } });
 
     return {
-      regions: regions,
       cpStatuses: cpStatuses,
       appStatuses: appStatuses,
       applicant: this.applicantFilter && this.applicantFilter.trim() || null, // convert empty string to null
@@ -185,12 +163,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   //
   // The following are to "Apply" the temporary filters: copy the temporary values to the actual variables, etc.
   //
-  public applyRegionFilters(doApply: boolean = true) {
-    this.regionFilters = { ...this._regionFilters };
-    if (doApply) { this._applyAllFilters(); }
-    // this.isRegionCollapsed = true; // FUTURE
-  }
-
   public applyCpStatusFilters(doApply: boolean = true) {
     this.cpStatusFilters = { ...this._cpStatusFilters };
     if (doApply) { this._applyAllFilters(); }
@@ -209,7 +181,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   public applyAllFilters(doApply: boolean = true) {
-    this.applyRegionFilters(false);
     this.applyCpStatusFilters(false);
     this.applyAppStatusFilters(false);
     this.applicantFilter = this._applicantFilter;
@@ -231,18 +202,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   private _saveFilters() {
-    let regions: string = null;
-    this.regionKeys.forEach(key => {
-      if (this.regionFilters[key]) {
-        if (!regions) {
-          regions = key;
-        } else {
-          regions += ',' + key;
-        }
-      }
-    });
-    this.urlService.save('regions', regions);
-
     let cpStatuses: string = null;
     this.cpStatusKeys.forEach(key => {
       if (this.cpStatusFilters[key]) {
@@ -278,11 +237,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   //
   // The following are to "Cancel" the temporary filters: just reset the values.
   //
-  public cancelRegionFilters() {
-    this._regionFilters = { ...this.regionFilters };
-    this.isRegionCollapsed = true;
-  }
-
   public cancelCpStatusFilters() {
     this._cpStatusFilters = { ...this.cpStatusFilters };
     this.isCpStatusCollapsed = true;
@@ -294,7 +248,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   public cancelAllFilters() {
-    this.cancelRegionFilters();
     this.cancelCpStatusFilters();
     this.cancelAppStatusFilters();
     this._applicantFilter = this.applicantFilter;
@@ -307,12 +260,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
   // (re)sets all filters from current URL
   private _resetAllFilters(doApply: boolean) {
-    // set region filters according to current param options
-    const regions = (this.urlService.query('regions') || '').split(',');
-    this.regionKeys.forEach(key => {
-      this.regionFilters[key] = regions.includes(key);
-    });
-
     // set cpStatus filters according to current param options
     const cpStatuses = (this.urlService.query('cpStatuses') || '').split(',');
     this.cpStatusKeys.forEach(key => {
@@ -333,7 +280,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.publishToFilter = this.urlService.query('publishTo') ? moment(this.urlService.query('publishTo')).toDate() : null;
 
     // copy all data from actual to temporary properties
-    this._regionFilters = { ...this.regionFilters };
     this._cpStatusFilters = { ...this.cpStatusFilters };
     this._appStatusFilters = { ...this.appStatusFilters };
     this._applicantFilter = this.applicantFilter;
@@ -351,13 +297,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   //
   // The following are to "Clear" the temporary filters.
   //
-  public clearRegionFilters(doApply: boolean = true) {
-    this.regionKeys.forEach(key => {
-      this._regionFilters[key] = false;
-    });
-    this.applyRegionFilters(doApply);
-  }
-
   public clearCpStatusFilters(doApply: boolean = true) {
     this.cpStatusKeys.forEach(key => {
       this._cpStatusFilters[key] = false;
@@ -374,7 +313,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
   public clearAllFilters() {
     if (this.filterCount() > 0) {
-      this.clearRegionFilters(false);
       this.clearCpStatusFilters(false);
       this.clearAppStatusFilters(false);
       this._applicantFilter = null;
@@ -386,10 +324,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
       this.applyAllFilters(true);
     }
-  }
-
-  public regionCount(): number {
-    return this.regionKeys.filter(key => this.regionFilters[key]).length;
   }
 
   public cpStatusCount(): number {
@@ -424,18 +358,13 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   public filterCount(): number {
-    return this.regionCount()
-      + this.cpStatusCount()
+    return this.cpStatusCount()
       + this.appStatusCount()
       + this.applicantFilterCount()
       + this.clidDtidFilterCount()
       + this.purposeFilterCount()
       + this.subpurposeFilterCount()
       + this.publishFilterCount();
-  }
-
-  public regionHasChanges(): boolean {
-    return !_.isEqual(this._regionFilters, this.regionFilters);
   }
 
   public cpStatusHasChanges(): boolean {

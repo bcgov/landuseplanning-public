@@ -109,7 +109,7 @@
               <div class="form-check" *ngFor="let key of appStatusKeys">
                 <label class="form-check-label">
                   <input class="form-check-input gtm-filter-app-status" type="checkbox" [(ngModel)]="_appStatusFilters[key]" name="{{key}}"> 
-                  {{applicationService.getStatusString(key)}}
+                  {{applicationService.getShortStatusString(key)}}
                 </label>
               </div>
               <div class="dropdown-button-bar" *ngVar="appStatusHasChanges() as hasChanges">
@@ -196,7 +196,7 @@
       <div class="form-check" *ngFor="let key of appStatusKeys">
         <label class="form-check-label" for="{{key}}">
           <input class="form-check-input gtm-filter-app-status" type="checkbox" name="{{key}}" id="{{key}}" [(ngModel)]="_appStatusFilters[key]">
-          {{applicationService.getStatusString(key)}}
+          {{applicationService.getShortStatusString(key)}}
         </label>
       </div>
     </fieldset>

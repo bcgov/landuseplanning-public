@@ -108,6 +108,7 @@ export class Constants {
   };
 
   public static readonly statuses = [
+    'ABANDONED', // may not be an actual status
     'ACCEPTED',
     'ACTIVE',
     'ALLOWED',
@@ -117,12 +118,15 @@ export class Constants {
     'DISPOSITION IN GOOD STANDING',
     'EXPIRED',
     'HISTORIC',
+    'NOT USED',
     'OFFER ACCEPTED',
+    'OFFER NOT ACCEPTED',
     'OFFER RESCINDED',
     'OFFERED',
     'PENDING',
     'PRE-TANTALIS',
     'RECEIVED',
+    'RETURNED',
     'REVERTED',
     'SOLD',
     'SUSPENDED',
@@ -145,7 +149,7 @@ export class Constants {
     'INSTITUTIONAL',
     'MISCELLANEOUS LAND USES',
     'OCEAN ENERGY',
-    'PRE-TANTALIS',
+    // 'PRE-TANTALIS', // not used by ACRFD because we have no pre-Tantalis apps
     'QUARRYING',
     'RESIDENTIAL',
     'SOLAR POWER',
@@ -311,9 +315,9 @@ export class Constants {
       'GENERAL AREA',
       'INVESTIGATIVE AND MONITORING PHASE'
     ],
-    'PRE-TANTALIS': [
-      'PRE-TANTALIS'
-    ],
+    // 'PRE-TANTALIS': [
+    //   'PRE-TANTALIS' // not used by ACRFD because we have no pre-Tantalis apps
+    // ],
     'QUARRYING': [
       'CONSTRUCTION STONE',
       'LIMESTONE AND DOLOMITE',

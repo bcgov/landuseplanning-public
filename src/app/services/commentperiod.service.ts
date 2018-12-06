@@ -15,14 +15,9 @@ export class CommentPeriodService {
   readonly OPEN = 'OP';
   readonly NOT_OPEN = 'NO';
 
-  private commentPeriodStatuses: Array<string> = []; // use helper to get these
   private commentPeriod: CommentPeriod = null; // for caching
 
-  constructor(private api: ApiService) {
-    // user-friendly strings for display
-    this.commentPeriodStatuses[this.OPEN] = 'Commenting Open';
-    this.commentPeriodStatuses[this.NOT_OPEN] = 'Not Open For Commenting';
-  }
+  constructor(private api: ApiService) { }
 
   // get all comment periods for the specified application id
   getAllByApplicationId(appId: string): Observable<CommentPeriod[]> {
@@ -71,7 +66,7 @@ export class CommentPeriodService {
   }
 
   /**
-   * Given a comment period, returns status abbreviation.
+   * Given a comment period, returns status code.
    */
   getStatusCode(commentPeriod: CommentPeriod): string {
     if (commentPeriod && commentPeriod.startDate && commentPeriod.endDate) {
@@ -87,12 +82,14 @@ export class CommentPeriodService {
   }
 
   /**
-   * Given a status code, returns user-friendly status string.
+   * Given a status code, returns a user-friendly status string.
    */
   getStatusString(statusCode: string): string {
-    switch (statusCode) {
-      case this.OPEN: return this.commentPeriodStatuses[this.OPEN];
-      case this.NOT_OPEN: return this.commentPeriodStatuses[this.NOT_OPEN];
+    if (statusCode) {
+      switch (statusCode) {
+        case this.OPEN: return 'Commenting Open';
+        case this.NOT_OPEN: return 'Commenting Closed';
+      }
     }
     return null;
   }

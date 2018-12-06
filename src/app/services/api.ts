@@ -93,24 +93,21 @@ export class ApiService {
   //
   // Applications
   //
-  getCountApplications(regions: string[], cpStartSince: string, cpStartUntil: string, cpEndSince: string, cpEndUntil: string,
-    appStatuses: string[], applicant: string, clidDtid: string, purpose: string, subpurpose: string, publishSince: string,
-    publishUntil: string, coordinates: string): Observable<number> {
+  getCountApplications(params: object): Observable<number> {
     let queryString = `application?`;
-    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
-    if (cpStartSince !== null) { queryString += `cpStart[since]=${cpStartSince}&`; }
-    if (cpStartUntil !== null) { queryString += `cpStart[until]=${cpStartUntil}&`; }
-    if (cpEndSince !== null) { queryString += `cpEnd[since]=${cpEndSince}&`; }
-    if (cpEndUntil !== null) { queryString += `cpEnd[until]=${cpEndUntil}&`; }
-    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
-    if (applicant !== null) { queryString += `client=${applicant}&`; }
-    if (purpose !== null) { queryString += `purpose[eq]=${purpose}&`; }
-    if (subpurpose !== null) { queryString += `subpurpose[eq]=${subpurpose}&`; }
-    if (publishSince !== null) { queryString += `publishDate[since]=${publishSince}&`; }
-    if (publishUntil !== null) { queryString += `publishDate[until]=${publishUntil}&`; }
-    if (coordinates !== null) { queryString += `centroid=${coordinates}&`; }
+    if (params['cpStartSince']) { queryString += `cpStart[since]=${params['cpStartSince']}&`; }
+    if (params['cpStartUntil']) { queryString += `cpStart[until]=${params['cpStartUntil']}&`; }
+    if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
+    if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
+    if (params['appStatuses']) { params['appStatuses'].forEach(status => queryString += `status[eq]=${status}&`); }
+    if (params['applicant']) { queryString += `client=${params['applicant']}&`; }
+    if (params['purposes']) { params['purposes'].forEach(purpose => queryString += `purpose[eq]=${purpose}&`); }
+    if (params['subpurposes']) { params['subpurposes'].forEach(subpurpose => queryString += `subpurpose[eq]=${subpurpose}&`); }
+    if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
+    if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
+    if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
 
-    if (clidDtid === null) {
+    if (!params['clidDtid']) {
       // trim the last ? or &
       queryString = queryString.slice(0, -1);
 
@@ -119,18 +116,16 @@ export class ApiService {
         .map(res => parseInt(res.headers.get('x-total-count'), 10));
     } else {
       // query for both CLID and DTID
-      const clid = this.http.head(`${this.apiPath}/${queryString}cl_file=${clidDtid}`)
+      const clid = this.http.head(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`)
         .map(res => parseInt(res.headers.get('x-total-count'), 10));
-      const dtid = this.http.head(`${this.apiPath}/${queryString}tantalisId=${clidDtid}`)
+      const dtid = this.http.head(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`)
         .map(res => parseInt(res.headers.get('x-total-count'), 10));
 
       return Observable.combineLatest(clid, dtid, (v1, v2) => v1 + v2);
     }
   }
 
-  getApplications(pageNum: number, pageSize: number, regions: string[], cpStartSince: string, cpStartUntil: string, cpEndSince: string,
-    cpEndUntil: string, appStatuses: string[], applicant: string, clidDtid: string, purpose: string, subpurpose: string, publishSince: string,
-    publishUntil: string, coordinates: string) {
+  getApplications(params: object) {
     const fields = [
       'agency',
       'areaHectares',
@@ -153,28 +148,27 @@ export class ApiService {
     ];
 
     let queryString = 'application?';
-    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
-    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
-    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
-    if (cpStartSince !== null) { queryString += `cpStart[since]=${cpStartSince}&`; }
-    if (cpStartUntil !== null) { queryString += `cpStart[until]=${cpStartUntil}&`; }
-    if (cpEndSince !== null) { queryString += `cpEnd[since]=${cpEndSince}&`; }
-    if (cpEndUntil !== null) { queryString += `cpEnd[until]=${cpEndUntil}&`; }
-    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
-    if (applicant !== null) { queryString += `client=${applicant}&`; }
-    if (purpose !== null) { queryString += `purpose[eq]=${purpose}&`; }
-    if (subpurpose !== null) { queryString += `subpurpose[eq]=${subpurpose}&`; }
-    if (publishSince !== null) { queryString += `publishDate[since]=${publishSince}&`; }
-    if (publishUntil !== null) { queryString += `publishDate[until]=${publishUntil}&`; }
-    if (coordinates !== null) { queryString += `centroid=${coordinates}&`; }
+    if (params['pageNum']) { queryString += `pageNum=${params['pageNum']}&`; }
+    if (params['pageSize']) { queryString += `pageSize=${params['pageSize']}&`; }
+    if (params['cpStartSince']) { queryString += `cpStart[since]=${params['cpStartSince']}&`; }
+    if (params['cpStartUntil']) { queryString += `cpStart[until]=${params['cpStartUntil']}&`; }
+    if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
+    if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
+    if (params['appStatuses']) { params['appStatuses'].forEach(status => queryString += `status[eq]=${status}&`); }
+    if (params['applicant']) { queryString += `client=${params['applicant']}&`; }
+    if (params['purposes']) { params['purposes'].forEach(purpose => queryString += `purpose[eq]=${purpose}&`); }
+    if (params['subpurposes']) { params['subpurposes'].forEach(subpurpose => queryString += `subpurpose[eq]=${subpurpose}&`); }
+    if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
+    if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
+    if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
     queryString += `fields=${this.buildValues(fields)}`;
 
-    if (clidDtid === null) {
+    if (!params['clidDtid']) {
       return this.get(queryString);
     } else {
       // query for both CLID and DTID
-      const clid = this.get(queryString + `&cl_file=${clidDtid}`);
-      const dtid = this.get(queryString + `&tantalisId=${clidDtid}`);
+      const clid = this.get(queryString + `&cl_file=${params['clidDtid']}`);
+      const dtid = this.get(queryString + `&tantalisId=${params['clidDtid']}`);
       return Observable.merge(clid, dtid);
     }
   }
