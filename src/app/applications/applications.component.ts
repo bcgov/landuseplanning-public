@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
+// import { ExploreFiltersType } from 'app/applications/app-explore/app-explore.component';
 import { FiltersType } from 'app/applications/applist-filters/applist-filters.component';
 
 // NB: this number needs to be small enough to give reasonable app loading feedback on slow networks
@@ -29,7 +30,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('appmap') appmap;
   @ViewChild('applist') applist;
   @ViewChild('appfilters') appfilters;
-  // @ViewChild('appdetail') appdetail; // FUTURE
+  @ViewChild('appexplore') appexplore;
 
   // FUTURE: change this to an observable and components subscribe to changes ?
   // ref: https://github.com/escardin/angular2-community-faq/blob/master/services.md#how-do-i-communicate-between-components-using-a-shared-service
@@ -41,10 +42,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.appfilters.onLoadStart();
       this.appmap.onLoadStart();
       this.applist.onLoadStart();
+      this.appexplore.onLoadStart();
     } else {
       this.appfilters.onLoadEnd();
       this.appmap.onLoadEnd();
       this.applist.onLoadEnd();
+      this.appexplore.onLoadEnd();
     }
   }
 
@@ -174,7 +177,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Event handler called when filters component updates filters.
+   * Event handler called when find or explore component updates filters.
    */
   public updateFilters(filters: FiltersType) {
     // console.log('updateFilters');
@@ -249,15 +252,28 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // show application details interface
   public showDetails() {
-    this.configService.isSidePanelVisible = true;
+    // show side panel if it's hidden or THIS component isn't already visible
+    this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isAppDetailsVisible;
     this.configService.isAppDetailsVisible = true;
+    this.configService.isExploreAppsVisible = false;
+    this.configService.isFindAppsVisible = false;
+  }
+
+  // show find applications interface
+  public showExplore() {
+    // show side panel if it's hidden or THIS component isn't already visible
+    this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isExploreAppsVisible;
+    this.configService.isAppDetailsVisible = false;
+    this.configService.isExploreAppsVisible = true;
     this.configService.isFindAppsVisible = false;
   }
 
   // show find applications interface
   public showFind() {
-    this.configService.isSidePanelVisible = true;
+    // show side panel if it's hidden or THIS component isn't already visible
+    this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isFindAppsVisible;
     this.configService.isAppDetailsVisible = false;
+    this.configService.isExploreAppsVisible = false;
     this.configService.isFindAppsVisible = true;
   }
 

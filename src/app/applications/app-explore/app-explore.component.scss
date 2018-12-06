@@ -1,0 +1,132 @@
+@import "~assets/styles/base/base.scss";
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-btns {
+  .btn-primary {
+    font-weight: 700;
+  }
+
+  .btn-light {
+    font-weight: 400;
+  }
+}
+
+// Date Range Inputs
+.date-range {
+  @include clearfix();
+}
+
+.date-range__input {
+  float: left;
+  width: 11rem;
+}
+
+.date-range__spacer {
+  float: left;
+  margin-top: 0.3rem;
+  width: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .date-range {
+    @include flex-direction(column);
+
+    .spacer {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+  }
+}
+
+// Select Badge Groups
+$select-badge-color: #777;
+$select-badge-bg: #eee;
+$select-badge-hover-bg: #d0ebff;
+$select-badge-active-color: #000;
+$select-badge-active-border-color: #74c0fc;
+$select-badge-active-bg: #a5d8ff;
+
+.select-badge-group {
+  margin: -0.2rem -0.15rem;
+  overflow: hidden;
+}
+
+.select-badge {
+  margin: 0.2rem 0.15rem;
+  float: left;
+
+  label {
+    position: relative;
+    margin: 0;
+    padding-top: 0.2rem;
+    padding-right: 1rem;
+    padding-bottom: 0.2rem;
+    padding-left: 2rem;
+    border-radius: 1rem;
+    border: 2px solid transparent;
+    color: $select-badge-color;
+    background: $select-badge-bg;
+    font-size: 0.825rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all ease-out 0.2s;
+  }
+
+  label::before {
+    font-family: 'Material Icons';
+    content: 'remove';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 100%;
+    text-align: center;
+    line-height: 1.8rem;
+    font-size: 1rem;
+  }
+
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+  }
+
+  input:focus,
+  input:active {
+    + label {
+      color: $select-badge-active-color;
+      border-color: $select-badge-active-border-color;
+      background: $select-badge-hover-bg;
+    }
+  }
+
+  input:hover {
+    + label {
+      color: $select-badge-active-color;
+      background: $select-badge-hover-bg;
+    }
+  }
+
+   input:checked {
+    + label {
+      color: $select-badge-active-color;
+      background: $select-badge-active-bg;
+    }
+
+    + label::before {
+      opacity: 1;
+      content: 'check';
+    }
+
+    ~ button {
+      background: $select-badge-active-bg;
+    }
+  }
+}

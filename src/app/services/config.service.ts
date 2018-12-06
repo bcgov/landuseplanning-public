@@ -10,6 +10,7 @@ export class ConfigService {
 
   // defaults
   private _isApplicationsListVisible = false;
+  private _isExploreAppsVisible = false;
   private _isFindAppsVisible = false;
   private _isApplicationsMapVisible = true;
   private _isSidePanelVisible = false;
@@ -41,13 +42,17 @@ export class ConfigService {
   get isSidePanelVisible(): boolean { return this._isSidePanelVisible; }
   set isSidePanelVisible(val: boolean) { this._isSidePanelVisible = val; }
 
-  // applications page find interface
-  get isFindAppsVisible(): boolean { return this._isFindAppsVisible; }
-  set isFindAppsVisible(val: boolean) { this._isFindAppsVisible = val; }
-
   // applications page details panel visibility
   get isAppDetailsVisible(): boolean { return this._isAppDetailsVisible; }
   set isAppDetailsVisible(val: boolean) { this._isAppDetailsVisible = val; }
+
+  // applications page explore interface
+  get isExploreAppsVisible(): boolean { return this._isExploreAppsVisible; }
+  set isExploreAppsVisible(val: boolean) { this._isExploreAppsVisible = val; }
+
+      // applications page find interface
+  get isFindAppsVisible(): boolean { return this._isFindAppsVisible; }
+  set isFindAppsVisible(val: boolean) { this._isFindAppsVisible = val; }
 
   get listPageSize(): number { return this._listPageSize; }
   set listPageSize(val: number) { this._listPageSize = val; }

@@ -1,10 +1,10 @@
 <div class="input-group" [ngClass]="{'is-invalid': isValidate && !isValidDate(ngbDate)}">
-  <input class="form-control" type="text" placeholder="yyyy-mm-dd" name="ngbDatepicker" ngbDatepicker #ngbDatepicker="ngbDatepicker"
+  <input class="form-control" type="text" placeholder="YYYY-MM-DD" name="ngbDatepicker" ngbDatepicker #ngbDatepicker="ngbDatepicker"
     [firstDayOfWeek]="7" navigation="arrows" [(ngModel)]="ngbDate" (ngModelChange)="onDateChg($event)" (click)="ngbDatepicker.close()"
     [minDate]="minNgbDate" [maxDate]="maxNgbDate">
   <div class="input-group-btn">
-    <button class="btn btn-icon" (click)="ngbDatepicker.toggle()" type="button" tabindex="-1">
-      <i class="material-icons">date_range</i>
+    <button class="test-btn btn btn-icon" (click)="ngbDatepicker.toggle()" type="button" tabindex="-1">
+      <i class="material-icons md-18">date_range</i>
     </button>
   </div>
 </div>

@@ -26,7 +26,6 @@
           [disabled]="loading">
           Find
         </button>
-
         <button class="btn btn-light" type="button" title="Clear filters"
           (click)="clearAllFilters()"
           [disabled]="loading">
@@ -62,7 +61,7 @@
 
       <div class="filter-actions-bar clearfix">
         <!-- Comment Period Dropdown -->
-        <div class="filter-control dropdown float-left" *ngVar="cpStatusCount() as numCpStatus">
+        <!-- <div class="filter-control dropdown float-left" *ngVar="cpStatusCount() as numCpStatus">
           <button class="btn dropdown-toggle" type="button" [ngClass]="(numCpStatus > 0) ? 'btn-secondary' : 'btn-outline-secondary'" id="cpStatusFilterButton"
             (click)="isAppStatusCollapsed=true;isCpStatusCollapsed=!isCpStatusCollapsed" [attr.aria-expanded]="!isCpStatusCollapsed"
             aria-controls="applist-cpstatus-filters" title="Comment Status filters">
@@ -95,10 +94,10 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Application Status Dropdown -->
-        <div class="filter-control dropdown float-left" *ngVar="appStatusCount() as numAppStatus">
+        <!-- <div class="filter-control dropdown float-left" *ngVar="appStatusCount() as numAppStatus">
           <button class="btn dropdown-toggle" type="button" [ngClass]="(numAppStatus > 0) ? 'btn-secondary' : 'btn-outline-secondary'" id="appStatusFilterButton"
             (click)="isCpStatusCollapsed=true;isAppStatusCollapsed=!isAppStatusCollapsed" [attr.aria-expanded]="!isAppStatusCollapsed"
             aria-controls="applist-appstatus-filters" title="Application Status filters">
@@ -132,7 +131,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Crown land File Number / Disposition Transaction ID -->
         <div class="clf-input filter-control input-group float-left">
@@ -180,7 +179,7 @@
   <div class="app-filters__body" id="applist-filters">
       
     <!-- Comment Period -->
-    <fieldset (click)="$event.stopPropagation()">
+    <!-- <fieldset (click)="$event.stopPropagation()">
       <legend>Comment Period Status</legend>
       <div class="form-check" *ngFor="let key of cpStatusKeys">
         <label class="form-check-label" for="{{key}}">
@@ -188,10 +187,10 @@
           {{commentPeriodService.getStatusString(key)}}
         </label>
       </div>
-    </fieldset>
+    </fieldset> -->
 
     <!-- Application Status -->
-    <fieldset (click)="$event.stopPropagation()">
+    <!-- <fieldset (click)="$event.stopPropagation()">
       <legend>Application Status</legend>
       <div class="form-check" *ngFor="let key of appStatusKeys">
         <label class="form-check-label" for="{{key}}">
@@ -199,7 +198,7 @@
           {{applicationService.getShortStatusString(key)}}
         </label>
       </div>
-    </fieldset>
+    </fieldset> -->
 
     <!-- Additional Filters -->
     <fieldset class="additional-filters" (click)="$event.stopPropagation()">
@@ -221,22 +220,6 @@
           <label for="subpurposeInput">Subpurpose</label>
           <input type="text" class="form-control gtm-filter-subpurpose" placeholder="Subpurpose" id="subpurposeInput" [(ngModel)]="_subpurposeFilter"
             [ngbTypeahead]="subpurposeSearch" [focusFirst]="false">
-        </div>
-        <div class="form-group">
-          <label>Published Between</label>
-          <div class="date-range">
-            <div class="form-group mb-0">
-              <label class="sr-only">Start Date</label>
-              <app-date-input class="gtm-filter-published-from" [(date)]="_publishFromFilter" [minDate]="minDate"
-                [maxDate]="_publishToFilter ? _publishToFilter : maxDate"></app-date-input>
-            </div>
-            <div class="spacer">TO</div>
-            <div class="form-group mb-0">
-              <label class="sr-only">End Date</label>
-              <app-date-input class="gtm-filter-published-to" [(date)]="_publishToFilter" [maxDate]="maxDate"
-                [minDate]="_publishFromFilter ? _publishFromFilter : minDate"></app-date-input>
-            </div>
-          </div>
         </div>
     </fieldset>
 

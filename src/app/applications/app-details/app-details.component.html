@@ -15,11 +15,12 @@
       <div class="applicant-name">{{application?.client || '-'}}</div>
       <div class="purpose">{{application?.purpose | lowercase}} {{application?.subpurpose | lowercase}}</div>
     </div>
-    <ul class="status-container" style="display: none;">
-      <li *ngIf="commentPeriodService.isOpen(application?.currentPeriod)">
+    <!--
+    <ul class="status-container">
+      <li *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
         <i class="material-icons" title="{{application?.cpStatus}}">
-          {{commentPeriodService.isOpen(application?.currentPeriod) ? 'comment' : 'highlight_off'}}
-        </i><span>{{application?.cpStatus}}</span>
+          {{commentPeriodService.isOpen(application.cpStatusCode) ? 'comment' : 'highlight_off'}}
+        </i><span>{{commentPeriodService.getStatusString(application.cpStatusCode)}}</span>
       </li>
       <li *ngVar="applicationService.getStatusCode(application?.status) as appStatusCode">
         <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isAbandoned(appStatusCode)">block</i>
@@ -31,10 +32,11 @@
         <span>{{application?.appStatus}}</span>
       </li>
     </ul>
+    -->
   </div>
   <div class="flex-panel__scroll">
     <div class="app-details-info">
-      <section class="commenting-info-container" *ngIf="application?.currentPeriod">
+      <section class="commenting-info-container" *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
         <div>This application is currently accepting comments for the next <strong>{{daysRemaining}}</strong> (closing on {{application?.currentPeriod.endDate | date:'mediumDate'}})</div>
         <button class="btn btn-primary" (click)="addComment()">Submit a Comment</button>
       </section>

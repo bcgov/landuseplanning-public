@@ -14,7 +14,7 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
 
-export interface FiltersType {
+export interface ExploreFiltersType {
   cpStatuses: Array<string>;
   appStatuses: Array<string>;
   applicant: string;
@@ -26,19 +26,16 @@ export interface FiltersType {
 }
 
 @Component({
-  selector: 'app-applist-filters',
-  templateUrl: './applist-filters.component.html',
-  styleUrls: ['./applist-filters.component.scss']
+  selector: 'app-explore',
+  templateUrl: './app-explore.component.html',
+  styleUrls: ['./app-explore.component.scss']
 })
-
-export class ApplistFiltersComponent implements OnInit, OnDestroy {
+export class AppExploreComponent implements OnInit, OnDestroy {
   @Output() updateFilters = new EventEmitter(); // to applications component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
 
-  public isCpStatusCollapsed = true;
-  public isAppStatusCollapsed = true;
   public loading = true; // init
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -46,15 +43,15 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   public cpStatusKeys: Array<string> = [];
   public appStatusKeys: Array<string> = [];
 
-  // search keys for text boxes
-  private purposeKeys: Array<string> = [];
-  private subpurposeKeys: Array<string> = [];
+  // search keys purpose and subpurpose
+  public purposeKeys: Array<string> = [];
+  public subpurposeKeys: Array<string> = [];
 
-  public applicantFilter: string = null;
-  public _applicantFilter: string = null; // temporary filters for Cancel feature
+  public cpStatusFilters: object = {}; // array-like object
+  public _cpStatusFilters: object = {}; // temporary filters for Cancel feature
 
-  public clidDtidFilter: number = null;
-  public _clidDtidFilter: number = null; // temporary filters for Cancel feature
+  public appStatusFilters: object = {}; // array-like object
+  public _appStatusFilters: object = {}; // temporary filters for Cancel feature
 
   public purposeFilter: string = null;
   public _purposeFilter: string = null; // temporary filters for Cancel feature
@@ -70,21 +67,19 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
   // (arrow) functions to return type-ahead results
   // ref: https://ng-bootstrap.github.io/#/components/typeahead/api
-  public purposeSearch = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term.length < 1 ? []
-        : this.purposeKeys.filter(key => key.indexOf(this._purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
-      );
+  public purposeSearch = (text$: Observable<string>) => text$
+    .debounceTime(200)
+    .distinctUntilChanged()
+    .map(term => term.length < 1 ? []
+      : this.purposeKeys.filter(key => key.indexOf(this._purposeFilter.toUpperCase()) > -1) // .slice(0, 10)
+    );
 
-  public subpurposeSearch = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term.length < 1 ? []
-        : this.subpurposeKeys.filter(key => key.indexOf(this._subpurposeFilter.toUpperCase()) > -1) // .slice(0, 10)
-      );
+  public subpurposeSearch = (text$: Observable<string>) => text$
+    .debounceTime(200)
+    .distinctUntilChanged()
+    .map(term => term.length < 1 ? []
+      : this.subpurposeKeys.filter(key => key.indexOf(this._subpurposeFilter.toUpperCase()) > -1) // .slice(0, 10)
+    );
 
   constructor(
     private applicationService: ApplicationService,
@@ -93,10 +88,12 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     private urlService: UrlService,
     private elementRef: ElementRef
   ) {
-    // populate the keys we want to display
+
+    // comment period status
     this.cpStatusKeys.push(this.commentPeriodService.OPEN);
     this.cpStatusKeys.push(this.commentPeriodService.NOT_OPEN);
 
+    // application status keys
     this.appStatusKeys.push(this.applicationService.APPLICATION_UNDER_REVIEW);
     this.appStatusKeys.push(this.applicationService.APPLICATION_REVIEW_COMPLETE);
     this.appStatusKeys.push(this.applicationService.DECISION_APPROVED);
@@ -118,46 +115,51 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         // load initial and updated filters
-        this._resetAllFilters(false);
+        // this._resetAllFilters(false);
       });
   }
 
-  // full height = top of app-applist-filters.app-filters + height of div.app-filters__header
-  get clientHeight(): number {
-    return this.elementRef.nativeElement.offsetTop + this.elementRef.nativeElement.firstElementChild.firstElementChild.clientHeight;
+  public ngOnInit() {
   }
-
-  public ngOnInit() { }
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  public getFilters(): FiltersType {
+  public getFilters(): ExploreFiltersType {
+    // convert array-like objects to arrays
+    const cpStatuses: Array<string> = [];
+    Object.keys(this.cpStatusFilters).forEach(key => { if (this.cpStatusFilters[key]) { cpStatuses.push(key); } });
+
+    const appStatuses: Array<string> = [];
+    Object.keys(this.appStatusFilters).forEach(key => { if (this.appStatusFilters[key]) { appStatuses.push(key); } });
+
     return {
-      cpStatuses: [],
-      appStatuses: [],
-      applicant: null, // this.applicantFilter && this.applicantFilter.trim() || null, // convert empty string to null
-      clidDtid: this.clidDtidFilter ? this.clidDtidFilter.toString() : null,
-      purpose: null,
-      subpurpose: null,
-      publishFrom: null,
-      publishTo: null
+      cpStatuses: cpStatuses,
+      appStatuses: appStatuses,
+      applicant: null,
+      clidDtid: null,
+      purpose: this.purposeFilter && this.purposeFilter.trim() || null, // convert empty string to null
+      subpurpose: this.subpurposeFilter && this.subpurposeFilter.trim() || null, // convert empty string to null
+      publishFrom: this.publishFromFilter ? moment(this.publishFromFilter).startOf('day').toDate() : null,
+      publishTo: this.publishToFilter ? moment(this.publishToFilter).endOf('day').toDate() : null
     };
   }
 
-  //
-  // The following are to "Apply" the temporary filters: copy the temporary values to the actual variables, etc.
-  //
-  public applyClidDtidFilter(doApply: boolean = true) {
-    this.clidDtidFilter = this._clidDtidFilter;
+  public applyCpStatusFilters(doApply: boolean = true) {
+    this.cpStatusFilters = { ...this._cpStatusFilters };
+    if (doApply) { this._applyAllFilters(); }
+  }
+
+  public applyAppStatusFilters(doApply: boolean = true) {
+    this.appStatusFilters = { ...this._appStatusFilters };
     if (doApply) { this._applyAllFilters(); }
   }
 
   public applyAllFilters(doApply: boolean = true) {
-    this.applicantFilter = this._applicantFilter;
-    this.clidDtidFilter = this._clidDtidFilter;
+    this.applyCpStatusFilters(false);
+    this.applyAppStatusFilters(false);
     this.purposeFilter = this._purposeFilter;
     this.subpurposeFilter = this._subpurposeFilter;
     this.publishFromFilter = this._publishFromFilter;
@@ -174,21 +176,49 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this._saveFilters();
   }
 
+  /// persist selected filters
   private _saveFilters() {
-    this.urlService.save('applicant', this.applicantFilter && this.applicantFilter.trim());
-    this.urlService.save('clidDtid', this.clidDtidFilter && this.clidDtidFilter.toString());
+    let cpStatuses: string = null;
+    this.cpStatusKeys.forEach(key => {
+      if (this.cpStatusFilters[key]) {
+        if (!cpStatuses) {
+          cpStatuses = key;
+        } else {
+          cpStatuses += ',' + key;
+        }
+      }
+    });
+    this.urlService.save('cpStatuses', cpStatuses);
+
+    let appStatuses: string = null;
+    this.appStatusKeys.forEach(key => {
+      if (this.appStatusFilters[key]) {
+        if (!appStatuses) {
+          appStatuses = key;
+        } else {
+          appStatuses += ',' + key;
+        }
+      }
+    });
+    this.urlService.save('appStatuses', appStatuses);
     this.urlService.save('purpose', this.purposeFilter && this.purposeFilter.trim());
     this.urlService.save('subpurpose', this.subpurposeFilter && this.subpurposeFilter.trim());
     this.urlService.save('publishFrom', this.publishFromFilter && moment(this.publishFromFilter).format('YYYY-MM-DD'));
     this.urlService.save('publishTo', this.publishToFilter && moment(this.publishToFilter).format('YYYY-MM-DD'));
   }
 
-  //
+  public cancelCpStatusFilters() {
+    this._cpStatusFilters = { ...this.cpStatusFilters };
+  }
+
+  public cancelAppStatusFilters() {
+    this._appStatusFilters = { ...this.appStatusFilters };
+  }
+
   // The following are to "Cancel" the temporary filters: just reset the values.
-  //
   public cancelAllFilters() {
-    this._applicantFilter = this.applicantFilter;
-    this._clidDtidFilter = this.clidDtidFilter;
+    this.cancelCpStatusFilters();
+    this.cancelAppStatusFilters();
     this._purposeFilter = this.purposeFilter;
     this._subpurposeFilter = this.subpurposeFilter;
     this._publishFromFilter = this.publishFromFilter;
@@ -197,16 +227,26 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
 
   // (re)sets all filters from current URL
   private _resetAllFilters(doApply: boolean) {
-    this.applicantFilter = this.urlService.query('applicant');
-    this.clidDtidFilter = this.urlService.query('clidDtid') ? +this.urlService.query('clidDtid') : null;
+    // set cpStatus filters according to current param options
+    const cpStatuses = (this.urlService.query('cpStatuses') || '').split(',');
+    this.cpStatusKeys.forEach(key => {
+      this.cpStatusFilters[key] = cpStatuses.includes(key);
+    });
+
+    // set appStatus filters according to current param options
+    const appStatuses = (this.urlService.query('appStatuses') || '').split(',');
+    this.appStatusKeys.forEach(key => {
+      this.appStatusFilters[key] = appStatuses.includes(key);
+    });
+
     this.purposeFilter = this.urlService.query('purpose');
     this.subpurposeFilter = this.urlService.query('subpurpose');
     this.publishFromFilter = this.urlService.query('publishFrom') ? moment(this.urlService.query('publishFrom')).toDate() : null;
     this.publishToFilter = this.urlService.query('publishTo') ? moment(this.urlService.query('publishTo')).toDate() : null;
 
     // copy all data from actual to temporary properties
-    this._applicantFilter = this.applicantFilter;
-    this._clidDtidFilter = this.clidDtidFilter;
+    this._cpStatusFilters = { ...this.cpStatusFilters };
+    this._appStatusFilters = { ...this.appStatusFilters };
     this._purposeFilter = this.purposeFilter;
     this._subpurposeFilter = this.subpurposeFilter;
     this._publishFromFilter = this.publishFromFilter;
@@ -217,13 +257,25 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     if (doApply) { this._applyAllFilters(); }
   }
 
-  //
   // The following are to "Clear" the temporary filters.
-  //
+  public clearCpStatusFilters(doApply: boolean = true) {
+    this.cpStatusKeys.forEach(key => {
+      this._cpStatusFilters[key] = false;
+    });
+    this.applyCpStatusFilters(doApply);
+  }
+
+  public clearAppStatusFilters(doApply: boolean = true) {
+    this.appStatusKeys.forEach(key => {
+      this._appStatusFilters[key] = false;
+    });
+    this.applyAppStatusFilters(doApply);
+  }
+
   public clearAllFilters() {
     if (this.filterCount() > 0) {
-      this._applicantFilter = null;
-      this._clidDtidFilter = null;
+      this.clearCpStatusFilters(false);
+      this.clearAppStatusFilters(false);
       this._purposeFilter = null;
       this._subpurposeFilter = null;
       this._publishFromFilter = null;
@@ -233,13 +285,12 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     }
   }
 
-  public applicantFilterCount(): number {
-    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
-    return applicantFilter ? 1 : 0;
+  public cpStatusCount(): number {
+    return this.cpStatusKeys.filter(key => this.cpStatusFilters[key]).length;
   }
 
-  public clidDtidFilterCount(): number {
-    return (this.clidDtidFilter && this.clidDtidFilter.toString().length > 0) ? 1 : 0;
+  public appStatusCount(): number {
+    return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
   }
 
   public purposeFilterCount(): number {
@@ -257,8 +308,8 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   public filterCount(): number {
-    return this.applicantFilterCount()
-      + this.clidDtidFilterCount()
+    return this.cpStatusCount()
+      + this.appStatusCount()
       + this.purposeFilterCount()
       + this.subpurposeFilterCount()
       + this.publishFilterCount();

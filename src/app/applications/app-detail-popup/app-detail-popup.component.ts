@@ -41,9 +41,11 @@ export class AppDetailPopupComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  // show details interface and hide the other in the side panel
   public showAppDetails() {
     this.configService.isSidePanelVisible = true;
     this.configService.isAppDetailsVisible = true;
+    this.configService.isExploreAppsVisible = false;
     this.configService.isFindAppsVisible = false;
     this.setCurrentApp.emit(this.app);
   }

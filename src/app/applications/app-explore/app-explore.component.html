@@ -1,0 +1,75 @@
+<div class="flex-panel">
+  <div class="flex-panel__header">
+    <h3 class="title">Explore Applications</h3>
+  </div>
+  <div class="flex-panel__scroll">
+
+    <div class="form-group">
+      <label class="control-label">Published Between</label>
+      <div class="date-range">
+        <div class="date-range__input">
+          <label class="sr-only">Start Date</label>
+          <app-date-input class="gtm-filter-published-from" [(date)]="_publishFromFilter" [minDate]="minDate"
+            [maxDate]="_publishToFilter ? _publishToFilter : maxDate"></app-date-input>
+        </div>
+        <div class="date-range__spacer">-</div>
+        <div class="date-range__input">
+          <label class="sr-only">End Date</label>
+          <app-date-input class="gtm-filter-published-to" [(date)]="_publishToFilter" [maxDate]="maxDate"
+            [minDate]="_publishFromFilter ? _publishFromFilter : minDate"></app-date-input>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Comment Period</label>
+      <div class="select-badge-group">
+        <div class="select-badge" *ngFor="let key of cpStatusKeys">
+          <input type="checkbox" name="{{key}}" id="_{{key}}" 
+            [(ngModel)]="_cpStatusFilters[key]" />
+          <label for="_{{key}}">
+            <!--
+            <i class="material-icons">check</i>
+            <i class="material-icons">remove</i>
+            -->
+            {{commentPeriodService.getStatusString(key)}}
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label">Purpose</label>
+      <div class="select-badge-group">
+        <div class="select-badge" *ngFor="let key of purposeKeys">
+          <input type="checkbox" name="{{key}}" id="_{{key}}" />
+          <label for="_{{key}}">{{key | titlecase}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Application Status</label>
+      <div class="select-badge-group">
+        <div class="select-badge" *ngFor="let key of appStatusKeys">
+          <input type="checkbox" name="{{key}}" id="_{{key}}" 
+            [(ngModel)]="_appStatusFilters[key]" />
+          <label for="_{{key}}">{{applicationService.getShortStatusString(key)}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-btns">
+      <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" 
+        (click)="applyAllFilters()"
+        [disabled]="loading">
+        Explore
+      </button>
+      <button class="btn btn-light">
+        Clear
+      </button>
+    </div>
+
+  </div>
+</div>
+

@@ -1,4 +1,4 @@
-// Form Label & Validation Variants
+// Form Label
 .control-label {
   margin-bottom: 0.3rem;
   font-size: 0.875rem;
@@ -9,6 +9,7 @@
   }
 }
 
+// Help Text
 .form-text {
   margin-top: 0.4rem;
   color: #999;
@@ -21,40 +22,22 @@
 
 .form-control-container {
   position: relative;
-
-  .validation-icon {
-    position: absolute;
-    top: 0.2rem;
-    right: 0.2rem;
-    bottom: 0.2rem;
-    padding-top: 0.4rem;
-    width: 2.5rem;
-    background: #fff;
-    text-align: center;
-  }
-}
-
-.optional {
-  .control-label:after {
-    white-space: pre;
-    content: " (optional)";
-    font-weight: normal;
-  }
-}
-
-.required {
-  .control-label:after {
-    white-space: pre;
-    content: " *";
-    color: red;
-  }
 }
 
 // Fieldset/Legend
+fieldset {
+  + fieldset {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+  }
+}
+
 legend {
-  float: left; // position legend inside the bounding box of the fieldset
-  font-size: 1rem;
-  font-weight: bold;
+  float: left; // Fix to ensure the legend is bound the the fieldset box
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 // Form Items
@@ -75,10 +58,8 @@ legend {
 }
 
 // Input types
+// Input variants
 input {
-  &.form-control {
-    height: $fc-height;
-  }
   &[type="tel"],
   &[type="text"],
   &[type="email"],
@@ -86,9 +67,6 @@ input {
     @include placeholder {
       color: $fc-placeholder-color;
     }
-    height: $fc-height;
-    padding: 0.75rem;
-    box-shadow: $fc-inner-shadow inset;
   }
 }
 
@@ -104,18 +82,6 @@ select {
       height: $fc-height;
       padding: 0 0.5rem;
     }
-  }
-}
-
-// Number
-input[type="number"] {
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
-
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
   }
 }
 
@@ -138,21 +104,6 @@ textarea.form-control {
   font-size: 0.875rem;
   vertical-align: top;
   }
-}
-
-fieldset {
-  + fieldset {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid #ddd;
-  }
-}
-
-legend {
-  float: left; // Fix to ensure the legend is bound the the fieldset box
-  margin-bottom: 1.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
 }
 
 label {

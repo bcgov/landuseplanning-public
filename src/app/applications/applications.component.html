@@ -12,6 +12,14 @@
         </button>
       </li>
       <li class="side-nav-item" 
+        [ngClass]="{'active': configService.isExploreAppsVisible && configService.isSidePanelVisible}">
+        <button class="btn" 
+          (click)="showExplore();">
+          <i class="material-icons">visibility</i>
+          <div>Explore</div>
+        </button>
+      </li>
+      <li class="side-nav-item" 
         [ngClass]="{'active': configService.isAppDetailsVisible && configService.isSidePanelVisible}">
         <button class="btn" 
           (click)="showDetails();">
@@ -34,6 +42,10 @@
       (updateFilters)="updateFilters($event)"
       [hidden]="!configService.isFindAppsVisible">
     </app-applist-filters>
+    <app-explore #appexplore
+    (updateFilters)="updateFilters($event)"
+    [hidden]="!configService.isExploreAppsVisible">
+    </app-explore>
   </div>
 
   <div class="main-panel">
