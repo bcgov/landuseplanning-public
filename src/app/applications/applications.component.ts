@@ -12,8 +12,28 @@ import * as _ from 'lodash';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
-// import { ExploreFiltersType } from 'app/applications/app-explore/app-explore.component';
-import { FiltersType } from 'app/applications/applist-filters/applist-filters.component';
+
+export interface FiltersType {
+  cpStatuses: Array<string>;
+  appStatuses: Array<string>;
+  applicant: string;
+  clidDtid: string;
+  purposes: Array<string>;
+  subpurposes: Array<string>;
+  publishFrom: Date;
+  publishTo: Date;
+}
+
+const emptyFilters: FiltersType = {
+  cpStatuses: [],
+  appStatuses: [],
+  applicant: null,
+  clidDtid: null,
+  purposes: [],
+  subpurposes: [],
+  publishFrom: null,
+  publishTo: null
+};
 
 // NB: this number needs to be small enough to give reasonable app loading feedback on slow networks
 //     but large enough for optimized "added/deleted" app logic (see map component)
@@ -31,6 +51,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('applist') applist;
   @ViewChild('appfilters') appfilters;
   @ViewChild('appexplore') appexplore;
+  // @ViewChild('appedetail') appdetail;
 
   // FUTURE: change this to an observable and components subscribe to changes ?
   // ref: https://github.com/escardin/angular2-community-faq/blob/master/services.md#how-do-i-communicate-between-components-using-a-shared-service
@@ -39,14 +60,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   set isLoading(val: boolean) {
     this._loading = val;
     if (val) {
-      this.appfilters.onLoadStart();
       this.appmap.onLoadStart();
       this.applist.onLoadStart();
+      this.appfilters.onLoadStart();
       this.appexplore.onLoadStart();
     } else {
-      this.appfilters.onLoadEnd();
       this.appmap.onLoadEnd();
       this.applist.onLoadEnd();
+      this.appfilters.onLoadEnd();
       this.appexplore.onLoadEnd();
     }
   }
@@ -93,8 +114,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // get initial filters and map coordinates
-    this.filters = this.appfilters.getFilters();
+    // get initial filters
+    const findFilters = this.appfilters.getFilters();
+    const exploreFilters = this.appexplore.getFilters();
+    // NB: first source is 'emptyFilters' to ensure all properties are set
+    this.filters = Object.assign({}, emptyFilters, { ...findFilters, ...exploreFilters });
+
+    // get initial map coordinates
     this.coordinates = this.appmap.getCoordinates();
 
     // load initial apps
@@ -107,9 +133,10 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   // - also look at takeWhile()/takeUntil() (to complete the current query)
   // - or unsubscribe?
   private getApps(getTotalNumber: boolean = true) {
+    // console.log('filters =', this.filters);
+
     // do this in another event so it's not in current change detection cycle
     setTimeout(() => {
-      const start = (new Date()).getTime(); // for profiling
       this.isLoading = true;
       let isFirstPage = true;
       this.snackBarRef = this.snackBar.open('Loading applications ...');
@@ -134,9 +161,11 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
             observables.push(this.applicationService.getAll(page, PAGE_SIZE, this.filters, this.coordinates));
           }
 
-          // TODO: this fails when there are 0 results (this.apps is not updated)
+          // check if there's nothing to query
+          if (observables.length === 0) { this.apps = []; }
 
           // get all observables sequentially
+          const start = (new Date()).getTime(); // for profiling
           Observable.concat(...observables)
             .takeUntil(this.ngUnsubscribe)
             .finally(() => {
@@ -152,7 +181,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.apps = applications;
               } else {
                 // NB: OnChanges event will update the components that use this array
-                this.apps = _.concat(this.apps, applications);
+                // NB: remove duplicates (eg, due to bad data such as multiple comment periods)
+                this.apps = _.uniqBy(_.concat(this.apps, applications), app => app._id);
               }
             }, error => {
               console.log(error);
@@ -177,11 +207,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Event handler called when find or explore component updates filters.
+   * Event handler called when Find or Explore component updates filters.
    */
   public updateFilters(filters: FiltersType) {
-    // console.log('updateFilters');
-    this.filters = filters;
+    // console.log('updateFilters, filters =', filters);
+    // NB: first source is 'emptyFilters' to ensure all properties are set
+    this.filters = Object.assign({}, emptyFilters, filters);
     this.getApps();
   }
 
@@ -189,7 +220,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Event handler called when map component view has changed.
    */
   public updateCoordinates(coordinates: string) {
-    // console.log('updateCoordinates');
+    // console.log('updateCoordinates, coordinates =', coordinates);
     this.coordinates = coordinates;
     this.getApps(false); // total number is not affected
   }
@@ -250,31 +281,47 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // show application details interface
+  // show Application Details interface
   public showDetails() {
+    this._clearFilters();
+
     // show side panel if it's hidden or THIS component isn't already visible
     this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isAppDetailsVisible;
+
     this.configService.isAppDetailsVisible = true;
     this.configService.isExploreAppsVisible = false;
     this.configService.isFindAppsVisible = false;
   }
 
-  // show find applications interface
+  // show Explore Applications interface
   public showExplore() {
+    this._clearFilters();
+
     // show side panel if it's hidden or THIS component isn't already visible
     this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isExploreAppsVisible;
+
     this.configService.isAppDetailsVisible = false;
     this.configService.isExploreAppsVisible = true;
     this.configService.isFindAppsVisible = false;
   }
 
-  // show find applications interface
+  // show Find Applications interface
   public showFind() {
+    this._clearFilters();
+
     // show side panel if it's hidden or THIS component isn't already visible
     this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isFindAppsVisible;
+
     this.configService.isAppDetailsVisible = false;
     this.configService.isExploreAppsVisible = false;
     this.configService.isFindAppsVisible = true;
+  }
+
+  private _clearFilters() {
+    // if we're hiding the explore component, clear its filters
+    if (this.configService.isExploreAppsVisible) { this.appexplore.clearAllFilters(); }
+    // if we're hiding the find component, clear its filters
+    if (this.configService.isFindAppsVisible) { this.appfilters.clearAllFilters(); }
   }
 
 }

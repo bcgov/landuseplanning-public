@@ -25,15 +25,8 @@
       <label class="control-label">Comment Period</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of cpStatusKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" 
-            [(ngModel)]="_cpStatusFilters[key]" />
-          <label for="_{{key}}">
-            <!--
-            <i class="material-icons">check</i>
-            <i class="material-icons">remove</i>
-            -->
-            {{commentPeriodService.getStatusString(key)}}
-          </label>
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_cpStatusFilters[key]" />
+          <label for="_{{key}}">{{commentPeriodService.getStatusString(key)}}</label>
         </div>
       </div>
     </div>
@@ -42,7 +35,7 @@
       <label class="control-label">Purpose</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of purposeKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_purposeFilters[key]" />
           <label for="_{{key}}">{{key | titlecase}}</label>
         </div>
       </div>
@@ -52,20 +45,21 @@
       <label class="control-label">Application Status</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of appStatusKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" 
-            [(ngModel)]="_appStatusFilters[key]" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_appStatusFilters[key]" />
           <label for="_{{key}}">{{applicationService.getShortStatusString(key)}}</label>
         </div>
       </div>
     </div>
 
     <div class="form-btns">
-      <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" 
+      <button class="btn btn-primary gtm-apply-filters" type="button" title="Apply filters"
         (click)="applyAllFilters()"
         [disabled]="loading">
         Explore
       </button>
-      <button class="btn btn-light">
+      <button class="btn btn-light" type="button" title="Clear filters"
+        (click)="clearAllFilters()"
+        [disabled]="loading">
         Clear
       </button>
     </div>

@@ -10,7 +10,7 @@ import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { FiltersType } from 'app/applications/applist-filters/applist-filters.component';
+import { FiltersType } from 'app/applications/applications.component';
 import { Application } from 'app/models/application';
 import { ApiService } from './api';
 import { DocumentService } from './document.service';
@@ -57,7 +57,7 @@ export class ApplicationService {
     const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
     const publishUntil = filters.publishTo ? filters.publishTo.toISOString() : null;
 
-    // convert application statuses
+    // convert application statuses from codes to strings
     const appStatuses = _.flatMap(filters.appStatuses, statusCode => this.getTantalisStatus(statusCode));
 
     // handle comment period filtering
@@ -136,7 +136,7 @@ export class ApplicationService {
     const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
     const publishUntil = filters.publishTo ? filters.publishTo.toISOString() : null;
 
-    // convert application statuses
+    // convert application statuses from codes to strings
     const appStatuses = _.flatMap(filters.appStatuses, statusCode => this.getTantalisStatus(statusCode));
 
     // handle comment period filtering

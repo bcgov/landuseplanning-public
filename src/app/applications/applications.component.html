@@ -3,26 +3,23 @@
 
   <div class="side-nav">
     <ul>
-      <li class="side-nav-item" 
+      <li class="side-nav-item"
         [ngClass]="{'active': configService.isFindAppsVisible && configService.isSidePanelVisible}">
-        <button class="btn" 
-          (click)="showFind();">
+        <button class="btn" (click)="showFind()">
           <i class="material-icons">search</i>
           <div>Find</div>
         </button>
       </li>
-      <li class="side-nav-item" 
+      <li class="side-nav-item"
         [ngClass]="{'active': configService.isExploreAppsVisible && configService.isSidePanelVisible}">
-        <button class="btn" 
-          (click)="showExplore();">
+        <button class="btn" (click)="showExplore()">
           <i class="material-icons">visibility</i>
           <div>Explore</div>
         </button>
       </li>
-      <li class="side-nav-item" 
+      <li class="side-nav-item"
         [ngClass]="{'active': configService.isAppDetailsVisible && configService.isSidePanelVisible}">
-        <button class="btn" 
-          (click)="showDetails();">
+        <button class="btn" (click)="showDetails()">
           <i class="material-icons">info</i>
           <div>Details</div>
         </button>
@@ -31,20 +28,20 @@
   </div>
 
   <div class="side-panel" [ngClass]="configService.isSidePanelVisible ? 'open':'closed'">
-    <button class="side-panel__close-btn btn btn-icon" (click)="configService.isSidePanelVisible=false; $event.stopPropagation();">
+    <button class="side-panel__close-btn btn btn-icon" (click)="configService.isSidePanelVisible=false">
       <i class="material-icons">close</i>
     </button>
-    <app-details #appdetail 
-      [appId]="currentAppId" 
+    <app-details #appdetail
+      [appId]="currentAppId"
       [hidden]="!configService.isAppDetailsVisible">
     </app-details>
-    <app-applist-filters #appfilters 
+    <app-applist-filters #appfilters
       (updateFilters)="updateFilters($event)"
       [hidden]="!configService.isFindAppsVisible">
     </app-applist-filters>
     <app-explore #appexplore
-    (updateFilters)="updateFilters($event)"
-    [hidden]="!configService.isExploreAppsVisible">
+      (updateFilters)="updateFilters($event)"
+      [hidden]="!configService.isExploreAppsVisible">
     </app-explore>
   </div>
 
@@ -54,11 +51,8 @@
       (setCurrentApp)="highlightApplication($event, true)"
       (unsetCurrentApp)="highlightApplication($event, false)">
     </app-applist-list>
-
     <app-applist-map class="app-map" #appmap
       [applications]="apps"
-      [applist]="applist"
-      [appfilters]="appfilters"
       (toggleCurrentApp)="toggleCurrentApp($event)"
       (updateCoordinates)="updateCoordinates($event)"
       (setCurrentApp)="highlightApplication($event, true)">

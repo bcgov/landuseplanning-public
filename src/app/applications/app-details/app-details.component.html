@@ -13,7 +13,7 @@
     <div class="file-number">Crown Land File: {{(application && application['clFile']) || '-'}}</div>
     <div>
       <div class="applicant-name">{{application?.client || '-'}}</div>
-      <div class="purpose">{{application?.purpose | lowercase}} {{application?.subpurpose | lowercase}}</div>
+      <div class="purpose">{{application?.purpose | lowercase}} - {{application?.subpurpose | lowercase}}</div>
     </div>
     <!--
     <ul class="status-container">
