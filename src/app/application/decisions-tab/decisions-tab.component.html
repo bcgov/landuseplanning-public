@@ -4,12 +4,12 @@
           {{application.appStatus || 'Unknown Application Status'}}
         </div>
 
-        <div>
-            <div *ngIf="!application.decision && applicationService.isDecision(application.status)">
+        <div *ngVar="applicationService.getStatusCode(application.status) as appStatusCode">
+            <div *ngIf="!application.decision && applicationService.isDecision(appStatusCode)">
                 No decisions documents are available at this time. Please check back for updates to this information.
             </div>
 
-            <div *ngIf="!application.decision && !applicationService.isDecision(application.status)">
+            <div *ngIf="!application.decision && !applicationService.isDecision(appStatusCode)">
                 No decisions have been made for this application at this time.
             </div>
 
