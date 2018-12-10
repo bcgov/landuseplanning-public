@@ -60,7 +60,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   private markerClusterGroup = L.markerClusterGroup({
     showCoverageOnHover: false,
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
-    // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
+    iconCreateFunction: this.clusterCreate
   });
   private oldZoom: number = null;
   private isMapReady = false;
@@ -97,11 +97,23 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       });
   }
 
-  // // for creating custom cluster icon
-  // private clusterCreate(cluster): L.Icon | L.DivIcon {
-  //   const html = cluster.getChildcount().toString();
-  //   return L.divIcon({ html: html, className: 'my-cluster', iconSize: L.point(40, 40) });
-  // }
+  // for creating custom cluster icon
+  private clusterCreate(cluster): L.Icon | L.DivIcon {
+    const childCount = cluster.getChildCount();
+    let c = ' marker-cluster-';
+    if (childCount < 10) {
+      c += 'small';
+    } else if (childCount < 100) {
+      c += 'medium';
+    } else {
+      c += 'large';
+    }
+
+    return new L.DivIcon({
+      html: `<div><span title="${childCount} applications near this location">${childCount}</span></div>`,
+      className: 'custom-marker' + c, iconSize: new L.Point(48, 48)
+    });
+  }
 
   // create map after view (which contains map id) is initialized
   ngAfterViewInit() {
@@ -204,6 +216,10 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
+
+    // ensure that when we zoom to the cluster group we allocate some space around the edge of the map
+    // TODO: make this work
+    // this.markerClusterGroup.on('clusterclick', a=> a.layer.zoomToBounds({padding: [100, 100]}));
 
     // add base maps layers control
     const baseLayers = {
