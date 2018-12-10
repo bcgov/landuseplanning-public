@@ -5,7 +5,9 @@
 </div>
 
 <div class="flex-panel" *ngIf="isLoading">
-  <em>Loading application details...</em>
+  <div class="flex-panel__header">
+    <em>Loading application details...</em>
+  </div>
 </div>
 
 <div class="flex-panel" *ngIf="application">

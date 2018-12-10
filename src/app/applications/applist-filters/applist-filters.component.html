@@ -12,8 +12,7 @@
           (keydown.arrowdown)="$event.preventDefault()"
           (keyup.enter)="applyAllFilters()"
           (mousewheel)="$event.preventDefault()"
-          [(ngModel)]="_clidDtidFilter"
-          [disabled]="loading" />
+          [(ngModel)]="_clidDtidFilter" />
       </div>
       <div class="form-btns">
         <button class="btn btn-primary gtm-apply-filters find-btn-lg-device" type="button" title="Find"
@@ -44,6 +43,9 @@
       <p>This is an identifier unique to each application. It represents a specific instance of a particular activity in
         a particular parcel of Crown land. For example, two applications may share the same Crown Land File Number if they
         are the same activity in the same parcel of land, but will have unique Disposition Transaction IDs.</p>
+    </section>
+    <section>
+      <p>Don't have either of these number? <button class="show-explore-btn btn btn-link" (click)="showExplore()">Explore Applications</button></p>
     </section>
   </div>
 </div>

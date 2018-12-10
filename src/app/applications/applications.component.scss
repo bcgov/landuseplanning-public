@@ -2,6 +2,7 @@
 
 $toggle-list-anim-duration: 0.2s;
 $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
+$side-panel-shadow: 0.15rem 0 0.5rem rgba(0,0,0,0.25);
 
 app-applications:host {
   position: absolute;     // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
@@ -9,6 +10,12 @@ app-applications:host {
   right: 0;
   bottom: 2rem;
   left: 0;
+}
+
+@media (min-width: 768px) {
+  app-applications:host {
+    top: 4.4rem;            
+  }
 }
 
 .applications-view {
@@ -76,6 +83,7 @@ $side-nav-item-height-lg: 5.5rem;
     z-index: 1002;
     height: 100%;
     border-bottom: none;
+    box-shadow: $side-panel-shadow;
   }
 
   .side-nav ul {
@@ -100,7 +108,7 @@ $side-panel-bg: #fff;
   overflow-x: hidden;
   transform: translateX(-100%);
   transition: transform ease-out 0.2s;
-  z-index: 1001;
+  z-index: 1002;
   background: $side-panel-bg;
 
   &.open {
@@ -126,7 +134,7 @@ $side-panel-bg: #fff;
     width: 0;
     transform: none;
     transition: width ease-out 0.2s;
-    box-shadow: 0 0.5rem 0.5rem #ccc;
+    box-shadow: $side-panel-shadow;
 
     &.open {
       width: $side-panel-width-lg;
@@ -155,12 +163,6 @@ $side-panel-bg: #fff;
 .main-panel {
   @include flex(1 1 auto);
   position: relative;
-}
-
-@media (min-width: 768px) {
-  app-applications:host {
-    top: 4.2rem;            
-  }
 }
 
 @media (max-width: 1023px) {

@@ -3,9 +3,6 @@
 // Filters Content Layout and Typography
 section {
   margin-top: 2rem;
-}
-
-section {
   line-height: 1.2rem;
   font-size: 0.875rem;
 
@@ -28,6 +25,13 @@ section {
   .btn-light {
     font-weight: 400;
   }
+}
+
+.show-explore-btn {
+  padding: 0;
+  border-width: 0;
+  font-size: inherit;
+  vertical-align: inherit;
 }
 
 // show/hide button variants for large and small devices

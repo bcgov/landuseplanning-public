@@ -118,6 +118,11 @@ export class ApplistFiltersComponent implements OnDestroy {
     return this.applicantFilterCount() + this.clidDtidFilterCount();
   }
 
+  public showExplore() {
+    this.configService.isExploreAppsVisible = true;
+    this.configService.isFindAppsVisible = false;
+  }
+
   public onLoadStart() { this.loading = true; }
 
   public onLoadEnd() { this.loading = false; }

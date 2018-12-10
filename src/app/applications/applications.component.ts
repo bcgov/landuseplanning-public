@@ -103,6 +103,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.renderer.addClass(document.body, 'no-scroll');
+
     // prevent underlying map actions for list and filters components
     const applist_list = <HTMLElement>document.getElementById('applist-list');
     L.DomEvent.disableClickPropagation(applist_list);
@@ -202,6 +204,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.renderer.removeClass(document.body, 'no-scroll');
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
