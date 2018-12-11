@@ -25,7 +25,7 @@
       <label class="control-label">Comment Period</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of cpStatusKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_cpStatusFilters[key]" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_cpStatusFilters[key]" [disabled]="loading" />
           <label for="_{{key}}">{{commentPeriodService.getStatusString(key)}}</label>
         </div>
       </div>
@@ -35,7 +35,7 @@
       <label class="control-label">Purpose</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of purposeKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_purposeFilters[key]" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_purposeFilters[key]" [disabled]="loading" />
           <label for="_{{key}}">{{key | titlecase}}</label>
         </div>
       </div>
@@ -45,15 +45,20 @@
       <label class="control-label">Application Status</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of appStatusKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_appStatusFilters[key]" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_appStatusFilters[key]" [disabled]="loading" />
           <label for="_{{key}}">{{applicationService.getShortStatusString(key)}}</label>
         </div>
       </div>
     </div>
 
     <div class="form-btns">
-      <button class="btn btn-primary gtm-apply-filters" type="button" title="Apply filters"
+      <button class="btn btn-primary gtm-apply-filters explore-btn-lg-device" type="button" title="Apply filters"
         (click)="applyAllFilters()"
+        [disabled]="loading">
+        Explore
+      </button>
+      <button class="btn btn-primary gtm-apply-filters explore-btn-sm-device" type="button" title="Apply filters"
+        (click)="applyAllFilters();showSidePanel.emit(false)"
         [disabled]="loading">
         Explore
       </button>

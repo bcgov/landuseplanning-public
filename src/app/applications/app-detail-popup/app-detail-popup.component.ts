@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { ConfigService } from 'app/services/config.service';
 
 @Component({
   selector: 'app-detail-popup',
@@ -14,19 +14,18 @@ import { ConfigService } from 'app/services/config.service';
 
 export class AppDetailPopupComponent implements OnInit, OnDestroy {
 
-  @Output() setCurrentApp = new EventEmitter(); // to applications component
-
   public id: string;
   public app: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     public applicationService: ApplicationService, // also used in template
-    public commentPeriodService: CommentPeriodService, // used in template
-    public configService: ConfigService
+    public commentPeriodService: CommentPeriodService // used in template
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     // load complete application
     this.applicationService.getById(this.id, false)
       .takeUntil(this.ngUnsubscribe)
@@ -41,13 +40,9 @@ export class AppDetailPopupComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  // show details interface and hide the other in the side panel
-  public showAppDetails() {
-    this.configService.isSidePanelVisible = true;
-    this.configService.isAppDetailsVisible = true;
-    this.configService.isExploreAppsVisible = false;
-    this.configService.isFindAppsVisible = false;
-    this.setCurrentApp.emit(this.app);
+  // show Details pane for this app
+  public showDetails() {
+    this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: { id: this.app._id }, fragment: 'details', replaceUrl: true });
   }
 
 }

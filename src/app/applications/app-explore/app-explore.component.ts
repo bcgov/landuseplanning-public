@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
@@ -15,8 +15,9 @@ import { UrlService } from 'app/services/url.service';
   templateUrl: './app-explore.component.html',
   styleUrls: ['./app-explore.component.scss']
 })
-export class AppExploreComponent implements OnDestroy {
+export class AppExploreComponent implements OnInit, OnDestroy {
   @Output() updateFilters = new EventEmitter(); // to applications component
+  @Output() showSidePanel = new EventEmitter(); // to applications component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
@@ -77,14 +78,78 @@ export class AppExploreComponent implements OnDestroy {
       });
     });
 
+    // initialize temporary filters
+    this.cpStatusKeys.forEach(key => { this._cpStatusFilters[key] = false; });
+    this.appStatusKeys.forEach(key => { this._appStatusFilters[key] = false; });
+    this.purposeKeys.forEach(key => { this._purposeFilters[key] = false; });
+    this.subpurposeKeys.forEach(key => { this._subpurposeFilters[key] = false; });
+
     // watch for URL param changes
+    // NB: this must be in constructor to get initial parameters
     this.urlService.onNavEnd$
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        // load initial and updated filters
-        this._resetAllFilters(false);
+        // get initial or updated parameters
+        const hasChanges = this._getParameters();
+
+        // notify applications component
+        if (hasChanges) {
+          // console.log('explore - has changes');
+          this.updateFilters.emit(this.getFilters());
+        }
       });
   }
+
+  private _getParameters(): boolean {
+    const cpStatuses = (this.urlService.query('cpStatuses') || '').split('|');
+    this.cpStatusKeys.forEach(key => {
+      this.cpStatusFilters[key] = cpStatuses.includes(key);
+    });
+
+    const appStatuses = (this.urlService.query('appStatuses') || '').split('|');
+    this.appStatusKeys.forEach(key => {
+      this.appStatusFilters[key] = appStatuses.includes(key);
+    });
+
+    const purposes = (this.urlService.query('purposes') || '').split('|');
+    this.purposeKeys.forEach(key => {
+      this.purposeFilters[key] = purposes.includes(key);
+    });
+
+    const subpurposes = (this.urlService.query('subpurposes') || '').split('|');
+    this.subpurposeKeys.forEach(key => {
+      this.subpurposeFilters[key] = subpurposes.includes(key);
+    });
+
+    this.publishFromFilter = this.urlService.query('publishFrom') ? moment(this.urlService.query('publishFrom')).toDate() : null;
+    this.publishToFilter = this.urlService.query('publishTo') ? moment(this.urlService.query('publishTo')).toDate() : null;
+
+    // const hasFilters = _.values(this.cpStatusFilters).find(b => b)
+    //   || _.values(this.appStatusFilters).find(b => b)
+    //   || _.values(this.purposeFilters).find(b => b)
+    //   || _.values(this.subpurposeFilters).find(b => b)
+    //   || !!this.publishFromFilter
+    //   || !!this.publishToFilter;
+
+    const hasChanges = !_.isEqual(this._cpStatusFilters, this.cpStatusFilters)
+      || !_.isEqual(this._appStatusFilters, this.appStatusFilters)
+      || !_.isEqual(this._purposeFilters, this.purposeFilters)
+      || !_.isEqual(this._subpurposeFilters, this.subpurposeFilters)
+      || !_.isEqual(this._publishFromFilter, this.publishFromFilter)
+      || !_.isEqual(this._publishToFilter, this.publishToFilter);
+
+    // copy all data from actual to temporary properties
+    this._cpStatusFilters = { ...this.cpStatusFilters };
+    this._appStatusFilters = { ...this.appStatusFilters };
+    this._purposeFilters = { ...this.purposeFilters };
+    this._subpurposeFilters = { ...this.subpurposeFilters };
+    this._publishFromFilter = this.publishFromFilter;
+    this._publishToFilter = this.publishToFilter;
+
+    return hasChanges;
+  }
+
+  public ngOnInit() { }
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -115,8 +180,8 @@ export class AppExploreComponent implements OnDestroy {
     };
   }
 
-  // apply all temporary filters
-  public applyAllFilters(doApply: boolean = true) {
+  public applyAllFilters(doNotify: boolean = true) {
+    // apply all temporary filters
     this.cpStatusFilters = { ...this._cpStatusFilters };
     this.appStatusFilters = { ...this._appStatusFilters };
     this.purposeFilters = { ...this._purposeFilters };
@@ -124,19 +189,14 @@ export class AppExploreComponent implements OnDestroy {
     this.publishFromFilter = this._publishFromFilter;
     this.publishToFilter = this._publishToFilter;
 
-    if (doApply) { this._applyAllFilters(); }
-  }
+    // save parameters
+    this._saveParameters();
 
-  private _applyAllFilters() {
     // notify applications component
-    this.updateFilters.emit(this.getFilters());
-
-    // save new filters
-    this._saveFilters();
+    if (doNotify) { this.updateFilters.emit(this.getFilters()); }
   }
 
-  // persist selected filters
-  private _saveFilters() {
+  private _saveParameters() {
     let cpStatuses: string = null;
     this.cpStatusKeys.forEach(key => {
       if (this.cpStatusFilters[key]) {
@@ -189,58 +249,10 @@ export class AppExploreComponent implements OnDestroy {
     this.urlService.save('publishTo', this.publishToFilter && moment(this.publishToFilter).format('YYYY-MM-DD'));
   }
 
-  // NOT USED AT THIS TIME
-  // // cancel the temporary filters -- just reset the values
-  // public cancelAllFilters() {
-  //   this._cpStatusFilters = { ...this.cpStatusFilters };
-  //   this._appStatusFilters = { ...this.appStatusFilters };
-  //   this._purposeFilters = this.purposeFilters;
-  //   this._subpurposeFilters = this.subpurposeFilters;
-  //   this._publishFromFilter = this.publishFromFilter;
-  //   this._publishToFilter = this.publishToFilter;
-  // }
-
-  // (re)set all filters from current URL params
-  private _resetAllFilters(doApply: boolean) {
-    const cpStatuses = (this.urlService.query('cpStatuses') || '').split('|');
-    this.cpStatusKeys.forEach(key => {
-      this.cpStatusFilters[key] = cpStatuses.includes(key);
-    });
-
-    const appStatuses = (this.urlService.query('appStatuses') || '').split('|');
-    this.appStatusKeys.forEach(key => {
-      this.appStatusFilters[key] = appStatuses.includes(key);
-    });
-
-    const purposes = (this.urlService.query('purposes') || '').split('|');
-    this.purposeKeys.forEach(key => {
-      this.purposeFilters[key] = purposes.includes(key);
-    });
-
-    const subpurposes = (this.urlService.query('subpurposes') || '').split('|');
-    this.subpurposeKeys.forEach(key => {
-      this.subpurposeFilters[key] = subpurposes.includes(key);
-    });
-
-    this.publishFromFilter = this.urlService.query('publishFrom') ? moment(this.urlService.query('publishFrom')).toDate() : null;
-    this.publishToFilter = this.urlService.query('publishTo') ? moment(this.urlService.query('publishTo')).toDate() : null;
-
-    // copy all data from actual to temporary properties
-    this._cpStatusFilters = { ...this.cpStatusFilters };
-    this._appStatusFilters = { ...this.appStatusFilters };
-    this._purposeFilters = { ...this.purposeFilters };
-    this._subpurposeFilters = { ...this.subpurposeFilters };
-    this._publishFromFilter = this.publishFromFilter;
-    this._publishToFilter = this.publishToFilter;
-
-    // if called from UI, apply new filters
-    // otherwise this was called internally (eg, init)
-    if (doApply) { this._applyAllFilters(); }
-  }
-
   // clear all temporary filters
-  public clearAllFilters() {
+  public clearAllFilters(doNotify: boolean = true) {
     if (this.filterCount() > 0) {
+      // console.log('clearing Explore filters');
       this.cpStatusKeys.forEach(key => { this._cpStatusFilters[key] = false; });
       this.appStatusKeys.forEach(key => { this._appStatusFilters[key] = false; });
       this.purposeKeys.forEach(key => { this._purposeFilters[key] = false; });
@@ -248,36 +260,19 @@ export class AppExploreComponent implements OnDestroy {
       this._publishFromFilter = null;
       this._publishToFilter = null;
 
-      this.applyAllFilters(true);
+      this.applyAllFilters(doNotify);
     }
   }
 
-  public cpStatusCount(): number {
-    return this.cpStatusKeys.filter(key => this.cpStatusFilters[key]).length;
-  }
-
-  public appStatusCount(): number {
-    return this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
-  }
-
-  public purposeFiltersCount(): number {
-    return this.purposeKeys.filter(key => this.purposeFilters[key]).length;
-  }
-
-  public subpurposeFiltersCount(): number {
-    return this.subpurposeKeys.filter(key => this.subpurposeFilters[key]).length;
-  }
-
-  public publishFilterCount(): number {
-    return (this.publishFromFilter || this.publishToFilter) ? 1 : 0;
-  }
-
+  // return count of filters
   public filterCount(): number {
-    return this.cpStatusCount()
-      + this.appStatusCount()
-      + this.purposeFiltersCount()
-      + this.subpurposeFiltersCount()
-      + this.publishFilterCount();
+    const cpStatusCount = this.cpStatusKeys.filter(key => this.cpStatusFilters[key]).length;
+    const appStatusCount = this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
+    const purposeCount = this.purposeKeys.filter(key => this.purposeFilters[key]).length;
+    const subpurposeCount = this.subpurposeKeys.filter(key => this.subpurposeFilters[key]).length;
+    const publishCount = (this.publishFromFilter || this.publishToFilter) ? 1 : 0;
+
+    return cpStatusCount + appStatusCount + purposeCount + subpurposeCount + publishCount;
   }
 
   public onLoadStart() { this.loading = true; }

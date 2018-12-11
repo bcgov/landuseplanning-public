@@ -1,29 +1,29 @@
-import { Component, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import * as moment from 'moment';
 
 import { Application } from 'app/models/application';
 import { ConfigService } from 'app/services/config.service';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { AddCommentComponent } from 'app/application/add-comment/add-comment.component';
+import { AddCommentComponent } from 'app/application/add-comment/add-comment.component'; // TODO: move this to ./applications/
 import { ApiService } from 'app/services/api';
+import { UrlService } from 'app/services/url.service';
 
 @Component({
   selector: 'app-details',
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
 })
-export class AppDetailsComponent implements OnChanges, OnDestroy {
+export class AppDetailsComponent implements OnDestroy {
 
-  @Input() appId: string;
+  @Output() setCurrentApp = new EventEmitter(); // to applications component
+  @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
   public isLoading: boolean;
-  public application: Application;
+  public application: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  public daysRemaining = '?';
   private ngbModal: NgbModalRef = null;
 
   constructor(
@@ -31,39 +31,51 @@ export class AppDetailsComponent implements OnChanges, OnDestroy {
     public configService: ConfigService,
     public applicationService: ApplicationService, // used in template
     public commentPeriodService: CommentPeriodService, // used in template
-    public api: ApiService // used in template
-  ) { }
+    public api: ApiService, // used in template
+    private urlService: UrlService
+  ) {
+    // watch for URL param changes
+    // NB: this must be in constructor to get initial parameters
+    this.urlService.onNavEnd$
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        const id = this.urlService.query('id');
+        if (!id) {
+          // nothing to display
+          this.application = null;
+        } else if (!this.application) {
+          // initial load
+          this._loadApp(id);
+        } else if (this.application._id !== id) {
+          // updated app
+          this.application = null;
+          this._loadApp(id);
+        }
+      });
+  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.application = null;
+  private _loadApp(id: string) {
+    this.isLoading = true;
+    // load entire application so we get extra data (documents, decision, features)
+    this.applicationService.getById(id, true)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        application => {
+          this.isLoading = false;
+          this.application = application;
 
-    // guard against null app ID
-    if (changes.appId.currentValue) {
-      this.isLoading = true;
-      // reload application so we get extra data (documents, decision, features)
-      this.applicationService.getById(this.appId, true)
-        .takeUntil(this.ngUnsubscribe)
-        .subscribe(
-          application => {
-            this.isLoading = false;
-            this.application = application;
+          // save parameter
+          this.urlService.save('id', this.application._id);
 
-            // get comment period days remaining
-            if (this.application.currentPeriod) {
-              const now = new Date();
-              const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-              // use moment to handle Daylight Saving Time changes
-              const days = moment(this.application.currentPeriod.endDate).diff(moment(today), 'days') + 1;
-              this.daysRemaining = days + (days === 1 ? ' day ' : ' days ');
-            }
-          },
-          error => {
-            this.isLoading = false;
-            console.log('error =', error);
-            alert('Uh-oh, couldn\'t load application');
-          }
-        );
-    }
+          // notify applications component
+          this.setCurrentApp.emit(this.application);
+        },
+        error => {
+          this.isLoading = false;
+          console.log('error =', error);
+          alert('Uh-oh, couldn\'t load application');
+        }
+      );
   }
 
   ngOnDestroy() {
@@ -72,7 +84,14 @@ export class AppDetailsComponent implements OnChanges, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  private addComment() {
+  public clearAllFilters() {
+    if (this.application) {
+      this.unsetCurrentApp.emit(this.application); // notify applications component
+      this.urlService.save('id', null);
+    }
+  }
+
+  public addComment() {
     if (this.application.currentPeriod) {
       // open modal
       this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });

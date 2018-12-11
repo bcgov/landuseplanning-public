@@ -15,13 +15,13 @@
           [(ngModel)]="_clidDtidFilter" />
       </div>
       <div class="form-btns">
-        <button class="btn btn-primary gtm-apply-filters find-btn-lg-device" type="button" title="Find"
+        <button class="btn btn-primary gtm-apply-filters find-btn-lg-device" type="button" title="Apply filters"
           (click)="applyAllFilters()"
           [disabled]="loading">
           Find
         </button>
-        <button class="btn btn-primary gtm-apply-filters find-btn-sm-device" type="button" title="Find"
-          (click)="applyAllFilters();configService.isSidePanelVisible=false"
+        <button class="btn btn-primary gtm-apply-filters find-btn-sm-device" type="button" title="Apply filters"
+          (click)="applyAllFilters();showSidePanel.emit(false)"
           [disabled]="loading">
           Find
         </button>

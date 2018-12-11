@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div class="flex-panel" *ngIf="application">
+<div class="flex-panel" *ngIf="!isLoading && application !== null">
   <div class="flex-panel__header">
     <div class="file-number">Crown Land File: {{(application && application['clFile']) || '-'}}</div>
     <div>
@@ -39,7 +39,11 @@
   <div class="flex-panel__scroll">
     <div class="app-details-info">
       <section class="commenting-info-container" *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
-        <div>This application is currently accepting comments for the next <strong>{{daysRemaining}}</strong> (closing on {{application?.currentPeriod.endDate | date:'mediumDate'}})</div>
+        <div *ngVar="application.currentPeriod['daysRemaining'] as daysRemaining">
+          This application is currently accepting comments for the next
+          <strong>{{daysRemaining === 1 ? daysRemaining + " day" : daysRemaining + " days"}}</strong>
+          (closing on {{application.currentPeriod.endDate | date:'mediumDate'}}).
+        </div>
         <button class="btn btn-primary" (click)="addComment()">Submit a Comment</button>
       </section>
       <ngb-tabset>

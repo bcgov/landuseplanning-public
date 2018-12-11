@@ -277,10 +277,19 @@ export class ApplicationService {
         promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
           .toPromise()
           .then(periods => {
-            const cp = this.commentPeriodService.getCurrent(periods); // may be null
-            application.currentPeriod = cp;
+            application.currentPeriod = this.commentPeriodService.getCurrent(periods); // may be null
+
             // comment period status code
-            application.cpStatusCode = this.commentPeriodService.getStatusCode(cp);
+            application.cpStatusCode = this.commentPeriodService.getStatusCode(application.currentPeriod);
+
+            // derive days remaining for display
+            // use moment to handle Daylight Saving Time changes
+            if (this.commentPeriodService.isOpen(application.cpStatusCode)) {
+              const now = new Date();
+              const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+              application.currentPeriod['daysRemaining']
+                = moment(application.currentPeriod.endDate).diff(moment(today), 'days') + 1; // including today
+            }
           })
         );
 

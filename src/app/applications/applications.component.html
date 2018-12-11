@@ -4,22 +4,22 @@
   <div class="side-nav">
     <ul>
       <li class="side-nav-item"
-        [ngClass]="{'active': configService.isFindAppsVisible && configService.isSidePanelVisible}">
-        <button class="btn" (click)="showFind()">
+        [ngClass]="{'active': isSidePanelVisible && isFindAppsVisible}">
+        <button class="btn" (click)="toggleFind()">
           <i class="material-icons">search</i>
           <div>Find</div>
         </button>
       </li>
       <li class="side-nav-item"
-        [ngClass]="{'active': configService.isExploreAppsVisible && configService.isSidePanelVisible}">
-        <button class="btn" (click)="showExplore()">
+        [ngClass]="{'active': isSidePanelVisible && isExploreAppsVisible}">
+        <button class="btn" (click)="toggleExplore()">
           <i class="material-icons">visibility</i>
           <div>Explore</div>
         </button>
       </li>
       <li class="side-nav-item"
-        [ngClass]="{'active': configService.isAppDetailsVisible && configService.isSidePanelVisible}">
-        <button class="btn" (click)="showDetails()">
+        [ngClass]="{'active': isSidePanelVisible && isAppDetailsVisible}">
+        <button class="btn" (click)="toggleDetails()">
           <i class="material-icons">info</i>
           <div>Details</div>
         </button>
@@ -27,35 +27,39 @@
     </ul>
   </div>
 
-  <div class="side-panel" [ngClass]="configService.isSidePanelVisible ? 'open':'closed'">
-    <button class="side-panel__close-btn btn btn-icon" (click)="configService.isSidePanelVisible=false">
+  <div class="side-panel" [ngClass]="isSidePanelVisible ? 'open':'closed'">
+    <button class="side-panel__close-btn btn btn-icon" (click)="closeSidePanel()">
       <i class="material-icons">close</i>
     </button>
     <app-details #appdetail
-      [appId]="currentAppId"
-      [hidden]="!configService.isAppDetailsVisible">
+      (setCurrentApp)="updateDetails($event, true)"
+      (unsetCurrentApp)="updateDetails($event, false)"
+      [hidden]="!isAppDetailsVisible">
     </app-details>
     <app-applist-filters #appfilters
-      (updateFilters)="updateFilters($event)"
-      [hidden]="!configService.isFindAppsVisible">
+      (updateFilters)="updateFindFilters($event)"
+      (showSidePanel)="isSidePanelVisible=$event"
+      [hidden]="!isFindAppsVisible">
     </app-applist-filters>
     <app-explore #appexplore
-      (updateFilters)="updateFilters($event)"
-      [hidden]="!configService.isExploreAppsVisible">
+      (updateFilters)="updateExploreFilters($event)"
+      (showSidePanel)="isSidePanelVisible=$event"
+      [hidden]="!isExploreAppsVisible">
     </app-explore>
   </div>
 
   <div class="main-panel">
     <app-applist-list class="app-list" style="display: none;" #applist
       [applications]="apps"
-      (setCurrentApp)="highlightApplication($event, true)"
-      (unsetCurrentApp)="highlightApplication($event, false)">
+      [isListVisible]="isApplicationsListVisible"
+      (setCurrentApp)="appmap.onHighlightApplication($event, true)"
+      (unsetCurrentApp)="appmap.onHighlightApplication($event, false)">
     </app-applist-list>
     <app-applist-map class="app-map" #appmap
       [applications]="apps"
-      (toggleCurrentApp)="toggleCurrentApp($event)"
-      (updateCoordinates)="updateCoordinates($event)"
-      (setCurrentApp)="highlightApplication($event, true)">
+      [isMapVisible]="isApplicationsMapVisible"
+      (toggleCurrentApp)="applist.toggleCurrentApp($event)"
+      (updateCoordinates)="updateCoordinates($event)">
     </app-applist-map>
   </div>
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/concat';
@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
+import { UrlService } from 'app/services/url.service';
 
 export interface FiltersType {
   cpStatuses: Array<string>;
@@ -51,7 +52,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('applist') applist;
   @ViewChild('appfilters') appfilters;
   @ViewChild('appexplore') appexplore;
-  // @ViewChild('appedetail') appdetail;
+  @ViewChild('appdetail') appdetail;
 
   // FUTURE: change this to an observable and components subscribe to changes ?
   // ref: https://github.com/escardin/angular2-community-faq/blob/master/services.md#how-do-i-communicate-between-components-using-a-shared-service
@@ -72,31 +73,41 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  public isApplicationsListVisible = false;
+  public isExploreAppsVisible = false;
+  public isFindAppsVisible = false;
+  public isApplicationsMapVisible = true;
+  public isSidePanelVisible = false;
+  public isAppDetailsVisible = false;
+
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
   private filters: FiltersType = null;
   private coordinates: string = null;
   public apps: Array<Application> = [];
   public totalNumber = 0;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  public currentAppId: string = null; // TODO: set this when list item is clicked
 
   constructor(
     public snackBar: MatSnackBar,
     private router: Router,
     private applicationService: ApplicationService,
     public configService: ConfigService, // used in template
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public urlService: UrlService // also used in template
   ) {
-    // add a class to the body tag here to limit the height of the viewport when on the Applications page
-    this.router.events
+    // watch for URL param changes
+    // NB: this must be in constructor to get initial filters
+    this.urlService.onNavEnd$
       .takeUntil(this.ngUnsubscribe)
       .subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          const currentUrlSlug = event.url.slice(1);
-          if (currentUrlSlug === 'applications') {
-            this.renderer.addClass(document.body, 'no-scroll');
-          } else {
-            this.renderer.removeClass(document.body, 'no-scroll');
+        // when we have an URL fragment, show respective pane
+        const urlTree = router.parseUrl(event.url);
+        if (urlTree && urlTree.fragment) {
+          // console.log('got fragment =', urlTree.fragment);
+          switch (urlTree.fragment) {
+            case 'details': if (!this.isAppDetailsVisible) { this.toggleDetails(true); } break;
+            case 'explore': if (!this.isExploreAppsVisible) { this.toggleExplore(true); } break;
+            case 'find': if (!this.isFindAppsVisible) { this.toggleFind(true); } break;
           }
         }
       });
@@ -135,10 +146,11 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   // - also look at takeWhile()/takeUntil() (to complete the current query)
   // - or unsubscribe?
   private getApps(getTotalNumber: boolean = true) {
-    // console.log('filters =', this.filters);
-
     // do this in another event so it's not in current change detection cycle
     setTimeout(() => {
+      // safety check // TODO: remove this when this processing becomes interruptable (see above)
+      if (this.isLoading) { return; }
+
       this.isLoading = true;
       let isFirstPage = true;
       this.snackBarRef = this.snackBar.open('Loading applications ...');
@@ -210,13 +222,46 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Event handler called when Find or Explore component updates filters.
+   * Event handler called when Find component updates its filters.
    */
-  public updateFilters(filters: FiltersType) {
-    // console.log('updateFilters, filters =', filters);
+  public updateFindFilters(filters: FiltersType) {
+    // console.log('updating find filters =', filters);
     // NB: first source is 'emptyFilters' to ensure all properties are set
     this.filters = Object.assign({}, emptyFilters, filters);
+    // clear other filters
+    this.appexplore.clearAllFilters(false);
+    this.appdetail.clearAllFilters();
     this.getApps();
+
+    // we have Find filters -- show Find pane
+    this.toggleFind(true);
+  }
+
+  /**
+   * Event handler called when Explore component updates its filters.
+   */
+  public updateExploreFilters(filters: FiltersType) {
+    // console.log('updating explore filters =', filters);
+    // NB: first source is 'emptyFilters' to ensure all properties are set
+    this.filters = Object.assign({}, emptyFilters, filters);
+    // clear other filters
+    this.appfilters.clearAllFilters(false);
+    this.appdetail.clearAllFilters();
+    this.getApps();
+
+    // we have Explore filters -- show Explore pane
+    this.toggleExplore(true);
+  }
+
+  /**
+   * Event handler called when Details component updates its current app.
+   */
+  public updateDetails(app: Application, show: boolean) {
+    // console.log('updating details, app =', app, 'show =', show);
+    this.appmap.onHighlightApplication(app, show);
+
+    // if we have details, show Details pane, else toggle it
+    this.toggleDetails(show);
   }
 
   /**
@@ -229,20 +274,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Event handler called when map component selects or unselects a marker.
-   */
-  public toggleCurrentApp(app: Application) {
-    // this.applist.toggleCurrentApp(app); // DO NOT TOGGLE LIST ITEM AT THIS TIME
-  }
-
-  /**
    * Called when list component visibility is toggled.
    */
   public toggleAppList() {
-    if (this.configService.isApplicationsListVisible) {
-      this.configService.isApplicationsListVisible = false;
+    if (this.isApplicationsListVisible) {
+      this.isApplicationsListVisible = false;
     } else {
-      this.configService.isApplicationsListVisible = true;
+      this.isApplicationsListVisible = true;
       // make list visible in next timeslice
       // to visually separate panel opening from data loading
       setTimeout(() => {
@@ -255,10 +293,10 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Called when map component visibility is toggled.
    */
   public toggleAppMap() {
-    if (this.configService.isApplicationsMapVisible) {
-      this.configService.isApplicationsMapVisible = false;
+    if (this.isApplicationsMapVisible) {
+      this.isApplicationsMapVisible = false;
     } else {
-      this.configService.isApplicationsMapVisible = true;
+      this.isApplicationsMapVisible = true;
       // make map visible in next timeslice
       // to visually separate panel opening from data loading
       setTimeout(() => {
@@ -267,64 +305,49 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Event handler called when list or map component selects or unselects an app.
-   */
-  public highlightApplication(app: Application, show: boolean) {
-    // do something on the map:
-    this.appmap.onHighlightApplication(app, show);
-
-    // do something on the detail pane:
-    if (show) {
-      this.configService.isAppDetailsVisible = true;
-      this.currentAppId = app._id;
-    } else {
-      this.configService.isAppDetailsVisible = false;
-      this.currentAppId = null;
-    }
-  }
-
   // show Application Details interface
-  public showDetails() {
-    this._clearFilters();
-
+  public toggleDetails(forceShow: boolean = false) {
+    // console.log('toggling details, force =', forceShow);
     // show side panel if it's hidden or THIS component isn't already visible
-    this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isAppDetailsVisible;
+    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isAppDetailsVisible);
 
-    this.configService.isAppDetailsVisible = true;
-    this.configService.isExploreAppsVisible = false;
-    this.configService.isFindAppsVisible = false;
+    this.isAppDetailsVisible = true;
+    this.isExploreAppsVisible = false;
+    this.isFindAppsVisible = false;
+    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #details');
+    this.urlService.setFragment(this.isSidePanelVisible ? 'details' : null);
   }
 
   // show Explore Applications interface
-  public showExplore() {
-    this._clearFilters();
-
+  public toggleExplore(forceShow: boolean = false) {
+    // console.log('toggling explore, force =', forceShow);
     // show side panel if it's hidden or THIS component isn't already visible
-    this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isExploreAppsVisible;
+    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isExploreAppsVisible);
 
-    this.configService.isAppDetailsVisible = false;
-    this.configService.isExploreAppsVisible = true;
-    this.configService.isFindAppsVisible = false;
+    this.isAppDetailsVisible = false;
+    this.isExploreAppsVisible = true;
+    this.isFindAppsVisible = false;
+    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #explore');
+    this.urlService.setFragment(this.isSidePanelVisible ? 'explore' : null);
   }
 
   // show Find Applications interface
-  public showFind() {
-    this._clearFilters();
-
+  public toggleFind(forceShow: boolean = false) {
+    // console.log('toggling find, force =', forceShow);
     // show side panel if it's hidden or THIS component isn't already visible
-    this.configService.isSidePanelVisible = !this.configService.isSidePanelVisible || !this.configService.isFindAppsVisible;
+    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isFindAppsVisible);
 
-    this.configService.isAppDetailsVisible = false;
-    this.configService.isExploreAppsVisible = false;
-    this.configService.isFindAppsVisible = true;
+    this.isAppDetailsVisible = false;
+    this.isExploreAppsVisible = false;
+    this.isFindAppsVisible = true;
+    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #find');
+    this.urlService.setFragment(this.isSidePanelVisible ? 'find' : null);
   }
 
-  private _clearFilters() {
-    // if we're hiding the explore component, clear its filters
-    if (this.configService.isExploreAppsVisible) { this.appexplore.clearAllFilters(); }
-    // if we're hiding the find component, clear its filters
-    if (this.configService.isFindAppsVisible) { this.appfilters.clearAllFilters(); }
+  public closeSidePanel() {
+    this.isSidePanelVisible = false;
+    // console.log('clearing fragment');
+    this.urlService.setFragment(null);
   }
 
 }

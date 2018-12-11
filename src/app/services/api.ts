@@ -121,6 +121,7 @@ export class ApiService {
       const dtid = this.http.head(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`)
         .map(res => parseInt(res.headers.get('x-total-count'), 10));
 
+      // return sum of counts
       return Observable.combineLatest(clid, dtid, (v1, v2) => v1 + v2);
     }
   }
@@ -169,6 +170,8 @@ export class ApiService {
       // query for both CLID and DTID
       const clid = this.get(queryString + `&cl_file=${params['clidDtid']}`);
       const dtid = this.get(queryString + `&tantalisId=${params['clidDtid']}`);
+
+      // return merged results
       return Observable.merge(clid, dtid);
     }
   }

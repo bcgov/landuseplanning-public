@@ -50,9 +50,9 @@ const markerIconLg = L.icon({
 export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() applications: Array<Application> = []; // from applications component
+  @Input() isMapVisible: Array<Application> = []; // from applications component
   @Output() toggleCurrentApp = new EventEmitter(); // to applications component
   @Output() updateCoordinates = new EventEmitter(); // to applications component
-  @Output() setCurrentApp = new EventEmitter(); // to applications component
 
   private map: L.Map = null;
   private markerList: Array<L.Marker> = []; // list of markers
@@ -287,7 +287,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     // update map only if it's visible
-    if (this.configService.isApplicationsMapVisible) {
+    if (this.isMapVisible) {
       if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
         // console.log('map: got changed apps =', changes.applications);
 
@@ -461,7 +461,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     const marker = args[1].target as L.Marker;
 
     // update selected item in app list
-    this.toggleCurrentApp.emit(app);
+    // this.toggleCurrentApp.emit(app); // DO NOT TOGGLE LIST ITEM AT THIS TIME
 
     // if there's already a popup, delete it
     let popup = marker.getPopup();
@@ -482,8 +482,6 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     const compFactory = this.resolver.resolveComponentFactory(AppDetailPopupComponent);
     const compRef = compFactory.create(this.injector);
     compRef.instance.id = app._id;
-    // emit to own handler when component emits
-    compRef.instance.setCurrentApp.subscribe(a => this.setCurrentApp.emit(a));
     this.appRef.attachView(compRef.hostView);
     compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
     const div = document.createElement('div').appendChild(compRef.location.nativeElement);

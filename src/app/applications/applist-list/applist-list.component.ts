@@ -7,6 +7,8 @@ import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 
+const LIST_PAGE_SIZE = 10;
+
 @Component({
   selector: 'app-applist-list',
   templateUrl: './applist-list.component.html',
@@ -16,6 +18,7 @@ import { ConfigService } from 'app/services/config.service';
 export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() applications: Array<Application> = []; // from applications component
+  @Input() isListVisible: Array<Application> = []; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
@@ -40,7 +43,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     // update list only if it's visible
-    if (this.configService.isApplicationsListVisible) {
+    if (this.isListVisible) {
       if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
         // console.log('list: got visible apps from map component');
         // console.log('# visible apps =', this.applications.length);
@@ -48,7 +51,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
         // start of loading is when we get a new list of apps
         // or when applications component starts data querying (see below)
         this.loading = true;
-        this.numToShow = this.configService.listPageSize; // init/reset
+        this.numToShow = LIST_PAGE_SIZE; // init/reset
         this.setLoaded();
       }
     }
@@ -59,7 +62,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
     // start of loading is when list becomes visible
     // or when applications component starts data querying (see below)
     this.loading = true;
-    this.numToShow = this.configService.listPageSize; // init/reset
+    this.numToShow = LIST_PAGE_SIZE; // init/reset
     this.setLoaded();
   }
 
@@ -105,7 +108,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public loadMore() {
-    this.numToShow += this.configService.listPageSize;
+    this.numToShow += LIST_PAGE_SIZE;
     this.setLoaded();
   }
 

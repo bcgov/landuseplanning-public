@@ -1,4 +1,5 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
@@ -12,8 +13,9 @@ import { UrlService } from 'app/services/url.service';
   styleUrls: ['./applist-filters.component.scss']
 })
 
-export class ApplistFiltersComponent implements OnDestroy {
+export class ApplistFiltersComponent implements OnInit, OnDestroy {
   @Output() updateFilters = new EventEmitter(); // to applications component
+  @Output() showSidePanel = new EventEmitter(); // to applications component
 
   public loading = true; // init
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -26,17 +28,44 @@ export class ApplistFiltersComponent implements OnDestroy {
   public _clidDtidFilter: number = null; // temporary filters for Cancel feature
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     public configService: ConfigService, // used in template
     private urlService: UrlService
   ) {
     // watch for URL param changes
+    // NB: this must be in constructor to get initial parameters
     this.urlService.onNavEnd$
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        // load initial and updated filters
-        this._resetAllFilters(false);
+        // get initial or updated parameters
+        const hasChanges = this._getParameters();
+
+        // notify applications component
+        if (hasChanges) {
+          // console.log('find - has changes');
+          this.updateFilters.emit(this.getFilters());
+        }
       });
   }
+
+  private _getParameters(): boolean {
+    this.applicantFilter = this.urlService.query('applicant');
+    this.clidDtidFilter = this.urlService.query('clidDtid') ? +this.urlService.query('clidDtid') : null;
+
+    // const hasFilters = !!this.applicantFilter || !!this.clidDtidFilter;
+
+    const hasChanges = !_.isEqual(this._applicantFilter, this.applicantFilter)
+      || !_.isEqual(this._clidDtidFilter, this.clidDtidFilter);
+
+    // copy all data from actual to temporary properties
+    this._applicantFilter = this.applicantFilter;
+    this._clidDtidFilter = this.clidDtidFilter;
+
+    return hasChanges;
+  }
+
+  public ngOnInit() { }
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -50,77 +79,46 @@ export class ApplistFiltersComponent implements OnDestroy {
     };
   }
 
-  // apply all temporary filters
-  public applyAllFilters() {
+  public applyAllFilters(doNotify: boolean = true) {
+    // apply all temporary filters
     this.applicantFilter = this._applicantFilter;
     this.clidDtidFilter = this._clidDtidFilter;
 
-    this._applyAllFilters();
-  }
+    // save parameters
+    this._saveParameters();
 
-  private _applyAllFilters() {
     // notify applications component
-    this.updateFilters.emit(this.getFilters());
-
-    // save new filters
-    this._saveFilters();
+    if (doNotify) { this.updateFilters.emit(this.getFilters()); }
   }
 
-  // persist selected filters
-  private _saveFilters() {
+  private _saveParameters() {
     this.urlService.save('applicant', this.applicantFilter && this.applicantFilter.trim());
     this.urlService.save('clidDtid', this.clidDtidFilter && this.clidDtidFilter.toString());
   }
 
-  // NOT USED AT THIS TIME
-  // // cancel the temporary filters -- just reset the values
-  // public cancelAllFilters() {
-  //   this._applicantFilter = this.applicantFilter;
-  //   this._clidDtidFilter = this.clidDtidFilter;
-  // }
-
-  // (re)sets all filters from current URL params
-  private _resetAllFilters(doApply: boolean) {
-    this.applicantFilter = this.urlService.query('applicant');
-    this.clidDtidFilter = this.urlService.query('clidDtid') ? +this.urlService.query('clidDtid') : null;
-
-    // copy all data from actual to temporary properties
-    this._applicantFilter = this.applicantFilter;
-    this._clidDtidFilter = this.clidDtidFilter;
-
-    // if called from UI, apply new filters
-    // otherwise this was called internally (eg, init)
-    if (doApply) { this._applyAllFilters(); }
-  }
-
-  //
-  // The following are to "Clear" the temporary filters.
-  //
-  public clearAllFilters() {
+  // clear all temporary filters
+  public clearAllFilters(doNotify: boolean = true) {
     if (this.filterCount() > 0) {
+      // console.log('clearing Find filters');
       this._applicantFilter = null;
       this._clidDtidFilter = null;
 
-      this.applyAllFilters();
+      this.applyAllFilters(doNotify);
     }
   }
 
-  public applicantFilterCount(): number {
-    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
-    return applicantFilter ? 1 : 0;
-  }
-
-  public clidDtidFilterCount(): number {
-    return (this.clidDtidFilter && this.clidDtidFilter.toString().length > 0) ? 1 : 0;
-  }
-
+  // return count of filters
   public filterCount(): number {
-    return this.applicantFilterCount() + this.clidDtidFilterCount();
+    const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
+    const applicantFilterCount = applicantFilter ? 1 : 0;
+    const clidDtidFilterCount = (this.clidDtidFilter && this.clidDtidFilter.toString().length > 0) ? 1 : 0;
+
+    return applicantFilterCount + clidDtidFilterCount;
   }
 
+  // show Explore pane
   public showExplore() {
-    this.configService.isExploreAppsVisible = true;
-    this.configService.isFindAppsVisible = false;
+    this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore', replaceUrl: true });
   }
 
   public onLoadStart() { this.loading = true; }
