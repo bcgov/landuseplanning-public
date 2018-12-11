@@ -6,7 +6,7 @@ import { CommentPeriodService } from './commentperiod.service';
 import { DecisionService } from './decision.service';
 import { FeatureService } from './feature.service';
 
-fdescribe('ApplicationService', () => {
+describe('ApplicationService', () => {
   let service;
   beforeEach(() => {
     TestBed.configureTestingModule({
