@@ -200,3 +200,34 @@ $side-panel-bg: #fff;
     order: 2;
   }
 }
+
+// Results Bar
+.app-results {
+  @include flex-box();
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  padding: 0.75rem 1.5rem;
+  height: 4rem;
+  background: rgba(255,255,255,0.75);
+  align-items: center;
+}
+ .app-results__count {
+  letter-spacing: -0.02rem;
+  font-size: 1rem;
+  font-weight: 600;
+   strong {
+    font-weight: 600;
+  }
+}
+ .app-results__clear {
+  margin-left: 0.8rem;
+  padding-left: 0.25rem;
+  border-left: 1px solid #ccc;
+   button {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+} 

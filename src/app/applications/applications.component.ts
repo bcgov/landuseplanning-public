@@ -350,4 +350,15 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.urlService.setFragment(null);
   }
 
+  public resetFilters(filters: FiltersType) {
+    // console.log('updateFilters, filters =', filters);
+    // NB: first source is 'emptyFilters' to ensure all properties are set
+    //this.filters = Object.assign({}, emptyFilters, filters);
+    // clear other filters
+    this.appfilters.clearAllFilters();
+    this.appexplore.clearAllFilters();
+    this.appdetail.clearAllFilters();
+    this.getApps();
+  }
+
 }

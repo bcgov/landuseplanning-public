@@ -49,6 +49,12 @@
   </div>
 
   <div class="main-panel">
+    <div class="app-results">
+      <span class="app-results__count">Found <strong>{{totalNumber}}</strong> applications</span>
+      <span class="app-results__clear" *ngIf="appfilters.filterCount() > 0 || appexplore.filterCount() > 0">
+        <button class="clear-btn btn btn-sm btn-link" (click)="resetFilters()">Clear Filters</button>
+      </span>
+    </div>
     <app-applist-list class="app-list" style="display: none;" #applist
       [applications]="apps"
       [isListVisible]="isApplicationsListVisible"
