@@ -11,16 +11,6 @@
     color: $bg-dark-link-color;
 }
 
-.clickable {
-    cursor: pointer !important;
-    color: $link-color !important;
-    
-    &:focus,
-    &:hover {
-      text-decoration: underline !important;
-    }
-}
-
 // Named Anchors
 .pg-anchor[id]:before {
     content:" ";

@@ -1,22 +1,18 @@
 <div class="flex-panel" *ngIf="!isLoading && !application">
   <div class="flex-panel__header">
-    <h3 class="title">No application selected</h3>
+    <h2 class="title">No application selected</h2>
   </div>
 </div>
 
 <div class="flex-panel" *ngIf="isLoading">
   <div class="flex-panel__header">
-    <em>Loading application details...</em>
+    <h2 class="title">Loading application details...</h2>
   </div>
 </div>
 
 <div class="flex-panel" *ngIf="!isLoading && application !== null">
   <div class="flex-panel__header">
-    <div class="file-number">Crown Land File: {{(application && application['clFile']) || '-'}}</div>
-    <div>
-      <div class="applicant-name">{{application?.client || '-'}}</div>
-      <div class="purpose">{{application?.purpose | lowercase}} - {{application?.subpurpose | lowercase}}</div>
-    </div>
+    <h2 class="title">Crown Land File: &nbsp; #{{(application && application['clFile']) || '-'}}</h2>
     <!--
     <ul class="status-container">
       <li *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
@@ -36,15 +32,24 @@
     </ul>
     -->
   </div>
+  <div class="flex-panel__header title-panel">
+    <div class="applicant-name">{{application?.client | titlecase}}</div>
+    <div class="application-purpose">{{application?.purpose | titlecase}} - {{application?.subpurpose | titlecase}}</div>
+  </div>
   <div class="flex-panel__scroll">
     <div class="app-details-info">
-      <section class="commenting-info-container" *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
-        <div *ngVar="application.currentPeriod['daysRemaining'] as daysRemaining">
-          This application is currently accepting comments for the next
-          <strong>{{daysRemaining === 1 ? daysRemaining + " day" : daysRemaining + " days"}}</strong>
-          (closing on {{application.currentPeriod.endDate | date:'mediumDate'}}).
+      <section class="commenting-info-container">
+        <div *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
+          <div *ngVar="application.currentPeriod['daysRemaining'] as daysRemaining">
+            This application is currently accepting comments for the next
+            <strong>{{daysRemaining === 1 ? daysRemaining + " day" : daysRemaining + " days"}}</strong>
+            (closing on {{application.currentPeriod.endDate | date:'mediumDate'}}).
+          </div>
+          <button class="btn btn-primary" (click)="addComment()">Submit a Comment</button>
         </div>
-        <button class="btn btn-primary" (click)="addComment()">Submit a Comment</button>
+        <div *ngIf="!commentPeriodService.isOpen(application.cpStatusCode)">
+          Commenting is closed for this application. Comments for this application were accepted from <strong>{{application.currentPeriod.startDate | date:'mediumDate'}} to {{application.currentPeriod.endDate | date:'mediumDate'}}</strong>.
+        </div>
       </section>
       <ngb-tabset>
         <ngb-tab>
@@ -53,7 +58,7 @@
           </ng-template>
           <ng-template ngbTabContent>
             <section>
-              <h4>About this application</h4>
+              <h3>About this application</h3>
               <p class="description">{{application?.description || "No description available"}}</p>
               <ul class="meta-container">
                 <li>
@@ -62,7 +67,7 @@
                 </li>
                 <li>
                   <div class="key">Applicant Name:</div>
-                  <div class="value">{{application?.client}}</div>
+                  <div class="value">{{application?.client | titlecase}}</div>
                 </li>
                 <li>
                   <div class="key">Disposition Transaction:</div>
@@ -70,7 +75,7 @@
                 </li>
                 <li>
                   <div class="key">Tenure:</div>
-                  <div class="value">{{application?.type | lowercase}} / {{application?.subtype | lowercase}}</div>
+                  <div class="value">{{application?.type | titlecase}} / {{application?.subtype | titlecase}}</div>
                 </li>
                 <li>
                   <div class="key">Purpose/Subpurpose:</div>
@@ -83,8 +88,11 @@
               </ul>
             </section>
             <section>
-              <h4>Application Documents</h4>
-              <ul class="document-list">
+              <h3>Application Documents</h3>
+              <div *ngIf="application.documents.length === 0">
+                No documents available
+              </div>
+              <ul class="document-list" *ngIf="application.documents.length > 0">
                 <li *ngFor="let document of application.documents">
                   <a [href]="api.getDocumentUrl(document)" [title]="document.displayName || ''" target="_blank">
                     <i class="material-icons md-18">
@@ -96,7 +104,7 @@
               </ul>
             </section>
             <section>
-              <h4>Application Decision</h4>
+              <h3>Application Decision</h3>
               <div *ngIf="!application.decision
                 && !applicationService.isAbandoned(application.status)
                 && !applicationService.isDecisionApproved(application.status)

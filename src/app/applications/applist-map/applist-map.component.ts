@@ -111,7 +111,9 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     return new L.DivIcon({
       html: `<div><span title="${childCount} applications near this location">${childCount}</span></div>`,
-      className: 'custom-marker' + c, iconSize: new L.Point(48, 48)
+      className: 'cluster-marker-count' + c, 
+      iconSize: new L.Point(48, 48),
+      iconAnchor: [25, 46]
     });
   }
 
@@ -221,7 +223,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     // TODO: make this work
     // this.markerClusterGroup.on('clusterclick', a=> a.layer.zoomToBounds({padding: [100, 100]}));
 
-    // add base maps layers control
+    // define baselayers
     const baseLayers = {
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
@@ -229,19 +231,23 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
+
+    // add layer control
     L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
 
     // map attribution
     L.control.attribution({ position: 'bottomright' }).addTo(this.map);
 
     // add scale control
-    L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+    //L.control.scale({ position: 'bottomleft' }).addTo(this.map);
 
     // add zoom control
     L.control.zoom({ position: 'bottomright' }).addTo(this.map);
 
     // add reset view control
     this.map.addControl(new resetViewControl());
+
+    //
 
     // load base layer
     for (const key of Object.keys(baseLayers)) {
@@ -474,7 +480,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     const popupOptions = {
       className: 'map-popup-content',
-      autoPanPaddingTopLeft: L.point(40, 250),
+      autoPanPaddingTopLeft: L.point(40, 300),
       autoPanPaddingBottomRight: L.point(40, 20)
     };
 

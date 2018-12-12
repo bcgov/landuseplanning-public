@@ -92,8 +92,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private applicationService: ApplicationService,
     public configService: ConfigService, // used in template
-    private renderer: Renderer2,
-    public urlService: UrlService // also used in template
+    public urlService: UrlService,
+    private renderer: Renderer2 // also used in template
   ) {
     // watch for URL param changes
     // NB: this must be in constructor to get initial filters
@@ -140,11 +140,27 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getApps();
   }
 
+  // prevent the snackbar from showing if we load faster than 250ms
+  // tslint:disable-next-line:member-ordering
+  private showSnackBar = _.debounce(() => {
+    this.snackBarRef = this.snackBar.open('Loading applications ...');
+  }, 250);
+
+  // Cancel showing the snackbar if we load the applications quickly
+  private hideSnackBar() {
+    this.showSnackBar.cancel();
+
+    if (this.snackBarRef) {
+      this.snackBarRef.dismiss();
+    }
+  }
+
   // FUTURE: allow user action to interrupt current data retrieval...
   // - create a new observable that emits any time we need updated data
   // - listen to that observable (ie, yield) and get data then -- with debounce/throttle to handle overlapping events
   // - also look at takeWhile()/takeUntil() (to complete the current query)
   // - or unsubscribe?
+
   private getApps(getTotalNumber: boolean = true) {
     // do this in another event so it's not in current change detection cycle
     setTimeout(() => {
@@ -153,7 +169,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.isLoading = true;
       let isFirstPage = true;
-      this.snackBarRef = this.snackBar.open('Loading applications ...');
+
+      this.showSnackBar();
 
       if (getTotalNumber) {
         // FOR FUTURE USE
@@ -183,8 +200,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
           Observable.concat(...observables)
             .takeUntil(this.ngUnsubscribe)
             .finally(() => {
-              this.snackBarRef.dismiss();
               this.isLoading = false;
+              this.hideSnackBar();
               console.log('got', this.apps.length, 'apps in', (new Date()).getTime() - start, 'ms');
             })
             .subscribe(applications => {
@@ -209,8 +226,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
           alert('Uh-oh, couldn\'t count applications');
           // applications not found --> navigate back to home
           this.router.navigate(['/']);
-          this.snackBarRef.dismiss();
           this.isLoading = false;
+          this.hideSnackBar();
         });
     });
   }
@@ -353,7 +370,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public resetFilters(filters: FiltersType) {
     // console.log('updateFilters, filters =', filters);
     // NB: first source is 'emptyFilters' to ensure all properties are set
-    //this.filters = Object.assign({}, emptyFilters, filters);
+    // this.filters = Object.assign({}, emptyFilters, filters);
     // clear other filters
     this.appfilters.clearAllFilters();
     this.appexplore.clearAllFilters();

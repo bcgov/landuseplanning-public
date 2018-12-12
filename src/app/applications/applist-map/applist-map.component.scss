@@ -1,16 +1,9 @@
 @import "~assets/styles/base/base.scss";
 
-$toggle-list-anim-duration:     0.2s;
-$popup-close-button-color:      #000;
-$popoup-close-button-hover-bg:  #eee;
 $map-control-button-bg:         #fff;
 
+#map,
 .map-container {
-  flex: 1 1;
-}
-
-#map {
-  display: block;
   position: absolute;
   top: 0;
   right: 0;
@@ -18,58 +11,15 @@ $map-control-button-bg:         #fff;
   left: 0;
 }
 
-// Map Control Customization
+// see applist-map.component.ts:_clusterCreate()
+#map {
+  .cluster-marker-count {
+    text-align: center;
+  }
+}
+
+// Leaflet Control Customization
 ::ng-deep {
-  .leaflet-container {
-    font-family: "myriad-pro", Calibri, Arial, 'sans serif';
-
-    a.leaflet-popup-close-button {
-      top: 0.5rem;
-      right: 0.5rem;
-      padding: 0.5rem 0;
-      width: 2rem;
-      height: 2rem;
-      color: $popup-close-button-color;
-      font-size: 1.5rem;
-      font-weight: normal;
-      border-radius: 0.25rem;
-      transition: all ease-out 0.2s;
-
-      &:active,
-      &:focus,
-      &:hover {
-        color: $popup-close-button-color;
-        background: $popoup-close-button-hover-bg;
-      }
-    }
-  }
-
-  .leaflet-popup {
-    margin-bottom: 60px; // Offset so we can see the marker
-  }
-  
-  .leaflet-popup-content-wrapper {
-    padding: 0;
-    border-radius: 0.2rem;
-  }
-
-  .leaflet-popup-content {
-    width: 20rem !important;
-    margin: 0;
-    overflow: hidden;
-  }
-
-  .leaflet-control-attribution {
-    padding: 0.5rem;
-    height: 4rem;
-    line-height: 0.75rem;
-    font-size: 0.75rem;
-  }
-
-  .leaflet-bottom.leaflet-left {
-    bottom: 4.25rem;
-  }
-
   .map-reset-control {
     margin-right: 12px !important;
     padding: 0;
@@ -85,58 +35,6 @@ $map-control-button-bg:         #fff;
 
     &:hover {
       background: #f4f4f4;
-    }
-  }
-}
-
-@media (min-width: 377px) {
-  ::ng-deep {
-    .leaflet-bottom.leaflet-left {
-      bottom: 3.5rem;
-    }
-
-    .leaflet-control-attribution {
-      height: 3.25rem ;
-    }
-  }
-}
-
-@media (min-width: 570px) {
-  ::ng-deep {
-    .leaflet-bottom.leaflet-left {
-      bottom: 2.75rem;
-    }
-
-    .leaflet-control-attribution {
-      height: 2.5rem;
-    }
-  }
-}
-
-@media (min-width: 1085px){
-  ::ng-deep {
-    .leaflet-bottom.leaflet-left {
-      bottom: 2rem;
-    }
-
-    .leaflet-control-attribution {
-      height: auto;
-    }
-  }
-}
-
-@media (min-width: 1175px) {
-  ::ng-deep {
-    .leaflet-bottom.leaflet-left {
-      bottom: 0;
-    }
-  }
-}
-
-@media (min-width: 1024px) {
-  ::ng-deep {
-    .leaflet-popup-content {
-      width: 24rem !important;
     }
   }
 }

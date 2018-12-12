@@ -73,22 +73,26 @@ hr {
   }
 }
 
-// Flex Panel
+// Flex panel
 .flex-panel {
   @include flex-box();
   @include flex-direction(column);
 }
 
 .flex-panel__header {
+  @include flex-box();
+  @include flex-direction(row);
   @include flex(0 0 auto);
-  padding: 1.5rem;
-  // border-bottom: 1px solid #dee2e6;
-
+  padding: 0.75rem 1.5rem;
+  height: 4rem;
+  align-items: center;
+   
   .title {
+    @include flex(1 1 auto);
     margin: 0;
     letter-spacing: -0.02rem;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 0.875rem;
+    font-weight: 700;
   }
 }
 
@@ -96,6 +100,7 @@ hr {
   @include flex(1 1 auto);
   padding: 1.5rem;
   overflow-y: auto;
+  background: $gray0;
 }
 
 .flex-panel__footer {

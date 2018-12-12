@@ -1,4 +1,4 @@
-<div class="applications-view">
+<div class="applications-view" [ngClass]="isSidePanelVisible ? 'side-panel__open':'side-panel__closed'">
   <h1 class="sr-only">Find Applications in British Columbia</h1>
 
   <div class="side-nav">
@@ -27,8 +27,8 @@
     </ul>
   </div>
 
-  <div class="side-panel" [ngClass]="isSidePanelVisible ? 'open':'closed'">
-    <button class="side-panel__close-btn btn btn-icon" (click)="closeSidePanel()">
+  <div class="side-panel">
+    <button class="close-btn btn btn-icon" (click)="closeSidePanel()">
       <i class="material-icons">close</i>
     </button>
     <app-details #appdetail
@@ -42,6 +42,7 @@
       [hidden]="!isFindAppsVisible">
     </app-applist-filters>
     <app-explore #appexplore
+      [appmap]="appmap"
       (updateFilters)="updateExploreFilters($event)"
       (showSidePanel)="isSidePanelVisible=$event"
       [hidden]="!isExploreAppsVisible">
@@ -50,7 +51,7 @@
 
   <div class="main-panel">
     <div class="app-results">
-      <span class="app-results__count">Found <strong>{{totalNumber}}</strong> applications</span>
+      <span class="app-results__count"><strong>{{totalNumber}}</strong> applications found</span>
       <span class="app-results__clear" *ngIf="appfilters.filterCount() > 0 || appexplore.filterCount() > 0">
         <button class="clear-btn btn btn-sm btn-link" (click)="resetFilters()">Clear Filters</button>
       </span>

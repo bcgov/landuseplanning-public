@@ -185,7 +185,7 @@
 
 // Icon Button
 .btn-icon {
-  min-width: 2.5rem !important;
+  width: 2rem;
   padding-top: 0.35rem;
   padding-right: 0;
   padding-bottom: 0.35rem;
@@ -205,5 +205,20 @@
   &:hover {
     color: #000;
     background: #eee;
+  }
+}
+
+// Generic close button for panels, popups, etc.
+.close-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: $gray6;
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: $gray9;
+    background: $gray1;
   }
 }

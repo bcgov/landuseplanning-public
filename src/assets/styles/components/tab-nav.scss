@@ -1,4 +1,4 @@
-$tab-border-width: 4px;
+$tab-border-width: 3px;
 
 .nav-tabs {
   width: 100%;
@@ -11,25 +11,27 @@ $tab-border-width: 4px;
 
 .nav-tabs .nav-link {
   padding: 0.4rem 1rem;
-  color: #ccc;
+  color: $gray5;
   border: none;
-  border-bottom: $tab-border-width solid #ccc;
+  border-bottom: $tab-border-width solid $gray3;
   border-radius: 0;
   background: transparent;
   letter-spacing: -0.02rem;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 700;
   transition: all ease-out 0.2s;
 }
 
+.nav-tabs .nav-link:active,
+.nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:hover {
-  border-color: #eee;
+  border-color: $gray5;
 }
 
 .nav-tabs .nav-link.active {
-  color: #007bff;
-  border-bottom-color: #007bff;
+  color: $primary0;
+  border-bottom-color: $primary0;
   background: transparent;
 }
 

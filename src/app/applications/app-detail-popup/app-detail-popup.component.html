@@ -1,10 +1,11 @@
+<div class="popup-content" *ngIf="!app">
+  Loading application details...
+</div>
+
 <div class="popup-content" *ngIf="app">
   <div class="file-number">Crown Land File: {{app['clFile'] || '-'}}</div>
-
-  <div>
-    <div class="applicant-name">{{app.client || '-'}}</div>
-    <div class="purpose">{{app.purpose | lowercase}} - {{app.subpurpose | lowercase}}</div>
-  </div>
+  <div class="applicant-name">{{app.client | titlecase}}</div>
+  <div class="purpose">{{app.purpose | titlecase}} - {{app.subpurpose | titlecase}}</div>
 
   <ul class="status-container">
     <li *ngVar="commentPeriodService.getStatusString(app.cpStatusCode) as cpStatus">

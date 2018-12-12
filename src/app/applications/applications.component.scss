@@ -2,7 +2,7 @@
 
 $toggle-list-anim-duration: 0.2s;
 $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
-$side-panel-shadow: 0.15rem 0 0.5rem rgba(0,0,0,0.25);
+$side-panel-shadow: 0.1rem 0 0.15rem rgba(0,0,0,0.25);
 
 app-applications:host {
   position: absolute;     // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
@@ -25,25 +25,27 @@ app-applications:host {
   height: 100%;
 }
 
-// Side Navigation
-$side-nav-bg: #0050a1;
+// Side navigation & panel
 $side-nav-color: #fff;
 $side-nav-item-height-sm: 4.5rem;
 $side-nav-item-width-lg: 6rem;
 $side-nav-item-height-lg: 5.5rem;
+$side-panel-width-lg: 30rem;
+$side-panel-bg: #fff;
 
 .side-nav {
   @include flex(0 0 auto);
   position: relative;
+  z-index: 1002;
   order: 0;
-  background: $side-nav-bg;
+  background: $primary4;
 }
 
 .side-nav ul {
   @include flex-box();
   margin: 0;
   padding: 0;
-  background: $side-nav-bg;
+  background: $primary4;
   list-style-type: none;
 }
 
@@ -57,7 +59,7 @@ $side-nav-item-height-lg: 5.5rem;
   width: 100%;
   height: 100%;
   color: rgba($side-nav-color, 0.6);
-  background: $side-nav-bg;
+  background: $primary4;
   border-radius: 0;
   border: none;
   text-align: center;
@@ -68,13 +70,19 @@ $side-nav-item-height-lg: 5.5rem;
     margin-bottom: 0.1rem;
     vertical-align: top;
   }
+}
 
+.side-nav-item .btn:focus,
+.side-nav-item .btn:hover {
+  color: #fff;
+  background: $primary5;
+  box-shadow: none;
 }
 
 .side-nav-item.active .btn {
   color: $side-nav-color;
   border: none;
-  background: lighten($side-nav-bg, 10%);
+  background: $primary1;
   box-shadow: none;
 }
 
@@ -96,23 +104,24 @@ $side-nav-item-height-lg: 5.5rem;
   }
 }
 
-// Side Panel
-$side-panel-width-lg: 30rem;
-$side-panel-bg: #fff;
-
+// Side panel
 .side-panel {
   position: absolute;
   top: 0;
+  left: 0;
   bottom: $side-nav-item-height-sm;
+  z-index: 1001;
   width: 100%;
   overflow-x: hidden;
+  background: $side-panel-bg;
   transform: translateX(-100%);
   transition: transform ease-out 0.2s;
-  z-index: 1002;
-  background: $side-panel-bg;
 
-  &.open {
-    transform: translateX(0);
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1001;
   }
 
   ::ng-deep {
@@ -128,24 +137,12 @@ $side-panel-bg: #fff;
 
 @media (min-width: 1024px) {
   .side-panel {
-    @include flex(0 0 auto);
-    position: relative;
     bottom: 0;
-    width: 0;
-    transform: none;
-    transition: width ease-out 0.2s;
+    width: $side-panel-width-lg;
     box-shadow: $side-panel-shadow;
-
-    &.open {
-      width: $side-panel-width-lg;
-    }
 
     ::ng-deep {
       .flex-panel {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
         left: auto;
         width: $side-panel-width-lg;
       }
@@ -153,18 +150,49 @@ $side-panel-bg: #fff;
   }
 }
 
-.side-panel__close-btn {
-  position: absolute;
-  top: 1.25rem;
-  right: 1rem;
-  z-index: 10000;
-}
-
+// Main content area
 .main-panel {
   @include flex(1 1 auto);
   position: relative;
 }
 
+// Results bar
+.app-results {
+  @include flex-box();
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  padding: 0.75rem 1.5rem;
+  height: 4rem;
+  background: rgba(255,255,255,0.75);
+  align-items: center;
+  transition: left ease-out 0.2s;
+}
+
+.app-results__count,
+.app-results__clear {
+  font-size: 0.875rem;
+}
+
+.app-results__count {
+  letter-spacing: -0.02rem;
+  color: $gray9;
+  font-weight: 700;
+}
+
+.app-results__clear {
+  margin-left: 0.8rem;
+  padding-left: 0.25rem;
+  border-left: 1px solid $gray4;
+
+  .btn {
+    font-weight: 700;
+  }
+} 
+
+// Define layout order
 @media (max-width: 1023px) {
   .applications-view {
     @include flex-flow(column nowrap);
@@ -201,33 +229,28 @@ $side-panel-bg: #fff;
   }
 }
 
-// Results Bar
-.app-results {
-  @include flex-box();
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  padding: 0.75rem 1.5rem;
-  height: 4rem;
-  background: rgba(255,255,255,0.75);
-  align-items: center;
-}
- .app-results__count {
-  letter-spacing: -0.02rem;
-  font-size: 1rem;
-  font-weight: 600;
-   strong {
-    font-weight: 600;
+// Side Panel States
+.side-panel__open {
+  .side-panel {
+    transform: translateX(0);
   }
 }
- .app-results__clear {
-  margin-left: 0.8rem;
-  padding-left: 0.25rem;
-  border-left: 1px solid #ccc;
-   button {
-    font-size: 1rem;
-    font-weight: 600;
+
+@media (min-width: 1024px) {
+  .side-panel__open {
+    .side-panel {
+      transform: translateX($side-nav-item-width-lg);
+    }
+
+    .app-results {
+      left: $side-panel-width-lg;
+    }
   }
-} 
+}
+
+::ng-deep {
+  .cdk-overlay-container {
+    bottom: 3rem;
+    height: auto;
+  }
+}

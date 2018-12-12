@@ -1,31 +1,78 @@
-#map {
-  // see applist-map.component.ts:_clusterCreate()
-  .custom-marker {
-    text-align: center;
-  }
+.leaflet-container {
+  font-family: "myriad-pro", Calibri, Arial, 'sans serif';
 
-  // Marker cluster size variants
-  // * small  = 1-9 
-  // * medium = 10-99
-  // * large  = 100+   
+  a.leaflet-popup-close-button {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem 0;
+    width: 2rem;
+    height: 2rem;
+    color: $gray6;
+    border-radius: 0.25rem;
+    font-size: 24px; // default material-icon size
+    font-weight: normal;
+    transition: all ease-out 0.2s;
 
-  .marker-cluster-small,
-  .marker-cluster-medium,
-  .marker-cluster-large {
-    background-color: transparent !important;
-    background-image: url("~assets/images/cluster-pin.svg");
-    background-size: 100%;
-    background-repeat: no-repeat;
-
-    div {
-      width: 100%;
-      height: 40px;
-      color: #fff;
-      background-color: transparent !important;
-      text-align: center;
-      line-height: 2.25rem;
-      font-size: 0.85rem;
-      font-weight: 700;
+    &:active,
+    &:focus,
+    &:hover {
+      color: $gray9;
+      background: $gray1;
     }
+  }
+}
+
+.leaflet-popup {
+  margin-bottom: 60px; // Offset so we can see the marker
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 0.2rem;
+}
+
+.leaflet-popup-content {
+  width: 20rem !important;
+  margin: 0;
+  overflow: hidden;
+}
+
+.leaflet-control-attribution {
+  padding: 0.5rem;
+  line-height: 0.75rem;
+  font-size: 0.75rem;
+}
+
+// Layer control customization
+.leaflet-control-layers {
+  //border: 10px solid red;
+}
+
+.leaflet-control-layers-toggle {
+  //background: none;
+}
+
+// Marker cluster size variants
+// * small  = 1-9 
+// * medium = 10-99
+// * large  = 100+   
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: transparent !important;
+  background-image: url("~assets/images/cluster-pin.svg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+
+  div {
+    width: 100%;
+    height: 48px;
+    color: #fff;
+    background-color: transparent !important;
+    text-align: center;
+    line-height: 2.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
   }
 }

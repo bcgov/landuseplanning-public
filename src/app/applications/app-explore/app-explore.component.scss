@@ -44,10 +44,7 @@
 }
 
 // Select Badge Groups
-$select-badge-color: #777;
-$select-badge-bg: #eee;
 $select-badge-hover-bg: #d0ebff;
-$select-badge-active-color: #000;
 $select-badge-active-border-color: #74c0fc;
 $select-badge-active-bg: #a5d8ff;
 
@@ -69,8 +66,8 @@ $select-badge-active-bg: #a5d8ff;
     padding-left: 2rem;
     border-radius: 1rem;
     border: 2px solid transparent;
-    color: $select-badge-color;
-    background: $select-badge-bg;
+    color: $gray7;
+    background: $gray2;
     font-size: 0.825rem;
     font-weight: 400;
     cursor: pointer;
@@ -86,7 +83,7 @@ $select-badge-active-bg: #a5d8ff;
     width: 34px;
     height: 100%;
     text-align: center;
-    line-height: 1.8rem;
+    line-height: 1.6rem;
     font-size: 1rem;
   }
 
@@ -101,7 +98,7 @@ $select-badge-active-bg: #a5d8ff;
   input:focus,
   input:active {
     + label {
-      color: $select-badge-active-color;
+      color: $gray9;
       border-color: $select-badge-active-border-color;
       background: $select-badge-hover-bg;
     }
@@ -109,14 +106,14 @@ $select-badge-active-bg: #a5d8ff;
 
   input:hover {
     + label {
-      color: $select-badge-active-color;
+      color: $gray9;
       background: $select-badge-hover-bg;
     }
   }
 
    input:checked {
     + label {
-      color: $select-badge-active-color;
+      color: $gray9;
       background: $select-badge-active-bg;
     }
 

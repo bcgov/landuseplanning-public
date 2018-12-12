@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
@@ -9,6 +9,7 @@ import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
+import { DateInputComponent } from 'app/date-input/date-input.component';
 
 @Component({
   selector: 'app-explore',
@@ -16,6 +17,7 @@ import { UrlService } from 'app/services/url.service';
   styleUrls: ['./app-explore.component.scss']
 })
 export class AppExploreComponent implements OnInit, OnDestroy {
+  @Input() appmap;
   @Output() updateFilters = new EventEmitter(); // to applications component
   @Output() showSidePanel = new EventEmitter(); // to applications component
 
@@ -181,6 +183,8 @@ export class AppExploreComponent implements OnInit, OnDestroy {
   }
 
   public applyAllFilters(doNotify: boolean = true) {
+    // reset to the default map extend so we have context of what results are returned
+    this.appmap.resetView();
     // apply all temporary filters
     this.cpStatusFilters = { ...this._cpStatusFilters };
     this.appStatusFilters = { ...this._appStatusFilters };
@@ -188,6 +192,7 @@ export class AppExploreComponent implements OnInit, OnDestroy {
     this.subpurposeFilters = { ...this._subpurposeFilters };
     this.publishFromFilter = this._publishFromFilter;
     this.publishToFilter = this._publishToFilter;
+
 
     // save parameters
     this._saveParameters();
