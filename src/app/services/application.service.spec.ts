@@ -13,7 +13,7 @@ import { CommentPeriod } from 'app/models/commentperiod';
 import { Decision } from 'app/models/decision';
 import { Feature } from 'app/models/feature';
 
-describe('ApplicationService', () => {
+fdescribe('ApplicationService', () => {
   let service;
   const apiServiceStub = {
     getApplication(id: string) {
@@ -310,112 +310,204 @@ describe('ApplicationService', () => {
     });
   });
 
-  describe('getStatusString()', () => {
-    it('with "AB" code it returns "Application Abandoned"', () => {
-      expect(service.getStatusString('AB')).toBe('Application Abandoned');
-    });
-
-    it('with "AC" code it returns "Application Under Review', () => {
-      expect(service.getStatusString('AC')).toBe('Application Under Review');
-    });
-
-    it('with "AL" code it returns "Decision: Allowed', () => {
-      expect(service.getStatusString('AL')).toBe('Decision: Allowed');
-    });
-
-    it('with "CA" code it returns "Application Cancelled', () => {
-      expect(service.getStatusString('CA')).toBe('Application Cancelled');
-    });
-
-    it('with "DE" code it returns "Decision Made', () => {
-      expect(service.getStatusString('DE')).toBe('Decision Made');
-    });
-
-    it('with "DI" code it returns "Decision: Not Approved', () => {
-      expect(service.getStatusString('DI')).toBe('Decision: Not Approved');
-    });
-
-    it('with "DG" code it returns "Tenure: Disposition in Good Standing', () => {
-      expect(service.getStatusString('DG')).toBe('Tenure: Disposition in Good Standing');
-    });
-
-    it('with "OA" code it returns "Decision: Offer Accepted', () => {
-      expect(service.getStatusString('OA')).toBe('Decision: Offer Accepted');
-    });
-
-    it('with "ON" code it returns "Decision: Offer Not Accepted', () => {
-      expect(service.getStatusString('ON')).toBe('Decision: Offer Not Accepted');
-    });
-
-    it('with "OF" code it returns "Decision: Offered', () => {
-      expect(service.getStatusString('OF')).toBe('Decision: Offered');
-    });
-
-    it('with "SU" code it returns "Tenure: Suspended', () => {
-      expect(service.getStatusString('SU')).toBe('Tenure: Suspended');
-    });
-
-    it('with "UN" code it returns "Unknown Application Status', () => {
-      expect(service.getStatusString('UN')).toBe('Unknown Application Status');
-    });
-
-    it('returns the code that was passed in if it is not recognized', () => {
-      expect(service.getStatusString('WOO_BOY')).toBe('WOO_BOY');
-    });
-  });
-
   describe('getStatusCode()', () => {
     it('with "ABANDONED" status it returns "AB" code', () => {
-      expect(service.getStatusCode('ABANDONED')).toBe('AB');
+      expect(service.getStatusCode('ABANDONED')).toEqual(service.ABANDONED);
     });
 
-    it('with "ACCEPTED" status it returns "AC" code', () => {
-      expect(service.getStatusCode('ACCEPTED')).toBe('AC');
+    it('with "CANCELLED" status it returns "AB" code', () => {
+      expect(service.getStatusCode('CANCELLED')).toEqual(service.ABANDONED);
     });
 
-    it('with "ALLOWED" status it returns "AL" code', () => {
-      expect(service.getStatusCode('ALLOWED')).toBe('AL');
+    it('with "OFFER NOT ACCEPTED" status it returns "AB" code', () => {
+      expect(service.getStatusCode('OFFER NOT ACCEPTED')).toEqual(service.ABANDONED);
     });
 
-    it('with "CANCELLED" status it returns "CA" code', () => {
-      expect(service.getStatusCode('CANCELLED')).toBe('CA');
+    it('with "OFFER RESCINDED" status it returns "AB" code', () => {
+      expect(service.getStatusCode('OFFER RESCINDED')).toEqual(service.ABANDONED);
     });
 
-    it('with "DISALLOWED" status it returns "DI" code', () => {
-      expect(service.getStatusCode('DISALLOWED')).toBe('DI');
+    it('with "RETURNED" status it returns "AB" code', () => {
+      expect(service.getStatusCode('RETURNED')).toEqual(service.ABANDONED);
     });
 
-    it('with "DISPOSITION IN GOOD STANDING" status it returns "DG" code', () => {
-      expect(service.getStatusCode('DISPOSITION IN GOOD STANDING')).toBe('DG');
+    it('with "REVERTED" status it returns "AB" code', () => {
+      expect(service.getStatusCode('REVERTED')).toEqual(service.ABANDONED);
     });
 
-    it('with "OFFER ACCEPTED" status it returns "OA" code', () => {
-      expect(service.getStatusCode('OFFER ACCEPTED')).toBe('OA');
+    it('with "SOLD" status it returns "AB" code', () => {
+      expect(service.getStatusCode('SOLD')).toEqual(service.ABANDONED);
     });
 
-    it('with "OFFER NOT ACCEPTED" status it returns "ON" code', () => {
-      expect(service.getStatusCode('OFFER NOT ACCEPTED')).toBe('ON');
+    it('with "SUSPENDED" status it returns "AB" code', () => {
+      expect(service.getStatusCode('SUSPENDED')).toEqual(service.ABANDONED);
     });
 
-    it('with "OFFERED" status it returns "OF" code', () => {
-      expect(service.getStatusCode('OFFERED')).toBe('OF');
+    it('with "WITHDRAWN" status it returns "AB" code', () => {
+      expect(service.getStatusCode('WITHDRAWN')).toEqual(service.ABANDONED);
     });
 
-    it('with "SUSPENDED" status it returns "SU" code', () => {
-      expect(service.getStatusCode('SUSPENDED')).toBe('SU');
+    it('with "ACCEPTED" status it returns "AUR" code', () => {
+      expect(service.getStatusCode('ACCEPTED')).toEqual(service.APPLICATION_UNDER_REVIEW);
+    });
+
+    it('with "ALLOWED" status it returns "AUR" code', () => {
+      expect(service.getStatusCode('ALLOWED')).toEqual(service.APPLICATION_UNDER_REVIEW);
+    });
+
+    it('with "PENDING" status it returns "AUR" code', () => {
+      expect(service.getStatusCode('PENDING')).toEqual(service.APPLICATION_UNDER_REVIEW);
+    });
+
+    it('with "RECEIVED" status it returns "AUR" code', () => {
+      expect(service.getStatusCode('RECEIVED')).toEqual(service.APPLICATION_UNDER_REVIEW);
+    });
+
+    it('with "OFFER ACCEPTED" status it returns "ARC" code', () => {
+      expect(service.getStatusCode('OFFER ACCEPTED')).toEqual(service.APPLICATION_REVIEW_COMPLETE);
+    });
+
+    it('with "OFFERED" status it returns "ARC" code', () => {
+      expect(service.getStatusCode('OFFERED')).toEqual(service.APPLICATION_REVIEW_COMPLETE);
+    });
+
+    it('with "ACTIVE" status it returns "DA" code', () => {
+      expect(service.getStatusCode('ACTIVE')).toEqual(service.DECISION_APPROVED);
+    });
+
+    it('with "COMPLETED" status it returns "DA" code', () => {
+      expect(service.getStatusCode('COMPLETED')).toEqual(service.DECISION_APPROVED);
+    });
+
+    it('with "DISPOSITION IN GOOD STANDING" status it returns "DA" code', () => {
+      expect(service.getStatusCode('DISPOSITION IN GOOD STANDING')).toEqual(service.DECISION_APPROVED);
+    });
+
+    it('with "EXPIRED" status it returns "DA" code', () => {
+      expect(service.getStatusCode('EXPIRED')).toEqual(service.DECISION_APPROVED);
+    });
+
+    it('with "HISTORIC" status it returns "DA" code', () => {
+      expect(service.getStatusCode('HISTORIC')).toEqual(service.DECISION_APPROVED);
+    });
+
+    it('with "DISALLOWED" status it returns "DNA" code', () => {
+      expect(service.getStatusCode('DISALLOWED')).toEqual(service.DECISION_NOT_APPROVED);
+    });
+
+    it('with "NOT USED" status it returns "UN" code', () => {
+      expect(service.getStatusCode('NOT USED')).toEqual(service.UNKNOWN);
+    });
+
+    it('with "PRE-TANTALIS" status it returns "UN" code', () => {
+      expect(service.getStatusCode('PRE-TANTALIS')).toEqual(service.UNKNOWN);
     });
 
     it('returns "UN" if no status passed', () => {
-      expect(service.getStatusCode('')).toBe('UN');
+      expect(service.getStatusCode('')).toEqual(service.UNKNOWN);
     });
 
     it('returns "UN" if the passed in status is undefined', () => {
-      const undefinedStatus = undefined;
-      expect(service.getStatusCode(undefinedStatus)).toBe('UN');
+      expect(service.getStatusCode(undefined)).toEqual(service.UNKNOWN);
     });
 
-    it('returns the status back if it is not recognized', () => {
-      expect(service.getStatusCode('WOO_BOY')).toBe('Woo Boy');
+    it('returns "UN" if the passed in status is null', () => {
+      expect(service.getStatusCode(null)).toEqual(service.UNKNOWN);
+    });
+  });
+
+  describe('getTantalisStatus()', () => {
+    it('with "AB" status it returns Abandoned codes', () => {
+      expect(service.getTantalisStatus(service.ABANDONED)).toEqual(
+        ['ABANDONED', 'CANCELLED', 'OFFER NOT ACCEPTED', 'OFFER RESCINDED', 'RETURNED', 'REVERTED', 'SOLD', 'SUSPENDED', 'WITHDRAWN']
+      );
+    });
+
+    it('with "AUR" status it returns Application Under Review codes', () => {
+      expect(service.getTantalisStatus(service.APPLICATION_UNDER_REVIEW)).toEqual(
+        ['ACCEPTED', 'ALLOWED', 'PENDING', 'RECEIVED']
+      );
+    });
+
+    it('with "ARC" status it returns Application Review Complete codes', () => {
+      expect(service.getTantalisStatus(service.APPLICATION_REVIEW_COMPLETE)).toEqual(
+        ['OFFER ACCEPTED', 'OFFERED']
+      );
+    });
+
+    it('with "DA" status it returns Decision Approved codes', () => {
+      expect(service.getTantalisStatus(service.DECISION_APPROVED)).toEqual(
+        ['ACTIVE', 'COMPLETED', 'DISPOSITION IN GOOD STANDING', 'EXPIRED', 'HISTORIC']
+      );
+    });
+
+    it('with "DNA" status it returns Decision Not Approved codes', () => {
+      expect(service.getTantalisStatus(service.DECISION_NOT_APPROVED)).toEqual(
+        ['DISALLOWED']
+      );
+    });
+  });
+
+  describe('getShortStatusString()', () => {
+    it('with "AB" code it returns "Abandoned" string', () => {
+      expect(service.getShortStatusString(service.ABANDONED)).toBe('Abandoned');
+    });
+
+    it('with "AUR" code it returns "Under Review" string', () => {
+      expect(service.getShortStatusString(service.APPLICATION_UNDER_REVIEW)).toBe('Under Review');
+    });
+
+    it('with "ARC" code it returns "Decision Pending" string', () => {
+      expect(service.getShortStatusString(service.APPLICATION_REVIEW_COMPLETE)).toBe('Decision Pending');
+    });
+
+    it('with "DA" code it returns "Approved" string', () => {
+      expect(service.getShortStatusString(service.DECISION_APPROVED)).toBe('Approved');
+    });
+
+    it('with "DNA" code it returns "Not Approved" string', () => {
+      expect(service.getShortStatusString(service.DECISION_NOT_APPROVED)).toBe('Not Approved');
+    });
+
+    it('with "UN" code it returns "Unknown" string', () => {
+      expect(service.getShortStatusString(service.UNKNOWN)).toBe('Unknown');
+    });
+  });
+
+  describe('getLongStatusString()', () => {
+    it('with "AB" code it returns "Abandoned" string', () => {
+      expect(service.getLongStatusString(service.ABANDONED)).toBe('Abandoned');
+    });
+
+    it('with "AUR" code it returns "Application Under Review" string', () => {
+      expect(service.getLongStatusString(service.APPLICATION_UNDER_REVIEW)).toBe('Application Under Review');
+    });
+
+    it('with "ARC" code it returns "Application Review Complete - Decision Pending" string', () => {
+      expect(service.getLongStatusString(service.APPLICATION_REVIEW_COMPLETE)).toBe('Application Review Complete - Decision Pending');
+    });
+
+    it('with "DA" code it returns "Decision: Approved - Tenure Issued" string', () => {
+      expect(service.getLongStatusString(service.DECISION_APPROVED)).toBe('Decision: Approved - Tenure Issued');
+    });
+
+    it('with "DNA" code it returns "Decision: Not Approved" string', () => {
+      expect(service.getLongStatusString(service.DECISION_NOT_APPROVED)).toBe('Decision: Not Approved');
+    });
+
+    it('with "UN" code it returns "Unknown status" string', () => {
+      expect(service.getLongStatusString(service.UNKNOWN)).toBe('Unknown Status');
+    });
+  });
+
+  describe('getRegionCode()', () => {
+    it('returns the two letter abbreviation in the Business Unit string', () => {
+      const businessUnit = 'SK - LAND MGMNT - SKEENA FIELD OFFICE';
+      expect(service.getRegionCode(businessUnit)).toBe('SK');
+    });
+
+    it('returns Undefined if no Business Unit is present', () => {
+      expect(service.getRegionCode()).toBeUndefined();
     });
   });
 
@@ -466,19 +558,20 @@ describe('ApplicationService', () => {
       expect(service.getRegionString('VI')).toBe('West Coast, Nanaimo');
     });
 
-    it('returns "undefined" if code is not recognized', () => {
-      expect(service.getRegionString('WUT')).toBeUndefined();
-    });
-  });
-
-  describe('getRegionCode()', () => {
-    it('returns the two letter abbreviation in the businessUnit string', () => {
-      const businessUnit = 'SK - LAND MGMNT - SKEENA FIELD OFFICE';
-      expect(service.getRegionCode(businessUnit)).toBe('SK');
+    it('returns Null if no code passed', () => {
+      expect(service.getRegionString('')).toBeNull();
     });
 
-    it('returns undefined if no businessUnit is present', () => {
-      expect(service.getRegionCode()).toBeUndefined();
+    it('returns Null if code is not recognized', () => {
+      expect(service.getRegionString('WTF')).toBeNull();
+    });
+
+    it('returns Null if code is undefined', () => {
+      expect(service.getRegionString(undefined)).toBeNull();
+    });
+
+    it('returns Null if code is null', () => {
+      expect(service.getRegionString(null)).toBeNull();
     });
   });
 });

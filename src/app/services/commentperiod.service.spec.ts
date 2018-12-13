@@ -307,27 +307,27 @@ describe('CommentPeriodService', () => {
 
       describe('when the comment period contains all required fields', () => {
         describe('when the end date is before today', () => {
-          it('returns a CLOSED status', () => {
+          it('returns a NOT OPEN status', () => {
             const commentPeriod = new CommentPeriod({
               _id: '1',
               startDate: today,
               endDate: today.setDate(today.getDate() - 3)
             });
             expect(service.getStatusCode(commentPeriod)).toEqual(
-              service.CLOSED
+              service.NOT_OPEN
             );
           });
         });
 
         describe('when the start date is after today', () => {
-          it('returns a NOT STARTED status', () => {
+          it('returns a NOT OPEN status', () => {
             const commentPeriod = new CommentPeriod({
               _id: '1',
               startDate: today.setDate(today.getDate() + 3),
               endDate: today.setDate(today.getDate() + 6)
             });
             expect(service.getStatusCode(commentPeriod)).toEqual(
-              service.NOT_STARTED
+              service.NOT_OPEN
             );
           });
         });
@@ -352,21 +352,9 @@ describe('CommentPeriodService', () => {
       service = TestBed.get(CommentPeriodService);
     });
 
-    it('returns a human readable NOT STARTED status string', () => {
-      expect(service.getStatusString(service.NOT_STARTED)).toEqual(
-        'Commenting Not Started'
-      );
-    });
-
     it('returns a human readable NOT OPEN status string', () => {
       expect(service.getStatusString(service.NOT_OPEN)).toEqual(
         'Not Open For Commenting'
-      );
-    });
-
-    it('returns a human readable CLOSED status string', () => {
-      expect(service.getStatusString(service.CLOSED)).toEqual(
-        'Commenting Closed'
       );
     });
 
