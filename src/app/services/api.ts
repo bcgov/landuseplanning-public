@@ -184,26 +184,6 @@ export class ApiService {
     const queryString = `feature?applicationId=${applicationId}&fields=${this.buildValues(fields)}`;
     return this.get(queryString);
   }
-  //
-  // Organizations
-  //
-  getOrganizations() {
-    const fields = [
-      '_addedBy',
-      'name'
-    ];
-    const queryString = 'organization?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getOrganization(id: string) {
-    const fields = [
-      '_addedBy',
-      'name'
-    ];
-    const queryString = 'organization/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
 
   //
   // Decisions
