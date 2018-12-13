@@ -1,10 +1,20 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { SearchService } from './search.service';
+import { ApiService } from './api';
 
 describe('SearchService', () => {
+  const apiServiceSpy = jasmine.createSpyObj('ApiService', [
+    'getClientsInfoByDispositionId',
+    'getBCGWCrownLands',
+    'getBCGWDispositionTransactionId'
+  ]);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SearchService]
+      providers: [
+        SearchService,
+        { provide: ApiService, useValue: apiServiceSpy }
+      ]
     });
   });
 

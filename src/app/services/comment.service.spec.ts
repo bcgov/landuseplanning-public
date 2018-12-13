@@ -9,7 +9,7 @@ import { CommentPeriodService } from './commentperiod.service';
 import { DocumentService } from './document.service';
 import { Document } from 'app/models/document';
 
-fdescribe('CommentService', () => {
+describe('CommentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

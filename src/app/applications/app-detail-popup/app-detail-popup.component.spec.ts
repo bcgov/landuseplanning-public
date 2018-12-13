@@ -6,27 +6,25 @@ import { VarDirective } from 'app/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { Application } from 'app/models/application';
 
-xdescribe('AppDetailPopupComponent', () => {
+describe('AppDetailPopupComponent', () => {
   let component: AppDetailPopupComponent;
   let fixture: ComponentFixture<AppDetailPopupComponent>;
+  const application = new Application({_id: 'BBBB', appStatus: 'Application Under Review'});
   const stubApplicationService = {
-    getStatusCode() {
-      return 'AC';
-    },
-
-    isAccepted() {
-      return true;
-    },
-
+    getStatusCode() { return 'AC'; },
+    isAccepted() { return true; },
     isDispGoodStanding() { return false; },
-
     isOffered() { return true; },
     isOfferAccepted() { return true; },
+    isOfferNotAccepted() { return false; },
     isAbandoned() { return false; },
+    isAllowed() { return false; },
     isDisallowed() { return false; },
     isSuspended() { return false; },
     isUnknown() { return false; },
+    isCancelled() { return false; }
   };
 
   const stubCommentPeriodService = {
@@ -53,6 +51,7 @@ xdescribe('AppDetailPopupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AppDetailPopupComponent);
     component = fixture.componentInstance;
+    component.app = application;
     fixture.detectChanges();
   });
 
