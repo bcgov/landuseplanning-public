@@ -73,6 +73,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // prevent the snackbar from showing if we load faster than 250ms
+  // tslint:disable-next-line:member-ordering
+  private showSnackBar = _.debounce(() => {
+    this.snackBarRef = this.snackBar.open('Loading applications ...');
+  }, 250);
+
   public isApplicationsListVisible = false;
   public isExploreAppsVisible = false;
   public isFindAppsVisible = false;
@@ -113,6 +119,15 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  // cancel showing the snackbar if we load the applications quickly
+  private hideSnackBar() {
+    this.showSnackBar.cancel();
+
+    if (this.snackBarRef) {
+      this.snackBarRef.dismiss();
+    }
+  }
+
   ngOnInit() {
     this.renderer.addClass(document.body, 'no-scroll');
 
@@ -138,21 +153,6 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // load initial apps
     this.getApps();
-  }
-
-  // prevent the snackbar from showing if we load faster than 250ms
-  // tslint:disable-next-line:member-ordering
-  private showSnackBar = _.debounce(() => {
-    this.snackBarRef = this.snackBar.open('Loading applications ...');
-  }, 250);
-
-  // Cancel showing the snackbar if we load the applications quickly
-  private hideSnackBar() {
-    this.showSnackBar.cancel();
-
-    if (this.snackBarRef) {
-      this.snackBarRef.dismiss();
-    }
   }
 
   // FUTURE: allow user action to interrupt current data retrieval...

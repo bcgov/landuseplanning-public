@@ -111,7 +111,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     return new L.DivIcon({
       html: `<div><span title="${childCount} applications near this location">${childCount}</span></div>`,
-      className: 'cluster-marker-count' + c, 
+      className: 'cluster-marker-count' + c,
       iconSize: new L.Point(48, 48),
       iconAnchor: [25, 46]
     });
@@ -239,7 +239,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     L.control.attribution({ position: 'bottomright' }).addTo(this.map);
 
     // add scale control
-    //L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+    // L.control.scale({ position: 'bottomleft' }).addTo(this.map);
 
     // add zoom control
     L.control.zoom({ position: 'bottomright' }).addTo(this.map);

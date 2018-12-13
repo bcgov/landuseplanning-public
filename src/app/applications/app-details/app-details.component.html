@@ -87,6 +87,7 @@
                 </li>
               </ul>
             </section>
+
             <section>
               <h3>Application Documents</h3>
               <div *ngIf="application.documents.length === 0">
@@ -103,27 +104,39 @@
                 </li>
               </ul>
             </section>
+
             <section>
               <h3>Application Decision</h3>
-              <div *ngIf="!application.decision
-                && !applicationService.isAbandoned(application.status)
-                && !applicationService.isDecisionApproved(application.status)
-                && !applicationService.isDecisionNotApproved(application.status)">
-                No decisions have been made for this application at this time.
+              <!-- NB: decision object and decision status are independent -->
+              <div *ngIf="application.decision">
+                <ul class="document-list">
+                  <div *ngIf="application.decision.documents.length === 0">
+                    No documents available
+                  </div>
+                  <li *ngFor="let document of application.decision.documents">
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                      <i class="material-icons md-18">
+                        insert_drive_file
+                      </i>
+                      <span>{{document.documentFileName}}</span>
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <ul class="document-list" *ngIf="application.decision">
-                <li *ngFor="let document of application.decision.documents">
-                  <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                    <i class="material-icons md-18">
-                      insert_drive_file
-                    </i>
-                    <span>{{document.documentFileName}}</span>
-                  </a>
-                </li>
-              </ul>
+              <div *ngIf="!application.decision">
+                <div *ngIf="applicationService.isAbandoned(application.status)
+                || applicationService.isDecisionApproved(application.status)
+                || applicationService.isDecisionNotApproved(application.status); else notDecisionStatus">
+                  No decision documents are available at this time. Please check back for updates to this information.
+                </div>
+                <ng-template #notDecisionStatus>
+                  No decisions have been made for this application at this time.
+                </ng-template>
+              </div>
             </section>
           </ng-template>
         </ngb-tab>
+
         <ngb-tab>
           <ng-template ngbTabTitle>
             Shape Information
