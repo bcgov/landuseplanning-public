@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 
 // modules
 import { SharedModule } from 'app/shared.module';
-import { ApplicationRoutingModule } from './application-routing.module';
+// import { ApplicationRoutingModule } from './application-routing.module';
 
 // components
 import { ApplicationComponent } from './application.component';
@@ -26,7 +26,7 @@ import { FileUploadComponent } from 'app/file-upload/file-upload.component';
     NgxPaginationModule,
     RouterModule,
     SharedModule,
-    ApplicationRoutingModule
+    // ApplicationRoutingModule
   ],
   declarations: [
     ApplicationComponent,

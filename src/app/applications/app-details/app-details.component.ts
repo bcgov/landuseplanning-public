@@ -72,6 +72,7 @@ export class AppDetailsComponent implements OnDestroy {
         },
         error => {
           this.isLoading = false;
+          this.clearAllFilters(); // in case id not found
           console.log('error =', error);
           alert('Uh-oh, couldn\'t load application');
         }

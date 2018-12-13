@@ -18,6 +18,7 @@ import { AppRoutingModule } from 'app/app-routing.module';
 
 // components
 import { AppComponent } from 'app/app.component';
+import { AppProxyComponent } from 'app/app-proxy.component';
 import { HomeComponent } from 'app/home/home.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { HeaderComponent } from 'app/header/header.component';
@@ -52,6 +53,7 @@ import { UrlService } from 'app/services/url.service';
   ],
   declarations: [
     AppComponent,
+    AppProxyComponent,
     HomeComponent,
     ContactComponent,
     HeaderComponent,
