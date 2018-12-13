@@ -67,7 +67,7 @@ export class CommentPeriodService {
       .catch(this.api.handleError);
   }
 
-  // returns first period - multiple comment periods are currently not suported
+  // returns first period - multiple comment periods are currently not supported
   getCurrent(periods: CommentPeriod[]): CommentPeriod {
     return (periods.length > 0) ? periods[0] : null;
   }
