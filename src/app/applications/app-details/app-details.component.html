@@ -13,28 +13,27 @@
 <div class="flex-panel" *ngIf="!isLoading && application !== null">
   <div class="flex-panel__header">
     <h2 class="title">Crown Land File: &nbsp; #{{(application && application['clFile']) || '-'}}</h2>
-    <!--
-    <ul class="status-container">
-      <li *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
-        <i class="material-icons" title="{{application?.cpStatus}}">
-          {{commentPeriodService.isOpen(application.cpStatusCode) ? 'comment' : 'highlight_off'}}
-        </i><span>{{commentPeriodService.getStatusString(application.cpStatusCode)}}</span>
-      </li>
-      <li *ngVar="applicationService.getStatusCode(application?.status) as appStatusCode">
-        <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isAbandoned(appStatusCode)">block</i>
-        <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isApplicationUnderReview(appStatusCode)">access_time</i>
-        <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isApplicationReviewComplete(appStatusCode)">error_outline</i>
-        <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isDecisionApproved(appStatusCode)">check</i>
-        <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isDecisionNotApproved(appStatusCode)">clear</i>
-        <i class="material-icons" title="{{application?.appStatus}}" *ngIf="applicationService.isUnknown(appStatusCode)">warning</i>
-        <span>{{application?.appStatus}}</span>
-      </li>
-    </ul>
-    -->
   </div>
   <div class="flex-panel__header title-panel">
     <div class="applicant-name">{{application?.client | titlecase}}</div>
     <div class="application-purpose">{{application?.purpose | titlecase}} - {{application?.subpurpose | titlecase}}</div>
+    <ul class="status-container">
+      <li class="app-status" 
+        *ngVar="applicationService.getStatusCode(application?.status) as appStatusCode"
+        [ngClass]="{
+          'abandoned':        applicationService.isAbandoned(appStatusCode),
+          'under-review':     applicationService.isApplicationUnderReview(appStatusCode),
+          'review-complete':  applicationService.isApplicationReviewComplete(appStatusCode),
+          'approved':         applicationService.isDecisionApproved(appStatusCode),
+          'not-approved':     applicationService.isDecisionNotApproved(appStatusCode),
+          'unknown':          applicationService.isUnknown(appStatusCode)
+        }">{{application?.appStatus}}
+      </li>
+      <li class="commenting-status" 
+        [ngClass]="commentPeriodService.isOpen(application.cpStatusCode) ? 'commenting-open':'commenting-closed'">
+        {{commentPeriodService.getStatusString(application.cpStatusCode)}}
+      </li>
+    </ul>
   </div>
   <div class="flex-panel__scroll">
     <div class="app-details-info">

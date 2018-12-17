@@ -32,9 +32,10 @@
 }
 
 .leaflet-popup-content {
-  width: 20rem !important;
   margin: 0;
+  width: 20rem !important;
   overflow: hidden;
+  line-height: 1.5;
 }
 
 .leaflet-control-attribution {

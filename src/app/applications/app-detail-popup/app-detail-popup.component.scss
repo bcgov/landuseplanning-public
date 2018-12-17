@@ -22,53 +22,74 @@ $popup-title-bg: #003366;
 
 // Title Section Contents
 .file-number {
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.75rem;
+}
+
+.applicant-name,
+.purpose {
+  line-height: 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .applicant-name {
-  line-height: 1.25rem;
-  font-size: 1.15rem; // 18px
-  font-weight: 600;
+  color: $gray9;
 }
 
 .purpose {
-  color: #999;
-  line-height: 1.25rem;
+  color: $gray5;
   text-transform: capitalize;
-  font-size: 1.15rem;
-  font-weight: 600;
 }
 
 // Status 
 .status-container {
-  margin-top: 0.8em;
+  margin-top: 0.8rem;
   margin-bottom: 0;
   padding: 0;
-  font-size: 0.875rem;
+  overflow: hidden;
 
   li {
-    @include flex-box();
-    align-items: center;
+    padding-left: 1.55rem;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-weight: 400;
+    font-size: 0.75rem;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 18px;
   }
 
   li + li {
-    margin-top: 0.2rem;
+    margin-top: 0.3rem;
   }
+}
 
-  i {
-    @include flex(0 0 auto);
-    margin-right: 0.2rem;
-    font-size: 21px;
-  }
+// Status Iconography 
+.commenting-open {
+  background: url("~assets/images/baseline-insert_comment-24px.svg");
+}
 
-  span {
-    @include flex(1 1 auto);
-  }
+.commenting-closed {
+  background: url("~assets/images/baseline-cancel-24px.svg");
+}
+
+.under-review {
+  background: url("~assets/images/baseline-access_time-24px.svg");
+}
+
+.review-complete,
+.unknown {
+  background: url("~assets/images/outline-info-24px.svg");
+}
+
+.approved {
+  background: url("~assets/images/baseline-check-24px.svg");
+}
+
+.abandoned,
+.not-approved {
+  background: url("~assets/images/baseline-cancel-24px.svg");
 }
 
 .meta-container {
@@ -123,6 +144,6 @@ hr {
 .app-link {
   margin-top: 1rem;
   width: 100%;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
