@@ -253,4 +253,14 @@ $side-panel-bg: #fff;
     bottom: 3rem;
     height: auto;
   }
+
+  // Splash Modal Sizing
+  .splash-modal {
+    .modal-dialog {
+      padding-right: 0.5rem;
+      padding-left: 0.5rem;
+      max-width: 900px;
+      background: transparent;
+    }
+  }
 }

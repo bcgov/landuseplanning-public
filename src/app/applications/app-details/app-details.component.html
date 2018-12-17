@@ -1,16 +1,16 @@
-<div class="flex-panel" *ngIf="!isLoading && !application">
+<div class="flex-panel" *ngIf="!isAppLoading && !application">
   <div class="flex-panel__header">
     <h2 class="title">No application selected</h2>
   </div>
 </div>
 
-<div class="flex-panel" *ngIf="isLoading">
+<div class="flex-panel" *ngIf="isAppLoading">
   <div class="flex-panel__header">
     <h2 class="title">Loading application details...</h2>
   </div>
 </div>
 
-<div class="flex-panel" *ngIf="!isLoading && application !== null">
+<div class="flex-panel" *ngIf="!isAppLoading && application !== null">
   <div class="flex-panel__header">
     <h2 class="title">Crown Land File: &nbsp; #{{(application && application['clFile']) || '-'}}</h2>
   </div>

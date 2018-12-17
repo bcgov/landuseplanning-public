@@ -12,7 +12,6 @@ import { CookieService } from 'ngx-cookie-service';
 
 // modules
 import { SharedModule } from 'app/shared.module';
-import { ApplicationModule } from 'app/application/application.module';
 import { ApplicationsModule } from 'app/applications/applications.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 
@@ -47,7 +46,6 @@ import { UrlService } from 'app/services/url.service';
     Ng2PageScrollModule.forRoot(),
     BootstrapModalModule,
     SharedModule,
-    ApplicationModule,
     ApplicationsModule,
     AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
   ],

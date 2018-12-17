@@ -49,6 +49,7 @@ const markerIconLg = L.icon({
 
 export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
+  @Input() isLoading: boolean; // from applications component
   @Input() applications: Array<Application> = []; // from applications component
   @Input() isMapVisible: Array<Application> = []; // from applications component
   @Output() toggleCurrentApp = new EventEmitter(); // to applications component
@@ -330,7 +331,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
   /**
    * Resets map view.
    */
-  private resetView() {
+  public resetView() {
     // console.log('resetting view');
     this.fitBounds(); // default bounds
 
@@ -522,9 +523,5 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
   }
-
-  public onLoadStart() { }
-
-  public onLoadEnd() { }
 
 }

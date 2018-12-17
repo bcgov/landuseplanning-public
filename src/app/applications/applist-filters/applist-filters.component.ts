@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -14,10 +14,11 @@ import { UrlService } from 'app/services/url.service';
 })
 
 export class ApplistFiltersComponent implements OnInit, OnDestroy {
+
+  @Input() isLoading = true; // from applications component
   @Output() updateFilters = new EventEmitter(); // to applications component
   @Output() showSidePanel = new EventEmitter(); // to applications component
 
-  public loading = true; // init
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   // search keys for text boxes
@@ -44,6 +45,9 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
         // notify applications component
         if (hasChanges) {
           // console.log('find - has changes');
+          // don't show splash modal
+          // since there are parameters, assume the user knows what they're doing
+          this.configService.showSplashModal = false;
           this.updateFilters.emit(this.getFilters());
         }
       });
@@ -121,7 +125,4 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore', replaceUrl: true });
   }
 
-  public onLoadStart() { this.loading = true; }
-
-  public onLoadEnd() { this.loading = false; }
 }

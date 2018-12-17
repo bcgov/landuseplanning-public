@@ -32,16 +32,19 @@
       <i class="material-icons">close</i>
     </button>
     <app-details #appdetail
+      [isLoading]="isLoading"
       (setCurrentApp)="updateDetails($event, true)"
       (unsetCurrentApp)="updateDetails($event, false)"
       [hidden]="!isAppDetailsVisible">
     </app-details>
     <app-applist-filters #appfilters
+      [isLoading]="isLoading"
       (updateFilters)="updateFindFilters($event)"
       (showSidePanel)="isSidePanelVisible=$event"
       [hidden]="!isFindAppsVisible">
     </app-applist-filters>
     <app-explore #appexplore
+      [isLoading]="isLoading"
       [appmap]="appmap"
       (updateFilters)="updateExploreFilters($event)"
       (showSidePanel)="isSidePanelVisible=$event"
@@ -57,12 +60,14 @@
       </span>
     </div>
     <app-applist-list class="app-list" style="display: none;" #applist
+      [isLoading]="isLoading"
       [applications]="apps"
       [isListVisible]="isApplicationsListVisible"
       (setCurrentApp)="appmap.onHighlightApplication($event, true)"
       (unsetCurrentApp)="appmap.onHighlightApplication($event, false)">
     </app-applist-list>
     <app-applist-map class="app-map" #appmap
+      [isLoading]="isLoading"
       [applications]="apps"
       [isMapVisible]="isApplicationsMapVisible"
       (toggleCurrentApp)="applist.toggleCurrentApp($event)"

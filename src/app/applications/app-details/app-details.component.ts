@@ -1,13 +1,13 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
+import { AddCommentComponent } from '../add-comment/add-comment.component';
 import { Application } from 'app/models/application';
 import { ConfigService } from 'app/services/config.service';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { AddCommentComponent } from 'app/application/add-comment/add-comment.component'; // TODO: move this to ./applications/
 import { ApiService } from 'app/services/api';
 import { UrlService } from 'app/services/url.service';
 
@@ -18,10 +18,11 @@ import { UrlService } from 'app/services/url.service';
 })
 export class AppDetailsComponent implements OnDestroy {
 
+  @Input() isLoading: boolean; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
-  public isLoading: boolean;
+  public isAppLoading: boolean;
   public application: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private ngbModal: NgbModalRef = null;
@@ -44,6 +45,9 @@ export class AppDetailsComponent implements OnDestroy {
           // nothing to display
           this.application = null;
         } else if (!this.application) {
+          // don't show splash modal
+          // since there are parameters, assume the user knows what they're doing
+          this.configService.showSplashModal = false;
           // initial load
           this._loadApp(id);
         } else if (this.application._id !== id) {
@@ -55,13 +59,13 @@ export class AppDetailsComponent implements OnDestroy {
   }
 
   private _loadApp(id: string) {
-    this.isLoading = true;
+    this.isAppLoading = true;
     // load entire application so we get extra data (documents, decision, features)
     this.applicationService.getById(id, true)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         application => {
-          this.isLoading = false;
+          this.isAppLoading = false;
           this.application = application;
 
           // save parameter
@@ -71,7 +75,7 @@ export class AppDetailsComponent implements OnDestroy {
           this.setCurrentApp.emit(this.application);
         },
         error => {
-          this.isLoading = false;
+          this.isAppLoading = false;
           this.clearAllFilters(); // in case id not found
           console.log('error =', error);
           alert('Uh-oh, couldn\'t load application');

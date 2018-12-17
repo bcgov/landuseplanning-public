@@ -3,13 +3,13 @@
     <div class="app-list__body">
   
       <!-- Initial Loading Indicator -->
-      <div class="spinner-container" *ngIf="loading">
+      <div class="spinner-container" *ngIf="isListLoading">
         <div class="spinner spinner-sm rotating"></div>
         <span class="spinner__msg">Loading applications...</span>
       </div>
   
       <!-- No Results -->
-      <div class="no-results" *ngIf="!loading && loadedApps().length === 0">
+      <div class="no-results" *ngIf="!isListLoading && loadedApps().length === 0">
         <strong>No applications found</strong>
       </div>
   
@@ -75,9 +75,9 @@
   
         <!-- Load More -->
         <div class="load-more" *ngIf="loadedApps().length > 0 && loadedApps().length < applications.length">
-          <button class="btn btn-primary" type="button" title="Load more applications" (click)="loadMore();$event.stopPropagation()" [disabled]="loading">
-            <i class="spinner rotating" [hidden]="!loading"></i>
-            <span>{{loading ? 'Loading...':'Load More'}}</span>
+          <button class="btn btn-primary" type="button" title="Load more applications" (click)="loadMore();$event.stopPropagation()" [disabled]="isListLoading">
+            <i class="spinner rotating" [hidden]="!isListLoading"></i>
+            <span>{{isListLoading ? 'Loading...':'Load More'}}</span>
           </button>
         </div>
   

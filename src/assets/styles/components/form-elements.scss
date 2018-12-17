@@ -63,6 +63,9 @@ input {
   &[type="text"],
   &[type="email"],
   &[type="number"] {
+    height: 2.5rem;
+    box-shadow: 0.1rem 0.1rem 0.2rem inset $gray2;
+
     @include placeholder {
       color: $fc-placeholder-color;
     }

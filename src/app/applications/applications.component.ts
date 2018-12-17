@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +10,12 @@ import 'rxjs/add/operator/finally';
 import * as L from 'leaflet';
 import * as _ from 'lodash';
 
+import { ApplistMapComponent } from './applist-map/applist-map.component';
+import { ApplistListComponent } from './applist-list/applist-list.component';
+import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
+import { AppExploreComponent } from './app-explore/app-explore.component';
+import { AppDetailsComponent } from './app-details/app-details.component';
+import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
@@ -48,30 +55,11 @@ const PAGE_SIZE = 250;
 
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('appmap') appmap;
-  @ViewChild('applist') applist;
-  @ViewChild('appfilters') appfilters;
-  @ViewChild('appexplore') appexplore;
-  @ViewChild('appdetail') appdetail;
-
-  // FUTURE: change this to an observable and components subscribe to changes ?
-  // ref: https://github.com/escardin/angular2-community-faq/blob/master/services.md#how-do-i-communicate-between-components-using-a-shared-service
-  // ref: https://stackoverflow.com/questions/34700438/global-events-in-angular
-  private _loading = false;
-  set isLoading(val: boolean) {
-    this._loading = val;
-    if (val) {
-      this.appmap.onLoadStart();
-      this.applist.onLoadStart();
-      this.appfilters.onLoadStart();
-      this.appexplore.onLoadStart();
-    } else {
-      this.appmap.onLoadEnd();
-      this.applist.onLoadEnd();
-      this.appfilters.onLoadEnd();
-      this.appexplore.onLoadEnd();
-    }
-  }
+  @ViewChild('appmap') appmap: ApplistMapComponent;
+  @ViewChild('applist') applist: ApplistListComponent;
+  @ViewChild('appfilters') appfilters: ApplistFiltersComponent;
+  @ViewChild('appexplore') appexplore: AppExploreComponent;
+  @ViewChild('appdetail') appdetail: AppDetailsComponent;
 
   // prevent the snackbar from showing if we load faster than 250ms
   // tslint:disable-next-line:member-ordering
@@ -86,6 +74,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public isSidePanelVisible = false;
   public isAppDetailsVisible = false;
 
+  public isLoading = false; // initial value
+  private ngbModal: NgbModalRef = null;
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
   private filters: FiltersType = null;
   private coordinates: string = null;
@@ -95,6 +85,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     public snackBar: MatSnackBar,
+    private modalService: NgbModal,
     private router: Router,
     private applicationService: ApplicationService,
     public configService: ConfigService, // used in template
@@ -110,10 +101,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         const urlTree = router.parseUrl(event.url);
         if (urlTree && urlTree.fragment) {
           // console.log('got fragment =', urlTree.fragment);
-          switch (urlTree.fragment) {
-            case 'details': if (!this.isAppDetailsVisible) { this.toggleDetails(true); } break;
-            case 'explore': if (!this.isExploreAppsVisible) { this.toggleExplore(true); } break;
-            case 'find': if (!this.isFindAppsVisible) { this.toggleFind(true); } break;
+          // only show panels if splash modal is not displayed
+          if (!this.configService.showSplashModal) {
+            switch (urlTree.fragment) {
+              case 'details': if (!this.isAppDetailsVisible) { this.toggleDetails(true); } break;
+              case 'explore': if (!this.isExploreAppsVisible) { this.toggleExplore(true); } break;
+              case 'find': if (!this.isFindAppsVisible) { this.toggleFind(true); } break;
+            }
           }
         }
       });
@@ -139,6 +133,15 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     const applist_filters = <HTMLElement>document.getElementById('applist-filters');
     L.DomEvent.disableClickPropagation(applist_filters);
     L.DomEvent.disableScrollPropagation(applist_filters);
+
+    // show splash modal (unless sub-components have already turned off this flag)
+    if (this.configService.showSplashModal) {
+      // do this in another event so it's not in current change detection cycle
+      setTimeout(() => {
+        this.ngbModal = this.modalService.open(SplashModalComponent, { backdrop: 'static', windowClass: 'splash-modal' });
+        this.configService.showSplashModal = false;
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -233,6 +236,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.ngbModal) { this.ngbModal.dismiss('component destroyed'); }
     this.renderer.removeClass(document.body, 'no-scroll');
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -251,7 +255,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getApps();
 
     // we have Find filters -- show Find pane
-    this.toggleFind(true);
+    // this.toggleFind(true); // DON'T SHOW FIND PANE AUTOMATICALLY
   }
 
   /**
@@ -267,7 +271,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getApps();
 
     // we have Explore filters -- show Explore pane
-    this.toggleExplore(true);
+    // this.toggleExplore(true); // DON'T SHOW EXPLORE PANE AUTOMATICALLY
   }
 
   /**

@@ -4,12 +4,12 @@ import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import { ApplistMapComponent } from '../applist-map/applist-map.component';
 import { Constants } from 'app/utils/constants';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
-import { DateInputComponent } from 'app/date-input/date-input.component';
 
 @Component({
   selector: 'app-explore',
@@ -17,14 +17,15 @@ import { DateInputComponent } from 'app/date-input/date-input.component';
   styleUrls: ['./app-explore.component.scss']
 })
 export class AppExploreComponent implements OnInit, OnDestroy {
-  @Input() appmap;
+
+  @Input() isLoading = true; // from applications component
+  @Input() appmap: ApplistMapComponent;
   @Output() updateFilters = new EventEmitter(); // to applications component
   @Output() showSidePanel = new EventEmitter(); // to applications component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
 
-  public loading = true; // init
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   // search keys for lists
@@ -96,6 +97,9 @@ export class AppExploreComponent implements OnInit, OnDestroy {
 
         // notify applications component
         if (hasChanges) {
+          // don't show splash modal
+          // since there are parameters, assume the user knows what they're doing
+          this.configService.showSplashModal = false;
           // console.log('explore - has changes');
           this.updateFilters.emit(this.getFilters());
         }
@@ -280,7 +284,4 @@ export class AppExploreComponent implements OnInit, OnDestroy {
     return cpStatusCount + appStatusCount + purposeCount + subpurposeCount + publishCount;
   }
 
-  public onLoadStart() { this.loading = true; }
-
-  public onLoadEnd() { this.loading = false; }
 }

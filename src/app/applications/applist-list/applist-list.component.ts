@@ -17,13 +17,14 @@ const LIST_PAGE_SIZE = 10;
 
 export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
 
+  @Input() isLoading: boolean; // from applications component
   @Input() applications: Array<Application> = []; // from applications component
   @Input() isListVisible: Array<Application> = []; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
   private currentApp: Application = null; // for selecting app in list
-  public loading = true; // init
+  public isListLoading = true; // initial value
   private numToShow = 0;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -44,13 +45,20 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnChanges(changes: SimpleChanges) {
     // update list only if it's visible
     if (this.isListVisible) {
+      if (changes.isLoading && changes.isLoading.currentValue) {
+        // start of loading is when applications component starts data querying
+        // or when we get a new list of apps (see above)
+        // NB: end of loading is set below
+        this.isListLoading = true;
+      }
+
       if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
         // console.log('list: got visible apps from map component');
         // console.log('# visible apps =', this.applications.length);
 
         // start of loading is when we get a new list of apps
         // or when applications component starts data querying (see below)
-        this.loading = true;
+        this.isListLoading = true;
         this.numToShow = LIST_PAGE_SIZE; // init/reset
         this.setLoaded();
       }
@@ -61,7 +69,7 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
   public onListVisible() {
     // start of loading is when list becomes visible
     // or when applications component starts data querying (see below)
-    this.loading = true;
+    this.isListLoading = true;
     this.numToShow = LIST_PAGE_SIZE; // init/reset
     this.setLoaded();
   }
@@ -97,16 +105,6 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
     return this.applications.filter(a => a.centroid.length === 2);
   }
 
-  public onLoadStart() {
-    // start of loading is when applications component starts data querying
-    // or when we get a new list of apps (see above)
-    this.loading = true;
-  }
-
-  public onLoadEnd() {
-    // end of loading is set below
-  }
-
   public loadMore() {
     this.numToShow += LIST_PAGE_SIZE;
     this.setLoaded();
@@ -125,14 +123,14 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
               this.applications[i] = app;
               this.applications[i].isLoaded = true;
               // end of loading is when we have loaded some of our data
-              this.loading = false;
+              this.isListLoading = false;
             },
             error => console.log(error)
           );
       }
     }
     if (isNoneLoaded) {
-      this.loading = false;
+      this.isListLoading = false;
     }
   }
 
