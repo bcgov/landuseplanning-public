@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 import { CommentPeriod } from 'app/models/commentperiod';
 import 'rxjs/add/observable/of';
 import { Observable } from 'rxjs/Observable';
@@ -36,7 +36,7 @@ describe('CommentPeriodService', () => {
     });
 
     describe('when no comment periods are returned by the Api', () => {
-      it('returns an empty CommentPeriod array', () => {
+      it('returns an empty CommentPeriod array', async(() => {
         apiSpy.getPeriodsByAppId.and.returnValue(
           Observable.of({ text: () => {} })
         );
@@ -44,11 +44,11 @@ describe('CommentPeriodService', () => {
         service
           .getAllByApplicationId('123')
           .subscribe(result => expect(result).toEqual([] as CommentPeriod[]));
-      });
+      }));
     });
 
     describe('when one comment period is returned by the Api', () => {
-      it('returns an array with one CommentPeriod element', () => {
+      it('returns an array with one CommentPeriod element', async(() => {
         apiSpy.getPeriodsByAppId.and.returnValue(
           Observable.of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
         );
@@ -58,11 +58,11 @@ describe('CommentPeriodService', () => {
           .subscribe(result =>
             expect(result).toEqual([new CommentPeriod({ _id: '1' })])
           );
-      });
+      }));
     });
 
     describe('when multiple comment periods are returned by the Api', () => {
-      it('returns an array with multiple CommentPeriod elements', () => {
+      it('returns an array with multiple CommentPeriod elements', async(() => {
         apiSpy.getPeriodsByAppId.and.returnValue(
           Observable.of({
             text: () => 'notNull',
@@ -79,11 +79,11 @@ describe('CommentPeriodService', () => {
               new CommentPeriod({ _id: '3' })
             ])
           );
-      });
+      }));
     });
 
     describe('when an exception is thrown', () => {
-      it('ApiService.handleError is called and the error is re-thrown', () => {
+      it('ApiService.handleError is called and the error is re-thrown', async(() => {
         apiSpy.getPeriodsByAppId.and.returnValue(
           Observable.of({
             text: () => {
@@ -104,7 +104,7 @@ describe('CommentPeriodService', () => {
             expect(err).toEqual(Error('someRethrownError'));
           }
         );
-      });
+      }));
     });
   });
 
@@ -118,17 +118,17 @@ describe('CommentPeriodService', () => {
 
     describe('when forceReload is set to true', () => {
       describe('when no comment period is returned by the Api', () => {
-        it('returns a null CommentPeriod', () => {
+        it('returns a null CommentPeriod', async(() => {
           apiSpy.getPeriod.and.returnValue(Observable.of({ text: () => {} }));
 
           service
             .getById('1', true)
             .subscribe(result => expect(result).toEqual(null as CommentPeriod));
-        });
+        }));
       });
 
       describe('when one comment period is returned by the Api', () => {
-        it('returns one CommentPeriod', () => {
+        it('returns one CommentPeriod', async(() => {
           apiSpy.getPeriod.and.returnValue(
             Observable.of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
           );
@@ -138,11 +138,11 @@ describe('CommentPeriodService', () => {
             .subscribe(result =>
               expect(result).toEqual(new CommentPeriod({ _id: '1' }))
             );
-        });
+        }));
       });
 
       describe('when multiple comment periods are returned by the Api', () => {
-        it('returns only the first CommentPeriod', () => {
+        it('returns only the first CommentPeriod', async(() => {
           apiSpy.getPeriod.and.returnValue(
             Observable.of({
               text: () => 'notNull',
@@ -155,33 +155,41 @@ describe('CommentPeriodService', () => {
             .subscribe(result =>
               expect(result).toEqual(new CommentPeriod({ _id: '1' }))
             );
-        });
+        }));
       });
     });
 
     describe('when forceReload is set to false', () => {
       describe('when a comment period is cached', () => {
-        it('returns the cached comment period', () => {
-          // call once to set the cache
-          apiSpy.getPeriod.and.returnValue(
-            Observable.of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
+        beforeEach(async(() => {
+          apiSpy.getPeriod.and.returnValues(
+            Observable.of({
+              text: () => 'notNull',
+              json: () => [{ _id: '1' }]
+            }),
+            Observable.throw(
+              Error(
+                'Was not expecting ApiService.getPeriod to be called more than once.'
+              )
+            )
           );
-          service.getById('1', true).subscribe();
 
-          // update spy to return a different comment period
-          apiSpy.getPeriod.and.returnValue(
-            Observable.of({ text: () => 'notNull', json: () => [{ _id: '2' }] })
-          );
+          // call once to set the cache
+          service.getById('1', true).subscribe();
+        }));
+
+        it('returns the cached comment period', async(() => {
           // assert cached comment period is returned
           service
             .getById('1')
             .subscribe(result =>
               expect(result).toEqual(new CommentPeriod({ _id: '1' }))
             );
-        });
+        }));
       });
+
       describe('when no comment period is cached', () => {
-        it('calls the api to fetch a comment period', () => {
+        it('calls the api to fetch a comment period', async(() => {
           apiSpy.getPeriod.and.returnValue(
             Observable.of({ text: () => 'notNull', json: () => [{ _id: '3' }] })
           );
@@ -191,12 +199,12 @@ describe('CommentPeriodService', () => {
             .subscribe(result =>
               expect(result).toEqual(new CommentPeriod({ _id: '3' }))
             );
-        });
+        }));
       });
     });
 
     describe('when an exception is thrown', () => {
-      it('ApiService.handleError is called and the error is re-thrown', () => {
+      it('ApiService.handleError is called and the error is re-thrown', async(() => {
         apiSpy.getPeriod.and.returnValue(
           Observable.of({
             text: () => {
@@ -217,7 +225,7 @@ describe('CommentPeriodService', () => {
             expect(err).toEqual(Error('someRethrownError'));
           }
         );
-      });
+      }));
     });
   });
 
@@ -352,7 +360,7 @@ describe('CommentPeriodService', () => {
 
     it('returns a human readable NOT OPEN status string', () => {
       expect(service.getStatusString(service.NOT_OPEN)).toEqual(
-        'Commenting Closed'
+        'Not Open For Commenting'
       );
     });
 
