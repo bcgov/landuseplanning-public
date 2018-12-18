@@ -5,9 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
-import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 
 // modules
@@ -42,9 +40,7 @@ import { UrlService } from 'app/services/url.service';
     FormsModule,
     HttpModule,
     NgbModule.forRoot(),
-    NgxPaginationModule,
     Ng2PageScrollModule.forRoot(),
-    BootstrapModalModule,
     SharedModule,
     ApplicationsModule,
     AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
