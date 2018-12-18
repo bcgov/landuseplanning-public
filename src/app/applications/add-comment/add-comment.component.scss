@@ -1,30 +1,22 @@
 @import "~assets/styles/base/base.scss";
 
-.modal-dialog {
-  .progress-new {
-    position: absolute;
-    top: 40%;
-    left: 25%;
-    width: 50%;
+h4, h5 {
+  font-weight: 600;
+}
+
+h5 {
+  margin-bottom: 0.5rem;
+}
+
+.modal-title {
+  em {
+    color: $gray5;
+    font-style: normal;
+    font-weight: 400;
   }
 }
 
-.modal-content {
-  h4, h5 {
-    font-weight: 600;
-  }
-
-  h5 {
-    margin-bottom: 0.5rem;
-  }
-}
-
-.modal-footer {
-  .btn {
-    min-width: 6rem;
-  }
-}
-
+// First Step - Contact Information
 .contact-info {
   margin: 0;
   padding: 0;
@@ -44,8 +36,38 @@
   }
 }
 
-.step-desc {
-  margin-bottom: 1.5rem;
+// Contact Information Form
+.contact-form {
+  .modal-body {
+    padding-top: 0;
+  }
+
+  .contact-prompt {
+    margin-right: -1.5rem;
+    margin-bottom: 1.5rem;
+    margin-left: -1.5rem;
+    padding-top: 1.5rem;
+    padding-right: 2rem;
+    padding-bottom: 1.5rem;
+    padding-left: 5rem;
+    color: #fff;
+    background: $primary1;
+    background-image: url("~assets/images/outline-info-inverted-24px.svg");
+    background-position: 2rem center;
+    background-repeat: no-repeat;
+    background-size: 2rem;
+  }
+}
+
+
+// Progress Indicator
+.modal-dialog {
+  .progress-new {
+    position: absolute;
+    top: 40%;
+    left: 25%;
+    width: 50%;
+  }
 }
 
 .progress-content {
@@ -60,6 +82,7 @@
   margin-bottom: 1rem;
 }
 
+// Thank You Step
 .thank-you-content {
   text-align: center;
 

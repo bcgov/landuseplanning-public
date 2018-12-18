@@ -1,6 +1,7 @@
 .modal-header {
   @include flex-box();
   justify-content: flex-end;
+  align-items: center;
   padding-top: 1rem;
   padding-right: 1.5rem;
   padding-bottom: 1rem;
@@ -8,7 +9,6 @@
 
   .modal-title {
     @include flex(1 1 auto);
-    margin-top: 0.4rem;
   }
 
   .close-btn {
