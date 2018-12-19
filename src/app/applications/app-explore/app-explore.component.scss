@@ -16,30 +16,39 @@
 
 // Date Range Inputs
 .date-range {
-  @include clearfix();
+  @include flex-box();
 }
 
 .date-range__input {
-  float: left;
-  width: 11rem;
+  @include flex(1 1 auto);
+}
+
+// TODO: We shouldn't be encapsulating these controls in a single component
+// Prevents us from utilizing properties for placement of the dropmenu
+// Have to hack the position of the drop menu for the end date considering the above
+.date-range__input.end-date {
+  ::ng-deep {
+    ngb-datepicker {
+      right: 0 !important;
+      left: auto !important;
+    }
+  }
 }
 
 .date-range__spacer {
-  float: left;
   margin-top: 0.3rem;
   width: 2rem;
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .date-range {
     @include flex-direction(column);
+  }
 
-    .spacer {
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-      width: 100%;
-    }
+  .date-range__spacer {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
   }
 }
 

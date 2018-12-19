@@ -1,5 +1,62 @@
 @import "~assets/styles/base/base.scss";
 
+$date-input-btn-color: $gray7;
+$date-input-btn-color-active: $gray9;
+$date-input-border-color-active: $primary1;
+
+.date-input {
+  position: relative;
+}
+
+.date-input__calendar-btn {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  color: $date-input-btn-color;
+  background: transparent;
+  text-align: right;
+  cursor: pointer;
+  transition: all ease-out 0.2s;
+
+  i {
+    margin-top: 0.2rem;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: $date-input-btn-color-active;
+    border-color: $date-input-border-color-active;
+  }
+}
+
+.date-input__clear-btn {
+  position: absolute;
+  top: 0.28rem;
+  right: 2.25rem;
+  bottom: 0.28rem;
+  padding: 0.15rem;
+  color: $date-input-btn-color;
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: $date-input-btn-color-active;
+  }
+}
+
+input {
+  padding-right: 3rem;
+}
+
+input.form-control {
+  border: none;
+  background: #fff;
+}
+
+// Validation
 .is-invalid ~ .invalid-feedback {
   display: inline-block;
 }
@@ -8,18 +65,3 @@
   border-color: #dc3545;
 }
 
-.input-group.is-invalid {
-  .form-control {
-    border-color: #dc3545;
-  }
-
-  .input-group-append {
-    .btn-icon {
-      border-color: #dc3545;
-    }
-  }
-}
-
-.test-button:focus {
-  border: 2px solid blue;
-}

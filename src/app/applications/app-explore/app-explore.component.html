@@ -9,14 +9,20 @@
       <div class="date-range">
         <div class="date-range__input">
           <label class="sr-only">Start Date</label>
-          <app-date-input class="gtm-filter-published-from" [(date)]="_publishFromFilter" [minDate]="minDate"
-            [maxDate]="_publishToFilter ? _publishToFilter : maxDate"></app-date-input>
+          <app-date-input class="gtm-filter-published-from" 
+            [(date)]="_publishFromFilter" 
+            [minDate]="minDate"
+            [maxDate]="_publishToFilter ? _publishToFilter : maxDate">
+          </app-date-input>
         </div>
-        <div class="date-range__spacer">-</div>
-        <div class="date-range__input">
+        <div class="date-range__spacer">&ndash;</div>
+        <div class="date-range__input end-date">
           <label class="sr-only">End Date</label>
-          <app-date-input class="gtm-filter-published-to" [(date)]="_publishToFilter" [maxDate]="maxDate"
-            [minDate]="_publishFromFilter ? _publishFromFilter : minDate"></app-date-input>
+          <app-date-input class="gtm-filter-published-to" 
+            [(date)]="_publishToFilter" 
+            [maxDate]="maxDate"
+            [minDate]="_publishFromFilter ? _publishFromFilter : minDate">
+          </app-date-input>
         </div>
       </div>
     </div>

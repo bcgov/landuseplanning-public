@@ -1,13 +1,19 @@
-<div class="input-group" [ngClass]="{'is-invalid': isValidate && !isValidDate(ngbDate)}">
-  <input class="form-control" type="text" placeholder="YYYY-MM-DD" name="ngbDatepicker" ngbDatepicker #ngbDatepicker="ngbDatepicker"
-    [firstDayOfWeek]="7" navigation="arrows" [(ngModel)]="ngbDate" (ngModelChange)="onDateChg($event)" (click)="ngbDatepicker.close()"
-    [minDate]="minNgbDate" [maxDate]="maxNgbDate">
-  <div class="input-group-btn">
-    <button class="test-btn btn btn-icon" (click)="ngbDatepicker.toggle()" type="button" tabindex="-1">
-      <i class="material-icons md-18">date_range</i>
-    </button>
-  </div>
+<div class="date-input" [ngClass]="{'is-invalid': isValidate && !isValidDate(ngbDate)}">
+  <input class="form-control" type="text" placeholder="YYYY-MM-DD" name="ngbDatepicker" navigation="arrows" ngbDatepicker #ngbDatepicker="ngbDatepicker"
+    [firstDayOfWeek]="7" 
+    [(ngModel)]="ngbDate"
+    (ngModelChange)="onDateChg($event)"
+    [minDate]="minNgbDate" 
+    [maxDate]="maxNgbDate"
+    disabled />
+  <button class="date-input__calendar-btn form-control" (click)="ngbDatepicker.toggle()" type="button" title="Select a Date">
+    <i class="material-icons md-18">date_range</i>
+  </button>
+  <button class="date-input__clear-btn btn btn-icon" [hidden]="!ngbDate" (click)="clearDate()" title="Clear Date">
+    <i class="material-icons md-18">close</i>
+  </button>
 </div>
+
 <div class="invalid-feedback bg-danger" *ngIf="isValidate && !isValidDate(ngbDate)">
   Enter a valid date
 </div>

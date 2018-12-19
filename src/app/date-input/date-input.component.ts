@@ -37,6 +37,12 @@ export class DateInputComponent implements OnChanges {
     this.dateChange.emit(ngbDate ? this.ngbDateToDate(this.ngbDate) : null);
   }
 
+  // clear the date
+  clearDate(ngbDate: NgbDateStruct) {
+    this.ngbDate = null;
+    this.onDateChg(this.ngbDate);
+  }
+
   // used in template
   public isValidDate(date: NgbDateStruct): boolean {
     return (date && !isNaN(date.year) && !isNaN(date.month) && !isNaN(date.day));
