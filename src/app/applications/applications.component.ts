@@ -7,14 +7,13 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/concat';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/finally';
-import * as L from 'leaflet';
 import * as _ from 'lodash';
 
-import { ApplistMapComponent } from './applist-map/applist-map.component';
-import { ApplistListComponent } from './applist-list/applist-list.component';
-import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
-import { AppExploreComponent } from './app-explore/app-explore.component';
-import { AppDetailsComponent } from './app-details/app-details.component';
+import { AppMapComponent } from './app-map/app-map.component';
+import { AppListComponent } from './app-list/app-list.component';
+import { FindPanelComponent } from './find-panel/find-panel.component';
+import { ExplorePanelComponent } from './explore-panel/explore-panel.component';
+import { DetailsPanelComponent } from './details-panel/details-panel.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
@@ -55,17 +54,11 @@ const PAGE_SIZE = 250;
 
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('appmap') appmap: ApplistMapComponent;
-  @ViewChild('applist') applist: ApplistListComponent;
-  @ViewChild('appfilters') appfilters: ApplistFiltersComponent;
-  @ViewChild('appexplore') appexplore: AppExploreComponent;
-  @ViewChild('appdetail') appdetail: AppDetailsComponent;
-
-  // prevent the snackbar from showing if we load faster than 250ms
-  // tslint:disable-next-line:member-ordering
-  private showSnackBar = _.debounce(() => {
-    this.snackBarRef = this.snackBar.open('Loading applications ...');
-  }, 250);
+  @ViewChild('appmap') appmap: AppMapComponent;
+  @ViewChild('applist') applist: AppListComponent;
+  @ViewChild('findPanel') findPanel: FindPanelComponent;
+  @ViewChild('explorePanel') explorePanel: ExplorePanelComponent;
+  @ViewChild('detailsPanel') detailsPanel: DetailsPanelComponent;
 
   public isApplicationsListVisible = false;
   public isExploreAppsVisible = false;
@@ -75,7 +68,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public isAppDetailsVisible = false;
 
   public isLoading = false; // initial value
-  private ngbModal: NgbModalRef = null;
+  private splashModal: NgbModalRef = null;
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
   private filters: FiltersType = null;
   private coordinates: string = null;
@@ -88,74 +81,91 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private router: Router,
     private applicationService: ApplicationService,
-    public configService: ConfigService, // used in template
+    public configService: ConfigService,
     public urlService: UrlService,
-    private renderer: Renderer2 // also used in template
+    private renderer: Renderer2
   ) {
     // watch for URL param changes
     // NB: this must be in constructor to get initial filters
     this.urlService.onNavEnd$
       .takeUntil(this.ngUnsubscribe)
       .subscribe(event => {
-        // when we have an URL fragment, show respective pane
-        const urlTree = router.parseUrl(event.url);
-        if (urlTree && urlTree.fragment) {
-          // console.log('got fragment =', urlTree.fragment);
-          // only show panels if splash modal is not displayed
-          if (!this.configService.showSplashModal) {
+        // if we're displaying the splash page then remove any URL fragment
+        // so it doesn't interfere with future routing
+        if (this.configService.showSplashModal) {
+          this.urlService.setFragment(null);
+        } else {
+          // when we have an URL fragment, show respective panel
+          const urlTree = router.parseUrl(event.url);
+          if (urlTree && urlTree.fragment) {
+            // console.log('got fragment =', urlTree.fragment);
             switch (urlTree.fragment) {
-              case 'details': if (!this.isAppDetailsVisible) { this.toggleDetails(true); } break;
-              case 'explore': if (!this.isExploreAppsVisible) { this.toggleExplore(true); } break;
-              case 'find': if (!this.isFindAppsVisible) { this.toggleFind(true); } break;
+              case 'details': this.toggleDetails(true); break;
+              case 'explore': this.toggleExplore(true); break;
+              case 'find': this.toggleFind(true); break;
             }
           }
         }
       });
   }
 
-  // cancel showing the snackbar if we load the applications quickly
-  private hideSnackBar() {
-    this.showSnackBar.cancel();
-
-    if (this.snackBarRef) {
-      this.snackBarRef.dismiss();
-    }
-  }
-
   ngOnInit() {
     this.renderer.addClass(document.body, 'no-scroll');
+  }
 
-    // prevent underlying map actions for list and filters components
-    const applist_list = <HTMLElement>document.getElementById('applist-list');
-    L.DomEvent.disableClickPropagation(applist_list);
-    L.DomEvent.disableScrollPropagation(applist_list);
-
-    const applist_filters = <HTMLElement>document.getElementById('applist-filters');
-    L.DomEvent.disableClickPropagation(applist_filters);
-    L.DomEvent.disableScrollPropagation(applist_filters);
-
+  ngAfterViewInit() {
     // show splash modal (unless sub-components have already turned off this flag)
     if (this.configService.showSplashModal) {
       // do this in another event so it's not in current change detection cycle
       setTimeout(() => {
-        this.ngbModal = this.modalService.open(SplashModalComponent, { backdrop: 'static', windowClass: 'splash-modal' });
-        this.configService.showSplashModal = false;
+        this.splashModal = this.modalService.open(SplashModalComponent, { backdrop: 'static', windowClass: 'splash-modal' });
+        this.splashModal.result.then(() => { this.configService.showSplashModal = false; });
       });
     }
-  }
 
-  ngAfterViewInit() {
     // get initial filters
-    const findFilters = this.appfilters.getFilters();
-    const exploreFilters = this.appexplore.getFilters();
+    const findFilters = this.findPanel.getFilters();
+    const exploreFilters = this.explorePanel.getFilters();
     // NB: first source is 'emptyFilters' to ensure all properties are set
     this.filters = Object.assign({}, emptyFilters, { ...findFilters, ...exploreFilters });
 
     // get initial map coordinates
     this.coordinates = this.appmap.getCoordinates();
 
+    // TODO: only load initial maps if we have nothing else to display
+
     // load initial apps
     this.getApps();
+  }
+
+  ngOnDestroy() {
+    if (this.splashModal) { this.splashModal.dismiss('Splash modal dismissed'); }
+    if (this.snackBarRef) { this.hideSnackBar(); }
+    this.renderer.removeClass(document.body, 'no-scroll');
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
+  // show snackbar
+  // NB: use debounce to delay snackbar opening so we can cancel it if loading takes less than 500ms
+  // tslint:disable-next-line:member-ordering
+  private showSnackBar = _.debounce(() => {
+    this.snackBarRef = this.snackBar.open('Loading applications ...');
+  }, 500);
+
+  // hide snackbar
+  private hideSnackBar() {
+    // cancel any pending open
+    this.showSnackBar.cancel();
+
+    // if snackbar is showing, dismiss it
+    // NB: use debounce to delay snackbar dismiss so it is visible for at least 500ms
+    if (this.snackBarRef) {
+      _.debounce(() => {
+        this.snackBarRef.dismiss();
+        this.snackBarRef = null;
+      }, 500)();
+    }
   }
 
   // FUTURE: allow user action to interrupt current data retrieval...
@@ -170,10 +180,11 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       // safety check // TODO: remove this when this processing becomes interruptable (see above)
       if (this.isLoading) { return; }
 
+      console.log('getting apps');
+      this.showSnackBar();
+
       this.isLoading = true;
       let isFirstPage = true;
-
-      this.showSnackBar();
 
       if (getTotalNumber) {
         // FOR FUTURE USE
@@ -235,27 +246,24 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    if (this.ngbModal) { this.ngbModal.dismiss('component destroyed'); }
-    this.renderer.removeClass(document.body, 'no-scroll');
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   /**
    * Event handler called when Find component updates its filters.
    */
   public updateFindFilters(filters: FiltersType) {
     // console.log('updating find filters =', filters);
+
+    // don't show splash modal
+    // since there are parameters, assume the user knows what they're doing
+    this.configService.showSplashModal = false;
+
     // NB: first source is 'emptyFilters' to ensure all properties are set
     this.filters = Object.assign({}, emptyFilters, filters);
     // clear other filters
-    this.appexplore.clearAllFilters(false);
-    this.appdetail.clearAllFilters();
+    this.explorePanel.clearAllFilters(false);
     this.getApps();
 
-    // we have Find filters -- show Find pane
-    // this.toggleFind(true); // DON'T SHOW FIND PANE AUTOMATICALLY
+    // we have Find filters -- show Find panel
+    // this.toggleFind(true); // DON'T SHOW FIND PANEL AUTOMATICALLY
   }
 
   /**
@@ -263,15 +271,19 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public updateExploreFilters(filters: FiltersType) {
     // console.log('updating explore filters =', filters);
+
+    // don't show splash modal
+    // since there are parameters, assume the user knows what they're doing
+    this.configService.showSplashModal = false;
+
     // NB: first source is 'emptyFilters' to ensure all properties are set
     this.filters = Object.assign({}, emptyFilters, filters);
     // clear other filters
-    this.appfilters.clearAllFilters(false);
-    this.appdetail.clearAllFilters();
+    this.findPanel.clearAllFilters(false);
     this.getApps();
 
-    // we have Explore filters -- show Explore pane
-    // this.toggleExplore(true); // DON'T SHOW EXPLORE PANE AUTOMATICALLY
+    // we have Explore filters -- show Explore panel
+    // this.toggleExplore(true); // DON'T SHOW EXPLORE PANEL AUTOMATICALLY
   }
 
   /**
@@ -279,9 +291,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public updateDetails(app: Application, show: boolean) {
     // console.log('updating details, app =', app, 'show =', show);
+
+    // don't show splash modal
+    // since there are parameters, assume the user knows what they're doing
+    this.configService.showSplashModal = false;
+
     this.appmap.onHighlightApplication(app, show);
 
-    // if we have details, show Details pane, else toggle it
+    // if we have details, show Details panel, else toggle it
     this.toggleDetails(show);
   }
 
@@ -326,17 +343,17 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // show Application Details interface
-  public toggleDetails(forceShow: boolean = false) {
-    // console.log('toggling details, force =', forceShow);
+  // show Find Applications interface
+  public toggleFind(forceShow: boolean = false) {
+    // console.log('toggling find, force =', forceShow);
     // show side panel if it's hidden or THIS component isn't already visible
-    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isAppDetailsVisible);
+    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isFindAppsVisible);
 
-    this.isAppDetailsVisible = true;
+    this.isAppDetailsVisible = false;
     this.isExploreAppsVisible = false;
-    this.isFindAppsVisible = false;
-    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #details');
-    this.urlService.setFragment(this.isSidePanelVisible ? 'details' : null);
+    this.isFindAppsVisible = true;
+    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #find');
+    this.urlService.setFragment(this.isSidePanelVisible ? 'find' : null);
   }
 
   // show Explore Applications interface
@@ -352,33 +369,34 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.urlService.setFragment(this.isSidePanelVisible ? 'explore' : null);
   }
 
-  // show Find Applications interface
-  public toggleFind(forceShow: boolean = false) {
-    // console.log('toggling find, force =', forceShow);
+  // show Application Details interface
+  public toggleDetails(forceShow: boolean = false) {
+    // console.log('toggling details, force =', forceShow);
     // show side panel if it's hidden or THIS component isn't already visible
-    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isFindAppsVisible);
+    this.isSidePanelVisible = (forceShow || !this.isSidePanelVisible || !this.isAppDetailsVisible);
 
-    this.isAppDetailsVisible = false;
+    this.isAppDetailsVisible = true;
     this.isExploreAppsVisible = false;
-    this.isFindAppsVisible = true;
-    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #find');
-    this.urlService.setFragment(this.isSidePanelVisible ? 'find' : null);
+    this.isFindAppsVisible = false;
+    // console.log((this.isSidePanelVisible ? 'setting' : 'clearing') + ' fragment #details');
+    this.urlService.setFragment(this.isSidePanelVisible ? 'details' : null);
   }
 
   public closeSidePanel() {
     this.isSidePanelVisible = false;
+
+    // if user just closed details panel, unset the app
+    if (this.isAppDetailsVisible) {
+      this.detailsPanel.clearAllFilters();
+    }
+
     // console.log('clearing fragment');
     this.urlService.setFragment(null);
   }
 
-  public resetFilters(filters: FiltersType) {
-    // console.log('updateFilters, filters =', filters);
-    // NB: first source is 'emptyFilters' to ensure all properties are set
-    // this.filters = Object.assign({}, emptyFilters, filters);
-    // clear other filters
-    this.appfilters.clearAllFilters();
-    this.appexplore.clearAllFilters();
-    this.appdetail.clearAllFilters();
+  public clearFilters() {
+    this.findPanel.clearAllFilters();
+    this.explorePanel.clearAllFilters();
     this.getApps();
   }
 

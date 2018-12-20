@@ -20,14 +20,14 @@ export class SplashModalComponent {
   public find() {
     if (this.clidDtid) {
       this.activeModal.close('finding');
-      // navigate to Find page
+      // set URL parameter (but don't open Find panel)
       this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: { clidDtid: this.clidDtid }, replaceUrl: true });
     }
   }
 
   public explore() {
     this.activeModal.close('exploring');
-    // navigate to Explore page (and open it)
+    // open Explore panel (but don't set URL parameters)
     this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore', replaceUrl: true });
   }
 

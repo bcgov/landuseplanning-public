@@ -12,16 +12,16 @@ import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
 
 @Component({
-  templateUrl: './add-comment.component.html',
-  styleUrls: ['./add-comment.component.scss']
+  templateUrl: './comment-modal.component.html',
+  styleUrls: ['./comment-modal.component.scss']
 })
 
-export class AddCommentComponent implements OnInit {
+export class CommentModalComponent implements OnInit {
   @Input() currentPeriod: CommentPeriod;
 
   public submitting = false;
-  private progressValue: number;
-  private progressBufferValue: number;
+  private progressValue: number; // used in template
+  private progressBufferValue: number; // used in template
   public totalSize: number;
   public currentPage = 1;
   private comment: Comment;

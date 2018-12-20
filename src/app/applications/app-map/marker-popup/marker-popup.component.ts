@@ -1,28 +1,27 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { UrlService } from 'app/services/url.service';
+
 
 @Component({
-  selector: 'app-detail-popup',
-  templateUrl: './app-detail-popup.component.html',
-  styleUrls: ['./app-detail-popup.component.scss']
+  templateUrl: './marker-popup.component.html',
+  styleUrls: ['./marker-popup.component.scss']
 })
 
-export class AppDetailPopupComponent implements OnInit, OnDestroy {
+export class MarkerPopupComponent implements OnInit, OnDestroy {
 
   public id: string;
   public app: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
     public applicationService: ApplicationService, // also used in template
-    public commentPeriodService: CommentPeriodService // used in template
+    public commentPeriodService: CommentPeriodService, // used in template
+    public urlService: UrlService
   ) { }
 
   public ngOnInit() {
@@ -40,9 +39,10 @@ export class AppDetailPopupComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  // show Details pane for this app
+  // show Details panel for this app
   public showDetails() {
-    this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: { id: this.app._id }, fragment: 'details', replaceUrl: true });
+    this.urlService.save('id', this.app._id);
+    this.urlService.setFragment('details');
   }
 
 }

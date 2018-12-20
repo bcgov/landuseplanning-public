@@ -1,21 +1,20 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { ConfigService } from 'app/services/config.service';
 
 const LIST_PAGE_SIZE = 10;
 
 @Component({
-  selector: 'app-applist-list',
-  templateUrl: './applist-list.component.html',
-  styleUrls: ['./applist-list.component.scss']
+  selector: 'app-list',
+  templateUrl: './app-list.component.html',
+  styleUrls: ['./app-list.component.scss']
 })
 
-export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
+export class AppListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() isLoading: boolean; // from applications component
   @Input() applications: Array<Application> = []; // from applications component
@@ -30,14 +29,8 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     public applicationService: ApplicationService,
-    public commentPeriodService: CommentPeriodService, // used in template
-    public configService: ConfigService,
-    private elementRef: ElementRef
+    public commentPeriodService: CommentPeriodService // used in template
   ) { }
-
-  get clientWidth(): number {
-    return this.elementRef.nativeElement.firstElementChild.clientWidth; // div.app-list__container
-  }
 
   public ngOnInit() { }
 
@@ -120,16 +113,17 @@ export class ApplistListComponent implements OnInit, OnChanges, OnDestroy {
           .takeUntil(this.ngUnsubscribe)
           .subscribe(
             app => {
-              this.applications[i] = app;
-              this.applications[i].isLoaded = true;
-              // end of loading is when we have loaded some of our data
-              this.isListLoading = false;
+              if (app) { // safety check
+                this.applications[i] = app;
+                this.applications[i].isLoaded = true;
+              }
             },
             error => console.log(error)
           );
       }
     }
     if (isNoneLoaded) {
+      // end of loading is when we have loaded some of our data
       this.isListLoading = false;
     }
   }

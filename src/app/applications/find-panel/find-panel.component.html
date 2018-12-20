@@ -21,7 +21,7 @@
           Find
         </button>
         <button class="btn btn-primary gtm-apply-filters find-btn-sm-device" type="button" title="Apply filters"
-          (click)="applyAllFilters();showSidePanel.emit(false)"
+          (click)="applyAllFilters();hideSidePanel.emit()"
           [disabled]="isLoading">
           Find
         </button>
@@ -54,14 +54,10 @@
 </div>
 
 <div style="display: none;">
-  <div class="app-filters__body" id="applist-filters">
-
     <fieldset class="additional-filters" (click)="$event.stopPropagation()">
         <div class="form-group typeahead-container">
           <label for="applicantInput">Applicant Name</label>
           <input type="text" class="form-control gtm-filter-applicant" placeholder="Applicant Name" id="applicantInput" [(ngModel)]="_applicantFilter">
         </div>
     </fieldset>
-
-  </div>
 </div>

@@ -24,16 +24,9 @@ export class CommentPeriodService {
     return this.api.getPeriodsByAppId(appId)
       .map(res => {
         const periods = res.text() ? res.json() : [];
-        periods.forEach((period, i) => {
-          periods[i] = new CommentPeriod(period);
+        periods.forEach((obj: any, i: number) => {
+          periods[i] = new CommentPeriod(obj);
         });
-        return periods;
-      })
-      .map((periods: CommentPeriod[]) => {
-        if (periods.length === 0) {
-          return [] as CommentPeriod[];
-        }
-
         return periods;
       })
       .catch(this.api.handleError);

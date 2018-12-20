@@ -4,24 +4,22 @@ import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { ApplistMapComponent } from '../applist-map/applist-map.component';
 import { Constants } from 'app/utils/constants';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
 
 @Component({
-  selector: 'app-explore',
-  templateUrl: './app-explore.component.html',
-  styleUrls: ['./app-explore.component.scss']
+  selector: 'app-explore-panel',
+  templateUrl: './explore-panel.component.html',
+  styleUrls: ['./explore-panel.component.scss']
 })
-export class AppExploreComponent implements OnInit, OnDestroy {
+export class ExplorePanelComponent implements OnInit, OnDestroy {
 
   @Input() isLoading = true; // from applications component
-  @Input() appmap: ApplistMapComponent;
   @Output() updateFilters = new EventEmitter(); // to applications component
-  @Output() showSidePanel = new EventEmitter(); // to applications component
+  @Output() hideSidePanel = new EventEmitter(); // to applications component
+  @Output() resetView = new EventEmitter(); // to applications component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
@@ -55,7 +53,6 @@ export class AppExploreComponent implements OnInit, OnDestroy {
   constructor(
     private applicationService: ApplicationService,
     public commentPeriodService: CommentPeriodService, // also used in template
-    public configService: ConfigService, // used in template
     private urlService: UrlService
   ) {
     // declare comment period status keys
@@ -97,9 +94,6 @@ export class AppExploreComponent implements OnInit, OnDestroy {
 
         // notify applications component
         if (hasChanges) {
-          // don't show splash modal
-          // since there are parameters, assume the user knows what they're doing
-          this.configService.showSplashModal = false;
           // console.log('explore - has changes');
           this.updateFilters.emit(this.getFilters());
         }
@@ -187,8 +181,9 @@ export class AppExploreComponent implements OnInit, OnDestroy {
   }
 
   public applyAllFilters(doNotify: boolean = true) {
-    // reset to the default map extend so we have context of what results are returned
-    this.appmap.resetView();
+    // reset map view so we have context of what results are returned
+    this.resetView.emit();
+
     // apply all temporary filters
     this.cpStatusFilters = { ...this._cpStatusFilters };
     this.appStatusFilters = { ...this._appStatusFilters };

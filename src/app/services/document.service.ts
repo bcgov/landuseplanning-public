@@ -18,8 +18,8 @@ export class DocumentService {
     return this.api.getDocumentsByAppId(appId)
       .map(res => {
         const documents = res.text() ? res.json() : [];
-        documents.forEach((document, i) => {
-          documents[i] = new Document(document);
+        documents.forEach((obj: any, i: number) => {
+          documents[i] = new Document(obj);
         });
         return documents;
       })
@@ -31,8 +31,8 @@ export class DocumentService {
     return this.api.getDocumentsByCommentId(commentId)
       .map(res => {
         const documents = res.text() ? res.json() : [];
-        documents.forEach((document, i) => {
-          documents[i] = new Document(document);
+        documents.forEach((obj: any, i: number) => {
+          documents[i] = new Document(obj);
         });
         return documents;
       })
@@ -44,8 +44,8 @@ export class DocumentService {
     return this.api.getDocumentsByDecisionId(decisionId)
       .map(res => {
         const documents = res.text() ? res.json() : [];
-        documents.forEach((document, i) => {
-          documents[i] = new Document(document);
+        documents.forEach((obj: any, i: number) => {
+          documents[i] = new Document(obj);
         });
         return documents;
       })

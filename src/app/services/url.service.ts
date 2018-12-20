@@ -49,7 +49,7 @@ export class UrlService {
   }
 
   // save specified key in URL
-  public save(key: string, val: string = null) {
+  public save(key: string, val: string, doNavigate: boolean = true) {
     // check if not null or empty
     if (val) {
       // add/update key
@@ -58,21 +58,21 @@ export class UrlService {
       // remove key
       delete this._params[key];
     }
-    this.navigate();
+    if (doNavigate) { this.navigate(); }
   }
 
   // save specified fragment in URL
-  public setFragment(fragment: string = null) {
+  public setFragment(fragment: string, doNavigate: boolean = true) {
     this._fragment = fragment;
-    this.navigate();
+    if (doNavigate) { this.navigate(); }
   }
 
   // update browser URL
-  // NB: debounced function executes when 250ms have elapsed since last call
+  // NB: debounced function executes when 100ms have elapsed since last call
   // tslint:disable-next-line:member-ordering
   private navigate = _.debounce(() => {
     // this.location.go(this.router.createUrlTree([], { relativeTo: this.route, queryParams: params, fragment: this._fragment }).toString());
     this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: this._params, fragment: this._fragment, replaceUrl: true });
-  }, 250);
+  }, 100);
 
 }

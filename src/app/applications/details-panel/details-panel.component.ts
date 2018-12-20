@@ -3,20 +3,19 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
-import { AddCommentComponent } from '../add-comment/add-comment.component';
+import { CommentModalComponent } from 'app/comment-modal/comment-modal.component';
 import { Application } from 'app/models/application';
-import { ConfigService } from 'app/services/config.service';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ApiService } from 'app/services/api';
 import { UrlService } from 'app/services/url.service';
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './app-details.component.html',
-  styleUrls: ['./app-details.component.scss']
+  selector: 'app-details-panel',
+  templateUrl: './details-panel.component.html',
+  styleUrls: ['./details-panel.component.scss']
 })
-export class AppDetailsComponent implements OnDestroy {
+export class DetailsPanelComponent implements OnDestroy {
 
   @Input() isLoading: boolean; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
@@ -25,11 +24,10 @@ export class AppDetailsComponent implements OnDestroy {
   public isAppLoading: boolean;
   public application: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  private ngbModal: NgbModalRef = null;
+  private addCommentModal: NgbModalRef = null;
 
   constructor(
     private modalService: NgbModal,
-    public configService: ConfigService,
     public applicationService: ApplicationService, // used in template
     public commentPeriodService: CommentPeriodService, // used in template
     public api: ApiService, // used in template
@@ -45,9 +43,6 @@ export class AppDetailsComponent implements OnDestroy {
           // nothing to display
           this.application = null;
         } else if (!this.application) {
-          // don't show splash modal
-          // since there are parameters, assume the user knows what they're doing
-          this.configService.showSplashModal = false;
           // initial load
           this._loadApp(id);
         } else if (this.application._id !== id) {
@@ -84,7 +79,7 @@ export class AppDetailsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    // if (this.ngbModal) { this.ngbModal.dismiss('component destroyed'); }
+    if (this.addCommentModal) { this.addCommentModal.dismiss('Add Comment modal dismissed'); }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -99,18 +94,18 @@ export class AppDetailsComponent implements OnDestroy {
   public addComment() {
     if (this.application.currentPeriod) {
       // open modal
-      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      this.addCommentModal = this.modalService.open(CommentModalComponent, { backdrop: 'static', size: 'lg' });
       // set input parameter
-      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.application.currentPeriod;
+      (<CommentModalComponent>this.addCommentModal.componentInstance).currentPeriod = this.application.currentPeriod;
       // check result
-      this.ngbModal.result.then(
+      this.addCommentModal.result.then(
         value => {
           // saved
-          console.log(`Success, value = ${value}`);
+          console.log(`Add Comment succeeded, value = ${value}`);
         },
         reason => {
           // cancelled
-          console.log(`Cancelled, reason = ${reason}`);
+          console.log(`Add Comment cancelled, reason = ${reason}`);
         }
       );
     }

@@ -1,16 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApplistFiltersComponent } from './applist-filters.component';
+import { FindPanelComponent } from './find-panel.component';
 import { NgbModule, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { VarDirective } from 'app/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { ConfigService } from 'app/services/config.service';
 
-describe('ApplistFiltersComponent', () => {
-  let component: ApplistFiltersComponent;
-  let fixture: ComponentFixture<ApplistFiltersComponent>;
+describe('FindPanelComponent', () => {
+  let component: FindPanelComponent;
+  let fixture: ComponentFixture<FindPanelComponent>;
 
   const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getApplications']);
   const commentPeriodService = new CommentPeriodService(
@@ -27,7 +26,7 @@ describe('ApplistFiltersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ApplistFiltersComponent, VarDirective],
+      declarations: [FindPanelComponent, VarDirective],
       imports: [
         NgbModule,
         FormsModule,
@@ -35,7 +34,6 @@ describe('ApplistFiltersComponent', () => {
       ],
       providers: [
         NgbTypeaheadConfig,
-        ConfigService,
         { provide: ApplicationService, useValue: applicationService },
         { provide: CommentPeriodService, useValue: commentPeriodService },
       ]
@@ -44,7 +42,7 @@ describe('ApplistFiltersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApplistFiltersComponent);
+    fixture = TestBed.createComponent(FindPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

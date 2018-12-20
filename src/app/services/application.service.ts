@@ -159,8 +159,8 @@ export class ApplicationService {
       })
         .map(res => {
           const applications = res.text() ? res.json() : [];
-          applications.forEach((application, i) => {
-            applications[i] = new Application(application);
+          applications.forEach((obj: any, i: number) => {
+            applications[i] = new Application(obj);
           });
           return applications as Application[];
         })
@@ -190,8 +190,8 @@ export class ApplicationService {
       })
         .map(res => {
           const applications = res.text() ? res.json() : [];
-          applications.forEach((application, i) => {
-            applications[i] = new Application(application);
+          applications.forEach((obj: any, i: number) => {
+            applications[i] = new Application(obj);
           });
           return applications as Application[];
         })
@@ -230,8 +230,8 @@ export class ApplicationService {
     return Observable.merge(closed, future)
       .map(res => {
         const applications = res.text() ? res.json() : [];
-        applications.forEach((application, i) => {
-          applications[i] = new Application(application);
+        applications.forEach((obj: any, i: number) => {
+          applications[i] = new Application(obj);
         });
         return applications as Application[];
       })
@@ -267,13 +267,13 @@ export class ApplicationService {
           application['clFile'] = application.cl_file.toString().padStart(7, '0');
         }
 
-        // get the documents
+        // get the documents (may be empty array)
         promises.push(this.documentService.getAllByApplicationId(application._id)
           .toPromise()
           .then(documents => application.documents = documents)
         );
 
-        // get the current comment period
+        // get the comment periods (may be empty array)
         promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
           .toPromise()
           .then(periods => {
@@ -293,13 +293,13 @@ export class ApplicationService {
           })
         );
 
-        // get the decision
+        // get the decision (may be null)
         promises.push(this.decisionService.getByApplicationId(application._id, forceReload)
           .toPromise()
           .then(decision => application.decision = decision)
         );
 
-        // get the features
+        // get the features (may be empty array)
         promises.push(this.featureService.getByApplicationId(application._id)
           .toPromise()
           .then(features => application.features = features)

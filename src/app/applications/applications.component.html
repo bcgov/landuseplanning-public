@@ -31,48 +31,49 @@
     <button class="close-btn btn btn-icon" (click)="closeSidePanel()">
       <i class="material-icons">close</i>
     </button>
-    <app-details #appdetail
+    <app-details-panel #detailsPanel
       [isLoading]="isLoading"
       (setCurrentApp)="updateDetails($event, true)"
       (unsetCurrentApp)="updateDetails($event, false)"
       [hidden]="!isAppDetailsVisible">
-    </app-details>
-    <app-applist-filters #appfilters
+    </app-details-panel>
+    <app-find-panel #findPanel
       [isLoading]="isLoading"
       (updateFilters)="updateFindFilters($event)"
-      (showSidePanel)="isSidePanelVisible=$event"
+      (hideSidePanel)="isSidePanelVisible=false"
+      (resetView)="appmap.resetView()"
       [hidden]="!isFindAppsVisible">
-    </app-applist-filters>
-    <app-explore #appexplore
+    </app-find-panel>
+    <app-explore-panel #explorePanel
       [isLoading]="isLoading"
-      [appmap]="appmap"
       (updateFilters)="updateExploreFilters($event)"
-      (showSidePanel)="isSidePanelVisible=$event"
+      (hideSidePanel)="isSidePanelVisible=false"
+      (resetView)="appmap.resetView()"
       [hidden]="!isExploreAppsVisible">
-    </app-explore>
+    </app-explore-panel>
   </div>
 
   <div class="main-panel">
     <div class="app-results">
       <span class="app-results__count"><strong>{{totalNumber}}</strong> applications found</span>
-      <span class="app-results__clear" *ngIf="appfilters.filterCount() > 0 || appexplore.filterCount() > 0">
-        <button class="clear-btn btn btn-sm btn-link" (click)="resetFilters()">Clear Filters</button>
+      <span class="app-results__clear" *ngIf="findPanel.filterCount() > 0 || explorePanel.filterCount() > 0">
+        <button class="clear-btn btn btn-sm btn-link" (click)="clearFilters()">Clear Filters</button>
       </span>
     </div>
-    <app-applist-list class="app-list" style="display: none;" #applist
+    <app-list class="app-list" style="display: none;" #applist
       [isLoading]="isLoading"
       [applications]="apps"
       [isListVisible]="isApplicationsListVisible"
       (setCurrentApp)="appmap.onHighlightApplication($event, true)"
       (unsetCurrentApp)="appmap.onHighlightApplication($event, false)">
-    </app-applist-list>
-    <app-applist-map class="app-map" #appmap
+    </app-list>
+    <app-map class="app-map" #appmap
       [isLoading]="isLoading"
       [applications]="apps"
       [isMapVisible]="isApplicationsMapVisible"
       (toggleCurrentApp)="applist.toggleCurrentApp($event)"
       (updateCoordinates)="updateCoordinates($event)">
-    </app-applist-map>
+    </app-map>
   </div>
 
 </div>

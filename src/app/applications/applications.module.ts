@@ -8,17 +8,15 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared.module';
 
 // Components
-import { SplashModalComponent } from './splash-modal/splash-modal.component';
-import { AddCommentComponent } from './add-comment/add-comment.component';
 import { ApplicationsComponent } from './applications.component';
-import { ApplistListComponent } from './applist-list/applist-list.component';
-import { ApplistMapComponent } from './applist-map/applist-map.component';
-import { ApplistFiltersComponent } from './applist-filters/applist-filters.component';
-import { AppDetailPopupComponent } from './app-detail-popup/app-detail-popup.component';
-import { DateInputComponent } from 'app/date-input/date-input.component';
-import { FileUploadComponent } from 'app/file-upload/file-upload.component';
-import { AppDetailsComponent } from './app-details/app-details.component';
-import { AppExploreComponent } from './app-explore/app-explore.component';
+import { AppListComponent } from './app-list/app-list.component';
+import { AppMapComponent } from './app-map/app-map.component';
+import { MarkerPopupComponent } from './app-map/marker-popup/marker-popup.component';
+import { DetailsPanelComponent } from './details-panel/details-panel.component';
+import { ExplorePanelComponent } from './explore-panel/explore-panel.component';
+import { DateInputComponent } from './explore-panel/date-input/date-input.component';
+import { FindPanelComponent } from './find-panel/find-panel.component';
+import { SplashModalComponent } from './splash-modal/splash-modal.component';
 
 @NgModule({
   imports: [
@@ -29,22 +27,19 @@ import { AppExploreComponent } from './app-explore/app-explore.component';
     SharedModule
   ],
   declarations: [
-    SplashModalComponent,
-    AddCommentComponent,
     ApplicationsComponent,
-    ApplistListComponent,
-    ApplistMapComponent,
-    ApplistFiltersComponent,
-    AppDetailPopupComponent,
+    AppListComponent,
+    AppMapComponent,
+    MarkerPopupComponent,
+    DetailsPanelComponent,
+    ExplorePanelComponent,
     DateInputComponent,
-    FileUploadComponent,
-    AppDetailsComponent,
-    AppExploreComponent
+    FindPanelComponent,
+    SplashModalComponent
   ],
   entryComponents: [
-    SplashModalComponent,
-    AddCommentComponent,
-    AppDetailPopupComponent
+    MarkerPopupComponent,
+    SplashModalComponent
   ]
 })
 

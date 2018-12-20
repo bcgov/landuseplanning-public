@@ -38,7 +38,7 @@ export class DateInputComponent implements OnChanges {
   }
 
   // clear the date
-  clearDate(ngbDate: NgbDateStruct) {
+  clearDate() {
     this.ngbDate = null;
     this.onDateChg(this.ngbDate);
   }

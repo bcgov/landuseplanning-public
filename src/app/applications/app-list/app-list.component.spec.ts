@@ -1,13 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApplistListComponent } from './applist-list.component';
+import { AppListComponent } from './app-list.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { VarDirective } from 'app/utils/ng-var.directive';
-import { ConfigService } from 'app/services/config.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 
-describe('ApplistListComponent', () => {
-  let component: ApplistListComponent;
-  let fixture: ComponentFixture<ApplistListComponent>;
+describe('AppListComponent', () => {
+  let component: AppListComponent;
+  let fixture: ComponentFixture<AppListComponent>;
   const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getApplications']);
   const commentPeriodService = new CommentPeriodService(
     apiServiceSpy
@@ -15,10 +14,9 @@ describe('ApplistListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ApplistListComponent, VarDirective],
+      declarations: [AppListComponent, VarDirective],
       imports: [RouterTestingModule],
       providers: [
-        ConfigService,
         { provide: CommentPeriodService, useValue: commentPeriodService },
       ]
     })
@@ -26,7 +24,7 @@ describe('ApplistListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApplistListComponent);
+    fixture = TestBed.createComponent(AppListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -4,20 +4,20 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 
-import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
 
 @Component({
-  selector: 'app-applist-filters',
-  templateUrl: './applist-filters.component.html',
-  styleUrls: ['./applist-filters.component.scss']
+  selector: 'app-find-panel',
+  templateUrl: './find-panel.component.html',
+  styleUrls: ['./find-panel.component.scss']
 })
 
-export class ApplistFiltersComponent implements OnInit, OnDestroy {
+export class FindPanelComponent implements OnInit, OnDestroy {
 
   @Input() isLoading = true; // from applications component
   @Output() updateFilters = new EventEmitter(); // to applications component
-  @Output() showSidePanel = new EventEmitter(); // to applications component
+  @Output() hideSidePanel = new EventEmitter(); // to applications component
+  @Output() resetView = new EventEmitter(); // to applications component
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -31,7 +31,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    public configService: ConfigService, // used in template
     private urlService: UrlService
   ) {
     // watch for URL param changes
@@ -45,9 +44,6 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
         // notify applications component
         if (hasChanges) {
           // console.log('find - has changes');
-          // don't show splash modal
-          // since there are parameters, assume the user knows what they're doing
-          this.configService.showSplashModal = false;
           this.updateFilters.emit(this.getFilters());
         }
       });
@@ -84,6 +80,9 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
   }
 
   public applyAllFilters(doNotify: boolean = true) {
+    // reset map view so we have context of what results are returned
+    this.resetView.emit();
+
     // apply all temporary filters
     this.applicantFilter = this._applicantFilter;
     this.clidDtidFilter = this._clidDtidFilter;
@@ -120,8 +119,9 @@ export class ApplistFiltersComponent implements OnInit, OnDestroy {
     return applicantFilterCount + clidDtidFilterCount;
   }
 
-  // show Explore pane
+  // show Explore panel
   public showExplore() {
+    // hard-navigate to remove any other URL parameters
     this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore', replaceUrl: true });
   }
 

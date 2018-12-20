@@ -53,8 +53,8 @@ export class CommentService {
     return this.api.getCommentsByPeriodId(periodId)
       .map(res => {
         const comments = res.text() ? res.json() : [];
-        comments.forEach((comment, i) => {
-          comments[i] = new Comment(comment);
+        comments.forEach((obj: any, i: number) => {
+          comments[i] = new Comment(obj);
         });
         return comments as Comment[];
       })

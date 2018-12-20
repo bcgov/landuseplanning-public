@@ -71,7 +71,7 @@ export class Application {
 
     // copy centroid
     if (obj && obj.centroid) {
-      obj.centroid.forEach(num => {
+      obj.centroid.forEach((num: number) => {
         this.centroid.push(num);
       });
     }

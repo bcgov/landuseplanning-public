@@ -9,7 +9,7 @@ import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
 import { UrlService } from 'app/services/url.service';
-import { AppDetailPopupComponent } from 'app/applications/app-detail-popup/app-detail-popup.component';
+import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
@@ -42,12 +42,12 @@ const markerIconLg = L.icon({
 });
 
 @Component({
-  selector: 'app-applist-map',
-  templateUrl: './applist-map.component.html',
-  styleUrls: ['./applist-map.component.scss']
+  selector: 'app-map',
+  templateUrl: './app-map.component.html',
+  styleUrls: ['./app-map.component.scss']
 })
 
-export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() isLoading: boolean; // from applications component
   @Input() applications: Array<Application> = []; // from applications component
@@ -247,8 +247,6 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     // add reset view control
     this.map.addControl(new resetViewControl());
-
-    //
 
     // load base layer
     for (const key of Object.keys(baseLayers)) {
@@ -486,7 +484,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     };
 
     // compile marker popup component
-    const compFactory = this.resolver.resolveComponentFactory(AppDetailPopupComponent);
+    const compFactory = this.resolver.resolveComponentFactory(MarkerPopupComponent);
     const compRef = compFactory.create(this.injector);
     compRef.instance.id = app._id;
     this.appRef.attachView(compRef.hostView);
@@ -512,7 +510,7 @@ export class ApplistMapComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     // set icon on new marker
-    if (show) {
+    if (show && app) { // safety check
       const marker = _.find(this.markerList, { dispositionId: app.tantalisID });
       if (marker) {
         this.currentMarker = marker;

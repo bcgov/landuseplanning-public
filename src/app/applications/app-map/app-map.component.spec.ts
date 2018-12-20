@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApplistMapComponent } from './applist-map.component';
+import { AppMapComponent } from './app-map.component';
 import { ApplicationService } from 'app/services/application.service';
 import { ConfigService } from 'app/services/config.service';
 
-describe('ApplistMapComponent', () => {
-  let component: ApplistMapComponent;
-  let fixture: ComponentFixture<ApplistMapComponent>;
+describe('AppMapComponent', () => {
+  let component: AppMapComponent;
+  let fixture: ComponentFixture<AppMapComponent>;
 
   // const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getApplications']);
 
@@ -20,7 +20,7 @@ describe('ApplistMapComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ApplistMapComponent],
+      declarations: [AppMapComponent],
       providers: [
         ConfigService,
         { provide: ApplicationService, useValue: applicationServiceSpy }
@@ -30,7 +30,7 @@ describe('ApplistMapComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApplistMapComponent);
+    fixture = TestBed.createComponent(AppMapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
