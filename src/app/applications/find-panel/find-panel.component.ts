@@ -16,7 +16,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
 
   @Input() isLoading = true; // from applications component
   @Output() updateFilters = new EventEmitter(); // to applications component
-  @Output() hideSidePanel = new EventEmitter(); // to applications component
+  @Output() hideSidePanel = new EventEmitter(); // to applications component // used in template
   @Output() resetView = new EventEmitter(); // to applications component
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -39,17 +39,16 @@ export class FindPanelComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         // get initial or updated parameters
-        const hasChanges = this._getParameters();
+        const hasChanges = this.getParameters();
 
-        // notify applications component
+        // notify applications component that we have new filters
         if (hasChanges) {
-          // console.log('find - has changes');
           this.updateFilters.emit(this.getFilters());
         }
       });
   }
 
-  private _getParameters(): boolean {
+  private getParameters(): boolean {
     this.applicantFilter = this.urlService.query('applicant');
     this.clidDtidFilter = this.urlService.query('clidDtid') ? +this.urlService.query('clidDtid') : null;
 
@@ -80,7 +79,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
   }
 
   public applyAllFilters(doNotify: boolean = true) {
-    // reset map view so we have context of what results are returned
+    // notify applications component to reset map view so user has context of what results are returned
     this.resetView.emit();
 
     // apply all temporary filters
@@ -90,7 +89,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
     // save parameters
     this._saveParameters();
 
-    // notify applications component
+    // notify applications component that we have new filters
     if (doNotify) { this.updateFilters.emit(this.getFilters()); }
   }
 
@@ -102,7 +101,6 @@ export class FindPanelComponent implements OnInit, OnDestroy {
   // clear all temporary filters
   public clearAllFilters(doNotify: boolean = true) {
     if (this.filterCount() > 0) {
-      // console.log('clearing Find filters');
       this._applicantFilter = null;
       this._clidDtidFilter = null;
 

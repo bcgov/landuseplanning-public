@@ -18,7 +18,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
 
   @Input() isLoading = true; // from applications component
   @Output() updateFilters = new EventEmitter(); // to applications component
-  @Output() hideSidePanel = new EventEmitter(); // to applications component
+  @Output() hideSidePanel = new EventEmitter(); // to applications component // used in template
   @Output() resetView = new EventEmitter(); // to applications component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
@@ -90,17 +90,16 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         // get initial or updated parameters
-        const hasChanges = this._getParameters();
+        const hasChanges = this.getParameters();
 
-        // notify applications component
+        // notify applications component that we have new filters
         if (hasChanges) {
-          // console.log('explore - has changes');
           this.updateFilters.emit(this.getFilters());
         }
       });
   }
 
-  private _getParameters(): boolean {
+  private getParameters(): boolean {
     const cpStatuses = (this.urlService.query('cpStatuses') || '').split('|');
     this.cpStatusKeys.forEach(key => {
       this.cpStatusFilters[key] = cpStatuses.includes(key);
@@ -181,7 +180,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   }
 
   public applyAllFilters(doNotify: boolean = true) {
-    // reset map view so we have context of what results are returned
+    // notify applications component to reset map view so user has context of what results are returned
     this.resetView.emit();
 
     // apply all temporary filters
@@ -196,7 +195,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     // save parameters
     this._saveParameters();
 
-    // notify applications component
+    // notify applications component that we have new filters
     if (doNotify) { this.updateFilters.emit(this.getFilters()); }
   }
 
@@ -256,7 +255,6 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   // clear all temporary filters
   public clearAllFilters(doNotify: boolean = true) {
     if (this.filterCount() > 0) {
-      // console.log('clearing Explore filters');
       this.cpStatusKeys.forEach(key => { this._cpStatusFilters[key] = false; });
       this.appStatusKeys.forEach(key => { this._appStatusFilters[key] = false; });
       this.purposeKeys.forEach(key => { this._purposeFilters[key] = false; });

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -15,9 +15,10 @@ import { UrlService } from 'app/services/url.service';
   templateUrl: './details-panel.component.html',
   styleUrls: ['./details-panel.component.scss']
 })
-export class DetailsPanelComponent implements OnDestroy {
+export class DetailsPanelComponent implements OnInit, OnDestroy {
 
   @Input() isLoading: boolean; // from applications component
+  @Output() loadingApp = new EventEmitter(); // to applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
@@ -43,17 +44,21 @@ export class DetailsPanelComponent implements OnDestroy {
           // nothing to display
           this.application = null;
         } else if (!this.application) {
+          // notify applications component that we will have an app
+          this.loadingApp.emit();
           // initial load
-          this._loadApp(id);
+          this.loadApp(id);
         } else if (this.application._id !== id) {
-          // updated app
+          // notify applications component that we will have an app
+          this.loadingApp.emit();
+          // load new app
           this.application = null;
-          this._loadApp(id);
+          this.loadApp(id);
         }
       });
   }
 
-  private _loadApp(id: string) {
+  private loadApp(id: string) {
     this.isAppLoading = true;
     // load entire application so we get extra data (documents, decision, features)
     this.applicationService.getById(id, true)
@@ -61,32 +66,36 @@ export class DetailsPanelComponent implements OnDestroy {
       .subscribe(
         application => {
           this.isAppLoading = false;
-          this.application = application;
+          if (application) { // safety check
+            this.application = application;
 
-          // save parameter
-          this.urlService.save('id', this.application._id);
+            // save parameter
+            this.urlService.save('id', this.application._id);
 
-          // notify applications component
-          this.setCurrentApp.emit(this.application);
+            // notify applications component to set new app
+            this.setCurrentApp.emit(this.application);
+          }
         },
         error => {
           this.isAppLoading = false;
-          this.clearAllFilters(); // in case id not found
           console.log('error =', error);
           alert('Uh-oh, couldn\'t load application');
         }
       );
   }
 
+  ngOnInit() { }
+
   ngOnDestroy() {
-    if (this.addCommentModal) { this.addCommentModal.dismiss('Add Comment modal dismissed'); }
+    if (this.addCommentModal) { this.addCommentModal.dismiss('addCommentModal dismissed'); }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
   public clearAllFilters() {
     if (this.application) {
-      this.unsetCurrentApp.emit(this.application); // notify applications component
+      // notify applications component to unset current app
+      this.unsetCurrentApp.emit(this.application);
       this.urlService.save('id', null);
     }
   }
