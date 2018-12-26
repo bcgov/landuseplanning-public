@@ -49,29 +49,34 @@ export class UrlService {
   }
 
   // save specified key in URL
-  public save(key: string, val: string, doNavigate: boolean = true) {
-    // check if not null or empty
-    if (val) {
-      // add/update key
-      this._params[key] = val;
-    } else {
-      // remove key
-      delete this._params[key];
+  public save(key: string, val: string) {
+    // check if val has changed
+    if (val !== this.query(key)) {
+      // check if not null or empty
+      if (val) {
+        // add/update key
+        this._params[key] = val;
+      } else {
+        // remove key
+        delete this._params[key];
+      }
+      this.navigate();
     }
-    if (doNavigate) { this.navigate(); }
   }
 
   // save specified fragment in URL
-  public setFragment(fragment: string, doNavigate: boolean = true) {
-    this._fragment = fragment;
-    if (doNavigate) { this.navigate(); }
+  public setFragment(fragment: string) {
+    // check if fragment has changed
+    if (fragment !== this._fragment) {
+      this._fragment = fragment;
+      this.navigate();
+    }
   }
 
   // update browser URL
   // NB: debounced function executes when 100ms have elapsed since last call
   // tslint:disable-next-line:member-ordering
   private navigate = _.debounce(() => {
-    // this.location.go(this.router.createUrlTree([], { relativeTo: this.route, queryParams: params, fragment: this._fragment }).toString());
     this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: this._params, fragment: this._fragment, replaceUrl: true });
   }, 100);
 

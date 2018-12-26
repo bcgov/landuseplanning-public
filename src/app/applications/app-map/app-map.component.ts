@@ -12,9 +12,6 @@ import { UrlService } from 'app/services/url.service';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 declare module 'leaflet' {
-  export interface FeatureGroup<P = any> {
-    dispositionId: number;
-  }
   export interface Marker<P = any> {
     dispositionId: number;
   }
@@ -442,8 +439,8 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     });
 
+    // FUTURE
     // DOESN'T WORK QUITE RIGHT -- ALSO NEEDS TO BE CALLED WHEN MOVING/ZOOMING AROUND THE MAP
-    // // FOR FUTURE USE
     // // get number visible on map
     // let count = 0;
     // const mapBounds = this.map.getBounds();
@@ -459,6 +456,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     // console.log('numberVisible =', count);
   }
 
+  // called when user clicks on app marker
   private onMarkerClick(...args: any[]) {
     const app = args[0] as Application;
     const marker = args[1].target as L.Marker;
@@ -500,9 +498,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**
    * Called when an app is selected or unselected.
    */
-  // TODO: wait until loading is complete before highlighting marker (see vvv)
-  //       see https://basarat.gitbooks.io/typescript/docs/async-await.html
-  public onHighlightApplication(app: Application, show: boolean) {
+  public async onHighlightApplication(app: Application, show: boolean) {
     // reset icon on previous marker, if any
     if (this.currentMarker) {
       this.currentMarker.setIcon(markerIcon);
@@ -511,18 +507,29 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     // set icon on new marker
     if (show && app) { // safety check
+      // wait for apps to finish loading
+      // ref: https://basarat.gitbooks.io/typescript/docs/async-await.html
+      while (this.isLoading) { await this.delay(100); }
+
       const marker = _.find(this.markerList, { dispositionId: app.tantalisID });
-      // TODO: marker may not yet be in markerList (see ^^^)
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(markerIconLg);
         const visibleParent = this.markerClusterGroup.getVisibleParent(marker);
         // if marker is in a cluster, zoom into it
         if (marker !== visibleParent) {
-          this.markerClusterGroup.zoomToShowLayer(marker, () => console.log('zoomed'));
+          this.markerClusterGroup.zoomToShowLayer(marker);
+        }
+        // if not already open, show popup
+        if (!marker.getPopup() || !marker.getPopup().isOpen()) {
+          this.onMarkerClick(app, { target: marker });
         }
       }
     }
+  }
+
+  private delay(milliseconds: number): Promise<void> {
+    return new Promise<void>(resolve => setTimeout(resolve, milliseconds));
   }
 
 }
