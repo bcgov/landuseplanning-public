@@ -16,7 +16,6 @@ import { UrlService } from 'app/services/url.service';
 })
 export class ExplorePanelComponent implements OnInit, OnDestroy {
 
-  @Input() isLoading = true; // from applications component
   @Output() updateFilters = new EventEmitter(); // to applications component
   @Output() hideSidePanel = new EventEmitter(); // to applications component // used in template
   @Output() resetView = new EventEmitter(); // to applications component

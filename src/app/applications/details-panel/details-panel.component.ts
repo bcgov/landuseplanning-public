@@ -17,7 +17,6 @@ import { UrlService } from 'app/services/url.service';
 })
 export class DetailsPanelComponent implements OnInit, OnDestroy {
 
-  @Input() isLoading: boolean; // from applications component
   @Output() loadingApp = new EventEmitter(); // to applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component

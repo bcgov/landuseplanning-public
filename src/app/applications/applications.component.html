@@ -32,21 +32,18 @@
       <i class="material-icons">close</i>
     </button>
     <app-details-panel #detailsPanel
-      [isLoading]="isLoading"
       (loadingApp)="disableSplash()"
       (setCurrentApp)="updateDetails($event, true)"
       (unsetCurrentApp)="updateDetails($event, false)"
       [hidden]="!isAppDetailsVisible">
     </app-details-panel>
     <app-find-panel #findPanel
-      [isLoading]="isLoading"
       (updateFilters)="disableSplash();updateFindFilters($event)"
       (hideSidePanel)="closeSidePanel()"
       (resetView)="appmap.resetView(false)"
       [hidden]="!isFindAppsVisible">
     </app-find-panel>
     <app-explore-panel #explorePanel
-      [isLoading]="isLoading"
       (updateFilters)="disableSplash();updateExploreFilters($event)"
       (hideSidePanel)="closeSidePanel()"
       (resetView)="appmap.resetView(false)"

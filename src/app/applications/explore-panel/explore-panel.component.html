@@ -31,7 +31,7 @@
       <label class="control-label">Comment Period</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of cpStatusKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_cpStatusFilters[key]" [disabled]="isLoading" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_cpStatusFilters[key]" />
           <label for="_{{key}}">{{commentPeriodService.getStatusString(key)}}</label>
         </div>
       </div>
@@ -41,7 +41,7 @@
       <label class="control-label">Purpose</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of purposeKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_purposeFilters[key]" [disabled]="isLoading" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_purposeFilters[key]" />
           <label for="_{{key}}">{{key | titlecase}}</label>
         </div>
       </div>
@@ -51,7 +51,7 @@
       <label class="control-label">Application Status</label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of appStatusKeys">
-          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_appStatusFilters[key]" [disabled]="isLoading" />
+          <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_appStatusFilters[key]" />
           <label for="_{{key}}">{{applicationService.getShortStatusString(key)}}</label>
         </div>
       </div>
@@ -59,18 +59,15 @@
 
     <div class="form-btns">
       <button class="btn btn-primary gtm-apply-filters explore-btn-lg-device" type="button" title="Apply filters"
-        (click)="applyAllFilters()"
-        [disabled]="isLoading">
+        (click)="applyAllFilters()">
         Explore
       </button>
       <button class="btn btn-primary gtm-apply-filters explore-btn-sm-device" type="button" title="Apply filters"
-        (click)="applyAllFilters();hideSidePanel.emit()"
-        [disabled]="isLoading">
+        (click)="applyAllFilters();hideSidePanel.emit()">
         Explore
       </button>
       <button class="btn btn-light" type="button" title="Clear filters"
-        (click)="clearAllFilters()"
-        [disabled]="isLoading">
+        (click)="clearAllFilters()">
         Clear
       </button>
     </div>

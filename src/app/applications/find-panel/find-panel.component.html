@@ -16,18 +16,15 @@
       </div>
       <div class="form-btns">
         <button class="btn btn-primary gtm-apply-filters find-btn-lg-device" type="button" title="Apply filters"
-          (click)="applyAllFilters()"
-          [disabled]="isLoading">
+          (click)="applyAllFilters()">
           Find
         </button>
         <button class="btn btn-primary gtm-apply-filters find-btn-sm-device" type="button" title="Apply filters"
-          (click)="applyAllFilters();hideSidePanel.emit()"
-          [disabled]="isLoading">
+          (click)="applyAllFilters();hideSidePanel.emit()">
           Find
         </button>
         <button class="btn btn-light" type="button" title="Clear filters"
-          (click)="clearAllFilters()"
-          [disabled]="isLoading">
+          (click)="clearAllFilters()">
           Clear
         </button>
       </div>
