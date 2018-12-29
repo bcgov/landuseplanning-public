@@ -10,24 +10,23 @@
   </div>
 </div>
 
-<div class="flex-panel" *ngIf="!isAppLoading && application !== null">
+<div class="flex-panel" *ngIf="!isAppLoading && !!application">
   <div class="flex-panel__header">
-    <h2 class="title">Crown Land File: &nbsp; #{{(application && application['clFile']) || '-'}}</h2>
+    <h2 class="title">Crown Land File: &nbsp; #{{application['clFile'] || '-'}}</h2>
   </div>
   <div class="flex-panel__header title-panel">
-    <div class="applicant-name">{{application?.client | titlecase}}</div>
-    <div class="application-purpose">{{application?.purpose | titlecase}} - {{application?.subpurpose | titlecase}}</div>
+    <div class="applicant-name">{{application.client | titlecase}}</div>
+    <div class="application-purpose">{{application.purpose | titlecase}} - {{application.subpurpose | titlecase}}</div>
     <ul class="status-container">
       <li class="app-status" 
-        *ngVar="applicationService.getStatusCode(application?.status) as appStatusCode"
         [ngClass]="{
-          'abandoned':        applicationService.isAbandoned(appStatusCode),
-          'under-review':     applicationService.isApplicationUnderReview(appStatusCode),
-          'review-complete':  applicationService.isApplicationReviewComplete(appStatusCode),
-          'approved':         applicationService.isDecisionApproved(appStatusCode),
-          'not-approved':     applicationService.isDecisionNotApproved(appStatusCode),
-          'unknown':          applicationService.isUnknown(appStatusCode)
-        }">{{application?.appStatus}}
+          'abandoned':        applicationService.isAbandoned(application.appStatusCode),
+          'under-review':     applicationService.isApplicationUnderReview(application.appStatusCode),
+          'review-complete':  applicationService.isApplicationReviewComplete(application.appStatusCode),
+          'approved':         applicationService.isDecisionApproved(application.appStatusCode),
+          'not-approved':     applicationService.isDecisionNotApproved(application.appStatusCode),
+          'unknown':          applicationService.isUnknown(application.appStatusCode)
+        }">{{application.appStatus}}
       </li>
       <li class="commenting-status" 
         [ngClass]="commentPeriodService.isOpen(application.cpStatusCode) ? 'commenting-open':'commenting-closed'">
@@ -58,31 +57,31 @@
           <ng-template ngbTabContent>
             <section>
               <h3>About this application</h3>
-              <p class="description">{{application?.description || "No description available"}}</p>
+              <p class="description">{{application.description || "No description available"}}</p>
               <ul class="meta-container">
                 <li>
                   <div class="key">Application Status:</div>
-                  <div class="value">{{application?.appStatus}}</div>
+                  <div class="value">{{application.appStatus}}</div>
                 </li>
                 <li>
                   <div class="key">Applicant Name:</div>
-                  <div class="value">{{application?.client | titlecase}}</div>
+                  <div class="value">{{application.client | titlecase}}</div>
                 </li>
                 <li>
                   <div class="key">Disposition Transaction:</div>
-                  <div class="value">{{application?.tantalisID || '-'}}</div>
+                  <div class="value">{{application.tantalisID || '-'}}</div>
                 </li>
                 <li>
                   <div class="key">Tenure:</div>
-                  <div class="value">{{application?.type | titlecase}} / {{application?.subtype | titlecase}}</div>
+                  <div class="value">{{application.type | titlecase}} / {{application.subtype | titlecase}}</div>
                 </li>
                 <li>
                   <div class="key">Purpose/Subpurpose:</div>
-                  <div class="value">{{application?.purpose | lowercase}} / {{application?.subpurpose | lowercase}}</div>
+                  <div class="value">{{application.purpose | lowercase}} / {{application.subpurpose | lowercase}}</div>
                 </li>
                 <li>
                   <div class="key">Location:</div>
-                  <div class="value">{{application?.location | lowercase}}</div>
+                  <div class="value">{{application.location | lowercase}}</div>
                 </li>
               </ul>
             </section>
@@ -123,9 +122,9 @@
                 </ul>
               </div>
               <div *ngIf="!application.decision">
-                <div *ngIf="applicationService.isAbandoned(application.status)
-                || applicationService.isDecisionApproved(application.status)
-                || applicationService.isDecisionNotApproved(application.status); else notDecisionStatus">
+                <div *ngIf="applicationService.isAbandoned(application.appStatusCode)
+                || applicationService.isDecisionApproved(application.appStatusCode)
+                || applicationService.isDecisionNotApproved(application.appStatusCode); else notDecisionStatus">
                   No decision documents are available at this time. Please check back for updates to this information.
                 </div>
                 <ng-template #notDecisionStatus>
@@ -143,10 +142,12 @@
           <ng-template ngbTabContent>
             <section>
               <!--
-              <p *ngIf="application?.features">This application has <strong>{{application.features.length}}</strong> {{application.features.length === 1 ? 'shape.' : 'shapes.'}}</p>
+              <p *ngIf="application.features">
+                This application has <strong>{{application.features.length}}</strong> {{application.features.length === 1 ? 'shape.' : 'shapes.'}}
+              </p>
               -->
               <ul class="shapefile-list">
-                <li *ngFor="let feature of application?.features">
+                <li *ngFor="let feature of application.features">
                   <div class="shapefile-list__id">Shape ID: {{feature.properties.INTRID_SID}}</div>
                   <div>Type/Subtype: {{application.type || '-'}} / {{application.subtype || '-'}}</div>
                   <div>Area (ha): {{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</div>

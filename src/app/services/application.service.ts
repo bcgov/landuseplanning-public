@@ -259,8 +259,11 @@ export class ApplicationService {
         // derive region code
         application.region = this.getRegionCode(application.businessUnit);
 
+        // application status code
+        application.appStatusCode = this.getStatusCode(application.status);
+
         // user-friendly application status
-        application.appStatus = this.getLongStatusString(this.getStatusCode(application.status));
+        application.appStatus = this.getLongStatusString(application.appStatusCode);
 
         // 7-digit CL File number for display
         if (application.cl_file) {
