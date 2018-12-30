@@ -13,6 +13,7 @@ import { AppListComponent } from './app-list/app-list.component';
 import { AppMapComponent } from './app-map/app-map.component';
 import { MarkerPopupComponent } from './app-map/marker-popup/marker-popup.component';
 import { DetailsPanelComponent } from './details-panel/details-panel.component';
+import { DetailsMapComponent } from './details-panel/details-map/details-map.component';
 import { ExplorePanelComponent } from './explore-panel/explore-panel.component';
 import { DateInputComponent } from './explore-panel/date-input/date-input.component';
 import { FindPanelComponent } from './find-panel/find-panel.component';
@@ -32,6 +33,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
     AppMapComponent,
     MarkerPopupComponent,
     DetailsPanelComponent,
+    DetailsMapComponent,
     ExplorePanelComponent,
     DateInputComponent,
     FindPanelComponent,

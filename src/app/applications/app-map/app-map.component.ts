@@ -265,7 +265,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   // to avoid timing conflict with animations (resulting in small map tile at top left of page),
-  // ensure map component is visible in the DOM then update it; otherwise wait a bit...
+  // ensure map component is visible in the DOM then update it; otherwise wait a bit and try again
   // ref: https://github.com/Leaflet/Leaflet/issues/4835
   // ref: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
   private fixMap() {
@@ -395,16 +395,10 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private fitBounds(bounds: L.LatLngBounds = null) {
     // console.log('fitting bounds');
-    const fitBoundsOptions: L.FitBoundsOptions = {
-      // disable animation to prevent known bug where zoom is sometimes incorrect
-      // ref: https://github.com/Leaflet/Leaflet/issues/3249
-      animate: false
-    };
-
     if (bounds && bounds.isValid()) {
-      this.map.fitBounds(bounds, fitBoundsOptions);
+      this.map.fitBounds(bounds);
     } else {
-      this.map.fitBounds(this.defaultBounds, fitBoundsOptions);
+      this.map.fitBounds(this.defaultBounds);
     }
   }
 

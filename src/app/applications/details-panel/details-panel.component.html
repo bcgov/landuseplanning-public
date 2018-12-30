@@ -36,7 +36,7 @@
   </div>
   <div class="flex-panel__scroll">
     <div class="app-details-info">
-      <section class="commenting-info-container">
+      <section class="commenting-info-container" *ngIf="application.currentPeriod">
         <div *ngIf="commentPeriodService.isOpen(application.cpStatusCode)">
           <div *ngVar="application.currentPeriod['daysRemaining'] as daysRemaining">
             This application is currently accepting comments for the next
@@ -137,9 +137,12 @@
 
         <ngb-tab>
           <ng-template ngbTabTitle>
-            Shape Information
+            Geographic Shapes ({{application.features?.length || 0}})
           </ng-template>
           <ng-template ngbTabContent>
+            <section>
+              <app-details-map [application]="application"></app-details-map>
+            </section>
             <section>
               <!--
               <p *ngIf="application.features">
@@ -147,11 +150,11 @@
               </p>
               -->
               <ul class="shapefile-list">
-                <li *ngFor="let feature of application.features">
+                <li class="interest-id" *ngFor="let feature of application.features">
                   <div class="shapefile-list__id">Shape ID: {{feature.properties.INTRID_SID}}</div>
-                  <div>Type/Subtype: {{application.type || '-'}} / {{application.subtype || '-'}}</div>
-                  <div>Area (ha): {{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</div>
-                  <div>Legal Description: <span [innerHTML]="(feature.properties.TENURE_LEGAL_DESCRIPTION | newlines) || '-'"></span></div>
+                  <div><strong>Type/Subtype:</strong> {{application.type || '-'}} / {{application.subtype || '-'}}</div>
+                  <div><strong>Area (ha):</strong> {{application.areaHectares ? (application.areaHectares | number:'1.2-2') : '-'}}</div>
+                  <div><strong>Legal Description:</strong> <span [innerHTML]="(feature.properties.TENURE_LEGAL_DESCRIPTION | newlines) || '-'"></span></div>
                 </li>
               </ul>
             </section>
