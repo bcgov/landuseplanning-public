@@ -103,7 +103,7 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
   private fitBounds() {
     const bounds = this.appFG.getBounds();
     if (bounds && bounds.isValid()) {
-      this.map.fitBounds(bounds);
+      this.map.fitBounds(bounds, { padding: [20, 20] });
     }
   }
 

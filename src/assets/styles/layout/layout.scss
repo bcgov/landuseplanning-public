@@ -90,9 +90,9 @@ hr {
   .title {
     @include flex(1 1 auto);
     margin: 0;
-    letter-spacing: -0.02rem;
-    font-size: 0.875rem;
-    font-weight: 700;
+    letter-spacing: -0.01rem;
+    font-size: 1rem;
+    font-weight: 400;
   }
 }
 

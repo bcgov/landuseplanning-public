@@ -1,21 +1,57 @@
 @import "~assets/styles/base/base.scss";
 
-.app-detail {
-  line-height: normal;
+::ng-deep {
+  .nav-tabs {
+    display: none;
+  }
+
+  .nav-item {
+    width: 50%;
+    text-align: center;
+  }
 }
 
+.flex-panel__scroll {
+  padding: 0;
+}
 section + section {
   margin-top: 2rem;
 }
 
 section {
+  margin: 0 !important;
+  padding: 1.5rem;
+  border-bottom: 1px solid #ddd;
+
   h3 {
     margin-bottom: 1rem;
     font-size: 1rem;
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  h5 {
+    margin-bottom: 0.2rem;
+    letter-spacing: 0;
+    font-size: 0.875rem;
     font-weight: 600;
   }
 }
 
+.app-detail {
+  line-height: normal;
+}
+
+.app-detail-info {
+  line-height: 1.25rem;
+  font-size: 0.85rem;
+}
+
+// Title Panel
 .title-panel {
   @include flex-direction(column);
   @include flex(0 0 auto);
@@ -30,79 +66,78 @@ section {
 .application-purpose {
   letter-spacing: -0.02rem;
   line-height: 1.5rem;
-  font-size: 1.375rem;
-  font-weight: 600;
 }
 
 .applicant-name {
   color: $gray9;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .application-purpose {
-  color: $gray5;
+  color: $gray7;
+  font-size: 1.25rem;
 }
 
-// Status 
-.status-container {
-  margin-top: 1.4rem;
-  margin-bottom: 0;
-  padding: 0;
+// Status Sections and Iconography
+.status-section {
+  padding: 1.2rem 1.5rem;
+}
+
+.status {
+  padding-top: 0.1rem;
+  padding-left: 2.25rem;
   overflow: hidden;
-
-  li {
-    padding-left: 1.75rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.8rem;
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: 20px;
-  }
-
-  li + li {
-    margin-top: 0.35rem;
-  }
+  text-overflow: ellipsis;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 24px;
 }
 
-// Status Iconography 
+.status-msg {
+  margin-top: 0.8rem;
+}
+
 .commenting-open {
-  background: url("~assets/images/baseline-insert_comment-24px.svg");
+  background-image: url("~assets/images/baseline-insert_comment-24px.svg");
 }
 
 .commenting-closed {
-  background: url("~assets/images/baseline-cancel-24px.svg");
+  background-image: url("~assets/images/baseline-cancel-24px.svg");
 }
 
 .under-review {
-  background: url("~assets/images/baseline-access_time-24px.svg");
+  background-image: url("~assets/images/baseline-access_time-24px.svg");
 }
 
 .review-complete,
 .unknown {
-  background: url("~assets/images/outline-info-24px.svg");
+  background-image: url("~assets/images/outline-info-24px.svg");
 }
 
 .approved {
-  background: url("~assets/images/baseline-check-24px.svg");
+  background-image: url("~assets/images/baseline-check-24px.svg");
 }
 
 .abandoned,
 .not-approved {
-  background: url("~assets/images/baseline-cancel-24px.svg");
+  background-image: url("~assets/images/baseline-cancel-24px.svg");
 }
 
-.app-details-info {
-  line-height: 1.25rem;
-  font-size: 0.85rem;
+.submit-comment-btn {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
+
 
 // Meta
 .meta-container {
   position: relative;
   overflow: hidden;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
+  margin: 0;
   padding: 0;
   display: table;
   width: 100%;
@@ -121,25 +156,21 @@ section {
   .key {
     display: table-cell;
     padding-right: 1.5rem;
+    padding-bottom: 0.2rem;
     white-space: nowrap;
   }
 
   .value {
     display: table-cell;
-    font-style: italic;
+    //font-style: italic;
   }
 }
 
-:host ::ng-deep {
-  .nav-item {
-    width: 50%;
-    text-align: center;
-  }
-}
-
+// Documents
 .document-list {
   padding: 0;
   margin: 0 -0.2rem;
+  margin-top: 1.25rem;
   list-style-type: none;
 
   li {
@@ -171,32 +202,24 @@ section {
   }
 }
 
+// Shapefile List
 .shapefile-list {
-  margin-top: -0.5rem;
+  margin-top: 1.5rem;
   margin-bottom: 0;
   padding: 0;
   list-style-type: none;
 
-  li {
-    padding: 0.5rem 0;
+  .shapefile-list__item + .shapefile-list__item {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid $gray4;
+  }
+
+  .meta-container {
+    margin-bottom: 0.5rem;
   }
 }
 
 .shapefile-list__id {
-  font-size: 1.15rem;
-  font-weight: 700;
   margin-bottom: 0.5rem;
-}
-
-.commenting-info-container {
-  margin-bottom: 1.5rem;
-
-  .btn {
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
-    padding: 0.75rem;
-    width: 100%;
-    font-size: 0.875rem;
-    font-weight: 700;
-  }
 }
