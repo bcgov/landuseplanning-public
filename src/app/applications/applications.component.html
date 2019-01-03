@@ -53,7 +53,7 @@
 
   <div class="main-panel">
     <div class="app-results">
-      <span class="app-results__count"><strong>{{totalNumber}}</strong> applications found</span>
+      <span class="app-results__count"><strong>{{totalNumber}}</strong> {{totalNumber !== 1 ? 'applications' : 'application'}} found</span>
       <span class="app-results__clear" *ngIf="findPanel.filterCount() > 0 || explorePanel.filterCount() > 0">
         <button class="clear-btn btn btn-sm btn-link" (click)="clearFilters()">Clear Filters</button>
       </span>
