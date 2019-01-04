@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ContactComponent } from 'app/contact/contact.component';
-import { ApplicationsComponent } from 'app/applications/applications.component';
+import { ProjectsComponent } from 'app/projects/projects.component';
 import { HomeComponent } from 'app/home/home.component';
 
 const routes: Routes = [
@@ -11,8 +11,8 @@ const routes: Routes = [
     component: ContactComponent
   },
   {
-    path: 'applications',
-    component: ApplicationsComponent
+    path: 'projects',
+    component: ProjectsComponent
   },
   {
     // default route

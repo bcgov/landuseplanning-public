@@ -88,6 +88,77 @@ export class ApiService {
   }
 
   //
+  // Projects
+  //
+  getCountProjects() {
+    const queryString = `project`;
+    return this.http.head(`${this.apiPath}/${queryString}`);
+  }
+
+  getProjects(pageNum: number, pageSize: number, regions: string[], cpStatuses: string[], appStatuses: string[], applicant: string,
+    clFile: string, dispId: string, purpose: string) {
+    const fields = [
+      'agency',
+      'areaHectares',
+      'businessUnit',
+      'centroid',
+      'cl_file',
+      'client',
+      'description',
+      'legalDescription',
+      'location',
+      'name',
+      'publishDate',
+      'purpose',
+      'status',
+      'subpurpose',
+      'subtype',
+      'tantalisID',
+      'tenureStage',
+      'type'
+    ];
+
+    let queryString = 'project?';
+    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
+    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
+    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
+    if (cpStatuses !== null && cpStatuses.length > 0) { queryString += `cpStatuses=${this.buildValues(cpStatuses)}&`; }
+    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
+    if (applicant !== null) { queryString += `client=${applicant}&`; }
+    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
+    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
+    if (purpose !== null) { queryString += `purpose=${purpose}&`; }
+    queryString += `fields=${this.buildValues(fields)}`;
+
+    return this.get(queryString);
+  }
+
+  getProject(id: string) {
+    const fields = [
+      'agency',
+      'areaHectares',
+      'businessUnit',
+      'centroid',
+      'cl_file',
+      'client',
+      'description',
+      'legalDescription',
+      'location',
+      'name',
+      'publishDate',
+      'purpose',
+      'status',
+      'subpurpose',
+      'subtype',
+      'tantalisID',
+      'tenureStage',
+      'type'
+    ];
+    const queryString = 'project/' + id + '?fields=' + this.buildValues(fields);
+    return this.get(queryString);
+  }
+
+  //
   // Applications
   //
   getCountApplications() {

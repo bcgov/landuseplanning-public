@@ -13,7 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 // modules
 import { SharedModule } from 'app/shared.module';
 import { ApplicationModule } from 'app/application/application.module';
-import { ApplicationsModule } from 'app/applications/applications.module';
+import { ProjectsModule } from 'app/projects/projects.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 
 // components
@@ -25,13 +25,13 @@ import { FooterComponent } from 'app/footer/footer.component';
 
 // services
 import { ApiService } from 'app/services/api';
-import { ApplicationService } from 'app/services/application.service';
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DecisionService } from 'app/services/decision.service';
 import { DocumentService } from 'app/services/document.service';
 import { SearchService } from 'app/services/search.service';
 import { FeatureService } from 'app/services/feature.service';
+import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 
 @NgModule({
@@ -47,7 +47,7 @@ import { ConfigService } from 'app/services/config.service';
     BootstrapModalModule,
     SharedModule,
     ApplicationModule,
-    ApplicationsModule,
+    ProjectsModule,
     AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
   ],
   declarations: [
@@ -60,7 +60,7 @@ import { ConfigService } from 'app/services/config.service';
   providers: [
     CookieService,
     ApiService,
-    ApplicationService,
+    ProjectService,
     CommentService,
     CommentPeriodService,
     ConfigService,
