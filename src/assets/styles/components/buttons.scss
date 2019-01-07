@@ -191,7 +191,7 @@
   padding-bottom: 0.35rem;
   padding-left: 0;
   overflow: hidden;
-  background: transparent;
+  background-color: transparent;
   transition: all ease-out 0.2s;
   cursor: pointer;
 
@@ -204,7 +204,7 @@
   &:focus,
   &:hover {
     color: #000;
-    background: #eee;
+    background-color: #eee;
   }
 }
 
@@ -220,5 +220,22 @@
   &:hover {
     color: $gray9;
     background: $gray1;
+  }
+}
+
+// Label buttons (help, info, etc.)
+.label-btn {
+  margin-top: -0.2rem;
+  padding: 0;
+  width: auto;
+
+  i {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-image: url("~/assets/images/baseline-info-24px.svg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 18px;
   }
 }

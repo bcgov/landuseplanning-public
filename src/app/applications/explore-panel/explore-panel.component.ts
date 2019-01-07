@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
@@ -7,6 +8,7 @@ import * as moment from 'moment';
 import { Constants } from 'app/utils/constants';
 import { ApplicationService } from 'app/services/application.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { PurposeInfoModalComponent } from 'app/applications/purpose-info-modal/purpose-info-modal.component';
 import { UrlService } from 'app/services/url.service';
 
 @Component({
@@ -24,6 +26,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   readonly maxDate = moment().toDate(); // today
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+  private purposeInfoModal: NgbModalRef = null;
 
   // search keys for lists
   public cpStatusKeys: Array<string> = [];
@@ -50,6 +53,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   public _publishToFilter: Date = null; // temporary filters for Cancel feature
 
   constructor(
+    private modalService: NgbModal,
     private applicationService: ApplicationService,
     public commentPeriodService: CommentPeriodService, // also used in template
     private urlService: UrlService
@@ -274,6 +278,11 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     const publishCount = (this.publishFromFilter || this.publishToFilter) ? 1 : 0;
 
     return cpStatusCount + appStatusCount + purposeCount + subpurposeCount + publishCount;
+  }
+
+  public showPurposeInfoModal() {
+    // open modal
+    this.purposeInfoModal = this.modalService.open(PurposeInfoModalComponent, { backdrop: 'static', size: 'lg' });
   }
 
 }

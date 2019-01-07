@@ -1,0 +1,26 @@
+@import "~assets/styles/base/base.scss";
+
+.purpose-list,
+.subpurpose-list {
+  margin: 0;
+}
+
+.purpose-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.purpose-list__item {
+  font-weight: 700;
+}
+
+.purpose-list__item + li {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $gray3;
+}
+
+.subpurpose-list {
+  padding-left: 2rem;
+  font-weight: normal;
+}
