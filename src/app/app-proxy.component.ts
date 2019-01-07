@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   template: ''
 })
 export class AppProxyComponent {
-  constructor(private _router: Router, private _route: ActivatedRoute) {
-    _router.navigate(['/applications'], { queryParams: { id: _route.snapshot.params['id'] }, fragment: 'details' });
+  constructor(private router: Router, private route: ActivatedRoute) {
+    this.router.navigate(['/applications'], { queryParams: { id: this.route.snapshot.params['id'] }, fragment: 'details' });
   }
 }

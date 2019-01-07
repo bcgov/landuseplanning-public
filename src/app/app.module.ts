@@ -21,6 +21,7 @@ import { ContactComponent } from 'app/contact/contact.component';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 import { HeaderComponent } from 'app/header/header.component';
 import { HomeComponent } from 'app/home/home.component';
+import { AboutComponent } from 'app/about/about.component';
 import { FooterComponent } from 'app/footer/footer.component';
 
 // services
@@ -55,6 +56,7 @@ import { UrlService } from 'app/services/url.service';
     FileUploadComponent,
     HeaderComponent,
     HomeComponent,
+    AboutComponent,
     FooterComponent
   ],
   providers: [

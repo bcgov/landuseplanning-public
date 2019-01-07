@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AppProxyComponent } from './app-proxy.component';
+import { HomeComponent } from 'app/home/home.component';
+import { AboutComponent } from 'app/about/about.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { ApplicationsComponent } from 'app/applications/applications.component';
-import { HomeComponent } from 'app/home/home.component';
+import { AppProxyComponent } from './app-proxy.component';
 
 const routes: Routes = [
   {
-    path: 'about',
+    path: 'home/:showSplashModal',
     component: HomeComponent
+  },
+  {
+    path: 'about',
+    component: AboutComponent
   },
   {
     path: 'contact',
@@ -29,13 +34,13 @@ const routes: Routes = [
   {
     // default route
     path: '',
-    redirectTo: 'applications',
+    redirectTo: 'home/true',
     pathMatch: 'full'
   },
   {
     // wildcard route
     path: '**',
-    redirectTo: '/applications'
+    redirectTo: '/home/true'
   }
 ];
 

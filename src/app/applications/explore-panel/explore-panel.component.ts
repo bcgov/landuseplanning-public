@@ -76,7 +76,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
 
     // declare subpurpose keys
     Object.getOwnPropertyNames(Constants.subpurposes).forEach(purpose => {
-      Constants.subpurposes[purpose].forEach(subpurpose => {
+      Constants.subpurposes[purpose].forEach((subpurpose: string) => {
         this.subpurposeKeys.push(subpurpose.toUpperCase());
       });
     });

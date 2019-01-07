@@ -1,17 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ConfigService } from 'app/services/config.service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  template: ''
 })
 
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent {
 
-  constructor() { }
-
-  ngOnInit() { }
-
-  ngOnDestroy() { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private configService: ConfigService
+  ) {
+    // (re)load applications component optionally with Splash modal
+    const showSplashModal = this.route.snapshot.paramMap.get('showSplashModal');
+    this.configService.showSplashModal = (showSplashModal === 'true');
+    this.router.navigate(['/applications']);
+  }
 
 }
