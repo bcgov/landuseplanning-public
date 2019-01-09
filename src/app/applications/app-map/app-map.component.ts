@@ -82,6 +82,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
         // FUTURE
         // // try to load new map state
         // if (this.isMapReady) {
+        //   // TODO: could also get params from event.url
         //   const lat = this.urlService.query('lat');
         //   const lng = this.urlService.query('lng');
         //   const zoom = this.urlService.query('zoom');

@@ -38,6 +38,7 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
     this.urlService.onNavEnd$
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
+        // TODO: could also get 'id' from event.url
         const id = this.urlService.query('id');
         if (!id) {
           // nothing to display

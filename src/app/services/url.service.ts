@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ParamMap, Params, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Params, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { filter } from 'rxjs/operators';
 import 'rxjs/add/operator/share';
 import * as _ from 'lodash';
 
 //
-// This service/class provides a centralized place to save and restore a page's parameters
+// This service/class provides a centralized mechanism to save and restore a page's parameters
 // in its URL (so any query parameters are saved in history). This allows 'back' functionality
 // as well as bookmarking or cutting/pasting an URL to restore the page's parameters.
 //
@@ -15,37 +15,40 @@ import * as _ from 'lodash';
 export class UrlService {
 
   public onNavEnd$: Observable<NavigationEnd>; // see details below
-
-  private _paramMap: ParamMap = null; // for querying
-  private _params: Params = {}; // for saving
-  private _fragment: string = null; // for saving
+  private _params: Params = {};
+  private _fragment: string = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
-    // observe query parameters
-    // these are updated on every route (ie, page) change (including navigation below)
-    this.activatedRoute.queryParamMap
-      .subscribe(paramMap => {
-        this._paramMap = paramMap;
-
-        // reset object
-        this._params = {};
-        this._paramMap.keys.forEach(key => this._params[key] = this._paramMap.get(key));
-      });
-
     // create a new observable that publishes only the NavigationEnd event
     // used for subscribers to know when to refresh their parameters
     // NB: use share() so this fires only once each time even with multiple subscriptions
     this.onNavEnd$ = this.router.events.pipe(
       filter(event => (event instanceof NavigationEnd))
     ).share() as Observable<NavigationEnd>;
+
+    // keep params up to date
+    this.activatedRoute.queryParamMap
+      .subscribe(paramMap => {
+        this._params = {}; // reset object
+        paramMap.keys.forEach(key => this._params[key] = paramMap.get(key));
+      });
+
+    // keep fragment up to date
+    this.onNavEnd$
+      .subscribe(event => {
+        const urlTree = router.parseUrl(event.url);
+        if (urlTree) {
+          this._fragment = urlTree.fragment;
+        }
+      });
   }
 
   // query for specified key in URL
   public query(key: string): string {
-    return this._paramMap.get(key); // returns null if key not found
+    return this._params[key] || null; // returns null if key not found
   }
 
   // save specified key in URL
@@ -77,7 +80,7 @@ export class UrlService {
   // NB: debounced function executes when 100ms have elapsed since last call
   // tslint:disable-next-line:member-ordering
   private navigate = _.debounce(() => {
-    this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: this._params, fragment: this._fragment, replaceUrl: true });
+    this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: this._params, fragment: this._fragment });
   }, 100);
 
 }

@@ -14,13 +14,13 @@ import { AppRoutingModule } from 'app/app-routing.module';
 import { ApplicationsModule } from 'app/applications/applications.module';
 
 // components
-import { AppProxyComponent } from 'app/app-proxy.component';
+import { HomeProxyComponent } from 'app/home-proxy.component';
+import { ApplicationsProxyComponent } from 'app/applications-proxy.component';
 import { AppComponent } from 'app/app.component';
 import { CommentModalComponent } from 'app/comment-modal/comment-modal.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 import { HeaderComponent } from 'app/header/header.component';
-import { HomeComponent } from 'app/home/home.component';
 import { AboutComponent } from 'app/about/about.component';
 import { FooterComponent } from 'app/footer/footer.component';
 
@@ -49,13 +49,13 @@ import { UrlService } from 'app/services/url.service';
     AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
   ],
   declarations: [
-    AppProxyComponent,
+    HomeProxyComponent,
+    ApplicationsProxyComponent,
     AppComponent,
     CommentModalComponent,
     ContactComponent,
     FileUploadComponent,
     HeaderComponent,
-    HomeComponent,
     AboutComponent,
     FooterComponent
   ],

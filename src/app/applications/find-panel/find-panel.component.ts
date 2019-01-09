@@ -38,6 +38,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         // get initial or updated parameters
+        // TODO: could also get params from event.url
         const hasChanges = this.getParameters();
 
         // notify applications component that we have new filters
@@ -119,7 +120,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
   // show Explore panel
   public showExplore() {
     // hard-navigate to remove any other URL parameters
-    this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore', replaceUrl: true });
+    this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore' });
   }
 
 }

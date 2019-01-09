@@ -8,7 +8,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ConfigService {
 
-  private _showSplashModal = true;
   private _baseLayerName = 'World Topographic'; // NB: must match a valid base layer name
 
   constructor() { }
@@ -22,9 +21,6 @@ export class ConfigService {
   public destroy() {
     // FUTURE: save settings to window.localStorage ?
   }
-
-  get showSplashModal(): boolean { return this._showSplashModal; }
-  set showSplashModal(val: boolean) { this._showSplashModal = val; }
 
   get baseLayerName(): string { return this._baseLayerName; }
   set baseLayerName(val: string) { this._baseLayerName = val; }

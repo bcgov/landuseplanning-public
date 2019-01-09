@@ -7,11 +7,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 //
 
 @Component({
-  selector: 'app-proxy-component',
+  // tslint:disable-next-line:component-selector
+  selector: 'applications-proxy-component',
   template: ''
 })
-export class AppProxyComponent {
-  constructor(private router: Router, private route: ActivatedRoute) {
+export class ApplicationsProxyComponent {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.router.navigate(['/applications'], { queryParams: { id: this.route.snapshot.params['id'] }, fragment: 'details' });
   }
 }

@@ -93,6 +93,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         // get initial or updated parameters
+        // TODO: could also get params from event.url
         const hasChanges = this.getParameters();
 
         // notify applications component that we have new filters

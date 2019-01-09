@@ -70,6 +70,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public isSidePanelVisible = false;
   public isAppDetailsVisible = false;
 
+  private showSplashModal = false;
   public isLoading = false; // initial value
   private loadInitialApps = true;
   private splashModal: NgbModalRef = null;
@@ -95,24 +96,21 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.urlService.onNavEnd$
       .takeUntil(this.ngUnsubscribe)
       .subscribe(event => {
-        // if we're not displaying the splash page
-        // then display interface according to fragment
-        if (!this.configService.showSplashModal) {
-          const urlTree = router.parseUrl(event.url);
-          if (urlTree && urlTree.fragment) {
-            this.isAppDetailsVisible = false;
-            this.isExploreAppsVisible = false;
-            this.isFindAppsVisible = false;
+        const urlTree = router.parseUrl(event.url);
+        if (urlTree) {
+          // if splash modal is open, close it in case user clicked Back
+          if (this.splashModal) { this.splashModal.dismiss(); }
+          this.isSidePanelVisible = false;
+          this.isAppDetailsVisible = false;
+          this.isExploreAppsVisible = false;
+          this.isFindAppsVisible = false;
 
-            switch (urlTree.fragment) {
-              case 'details': this.isSidePanelVisible = this.isAppDetailsVisible = true; break;
-              case 'explore': this.isSidePanelVisible = this.isExploreAppsVisible = true; break;
-              case 'find': this.isSidePanelVisible = this.isFindAppsVisible = true; break;
-            }
+          switch (urlTree.fragment) {
+            case 'splash': this.showSplashModal = true; break;
+            case 'details': this.isSidePanelVisible = this.isAppDetailsVisible = true; break;
+            case 'explore': this.isSidePanelVisible = this.isExploreAppsVisible = true; break;
+            case 'find': this.isSidePanelVisible = this.isFindAppsVisible = true; break;
           }
-        } else {
-          // remove any URL fragment so it doesn't interfere with future routing
-          this.urlService.setFragment(null);
         }
       });
   }
@@ -123,16 +121,25 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     // show splash modal (unless a sub-component has already turned off this flag)
-    if (this.configService.showSplashModal) {
+    if (this.showSplashModal) {
       // do this in another event so it's not in current change detection cycle
       setTimeout(() => {
         this.splashModal = this.modalService.open(SplashModalComponent, { backdrop: 'static', windowClass: 'splash-modal' });
         this.splashModal.result.then(result => {
-          this.configService.showSplashModal = false;
+          this.splashModal = null;
+          this.showSplashModal = false;
           // if user dismissed the modal or clicked Explore then load initial apps
-          // (otherwise user clicked Find, which will load filtered apps)
-          if (result === SplashModalResult.Dismissed || result === SplashModalResult.Exploring) {
-            this.getApps();
+          // otherwise user clicked Find, which will load filtered apps
+          switch (result) {
+            case SplashModalResult.Dismissed:
+              this.urlService.setFragment(null);
+              this.getApps();
+              break;
+            case SplashModalResult.Exploring:
+              this.getApps();
+              break;
+            case SplashModalResult.Finding:
+              break;
           }
         });
       });
@@ -195,7 +202,6 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.applicationService.getCount(this.filters, null)
           .takeUntil(this.ngUnsubscribe)
           .subscribe(count => {
-            console.log('totalNumber =', count);
             this.totalNumber = count;
           });
       }
@@ -252,10 +258,10 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Event handler called when Find component updates its filters.
    */
-  public updateFindFilters(filters: FiltersType) {
+  public updateFindFilters(findFilters: FiltersType) {
     this.loadInitialApps = false; // skip initial app load
     // NB: first source is 'emptyFilters' to ensure all properties are set
-    this.filters = Object.assign({}, emptyFilters, filters);
+    this.filters = Object.assign({}, emptyFilters, findFilters);
     // clear other filters
     this.explorePanel.clearAllFilters(false);
     this.getApps();
@@ -265,10 +271,10 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Event handler called when Explore component updates its filters.
    */
-  public updateExploreFilters(filters: FiltersType) {
+  public updateExploreFilters(exploreFilters: FiltersType) {
     this.loadInitialApps = false; // skip initial app load
     // NB: first source is 'emptyFilters' to ensure all properties are set
-    this.filters = Object.assign({}, emptyFilters, filters);
+    this.filters = Object.assign({}, emptyFilters, exploreFilters);
     // clear other filters
     this.findPanel.clearAllFilters(false);
     this.getApps();
@@ -361,7 +367,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public disableSplash() {
     // this is called by Find/Explore when they have filters to apply or by Details when it has an app to display
     // ie, on init, if the above are true then bypass the splash modal
-    this.configService.showSplashModal = false;
+    this.showSplashModal = false;
   }
 
   public closeSidePanel() {
