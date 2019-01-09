@@ -24,6 +24,7 @@ export class Application {
   tantalisID: number;
   tenureStage: string;
   type: string;
+  statusHistoryEffectiveDate: Date = null;
 
   region: string; // region code derived from Business Unit
   appStatus: string; // user-friendly application status
@@ -61,6 +62,10 @@ export class Application {
 
     if (obj && obj.publishDate) {
       this.publishDate = new Date(obj.publishDate);
+    }
+
+    if (obj && obj.statusHistoryEffectiveDate) {
+      this.statusHistoryEffectiveDate = new Date(obj.statusHistoryEffectiveDate); // in milliseconds
     }
 
     // replace \\n (JSON format) with newlines
