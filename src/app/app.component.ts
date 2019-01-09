@@ -5,8 +5,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
-import { ApiService } from './services/api';
-import { ConfigService } from './services/config.service';
+import { ApiService } from 'app/services/api';
+import { ConfigService } from 'app/services/config.service';
 
 @Component({
   selector: 'app-root',

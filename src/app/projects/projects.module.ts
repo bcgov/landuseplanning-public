@@ -14,7 +14,6 @@ import { ProjlistListComponent } from './projlist-list/projlist-list.component';
 import { ProjlistMapComponent } from './projlist-map/projlist-map.component';
 import { ProjlistFiltersComponent } from './projlist-filters/projlist-filters.component';
 import { ProjDetailPopupComponent } from './proj-detail-popup/proj-detail-popup.component';
-import { DateInputComponent } from 'app/date-input/date-input.component';
 
 @NgModule({
   imports: [
@@ -30,8 +29,7 @@ import { DateInputComponent } from 'app/date-input/date-input.component';
     ProjlistListComponent,
     ProjlistMapComponent,
     ProjlistFiltersComponent,
-    ProjDetailPopupComponent,
-    DateInputComponent
+    ProjDetailPopupComponent
   ],
   entryComponents: [
     ProjDetailPopupComponent

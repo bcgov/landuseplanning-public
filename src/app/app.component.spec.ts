@@ -6,8 +6,8 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
-import { ApiService } from './services/api';
-import { ConfigService } from './services/config.service';
+import { ApiService } from 'app/services/api';
+import { ConfigService } from 'app/services/config.service';
 
 describe('AppComponent', () => {
   const apiServiceStub = {
