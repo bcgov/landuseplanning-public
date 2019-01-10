@@ -49,7 +49,7 @@ export class DecisionService {
   }
 
   // get a specific decision by its id
-  getById(decisionId, forceReload: boolean = false): Observable<Decision> {
+  getById(decisionId: string, forceReload: boolean = false): Observable<Decision> {
     if (this.decision && this.decision._id === decisionId && !forceReload) {
       return Observable.of(this.decision);
     }

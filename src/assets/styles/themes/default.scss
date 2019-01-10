@@ -3,16 +3,41 @@ $primary:                       #003366;
 $gold:                          #fcba19;
 $lightgray:                     #eee;
 
+// Primary Blue
+$primary9:                      #001f3f;
+$primary8:                      #002952;
+$primary7:                      #003366;
+$primary6:                      #003d7a;
+$primary5:                      #00478d;
+$primary4:                      #0050a1;
+$primary3:                      #005ab4;
+$primary2:                      #0064c8;
+$primary1:                      #006edc;
+$primary0:                      #0078ef;
+
+// Gray
+$gray9:                         #212529;
+$gray8:                         #343a40;
+$gray7:                         #495057;
+$gray6:                         #868e96;
+$gray5:                         #adb5bd;
+$gray4:                         #ced4da;
+$gray3:                         #dee2e6;
+$gray2:                         #e9ecef;
+$gray1:                         #f1f3f5;
+$gray0:                         #f8f9fa;
+
+// Font
+$color:                         $gray9;
+$color-inverted:                #fff;
+$color-muted:                   $gray5;
+
 // Background Colors
 $bg-dark:                       $primary;
 $bg-dark-color:                 #fff;
 $bg-dark-link-color:            $gold;
 $bg-dark-border-color:          #5475a7;
 $bg-default:                    #fff;
-
-// Font Colors
-$font-color:                    #494949;
-$font-gray:                     #666666;
 
 // Links
 $link-color:                    #1a5a96;
@@ -80,16 +105,6 @@ $spinner-bg:                    #fff;
 $spinner-invert-color:          #fff;
 $spinner-invert-bg:             rgba(#001a33,0.8);
 
-// Tab Navigation
-$tab-color:                     #38598a;
-$tab-nav-border-color:          #ddd;
-$tab-nav-bg:                    #fff;
-$tab-hover-bg:                  $lightgray;
-$tab-sm-active-color:           #fff;
-$tab-sm-bg:                     $lightgray;
-$tab-sm-active-bg:              #38598a;
-$tab-active-bg:                 #fff;
-
 // Tables
 $table-header-bg:               #fff;
 $table-header-hover-bg:         #ddd;
@@ -100,21 +115,3 @@ $table-alt-row-bg:              #f4f4f4;
 $table-sort-icon-color:         #ccc;
 $table-sort-icon-active-color:  #000;
 $table-sort-icon-size:          0.25rem;
-
-// Map Components
-$map-bg:                        #445a71;
-
-// Map Popup
-$map-popup-color:               #fff;
-$map-popup-bg:                  #244278;
-$map-popup-footer-bg:           $primary;
-$map-popup-header-bg:           $primary;
-$map-popup-font-size:           0.9375rem; // 15 px
-$map-popup-menu-active-bg:      #5091cd;
-$map-popup-btn-color:           #fff;
-$map-popup-border-color:        #fff;
-
-// Search Widget
-$map-search-height:             3rem;
-$map-search-font-family:        "myriad-pro";
-$map-search-font-size:          medium; // 16 px

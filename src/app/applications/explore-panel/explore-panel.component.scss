@@ -1,0 +1,151 @@
+@import "~assets/styles/base/base.scss";
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-btns {
+  .btn-primary {
+    font-weight: 700;
+  }
+
+  .btn-light {
+    font-weight: 400;
+  }
+}
+
+// Date Range Inputs
+.date-range {
+  @include flex-box();
+}
+
+.date-range__input {
+  @include flex(1 1 auto);
+}
+
+// TODO: We shouldn't be encapsulating these controls in a single component
+// Prevents us from utilizing properties for placement of the dropmenu
+// Have to hack the position of the drop menu for the end date considering the above
+.date-range__input.end-date {
+  ::ng-deep {
+    ngb-datepicker {
+      right: 0 !important;
+      left: auto !important;
+    }
+  }
+}
+
+.date-range__spacer {
+  margin-top: 0.3rem;
+  width: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .date-range {
+    @include flex-direction(column);
+  }
+
+  .date-range__spacer {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+// Select Badge Groups
+$select-badge-hover-bg: #d0ebff;
+$select-badge-active-border-color: #74c0fc;
+$select-badge-active-bg: #a5d8ff;
+
+.select-badge-group {
+  margin: -0.2rem -0.15rem;
+  overflow: hidden;
+}
+
+.select-badge {
+  margin: 0.2rem 0.15rem;
+  float: left;
+
+  label {
+    position: relative;
+    margin: 0;
+    padding-top: 0.2rem;
+    padding-right: 1rem;
+    padding-bottom: 0.2rem;
+    padding-left: 2rem;
+    border-radius: 1rem;
+    border: 2px solid transparent;
+    color: $gray7;
+    background: $gray2;
+    font-size: 0.825rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all ease-out 0.2s;
+  }
+
+  label::before {
+    font-family: 'Material Icons';
+    content: 'remove';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 100%;
+    text-align: center;
+    line-height: 1.6rem;
+    font-size: 1rem;
+  }
+
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+  }
+
+  input:focus,
+  input:active {
+    + label {
+      color: $gray9;
+      border-color: $select-badge-active-border-color;
+      background: $select-badge-hover-bg;
+    }
+  }
+
+  input:hover {
+    + label {
+      color: $gray9;
+      background: $select-badge-hover-bg;
+    }
+  }
+
+   input:checked {
+    + label {
+      color: $gray9;
+      background: $select-badge-active-bg;
+    }
+
+    + label::before {
+      opacity: 1;
+      content: 'check';
+    }
+
+    ~ button {
+      background: $select-badge-active-bg;
+    }
+  }
+}
+
+// show/hide button variants for large and small devices
+@media (max-width: 1023px) {
+  .explore-btn-lg-device {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .explore-btn-sm-device {
+    display: none;
+  }
+}

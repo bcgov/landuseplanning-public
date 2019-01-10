@@ -1,0 +1,48 @@
+@import "~assets/styles/base/base.scss";
+
+// Filters Content Layout and Typography
+section {
+  margin-top: 2rem;
+  line-height: 1.2rem;
+  font-size: 0.875rem;
+
+  h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.find-form {
+  margin-bottom: 3rem;
+}
+
+.form-btns {
+  .btn-primary {
+    font-weight: 700;
+  }
+
+  .btn-light {
+    font-weight: 400;
+  }
+}
+
+.show-explore-btn {
+  padding: 0;
+  border-width: 0;
+  font-size: inherit;
+  vertical-align: inherit;
+}
+
+// show/hide button variants for large and small devices
+@media (max-width: 1023px) {
+  .find-btn-lg-device {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .find-btn-sm-device {
+    display: none;
+  }
+}

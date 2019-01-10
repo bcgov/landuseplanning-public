@@ -15,8 +15,8 @@ export class FeatureService {
     return this.api.getFeaturesByTantalisId(tantalisId)
       .map(res => {
         const features = res.text() ? res.json() : [];
-        features.forEach((feature, index) => {
-          feature[index] = new Feature(feature);
+        features.forEach((obj: any, i: number) => {
+          obj[i] = new Feature(obj);
         });
         return features;
       })
@@ -27,8 +27,8 @@ export class FeatureService {
     return this.api.getFeaturesByApplicationId(applicationId)
       .map(res => {
         const features = res.text() ? res.json() : [];
-        features.forEach((feature, index) => {
-          feature[index] = new Feature(feature);
+        features.forEach((obj: any, i: number) => {
+          obj[i] = new Feature(obj);
         });
         return features;
       })

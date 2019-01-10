@@ -1,14 +1,25 @@
-// Form Label & Validation Variants
+// Form Label
+label {
+  font-size: 0.875rem;
+}
+
 .control-label {
+  vertical-align: middle;
   margin-bottom: 0.3rem;
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 600;
+
+  em {
+    font-size: 0.875rem;
+    vertical-align: top;
+  }
 
   &:after {
     white-space: pre;
   }
 }
 
+// Help Text
 .form-text {
   margin-top: 0.4rem;
   color: #999;
@@ -21,40 +32,22 @@
 
 .form-control-container {
   position: relative;
-
-  .validation-icon {
-    position: absolute;
-    top: 0.2rem;
-    right: 0.2rem;
-    bottom: 0.2rem;
-    padding-top: 0.4rem;
-    width: 2.5rem;
-    background: #fff;
-    text-align: center;
-  }
-}
-
-.optional {
-  .control-label:after {
-    white-space: pre;
-    content: " (optional)";
-    font-weight: normal;
-  }
-}
-
-.required {
-  .control-label:after {
-    white-space: pre;
-    content: " *";
-    color: red;
-  }
 }
 
 // Fieldset/Legend
+fieldset {
+  + fieldset {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+  }
+}
+
 legend {
-  float: left; // position legend inside the bounding box of the fieldset
-  font-size: 1rem;
-  font-weight: bold;
+  float: left; // Fix to ensure the legend is bound the the fieldset box
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 // Form Items
@@ -72,27 +65,21 @@ legend {
   label {
     cursor: pointer;
   }
-
-  input {
-    margin-top: 0.35rem;
-  }
 }
 
 // Input types
+// Input variants
 input {
-  &.form-control {
-    height: $fc-height;
-  }
   &[type="tel"],
   &[type="text"],
   &[type="email"],
   &[type="number"] {
+    height: 2.5rem;
+    box-shadow: 0.1rem 0.1rem 0.2rem inset $gray2;
+
     @include placeholder {
       color: $fc-placeholder-color;
     }
-    height: $fc-height;
-    padding: 0.75rem;
-    box-shadow: $fc-inner-shadow inset;
   }
 }
 
@@ -111,18 +98,6 @@ select {
   }
 }
 
-// Number
-input[type="number"] {
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
-
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-}
-
 // Textarea
 textarea.form-control {
   padding-top: 0.75rem;
@@ -133,34 +108,6 @@ textarea.form-control {
   }
   resize: vertical;
   box-shadow: $fc-inner-shadow inset;
-}
-
-.control-label {
-  vertical-align: middle;
-
-  em {
-  font-size: 0.875rem;
-  vertical-align: top;
-  }
-}
-
-fieldset {
-  + fieldset {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid #ddd;
-  }
-}
-
-legend {
-  float: left; // Fix to ensure the legend is bound the the fieldset box
-  margin-bottom: 1.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-label {
-  font-size: 0.875rem;
 }
 
 // Input Group 
@@ -208,5 +155,15 @@ label {
     .btn-icon {
       border-color: #dc3545;
     }
+  }
+}
+
+// Form Buttons
+.form-btns {
+  button {
+    min-width: 6rem;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 700;
   }
 }

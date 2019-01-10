@@ -1,9 +1,7 @@
 <header class="app-header" id="header" 
-  [ngClass]="{
-    'app-header--flex': (router.url.startsWith('/applications')),
-    'app-header--solid': (router.url.startsWith('/a/'))}">
+  [ngClass]="{'app-header--flex': (router.url.startsWith('/applications'))}">
   <nav class="navbar navbar-expand-md justify-content-between">
-    <a class="navbar-brand" title="Applications, Comments & Reasons for Decision - Beta" routerLink="/home">
+    <a class="navbar-brand" title="Applications, Comments & Reasons for Decision - Beta" routerLink="/home/true">
       <span class="navbar-brand__title">Applications, Comments <span class="wb"><span class="amp">&</span> Reasons for Decision <span class="navbar-brand__version">BETA</span></span></span>
     </a>
     <button class="navbar-toggler" type="button" title="Toggle Main Navigation"
@@ -18,8 +16,13 @@
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" title="Find Crown land Applications in British Columbia" routerLink="/applications">
-            <span>Find Applications</span>
+          <a class="nav-link" title="Find Crown land Applications in British Columbia" routerLink="/home/false">
+            <span>All Applications</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" title="About Us" routerLink="/about">
+            <span>About</span>
           </a>
         </li>
         <li class="nav-item">

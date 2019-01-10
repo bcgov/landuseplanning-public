@@ -1,0 +1,40 @@
+@import "~assets/styles/base/base.scss";
+
+$map-control-button-bg:         #fff;
+
+#map,
+.map-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+// see app-map.component.ts:_clusterCreate()
+#map {
+  .cluster-marker-count {
+    text-align: center;
+  }
+}
+
+// Leaflet Control Customization
+::ng-deep {
+  .map-reset-control {
+    margin-right: 12px !important;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    background: $map-control-button-bg;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 2px;
+    border: none;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+    cursor: pointer;
+
+    &:hover {
+      background: #f4f4f4;
+    }
+  }
+}

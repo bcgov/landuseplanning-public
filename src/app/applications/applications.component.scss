@@ -2,6 +2,7 @@
 
 $toggle-list-anim-duration: 0.2s;
 $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
+$side-panel-shadow: 0.1rem 0 0.15rem rgba(0,0,0,0.25);
 
 app-applications:host {
   position: absolute;     // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
@@ -13,131 +14,253 @@ app-applications:host {
 
 @media (min-width: 768px) {
   app-applications:host {
-    top: 4.2rem;            
+    top: 4.4rem;            
   }
 }
 
 .applications-view {
   @include flex-box();
-  @include flex-flow(column nowrap);
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-// Application Filters
-.app-filters {
+// Side navigation & panel
+$side-nav-color: #fff;
+$side-nav-item-height-sm: 4.5rem;
+$side-nav-item-width-lg: 6rem;
+$side-nav-item-height-lg: 5.5rem;
+$side-panel-width-lg: 30rem;
+$side-panel-bg: #fff;
+
+.side-nav {
   @include flex(0 0 auto);
-  display: block;
-  z-index: 1004;
-}
-
-@media (min-width: 1200px) {
-  .app-filters {
-    position: absolute;
-    top: 0.5rem;
-    left: 50%;
-    margin-left: -24rem;
-    width: 48rem;
-    z-index: 999;
-    box-shadow: $map-component-shadow;
-    transition: left ease-out $toggle-list-anim-duration;
-  }
-}
-
-// List Container
-.app-list-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 3rem;
+  position: relative;
   z-index: 1002;
-  transform: translateX(-100%) translateX(-3rem);
-  transition: transform ease-out $toggle-list-anim-duration;
-  border-top: 1px solid #ddd;
+  order: 0;
+  background: $primary4;
 }
 
-// List Container {
-@media (min-width: 768px) {
-  .app-list-container {
-    width: 22rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  .app-list-container {
-    border-top: none;
-  }
-}
-
-.toggle-app-list-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: -39px;
+.side-nav ul {
+  @include flex-box();
+  margin: 0;
   padding: 0;
-  width: 40px;
-  height: 3rem;
-  z-index: 1003;
-  box-shadow: $map-component-shadow;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  background: #fff;
-  transition: left ease-out $toggle-list-anim-duration; 
-  clip: rect(0,3.5rem,3.5rem,0);
+  background: $primary4;
+  list-style-type: none;
+}
+
+.side-nav-item {
+  @include flex(1 1 auto);
+  height: $side-nav-item-height-sm;
+}
+
+.side-nav-item .btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: rgba($side-nav-color, 0.6);
+  background: $primary4;
+  border-radius: 0;
+  border: none;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
 
   i {
-    margin-top: 0.4rem;
-    margin-right: 0.1rem;
-    font-size: 1.875rem;
+    margin-bottom: 0.1rem;
+    vertical-align: top;
   }
 }
 
-.overlay {
+.side-nav-item .btn:focus,
+.side-nav-item .btn:hover {
+  color: #fff;
+  background: $primary5;
+  box-shadow: none;
+}
+
+.side-nav-item.active .btn {
+  color: $side-nav-color;
+  border: none;
+  background: $primary1;
+  box-shadow: none;
+}
+
+@media (min-width: 1024px) {
+  .side-nav {
+    z-index: 1002;
+    height: 100%;
+    border-bottom: none;
+    box-shadow: $side-panel-shadow;
+  }
+
+  .side-nav ul {
+    @include flex-direction(column);
+  }
+
+  .side-nav-item {
+    width: $side-nav-item-width-lg;
+    height: $side-nav-item-height-lg;
+  }
+}
+
+// Side panel
+.side-panel {
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
-  background: rgba(0,0,0,0.5);
-  opacity: 0;
+  bottom: $side-nav-item-height-sm;
+  z-index: 1001;
+  width: 100%;
+  overflow-x: hidden;
+  background: $side-panel-bg;
   transform: translateX(-100%);
-  transition: opacity ease-out $toggle-list-anim-duration;
-}
+  transition: transform ease-out 0.2s;
 
-
-// Container for the List and Map components
-.app-list-map-container {
-  @include flex(1 1 auto);
-  position: relative;
-}
-
-// Application List Open / Closed State
-.app-list-open {
-  .app-list-container {
-    box-shadow: $map-component-shadow;
-    transform: translateX(0) translateX(-3rem);
-  }
-
-  .overlay {
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
     z-index: 1001;
-    opacity: 1;
-    transform: translateX(0);
   }
-}
 
-@media (min-width: 768px) {
-  .app-list-open {
-    .overlay {
-      display: none;
+  ::ng-deep {
+    .flex-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     }
   }
 }
 
-@media (min-width: 1200px) {
-  .app-list-open {
-    .app-filters {
-      left: calc(50% + 12.5rem);
+@media (min-width: 1024px) {
+  .side-panel {
+    bottom: 0;
+    width: $side-panel-width-lg;
+    box-shadow: $side-panel-shadow;
+
+    ::ng-deep {
+      .flex-panel {
+        left: auto;
+        width: $side-panel-width-lg;
+      }
+    }
+  }
+}
+
+// Main content area
+.main-panel {
+  @include flex(1 1 auto);
+  position: relative;
+}
+
+// Results bar
+.app-results {
+  @include flex-box();
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  padding: 0.75rem 1.5rem;
+  height: 4rem;
+  background: rgba(255,255,255,0.75);
+  align-items: center;
+  transition: left ease-out 0.2s;
+}
+
+.app-results__count,
+.app-results__clear {
+  font-size: 0.875rem;
+}
+
+.app-results__count {
+  letter-spacing: -0.02rem;
+  color: $gray9;
+  font-weight: 700;
+}
+
+.app-results__clear {
+  margin-left: 0.8rem;
+  padding-left: 0.25rem;
+  border-left: 1px solid $gray4;
+
+  .btn {
+    font-weight: 700;
+  }
+} 
+
+// Define layout order
+@media (max-width: 1023px) {
+  .applications-view {
+    @include flex-flow(column nowrap);
+  }
+
+  .side-nav {
+    order: 3;
+  }
+
+  .side-panel {
+    order: 1;
+  }
+
+  .main-panel {
+    order: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .applications-view {
+    @include flex-flow(row nowrap);
+  }
+
+  .side-nav {
+    order: 0;
+  }
+
+  .side-panel {
+    order: 1;
+  }
+
+  .main-panel {
+    order: 2;
+  }
+}
+
+// Side Panel States
+.side-panel__open {
+  .side-panel {
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 1024px) {
+  .side-panel__open {
+    .side-panel {
+      transform: translateX($side-nav-item-width-lg);
+    }
+
+    .app-results {
+      left: $side-panel-width-lg;
+    }
+  }
+}
+
+::ng-deep {
+  .cdk-overlay-container {
+    bottom: 3rem;
+    height: auto;
+  }
+
+  // Splash Modal Sizing
+  .splash-modal {
+    .modal-dialog {
+      padding-right: 0.5rem;
+      padding-left: 0.5rem;
+      max-width: 900px;
+      background: transparent;
     }
   }
 }

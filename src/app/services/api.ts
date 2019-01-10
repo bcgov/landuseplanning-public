@@ -3,6 +3,9 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/merge';
 import * as _ from 'lodash';
 
 import { Comment } from 'app/models/comment';
@@ -90,13 +93,40 @@ export class ApiService {
   //
   // Applications
   //
-  getCountApplications() {
-    const queryString = `application`;
-    return this.http.head(`${this.apiPath}/${queryString}`);
+  getCountApplications(params: object): Observable<number> {
+    let queryString = `application?`;
+    if (params['cpStartSince']) { queryString += `cpStart[since]=${params['cpStartSince']}&`; }
+    if (params['cpStartUntil']) { queryString += `cpStart[until]=${params['cpStartUntil']}&`; }
+    if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
+    if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
+    if (params['appStatuses']) { params['appStatuses'].forEach((status: string) => queryString += `status[eq]=${status}&`); }
+    if (params['applicant']) { queryString += `client=${params['applicant']}&`; }
+    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${purpose}&`); }
+    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${subpurpose}&`); }
+    if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
+    if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
+    if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
+
+    if (!params['clidDtid']) {
+      // trim the last ? or &
+      queryString = queryString.slice(0, -1);
+
+      // retrieve the count from the response headers
+      return this.http.head(`${this.apiPath}/${queryString}`)
+        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+    } else {
+      // query for both CLID and DTID
+      const clid = this.http.head(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`)
+        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+      const dtid = this.http.head(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`)
+        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+
+      // return sum of counts
+      return Observable.combineLatest(clid, dtid, (v1, v2) => v1 + v2);
+    }
   }
 
-  getApplications(pageNum: number, pageSize: number, regions: string[], cpStatuses: string[], appStatuses: string[], applicant: string,
-    clFile: string, dispId: string, purpose: string) {
+  getApplications(params: object) {
     const fields = [
       'agency',
       'areaHectares',
@@ -111,6 +141,7 @@ export class ApiService {
       'publishDate',
       'purpose',
       'status',
+      'statusHistoryEffectiveDate',
       'subpurpose',
       'subtype',
       'tantalisID',
@@ -119,18 +150,31 @@ export class ApiService {
     ];
 
     let queryString = 'application?';
-    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
-    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
-    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
-    if (cpStatuses !== null && cpStatuses.length > 0) { queryString += `cpStatuses=${this.buildValues(cpStatuses)}&`; }
-    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
-    if (applicant !== null) { queryString += `client=${applicant}&`; }
-    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
-    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
-    if (purpose !== null) { queryString += `purpose=${purpose}&`; }
+    if (params['pageNum']) { queryString += `pageNum=${params['pageNum']}&`; }
+    if (params['pageSize']) { queryString += `pageSize=${params['pageSize']}&`; }
+    if (params['cpStartSince']) { queryString += `cpStart[since]=${params['cpStartSince']}&`; }
+    if (params['cpStartUntil']) { queryString += `cpStart[until]=${params['cpStartUntil']}&`; }
+    if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
+    if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
+    if (params['appStatuses']) { params['appStatuses'].forEach((status: string) => queryString += `status[eq]=${status}&`); }
+    if (params['applicant']) { queryString += `client=${params['applicant']}&`; }
+    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${purpose}&`); }
+    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${subpurpose}&`); }
+    if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
+    if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
+    if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
     queryString += `fields=${this.buildValues(fields)}`;
 
-    return this.get(queryString);
+    if (!params['clidDtid']) {
+      return this.get(queryString);
+    } else {
+      // query for both CLID and DTID
+      const clid = this.get(queryString + `&cl_file=${params['clidDtid']}`);
+      const dtid = this.get(queryString + `&tantalisId=${params['clidDtid']}`);
+
+      // return merged results
+      return Observable.merge(clid, dtid);
+    }
   }
 
   getApplication(id: string) {
@@ -148,6 +192,7 @@ export class ApiService {
       'publishDate',
       'purpose',
       'status',
+      'statusHistoryEffectiveDate',
       'subpurpose',
       'subtype',
       'tantalisID',
@@ -334,34 +379,6 @@ export class ApiService {
 
   getDocumentUrl(document: Document): string {
     return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
-  }
-
-  //
-  // Crown Lands files
-  //
-  getBCGWCrownLands(id: string) {
-    const fields = [
-      'name',
-      'isImported'
-    ];
-    const queryString = 'search/bcgw/crownLandsId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getBCGWDispositionTransactionId(id: number) {
-    const fields = [
-      'name'
-    ];
-    const queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getClientsInfoByDispositionId(id: number) {
-    const fields = [
-      'name'
-    ];
-    const queryString = 'search/bcgw/getClientsInfoByDispositionId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
   }
 
   //

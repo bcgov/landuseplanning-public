@@ -1,34 +1,79 @@
-#map {
-  // see applist-map.component.ts:_clusterCreate()
-  .my-cluster {
-    margin-left: -20px !important;
-    margin-top: -18px !important;
-    width: 40px !important;
-    height: 36px !important;
-    border-radius: 5px;
-    background-color: greenyellow;
-    opacity: 0.8 !important;
-    text-align: center;
-    font-size: 24px;
-  }
-  /*
-     * small = 1-9 markers in cluster
-     * medium = 10-99 markers in cluster
-     * large = 100+ markers in cluster
-     */
-  .marker-cluster-small,
-  .marker-cluster-medium,
-  .marker-cluster-large {
-    // background-color: rgba(181, 226, 140, 0.6) !important; // greenish
-    // background-color: rgba(241, 211, 87, 0.6) !important; // yellowish
-    // background-color: rgba(253, 156, 115, 0.6) !important; // orangeish
-    background-color: rgba(135, 206, 250, 0.8) !important; // lightskyblue
-    div {
-      // background-color: rgba(110, 204, 57, 0.6) !important; // greenish
-      // background-color: rgba(240, 194, 12, 0.6) !important; // yellowish
-      // background-color: rgba(241, 128, 23, 0.6) !important; // orangeish
-      background-color: rgba(30, 144, 255, 0.8) !important; // dodgerblue
-      color: #fff;
+.leaflet-container {
+  font-family: "myriad-pro", Calibri, Arial, 'sans serif';
+
+  a.leaflet-popup-close-button {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem 0;
+    width: 2rem;
+    height: 2rem;
+    color: $gray6;
+    border-radius: 0.25rem;
+    font-size: 24px; // default material-icon size
+    font-weight: normal;
+    transition: all ease-out 0.2s;
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: $gray9;
+      background: $gray1;
     }
+  }
+}
+
+.leaflet-popup {
+  margin-bottom: 60px; // Offset so we can see the marker
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 0.2rem;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  width: 20rem !important;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.leaflet-control-attribution {
+  padding: 0.5rem;
+  line-height: 0.75rem;
+  font-size: 0.75rem;
+}
+
+// Layer control customization
+.leaflet-control-layers {
+  //border: 10px solid red;
+}
+
+.leaflet-control-layers-toggle {
+  //background: none;
+}
+
+// Marker cluster size variants
+// * small  = 1-9 
+// * medium = 10-99
+// * large  = 100+   
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: transparent !important;
+  background-image: url("~assets/images/cluster-pin.svg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+
+  div {
+    width: 100%;
+    height: 48px;
+    color: #fff;
+    background-color: transparent !important;
+    text-align: center;
+    line-height: 2.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
   }
 }
