@@ -1,9 +1,9 @@
 <header class="app-header" id="header" 
   [ngClass]="{
-    'app-header--flex': (router.url.startsWith('/applications')),
+    'app-header--flex': (router.url.startsWith('/projects')),
     'app-header--solid': (router.url.startsWith('/a/'))}">
   <nav class="navbar navbar-expand-md justify-content-between">
-    <a class="navbar-brand" title="Applications, Comments & Reasons for Decision - Beta" routerLink="/home">
+    <a class="navbar-brand" title="EAGLE - Beta" routerLink="/home">
       <span class="navbar-brand__title">BC Environmental Assessment Office <span class="navbar-brand__version">BETA</span></span>
     </a>
     <button class="navbar-toggler" type="button" title="Toggle Main Navigation"
@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" title="Find Crown land Applications in British Columbia" routerLink="/applications">
+          <a class="nav-link" title="Find EAO Projects in British Columbia" routerLink="/projects">
             <span>Find Projects</span>
           </a>
         </li>
