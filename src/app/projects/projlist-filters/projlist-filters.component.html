@@ -1,4 +1,4 @@
-<div class="app-filters__container d-flex flex-column" name="Filters to limit displayed Crown land projects"
+<div class="app-filters__container d-flex flex-column" name="Filters to limit displayed EAO Projects"
   [ngClass]="isFiltersCollapsed ? 'closed':'open'">
 
   <div class="app-filters__header d-flex justify-content-between">
@@ -83,11 +83,11 @@
           </div>
         </div>
 
-        <!-- Crown land File Input -->
+        <!-- EAO Projects Input -->
         <div class="clf-input filter-control input-group float-left">
-          <input class="form-control gtm-filter-cl-file" type="number" placeholder="Crown land File # (eg: 1234567)" id="clFileInput3" [(ngModel)]="_clFileFilter"
+          <input class="form-control gtm-filter-cl-file" type="number" placeholder="EAO Project # (eg: 1234567)" id="clFileInput3" [(ngModel)]="_clFileFilter"
             (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()"
-            (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true" title="Crown Land File Number" [disabled]="loading">
+            (keyup.enter)="applyClFileFilter()" (focus)="isCpStatusCollapsed=true;isAppStatusCollapsed=true" title="EAO Project Number" [disabled]="loading">
           <div class="input-group-btn">
             <!-- *ngIf="clFileFilterCount() > 0" -->
             <button type="button" class="btn btn-primary gtm-apply-filters" (click)="applyClFileFilter()" [disabled]="loading">Apply</button>
@@ -162,8 +162,8 @@
           [ngbTypeahead]="applicantSearch" [focusFirst]="false">
         </div>
         <div class="form-group">
-          <label for="clFileInput2">Crown land File #</label>
-          <input type="number" class="form-control gtm-filter-cl-file " placeholder="Crown land File #" id="clFileInput2" [(ngModel)]="_clFileFilter"
+          <label for="clFileInput2">EAO Project #</label>
+          <input type="number" class="form-control gtm-filter-cl-file " placeholder="EAO Project #" id="clFileInput2" [(ngModel)]="_clFileFilter"
             (keydown.arrowup)="$event.preventDefault()" (keydown.arrowdown)="$event.preventDefault()" (mousewheel)="$event.preventDefault()">
         </div>
         <div class="form-group">
