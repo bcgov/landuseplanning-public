@@ -14,14 +14,14 @@
   <div class="flex-panel__header">
     <h2 class="title">Crown Land File: &nbsp; #{{(application && application['clFile']) || '-'}}</h2>
   </div>
-  <div class="flex-panel__header title-panel">
-    <div class="applicant-name">{{application?.client | titlecase}}</div>
-    <div class="application-purpose">{{application?.purpose | titlecase}} - {{application?.subpurpose | titlecase}}</div>
-  </div>
   <div class="flex-panel__scroll">
+    <div class="title-panel">
+      <div class="applicant-name">{{application.client | titlecase}}</div>
+      <div class="application-purpose">{{application.purpose | titlecase}} - {{application.subpurpose | titlecase}}</div>
+    </div>
     <div class="app-detail-info">
       <section class="status-section">
-        <div class="status" *ngVar="applicationService.getStatusCode(application?.status) as appStatusCode"
+        <div class="status" *ngVar="applicationService.getStatusCode(application.status) as appStatusCode"
           [ngClass]="{
             'abandoned':        applicationService.isAbandoned(appStatusCode),
             'under-review':     applicationService.isApplicationUnderReview(appStatusCode),
@@ -33,7 +33,6 @@
           <div><strong>{{application?.appStatus}}</strong></div>
         </div>
       </section>
-
       <div *ngIf="application.currentPeriod">
         <section class="status-section" *ngVar="application.currentPeriod['daysRemaining'] as daysRemaining">
           <div class="status" [ngClass]="commentPeriodService.isOpen(application.cpStatusCode) ? 'commenting-open':'commenting-closed'">
