@@ -38,7 +38,7 @@
     </div>
     
     <div class="form-group">
-      <label class="control-label">Purpose <button class="label-btn btn-icon btn" (click)="showPurposeInfoModal()" title="Show me more information about what I can expect to find when selecting a purpose"><i></i></button></label>
+      <label class="control-label">Purpose <button (click)="showPurposeInfoModal()" title="Show me more information about what I can expect to find when selecting a purpose">What are these?</button></label>
       <div class="select-badge-group">
         <div class="select-badge" *ngFor="let key of purposeKeys">
           <input type="checkbox" name="{{key}}" id="_{{key}}" [(ngModel)]="_purposeFilters[key]" />

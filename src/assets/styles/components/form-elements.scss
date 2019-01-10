@@ -5,9 +5,9 @@ label {
 
 .control-label {
   vertical-align: middle;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
 
   em {
     font-size: 0.875rem;
@@ -16,6 +16,20 @@ label {
 
   &:after {
     white-space: pre;
+  }
+
+  button {
+    margin-left: 0.25rem;
+    padding: 0;
+    color: blue;
+    border: none;
+    background: transparent;
+    font-size: 0.8rem;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
