@@ -1,16 +1,5 @@
 @import "~assets/styles/base/base.scss";
 
-::ng-deep {
-  .nav-tabs {
-    display: none;
-  }
-
-  .nav-item {
-    width: 50%;
-    text-align: center;
-  }
-}
-
 .flex-panel__scroll {
   padding: 0;
 }
@@ -53,12 +42,10 @@ section {
 
 // Title Panel
 .title-panel {
-  @include flex-direction(column);
-  @include flex(0 0 auto);
-  align-items: flex-start;
-  padding-top: 0;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
   padding-bottom: 1.5rem;
-  height: auto;
+  background: #fff;
 }
 
 // Title Contents
