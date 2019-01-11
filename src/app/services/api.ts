@@ -6,6 +6,8 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/mergeMap';
 import * as _ from 'lodash';
 
 import { Comment } from 'app/models/comment';
@@ -172,8 +174,9 @@ export class ApiService {
       const clid = this.get(queryString + `&cl_file=${params['clidDtid']}`);
       const dtid = this.get(queryString + `&tantalisId=${params['clidDtid']}`);
 
-      // return merged results
-      return Observable.merge(clid, dtid);
+      // return merged results, using toArray to wait for all results (ie, single emit)
+      // this is fine performance-wise because there should be no more than a few results
+      return Observable.merge(clid, dtid).toArray().mergeMap(items => Observable.of(...items));
     }
   }
 
