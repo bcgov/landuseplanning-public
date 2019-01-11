@@ -1,7 +1,7 @@
 <div class="popup-content">
   <div class="popup-title">
-    <span class="client-name__label">Applicant</span>
-    <span class="client-name__value">{{proj?.client || '-'}}</span>
+    <span class="client-name__label">Proponent</span>
+    <span class="client-name__value">{{proj?.name || '-'}}</span>
   </div>
   <div class="popup-body">
     <div class="app-details">
@@ -12,11 +12,16 @@
           </li>
           <li>
             <span class="key">EAO Project Number:</span>
-            <span class="value">{{(proj && proj['clFile']) || '-'}}</span>
+            <span class="value">{{proj?.epicProjectID || '-'}}</span>
           </li>
           <li>
-            <span class="key">Disposition Transaction:</span>
-            <span class="value">{{proj?.tantalisID || '-'}}</span>
+            <span class="key">Decision:</span>
+            <span class="value">{{proj?.eacDecision || '-'}}</span>
+          </li>
+          <li>
+            <!-- Phase object not ready -->
+            <span class="key">Phase:</span>
+            <span class="value">{{proj?.currentPhaseName || '-'}}</span>
           </li>
           <li>
             <span class="key">Location:</span>
@@ -28,51 +33,51 @@
       <hr>
 
       <!-- Status -->
-      <ul class="status-container">
+      <!-- <ul class="status-container">
         <li>
           <i class="material-icons" title="{{proj?.cpStatus}}">
             {{commentPeriodService.isOpen(proj?.currentPeriod) ? 'comment' : 'highlight_off'}}
           </i><span>{{proj?.cpStatus}}</span>
         </li>
         <li *ngVar="projectService.getStatusCode(proj?.status) as projStatusCode">
-          <!-- Project Under Review -->
+          
           <i class="material-icons" title="{{proj?.projStatus}}"
             *ngIf="projectService.isAccepted(projStatusCode)">
             access_time
           </i>
-          <!-- Decision: Allowed -->
+
           <i class="material-icons" title="{{proj?.projStatus}}"
             *ngIf="projectService.isAllowed(projStatusCode)">
             error_outline
           </i>
-          <!-- Tenure: Disposition in Good Standing / Decision: Offered / Decision: Offer Accepted -->
+
           <i class="material-icons" title="{{proj?.projStatus}}"
             *ngIf="projectService.isDispGoodStanding(projStatusCode)
               || projectService.isOffered(projStatusCode)
               || projectService.isOfferAccepted(projStatusCode)">
             check
           </i>
-          <!-- Project Cancelled / Project Abandoned / Decision: Offer Not Accepted -->
+
           <i class="material-icons" title="{{proj?.projStatus}}"
             *ngIf="projectService.isCancelled(projStatusCode)
             || projectService.isAbandoned(projStatusCode)
             || projectService.isOfferNotAccepted(projStatusCode)">
             cancel
           </i>
-          <!-- Decision: Not Approved / Tenure: Suspended-->
+
           <i class="material-icons" title="{{proj?.projStatus}}"
             *ngIf="projectService.isDisallowed(projStatusCode)
             || projectService.isSuspended(projStatusCode)">
             warning
           </i>
-          <!-- Unknown Project Status -->
+
           <i class="material-icons" title="{{proj?.projStatus}}"
             *ngIf="projectService.isUnknown(projStatusCode)">
             warning
           </i>
           <span>{{proj?.projStatus}}</span>
         </li>
-      </ul>
+      </ul> -->
       <a class="app-link btn btn-primary" [routerLink]="['/a', proj?._id]" title="View more information about this project">
         View Project Details
       </a>

@@ -4,7 +4,7 @@ import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 
 @Component({
-  selector: 'proj-detail-popup',
+  selector: 'app-proj-detail-popup',
   templateUrl: './proj-detail-popup.component.html',
   styleUrls: ['./proj-detail-popup.component.scss']
 })

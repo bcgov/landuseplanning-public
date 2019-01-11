@@ -340,10 +340,10 @@ export class ApplistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     // check for matching Disposition ID
-    retVal = retVal && (
-      !this.dispIdFilter || !item.tantalisID ||
-      item.tantalisID.toString().indexOf(this.dispIdFilter.toString()) > -1
-    );
+    // retVal = retVal && (
+    //   !this.dispIdFilter || !item.tantalisID ||
+    //   item.tantalisID.toString().indexOf(this.dispIdFilter.toString()) > -1
+    // );
 
     // check for matching Purpose / Sub-purpose
     const purposeSubpurpose = `${item.purpose} / ${item.subpurpose}`;
