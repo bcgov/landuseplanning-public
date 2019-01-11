@@ -363,33 +363,14 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
       bounds = this.defaultBounds;
     }
 
-    // OLD CODE WITH WORKAROUND FOR API $GEOWITHIN PROJECTION BEHAVIOUR
-    // NB: use min/max to protect API from invalid bounds
+    // use min/max to protect API from invalid bounds
     const west = Math.max(bounds.getWest(), -180);
     const south = Math.max(bounds.getSouth(), -90);
-    const east = Math.min(bounds.getEast(), 179.9999);
-    const north = Math.min(bounds.getNorth(), 89.9999);
+    const east = Math.min(bounds.getEast(), 180);
+    const north = Math.min(bounds.getNorth(), 90);
 
-    // build coordinates using right hand rule (CCW)
-    let coordinates = '';
-    coordinates += this.latLngToCoord(south, west) + ','; // bottom left
-    for (let x = Math.ceil(west); x < east; x++) {
-      coordinates += this.latLngToCoord(south, x) + ','; // along the bottom
-    }
-    coordinates += this.latLngToCoord(south, east) + ','; // bottom right
-    coordinates += this.latLngToCoord(north, east) + ','; // top right
-    for (let x = Math.floor(east); x > west; x--) {
-      coordinates += this.latLngToCoord(north, x) + ','; // along the top
-    }
-    coordinates += this.latLngToCoord(north, west) + ','; // top left
-    coordinates += this.latLngToCoord(south, west) + ','; // bottom left
-
-    // remove last comma and convert to a GeoJSON coordinates string
-    return `[[${coordinates.slice(0, -1)}]]`;
-
-    // NEW CODE (USING API $BOX QUERY)
-    // // return box parameters
-    // return `[${this.latLngToCoord(bounds.getSouthWest())},${this.latLngToCoord(bounds.getNorthEast())}]`;
+    // return box parameters
+    return `[[${this.latLngToCoord(south, west)},${this.latLngToCoord(north, east)}]]`;
   }
 
   private latLngToCoord(lat: number, lng: number): string {
