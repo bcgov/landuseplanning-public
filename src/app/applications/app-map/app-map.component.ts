@@ -172,6 +172,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.map = L.map('map', {
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
+      minZoom: 2, // prevent zooming out too far
       zoomSnap: 0.1, // for greater granularity when fitting bounds
       attributionControl: false
     });
@@ -363,24 +364,25 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     // OLD CODE WITH WORKAROUND FOR API $GEOWITHIN PROJECTION BEHAVIOUR
-    const west = bounds.getWest();
-    const south = bounds.getSouth();
-    const east = bounds.getEast();
-    const north = bounds.getNorth();
+    // NB: use min/max to protect API from invalid bounds
+    const west = Math.max(bounds.getWest(), -180);
+    const south = Math.max(bounds.getSouth(), -90);
+    const east = Math.min(bounds.getEast(), 179.9999);
+    const north = Math.min(bounds.getNorth(), 89.9999);
 
     // build coordinates using right hand rule (CCW)
     let coordinates = '';
-    coordinates += this.latLngToCoord(bounds.getSouthWest()) + ','; // bottom left
+    coordinates += this.latLngToCoord(south, west) + ','; // bottom left
     for (let x = Math.ceil(west); x < east; x++) {
-      coordinates += this.latLngToCoord(L.latLng(south, x)) + ','; // along the bottom
+      coordinates += this.latLngToCoord(south, x) + ','; // along the bottom
     }
-    coordinates += this.latLngToCoord(bounds.getSouthEast()) + ','; // bottom right
-    coordinates += this.latLngToCoord(bounds.getNorthEast()) + ','; // topright
+    coordinates += this.latLngToCoord(south, east) + ','; // bottom right
+    coordinates += this.latLngToCoord(north, east) + ','; // top right
     for (let x = Math.floor(east); x > west; x--) {
-      coordinates += this.latLngToCoord(L.latLng(north, x)) + ','; // along the top
+      coordinates += this.latLngToCoord(north, x) + ','; // along the top
     }
-    coordinates += this.latLngToCoord(bounds.getNorthWest()) + ','; // topleft
-    coordinates += this.latLngToCoord(bounds.getSouthWest()) + ','; // bottom left
+    coordinates += this.latLngToCoord(north, west) + ','; // top left
+    coordinates += this.latLngToCoord(south, west) + ','; // bottom left
 
     // remove last comma and convert to a GeoJSON coordinates string
     return `[[${coordinates.slice(0, -1)}]]`;
@@ -390,16 +392,18 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     // return `[${this.latLngToCoord(bounds.getSouthWest())},${this.latLngToCoord(bounds.getNorthEast())}]`;
   }
 
-  private latLngToCoord(ll: L.LatLng): string {
-    return `[${ll.lng},${ll.lat}]`;
+  private latLngToCoord(lat: number, lng: number): string {
+    return `[${lng},${lat}]`;
   }
 
+  // NB: do not animate fitBounds() as it can lead to getting
+  // the latest apps BEFORE the final coordinates are set
   private fitBounds(bounds: L.LatLngBounds = null) {
     // console.log('fitting bounds');
     if (bounds && bounds.isValid()) {
-      this.map.fitBounds(bounds);
+      this.map.fitBounds(bounds, { animate: false });
     } else {
-      this.map.fitBounds(this.defaultBounds);
+      this.map.fitBounds(this.defaultBounds, { animate: false });
     }
   }
 
