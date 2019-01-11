@@ -26,7 +26,7 @@ export class Project {
   subtype: String;
   type: String;
 
-  //Everything else
+  // Everything else
   addedBy: String;
   build: String;
   CEAALink: String;
