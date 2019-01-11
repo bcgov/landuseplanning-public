@@ -12,10 +12,10 @@ import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-de
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
-    dispositionId: number;
+    projectId: number;
   }
   export interface Marker<P = any> {
-    dispositionId: number;
+    projectId: number;
   }
 }
 
@@ -265,7 +265,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // update visibility for apps with markers only
     // ie, leave apps without markers 'visible' (as initialized)
     for (const marker of this.markerList) {
-      const app = _.find(this.projects, { tantalisID: marker.dispositionId });
+      const app = _.find(this.projects, { _id: marker.projectId });
       if (app) {
         const markerLatLng = marker.getLatLng();
         // app is visible if map contains its marker
@@ -304,7 +304,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     // remove deleted apps from list and map
     deletedApps.forEach(app => {
-      const markerIndex = _.findIndex(this.markerList, { dispositionId: app.tantalisID });
+      const markerIndex = _.findIndex(this.markerList, { projectId: app._id });
       if (markerIndex >= 0) {
         const markers = this.markerList.splice(markerIndex, 1);
         this.markerClusterGroup.removeLayer(markers[0]);
@@ -315,13 +315,13 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     addedApps.forEach(app => {
       // add marker
       if (app.centroid.length === 2) { // safety check
-        const title = `${app.client}\n`
-          + `${app.appStatus}\n`
+        const title = `${app.name}\n`
+          + `${app.sector}\n`
           + `${app.location}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
           .setIcon(markerIconYellow)
           .on('click', L.Util.bind(this.onMarkerClick, this, app));
-        marker.dispositionId = app.tantalisID;
+        marker.projectId = app._id;
         this.markerList.push(marker); // save to list
         this.markerClusterGroup.addLayer(marker); // save to marker clusters group
       }
@@ -380,7 +380,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     // set icon on new marker
     if (show) {
-      const marker = _.find(this.markerList, { dispositionId: app.tantalisID });
+      const marker = _.find(this.markerList, { projectId: app._id });
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(markerIconYellowLg);

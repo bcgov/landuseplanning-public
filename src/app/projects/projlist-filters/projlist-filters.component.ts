@@ -191,7 +191,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       // store keys for faster filter lookahead
       // don't include empty results, then sort results, and then remove duplicates
       // NB: these look only at currently-loaded apps -- not all the possible apps in the system
-      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(app => app.client ? app.client.toUpperCase() : null)).sort());
+      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(app => app.name ? app.name.toUpperCase() : null)).sort());
       // this.clFileKeys = _.sortedUniq(_.compact(this.projects.map(app => app.cl_file)).sort()); // NOT CURRENTLY USED
       // this.dispIdKeys = _.compact(this.projects.map(app => app.tantalisID)).sort(); // should already be unique // NOT CURRENTLY USED
 
@@ -301,13 +301,13 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     // check for matching Comment Period Status
-    retVal = retVal && (
-      allCpStatuses ||
-      (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod)) ||
-      (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod)) ||
-      (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod)) ||
-      (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN] && this.commentPeriodService.isNotOpen(item.currentPeriod))
-    );
+    // retVal = retVal && (
+    //   allCpStatuses ||
+    //   (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod)) ||
+    //   (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod)) ||
+    //   (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod)) ||
+    //   (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN] && this.commentPeriodService.isNotOpen(item.currentPeriod))
+    // );
 
     // if no option is selected, match all
     const allAppStatuses = this.appStatusKeys.every(key => {
@@ -315,53 +315,53 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     // check for matching Project Status
-    const appStatusCode = this.projectService.getStatusCode(item.status);
-    retVal = retVal && (
-      allAppStatuses ||
-      (this.appStatusFilters[this.projectService.ACCEPTED] && this.projectService.isAccepted(appStatusCode)) ||
-      (this.appStatusFilters[this.projectService.DECISION_MADE] && this.projectService.isDecision(appStatusCode) && !this.projectService.isCancelled(appStatusCode)) ||
-      (this.appStatusFilters[this.projectService.CANCELLED] && this.projectService.isCancelled(appStatusCode)) ||
-      (this.appStatusFilters[this.projectService.ABANDONED] && this.projectService.isAbandoned(appStatusCode)) ||
-      (this.appStatusFilters[this.projectService.DISPOSITION_GOOD_STANDING] && this.projectService.isDispGoodStanding(appStatusCode)) ||
-      (this.appStatusFilters[this.projectService.SUSPENDED] && this.projectService.isSuspended(appStatusCode))
-    );
+    // const appStatusCode = this.projectService.getStatusCode(item.status);
+    // retVal = retVal && (
+    //   allAppStatuses ||
+    //   (this.appStatusFilters[this.projectService.ACCEPTED] && this.projectService.isAccepted(appStatusCode)) ||
+    //   (this.appStatusFilters[this.projectService.DECISION_MADE] && this.projectService.isDecision(appStatusCode) && !this.projectService.isCancelled(appStatusCode)) ||
+    //   (this.appStatusFilters[this.projectService.CANCELLED] && this.projectService.isCancelled(appStatusCode)) ||
+    //   (this.appStatusFilters[this.projectService.ABANDONED] && this.projectService.isAbandoned(appStatusCode)) ||
+    //   (this.appStatusFilters[this.projectService.DISPOSITION_GOOD_STANDING] && this.projectService.isDispGoodStanding(appStatusCode)) ||
+    //   (this.appStatusFilters[this.projectService.SUSPENDED] && this.projectService.isSuspended(appStatusCode))
+    // );
 
     // check for matching Applicant
     const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
     retVal = retVal && (
-      !this.applicantFilter || !item.client ||
-      item.client.toUpperCase().indexOf(applicantFilter.toUpperCase()) > -1
+      !this.applicantFilter || !item.name ||
+      item.name.toUpperCase().indexOf(applicantFilter.toUpperCase()) > -1
     );
 
     // check for matching CL File
-    retVal = retVal && (
-      !this.clFileFilter || !item.cl_file ||
-      item.cl_file.toString().indexOf(this.clFileFilter.toString()) > -1
-    );
+    // retVal = retVal && (
+    //   !this.clFileFilter || !item.cl_file ||
+    //   item.cl_file.toString().indexOf(this.clFileFilter.toString()) > -1
+    // );
 
     // check for matching Disposition ID
     retVal = retVal && (
-      !this.dispIdFilter || !item.tantalisID ||
-      item.tantalisID.toString().indexOf(this.dispIdFilter.toString()) > -1
+      !this.dispIdFilter || !item._id ||
+      item._id.toString().indexOf(this.dispIdFilter.toString()) > -1
     );
 
     // check for matching Purpose / Sub-purpose
-    const purposeSubpurpose = `${item.purpose} / ${item.subpurpose}`;
-    const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
-    retVal = retVal && (
-      !this.purposeFilter || !item.purpose || !item.subpurpose ||
-      purposeSubpurpose.toUpperCase().indexOf(purposeFilter.toUpperCase()) > -1
-    );
+    // const purposeSubpurpose = `${item.purpose} / ${item.subpurpose}`;
+    // const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
+    // retVal = retVal && (
+    //   !this.purposeFilter || !item.purpose || !item.subpurpose ||
+    //   purposeSubpurpose.toUpperCase().indexOf(purposeFilter.toUpperCase()) > -1
+    // );
 
     // check for Publish Date range
-    if (retVal && item.publishDate) {
-      const publishDay = moment(item.publishDate).startOf('day').toDate(); // date only
-      retVal = (
-        (!this.publishFromFilter || publishDay >= this.publishFromFilter)
-        &&
-        (!this.publishToFilter || publishDay <= this.publishToFilter)
-      );
-    }
+    // if (retVal && item.dateAdded) {
+    //   const publishDay = moment(item.dateAdded).startOf('day').toDate(); // date only
+    //   retVal = (
+    //     (!this.publishFromFilter || publishDay >= this.publishFromFilter)
+    //     &&
+    //     (!this.publishToFilter || publishDay <= this.publishToFilter)
+    //   );
+    // }
 
     return retVal;
   }

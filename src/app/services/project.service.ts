@@ -129,15 +129,15 @@ export class ProjectService {
 
         projects.forEach((project) => {
           // derive region code
-          project.region = this.getRegionCode(project.businessUnit);
+          // project.region = this.getRegionCode(project.businessUnit);
 
-          // user-friendly project status
-          project.appStatus = this.getStatusString(this.getStatusCode(project.status));
+          // // user-friendly project status
+          // project.appStatus = this.getStatusString(this.getStatusCode(project.status));
 
-          // 7-digit CL File number for display
-          if (project.cl_file) {
-            project['clFile'] = project.cl_file.toString().padStart(7, '0');
-          }
+          // // 7-digit CL File number for display
+          // if (project.cl_file) {
+          //   project['clFile'] = project.cl_file.toString().padStart(7, '0');
+          // }
 
           // NB: we don't get the documents here
 
@@ -182,15 +182,15 @@ export class ProjectService {
         const promises: Array<Promise<any>> = [];
 
         // derive region code
-        project.region = this.getRegionCode(project.businessUnit);
+        // project.region = this.getRegionCode(project.businessUnit);
 
-        // user-friendly project status
-        project.appStatus = this.getStatusString(this.getStatusCode(project.status));
+        // // user-friendly project status
+        // project.appStatus = this.getStatusString(this.getStatusCode(project.status));
 
-        // 7-digit CL File number for display
-        if (project.cl_file) {
-          project['clFile'] = project.cl_file.toString().padStart(7, '0');
-        }
+        // // 7-digit CL File number for display
+        // if (project.cl_file) {
+        //   project['clFile'] = project.cl_file.toString().padStart(7, '0');
+        // }
 
         // get the documents
         // promises.push(this.documentService.getAllByProjectId(project._id)
