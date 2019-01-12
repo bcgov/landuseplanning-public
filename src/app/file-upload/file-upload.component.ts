@@ -4,7 +4,7 @@
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 
 @Component({
-  selector: 'app-file-upload',
+  // selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })

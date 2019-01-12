@@ -1,0 +1,94 @@
+<div class="project" id="anchor-point">
+  <div class="container">
+    <div class="row">
+      <main class="col-lg-5 project-info">
+        <section class="organization-item">
+          <p>{{project?.name || '-'}}</p>
+        </section>
+
+        <section class="project-item">
+          <div class="project-item__commenting row">
+            <div class="col">
+                <label>Current Phase</label>
+                <span>{{project?.currentPhaseName || 'Unknown Project Phase'}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p class="proj-status">{{project?.status || 'Unknown Project Status'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <!-- This is currently just an ID. We will need to fetch the query proponent using the ID -->
+              <label>Proponent</label>
+              <p class="value">{{project?.proponent || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Region</label>
+              <p class="value">{{project?.region || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Location</label>
+              <p class="value">{{project?.location || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Type</label>
+              <p class="value">{{project?.type || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>Sub-type</label>
+              <p class="value">{{project?.sector || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>EA Decision</label>
+              <p class="value">{{project && project.eacDecision || "-"}}</p>
+            </div>
+            <div class="col-6">
+              <label>Project Lead</label>
+              <p class="value">{{project?.projectLead || "-"}}</p>
+              <p class="value">{{project?.projectLeadPhone || "-"}}</p>
+              <p class="value"><a href="mailto:{{project?.projectLeadEmail}}">{{project?.projectLeadEmail || "-"}}</a></p>
+            </div>
+            <div class="col-6">
+              <label>Executive Project Director</label>
+              <p class="value">{{project?.responsibleEPD || "-"}}</p>
+              <p class="value">{{project?.responsibleEPDPhone || "-"}}</p>
+              <p class="value"><a href="mailto:{{project?.responsibleEPDEmail}}">{{project?.responsibleEPDEmail || "-"}}</a></p>
+            </div>
+            <div class="col-6">
+                <label>Compliance & Enforcement Lead</label>
+                <p class="value">{{project?.CELead || "-"}}</p>
+                <p class="value">{{project?.CELeadPhone || "-"}}</p>
+                <p class="value"><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
+              </div>
+          </div>
+        </section>
+
+        <section class="map-item">
+          <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
+            <span class="no-results-msg">No map available</span>
+          </div>
+          <div class="map-container">
+            <div class="map" id="map"></div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="col-lg-7 project-tabs">
+        <section>
+          <div role="navigation">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
+                <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true" routerLinkActive="active">{{tabLink.label}}</a>
+              </li>
+            </ul>
+          </div>
+
+          <router-outlet></router-outlet>
+
+        </section>
+      </aside>
+    </div>
+  </div>
+</div>

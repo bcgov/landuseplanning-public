@@ -45,9 +45,9 @@
           <p class="title">Attachments</p>
           <div class="row">
             <div class="col-12" *ngFor="let document of comment.documents">
-              <!-- <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+              <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
                 <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
-              </a> -->
+              </a>
             </div>
           </div>
         </div>
