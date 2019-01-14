@@ -53,7 +53,7 @@ fieldset {
   + fieldset {
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid $fc-border-color;
   }
 }
 
@@ -127,7 +127,7 @@ textarea.form-control {
 // Input Group 
 .input-group-btn {
   .btn-icon {
-    border-color: #ccc;
+    border-color: $fc-border-color;
   }
 }
 
@@ -138,6 +138,7 @@ textarea.form-control {
   padding: 0.5rem 1rem;
   font-weight: 600;
   color: #fff;
+  background: $fc-invalid-color;
 
   &::after {
     content: ' ';
@@ -147,7 +148,7 @@ textarea.form-control {
     width: 1rem;
     height: 1rem;
     border-right: 0.5rem solid transparent;
-    border-bottom: 0.5rem solid #dc3545;
+    border-bottom: 0.5rem solid $fc-invalid-color;
     border-left: 0.5rem solid transparent;
   }
 }
@@ -157,17 +158,17 @@ textarea.form-control {
 }
 
 .form-control.is-invalid {
-  border-color: #dc3545;
+  border-color: $fc-invalid-color;
 }
 
 .input-group.is-invalid {
   .form-control {
-    border-color: #dc3545;
+    border-color: $fc-invalid-color;
   }
 
   .input-group-btn {
     .btn-icon {
-      border-color: #dc3545;
+      border-color: $fc-invalid-color;
     }
   }
 }
