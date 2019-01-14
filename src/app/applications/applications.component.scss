@@ -2,7 +2,6 @@
 
 $toggle-list-anim-duration: 0.2s;
 $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
-$side-panel-shadow: 0.1rem 0 0.15rem rgba(0,0,0,0.25);
 
 app-applications:host {
   position: absolute;     // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
@@ -25,13 +24,11 @@ app-applications:host {
   height: 100%;
 }
 
-// Side navigation & panel
+// Side Navigation
 $side-nav-color: #fff;
 $side-nav-item-height-sm: 4.5rem;
 $side-nav-item-width-lg: 6rem;
 $side-nav-item-height-lg: 5.5rem;
-$side-panel-width-lg: 30rem;
-$side-panel-bg: #fff;
 
 .side-nav {
   @include flex(0 0 auto);
@@ -45,7 +42,6 @@ $side-panel-bg: #fff;
   @include flex-box();
   margin: 0;
   padding: 0;
-  background: $primary4;
   list-style-type: none;
 }
 
@@ -58,7 +54,7 @@ $side-panel-bg: #fff;
   display: block;
   width: 100%;
   height: 100%;
-  color: rgba($side-nav-color, 0.6);
+  color: $side-nav-color;
   background: $primary4;
   border-radius: 0;
   border: none;
@@ -74,7 +70,7 @@ $side-panel-bg: #fff;
 
 .side-nav-item .btn:focus,
 .side-nav-item .btn:hover {
-  color: #fff;
+  color: $side-nav-color;
   background: $primary5;
   box-shadow: none;
 }
@@ -91,7 +87,6 @@ $side-panel-bg: #fff;
     z-index: 1002;
     height: 100%;
     border-bottom: none;
-    box-shadow: $side-panel-shadow;
   }
 
   .side-nav ul {
@@ -105,6 +100,10 @@ $side-panel-bg: #fff;
 }
 
 // Side panel
+$side-panel-width-lg: 30rem;
+$side-panel-bg: #fff;
+$side-panel-shadow: 0.1rem 0 0.15rem rgba(0,0,0,0.25);
+
 .side-panel {
   position: absolute;
   top: 0;
@@ -150,6 +149,25 @@ $side-panel-bg: #fff;
   }
 }
 
+// Side Panel States
+.side-panel__open {
+  .side-panel {
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 1024px) {
+  .side-panel__open {
+    .side-panel {
+      transform: translateX($side-nav-item-width-lg);
+    }
+
+    .app-results {
+      left: $side-panel-width-lg;
+    }
+  }
+}
+
 // Main content area
 .main-panel {
   @include flex(1 1 auto);
@@ -157,6 +175,8 @@ $side-panel-bg: #fff;
 }
 
 // Results bar
+$app-results-bg: rgba(#fff, 0.9);
+
 .app-results {
   @include flex-box();
   position: absolute;
@@ -166,7 +186,7 @@ $side-panel-bg: #fff;
   z-index: 999;
   padding: 0.75rem 1.5rem;
   height: 4rem;
-  background: rgba(255,255,255,0.75);
+  background: $app-results-bg;
   align-items: center;
   transition: left ease-out 0.2s;
 }
@@ -177,7 +197,7 @@ $side-panel-bg: #fff;
 }
 
 .app-results__count {
-  letter-spacing: -0.02rem;
+  letter-spacing: -0.01rem;
   color: $gray9;
   font-weight: 700;
 }
@@ -226,25 +246,6 @@ $side-panel-bg: #fff;
 
   .main-panel {
     order: 2;
-  }
-}
-
-// Side Panel States
-.side-panel__open {
-  .side-panel {
-    transform: translateX(0);
-  }
-}
-
-@media (min-width: 1024px) {
-  .side-panel__open {
-    .side-panel {
-      transform: translateX($side-nav-item-width-lg);
-    }
-
-    .app-results {
-      left: $side-panel-width-lg;
-    }
   }
 }
 

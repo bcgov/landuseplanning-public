@@ -45,10 +45,10 @@ section {
   padding-right: 1.5rem;
   padding-left: 1.5rem;
   padding-bottom: 1.5rem;
+  border-bottom: 1px solid $gray3;
   background: #fff;
 }
 
-// Title Contents
 .applicant-name, 
 .application-purpose {
   letter-spacing: -0.02rem;
@@ -82,7 +82,7 @@ section {
 }
 
 .status-msg {
-  margin-top: 0.8rem;
+  margin-top: 0.6rem;
 }
 
 .commenting-open {
@@ -110,15 +110,6 @@ section {
 .not-approved {
   background-image: url("~assets/images/baseline-cancel-24px.svg");
 }
-
-.submit-comment-btn {
-  margin-top: 1.25rem;
-  padding: 0.75rem;
-  width: 100%;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-
 
 // Meta
 .meta-container {
@@ -151,6 +142,14 @@ section {
     display: table-cell;
     //font-style: italic;
   }
+}
+
+.submit-comment-btn {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 // Documents
