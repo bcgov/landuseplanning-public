@@ -1,0 +1,31 @@
+<div class="tab-pane" role="tabpanel">
+    <section class="tab-section" *ngIf="project">
+        <div class="status mb-3">
+          {{project.status || 'Unknown Project Status'}}
+        </div>
+
+        <div>
+            <h2 class="title">Description</h2>
+            <p [innerHTML]="(project.description || '-') | newlines"></p>
+        </div>
+
+        <div>
+            <!-- <h2 class="title">Project Documents</h2>
+            <div *ngIf="project.documents.length === 0">
+                <em>No documents have been uploaded for this project.</em>
+            </div> -->
+
+            <div class="row">
+                <!-- <div class="col-12" *ngFor="let document of project?.documents">
+                    <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+                        <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
+                    </a>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- <div class="float-right" *ngIf="project.publishDate">
+            <p class="value">Published on {{project.publishDate | date:'longDate'}}</p>
+        </div> -->
+    </section>
+</div>

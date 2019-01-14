@@ -7,16 +7,16 @@ import { RouterModule } from '@angular/router';
 
 // modules
 import { SharedModule } from 'app/shared.module';
-import { ApplicationRoutingModule } from './application-routing.module';
+import { ProjectRoutingModule } from './project-routing.module';
 
 // components
-import { ApplicationComponent } from './application.component';
-import { ApplicationTabComponent } from './application-tab/application-tab.component';
+import { ProjectComponent } from './project.component';
+import { ProjectTabComponent } from './project-tab/project-tab.component';
 import { CommentingTabComponent } from './commenting-tab/commenting-tab.component';
 import { ViewCommentComponent } from './commenting-tab/view-comment/view-comment.component';
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
 import { AddCommentComponent } from './add-comment/add-comment.component';
-// import { FileUploadComponent } from 'app/file-upload/file-upload.component';
+import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 
 @NgModule({
   imports: [
@@ -26,16 +26,16 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
     NgxPaginationModule,
     RouterModule,
     SharedModule,
-    ApplicationRoutingModule
+    ProjectRoutingModule
   ],
   declarations: [
-    ApplicationComponent,
-    ApplicationTabComponent,
+    ProjectComponent,
+    ProjectTabComponent,
     CommentingTabComponent,
     ViewCommentComponent,
     DecisionsTabComponent,
     AddCommentComponent,
-    // FileUploadComponent
+    FileUploadComponent
   ],
   entryComponents: [
     ViewCommentComponent,
@@ -43,4 +43,4 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
   ]
 })
 
-export class ApplicationModule { }
+export class ProjectModule { }

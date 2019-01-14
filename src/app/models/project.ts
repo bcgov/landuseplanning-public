@@ -6,10 +6,10 @@ import { Feature } from './feature';
 export class Project {
   // the following are retrieved from the API
   _id: string;
-  cEAAInvolvement: String;
-  cELead: String;
-  cELeadEmail: String;
-  cELeadPhone: String;
+  CEAAInvolvement: String;
+  CELead: String;
+  CELeadEmail: String;
+  CELeadPhone: String;
   centroid: Array<number> = [];
   description: String;
   eacDecision: String;
@@ -23,7 +23,6 @@ export class Project {
   responsibleEPD: String;
   responsibleEPDEmail: String;
   responsibleEPDPhone: String;
-  subtype: String;
   type: String;
 
   // Everything else
@@ -66,10 +65,10 @@ export class Project {
 
   constructor(obj?: any) {
     this._id                 = obj && obj._id                 || null;
-    this.cEAAInvolvement     = obj && obj.cEAAInvolvement     || null;
-    this.cELead              = obj && obj.cELead              || null;
-    this.cELeadEmail         = obj && obj.cELeadEmail         || null;
-    this.cELeadPhone         = obj && obj.cELeadPhone         || null;
+    this.CEAAInvolvement     = obj && obj.CEAAInvolvement     || null;
+    this.CELead              = obj && obj.CELead              || null;
+    this.CELeadEmail         = obj && obj.CELeadEmail         || null;
+    this.CELeadPhone         = obj && obj.CELeadPhone         || null;
     this.description         = obj && obj.description         || null;
     this.eacDecision         = obj && obj.eacDecision         || null;
     this.location            = obj && obj.location            || null;
@@ -82,7 +81,6 @@ export class Project {
     this.responsibleEPD      = obj && obj.responsibleEPD      || null;
     this.responsibleEPDEmail = obj && obj.responsibleEPDEmail || null;
     this.responsibleEPDPhone = obj && obj.responsibleEPDPhone || null;
-    this.subtype             = obj && obj.subtype             || null;
     this.type                = obj && obj.type                || null;
     this.addedBy             = obj && obj.addedBy             || null;
     this.build               = obj && obj.build               || null;
