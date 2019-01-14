@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Constants } from 'app/utils/constants';
 
@@ -7,16 +7,14 @@ import { Constants } from 'app/utils/constants';
   templateUrl: './purpose-info-modal.component.html',
   styleUrls: ['./purpose-info-modal.component.scss']
 })
-export class PurposeInfoModalComponent implements OnInit {
+
+export class PurposeInfoModalComponent {
+  @HostBinding('class') classes = 'modal-content-flex';
 
   constants = Constants;
 
   constructor(
     public activeModal: NgbActiveModal
-  ) {
-  }
-
-  ngOnInit() {
-  }
+  ) { }
 
 }
