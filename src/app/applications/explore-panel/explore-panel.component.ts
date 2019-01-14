@@ -283,7 +283,10 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
 
   public showPurposeInfoModal() {
     // open modal
-    this.purposeInfoModal = this.modalService.open(PurposeInfoModalComponent, { backdrop: 'static', size: 'lg' });
+    this.purposeInfoModal = this.modalService.open(PurposeInfoModalComponent, {
+        size: 'lg',
+        windowClass: 'modal-fixed'
+      }
+    );
   }
-
 }

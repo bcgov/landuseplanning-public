@@ -30,4 +30,45 @@
 
 .modal-body {
   padding: 1.5rem;
+  background: $gray0;
+}
+
+// Fixed Modal w/ Scrolling Body
+.modal-open .modal-fixed {
+  overflow: hidden;
+}
+
+.modal-fixed {
+  overflow: hidden;
+
+  .modal-dialog,
+  .modal-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+  }
+
+  // Host components should reflect this class to ensure the content can flex as expected
+  .modal-content-flex {
+    display: flex;
+    flex-direction: column
+  }
+
+  .modal-header {
+    flex: 0 0 auto;
+  }
+
+  .modal-body {
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 799px) {
+  .modal-fixed .modal-dialog {
+    max-width: 640px;
+    margin: 30px auto;
+  }
 }
