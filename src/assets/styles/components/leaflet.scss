@@ -22,6 +22,7 @@
   }
 }
 
+// Popup
 .leaflet-popup {
   margin-bottom: 60px; // Offset so we can see the marker
 }
@@ -38,19 +39,11 @@
   line-height: 1.5;
 }
 
+// Map Attribution
 .leaflet-control-attribution {
   padding: 0.5rem;
   line-height: 0.75rem;
   font-size: 0.75rem;
-}
-
-// Layer control customization
-.leaflet-control-layers {
-  //border: 10px solid red;
-}
-
-.leaflet-control-layers-toggle {
-  //background: none;
 }
 
 // Marker cluster size variants
@@ -76,4 +69,15 @@
     font-size: 0.85rem;
     font-weight: 700;
   }
+}
+
+// Layer Control
+.leaflet-touch .leaflet-control-layers-toggle {
+  width: 32px;
+  height: 32px;
+  background: url("~assets/images/baseline-layers-24px.svg") no-repeat center 5px;
+}
+
+.leaflet-top.leaflet-right .leaflet-control {
+  margin-top: 14px;
 }

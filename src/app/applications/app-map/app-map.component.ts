@@ -381,10 +381,13 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   // the latest apps BEFORE the final coordinates are set
   private fitBounds(bounds: L.LatLngBounds = null) {
     // console.log('fitting bounds');
+    const fitBoundsOptions: L.FitBoundsOptions = {
+      animate: false, paddingTopLeft: [0, 100], paddingBottomRight: [0, 20]
+    };
     if (bounds && bounds.isValid()) {
-      this.map.fitBounds(bounds, { animate: false });
+      this.map.fitBounds(bounds, fitBoundsOptions);
     } else {
-      this.map.fitBounds(this.defaultBounds, { animate: false });
+      this.map.fitBounds(this.defaultBounds, fitBoundsOptions);
     }
   }
 

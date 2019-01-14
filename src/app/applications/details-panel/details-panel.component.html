@@ -70,7 +70,7 @@
           </li>
           <li>
             <div class="key">Location:</div>
-            <div class="value">{{application?.location | lowercase}}</div>
+            <div class="value">{{application?.location}}</div>
           </li>
         </ul>
         <!--
@@ -103,7 +103,7 @@
             </div>
             <li *ngFor="let document of application.decision.documents">
               <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
-                <i class="material-icons md-18">
+                <i class="material-icons">
                   insert_drive_file
                 </i>
                 <span>{{document.documentFileName}}</span>
