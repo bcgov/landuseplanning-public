@@ -75,5 +75,5 @@ def notifyBuild(String msg = '', String colour = 'GREEN') {
   }
 
   // Send notifications
-  slackSend (color: colorCode, message: msg)
+  // slackSend (color: colorCode, message: msg)
 }
