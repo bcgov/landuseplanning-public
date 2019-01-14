@@ -14,7 +14,7 @@ export class ApiService {
   public isMS: boolean; // IE, Edge, etc
   public apiPath: string;
   public adminUrl: string;
-  public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'beta' | 'master' | 'prod';
+  public env: 'local' | 'dev' | 'prod';
 
   constructor(
     private http: Http
@@ -31,52 +31,17 @@ export class ApiService {
         this.env = 'local';
         break;
 
-      case 'nrts-prc-dev.pathfinder.gov.bc.ca':
+      case 'eagle-dev.pathfinder.gov.bc.ca':
         // Dev
-        this.apiPath = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/admin/';
+        this.apiPath = 'https://eagle-dev.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://eagle-dev.pathfinder.gov.bc.ca/admin/';
         this.env = 'dev';
-        break;
-
-      case 'nrts-prc-test.pathfinder.gov.bc.ca':
-        // Test
-        this.apiPath = 'https://nrts-prc-test.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-test.pathfinder.gov.bc.ca/admin/';
-        this.env = 'test';
-        break;
-
-      case 'nrts-prc-demo.pathfinder.gov.bc.ca':
-        // Demo
-        this.apiPath = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/admin/';
-        this.env = 'demo';
-        break;
-
-      case 'nrts-prc-scale.pathfinder.gov.bc.ca':
-        // Scale
-        this.apiPath = 'https://nrts-prc-scale.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-scale.pathfinder.gov.bc.ca/admin/';
-        this.env = 'scale';
-        break;
-
-      case 'nrts-prc-beta.pathfinder.gov.bc.ca':
-        // Beta
-        this.apiPath = 'https://nrts-prc-beta.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-beta.pathfinder.gov.bc.ca/admin/';
-        this.env = 'beta';
-        break;
-
-      case 'nrts-prc-master.pathfinder.gov.bc.ca':
-        // Master
-        this.apiPath = 'https://nrts-prc-master.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-master.pathfinder.gov.bc.ca/admin/';
-        this.env = 'master';
         break;
 
       default:
         // Prod
-        this.apiPath = 'https://comment.nrs.gov.bc.ca/api/public';
-        this.adminUrl = 'https://comment.nrs.gov.bc.ca/admin/';
+        this.apiPath = 'https://eagle-dev.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://eagle-dev.pathfinder.gov.bc.ca/admin/';
         this.env = 'prod';
     };
   }
