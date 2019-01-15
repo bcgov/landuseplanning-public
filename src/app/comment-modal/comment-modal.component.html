@@ -6,11 +6,11 @@
   </div>
 </div>
 
-<!-- FIRST PAGE -->
+<!-- PAGE 1 -->
 <form #preCommentForm="ngForm" *ngIf="this.currentPage === 1">
   <div class="modal-header">
     <h4 class="modal-title">Submit a Comment</h4>
-    <button class="btn btn-icon close-btn gtm-submit-comment_cancel-pg1" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page1')">
+    <button class="btn btn-icon close-btn gtm-submit-comment_cancel-pg1" type="button" aria-label="Close" (click)="dismiss('dismissed page1')">
       <i class="material-icons">
         close
       </i>
@@ -40,11 +40,11 @@
   </div>
 </form>
 
-<!-- Contact Information Form-->
+<!-- PAGE 2 -->
 <form class="contact-form" #commentForm1="ngForm" *ngIf="this.currentPage === 2">
   <div class="modal-header">
     <h4 class="modal-title">Enter your contact information <em>(optional)</em></h4>
-    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg2" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page2')">
+    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg2" type="button" aria-label="Close" (click)="dismiss('dismissed page2')">
       <i class="material-icons">
         close
       </i>
@@ -104,11 +104,11 @@
   </div>
 </form>
 
-<!-- Comment Form -->
-<form #commentForm2="ngForm" *ngIf="this.currentPage === 3" [hidden]="submitting">
+<!-- PAGE 3 -->
+<form class="comment-form" #commentForm2="ngForm" *ngIf="this.currentPage === 3" [hidden]="submitting">
   <div class="modal-header">
     <h4 class="modal-title">Enter your comment</h4>
-    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page3')">
+    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" type="button" aria-label="Close" (click)="dismiss('dismissed page3')">
       <i class="material-icons">
         close
       </i>
@@ -137,10 +137,10 @@
   </div>
 </form>
 
-<!-- Success -->
+<!-- PAGE 4 -->
 <div class="thank-you-content" *ngIf="this.currentPage === 4">
   <div class="modal-header">
-    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page3')">
+    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg4" type="button" aria-label="Close" (click)="dismiss('dismissed page4')">
       <i class="material-icons">
         close
       </i>

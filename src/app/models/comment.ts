@@ -8,6 +8,10 @@ class Internal {
     this.email = obj && obj.email || null;
     this.phone = obj && obj.phone || null;
   }
+
+  hasData(): boolean {
+    return (!!this.email || !!this.phone);
+  }
 }
 
 class CommentAuthor {
@@ -23,9 +27,15 @@ class CommentAuthor {
     this.orgName            = obj && obj.orgName            || null;
     this.contactName        = obj && obj.contactName        || null;
     this.location           = obj && obj.location           || null;
-    this.requestedAnonymous = obj && obj.requestedAnonymous || null;
+    this.requestedAnonymous = obj && obj.requestedAnonymous || false; // default
 
-    this.internal = new Internal(obj && obj.internal || null); // must exist
+    this.internal = new Internal(obj && obj.internal || null); // must exist (expected by API)
+  }
+
+  hasData(): boolean {
+    // not including refs
+    return (!!this.orgName || !!this.contactName || !!this.location || !!this.requestedAnonymous
+      || (this.internal && this.internal.hasData()));
   }
 }
 
@@ -45,6 +55,11 @@ class Review {
     if (obj && obj.reviewerDate) {
       this.reviewerDate = new Date(obj.reviewerDate);
     }
+  }
+
+  hasData(): boolean {
+    // not including refs
+    return (!!this.reviewerNotes || !!this.reviewerDate);
   }
 }
 
@@ -88,5 +103,12 @@ export class Comment {
         this.documents.push(doc);
       }
     }
+  }
+
+  hasData(): boolean {
+    // not including refs
+    return (!!this.commentNumber || !!this.comment || !!this.dateAdded || !!this.commentStatus
+      || (this.commentAuthor && this.commentAuthor.hasData())
+      || (this.review && this.review.hasData()));
   }
 }

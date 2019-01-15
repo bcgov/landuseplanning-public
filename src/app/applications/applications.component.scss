@@ -257,11 +257,23 @@ $app-results-bg: rgba(#fff, 0.9);
 
   // Splash Modal Sizing
   .splash-modal {
+    z-index: 1050; // on top of most other stuff
+
     .modal-dialog {
       padding-right: 0.5rem;
       padding-left: 0.5rem;
       max-width: 900px;
       background: transparent;
     }
+  }
+
+  // Comment Modal
+  .comment-modal {
+    z-index: 1055; // on top of Splash modal
+  }
+
+  // Confirm Modal
+  dialog-holder dialog-wrapper .modal {
+    z-index: 1060; // on top of Comment modal
   }
 }

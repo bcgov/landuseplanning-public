@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, HostListener, OnInit } from '@angular/core';
 // import { HttpEventType } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
+import { ConfirmComponent } from 'app/confirm/confirm.component';
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
@@ -17,11 +19,11 @@ import { DocumentService } from 'app/services/document.service';
 })
 
 export class CommentModalComponent implements OnInit {
-  @Input() currentPeriod: CommentPeriod;
+  @Input() currentPeriod: CommentPeriod; // for the subject application
 
   public submitting = false;
-  private progressValue: number; // used in template
-  private progressBufferValue: number; // used in template
+  public progressValue: number; // used in template
+  public progressBufferValue: number; // used in template
   public totalSize: number;
   public currentPage = 1;
   private comment: Comment;
@@ -29,33 +31,69 @@ export class CommentModalComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
+    private dialogService: DialogService,
     private commentService: CommentService,
     private documentService: DocumentService
   ) { }
 
+  // check for unsaved changes before closing (or reloading) current tab/window
+  @HostListener('window:beforeunload', ['$event'])
+  public handleBeforeUnload(event: Event) {
+    console.log('handleBeforeUnload()');
+
+    // display browser alert if needed
+    if (this.anyUnsavedData()) {
+      event.returnValue = true;
+    }
+  }
+
+  public dismiss(reason: string) {
+    if (this.currentPage < 4 && this.anyUnsavedData()) {
+      // prompt to confirm
+      this.dialogService.addDialog(ConfirmComponent,
+        {
+          title: 'Unsaved Changes',
+          message: 'Click OK to discard your changes or Cancel to return to your comment.'
+        }, {
+          backdropColor: 'rgba(0, 0, 0, 0.5)'
+        })
+        .subscribe(isConfirmed => {
+          // dismiss if confirmed
+          if (isConfirmed) {
+            this.activeModal.dismiss(reason);
+          }
+        });
+    } else {
+      // dismiss right away
+      this.activeModal.dismiss(reason);
+    }
+  }
+
+  private anyUnsavedData(): boolean {
+    return (this.comment.hasData() || this.files.length > 0);
+  }
+
   ngOnInit() {
-    this.comment = new Comment();
-    this.comment._commentPeriod = this.currentPeriod._id;
-    this.comment.commentAuthor.requestedAnonymous = false;
+    this.comment = new Comment({ _commentPeriod: this.currentPeriod._id });
   }
 
-  private p1_next() {
+  public p1_next() {
     this.currentPage++;
   }
 
-  private p2_back() {
+  public p2_back() {
     this.currentPage--;
   }
 
-  private p2_next() {
+  public p2_next() {
     this.currentPage++;
   }
 
-  private p3_back() {
+  public p3_back() {
     this.currentPage--;
   }
 
-  private p3_next() {
+  public p3_next() {
     this.submitting = true;
     this.progressValue = this.progressBufferValue = 0;
 
@@ -73,7 +111,7 @@ export class CommentModalComponent implements OnInit {
         this.comment = comment;
         return comment;
       })
-      .then((comment: Comment) => {
+      .then(() => {
         // then upload all documents
         const observables: Array<Observable<Document>> = [];
 
