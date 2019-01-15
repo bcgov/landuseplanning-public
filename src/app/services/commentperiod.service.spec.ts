@@ -12,7 +12,7 @@ describe('CommentPeriodService', () => {
         {
           provide: ApiService,
           useValue: jasmine.createSpyObj('ApiService', [
-            'getPeriodsByAppId',
+            'getPeriodsByProjId',
             'getPeriod',
             'handleError'
           ])
@@ -27,7 +27,7 @@ describe('CommentPeriodService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('getAllByApplicationId', () => {
+  describe('getAllByProjectId', () => {
     let service: CommentPeriodService;
     let apiSpy;
     beforeEach(() => {
@@ -37,24 +37,24 @@ describe('CommentPeriodService', () => {
 
     describe('when no comment periods are returned by the Api', () => {
       it('returns an empty CommentPeriod array', async(() => {
-        apiSpy.getPeriodsByAppId.and.returnValue(
+        apiSpy.getPeriodsByProjId.and.returnValue(
           Observable.of({ text: () => {} })
         );
 
         service
-          .getAllByApplicationId('123')
+          .getAllByProjectId('123')
           .subscribe(result => expect(result).toEqual([] as CommentPeriod[]));
       }));
     });
 
     describe('when one comment period is returned by the Api', () => {
       it('returns an array with one CommentPeriod element', async(() => {
-        apiSpy.getPeriodsByAppId.and.returnValue(
+        apiSpy.getPeriodsByProjId.and.returnValue(
           Observable.of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
         );
 
         service
-          .getAllByApplicationId('123')
+          .getAllByProjectId('123')
           .subscribe(result =>
             expect(result).toEqual([new CommentPeriod({ _id: '1' })])
           );
@@ -63,7 +63,7 @@ describe('CommentPeriodService', () => {
 
     describe('when multiple comment periods are returned by the Api', () => {
       it('returns an array with multiple CommentPeriod elements', async(() => {
-        apiSpy.getPeriodsByAppId.and.returnValue(
+        apiSpy.getPeriodsByProjId.and.returnValue(
           Observable.of({
             text: () => 'notNull',
             json: () => [{ _id: '1' }, { _id: '2' }, { _id: '3' }]
@@ -71,7 +71,7 @@ describe('CommentPeriodService', () => {
         );
 
         service
-          .getAllByApplicationId('123')
+          .getAllByProjectId('123')
           .subscribe(result =>
             expect(result).toEqual([
               new CommentPeriod({ _id: '1' }),
@@ -84,7 +84,7 @@ describe('CommentPeriodService', () => {
 
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
-        apiSpy.getPeriodsByAppId.and.returnValue(
+        apiSpy.getPeriodsByProjId.and.returnValue(
           Observable.of({
             text: () => {
               throw Error('someError');
@@ -96,7 +96,7 @@ describe('CommentPeriodService', () => {
           return Observable.throw(Error('someRethrownError'));
         });
 
-        service.getAllByApplicationId('123').subscribe(
+        service.getAllByProjectId('123').subscribe(
           () => {
             fail('An error was expected.');
           },

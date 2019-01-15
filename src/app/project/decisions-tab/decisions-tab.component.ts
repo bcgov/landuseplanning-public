@@ -3,37 +3,37 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
-import { Application } from 'app/models/application';
+import { Project } from 'app/models/project';
 import { ApiService } from 'app/services/api';
-import { ApplicationService } from 'app/services/application.service';
+import { ProjectService } from 'app/services/project.service';
 
 @Component({
   templateUrl: './decisions-tab.component.html',
   styleUrls: ['./decisions-tab.component.scss']
 })
 export class DecisionsTabComponent implements OnInit, OnDestroy {
-  public application: Application = null;
+  public project: Project = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public api: ApiService, // used in template
-    public applicationService: ApplicationService // used in template
+    public projectService: ProjectService // used in template
   ) { }
 
   ngOnInit() {
-    // get application
+    // get project
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { application: Application }) => {
-          if (data.application) {
-            this.application = data.application;
+        (data: { project: Project }) => {
+          if (data.project) {
+            this.project = data.project;
           } else {
-            alert('Uh-oh, couldn\'t load application');
-            // application not found --> navigate back to application list
-            this.router.navigate(['/applications']);
+            alert('Uh-oh, couldn\'t load project');
+            // project not found --> navigate back to project list
+            this.router.navigate(['/projects']);
           }
         }
       );

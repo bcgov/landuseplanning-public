@@ -4,22 +4,22 @@
     </div>
 
     <section class="tab-section" *ngIf="!loading">
-        <div *ngIf="!application?.currentPeriod">
-            No comment periods are currently scheduled for this application.
+        <div *ngIf="!project?.currentPeriod">
+            No comment periods are currently scheduled for this project.
         </div>
 
-        <div class="card card-body d-flex flex-row justify-content-between" *ngIf="application?.currentPeriod">
+        <div class="card card-body d-flex flex-row justify-content-between" *ngIf="project?.currentPeriod">
             <div>
-              <label class="title">{{application.cpStatus || 'Unknown Comment Period Status'}}</label>
-                <p class="mb-0">{{application.currentPeriod.startDate | date:'mediumDate'}} - {{application.currentPeriod.endDate | date:'mediumDate'}}</p>
+              <label class="title">{{project.commentPeriodStatus || 'Unknown Comment Period Status'}}</label>
+                <p class="mb-0">{{project.currentPeriod.dateStarted | date:'mediumDate'}} - {{project.currentPeriod.dateCompleted | date:'mediumDate'}}</p>
             </div>
-            <div *ngIf="commentPeriodService.isOpen(application.currentPeriod)">
+            <div *ngIf="commentPeriodService.isOpen(project.currentPeriod)">
                 <div class="badge badge-secondary p-3">{{daysRemaining}}</div>
             </div>
         </div>
 
         <!-- <div *ngIf="comments?.length === 0">
-            <em>No comments have been received for this application at this time.</em>
+            <em>No comments have been received for this project at this time.</em>
         </div> -->
         <div class="list-group">
             <ng-template ngFor let-item [ngForOf]="comments">

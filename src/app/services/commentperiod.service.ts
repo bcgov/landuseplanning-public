@@ -27,8 +27,8 @@ export class CommentPeriodService {
   }
 
   // get all comment periods for the specified application id
-  getAllByApplicationId(appId: string): Observable<CommentPeriod[]> {
-    return this.api.getPeriodsByAppId(appId)
+  getAllByProjectId(appId: string): Observable<CommentPeriod[]> {
+    return this.api.getPeriodsByProjId(appId)
       .map(res => {
         const periods = res.text() ? res.json() : [];
         periods.forEach((period, i) => {
@@ -76,16 +76,16 @@ export class CommentPeriodService {
    * Given a comment period, returns status abbreviation.
    */
   getStatusCode(commentPeriod: CommentPeriod): string {
-    if (!commentPeriod || !commentPeriod.startDate || !commentPeriod.endDate) {
+    if (!commentPeriod || !commentPeriod.dateStarted || !commentPeriod.dateCompleted) {
       return this.NOT_OPEN;
     }
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    if (commentPeriod.endDate < today) {
+    if (commentPeriod.dateCompleted < today) {
       return this.CLOSED;
-    } else if (commentPeriod.startDate > today) {
+    } else if (commentPeriod.dateStarted > today) {
       return this.NOT_STARTED;
     } else {
       return this.OPEN;
