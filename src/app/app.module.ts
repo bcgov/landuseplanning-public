@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 
 // modules
@@ -18,6 +19,7 @@ import { HomeProxyComponent } from 'app/home-proxy.component';
 import { ApplicationsProxyComponent } from 'app/applications-proxy.component';
 import { AppComponent } from 'app/app.component';
 import { CommentModalComponent } from 'app/comment-modal/comment-modal.component';
+import { ConfirmComponent } from 'app/confirm/confirm.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 import { HeaderComponent } from 'app/header/header.component';
@@ -46,13 +48,15 @@ import { UrlService } from 'app/services/url.service';
     Ng2PageScrollModule.forRoot(),
     SharedModule,
     ApplicationsModule,
-    AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
+    AppRoutingModule, // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
+    BootstrapModalModule.forRoot({ container: document.body })
   ],
   declarations: [
     HomeProxyComponent,
     ApplicationsProxyComponent,
     AppComponent,
     CommentModalComponent,
+    ConfirmComponent,
     ContactComponent,
     FileUploadComponent,
     HeaderComponent,
@@ -72,7 +76,8 @@ import { UrlService } from 'app/services/url.service';
     UrlService
   ],
   entryComponents: [
-    CommentModalComponent
+    CommentModalComponent,
+    ConfirmComponent
   ],
   bootstrap: [
     AppComponent

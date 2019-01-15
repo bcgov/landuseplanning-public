@@ -87,7 +87,9 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   ngOnDestroy() {
-    if (this.addCommentModal) { this.addCommentModal.dismiss('addCommentModal dismissed'); }
+    if (this.addCommentModal) {
+      (<CommentModalComponent>this.addCommentModal.componentInstance).dismiss('destroying');
+    }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -103,18 +105,18 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
   public addComment() {
     if (this.application.currentPeriod) {
       // open modal
-      this.addCommentModal = this.modalService.open(CommentModalComponent, { backdrop: 'static', size: 'lg' });
+      this.addCommentModal = this.modalService.open(CommentModalComponent, { backdrop: 'static', size: 'lg', windowClass: 'comment-modal' });
       // set input parameter
       (<CommentModalComponent>this.addCommentModal.componentInstance).currentPeriod = this.application.currentPeriod;
       // check result
       this.addCommentModal.result.then(
-        value => {
+        () => {
           // saved
-          console.log(`Add Comment succeeded, value = ${value}`);
+          this.addCommentModal = null; // for next time
         },
-        reason => {
-          // cancelled
-          console.log(`Add Comment cancelled, reason = ${reason}`);
+        () => {
+          // dismissed
+          this.addCommentModal = null; // for next time
         }
       );
     }
