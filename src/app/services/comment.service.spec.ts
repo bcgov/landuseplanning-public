@@ -16,7 +16,7 @@ describe('CommentService', () => {
         {
           provide: ApiService,
           useValue: jasmine.createSpyObj('ApiService', [
-            'getPeriodsByAppId',
+            'getPeriodsByProjId',
             'getPeriod',
             'getCommentsByPeriodId',
             'getComment',
@@ -27,7 +27,7 @@ describe('CommentService', () => {
         {
           provide: CommentPeriodService,
           useValue: jasmine.createSpyObj('CommentPeriodService', [
-            'getAllByApplicationId'
+            'getAllByProjectId'
           ])
         },
         {
@@ -46,7 +46,7 @@ describe('CommentService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('getAllByApplicationId', () => {
+  describe('getAllByProjectId', () => {
     let service: CommentService;
     let commentPeriodServiceSpy;
     let apiSpy;
@@ -58,10 +58,10 @@ describe('CommentService', () => {
 
     describe('when no comment periods are returned by the comment period service', () => {
       it('returns an empty Comment array', async(() => {
-        commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+        commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
           Observable.of([] as CommentPeriod[])
         );
-        service.getAllByApplicationId('123').subscribe(res => {
+        service.getAllByProjectId('123').subscribe(res => {
           expect(res).toEqual([] as Comment[]);
         });
       }));
@@ -70,7 +70,7 @@ describe('CommentService', () => {
     describe('when one comment period is returned by the comment period service', () => {
       describe('when the comment period contains no comments', () => {
         it('returns an empty comments array', async(() => {
-          commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+          commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
             Observable.of([new CommentPeriod({ _id: '1' })])
           );
 
@@ -84,7 +84,7 @@ describe('CommentService', () => {
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
-          service.getAllByApplicationId('123').subscribe(res => {
+          service.getAllByProjectId('123').subscribe(res => {
             expect(res).toEqual([] as Comment[]);
           });
         }));
@@ -92,7 +92,7 @@ describe('CommentService', () => {
 
       describe('when the comment period contains one comment', () => {
         it('returns an array with one comment from the comment period', async(() => {
-          commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+          commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
             Observable.of([new CommentPeriod({ _id: '1' })])
           );
 
@@ -106,7 +106,7 @@ describe('CommentService', () => {
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
-          service.getAllByApplicationId('123').subscribe(res => {
+          service.getAllByProjectId('123').subscribe(res => {
             expect(res).toEqual([new Comment({ _id: '11' })]);
           });
         }));
@@ -114,7 +114,7 @@ describe('CommentService', () => {
 
       describe('when the comment period contains multiple comments', () => {
         it('returns an array of comments from the comment period', async(() => {
-          commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+          commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
             Observable.of([new CommentPeriod({ _id: '1' })])
           );
 
@@ -132,7 +132,7 @@ describe('CommentService', () => {
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
-          service.getAllByApplicationId('123').subscribe(res => {
+          service.getAllByProjectId('123').subscribe(res => {
             expect(res).toEqual([
               new Comment({ _id: '11' }),
               new Comment({ _id: '22' }),
@@ -146,7 +146,7 @@ describe('CommentService', () => {
     describe('when multiple comment periods are returned by the comment period service', () => {
       describe('when the comment periods contains no comments', () => {
         it('returns an empty comments array', async(() => {
-          commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+          commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
             Observable.of([
               new CommentPeriod({ _id: '1' }),
               new CommentPeriod({ _id: '2' })
@@ -160,7 +160,7 @@ describe('CommentService', () => {
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
-          service.getAllByApplicationId('123').subscribe(res => {
+          service.getAllByProjectId('123').subscribe(res => {
             expect(res).toEqual([] as Comment[]);
           });
         }));
@@ -168,7 +168,7 @@ describe('CommentService', () => {
 
       describe('when the comment periods contain one comment', () => {
         it('returns an array with one comment from the comment period', async(() => {
-          commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+          commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
             Observable.of([
               new CommentPeriod({ _id: '1' }),
               new CommentPeriod({ _id: '2' })
@@ -182,7 +182,7 @@ describe('CommentService', () => {
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
-          service.getAllByApplicationId('123').subscribe(res => {
+          service.getAllByProjectId('123').subscribe(res => {
             expect(res).toEqual([
               new Comment({ _id: '11' }),
               new Comment({ _id: '22' })
@@ -193,7 +193,7 @@ describe('CommentService', () => {
 
       describe('when the comment periods contain multiple comments', () => {
         it('returns an array of comments from the comment period', async(() => {
-          commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+          commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
             Observable.of([
               new CommentPeriod({ _id: '1' }),
               new CommentPeriod({ _id: '2' })
@@ -214,7 +214,7 @@ describe('CommentService', () => {
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
-          service.getAllByApplicationId('123').subscribe(res => {
+          service.getAllByProjectId('123').subscribe(res => {
             expect(res).toEqual([
               new Comment({ _id: '11' }),
               new Comment({ _id: '22' }),
@@ -229,7 +229,7 @@ describe('CommentService', () => {
 
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
-        commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
+        commentPeriodServiceSpy.getAllByProjectId.and.returnValue(
           Observable.throw(Error('someError'))
         );
 
@@ -240,7 +240,7 @@ describe('CommentService', () => {
           return Observable.throw(Error('someRethrownError'));
         });
 
-        service.getAllByApplicationId('123').subscribe(
+        service.getAllByProjectId('123').subscribe(
           () => {
             fail('An error was expected.');
           },

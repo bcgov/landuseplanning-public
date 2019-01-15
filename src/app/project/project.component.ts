@@ -48,7 +48,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         (data: { project: Project }) => {
           if (data.project) {
             this.project = data.project;
-            console.log(this.project);
           } else {
             alert('Uh-oh, couldn\'t load project');
             // project not found --> navigate back to project list

@@ -17,6 +17,7 @@ import { ViewCommentComponent } from './commenting-tab/view-comment/view-comment
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
 import { AddCommentComponent } from './add-comment/add-comment.component';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
+import { DateInputComponent } from 'app/date-input/date-input.component';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { FileUploadComponent } from 'app/file-upload/file-upload.component';
     ViewCommentComponent,
     DecisionsTabComponent,
     AddCommentComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    DateInputComponent
   ],
   entryComponents: [
     ViewCommentComponent,

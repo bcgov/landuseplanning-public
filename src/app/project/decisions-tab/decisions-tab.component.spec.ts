@@ -4,10 +4,10 @@ import { NewlinesPipe } from 'app/pipes/newlines.pipe';
 import { VarDirective } from 'app/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'app/services/api';
-import { ApplicationService } from 'app/services/application.service';
+import { ProjectService } from 'app/services/project.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import { Application } from 'app/models/application';
+import { Project } from 'app/models/project';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivatedRouteStub } from 'app/spec/helpers';
 
@@ -15,8 +15,8 @@ describe('DecisionsTabComponent', () => {
   let component: DecisionsTabComponent;
   let fixture: ComponentFixture<DecisionsTabComponent>;
 
-  const existingApplication = new Application();
-  const validRouteData = {application: existingApplication};
+  const existingProject = new Project();
+  const validRouteData = {project: existingProject};
 
   const activatedRouteStub = new ActivatedRouteStub(validRouteData);
   const routerSpy = {
@@ -29,7 +29,7 @@ describe('DecisionsTabComponent', () => {
     }
   };
 
-  const applicationServiceStub = {
+  const projectServiceStub = {
     getStatusCode() {
       return 'AC';
     },
@@ -48,7 +48,7 @@ describe('DecisionsTabComponent', () => {
       imports: [RouterTestingModule],
       providers: [
         { provide: ApiService, useValue: apiServiceStub },
-        { provide: ApplicationService, useValue: applicationServiceStub },
+        { provide: ProjectService, useValue: projectServiceStub },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Router, useValue: routerSpy },
       ]
@@ -66,24 +66,24 @@ describe('DecisionsTabComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when the application is retrievable from the route', () => {
+  describe('when the project is retrievable from the route', () => {
     beforeEach(() => {
       activatedRouteStub.setParentData(validRouteData);
     });
 
-    it('sets the component application to the one from the route', () => {
-      expect(component.application).toEqual(existingApplication);
+    it('sets the component project to the one from the route', () => {
+      expect(component.project).toEqual(existingProject);
     });
   });
 
-  describe('when the application is not available from the route', () => {
+  describe('when the project is not available from the route', () => {
     beforeEach(() => {
       activatedRouteStub.setParentData({something: 'went wrong'});
     });
 
-    it('redirects to /applications', () => {
+    it('redirects to /projects', () => {
       component.ngOnInit();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/applications']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/projects']);
     });
   });
 });

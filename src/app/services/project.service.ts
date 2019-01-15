@@ -199,15 +199,15 @@ export class ProjectService {
         // );
 
         // // get the current comment period
-        // promises.push(this.commentPeriodService.getAllByProjectId(project._id)
-        //   .toPromise()
-        //   .then(periods => {
-        //     const cp = this.commentPeriodService.getCurrent(periods);
-        //     project.currentPeriod = cp;
-        //     // user-friendly comment period status
-        //     project.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
-        //   })
-        // );
+        promises.push(this.commentPeriodService.getAllByProjectId(project._id)
+          .toPromise()
+          .then(periods => {
+            const cp = this.commentPeriodService.getCurrent(periods);
+            project.currentPeriod = cp;
+            // user-friendly comment period status
+            // project.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
+          })
+        );
 
         // // get the decision
         // promises.push(this.decisionService.getByProjectId(project._id, forceReload)

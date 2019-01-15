@@ -1,29 +1,29 @@
 <div class="tab-pane" role="tabpanel">
-    <section class="tab-section" *ngIf="application">
+    <!-- <section class="tab-section" *ngIf="project">
         <div class="status mb-3">
-          {{application.appStatus || 'Unknown Application Status'}}
+          {{project.appStatus || 'Unknown Project Status'}}
         </div>
 
-        <div *ngVar="applicationService.getStatusCode(application.status) as appStatusCode">
-            <div *ngIf="!application.decision && applicationService.isDecision(appStatusCode)">
+        <div *ngVar="projectService.getStatusCode(project.status) as appStatusCode">
+            <div *ngIf="!project.decision && projectService.isDecision(appStatusCode)">
                 No decisions documents are available at this time. Please check back for updates to this information.
             </div>
 
-            <div *ngIf="!application.decision && !applicationService.isDecision(appStatusCode)">
-                No decisions have been made for this application at this time.
+            <div *ngIf="!project.decision && !projectService.isDecision(appStatusCode)">
+                No decisions have been made for this project at this time.
             </div>
 
-            <div *ngIf="application.decision">
+            <div *ngIf="project.decision">
                 <h2 class="title">Description</h2>
-                <p class="mb-3" [innerHTML]="application.decision.description | newlines"></p>
+                <p class="mb-3" [innerHTML]="project.decision.description | newlines"></p>
 
                 <h2 class="title">Decision Documents</h2>
-                <div *ngIf="application.decision.documents.length === 0">
+                <div *ngIf="project.decision.documents.length === 0">
                     <em>No documents have been uploaded for this decision.</em>
                 </div>
 
                 <div class="row">
-                    <div class="col-12" *ngFor="let document of application.decision.documents">
+                    <div class="col-12" *ngFor="let document of project.decision.documents">
                         <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
                             <i class="material-icons">attachment</i>&nbsp;{{document.documentFileName}}
                         </a>
@@ -31,5 +31,5 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 </div>

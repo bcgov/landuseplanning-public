@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as moment from 'moment';
 
-import { Application } from 'app/models/application';
+import { Project } from 'app/models/project';
 import { Comment } from 'app/models/comment';
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
@@ -29,7 +29,7 @@ import { ViewCommentComponent } from './view-comment/view-comment.component';
 })
 export class CommentingTabComponent implements OnInit, OnDestroy {
   public loading = true;
-  public application: Application = null;
+  public project: Project = null;
   public comments: Array<Comment> = [];
   public daysRemaining = '?';
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -43,25 +43,29 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // get application
+    // get project
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { application: Application }) => {
-          if (data.application) {
-            this.application = data.application;
-
+        (data: { project: Project }) => {
+          if (data.project) {
+            this.project = data.project;
             // get comment period days remaining
-            if (this.application.currentPeriod) {
+            if (this.project.currentPeriod) {
               const now = new Date();
               const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
               // use moment to handle Daylight Saving Time changes
-              const days = moment(this.application.currentPeriod.endDate).diff(moment(today), 'days') + 1;
+              const days = moment(this.project.currentPeriod.dateCompleted).diff(moment(today), 'days') + 1;
               this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
+              if (days <= 0) {
+                this.project.commentPeriodStatus = 'Completed';
+              } else {
+                this.project.commentPeriodStatus = 'In progress';
+              }
             }
 
-            // get application comments
-            this.commentService.getAllByApplicationId(this.application._id)
+            // get project comments
+            this.commentService.getAllByProjectId(this.project._id)
               .takeUntil(this.ngUnsubscribe)
               .subscribe((comments: Comment[]) => {
                 this.comments = comments;
@@ -78,10 +82,10 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
                 }
               );
           } else {
-            alert('Uh-oh, couldn\'t load application');
+            alert('Uh-oh, couldn\'t load project');
             this.loading = false;
-            // application not found --> navigate back to application list
-            this.router.navigate(['/applications']);
+            // project not found --> navigate back to project list
+            this.router.navigate(['/projects']);
           }
         }
       );

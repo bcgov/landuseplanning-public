@@ -31,10 +31,11 @@ export class Project {
   CEAALink: String;
   code: String;
   commodity: String;
+  currentPeriod: CommentPeriod;
   currentPhaseName: string;
   dateAdded: String;
   dateCommentsClosed: String;
-  dateCommentsOpen: String;
+  commentPeriodStatus: String;
   dateUpdated: String;
   decisionDate: String;
   duration: String;
@@ -90,7 +91,7 @@ export class Project {
     this.currentPhaseName    = obj && obj.currentPhaseName    || null;
     this.dateAdded           = obj && obj.dateAdded           || null;
     this.dateCommentsClosed  = obj && obj.dateCommentsClosed  || null;
-    this.dateCommentsOpen    = obj && obj.dateCommentsOpen    || null;
+    this.commentPeriodStatus    = obj && obj.commentPeriodStatus    || null;
     this.dateUpdated         = obj && obj.dateUpdated         || null;
     this.decisionDate        = obj && obj.decisionDate        || null;
     this.duration            = obj && obj.duration            || null;
@@ -130,9 +131,9 @@ export class Project {
       });
     }
 
-    // if (obj && obj.currentPeriod) {
-    //   this.currentPeriod = new CommentPeriod(obj.currentPeriod);
-    // }
+    if (obj && obj.currentPeriod) {
+      this.currentPeriod = new CommentPeriod(obj.currentPeriod);
+    }
 
     // if (obj && obj.decision) {
     //   this.decision = new Decision(obj.decision);

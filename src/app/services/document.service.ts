@@ -14,7 +14,7 @@ export class DocumentService {
   constructor(private api: ApiService) { }
 
   // get all documents for the specified application id
-  getAllByApplicationId(appId: string): Observable<Document[]> {
+  getAllByProjectId(appId: string): Observable<Document[]> {
     return this.api.getDocumentsByAppId(appId)
       .map(res => {
         const documents = res.text() ? res.json() : [];

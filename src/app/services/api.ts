@@ -128,7 +128,7 @@ export class ApiService {
       'currentPhaseName',
       'dateAdded',
       'dateCommentsClosed',
-      'dateCommentsOpen',
+      'commentPeriodStatus',
       'dateUpdated',
       'decisionDate',
       'duration',
@@ -279,23 +279,23 @@ export class ApiService {
   //
   // Comment Periods
   //
-  getPeriodsByAppId(appId: string) {
+  getPeriodsByProjId(appId: string) {
     const fields = [
       '_addedBy',
-      '_application',
-      'startDate',
-      'endDate'
+      'project',
+      'dateStarted',
+      'dateCompleted'
     ];
-    const queryString = 'commentperiod?_application=' + appId + '&fields=' + this.buildValues(fields);
+    const queryString = 'commentperiod?project=' + appId + '&fields=' + this.buildValues(fields);
     return this.get(queryString);
   }
 
   getPeriod(id: string) {
     const fields = [
       '_addedBy',
-      '_application',
+      'project',
       'startDate',
-      'endDate'
+      'dateCompleted'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.get(queryString);

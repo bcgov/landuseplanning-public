@@ -6,7 +6,7 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import { Application } from 'app/models/application';
+import { Project } from 'app/models/project';
 import { Comment } from 'app/models/comment';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -17,8 +17,8 @@ describe('CommentingTabComponent', () => {
   let component: CommentingTabComponent;
   let fixture: ComponentFixture<CommentingTabComponent>;
 
-  const existingApplication = new Application();
-  const validRouteData = {application: existingApplication};
+  const existingProject = new Project();
+  const validRouteData = {project: existingProject};
 
   const activatedRouteStub = new ActivatedRouteStub(validRouteData);
 
@@ -33,7 +33,7 @@ describe('CommentingTabComponent', () => {
   };
 
   const commentServiceStub = {
-    getAllByApplicationId() {
+    getAllByProjectId() {
       return Observable.of([new Comment({})]);
     }
   };
@@ -63,13 +63,13 @@ describe('CommentingTabComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when the application is retrievable from the route', () => {
+  describe('when the project is retrievable from the route', () => {
     beforeEach(() => {
       activatedRouteStub.setParentData(validRouteData);
     });
 
-    it('sets the component application to the one from the route', () => {
-      expect(component.application).toEqual(existingApplication);
+    it('sets the component project to the one from the route', () => {
+      expect(component.project).toEqual(existingProject);
     });
 
     describe('daysRemaining', () => {
@@ -81,7 +81,7 @@ describe('CommentingTabComponent', () => {
         const currentTime = new Date(2018, 12, 1);
         const today = moment(currentTime).toDate();
         jasmine.clock().mockDate(today);
-        existingApplication.currentPeriod = appCommentPeriod;
+        existingProject.currentPeriod = appCommentPeriod;
       });
 
       afterEach(() => {
@@ -89,7 +89,7 @@ describe('CommentingTabComponent', () => {
       });
 
       it('calculates the days remaining based on the current time', () => {
-        appCommentPeriod.endDate = new Date(2018, 12, 25);
+        appCommentPeriod.dateCompleted = new Date(2018, 12, 25);
 
         component.ngOnInit();
 
@@ -97,7 +97,7 @@ describe('CommentingTabComponent', () => {
       });
 
       it('uses the correct language when the end date is the current date', () => {
-        appCommentPeriod.endDate = new Date(2018, 12, 1);
+        appCommentPeriod.dateCompleted = new Date(2018, 12, 1);
 
         component.ngOnInit();
 
@@ -106,7 +106,7 @@ describe('CommentingTabComponent', () => {
 
 
       it('uses negative values when the date is in the past', () => {
-        appCommentPeriod.endDate = new Date(2018, 11, 29);
+        appCommentPeriod.dateCompleted = new Date(2018, 11, 29);
 
         component.ngOnInit();
 
@@ -115,7 +115,7 @@ describe('CommentingTabComponent', () => {
 
       describe('when there is no comment period', () => {
         beforeEach(() => {
-          existingApplication.currentPeriod = null;
+          existingProject.currentPeriod = null;
         });
 
         it('sets daysRemaining as a "?" ', () => {
@@ -128,28 +128,28 @@ describe('CommentingTabComponent', () => {
     });
 
     describe('comments', () => {
-      const application = new Application({_id: 'AAAA'});
+      const project = new Project({_id: 'AAAA'});
       const oldComment = new Comment({dateAdded: new Date(2018, 3, 1)});
       const mediumComment = new Comment({dateAdded: new Date(2018, 6, 1)});
       const newComment = new Comment({dateAdded: new Date(2018, 11, 1)});
       let commentService: CommentService;
 
       beforeEach(() => {
-        activatedRouteStub.setParentData({application: application});
+        activatedRouteStub.setParentData({project: project});
         commentService = TestBed.get(CommentService);
       });
 
-      it('calls commentService getAllByApplicationId with the app id from the route', () => {
-        spyOn(commentService, 'getAllByApplicationId').and.callThrough();
+      it('calls commentService getAllByProjectId with the app id from the route', () => {
+        spyOn(commentService, 'getAllByProjectId').and.callThrough();
 
         component.ngOnInit();
 
-        expect(commentService.getAllByApplicationId).toHaveBeenCalledWith('AAAA');
+        expect(commentService.getAllByProjectId).toHaveBeenCalledWith('AAAA');
       });
 
       it('attaches the resulting comments to the component and sorts by date descending', () => {
         const commentResponse = Observable.of([mediumComment, newComment, oldComment]);
-        spyOn(commentService, 'getAllByApplicationId').and.returnValue(commentResponse);
+        spyOn(commentService, 'getAllByProjectId').and.returnValue(commentResponse);
 
         component.ngOnInit();
 
@@ -163,15 +163,15 @@ describe('CommentingTabComponent', () => {
     });
   });
 
-  describe('when the application is not available from the route', () => {
+  describe('when the project is not available from the route', () => {
     beforeEach(() => {
       activatedRouteStub.setParentData({something: 'went wrong'});
     });
 
-    it('redirects to /applications', () => {
+    it('redirects to /projects', () => {
       component.ngOnInit();
       expect(component.loading).toEqual(false);
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/applications']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/projects']);
     });
   });
 });
