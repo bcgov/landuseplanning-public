@@ -63,6 +63,7 @@ $select-badge-active-bg: #a5d8ff;
 }
 
 .select-badge {
+  position: relative;
   margin: 0.2rem 0.15rem;
   float: left;
 
@@ -102,6 +103,7 @@ $select-badge-active-bg: #a5d8ff;
     left: 0;
     width: 0;
     height: 0;
+    opacity: 0;
   }
 
   input:focus,
