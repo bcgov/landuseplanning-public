@@ -122,3 +122,8 @@ h5 {
   background-repeat: no-repeat;
   background-size: 72px;
 }
+
+// Disabled state transitions do not work correctly in IE
+.btn {
+  transition: background-color linear 0.2s;
+}
