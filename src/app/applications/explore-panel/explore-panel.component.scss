@@ -74,27 +74,18 @@ $select-badge-active-bg: #a5d8ff;
     padding-right: 1rem;
     padding-bottom: 0.2rem;
     padding-left: 2rem;
+    color: $gray7;
     border-radius: 1rem;
     border: 2px solid transparent;
-    color: $gray7;
-    background: $gray2;
+    background-color: $gray2;
+    background-image: url("~assets/images/baseline-remove-24px.svg");
+    background-position: 8px center;
+    background-repeat: no-repeat;
+    background-size: 18px;
     font-size: 0.825rem;
     font-weight: 400;
     cursor: pointer;
     transition: all ease-out 0.2s;
-  }
-
-  label::before {
-    font-family: 'Material Icons';
-    content: 'remove';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 34px;
-    height: 100%;
-    text-align: center;
-    line-height: 1.6rem;
-    font-size: 1rem;
   }
 
   input {
@@ -111,30 +102,26 @@ $select-badge-active-bg: #a5d8ff;
     + label {
       color: $gray9;
       border-color: $select-badge-active-border-color;
-      background: $select-badge-hover-bg;
+      background-color: $select-badge-hover-bg;
     }
   }
 
   input:hover {
     + label {
       color: $gray9;
-      background: $select-badge-hover-bg;
+      background-color: $select-badge-hover-bg;
     }
   }
 
    input:checked {
     + label {
       color: $gray9;
-      background: $select-badge-active-bg;
-    }
-
-    + label::before {
-      opacity: 1;
-      content: 'check';
+      background-color: $select-badge-active-bg;
+      background-image: url("~assets/images/baseline-check-24px.svg");
     }
 
     ~ button {
-      background: $select-badge-active-bg;
+      background-color: $select-badge-active-bg;
     }
   }
 }
