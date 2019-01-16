@@ -68,6 +68,11 @@
   }
 }
 
+.droparea .file-upload__target {
+  border-color: $fc-focus-border-color;
+  background: #fff;
+}
+
 @media (min-width: 768px) {
   .file-upload {
     input {
