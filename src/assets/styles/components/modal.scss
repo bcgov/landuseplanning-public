@@ -41,6 +41,10 @@
 .modal-fixed {
   overflow: hidden;
 
+  .modal-dialog.modal-lg {
+    max-width: none !important;
+  }
+
   .modal-dialog,
   .modal-content {
     position: absolute;
@@ -49,16 +53,21 @@
     bottom: 0;
     left: 0;
     overflow: hidden;
+    background: transparent;
   }
 
   // Host components should reflect this class to ensure the content can flex as expected
   .modal-content-flex {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    margin: 0 auto;
+    width: 800px;
+    height: 100%;
   }
 
   .modal-header {
     flex: 0 0 auto;
+    background: #fff;
   }
 
   .modal-body {
@@ -68,7 +77,7 @@
 
 @media (min-width: 576px) and (max-width: 799px) {
   .modal-fixed .modal-dialog {
-    max-width: 640px;
+    max-width: auto !important;
     margin: 30px auto;
   }
 }
