@@ -72,11 +72,12 @@ section {
 }
 
 .status {
-  padding-top: 0.1rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
   padding-left: 2.25rem;
   overflow: hidden;
   text-overflow: ellipsis;
-  background-position: left top;
+  background-position: left center;
   background-repeat: no-repeat;
   background-size: 24px;
 }
