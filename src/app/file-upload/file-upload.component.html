@@ -1,6 +1,6 @@
 <div class="form-text">
   <div>Maximum of {{maxFiles}} files, up to {{maxSize}}MB each.</div>
-  <div>Acceptable file types: {{fileExt}}</div>
+  <br> Acceptable file types: {{fileExt.slice().join(', ')}}
 </div>
 
 <div class="file-upload" draggable="true" ngClass="{{dragDropClass}}">
