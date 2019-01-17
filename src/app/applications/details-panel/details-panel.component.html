@@ -124,7 +124,7 @@
       </section>
 
       <section>
-        <h3>Geographic Shape Information ({{application?.features.length}} Shapes)</h3>
+        <h3>Geographic Shape Information <span>({{application?.features.length > 1 ? application?.features.length + " Shapes": application?.features.length + " Shape"}})</span></h3>
         <app-details-map [application]="application"></app-details-map>
         <ul class="shapefile-list">
           <li class="shapefile-list__item" *ngFor="let feature of application?.features">
