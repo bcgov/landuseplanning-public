@@ -1,3 +1,7 @@
+import * as moment from 'moment';
+
+import { Comment } from './comment';
+
 export class CommentPeriod {
   _id: string;
   __v: Number;
@@ -44,6 +48,11 @@ export class CommentPeriod {
   read: Array<String> = [];
   write: Array<String> = [];
   delete: Array<String> = [];
+
+  // Not from API
+  commentPeriodStatus: String;
+  comments: Comment[];
+  daysRemaining: String;
 
   constructor(obj?: any) {
     this._id                  = obj && obj._id                  || null;
@@ -96,6 +105,23 @@ export class CommentPeriod {
 
     if (obj && obj.dateCompleted) {
       this.dateCompleted = new Date(obj.dateCompleted);
+    }
+
+    // get comment period days remaining and determine status of the period
+    if (obj && obj.dateCompleted) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const days = moment(obj.dateCompleted).diff(moment(today), 'days') + 1;
+      this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
+      if (days <= 0) {
+        this.commentPeriodStatus = 'Completed';
+      } else {
+        this.commentPeriodStatus = 'In progress';
+      }
+    }
+
+    if (obj && obj.comments) {
+      this.comments.push(obj.comments);
     }
   }
 }

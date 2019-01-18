@@ -12,6 +12,7 @@ import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 
 import { ViewCommentComponent } from './view-comment/view-comment.component';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @Component({
   templateUrl: './commenting-tab.component.html',
@@ -30,14 +31,11 @@ import { ViewCommentComponent } from './view-comment/view-comment.component';
 export class CommentingTabComponent implements OnInit, OnDestroy {
   public loading = true;
   public project: Project = null;
-  public comments: Array<Comment> = [];
-  public daysRemaining = '?';
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private commentService: CommentService,
     public commentPeriodService: CommentPeriodService, // used in template
     private dialogService: DialogService
   ) { }
@@ -50,37 +48,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
         (data: { project: Project }) => {
           if (data.project) {
             this.project = data.project;
-            // get comment period days remaining
-            if (this.project.currentPeriod) {
-              const now = new Date();
-              const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-              // use moment to handle Daylight Saving Time changes
-              const days = moment(this.project.currentPeriod.dateCompleted).diff(moment(today), 'days') + 1;
-              this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
-              if (days <= 0) {
-                this.project.commentPeriodStatus = 'Completed';
-              } else {
-                this.project.commentPeriodStatus = 'In progress';
-              }
-            }
-
-            // get project comments
-            this.commentService.getAllByProjectId(this.project._id)
-              .takeUntil(this.ngUnsubscribe)
-              .subscribe((comments: Comment[]) => {
-                this.comments = comments;
-
-                // sort by date added
-                this.comments.sort(function (a: Comment, b: Comment) {
-                  return (new Date(a.dateAdded) > new Date(b.dateAdded) ? 1 : -1);
-                });
-                this.loading = false;
-              },
-                error => {
-                  console.log(error);
-                  this.loading = false;
-                }
-              );
+            this.loading = false;
           } else {
             alert('Uh-oh, couldn\'t load project');
             this.loading = false;

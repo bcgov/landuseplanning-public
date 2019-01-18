@@ -35,8 +35,8 @@ export class AddCommentComponent implements OnInit {
 
   ngOnInit() {
     this.comment = new Comment();
-    this.comment._commentPeriod = this.currentPeriod._id;
-    this.comment.commentAuthor.requestedAnonymous = false;
+    this.comment.period = this.currentPeriod._id;
+    this.comment.isAnonymous = false;
   }
 
   private p1_next() {

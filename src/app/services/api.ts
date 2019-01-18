@@ -279,23 +279,22 @@ export class ApiService {
   //
   // Comment Periods
   //
-  getPeriodsByProjId(appId: string) {
+  getPeriodsByProjId(projId: string) {
     const fields = [
-      '_addedBy',
       'project',
       'dateStarted',
       'dateCompleted'
     ];
-    const queryString = 'commentperiod?project=' + appId + '&fields=' + this.buildValues(fields);
+    const queryString = 'commentperiod?project=' + projId + '&fields=' + this.buildValues(fields);
     return this.get(queryString);
   }
 
   getPeriod(id: string) {
     const fields = [
-      '_addedBy',
       'project',
-      'startDate',
-      'dateCompleted'
+      'dateStarted',
+      'dateCompleted',
+      'informationLabel'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.get(queryString);
@@ -306,14 +305,17 @@ export class ApiService {
   //
   getCommentsByPeriodId(periodId: string) {
     const fields = [
-      '_addedBy',
-      '_commentPeriod',
-      'commentNumber',
+      'author',
       'comment',
-      'commentAuthor',
-      'review',
+      'commentId',
       'dateAdded',
-      'commentStatus'
+      'dateUpdated',
+      'isAnonymous',
+      'location',
+      'period',
+      'read',
+      'write',
+      'delete'
     ];
     const queryString = 'comment?_commentPeriod=' + periodId + '&fields=' + this.buildValues(fields);
     return this.get(queryString);
@@ -321,14 +323,17 @@ export class ApiService {
 
   getComment(id: string) {
     const fields = [
-      '_addedBy',
-      '_commentPeriod',
-      'commentNumber',
+      'author',
       'comment',
-      'commentAuthor',
-      'review',
+      'commentId',
       'dateAdded',
-      'commentStatus'
+      'dateUpdated',
+      'isAnonymous',
+      'location',
+      'period',
+      'read',
+      'write',
+      'delete'
     ];
     const queryString = 'comment/' + id + '?fields=' + this.buildValues(fields);
     return this.get(queryString);
@@ -337,7 +342,7 @@ export class ApiService {
   addComment(comment: Comment) {
     const fields = [
       'comment',
-      'commentAuthor'
+      'author'
     ];
     const queryString = 'comment?fields=' + this.buildValues(fields);
     return this.post(queryString, comment);
