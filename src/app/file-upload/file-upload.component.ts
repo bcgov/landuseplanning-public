@@ -1,7 +1,7 @@
 //
 // inspired by http://www.advancesharp.com/blog/1218/angular-4-upload-files-with-data-and-web-api-by-drag-drop
 //
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-file-upload',
@@ -10,12 +10,15 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
 })
 
 export class FileUploadComponent {
-  dragDropClass = 'dragarea';
+  public dragDropClass = 'dragarea';
   @Input() fileExt = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'txt'];
   @Input() maxFiles = 5;
   @Input() maxSize = 5; // in MB
   @Input() files: Array<File> = [];
+  @Input() showInfo = true;
+  @Input() showList = true;
   @Output() filesChange = new EventEmitter();
+  @ViewChild('file') fileInput: ElementRef;
   public errors: Array<string> = [];
 
   constructor() { }
@@ -47,12 +50,15 @@ export class FileUploadComponent {
     this.addFiles(event.dataTransfer.files);
   }
 
-  onFileChange(event) {
+  public onFileChange(event: any) {
     const files = event.target.files;
     this.addFiles(files);
+
+    // clear file input so we can reuse it
+    this.fileInput.nativeElement.value = '';
   }
 
-  addFiles(files) {
+  private addFiles(files: FileList) {
     this.errors = []; // clear previous errors
 
     if (this.isValidFiles(files)) {
@@ -63,24 +69,30 @@ export class FileUploadComponent {
     }
   }
 
-  removeFile(file) {
+  public removeFile(file: File) {
     this.errors = []; // clear previous errors
 
     const index = this.files.indexOf(file);
     if (index !== -1) {
       this.files.splice(index, 1);
     }
+    this.filesChange.emit(this.files);
   }
 
   private isValidFiles(files: FileList): boolean {
+    if (this.maxFiles > 0) { this.validateMaxFiles(files); }
+    if (this.fileExt.length > 0) { this.validateFileExtensions(files); }
+    if (this.maxSize > 0) { this.validateFileSizes(files); }
+    return (this.errors.length === 0);
+  }
+
+  private validateMaxFiles(files: FileList): boolean {
     if ((files.length + this.files.length) > this.maxFiles) {
       this.errors.push('Too many files');
       setTimeout(() => this.errors = [], 5000);
       return false;
     }
-    this.validateFileExtensions(files);
-    this.validateFileSizes(files);
-    return (this.errors.length === 0);
+    return true;
   }
 
   private validateFileExtensions(files: FileList): boolean {

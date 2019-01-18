@@ -191,6 +191,7 @@
   padding-bottom: 0.35rem;
   padding-left: 0;
   overflow: hidden;
+  color: $gray6;
   background-color: transparent;
   transition: all ease-out 0.2s;
   cursor: pointer;
@@ -203,8 +204,8 @@
   &:active,
   &:focus,
   &:hover {
-    color: #000;
-    background-color: #eee;
+    color: $gray9;
+    background-color: $gray2;
   }
 }
 
