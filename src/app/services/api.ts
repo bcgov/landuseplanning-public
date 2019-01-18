@@ -102,9 +102,9 @@ export class ApiService {
     if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
     if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
     if (params['appStatuses']) { params['appStatuses'].forEach((status: string) => queryString += `status[eq]=${status}&`); }
-    if (params['applicant']) { queryString += `client=${params['applicant']}&`; }
-    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${purpose}&`); }
-    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${subpurpose}&`); }
+    if (params['applicant']) { queryString += `client=${encodeURIComponent(params['applicant'])}&`; }
+    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`); }
+    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`); }
     if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
     if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
     if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
@@ -159,9 +159,9 @@ export class ApiService {
     if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
     if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
     if (params['appStatuses']) { params['appStatuses'].forEach((status: string) => queryString += `status[eq]=${status}&`); }
-    if (params['applicant']) { queryString += `client=${params['applicant']}&`; }
-    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${purpose}&`); }
-    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${subpurpose}&`); }
+    if (params['applicant']) { queryString += `client=${encodeURIComponent(params['applicant'])}&`; }
+    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`); }
+    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`); }
     if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
     if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
     if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
