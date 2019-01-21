@@ -16,7 +16,7 @@
   </div>
   <div class="flex-panel__scroll">
     <section class="title-panel">
-      <div class="applicant-name">{{application.client | titlecase}}</div>
+      <div class="applicant-name">{{application['applicants'] | titlecase}}</div>
       <div class="application-purpose">{{application.purpose | titlecase}} - {{application.subpurpose | titlecase}}</div>
     </section>
     <div class="app-detail-info">
@@ -31,7 +31,7 @@
             'unknown':          applicationService.isUnknown(application.appStatusCode)
           }">
           <div>
-            <strong>{{application?.appStatus}}</strong>
+            <strong>{{application.appStatus}}</strong>
           </div>
         </div>
         <div class="status-msg" *ngIf="application['retireDate']">
@@ -55,27 +55,27 @@
 
       <section>
         <h3>Application Details</h3>
-        <p class="description">{{application?.description || "No description available"}}</p>
+        <p class="description">{{application.description || "No description available"}}</p>
         <ul class="meta-container">
           <li>
-            <div class="key">Applicant:</div>
-            <div class="value">{{application?.client | titlecase}}</div>
+            <div class="key">Applicant(s):</div>
+            <div class="value">{{application['applicants'] | titlecase}}</div>
           </li>
           <li>
             <div class="key">Disposition Transaction:</div>
-            <div class="value">{{application?.tantalisID || '-'}}</div>
+            <div class="value">{{application.tantalisID || '-'}}</div>
           </li>
           <li>
             <div class="key">Tenure:</div>
-            <div class="value">{{application?.type | titlecase}} / {{application?.subtype | titlecase}}</div>
+            <div class="value">{{application.type | titlecase}} / {{application.subtype | titlecase}}</div>
           </li>
           <li>
             <div class="key">Purpose/Subpurpose:</div>
-            <div class="value">{{application?.purpose | titlecase}} / {{application?.subpurpose | titlecase}}</div>
+            <div class="value">{{application.purpose | titlecase}} / {{application.subpurpose | titlecase}}</div>
           </li>
           <li>
             <div class="key">Location:</div>
-            <div class="value">{{application?.location}}</div>
+            <div class="value">{{application.location}}</div>
           </li>
         </ul>
         <ul class="document-list" *ngIf="application.documents.length > 0">
@@ -121,10 +121,10 @@
       </section>
 
       <section>
-        <h3>Geographic Shape Information <span>({{application?.features.length > 1 ? application?.features.length + " Shapes": application?.features.length + " Shape"}})</span></h3>
+        <h3>Geographic Shape Information <span>({{application.features.length > 1 ? application.features.length + " Shapes": application.features.length + " Shape"}})</span></h3>
         <app-details-map [application]="application"></app-details-map>
         <ul class="shapefile-list">
-          <li class="shapefile-list__item" *ngFor="let feature of application?.features">
+          <li class="shapefile-list__item" *ngFor="let feature of application.features">
             <h4 class="shapefile-list__id">Shape ID: {{feature.properties.INTRID_SID}}</h4>
             <ul class="meta-container">
               <li>

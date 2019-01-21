@@ -275,6 +275,12 @@ export class ApplicationService {
           application['clFile'] = application.cl_file.toString().padStart(7, '0');
         }
 
+        // derive unique applicants
+        if (application.client) {
+          const clients = application.client.split(', ');
+          application['applicants'] = _.uniq(clients).join(', ');
+        }
+
         // get the documents (may be empty array)
         promises.push(this.documentService.getAllByApplicationId(application._id)
           .toPromise()

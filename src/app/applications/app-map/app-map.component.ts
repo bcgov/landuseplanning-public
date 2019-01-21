@@ -404,7 +404,12 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     addedApps.forEach(app => {
       // add marker
       if (app.centroid.length === 2) { // safety check
-        const title = `${app.client || 'Applicant Name Not Available'}\n`
+        // derive unique applicants
+        if (app.client) {
+          const clients = app.client.split(', ');
+          app['applicants'] = _.uniq(clients).join(', ');
+        }
+        const title = `${app['applicants'] || 'Applicant Name Not Available'}\n`
           + `${app.purpose || '-'} / ${app.subpurpose || '-'}\n`
           + `${app.location || 'Location Not Available'}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
