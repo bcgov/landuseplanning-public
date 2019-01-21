@@ -1,6 +1,6 @@
 <div class="flex-panel" *ngIf="!isAppLoading && !application">
   <div class="flex-panel__header">
-    <h2 class="title">No application selected</h2>
+    <h2 class="title">No Application Selected</h2>
   </div>
 </div>
 
@@ -15,10 +15,10 @@
     <h2 class="title">Crown Land File: &nbsp; #{{(application && application['clFile']) || '-'}}</h2>
   </div>
   <div class="flex-panel__scroll">
-    <div class="title-panel">
+    <section class="title-panel">
       <div class="applicant-name">{{application.client | titlecase}}</div>
       <div class="application-purpose">{{application.purpose | titlecase}} - {{application.subpurpose | titlecase}}</div>
-    </div>
+    </section>
     <div class="app-detail-info">
       <section class="status-section">
         <div class="status"
