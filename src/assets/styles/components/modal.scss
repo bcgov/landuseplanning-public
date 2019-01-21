@@ -7,10 +7,6 @@
   padding-bottom: 1rem;
   padding-left: 1.5rem;
 
-  .modal-title {
-    @include flex(1 1 auto);
-  }
-
   .close-btn {
     @include flex(0 0 auto);
     margin-top: 0;
@@ -18,19 +14,21 @@
   }
 }
 
-.modal-footer {
-  padding-right: 1.5rem;
-  padding-left: 1.5rem;
-}
-
 .modal-title {
+  @include flex(1 1 auto);
   letter-spacing: -0.03rem;
   line-height: 1.65rem;
+  font-weight: 600;
 }
 
 .modal-body {
   padding: 1.5rem;
   background: $gray0;
+}
+
+.modal-footer {
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
 }
 
 // Fixed Modal w/ Scrolling Body
