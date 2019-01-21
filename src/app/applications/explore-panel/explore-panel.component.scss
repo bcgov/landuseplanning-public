@@ -17,10 +17,15 @@
 // Date Range Inputs
 .date-range {
   @include flex-box();
+  @include flex-direction(row);
 }
 
 .date-range__input {
   @include flex(1 1 auto);
+}
+
+.date-range__spacer {
+  margin: 0.35rem 0.5rem;
 }
 
 // TODO: We shouldn't be encapsulating these controls in a single component
@@ -32,23 +37,6 @@
       right: 0 !important;
       left: auto !important;
     }
-  }
-}
-
-.date-range__spacer {
-  margin-top: 0.3rem;
-  width: 2rem;
-  text-align: center;
-}
-
-@media (max-width: 480px) {
-  .date-range {
-    @include flex-direction(column);
-  }
-
-  .date-range__spacer {
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
   }
 }
 

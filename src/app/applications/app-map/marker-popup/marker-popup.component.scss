@@ -22,24 +22,22 @@ $popup-title-bg: #003366;
 
 // Title Section Contents
 .file-number {
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
   font-size: 0.75rem;
 }
 
-.applicant-name,
-.purpose {
-  line-height: 1.2rem;
+.applicant-name {
   font-size: 1rem;
   font-weight: 600;
 }
 
-.applicant-name {
-  color: $gray9;
+.applicant-name,
+.purpose {
+  line-height: 1.25rem;
 }
 
-.purpose {
-  color: $gray5;
-  text-transform: capitalize;
+.applicant-name {
+  color: $gray9;
 }
 
 // Status 
@@ -50,14 +48,15 @@ $popup-title-bg: #003366;
   overflow: hidden;
 
   li {
-    padding-left: 1.55rem;
+    padding-left: 1.75rem;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.75rem;
     background-position: left center;
     background-repeat: no-repeat;
     background-size: 18px;
+    text-overflow: ellipsis;
+    font-size: 0.75rem;
+    font-weight: 600;
   }
 
   li + li {

@@ -35,20 +35,23 @@ $date-input-border-color-active: $primary1;
 .date-input__clear-btn {
   position: absolute;
   top: 0.28rem;
-  right: 2.25rem;
+  right: 0.32em;
   bottom: 0.28rem;
   padding: 0.15rem;
   color: $date-input-btn-color;
+  background-color: #fff;
 
   &:active,
   &:focus,
   &:hover {
     color: $date-input-btn-color-active;
+    background-color: $gray2;
   }
 }
 
 input {
-  padding-right: 3rem;
+  padding-right: 2.5rem;
+  font-size: 0.875rem;
 }
 
 input.form-control {
