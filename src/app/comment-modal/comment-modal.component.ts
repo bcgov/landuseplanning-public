@@ -52,8 +52,8 @@ export class CommentModalComponent implements OnInit {
       // prompt to confirm
       this.dialogService.addDialog(ConfirmComponent,
         {
-          title: 'Unsaved Changes',
-          message: 'Click OK to discard your changes or Cancel to return to your comment.'
+          title: 'Are you sure?',
+          message: 'You are about to discard your comment. All edits you have made will be lost. Do you want to continue?'
         }, {
           backdropColor: 'rgba(0, 0, 0, 0.5)'
         })
