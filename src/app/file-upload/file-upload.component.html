@@ -1,10 +1,10 @@
-<div class="form-text">
+<div class="form-text" *ngIf="showInfo">
   <div>Maximum of {{maxFiles}} files, up to {{maxSize}}MB each.</div>
-  <br> Acceptable file types: {{fileExt.slice().join(', ')}}
+  <div>Acceptable file types: {{fileExt.slice().join(', ')}}</div>
 </div>
 
 <div class="file-upload" draggable="true" ngClass="{{dragDropClass}}">
-  <input type="file" #file [multiple]="(maxFiles > 1)" (change)="onFileChange($event)" />
+  <input type="file" #file [multiple]="(maxFiles !== 1)" (change)="onFileChange($event)" />
   <div class="file-upload__target">
     <div class="file-upload__prompt">
       <i class="file-upload__prompt-icon material-icons">file_upload</i>
@@ -13,20 +13,20 @@
   </div>
 </div>
 
-<ul class="doc-list" *ngIf="files.length > 0">
-    <li *ngFor="let f of files">
-      <span class="cell icon">
-        <i class="material-icons">insert_drive_file</i>
-      </span>
-      <span class="cell name" [title]="f.name || ''">
-        <span class="cell__txt-content">{{f.name}}</span>
-      </span>
-      <span class="cell actions">
-        <button class="btn btn-icon" type="button" title="Remove this file" (click)="removeFile(f)">
-          <i class="material-icons">delete</i>
-        </button>
-      </span>
-    </li>
+<ul class="doc-list" *ngIf="showList && files.length > 0">
+  <li *ngFor="let f of files">
+    <span class="cell icon">
+      <i class="material-icons">insert_drive_file</i>
+    </span>
+    <span class="cell name" [title]="f.displayName || ''">
+      <span class="cell__txt-content">{{f.name}}</span>
+    </span>
+    <span class="cell actions">
+      <button class="btn btn-icon" type="button" title="Remove this file" (click)="removeFile(f)">
+        <i class="material-icons">delete</i>
+      </button>
+    </span>
+  </li>
 </ul>
 
 <div *ngIf="errors.length > 0" class="errors-list">
