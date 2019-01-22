@@ -265,9 +265,9 @@ export class ApplicationService {
         // user-friendly application status
         application.appStatus = this.getLongStatusString(application.appStatusCode);
 
-        // derive date of removal from ACRFD
+        // derive retire date
         if (application.statusHistoryEffectiveDate && [this.DECISION_APPROVED, this.DECISION_NOT_APPROVED, this.ABANDONED].includes(application.appStatusCode)) {
-          application['removeDate'] = moment(application.statusHistoryEffectiveDate).add(6, 'months');
+          application['retireDate'] = moment(application.statusHistoryEffectiveDate).endOf('day').add(6, 'months');
         }
 
         // 7-digit CL File number for display

@@ -30,7 +30,12 @@
             'not-approved':     applicationService.isDecisionNotApproved(application.appStatusCode),
             'unknown':          applicationService.isUnknown(application.appStatusCode)
           }">
-          <div><strong>{{application?.appStatus}}</strong></div>
+          <div>
+            <strong>{{application?.appStatus}}</strong>
+          </div>
+        </div>
+        <div class="status-msg" *ngIf="application['retireDate']">
+          This application will be available on this site until {{application['retireDate'] | date:'longDate'}}.
         </div>
       </section>
       <div *ngIf="application.currentPeriod">
@@ -73,14 +78,6 @@
             <div class="value">{{application?.location}}</div>
           </li>
         </ul>
-        <!--
-        <div *ngIf="application.statusHistoryEffectiveDate" style="font-weight: bold">
-          Application status was last changed on {{application.statusHistoryEffectiveDate | date:'longDate'}}.
-        </div>
-        <div *ngIf="application['removeDate']" style="font-weight: bold">
-          This file will be available on this site until {{application['removeDate'] | date:'longDate'}}.
-        </div>
-        -->
         <ul class="document-list" *ngIf="application.documents.length > 0">
           <li *ngFor="let document of application.documents">
             <a [href]="api.getDocumentUrl(document)" [title]="document.displayName || ''" target="_blank">
