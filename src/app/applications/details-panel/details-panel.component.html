@@ -78,35 +78,35 @@
             <div class="value">{{application?.location}}</div>
           </li>
         </ul>
-        <ul class="document-list" *ngIf="application.documents.length > 0">
-          <li *ngFor="let document of application.documents">
-            <a [href]="api.getDocumentUrl(document)" [title]="document.displayName || ''" target="_blank">
+        <div class="doc-list" *ngIf="application.documents.length > 0">
+          <a class="doc-list__item" [href]="api.getDocumentUrl(document)" [title]="document.displayName || ''" target="_blank" *ngFor="let document of application.documents">
+            <div class="cell doc-list__item-icon">
               <i class="material-icons">
                 insert_drive_file
               </i>
-              <span>{{document.documentFileName}}</span>
-            </a>
-          </li>
-        </ul>
+            </div>
+            <div class="cell doc-list__item-name">{{document.documentFileName}}</div>
+          </a>
+        </div>
       </section>
 
       <section>
         <h3>Decision Information</h3>
         <!-- NB: decision object and decision status are independent -->
         <div *ngIf="application.decision">
-          <ul class="document-list">
-            <div *ngIf="application.decision.documents.length === 0">
-              No decision documents are available.
-            </div>
-            <li *ngFor="let document of application.decision.documents">
-              <a [href]="api.getDocumentUrl(document)" target="_blank" [title]="document.displayName || ''">
+          <div *ngIf="application.decision.documents.length === 0">
+            No decision documents are available.
+          </div>
+          <div class="doc-list" *ngIf="application.decision.documents.length > 0">
+            <a class="doc-list__item" [href]="api.getDocumentUrl(document)" [title]="document.displayName || ''" target="_blank" *ngFor="let document of application.decision.documents">
+              <div class="cell doc-list__item-icon">
                 <i class="material-icons">
                   insert_drive_file
                 </i>
-                <span>{{document.documentFileName}}</span>
-              </a>
-            </li>
-          </ul>
+              </div>
+              <div class="cell doc-list__item-name">{{document.documentFileName}}</div>
+            </a>
+          </div>
         </div>
         <div *ngIf="!application.decision">
           <div *ngIf="applicationService.isAbandoned(application.appStatusCode)

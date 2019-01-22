@@ -149,39 +149,8 @@ section {
 }
 
 // Documents
-.document-list {
-  padding: 0;
-  margin: 0 -0.2rem;
-  margin-top: 1.25rem;
-  list-style-type: none;
-
-  li {
-    margin: 0.2rem;
-    white-space: nowrap;
-
-    a {
-      display: block;
-      padding: 0.4rem;
-      overflow: hidden;
-      color: $primary0;
-      border-radius: 0.2rem;
-      background: $gray2;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      transition: all ease-out 0.2s;
-    }
-
-    a:hover {
-      color: $color-inverted;
-      background: $primary0;
-      text-decoration: none;
-    }
-
-    i, span {
-      display: inline;
-      vertical-align: middle;
-    }
-  }
+.doc-list {
+  margin-top: 1rem;
 }
 
 // Shapefile List
