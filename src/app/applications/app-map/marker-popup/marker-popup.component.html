@@ -4,8 +4,10 @@
 
 <div class="popup-content" *ngIf="app">
   <div class="file-number">Crown Land File: {{app['clFile'] || '-'}}</div>
-  <div class="applicant-name">{{app.client | titlecase}}</div>
+
+  <div class="applicant-name">{{app['applicants'] | titlecase}}</div>
   <div class="purpose">{{app.purpose | titlecase}} - {{app.subpurpose | titlecase}}</div>
+
   <ul class="status-container">
     <li class="app-status"
       [ngClass]="{
@@ -22,26 +24,6 @@
       {{commentPeriodService.getStatusString(app.cpStatusCode)}}
     </li>
   </ul>
-  
-  <!--
-  <ul class="status-container">
-    <li *ngVar="commentPeriodService.getStatusString(app.cpStatusCode) as cpStatus">
-      <i class="material-icons" title="{{app.cpStatus}}">
-        {{commentPeriodService.isOpen(app.cpStatusCode) ? 'comment' : 'highlight_off'}}
-      </i>
-      <span>{{cpStatus}}</span>
-    </li>
-    <li>
-      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isAbandoned(app.appStatusCode)">block</i>
-      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isApplicationUnderReview(app.appStatusCode)">access_time</i>
-      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isApplicationReviewComplete(app.appStatusCode)">error_outline</i>
-      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isDecisionApproved(app.appStatusCode)">check</i>
-      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isDecisionNotApproved(app.appStatusCode)">clear</i>
-      <i class="material-icons" title="{{app.appStatus}}" *ngIf="applicationService.isUnknown(app.appStatusCode)">warning</i>
-      <span>{{app.appStatus}}</span>
-    </li>
-  </ul>
-  -->
 
   <button class="app-link btn btn-primary" (click)="showDetails()">View Application Details</button>
 </div>
