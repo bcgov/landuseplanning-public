@@ -14,18 +14,18 @@
 </div>
 
 <ul class="doc-list" *ngIf="showList && files.length > 0">
-  <li *ngFor="let f of files">
-    <span class="cell icon">
+  <li class="doc-list__item" *ngFor="let f of files">
+    <div class="cell doc-list__item-icon">
       <i class="material-icons">insert_drive_file</i>
-    </span>
-    <span class="cell name" [title]="f.displayName || ''">
-      <span class="cell__txt-content">{{f.name}}</span>
-    </span>
-    <span class="cell actions">
+    </div>
+    <div class="cell doc-list__item-name" [title]="f.displayName || ''">
+      {{f.name}}
+    </div>
+    <div class="cell doc-list__item-actions">
       <button class="btn btn-icon" type="button" title="Remove this file" (click)="removeFile(f)">
         <i class="material-icons">delete</i>
       </button>
-    </span>
+    </div>
   </li>
 </ul>
 

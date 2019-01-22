@@ -4,7 +4,7 @@
   @include clearfix;
   position: relative;
   padding: 0;
-  border-bottom: 4px solid $gold;
+  border-bottom: 2px solid $gold;
   background: $header-bg;
   color: $header-font-color;
   z-index: 1005;
@@ -26,14 +26,14 @@
   .app-header--flex {
     @include flex(0 0 auto);
     position: relative;
-    border-bottom-width: 4px;
+    border-bottom-width: 2px;
     border-bottom-color: $gold;
     background: $header-bg;
     color: $header-font-color;
   }
 
   .app-header--solid {
-    border-bottom: 4px solid $gold;
+    border-bottom: 42px solid $gold;
     background: $header-bg;
     color: $header-font-color;
   }

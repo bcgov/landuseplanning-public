@@ -53,7 +53,7 @@ export class CommentModalComponent implements OnInit {
       this.dialogService.addDialog(ConfirmComponent,
         {
           title: 'Are you sure?',
-          message: 'You are about to discard your comment. All edits you have made will be lost. Do you want to continue?'
+          message: 'You are about to discard your comment. Do you want to continue?'
         }, {
           backdropColor: 'rgba(0, 0, 0, 0.5)'
         })
