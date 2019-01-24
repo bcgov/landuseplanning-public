@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { ProjectTabComponent } from './project-tab/project-tab.component';
 import { CommentingTabComponent } from './commenting-tab/commenting-tab.component';
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
+import { CommentsComponent } from '../comments/comments.component';
 
 export const ProjectRoutes: Routes = [
   {
@@ -21,5 +22,9 @@ export const ProjectRoutes: Routes = [
   {
     path: 'decisions',
     component: DecisionsTabComponent
+  },
+  {
+    path: 'cp',
+    component: CommentsComponent
   }
 ];

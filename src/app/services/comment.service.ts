@@ -8,7 +8,6 @@ import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
 import { ApiService } from './api';
-import { CommentPeriodService } from './commentperiod.service';
 import { DocumentService } from './document.service';
 import { Comment } from 'app/models/comment';
 
@@ -18,34 +17,8 @@ export class CommentService {
 
   constructor(
     private api: ApiService,
-    private commentPeriodService: CommentPeriodService,
     private documentService: DocumentService
   ) { }
-
-  // get all comments for the specified application id
-  // (without documents)
-  getAllByProjectId(appId: string): Observable<Comment[]> {
-    // first get the comment periods
-    return this.commentPeriodService.getAllByProjectId(appId)
-      .mergeMap(periods => {
-        if (periods.length === 0) {
-          return Observable.of([] as Comment[]);
-        }
-
-        const promises: Array<Promise<any>> = [];
-
-        // now get the comments for all periods
-        periods.forEach(period => {
-          promises.push(this.getAllByPeriodId(period._id).toPromise());
-        });
-
-        return Promise.all(promises)
-          .then((allComments: Comment[][]) => {
-            return _.flatten(allComments);
-          });
-      })
-      .catch(this.api.handleError);
-  }
 
   // get all comments for the specified comment period id
   // (without documents)
@@ -75,19 +48,19 @@ export class CommentService {
         // return the first (only) comment
         return comments.length > 0 ? new Comment(comments[0]) : null;
       })
-      .mergeMap(comment => {
-        if (!comment) { return Observable.of(null as Comment); }
+      // .mergeMap(comment => {
+      //   if (!comment) { return Observable.of(null as Comment); }
 
-        // now get the comment documents
-        const promise = this.documentService.getAllByCommentId(comment._id)
-          .toPromise()
-          .then(documents => comment.documents = documents);
+      //   // now get the comment documents
+      //   // const promise = this.documentService.getAllByCommentId(comment._id)
+      //   //   .toPromise()
+      //   //   .then(documents => comment.documents = documents);
 
-        return Promise.resolve(promise).then(() => {
-          this.comment = comment;
-          return this.comment;
-        });
-      })
+      //   return Promise.resolve(promise).then(() => {
+      //     this.comment = comment;
+      //     return this.comment;
+      //   });
+      // })
       .catch(this.api.handleError);
   }
 
@@ -99,15 +72,15 @@ export class CommentService {
     delete comment._id;
 
     // don't send documents
-    delete comment.documents;
+    // delete comment.documents;
 
-    // replace newlines with \\n (JSON format)
-    if (comment.comment) {
-      comment.comment = comment.comment.replace(/\n/g, '\\n');
-    }
-    if (comment.review && comment.review.reviewerNotes) {
-      comment.review.reviewerNotes = comment.review.reviewerNotes.replace(/\n/g, '\\n');
-    }
+    // // replace newlines with \\n (JSON format)
+    // if (comment.comment) {
+    //   comment.comment = comment.comment.replace(/\n/g, '\\n');
+    // }
+    // if (comment.review && comment.review.reviewerNotes) {
+    //   comment.review.reviewerNotes = comment.review.reviewerNotes.replace(/\n/g, '\\n');
+    // }
 
     return this.api.addComment(comment)
       .map(res => {

@@ -8,43 +8,19 @@
             No comment periods are currently scheduled for this project.
         </div>
 
-        <div class="card card-body d-flex flex-row justify-content-between" *ngIf="project?.currentPeriod">
-            <div>
-              <label class="title">{{project.commentPeriodStatus || 'Unknown Comment Period Status'}}</label>
-                <p class="mb-0">{{project.currentPeriod.dateStarted | date:'mediumDate'}} - {{project.currentPeriod.dateCompleted | date:'mediumDate'}}</p>
-            </div>
-            <div *ngIf="commentPeriodService.isOpen(project.currentPeriod)">
-                <div class="badge badge-secondary p-3">{{daysRemaining}}</div>
-            </div>
-        </div>
-
-        <!-- <div *ngIf="comments?.length === 0">
-            <em>No comments have been received for this project at this time.</em>
-        </div> -->
-        <div class="list-group">
-            <ng-template ngFor let-item [ngForOf]="comments">
-                <div class="list-group-item flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <div class="comment__author">
-                            <div *ngIf="item.commentAuthor && item.commentAuthor.requestedAnonymous !== true; else anonymous">
-                                <span>{{item.commentAuthor.contactName}}</span>
-                                <span *ngIf="item.commentAuthor.orgName">({{item.commentAuthor.orgName}})</span>
-                                <span *ngIf="item.commentAuthor.location">, {{item.commentAuthor.location}}</span>
-                            </div>
-                            <ng-template #anonymous>
-                                <em>Anonymous</em>
-                            </ng-template>
-                        </div>
-                        <div class="comment__date">
-                            {{(item.dateAdded | date:'longDate') || "-"}}
-                        </div>
+        <div *ngIf="project?.commentPeriods">
+            <div class="card card-body d-flex flex-row justify-content-between" *ngFor="let commentPeriod of project?.commentPeriods">
+                <!-- TODO: Create a button to go to comments page -->
+                <a (click)="$event.stopPropagation()" [routerLink]="['../cp', commentPeriod._id]" title="Go to Comment Period">
+                    <div>
+                        <label class="title">{{commentPeriod.commentPeriodStatus || 'Unknown Comment Period Status'}}</label>
+                        <p class="mb-0">{{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}</p>
                     </div>
-                    <p class="comment__text">{{item.comment}}</p>
-                    <div class="comment__buttons ">
-                        <div class="clickable" (click)="viewDetails(item._id)">Read More &nbsp; &rsaquo;</div>
+                    <div *ngIf="commentPeriodService.isOpen(commentPeriod)">
+                        <div class="badge badge-secondary p-3">{{commentPeriod.daysRemaining}}</div>
                     </div>
-                </div>
-            </ng-template>
+                </a>
+            </div>
         </div>
     </section>
 </div>

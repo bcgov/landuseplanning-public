@@ -164,13 +164,13 @@ export class ProjectService {
   }
 
   // get a specific project by its id
-  getById(appId: string, forceReload: boolean = false): Observable<Project> {
-    if (this.project && this.project._id === appId && !forceReload) {
+  getById(projId: string, forceReload: boolean = false): Observable<Project> {
+    if (this.project && this.project._id === projId && !forceReload) {
       return Observable.of(this.project);
     }
 
     // first get the project
-    return this.api.getProject(appId)
+    return this.api.getProject(projId)
       .map(res => {
         const projects = res.text() ? res.json() : [];
         // return the first (only) project
@@ -202,8 +202,7 @@ export class ProjectService {
         promises.push(this.commentPeriodService.getAllByProjectId(project._id)
           .toPromise()
           .then(periods => {
-            const cp = this.commentPeriodService.getCurrent(periods);
-            project.currentPeriod = cp;
+            project.commentPeriods = periods;
             // user-friendly comment period status
             // project.cpStatus = this.commentPeriodService.getStatusString(this.commentPeriodService.getStatusCode(cp));
           })
