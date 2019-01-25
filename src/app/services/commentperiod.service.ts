@@ -31,8 +31,8 @@ export class CommentPeriodService {
   }
 
   // get all comment periods for the specified application id
-  getAllByProjectId(appId: string): Observable<CommentPeriod[]> {
-    return this.api.getPeriodsByProjId(appId)
+  getAllByProjectId(projId: string): Observable<CommentPeriod[]> {
+    return this.api.getPeriodsByProjId(projId)
       .map(res => {
         const periods = res.text() ? res.json() : [];
         periods.forEach((period, i) => {
@@ -68,39 +68,57 @@ export class CommentPeriodService {
         this.commentPeriod = period;
         return this.commentPeriod;
       })
+      .mergeMap(commentPeriod => {
+        if (!commentPeriod) { return Observable.of(null as CommentPeriod); }
+
+        const promises: Array<Promise<any>> = [];
+
+        // Get comment count from head
+        promises.push(this.commentService.getCountById(commentPeriod._id)
+          .toPromise()
+          .then(count => {
+            commentPeriod.totalComments = count;
+          })
+        );
+
+        return Promise.all(promises).then(() => {
+          this.commentPeriod = commentPeriod;
+          return this.commentPeriod;
+        });
+      })
       .catch(this.api.handleError);
   }
 
-    // get a specific comment period by its id
-    getByIdWithComments(periodId: string, forceReload: boolean = false): Observable<CommentPeriod> {
-      if (this.commentPeriod && this.commentPeriod._id === periodId && !forceReload) {
-        return Observable.of(this.commentPeriod);
-      }
-      return this.api.getPeriod(periodId)
-        .map(res => {
-          const periods = res.text() ? res.json() : [];
-          // return the first (only) comment period
-          return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
-        })
-        .mergeMap(commentPeriod => {
-          if (!commentPeriod) { return Observable.of(null as CommentPeriod); }
+  // get a specific comment period by its id
+  // getByIdWithComments(periodId: string, forceReload: boolean = false): Observable<CommentPeriod> {
+  //   if (this.commentPeriod && this.commentPeriod._id === periodId && !forceReload) {
+  //     return Observable.of(this.commentPeriod);
+  //   }
+  //   return this.api.getPeriod(periodId)
+  //     .map(res => {
+  //       const periods = res.text() ? res.json() : [];
+  //       // return the first (only) comment period
+  //       return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
+  //     })
+  //     .mergeMap(commentPeriod => {
+  //       if (!commentPeriod) { return Observable.of(null as CommentPeriod); }
 
-          const promises: Array<Promise<any>> = [];
+  //       const promises: Array<Promise<any>> = [];
 
-          // get the current comment period
-          promises.push(this.commentService.getAllByPeriodId(commentPeriod._id)
-            .toPromise()
-            .then(comments => {
-              commentPeriod.comments = comments;
-            })
-          );
-          return Promise.all(promises).then(() => {
-            this.commentPeriod = commentPeriod;
-            return this.commentPeriod;
-          });
-        })
-        .catch(this.api.handleError);
-    }
+  //       // get the current comment period
+  //       promises.push(this.commentService.getAllByPeriodId(commentPeriod._id)
+  //         .toPromise()
+  //         .then(comments => {
+  //           commentPeriod.comments = comments;
+  //         })
+  //       );
+  //       return Promise.all(promises).then(() => {
+  //         this.commentPeriod = commentPeriod;
+  //         return this.commentPeriod;
+  //       });
+  //     })
+  //     .catch(this.api.handleError);
+  // }
 
   // returns first period - multiple comment periods are currently not supported
   getCurrent(periods: CommentPeriod[]): CommentPeriod {

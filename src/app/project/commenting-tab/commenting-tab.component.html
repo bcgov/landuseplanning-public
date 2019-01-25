@@ -9,17 +9,14 @@
         </div>
 
         <div *ngIf="project?.commentPeriods">
-            <div class="card card-body d-flex flex-row justify-content-between" *ngFor="let commentPeriod of project?.commentPeriods">
-                <!-- TODO: Create a button to go to comments page -->
-                <a (click)="$event.stopPropagation()" [routerLink]="['../cp', commentPeriod._id]" title="Go to Comment Period">
-                    <div>
-                        <label class="title">{{commentPeriod.commentPeriodStatus || 'Unknown Comment Period Status'}}</label>
-                        <p class="mb-0">{{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}</p>
-                    </div>
-                    <div *ngIf="commentPeriodService.isOpen(commentPeriod)">
-                        <div class="badge badge-secondary p-3">{{commentPeriod.daysRemaining}}</div>
-                    </div>
-                </a>
+            <div [routerLink]="['../cp', commentPeriod._id]" class="d-flex justify-content-between list-group-item" *ngFor="let commentPeriod of project?.commentPeriods">
+                <div>
+                    <label class="title">{{commentPeriod.commentPeriodStatus || 'Unknown Comment Period Status'}}</label>
+                    <p class="mb-0">{{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}</p>
+                </div>
+                <div *ngIf="commentPeriodService.isOpen(commentPeriod)">
+                    <div class="badge badge-secondary p-3">{{commentPeriod.daysRemaining}}</div>
+                </div>
             </div>
         </div>
     </section>

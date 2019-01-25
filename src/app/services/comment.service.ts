@@ -20,16 +20,30 @@ export class CommentService {
     private documentService: DocumentService
   ) { }
 
+  // get count of projects
+  getCountById(commentPeriodId): Observable<number> {
+    return this.api.getCountCommentsById(commentPeriodId)
+      .map(res => {
+        // retrieve the count from the response headers
+        return parseInt(res.headers.get('x-total-count'), 10);
+      })
+      .catch(this.api.handleError);
+  }
+
   // get all comments for the specified comment period id
   // (without documents)
-  getAllByPeriodId(periodId: string): Observable<Comment[]> {
-    return this.api.getCommentsByPeriodId(periodId)
+  getByPeriodId(periodId: string, pageNum: number = null, pageSize: number = null, getCount: string = null): Observable<Comment[]> {
+    return this.api.getCommentsByPeriodId(pageNum, pageSize, getCount, periodId)
       .map(res => {
         const comments = res.text() ? res.json() : [];
         comments.forEach((comment, i) => {
           comments[i] = new Comment(comment);
         });
-        return comments as Comment[];
+        const commentsDataSet = {
+          totalCount: res.headers.get('x-total-count'),
+          currentComments: comments as Comment[]
+        };
+        return commentsDataSet;
       })
       .catch(this.api.handleError);
   }

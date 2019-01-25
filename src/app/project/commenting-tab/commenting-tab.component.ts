@@ -4,15 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import * as moment from 'moment';
 
 import { Project } from 'app/models/project';
-import { Comment } from 'app/models/comment';
-import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-
-import { ViewCommentComponent } from './view-comment/view-comment.component';
-import { CommentPeriod } from 'app/models/commentperiod';
 
 @Component({
   templateUrl: './commenting-tab.component.html',
@@ -62,27 +56,5 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  private viewDetails(commentId: string) {
-    this.dialogService.addDialog(ViewCommentComponent,
-      {
-        commentId: commentId
-      }, {
-        // index: 0,
-        // autoCloseTimeout: 10000,
-        // closeByClickingOutside: true,
-        backdropColor: 'rgba(0, 0, 0, 0.5)'
-      })
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((isConfirmed) => {
-        // // we get dialog result
-        // if (isConfirmed) {
-        //   // TODO: reload page?
-        //   console.log('saved');
-        // } else {
-        //   console.log('canceled');
-        // }
-      });
   }
 }
