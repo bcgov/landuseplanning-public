@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="status-msg" *ngIf="application['retireDate']">
-          This application will be available on this site until {{application['retireDate'] | date:'longDate'}}.
+          This application will be available on this site until {{application['retireDate'] | date:'longDate'}}. <br> It will continue to be available on <a href="http://a100.gov.bc.ca/pub/pls/gator/gator$queryforms.search_ip_by_file_number" title="To find information about this application after the specified date, visit GATOR" target="_blank">GATOR</a>.
         </div>
       </section>
       <div *ngIf="application.currentPeriod">
