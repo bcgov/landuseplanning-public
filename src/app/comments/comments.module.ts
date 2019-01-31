@@ -7,10 +7,11 @@ import { RouterModule } from '@angular/router';
 
 // modules
 import { SharedModule } from 'app/shared.module';
-import { CommentsRoutingModule } from './comments-routing.module';
 
 // components
 import { CommentsComponent } from './comments.component';
+import { ViewCommentComponent } from './view-comment/view-comment.component';
+
 
 @NgModule({
   imports: [
@@ -20,8 +21,13 @@ import { CommentsComponent } from './comments.component';
     NgxPaginationModule,
     RouterModule,
     SharedModule,
-    CommentsRoutingModule
   ],
-  declarations: [CommentsComponent]
+  declarations: [
+    CommentsComponent,
+    ViewCommentComponent
+  ],
+  entryComponents: [
+    ViewCommentComponent,
+  ]
 })
 export class CommentsModule { }

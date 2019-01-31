@@ -1,36 +1,30 @@
-<div class="comments" id="anchor-point">
-  <section>
-    <h1>
-      {{commentPeriodHeader}}
-    </h1>
-    <h2>
-      {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
-    </h2>
-    <p>
-      This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
-    </p>
-  </section>
-  <!-- <section>
-    <div class="spinner-container" *ngIf="loading" [@visibility]>
+<div class="comments">
+    <div class="spinner-container" *ngIf="loading">
         <div class="spinner-new rotating"></div>
     </div>
-    <div *ngFor="let comment of commentPeriod?.comments">
-      {{comment.comment}}
+    <div class="header-section m-4">
+        <h1>
+            {{commentPeriodHeader}}
+        </h1>
+        <h2>
+            {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
+        </h2>
+        <p>
+            This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
+        </p>
     </div>
-  </section> -->
-  
-  <section>
-    <div *ngIf="commentPeriod.comments?.length === 0">
-        <em>No comments have been received for this project at this time.</em>
-    </div>
-    <div class="list-group">
-        <ng-template ngFor let-item [ngForOf]="commentPeriod.comments">
+    
+    <div class="comment-section mx-4">
+        <div *ngIf="comments?.length === 0">
+            <em>No comments have been received for this project at this time.</em>
+        </div>
+        <ng-template ngFor let-item [ngForOf]="comments | paginate: { id: 'server', itemsPerPage: commentPeriod.pageSize, currentPage: commentPeriod.currentPage, totalItems: totalComments }">
             <div class="list-group-item flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <div class="comment__author">
                         <div *ngIf="item.author && item.Anonymous !== true; else anonymous">
                             <span>{{item.author}}</span>
-                            <span *ngIf="item.author.location">, {{item.location}}</span>
+                            <span *ngIf="item.location">, {{item.location}}</span>
                         </div>
                         <ng-template #anonymous>
                             <em>Anonymous</em>
@@ -46,6 +40,9 @@
                 </div>
             </div>
         </ng-template>
+        <div class="page-controls">
+            <div class="spinner" [ngClass]="{ 'hidden': !commentsLoading }"></div>
+            <pagination-controls (pageChange)="getPaginatedComments($event)" id="server"></pagination-controls>
+        </div>
     </div>
-  </section>
 </div>

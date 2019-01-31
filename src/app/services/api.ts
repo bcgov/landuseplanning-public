@@ -285,7 +285,11 @@ export class ApiService {
       'dateStarted',
       'dateCompleted'
     ];
-    const queryString = 'commentperiod?project=' + projId + '&fields=' + this.buildValues(fields);
+    // TODO: May want to pass this as a parameter in the future.
+    const sort = '&sortBy=-dateStarted';
+
+    let queryString = 'commentperiod?project=' + projId + '&fields=' + this.buildValues(fields) + '&';
+    if (sort !== null) { queryString += `sortBy=${sort}&`; }
     return this.get(queryString);
   }
 
@@ -303,7 +307,12 @@ export class ApiService {
   //
   // Comments
   //
-  getCommentsByPeriodId(periodId: string) {
+  getCountCommentsById(commentPeriodId) {
+    const queryString = `comment?period=${commentPeriodId}`;
+    return this.http.head(`${this.apiPath}/${queryString}`);
+  }
+
+  getCommentsByPeriodId(pageNum: number, pageSize: number, getCount: string, periodId: string) {
     const fields = [
       'author',
       'comment',
@@ -317,7 +326,14 @@ export class ApiService {
       'write',
       'delete'
     ];
-    const queryString = 'comment?_commentPeriod=' + periodId + '&fields=' + this.buildValues(fields);
+    // TODO: May want to pass this as a parameter in the future.
+    const sort = '-dateAdded';
+
+    let queryString = 'comment?period=' + periodId + '&fields=' + this.buildValues(fields) + '&';
+    if (sort !== null) { queryString += `sortBy=${sort}&`; }
+    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
+    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
+    if (getCount !== null) { queryString += `count=${getCount}&`; }
     return this.get(queryString);
   }
 

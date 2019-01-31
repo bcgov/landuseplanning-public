@@ -13,7 +13,6 @@ import { ProjectRoutingModule } from './project-routing.module';
 import { ProjectComponent } from './project.component';
 import { ProjectTabComponent } from './project-tab/project-tab.component';
 import { CommentingTabComponent } from './commenting-tab/commenting-tab.component';
-import { ViewCommentComponent } from './commenting-tab/view-comment/view-comment.component';
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
 import { AddCommentComponent } from './add-comment/add-comment.component';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
@@ -33,14 +32,12 @@ import { DateInputComponent } from 'app/date-input/date-input.component';
     ProjectComponent,
     ProjectTabComponent,
     CommentingTabComponent,
-    ViewCommentComponent,
     DecisionsTabComponent,
     AddCommentComponent,
     FileUploadComponent,
     DateInputComponent
   ],
   entryComponents: [
-    ViewCommentComponent,
     AddCommentComponent
   ]
 })
