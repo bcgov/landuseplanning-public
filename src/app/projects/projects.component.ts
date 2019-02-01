@@ -12,10 +12,7 @@ import * as _ from 'lodash';
 import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
-// import { FiltersType } from 'app/projects/applist-filters/applist-filters.component'; // FUTURE
 
-// NB: this number was chosen (by profiling) to give reasonable app loading feedback
-//     without the overhead of doing too much work
 const PAGE_SIZE = 100;
 
 @Component({
