@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -17,7 +17,8 @@ export class ProjectTabComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public api: ApiService // used in template
+    public api: ApiService, // used in template
+    private renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -28,6 +29,7 @@ export class ProjectTabComponent implements OnInit, OnDestroy {
         (data: { project: Project }) => {
           if (data.project) {
             this.project = data.project;
+            this.renderer.removeClass(document.body, 'no-scroll');
           } else {
             alert('Uh-oh, couldn\'t load project');
             // project not found --> navigate back to project list
