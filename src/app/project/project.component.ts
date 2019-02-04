@@ -9,7 +9,6 @@ import { Project } from 'app/models/project';
 import { ConfigService } from 'app/services/config.service';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { AddCommentComponent } from './add-comment/add-comment.component';
 
 @Component({
   selector: 'app-project',

@@ -98,24 +98,6 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
         : this.applicantKeys.filter(key => key.indexOf(this._applicantFilter.toUpperCase()) > -1) // .slice(0, 10)
       );
 
-  // NOT CURRENTLY USED
-  // public clFileSearch = (text$: Observable<string>) =>
-  //   text$
-  //     .debounceTime(200)
-  //     .distinctUntilChanged()
-  //     .map(term => term.length < 1 ? []
-  //       : this.clFileKeys.filter(key => key.toString().indexOf(this._clFileFilter.toString()) > -1) // .slice(0, 10)
-  //     );
-
-  // NOT CURRENTLY USED
-  // public dispIdSearch = (text$: Observable<string>) =>
-  //   text$
-  //     .debounceTime(200)
-  //     .distinctUntilChanged()
-  //     .map(term => term.length < 1 ? []
-  //       : this.dispIdKeys.filter(key => key.toString().indexOf(this._dispIdFilter.toString()) > -1) // .slice(0, 10)
-  //     );
-
   public purposeSearch = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
@@ -133,27 +115,6 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private configService: ConfigService,
     private elementRef: ElementRef
   ) {
-    // populate the keys we want to display
-    this.regionKeys.push(this.projectService.CARIBOO);
-    this.regionKeys.push(this.projectService.KOOTENAY);
-    this.regionKeys.push(this.projectService.LOWER_MAINLAND);
-    this.regionKeys.push(this.projectService.OMENICA);
-    this.regionKeys.push(this.projectService.PEACE);
-    this.regionKeys.push(this.projectService.SKEENA);
-    this.regionKeys.push(this.projectService.SOUTHERN_INTERIOR);
-    this.regionKeys.push(this.projectService.VANCOUVER_ISLAND);
-
-    this.cpStatusKeys.push(this.commentPeriodService.OPEN);
-    this.cpStatusKeys.push(this.commentPeriodService.NOT_STARTED);
-    this.cpStatusKeys.push(this.commentPeriodService.CLOSED);
-    this.cpStatusKeys.push(this.commentPeriodService.NOT_OPEN);
-
-    this.appStatusKeys.push(this.projectService.ACCEPTED);
-    this.appStatusKeys.push(this.projectService.DECISION_MADE);
-    this.appStatusKeys.push(this.projectService.CANCELLED);
-    this.appStatusKeys.push(this.projectService.ABANDONED);
-    this.appStatusKeys.push(this.projectService.DISPOSITION_GOOD_STANDING);
-    this.appStatusKeys.push(this.projectService.SUSPENDED);
   }
 
   // full height = top of app-applist-filters.app-filters + height of div.app-filters__header
@@ -185,15 +146,8 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
-      // console.log('filters: got apps from projects component');
-      // console.log('# apps =', this.projects.length);
 
-      // store keys for faster filter lookahead
-      // don't include empty results, then sort results, and then remove duplicates
-      // NB: these look only at currently-loaded apps -- not all the possible apps in the system
       this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(app => app.name ? app.name.toUpperCase() : null)).sort());
-      // this.clFileKeys = _.sortedUniq(_.compact(this.projects.map(app => app.cl_file)).sort()); // NOT CURRENTLY USED
-      // this.dispIdKeys = _.compact(this.projects.map(app => app.tantalisID)).sort(); // should already be unique // NOT CURRENTLY USED
 
       // (re)apply filtering
       this.internalApplyAllFilters(false);
@@ -282,49 +236,15 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       return (this.regionFilters[key] === false);
     });
 
-    // check for matching region
-    retVal = retVal && (
-      allRegions ||
-      (this.regionFilters[this.projectService.CARIBOO] && (item.region === this.projectService.CARIBOO)) ||
-      (this.regionFilters[this.projectService.KOOTENAY] && (item.region === this.projectService.KOOTENAY)) ||
-      (this.regionFilters[this.projectService.LOWER_MAINLAND] && (item.region === this.projectService.LOWER_MAINLAND)) ||
-      (this.regionFilters[this.projectService.OMENICA] && (item.region === this.projectService.OMENICA)) ||
-      (this.regionFilters[this.projectService.PEACE] && (item.region === this.projectService.PEACE)) ||
-      (this.regionFilters[this.projectService.SKEENA] && (item.region === this.projectService.SKEENA)) ||
-      (this.regionFilters[this.projectService.SOUTHERN_INTERIOR] && (item.region === this.projectService.SOUTHERN_INTERIOR)) ||
-      (this.regionFilters[this.projectService.VANCOUVER_ISLAND] && (item.region === this.projectService.VANCOUVER_ISLAND))
-    );
-
     // if no option is selected, match all
     const allCpStatuses = this.cpStatusKeys.every(key => {
       return (this.cpStatusFilters[key] === false);
     });
 
-    // check for matching Comment Period Status
-    // retVal = retVal && (
-    //   allCpStatuses ||
-    //   (this.cpStatusFilters[this.commentPeriodService.OPEN] && this.commentPeriodService.isOpen(item.currentPeriod)) ||
-    //   (this.cpStatusFilters[this.commentPeriodService.NOT_STARTED] && this.commentPeriodService.isNotStarted(item.currentPeriod)) ||
-    //   (this.cpStatusFilters[this.commentPeriodService.CLOSED] && this.commentPeriodService.isClosed(item.currentPeriod)) ||
-    //   (this.cpStatusFilters[this.commentPeriodService.NOT_OPEN] && this.commentPeriodService.isNotOpen(item.currentPeriod))
-    // );
-
     // if no option is selected, match all
     const allAppStatuses = this.appStatusKeys.every(key => {
       return (this.appStatusFilters[key] === false);
     });
-
-    // check for matching Project Status
-    // const appStatusCode = this.projectService.getStatusCode(item.status);
-    // retVal = retVal && (
-    //   allAppStatuses ||
-    //   (this.appStatusFilters[this.projectService.ACCEPTED] && this.projectService.isAccepted(appStatusCode)) ||
-    //   (this.appStatusFilters[this.projectService.DECISION_MADE] && this.projectService.isDecision(appStatusCode) && !this.projectService.isCancelled(appStatusCode)) ||
-    //   (this.appStatusFilters[this.projectService.CANCELLED] && this.projectService.isCancelled(appStatusCode)) ||
-    //   (this.appStatusFilters[this.projectService.ABANDONED] && this.projectService.isAbandoned(appStatusCode)) ||
-    //   (this.appStatusFilters[this.projectService.DISPOSITION_GOOD_STANDING] && this.projectService.isDispGoodStanding(appStatusCode)) ||
-    //   (this.appStatusFilters[this.projectService.SUSPENDED] && this.projectService.isSuspended(appStatusCode))
-    // );
 
     // check for matching Applicant
     const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
@@ -333,35 +253,11 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       item.name.toUpperCase().indexOf(applicantFilter.toUpperCase()) > -1
     );
 
-    // check for matching CL File
-    // retVal = retVal && (
-    //   !this.clFileFilter || !item.cl_file ||
-    //   item.cl_file.toString().indexOf(this.clFileFilter.toString()) > -1
-    // );
-
     // check for matching Disposition ID
     retVal = retVal && (
       !this.dispIdFilter || !item._id ||
       item._id.toString().indexOf(this.dispIdFilter.toString()) > -1
     );
-
-    // check for matching Purpose / Sub-purpose
-    // const purposeSubpurpose = `${item.purpose} / ${item.subpurpose}`;
-    // const purposeFilter = this.purposeFilter && this.purposeFilter.trim(); // returns null or empty
-    // retVal = retVal && (
-    //   !this.purposeFilter || !item.purpose || !item.subpurpose ||
-    //   purposeSubpurpose.toUpperCase().indexOf(purposeFilter.toUpperCase()) > -1
-    // );
-
-    // check for Publish Date range
-    // if (retVal && item.dateAdded) {
-    //   const publishDay = moment(item.dateAdded).startOf('day').toDate(); // date only
-    //   retVal = (
-    //     (!this.publishFromFilter || publishDay >= this.publishFromFilter)
-    //     &&
-    //     (!this.publishToFilter || publishDay <= this.publishToFilter)
-    //   );
-    // }
 
     return retVal;
   }
