@@ -11,6 +11,7 @@ import { SharedModule } from 'app/shared.module';
 // components
 import { CommentsComponent } from './comments.component';
 import { ViewCommentComponent } from './view-comment/view-comment.component';
+import { AddCommentComponent } from './add-comment/add-comment.component';
 
 
 @NgModule({
@@ -23,10 +24,12 @@ import { ViewCommentComponent } from './view-comment/view-comment.component';
     SharedModule,
   ],
   declarations: [
+    AddCommentComponent,
     CommentsComponent,
     ViewCommentComponent
   ],
   entryComponents: [
+    AddCommentComponent,
     ViewCommentComponent,
   ]
 })
