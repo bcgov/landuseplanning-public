@@ -44,7 +44,7 @@ section {
   background: #fff;
 }
 
-.applicant-name, 
+.applicant-name,
 .application-purpose {
   letter-spacing: -0.02rem;
   line-height: 1.5rem;
@@ -79,6 +79,17 @@ section {
 
 .status-msg {
   margin-top: 0.6rem;
+
+  &.status-highlight {
+    position: relative;
+    padding: 0 0.25rem;
+    margin-bottom: 0;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+  }
 }
 
 .commenting-open {
