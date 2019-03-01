@@ -55,7 +55,7 @@
 
       <section>
         <h3>Application Details</h3>
-        <p class="description">{{application.description || "No description available"}}</p>
+        <p class="description" [innerHTML]="(application.description | linkify) || 'No description available'"></p>
         <ul class="meta-container">
           <li>
             <div class="key">Applicant(s):</div>
