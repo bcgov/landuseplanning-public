@@ -7,6 +7,7 @@ import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 import { OrderByPipe } from 'app/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/pipes/newlines.pipe';
 import { ObjectFilterPipe } from 'app/pipes/object-filter.pipe';
+import { LinkifyPipe } from 'app/pipes/linkify.pipe';
 
 import { VarDirective } from 'app/utils/ng-var.directive';
 import { DragMoveDirective } from 'app/utils/drag-move.directive';
@@ -22,6 +23,7 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
+    LinkifyPipe,
     VarDirective,
     DragMoveDirective
   ],
@@ -32,6 +34,7 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
+    LinkifyPipe,
     VarDirective,
     DragMoveDirective
   ]
