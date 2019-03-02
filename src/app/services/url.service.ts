@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Params, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { filter } from 'rxjs/operators';
-import 'rxjs/add/operator/share';
+import { Params, ActivatedRoute, Router, NavigationEnd, Event } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, share } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 //
@@ -26,8 +25,9 @@ export class UrlService {
     // used for subscribers to know when to refresh their parameters
     // NB: use share() so this fires only once each time even with multiple subscriptions
     this.onNavEnd$ = this.router.events.pipe(
-      filter(event => (event instanceof NavigationEnd))
-    ).share() as Observable<NavigationEnd>;
+      filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd),
+      share()
+    );
 
     // keep params up to date
     this.activatedRoute.queryParamMap

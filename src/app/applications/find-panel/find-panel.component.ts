@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { UrlService } from 'app/services/url.service';
@@ -35,7 +35,9 @@ export class FindPanelComponent implements OnInit, OnDestroy {
     // watch for URL param changes
     // NB: this must be in constructor to get initial parameters
     this.urlService.onNavEnd$
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(() => {
         // get initial or updated parameters
         // TODO: could also get params from event.url

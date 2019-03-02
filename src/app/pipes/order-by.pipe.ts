@@ -43,5 +43,5 @@ export class OrderByPipe implements PipeTransform {
 
       return 0;
     });
-  };
+  }
 }

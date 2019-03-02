@@ -24,6 +24,7 @@ export class LinkifyPipe implements PipeTransform {
         str = str.replace(match.text, `<a href="${match.url}" target="_blank">${match.text}</a>`);
       });
     }
+
     return str;
   }
 }

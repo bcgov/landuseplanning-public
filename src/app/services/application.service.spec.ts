@@ -5,8 +5,7 @@ import { DocumentService } from './document.service';
 import { CommentPeriodService } from './commentperiod.service';
 import { DecisionService } from './decision.service';
 import { FeatureService } from './feature.service';
-import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { Application } from 'app/models/application';
 import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
@@ -22,7 +21,7 @@ fdescribe('ApplicationService', () => {
           return [{_id: id, status: 'ACCEPTED'}];
         }
       };
-      return Observable.of(response);
+      return of(response);
     },
 
     getApplications() {
@@ -34,7 +33,7 @@ fdescribe('ApplicationService', () => {
           ];
         }
       };
-      return Observable.of(response);
+      return of(response);
     },
 
     getCountApplications() {
@@ -49,7 +48,7 @@ fdescribe('ApplicationService', () => {
           }
         }
       };
-      return Observable.of(response);
+      return of(response);
     },
 
     handleError(error: any) {
@@ -63,7 +62,7 @@ fdescribe('ApplicationService', () => {
         new Document({_id: 'DDDDD'}),
         new Document({_id: 'EEEEE'})
       ];
-      return Observable.of(documents);
+      return of(documents);
     }
   };
 
@@ -73,7 +72,7 @@ fdescribe('ApplicationService', () => {
         new CommentPeriod({_id: 'DDDDD', startDate: new Date(2018, 10, 1, ), endDate: new Date(2018, 11, 10)}),
         new CommentPeriod({_id: 'EEEEE', startDate: new Date(2018, 10, 1, ), endDate: new Date(2018, 11, 10)})
       ];
-      return Observable.of(commentPeriods);
+      return of(commentPeriods);
     },
 
     getCurrent(periods: CommentPeriod[]): CommentPeriod {
@@ -91,7 +90,7 @@ fdescribe('ApplicationService', () => {
 
   const decisionServiceStub = {
     getByApplicationId(applicationId: string) {
-      return Observable.of(new Decision({_id: 'IIIII'}));
+      return of(new Decision({_id: 'IIIII'}));
     }
   };
 
@@ -101,7 +100,7 @@ fdescribe('ApplicationService', () => {
         new Feature({id: 'FFFFF', properties: { TENURE_AREA_IN_HECTARES: 12 }}),
         new Feature({id: 'GGGGG', properties: { TENURE_AREA_IN_HECTARES: 13 }})
       ];
-      return Observable.of(features);
+      return of(features);
     }
   };
 
@@ -158,7 +157,7 @@ fdescribe('ApplicationService', () => {
       };
 
       spyOn(apiService, 'getApplications')
-        .and.returnValue(Observable.of(response));
+        .and.returnValue(of(response));
     });
 
     describe('with no filters', () => {
@@ -197,7 +196,7 @@ fdescribe('ApplicationService', () => {
       };
 
       spyOn(apiService, 'getApplication')
-        .and.returnValue(Observable.of(response));
+        .and.returnValue(of(response));
     });
 
     describe('when an application has been cached', () => {

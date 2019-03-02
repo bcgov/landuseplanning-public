@@ -1,8 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { Comment } from 'app/models/comment';
 import { CommentPeriod } from 'app/models/commentperiod';
-import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { of, throwError } from 'rxjs';
 import { ApiService } from './api';
 import { CommentService } from './comment.service';
 import { CommentPeriodService } from './commentperiod.service';
@@ -59,7 +58,7 @@ describe('CommentService', () => {
     describe('when no comment periods are returned by the comment period service', () => {
       it('returns an empty Comment array', async(() => {
         commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-          Observable.of([] as CommentPeriod[])
+          of([] as CommentPeriod[])
         );
         service.getAllByApplicationId('123').subscribe(res => {
           expect(res).toEqual([] as Comment[]);
@@ -71,13 +70,13 @@ describe('CommentService', () => {
       describe('when the comment period contains no comments', () => {
         it('returns an empty comments array', async(() => {
           commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-            Observable.of([new CommentPeriod({ _id: '1' })])
+            of([new CommentPeriod({ _id: '1' })])
           );
 
           // Return unique sets of comments each time CommentPeriodService#getAllByPeriodId is called
           spyOn(service, 'getAllByPeriodId').and.returnValues(
-            Observable.of([] as Comment[]),
-            Observable.of([
+            of([] as Comment[]),
+            of([
               new Comment({ _id: '33' }),
               new Comment({ _id: '44' })
             ])
@@ -93,13 +92,13 @@ describe('CommentService', () => {
       describe('when the comment period contains one comment', () => {
         it('returns an array with one comment from the comment period', async(() => {
           commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-            Observable.of([new CommentPeriod({ _id: '1' })])
+            of([new CommentPeriod({ _id: '1' })])
           );
 
           // Return unique sets of comments each time CommentPeriodService#getAllByPeriodId is called
           spyOn(service, 'getAllByPeriodId').and.returnValues(
-            Observable.of([new Comment({ _id: '11' })]),
-            Observable.of([
+            of([new Comment({ _id: '11' })]),
+            of([
               new Comment({ _id: '44' }),
               new Comment({ _id: '55' })
             ])
@@ -115,17 +114,17 @@ describe('CommentService', () => {
       describe('when the comment period contains multiple comments', () => {
         it('returns an array of comments from the comment period', async(() => {
           commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-            Observable.of([new CommentPeriod({ _id: '1' })])
+            of([new CommentPeriod({ _id: '1' })])
           );
 
           // Return unique sets of comments each time CommentPeriodService#getAllByPeriodId is called
           spyOn(service, 'getAllByPeriodId').and.returnValues(
-            Observable.of([
+            of([
               new Comment({ _id: '11' }),
               new Comment({ _id: '22' }),
               new Comment({ _id: '33' })
             ]),
-            Observable.of([
+            of([
               new Comment({ _id: '44' }),
               new Comment({ _id: '55' })
             ])
@@ -147,7 +146,7 @@ describe('CommentService', () => {
       describe('when the comment periods contains no comments', () => {
         it('returns an empty comments array', async(() => {
           commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-            Observable.of([
+            of([
               new CommentPeriod({ _id: '1' }),
               new CommentPeriod({ _id: '2' })
             ])
@@ -155,8 +154,8 @@ describe('CommentService', () => {
 
           // Return unique sets of comments each time CommentPeriodService#getAllByPeriodId is called
           spyOn(service, 'getAllByPeriodId').and.returnValues(
-            Observable.of([] as Comment[]),
-            Observable.of([] as Comment[])
+            of([] as Comment[]),
+            of([] as Comment[])
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
@@ -169,7 +168,7 @@ describe('CommentService', () => {
       describe('when the comment periods contain one comment', () => {
         it('returns an array with one comment from the comment period', async(() => {
           commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-            Observable.of([
+            of([
               new CommentPeriod({ _id: '1' }),
               new CommentPeriod({ _id: '2' })
             ])
@@ -177,8 +176,8 @@ describe('CommentService', () => {
 
           // Return unique sets of comments each time CommentPeriodService#getAllByPeriodId is called
           spyOn(service, 'getAllByPeriodId').and.returnValues(
-            Observable.of([new Comment({ _id: '11' })]),
-            Observable.of([new Comment({ _id: '22' })])
+            of([new Comment({ _id: '11' })]),
+            of([new Comment({ _id: '22' })])
           );
 
           // As CommentPeriodService#getAllByPeriodId is only called once, assert first pair of comments
@@ -194,7 +193,7 @@ describe('CommentService', () => {
       describe('when the comment periods contain multiple comments', () => {
         it('returns an array of comments from the comment period', async(() => {
           commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-            Observable.of([
+            of([
               new CommentPeriod({ _id: '1' }),
               new CommentPeriod({ _id: '2' })
             ])
@@ -202,12 +201,12 @@ describe('CommentService', () => {
 
           // Return unique sets of comments each time CommentPeriodService#getAllByPeriodId is called
           spyOn(service, 'getAllByPeriodId').and.returnValues(
-            Observable.of([
+            of([
               new Comment({ _id: '11' }),
               new Comment({ _id: '22' }),
               new Comment({ _id: '33' })
             ]),
-            Observable.of([
+            of([
               new Comment({ _id: '44' }),
               new Comment({ _id: '55' })
             ])
@@ -230,14 +229,14 @@ describe('CommentService', () => {
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
         commentPeriodServiceSpy.getAllByApplicationId.and.returnValue(
-          Observable.throw(Error('someError'))
+          throwError(Error('someError'))
         );
 
         spyOn(service, 'getAllByPeriodId').and.throwError('someError');
 
         apiSpy.handleError.and.callFake(error => {
           expect(error).toEqual(Error('someError'));
-          return Observable.throw(Error('someRethrownError'));
+          return throwError(Error('someRethrownError'));
         });
 
         service.getAllByApplicationId('123').subscribe(
@@ -263,7 +262,7 @@ describe('CommentService', () => {
     describe('when the comment period has no comments', () => {
       it('returns an empty Comment array', async(() => {
         apiSpy.getCommentsByPeriodId.and.returnValue(
-          Observable.of({ text: () => {} })
+          of({ text: () => {} })
         );
         service.getAllByPeriodId('1').subscribe(res => {
           expect(res).toEqual([] as Comment[]);
@@ -274,7 +273,7 @@ describe('CommentService', () => {
     describe('when the comment period has one comment', () => {
       it('returns an array with one Comment element', async(() => {
         apiSpy.getCommentsByPeriodId.and.returnValue(
-          Observable.of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
+          of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
         );
         service.getAllByPeriodId('1').subscribe(res => {
           expect(res).toEqual([new Comment({ _id: '1' })]);
@@ -285,7 +284,7 @@ describe('CommentService', () => {
     describe('when the comment period has one comment', () => {
       it('returns an array with one Comment element', async(() => {
         apiSpy.getCommentsByPeriodId.and.returnValue(
-          Observable.of({
+          of({
             text: () => 'notNull',
             json: () => [{ _id: '1' }, { _id: '2' }, { _id: '3' }]
           })
@@ -303,12 +302,12 @@ describe('CommentService', () => {
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
         apiSpy.getCommentsByPeriodId.and.returnValue(
-          Observable.throw(Error('someError'))
+          throwError(Error('someError'))
         );
 
         apiSpy.handleError.and.callFake(error => {
           expect(error).toEqual(Error('someError'));
-          return Observable.throw(Error('someRethrownError'));
+          return throwError(Error('someRethrownError'));
         });
 
         service.getAllByPeriodId('123').subscribe(
@@ -336,7 +335,7 @@ describe('CommentService', () => {
     describe('when forceReload is set to true', () => {
       describe('when no comment is returned by the Api', () => {
         it('returns a null Comment', async(() => {
-          apiSpy.getComment.and.returnValue(Observable.of({ text: () => {} }));
+          apiSpy.getComment.and.returnValue(of({ text: () => {} }));
 
           service
             .getById('1', true)
@@ -347,11 +346,11 @@ describe('CommentService', () => {
       describe('when one comment is returned by the Api', () => {
         it('returns one Comment', async(() => {
           apiSpy.getComment.and.returnValue(
-            Observable.of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
+            of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
           );
 
           documentServiceSpy.getAllByCommentId.and.returnValue(
-            Observable.of([] as Document[])
+            of([] as Document[])
           );
 
           service
@@ -365,15 +364,15 @@ describe('CommentService', () => {
       describe('when multiple comments are returned by the Api', () => {
         it('returns only the first Comment', async(() => {
           apiSpy.getComment.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '1' }, { _id: '2' }, { _id: '3' }]
             })
           );
 
           documentServiceSpy.getAllByCommentId.and.returnValues(
-            Observable.of([new Document({ _id: '6' })]),
-            Observable.throw(
+            of([new Document({ _id: '6' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByCommentId to be called more than once.'
               )
@@ -393,8 +392,8 @@ describe('CommentService', () => {
       describe('when a comment is cached', () => {
         beforeEach(async(() => {
           documentServiceSpy.getAllByCommentId.and.returnValues(
-            Observable.of([new Document({ _id: '7' })]),
-            Observable.throw(
+            of([new Document({ _id: '7' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByCommentId to be called more than once.'
               )
@@ -402,11 +401,11 @@ describe('CommentService', () => {
           );
 
           apiSpy.getComment.and.returnValues(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '1' }]
             }),
-            Observable.throw(
+            throwError(
               Error(
                 'Was not expecting ApIService.getComment to be called more than once.'
               )
@@ -430,12 +429,12 @@ describe('CommentService', () => {
       describe('when no comment is cached', () => {
         it('calls the api to fetch a comment', async(() => {
           apiSpy.getComment.and.returnValue(
-            Observable.of({ text: () => 'notNull', json: () => [{ _id: '3' }] })
+            of({ text: () => 'notNull', json: () => [{ _id: '3' }] })
           );
 
           documentServiceSpy.getAllByCommentId.and.returnValues(
-            Observable.of([new Document({ _id: '8' })]),
-            Observable.throw(
+            of([new Document({ _id: '8' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByCommentId to be called more than once.'
               )
@@ -454,7 +453,7 @@ describe('CommentService', () => {
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
         apiSpy.getComment.and.returnValue(
-          Observable.of({
+          of({
             text: () => {
               throw Error('someError');
             }
@@ -462,7 +461,7 @@ describe('CommentService', () => {
         );
         apiSpy.handleError.and.callFake(error => {
           expect(error).toEqual(Error('someError'));
-          return Observable.throw(Error('someRethrownError'));
+          return throwError(Error('someRethrownError'));
         });
 
         service.getById('1').subscribe(
@@ -487,7 +486,7 @@ describe('CommentService', () => {
 
     describe('when no comment is returned by the api', () => {
       it('returns null', async(() => {
-        apiSpy.addComment.and.returnValue(Observable.of({ text: () => {} }));
+        apiSpy.addComment.and.returnValue(of({ text: () => {} }));
 
         service
           .add(new Comment())
@@ -500,7 +499,7 @@ describe('CommentService', () => {
         const comment = new Comment();
 
         apiSpy.addComment.and.returnValue(
-          Observable.of({
+          of({
             text: () => 'notNull',
             json: () => comment
           })
@@ -535,7 +534,7 @@ describe('CommentService', () => {
         // Replace ApiService.addComment with a fake method that simply returns the arg passed to it.
         apiSpy.addComment.and.callFake((arg: Comment) => {
           modifiedComment = arg;
-          return Observable.of({
+          return of({
             text: () => 'notNull',
             json: () => arg
           });

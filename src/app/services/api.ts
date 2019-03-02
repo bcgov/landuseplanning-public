@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/mergeMap';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+
+import { Observable, of, combineLatest, merge, throwError } from 'rxjs';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 import * as _ from 'lodash';
 
+import { Application } from 'app/models/application';
 import { Comment } from 'app/models/comment';
+import { CommentPeriod } from 'app/models/commentperiod';
+import { Decision } from 'app/models/decision';
 import { Document } from 'app/models/document';
+import { Feature } from 'app/models/feature';
+import { User } from 'app/models/user';
 
 @Injectable()
 export class ApiService {
@@ -22,7 +22,7 @@ export class ApiService {
   public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'beta' | 'master' | 'prod';
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) {
     // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
     // this.token = currentUser && currentUser.token;
@@ -83,13 +83,13 @@ export class ApiService {
         this.apiPath = 'https://comment.nrs.gov.bc.ca/api/public';
         this.adminUrl = 'https://comment.nrs.gov.bc.ca/admin/';
         this.env = 'prod';
-    };
+    }
   }
 
-  handleError(error: any): ErrorObservable {
+  handleError(error: any): Observable<never> {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
     console.log('API error =', reason);
-    return Observable.throw(error);
+    return throwError(error);
   }
 
   //
@@ -114,21 +114,21 @@ export class ApiService {
       queryString = queryString.slice(0, -1);
 
       // retrieve the count from the response headers
-      return this.http.head(`${this.apiPath}/${queryString}`)
-        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+      return this.http.head<HttpResponse<Object>>(`${this.apiPath}/${queryString}`, { observe: 'response' })
+        .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
     } else {
       // query for both CLID and DTID
-      const clid = this.http.head(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`)
-        .map(res => parseInt(res.headers.get('x-total-count'), 10));
-      const dtid = this.http.head(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`)
-        .map(res => parseInt(res.headers.get('x-total-count'), 10));
+      const clid = this.http.head<HttpResponse<Object>>(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`, { observe: 'response' })
+        .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
+      const dtid = this.http.head<HttpResponse<Object>>(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`, { observe: 'response' })
+        .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
 
       // return sum of counts
-      return Observable.combineLatest(clid, dtid, (v1, v2) => v1 + v2);
+      return combineLatest(clid, dtid, (v1, v2) => v1 + v2);
     }
   }
 
-  getApplications(params: object) {
+  getApplications(params: object): Observable<Application[]> {
     const fields = [
       'agency',
       'areaHectares',
@@ -168,19 +168,19 @@ export class ApiService {
     queryString += `fields=${this.buildValues(fields)}`;
 
     if (!params['clidDtid']) {
-      return this.get(queryString);
+      return this.http.get<Application[]>(`${this.apiPath}/${queryString}`);
     } else {
       // query for both CLID and DTID
-      const clid = this.get(queryString + `&cl_file=${params['clidDtid']}`);
-      const dtid = this.get(queryString + `&tantalisId=${params['clidDtid']}`);
+      const clid = this.http.get<Application[]>(`${this.apiPath}/${queryString}&cl_file=${params['clidDtid']}`);
+      const dtid = this.http.get<Application[]>(`${this.apiPath}/${queryString}&tantalisId=${params['clidDtid']}`);
 
       // return merged results, using toArray to wait for all results (ie, single emit)
       // this is fine performance-wise because there should be no more than a few results
-      return Observable.merge(clid, dtid).toArray().mergeMap(items => Observable.of(...items));
+      return merge(clid, dtid).pipe(toArray(), mergeMap(items => of(...items)));
     }
   }
 
-  getApplication(id: string) {
+  getApplication(id: string): Observable<Application[]> {
     const fields = [
       'agency',
       'areaHectares',
@@ -203,13 +203,13 @@ export class ApiService {
       'type'
     ];
     const queryString = 'application/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Application[]>(`${this.apiPath}/${queryString}`);
   }
 
   //
   // Features
   //
-  getFeaturesByTantalisId(tantalisID: number) {
+  getFeaturesByTantalisId(tantalisID: number): Observable<Feature[]> {
     const fields = [
       'applicationID',
       'geometry',
@@ -218,10 +218,10 @@ export class ApiService {
       'type'
     ];
     const queryString = `feature?tantalisId=${tantalisID}&fields=${this.buildValues(fields)}`;
-    return this.get(queryString);
+    return this.http.get<Feature[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getFeaturesByApplicationId(applicationId: string) {
+  getFeaturesByApplicationId(applicationId: string): Observable<Feature[]> {
     const fields = [
       'applicationID',
       'geometry',
@@ -230,13 +230,13 @@ export class ApiService {
       'type'
     ];
     const queryString = `feature?applicationId=${applicationId}&fields=${this.buildValues(fields)}`;
-    return this.get(queryString);
+    return this.http.get<Feature[]>(`${this.apiPath}/${queryString}`);
   }
 
   //
   // Decisions
   //
-  getDecisionByAppId(appId: string) {
+  getDecisionByAppId(appId: string): Observable<Decision[]> {
     const fields = [
       '_addedBy',
       '_application',
@@ -244,10 +244,10 @@ export class ApiService {
       'description'
     ];
     const queryString = 'decision?_application=' + appId + '&fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Decision[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getDecision(id: string) {
+  getDecision(id: string): Observable<Decision[]> {
     const fields = [
       '_addedBy',
       '_application',
@@ -255,13 +255,13 @@ export class ApiService {
       'description'
     ];
     const queryString = 'decision/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Decision[]>(`${this.apiPath}/${queryString}`);
   }
 
   //
   // Comment Periods
   //
-  getPeriodsByAppId(appId: string) {
+  getPeriodsByAppId(appId: string): Observable<CommentPeriod[]> {
     const fields = [
       '_addedBy',
       '_application',
@@ -269,10 +269,10 @@ export class ApiService {
       'endDate'
     ];
     const queryString = 'commentperiod?_application=' + appId + '&fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getPeriod(id: string) {
+  getPeriod(id: string): Observable<CommentPeriod[]> {
     const fields = [
       '_addedBy',
       '_application',
@@ -280,13 +280,13 @@ export class ApiService {
       'endDate'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`);
   }
 
   //
   // Comments
   //
-  getCommentsByPeriodId(periodId: string) {
+  getCommentsByPeriodId(periodId: string): Observable<Comment[]> {
     const fields = [
       '_addedBy',
       '_commentPeriod',
@@ -298,10 +298,10 @@ export class ApiService {
       'commentStatus'
     ];
     const queryString = 'comment?_commentPeriod=' + periodId + '&fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Comment[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getComment(id: string) {
+  getComment(id: string): Observable<Comment[]> {
     const fields = [
       '_addedBy',
       '_commentPeriod',
@@ -313,22 +313,22 @@ export class ApiService {
       'commentStatus'
     ];
     const queryString = 'comment/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Comment[]>(`${this.apiPath}/${queryString}`);
   }
 
-  addComment(comment: Comment) {
+  addComment(comment: Comment): Observable<Comment> {
     const fields = [
       'comment',
       'commentAuthor'
     ];
     const queryString = 'comment?fields=' + this.buildValues(fields);
-    return this.post(queryString, comment);
+    return this.http.post<Comment>(`${this.apiPath}/${queryString}`, comment, {});
   }
 
   //
   // Documents
   //
-  getDocumentsByAppId(appId: string) {
+  getDocumentsByAppId(appId: string): Observable<Document[]> {
     const fields = [
       '_application',
       'documentFileName',
@@ -337,10 +337,10 @@ export class ApiService {
       'internalMime'
     ];
     const queryString = 'document?_application=' + appId + '&fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getDocumentsByCommentId(commentId: string) {
+  getDocumentsByCommentId(commentId: string): Observable<Document[]> {
     const fields = [
       '_comment',
       'documentFileName',
@@ -349,10 +349,10 @@ export class ApiService {
       'internalMime'
     ];
     const queryString = 'document?_comment=' + commentId + '&fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getDocumentsByDecisionId(decisionId: string) {
+  getDocumentsByDecisionId(decisionId: string): Observable<Document[]> {
     const fields = [
       '_decision',
       'documentFileName',
@@ -361,15 +361,15 @@ export class ApiService {
       'internalMime'
     ];
     const queryString = 'document?_decision=' + decisionId + '&fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
 
-  getDocument(id: string) {
+  getDocument(id: string): Observable<Document[]> {
     const queryString = 'document/' + id;
-    return this.get(queryString);
+    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
 
-  uploadDocument(formData: FormData) {
+  uploadDocument(formData: FormData): Observable<Document> {
     const fields = [
       'documentFileName',
       'displayName',
@@ -377,7 +377,7 @@ export class ApiService {
       'internalMime'
     ];
     const queryString = 'document/?fields=' + this.buildValues(fields);
-    return this.post(queryString, formData, { reportProgress: true });
+    return this.http.post<Document>(`${this.apiPath}/${queryString}`, formData, { reportProgress: true });
   }
 
   getDocumentUrl(document: Document): string {
@@ -387,7 +387,7 @@ export class ApiService {
   //
   // Users
   //
-  getAllUsers() {
+  getAllUsers(): Observable<User[]> {
     const fields = [
       'displayName',
       'username',
@@ -395,7 +395,7 @@ export class ApiService {
       'lastName'
     ];
     const queryString = 'user?fields=' + this.buildValues(fields);
-    return this.get(queryString);
+    return this.http.get<User[]>(`${this.apiPath}/${queryString}`);
   }
 
   //
@@ -408,20 +408,5 @@ export class ApiService {
     });
     // trim the last |
     return values.replace(/\|$/, '');
-  }
-
-  private get(apiRoute: string, options?: object) {
-    return this.http.get(`${this.apiPath}/${apiRoute}`, options || null);
-  }
-
-  private put(apiRoute: string, body?: object, options?: object) {
-    return this.http.put(`${this.apiPath}/${apiRoute}`, body || null, options || null);
-  }
-
-  private post(apiRoute: string, body?: object, options?: object) {
-    return this.http.post(`${this.apiPath}/${apiRoute}`, body || null, options || null);
-  }
-  private delete(apiRoute: string, body?: object, options?: object) {
-    return this.http.delete(`${this.apiPath}/${apiRoute}`, options || null);
   }
 }

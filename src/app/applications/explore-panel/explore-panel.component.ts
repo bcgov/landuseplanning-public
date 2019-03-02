@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -26,7 +26,6 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   readonly maxDate = moment().toDate(); // today
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  private purposeInfoModal: NgbModalRef = null;
 
   // search keys for lists
   public cpStatusKeys: Array<string> = [];
@@ -90,7 +89,9 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     // watch for URL param changes
     // NB: this must be in constructor to get initial parameters
     this.urlService.onNavEnd$
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(() => {
         // get initial or updated parameters
         // TODO: could also get params from event.url
@@ -283,7 +284,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
 
   public showPurposeInfoModal() {
     // open modal
-    this.purposeInfoModal = this.modalService.open(PurposeInfoModalComponent, {
+    this.modalService.open(PurposeInfoModalComponent, {
         size: 'lg',
         windowClass: 'modal-fixed'
       }
