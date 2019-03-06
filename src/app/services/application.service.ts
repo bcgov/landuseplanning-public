@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/of';
+import { Observable, of, combineLatest, merge } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -75,8 +69,9 @@ export class ApplicationService {
         publishSince: publishSince,
         publishUntil: publishUntil,
         coordinates: coordinates
-      })
-        .catch(this.api.handleError);
+      }).pipe(
+        catchError(this.api.handleError)
+      );
     }
 
     const now = moment();
@@ -97,8 +92,9 @@ export class ApplicationService {
         publishSince: publishSince,
         publishUntil: publishUntil,
         coordinates: coordinates
-      })
-        .catch(this.api.handleError);
+      }).pipe(
+        catchError(this.api.handleError)
+      );
     }
 
     // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
@@ -126,8 +122,10 @@ export class ApplicationService {
       coordinates: coordinates
     });
 
-    return Observable.combineLatest(closed, future, (v1, v2) => v1 + v2)
-      .catch(this.api.handleError);
+    return combineLatest(closed, future, (v1: number, v2: number) => v1 + v2)
+      .pipe(
+        catchError(this.api.handleError)
+      );
   }
 
   // get matching applications without their meta (documents, comment period, decisions, etc)
@@ -156,15 +154,20 @@ export class ApplicationService {
         publishSince: publishSince,
         publishUntil: publishUntil,
         coordinates: coordinates
-      })
-        .map(res => {
-          const applications = res.text() ? res.json() : [];
-          applications.forEach((obj: any, i: number) => {
-            applications[i] = new Application(obj);
+      }).pipe(
+        map((res: Application[]) => {
+          if (!res || res.length === 0) {
+            return [] as Application[];
+          }
+
+          const applications: Application[] = [];
+          res.forEach(application => {
+            applications.push(new Application(application));
           });
-          return applications as Application[];
-        })
-        .catch(this.api.handleError);
+          return applications;
+        }),
+        catchError(this.api.handleError)
+      );
     }
 
     const now = moment();
@@ -187,15 +190,20 @@ export class ApplicationService {
         publishSince: publishSince,
         publishUntil: publishUntil,
         coordinates: coordinates
-      })
-        .map(res => {
-          const applications = res.text() ? res.json() : [];
-          applications.forEach((obj: any, i: number) => {
-            applications[i] = new Application(obj);
+      }).pipe(
+        map((res: Application[]) => {
+          if (!res || res.length === 0) {
+            return [] as Application[];
+          }
+
+          const applications: Application[] = [];
+          res.forEach(application => {
+            applications.push(new Application(application));
           });
-          return applications as Application[];
-        })
-        .catch(this.api.handleError);
+          return applications;
+        }),
+        catchError(this.api.handleError)
+      );
     }
 
     // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
@@ -227,104 +235,117 @@ export class ApplicationService {
       coordinates: coordinates
     });
 
-    return Observable.merge(closed, future)
-      .map(res => {
-        const applications = res.text() ? res.json() : [];
-        applications.forEach((obj: any, i: number) => {
-          applications[i] = new Application(obj);
-        });
-        return applications as Application[];
-      })
-      .catch(this.api.handleError);
+    return merge(closed, future)
+      .pipe(
+        map((res: Application[]) => {
+          if (!res || res.length === 0) {
+            return [] as Application[];
+          }
+
+          const applications: Application[] = [];
+          res.forEach(application => {
+            applications.push(new Application(application));
+          });
+          return applications;
+        }),
+        catchError(this.api.handleError)
+      );
   }
 
   // get a specific application by its id
   getById(appId: string, forceReload: boolean = false): Observable<Application> {
     if (this.application && this.application._id === appId && !forceReload) {
-      return Observable.of(this.application);
+      return of(this.application);
     }
 
     // first get the application
     return this.api.getApplication(appId)
-      .map(res => {
-        const applications = res.text() ? res.json() : [];
-        // return the first (only) application
-        return applications.length > 0 ? new Application(applications[0]) : null;
-      })
-      .mergeMap(application => {
-        if (!application) { return Observable.of(null as Application); }
+      .pipe(
+        map((res: Application[]) => {
+          if (!res || res.length === 0) {
+            return null as Application;
+          }
 
-        const promises: Array<Promise<any>> = [];
+          // return the first (only) application
+          return new Application(res[0]);
+        }),
+        mergeMap((application: Application) => {
+          if (!application) {
+            return of(null as Application);
+          }
 
-        // derive region code
-        application.region = this.getRegionCode(application.businessUnit);
+          const promises: Array<Promise<any>> = [];
 
-        // application status code
-        application.appStatusCode = this.getStatusCode(application.status);
+          // derive region code
+          application.region = this.getRegionCode(application.businessUnit);
 
-        // user-friendly application status
-        application.appStatus = this.getLongStatusString(application.appStatusCode);
+          // application status code
+          application.appStatusCode = this.getStatusCode(application.status);
 
-        // derive retire date
-        if (application.statusHistoryEffectiveDate && [this.DECISION_APPROVED, this.DECISION_NOT_APPROVED, this.ABANDONED].includes(application.appStatusCode)) {
-          application['retireDate'] = moment(application.statusHistoryEffectiveDate).endOf('day').add(6, 'months');
-        }
+          // user-friendly application status
+          application.appStatus = this.getLongStatusString(application.appStatusCode);
 
-        // 7-digit CL File number for display
-        if (application.cl_file) {
-          application['clFile'] = application.cl_file.toString().padStart(7, '0');
-        }
+          // derive retire date
+          if (application.statusHistoryEffectiveDate && [this.DECISION_APPROVED, this.DECISION_NOT_APPROVED, this.ABANDONED].includes(application.appStatusCode)) {
+            application['retireDate'] = moment(application.statusHistoryEffectiveDate).endOf('day').add(6, 'months');
+          }
 
-        // derive unique applicants
-        if (application.client) {
-          const clients = application.client.split(', ');
-          application['applicants'] = _.uniq(clients).join(', ');
-        }
+          // 7-digit CL File number for display
+          if (application.cl_file) {
+            application['clFile'] = application.cl_file.toString().padStart(7, '0');
+          }
 
-        // get the documents (may be empty array)
-        promises.push(this.documentService.getAllByApplicationId(application._id)
-          .toPromise()
-          .then(documents => application.documents = documents)
-        );
+          // derive unique applicants
+          if (application.client) {
+            const clients = application.client.split(', ');
+            application['applicants'] = _.uniq(clients).join(', ');
+          }
 
-        // get the comment periods (may be empty array)
-        promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
-          .toPromise()
-          .then(periods => {
-            application.currentPeriod = this.commentPeriodService.getCurrent(periods); // may be null
+          // get the documents (may be empty array)
+          promises.push(this.documentService.getAllByApplicationId(application._id)
+            .toPromise()
+            .then(documents => application.documents = documents)
+          );
 
-            // comment period status code
-            application.cpStatusCode = this.commentPeriodService.getStatusCode(application.currentPeriod);
+          // get the comment periods (may be empty array)
+          promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
+            .toPromise()
+            .then(periods => {
+              application.currentPeriod = this.commentPeriodService.getCurrent(periods); // may be null
 
-            // derive days remaining for display
-            // use moment to handle Daylight Saving Time changes
-            if (this.commentPeriodService.isOpen(application.cpStatusCode)) {
-              const now = new Date();
-              const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-              application.currentPeriod['daysRemaining']
-                = moment(application.currentPeriod.endDate).diff(moment(today), 'days') + 1; // including today
-            }
-          })
-        );
+              // comment period status code
+              application.cpStatusCode = this.commentPeriodService.getStatusCode(application.currentPeriod);
 
-        // get the decision (may be null)
-        promises.push(this.decisionService.getByApplicationId(application._id, forceReload)
-          .toPromise()
-          .then(decision => application.decision = decision)
-        );
+              // derive days remaining for display
+              // use moment to handle Daylight Saving Time changes
+              if (this.commentPeriodService.isOpen(application.cpStatusCode)) {
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                application.currentPeriod['daysRemaining']
+                  = moment(application.currentPeriod.endDate).diff(moment(today), 'days') + 1; // including today
+              }
+            })
+          );
 
-        // get the features (may be empty array)
-        promises.push(this.featureService.getByApplicationId(application._id)
-          .toPromise()
-          .then(features => application.features = features)
-        );
+          // get the decision (may be null)
+          promises.push(this.decisionService.getByApplicationId(application._id, forceReload)
+            .toPromise()
+            .then(decision => application.decision = decision)
+          );
 
-        return Promise.all(promises).then(() => {
-          this.application = application;
-          return this.application;
-        });
-      })
-      .catch(this.api.handleError);
+          // get the features (may be empty array)
+          promises.push(this.featureService.getByApplicationId(application._id)
+            .toPromise()
+            .then(features => application.features = features)
+          );
+
+          return Promise.all(promises).then(() => {
+            this.application = application;
+            return this.application;
+          });
+        }),
+        catchError(this.api.handleError)
+      );
   }
 
   /**
@@ -375,7 +396,7 @@ export class ApplicationService {
   /**
    * Map status code to Tantalis Status(es).
    */
-  getTantalisStatus(statusCode: string): Array<string> {
+  getTantalisStatus(statusCode: string): string[] {
     if (statusCode) {
       switch (statusCode.toUpperCase()) {
         case this.ABANDONED: return ['ABANDONED', 'CANCELLED', 'OFFER NOT ACCEPTED', 'OFFER RESCINDED', 'RETURNED', 'REVERTED', 'SOLD', 'SUSPENDED', 'WITHDRAWN'];
@@ -385,7 +406,7 @@ export class ApplicationService {
         case this.DECISION_NOT_APPROVED: return ['DISALLOWED'];
       }
     }
-    return null;
+    return null as string[];
   }
 
   /**
@@ -402,7 +423,7 @@ export class ApplicationService {
         case this.UNKNOWN: return 'Unknown';
       }
     }
-    return null;
+    return null as string;
   }
 
   /**
@@ -419,7 +440,7 @@ export class ApplicationService {
         case this.UNKNOWN: return 'Unknown Status';
       }
     }
-    return null;
+    return null as string;
   }
 
   isAbandoned(statusCode: string): boolean {
@@ -469,7 +490,7 @@ export class ApplicationService {
         case this.VANCOUVER_ISLAND: return 'West Coast, Nanaimo';
       }
     }
-    return null;
+    return null as string;
   }
 
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/takeUntil';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { CommentModalComponent } from 'app/comment-modal/comment-modal.component';
 import { Application } from 'app/models/application';
@@ -36,7 +36,9 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
     // watch for URL param changes
     // NB: this must be in constructor to get initial parameters
     this.urlService.onNavEnd$
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(() => {
         // TODO: could also get 'id' from event.url
         const id = this.urlService.query('id');
@@ -62,7 +64,9 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
     this.isAppLoading = true;
     // load entire application so we get extra data (documents, decision, features)
     this.applicationService.getById(id, true)
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(
         application => {
           this.isAppLoading = false;

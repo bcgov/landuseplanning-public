@@ -2,9 +2,8 @@ import { Component, Input, HostListener, OnInit } from '@angular/core';
 // import { HttpEventType } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/forkJoin';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ConfirmComponent } from 'app/confirm/confirm.component';
 import { Comment } from 'app/models/comment';
@@ -39,7 +38,7 @@ export class CommentModalComponent implements OnInit {
   // check for unsaved changes before closing (or reloading) current tab/window
   @HostListener('window:beforeunload', ['$event'])
   public handleBeforeUnload(event: Event) {
-    console.log('handleBeforeUnload()');
+    // console.log('handleBeforeUnload()');
 
     // display browser alert if needed
     if (this.anyUnsavedData()) {
@@ -126,10 +125,12 @@ export class CommentModalComponent implements OnInit {
           // see https://stackoverflow.com/questions/37158928/angular-2-http-progress-bar
           // see https://angular.io/guide/http#listening-to-progress-events
           observables.push(this.documentService.add(formData)
-            .map((document: Document) => {
-              this.progressValue += 100 * file.size / this.totalSize;
-              return document;
-            })
+            .pipe(
+              map((document: Document) => {
+                this.progressValue += 100 * file.size / this.totalSize;
+                return document;
+              })
+            )
             // .subscribe((event: HttpEventType) => {
             //   if (event.type === HttpEventType.UploadProgress) {
             //     // TODO: do something here
@@ -139,13 +140,13 @@ export class CommentModalComponent implements OnInit {
         });
 
         // execute all uploads in parallel
-        return Observable.forkJoin(observables).toPromise();
+        return forkJoin(observables).toPromise();
       })
       .then(() => {
         this.submitting = false;
         this.currentPage++;
       })
-      .catch(error => {
+      .catch(() => {
         alert('Uh-oh, error submitting comment');
         this.submitting = false;
       });

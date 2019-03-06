@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { ApiService } from './api';
 import { CommentPeriod } from 'app/models/commentperiod';
@@ -22,35 +20,41 @@ export class CommentPeriodService {
   // get all comment periods for the specified application id
   getAllByApplicationId(appId: string): Observable<CommentPeriod[]> {
     return this.api.getPeriodsByAppId(appId)
-      .map(res => {
-        const periods = res.text() ? res.json() : [];
-        periods.forEach((obj: any, i: number) => {
-          periods[i] = new CommentPeriod(obj);
-        });
-        return periods;
-      })
-      .catch(this.api.handleError);
+      .pipe(
+        map((res: CommentPeriod[]) => {
+          if (!res || res.length === 0) {
+            return [] as CommentPeriod[];
+          }
+
+          const periods: Array<CommentPeriod> = [];
+          res.forEach(cp => {
+            periods.push(new CommentPeriod(cp));
+          });
+          return periods;
+        }),
+        catchError(this.api.handleError)
+      );
   }
 
   // get a specific comment period by its id
   getById(periodId: string, forceReload: boolean = false): Observable<CommentPeriod> {
     if (this.commentPeriod && this.commentPeriod._id === periodId && !forceReload) {
-      return Observable.of(this.commentPeriod);
+      return of(this.commentPeriod);
     }
 
     return this.api.getPeriod(periodId)
-      .map(res => {
-        const periods = res.text() ? res.json() : [];
-        // return the first (only) comment period
-        return periods.length > 0 ? new CommentPeriod(periods[0]) : null;
-      })
-      .map((period: CommentPeriod) => {
-        if (!period) { return null as CommentPeriod; }
+      .pipe(
+        map((res: CommentPeriod[])  => {
+          if (!res || res.length === 0) {
+            return null as CommentPeriod;
+          }
 
-        this.commentPeriod = period;
-        return this.commentPeriod;
-      })
-      .catch(this.api.handleError);
+          // return the first (only) comment period
+          this.commentPeriod = new CommentPeriod(res[0]);
+          return this.commentPeriod;
+        }),
+        catchError(this.api.handleError)
+      );
   }
 
   // returns first period - multiple comment periods are currently not supported
@@ -84,7 +88,7 @@ export class CommentPeriodService {
         case this.NOT_OPEN: return 'Commenting Closed';
       }
     }
-    return null;
+    return null as string;
   }
 
   isOpen(statusCode: string): boolean {

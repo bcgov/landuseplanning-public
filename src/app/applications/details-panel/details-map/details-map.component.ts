@@ -1,7 +1,6 @@
 import { Component, AfterViewInit, OnDestroy, Input } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import * as L from 'leaflet';
-import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
 

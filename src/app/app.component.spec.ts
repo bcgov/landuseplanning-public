@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
-import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from './services/api';
 import { ConfigService } from './services/config.service';
 
@@ -16,10 +15,6 @@ describe('AppComponent', () => {
 
   const configServiceStub = {
     init() {},
-  };
-
-  const cookieServiceStub = {
-    get() { return true; }
   };
 
   beforeEach(async(() => {
@@ -35,7 +30,6 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: ApiService, useValue: apiServiceStub },
-        { provide: CookieService, useValue: cookieServiceStub },
         { provide: ConfigService, useValue: configServiceStub }
       ]
     }).compileComponents();

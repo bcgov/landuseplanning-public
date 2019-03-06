@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { Application } from 'app/models/application';
@@ -110,7 +111,9 @@ export class AppListComponent implements OnInit, OnChanges, OnDestroy {
       if (!this.applications[i].isLoaded) {
         isNoneLoaded = false;
         this.applicationService.getById(this.applications[i]._id, true)
-          .takeUntil(this.ngUnsubscribe)
+          .pipe(
+            takeUntil(this.ngUnsubscribe)
+          )
           .subscribe(
             app => {
               if (app) { // safety check

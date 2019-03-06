@@ -3,8 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { NgbModule, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs';
 
 import { Application } from 'app/models/application';
 import { ApplicationService } from 'app/services/application.service';
@@ -25,13 +24,13 @@ describe('ApplicationsComponent', () => {
 
   const applicationServiceStub = {
     getCount() {
-      return Observable.of(2);
+      return of(2);
     },
 
     getAllFull() {
       const applicationOne = new Application();
       const applicationTwo = new Application();
-      return Observable.of([applicationOne, applicationTwo]);
+      return of([applicationOne, applicationTwo]);
     }
   };
 

@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs';
 
 import { DetailsMapComponent } from './details-map.component';
 import { ConfigService } from 'app/services/config.service';
@@ -39,7 +38,7 @@ describe('DetailsMapComponent', () => {
     component = fixture.componentInstance;
     component.application = new Application();
     mockFeatureService.getByApplicationId.and.returnValue(
-      Observable.of([
+      of([
         new Feature()
       ])
     );

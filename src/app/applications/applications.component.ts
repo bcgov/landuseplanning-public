@@ -2,12 +2,9 @@ import { Component, OnInit, AfterViewInit, OnDestroy, Renderer2, ViewChild } fro
 import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/concat';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/finally';
+
+import { Observable, Subject, Subscription, concat } from 'rxjs';
+import * as operators from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { AppMapComponent } from './app-map/app-map.component';
@@ -94,7 +91,9 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     // watch for URL param changes
     // NB: this must be in constructor to get initial filters
     this.urlService.onNavEnd$
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        operators.takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(event => {
         const urlTree = router.parseUrl(event.url);
         if (urlTree) {
@@ -194,20 +193,24 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isLoading = true;
       let isFirstPage = true;
 
-      // get latest coordinates
-      this.coordinates = this.appmap.getCoordinates();
-
       if (getTotalNumber) {
         // get total number using filters (but not coordinates)
         this.applicationService.getCount(this.filters, null)
-          .takeUntil(this.ngUnsubscribe)
+          .pipe(
+            operators.takeUntil(this.ngUnsubscribe)
+          )
           .subscribe(count => {
             this.totalNumber = count;
           });
       }
 
+      // get latest coordinates
+      this.coordinates = this.appmap.getCoordinates();
+
       this.applicationService.getCount(this.filters, this.coordinates)
-        .takeUntil(this.ngUnsubscribe)
+        .pipe(
+          operators.takeUntil(this.ngUnsubscribe)
+        )
         .subscribe(count => {
           // prepare 'pages' of gets
           const observables: Array<Observable<Application[]>> = [];
@@ -220,13 +223,15 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // get all observables sequentially
           const start = (new Date()).getTime(); // for profiling
-          this.observablesSub = Observable.concat(...observables)
-            .takeUntil(this.ngUnsubscribe)
-            .finally(() => {
-              this.isLoading = false;
-              this.hideSnackbar();
-              console.log('got', this.apps.length, 'apps in', (new Date()).getTime() - start, 'ms');
-            })
+          this.observablesSub = concat(...observables)
+            .pipe(
+              operators.takeUntil(this.ngUnsubscribe),
+              operators.finalize(() => {
+                this.isLoading = false;
+                this.hideSnackbar();
+                console.log('got', this.apps.length, 'apps in', (new Date()).getTime() - start, 'ms');
+              })
+            )
             .subscribe(applications => {
               if (isFirstPage) {
                 isFirstPage = false;

@@ -12,10 +12,6 @@
     "curly": true,
     "eofline": true,
     "forin": true,
-    "import-blacklist": [
-      true,
-      "rxjs"
-    ],
     "import-spacing": true,
     "indent": [
       true,
@@ -29,9 +25,10 @@
     ],
     "member-access": false,
     "member-ordering": [
-      true,
-      "static-before-instance",
-      "variables-before-functions"
+      false,
+      {
+        "order": "statics-first"
+      }
     ],
     "no-arg": true,
     "no-bitwise": true,
@@ -76,6 +73,7 @@
     ],
     "radix": true,
     "semicolon": [
+      true,
       "always"
     ],
     "triple-equals": [
@@ -92,7 +90,6 @@
         "variable-declaration": "nospace"
       }
     ],
-    "typeof-compare": true,
     "unified-signatures": true,
     "variable-name": false,
     "whitespace": [
@@ -123,9 +120,6 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true,
-    "no-access-missing-member": true,
-    "templates-use-public": true,
-    "invoke-injectable": true
+    "directive-class-suffix": true
   }
 }

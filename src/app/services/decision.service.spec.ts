@@ -1,7 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Decision } from 'app/models/decision';
-import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { of, throwError } from 'rxjs';
 import { ApiService } from './api';
 import { DecisionService } from './Decision.service';
 import { DocumentService } from './document.service';
@@ -49,7 +48,7 @@ describe('DecisionService', () => {
       describe('when no decision is returned by the Api', () => {
         it('returns a null Decision', async(() => {
           apiSpy.getDecisionByAppId.and.returnValue(
-            Observable.of({ text: () => {} })
+            of({ text: () => {} })
           );
 
           service
@@ -61,7 +60,7 @@ describe('DecisionService', () => {
       describe('when one decision is returned by the Api', () => {
         it('returns one Decision', async(() => {
           apiSpy.getDecisionByAppId.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '1' }]
             })
@@ -70,7 +69,7 @@ describe('DecisionService', () => {
           documentServiceSpy.getAllByDecisionId.and.callFake(
             (decisionId: String) => {
               expect(decisionId).toEqual('1');
-              return Observable.of([new Document({ _id: '11' })]);
+              return of([new Document({ _id: '11' })]);
             }
           );
 
@@ -88,15 +87,15 @@ describe('DecisionService', () => {
       describe('when multiple decisions are returned by the Api', () => {
         it('returns only the first Decision', async(() => {
           apiSpy.getDecisionByAppId.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '2' }, { _id: '3' }, { _id: '4' }]
             })
           );
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
-            Observable.of([new Document({ _id: '22' })]),
-            Observable.throw(
+            of([new Document({ _id: '22' })]),
+            throwError(
               Error(
                 // TODO handle this forced error better.  Self invoking fail() function?  Force res.text() to throw error instead?
                 'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
@@ -120,8 +119,8 @@ describe('DecisionService', () => {
       describe('when a decision is cached', () => {
         beforeEach(async(() => {
           documentServiceSpy.getAllByDecisionId.and.returnValues(
-            Observable.of([new Document({ _id: '33' })]),
-            Observable.throw(
+            of([new Document({ _id: '33' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
               )
@@ -129,11 +128,11 @@ describe('DecisionService', () => {
           );
 
           apiSpy.getDecisionByAppId.and.returnValues(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '3', _application: '31' }]
             }),
-            Observable.throw(
+            throwError(
               Error(
                 'Was not expecting ApiService.getDecisionByAppId to be called more than once.'
               )
@@ -161,15 +160,15 @@ describe('DecisionService', () => {
       describe('when no decision is cached', () => {
         it('calls the api to fetch a decision', async(() => {
           apiSpy.getDecisionByAppId.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '4', _application: '41' }]
             })
           );
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
-            Observable.of([new Document({ _id: '44' })]),
-            Observable.throw(
+            of([new Document({ _id: '44' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
               )
@@ -192,7 +191,7 @@ describe('DecisionService', () => {
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
         apiSpy.getDecisionByAppId.and.returnValue(
-          Observable.of({
+          of({
             text: () => {
               throw Error('someError');
             }
@@ -200,7 +199,7 @@ describe('DecisionService', () => {
         );
         apiSpy.handleError.and.callFake(error => {
           expect(error).toEqual(Error('someError'));
-          return Observable.throw(Error('someRethrownError'));
+          return throwError(Error('someRethrownError'));
         });
 
         service.getByApplicationId('1').subscribe(
@@ -228,7 +227,7 @@ describe('DecisionService', () => {
     describe('when forceReload is set to true', () => {
       describe('when no decision is returned by the Api', () => {
         it('returns a null Decision', async(() => {
-          apiSpy.getDecision.and.returnValue(Observable.of({ text: () => {} }));
+          apiSpy.getDecision.and.returnValue(of({ text: () => {} }));
 
           service
             .getById('1', true)
@@ -239,7 +238,7 @@ describe('DecisionService', () => {
       describe('when one decision is returned by the Api', () => {
         it('returns one Decision', async(() => {
           apiSpy.getDecision.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '1' }]
             })
@@ -248,7 +247,7 @@ describe('DecisionService', () => {
           documentServiceSpy.getAllByDecisionId.and.callFake(
             (decisionId: String) => {
               expect(decisionId).toEqual('1');
-              return Observable.of([new Document({ _id: '11' })]);
+              return of([new Document({ _id: '11' })]);
             }
           );
 
@@ -266,15 +265,15 @@ describe('DecisionService', () => {
       describe('when multiple decisions are returned by the Api', () => {
         it('returns only the first Decision', async(() => {
           apiSpy.getDecision.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '4' }, { _id: '5' }, { _id: '6' }]
             })
           );
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
-            Observable.of([new Document({ _id: '44' })]),
-            Observable.throw(
+            of([new Document({ _id: '44' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
               )
@@ -297,8 +296,8 @@ describe('DecisionService', () => {
       describe('when a decision is cached', () => {
         beforeEach(async(() => {
           documentServiceSpy.getAllByDecisionId.and.returnValues(
-            Observable.of([new Document({ _id: '55' })]),
-            Observable.throw(
+            of([new Document({ _id: '55' })]),
+            throwError(
               new Error(
                 'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
               )
@@ -306,11 +305,11 @@ describe('DecisionService', () => {
           );
 
           apiSpy.getDecision.and.returnValues(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '5', _application: '51' }]
             }),
-            Observable.throw(
+            throwError(
               new Error(
                 'Was not expecting ApiService.getDecision to be called more than once.'
               )
@@ -338,15 +337,15 @@ describe('DecisionService', () => {
       describe('when no decision is cached', () => {
         it('calls the api to fetch a decision', async(() => {
           apiSpy.getDecision.and.returnValue(
-            Observable.of({
+            of({
               text: () => 'notNull',
               json: () => [{ _id: '7', _application: '71' }]
             })
           );
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
-            Observable.of([new Document({ _id: '77' })]),
-            Observable.throw(
+            of([new Document({ _id: '77' })]),
+            throwError(
               Error(
                 'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
               )
@@ -369,7 +368,7 @@ describe('DecisionService', () => {
     describe('when an exception is thrown', () => {
       it('ApiService.handleError is called and the error is re-thrown', async(() => {
         apiSpy.getDecision.and.returnValue(
-          Observable.of({
+          of({
             text: () => {
               throw Error('someError');
             }
@@ -377,7 +376,7 @@ describe('DecisionService', () => {
         );
         apiSpy.handleError.and.callFake(error => {
           expect(error).toEqual(Error('someError'));
-          return Observable.throw(Error('someRethrownError'));
+          return throwError(Error('someRethrownError'));
         });
 
         service.getById('1').subscribe(

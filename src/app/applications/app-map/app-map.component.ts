@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import 'leaflet';
 import 'leaflet.markercluster';
 import * as _ from 'lodash';
@@ -60,7 +61,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
     iconCreateFunction: this.clusterCreate
   });
-  private oldZoom: number = null;
+  // private oldZoom: number = null;
   private isMapReady = false;
   private doNotify = true; // whether to emit notification
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -77,7 +78,9 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     private resolver: ComponentFactoryResolver
   ) {
     this.urlService.onNavEnd$
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(() => {
         // FUTURE
         // // try to load new map state
@@ -178,7 +181,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     // map state change events
     this.map.on('zoomstart', function () {
       // console.log('zoomstart');
-      this.oldZoom = this.map.getZoom();
+      // this.oldZoom = this.map.getZoom();
     }, this);
 
     // this.map.on('movestart', function () {
@@ -349,7 +352,7 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
    */
   public getCoordinates(): string {
     let bounds: L.LatLngBounds;
-    if (this.elementRef.nativeElement.offsetParent) {
+    if (this.isMapReady && this.elementRef.nativeElement.offsetParent) {
       // actual bounds
       bounds = this.map.getBounds();
     } else {

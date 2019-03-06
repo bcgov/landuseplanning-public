@@ -9,7 +9,7 @@ import { VarDirective } from './ng-var.directive';
 class TestVarComponent {}
 
 xdescribe('VarDirective', () => {
-  let component: TestVarComponent;
+  // let component: TestVarComponent;
   // let directive: VarDirective;
   let fixture: ComponentFixture<TestVarComponent>;
 
@@ -20,7 +20,7 @@ xdescribe('VarDirective', () => {
     });
 
     fixture = TestBed.createComponent(TestVarComponent);
-    component = fixture.componentInstance;
+    // component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
