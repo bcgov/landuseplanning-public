@@ -312,7 +312,7 @@ export class ApiService {
     return this.http.head(`${this.apiPath}/${queryString}`);
   }
 
-  getCommentsByPeriodId(pageNum: number, pageSize: number, getCount: string, periodId: string) {
+  getCommentsByPeriodId(pageNum: number, pageSize: number, getCount: boolean, periodId: string) {
     const fields = [
       'author',
       'comment',

@@ -68,24 +68,6 @@ export class CommentPeriodService {
         this.commentPeriod = period;
         return this.commentPeriod;
       })
-      .mergeMap(commentPeriod => {
-        if (!commentPeriod) { return Observable.of(null as CommentPeriod); }
-
-        const promises: Array<Promise<any>> = [];
-
-        // Get comment count from head
-        promises.push(this.commentService.getCountById(commentPeriod._id)
-          .toPromise()
-          .then(count => {
-            commentPeriod.totalComments = count;
-          })
-        );
-
-        return Promise.all(promises).then(() => {
-          this.commentPeriod = commentPeriod;
-          return this.commentPeriod;
-        });
-      })
       .catch(this.api.handleError);
   }
 

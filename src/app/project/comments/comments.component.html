@@ -18,7 +18,7 @@
         <div *ngIf="comments?.length === 0">
             <em>No comments have been received for this project at this time.</em>
         </div>
-        <ng-template ngFor let-item [ngForOf]="comments | paginate: { id: 'server', itemsPerPage: commentPeriod.pageSize, currentPage: commentPeriod.currentPage, totalItems: totalComments }">
+        <ng-template ngFor let-item [ngForOf]="comments | paginate: { id: 'server', itemsPerPage: this.pageSize, currentPage: this.currentPage, totalItems: totalComments }">
             <div class="list-group-item flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <div class="comment__author">
