@@ -90,24 +90,6 @@ export class ProjectService {
         // return the first (only) project
         return projects.length > 0 ? new Project(projects[0]) : null;
       })
-      .mergeMap(project => {
-        if (!project) { return Observable.of(null as Project); }
-
-        const promises: Array<Promise<any>> = [];
-
-        // Get the current comment period
-        promises.push(this.commentPeriodService.getAllByProjectId(project._id)
-          .toPromise()
-          .then(periods => {
-            project.commentPeriods = periods;
-          })
-        );
-
-        return Promise.all(promises).then(() => {
-          this.project = project;
-          return this.project;
-        });
-      })
       .catch(this.api.handleError);
   }
 }
