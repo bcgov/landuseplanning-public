@@ -4,9 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProjectComponent } from './project.component';
 import { ProjectResolver } from './project-resolver.service';
 import { ProjectRoutes } from './project-routes';
-import { CommentsComponent } from 'app/comments/comments.component';
-import { CommentsResolver } from 'app/comments/comments-resolver.service';
-import { CommentsModule } from 'app/comments/comments.module';
+import { CommentsComponent } from 'app/project/comments/comments.component';
+import { CommentsResolver } from 'app/project/comments/comments-resolver.service';
+import { CommentsModule } from 'app/project/comments/comments.module';
 
 const routes: Routes = [
   {
