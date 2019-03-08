@@ -1,7 +1,3 @@
-import { CommentPeriod } from './commentperiod';
-import { Decision } from './decision';
-import { Document } from './document';
-import { Feature } from './feature';
 
 export class Project {
   // the following are retrieved from the API
@@ -31,7 +27,6 @@ export class Project {
   CEAALink: String;
   code: String;
   commodity: String;
-  commentPeriods: CommentPeriod[];
   currentPhaseName: string;
   dateAdded: String;
   dateUpdated: String;
@@ -125,10 +120,6 @@ export class Project {
       obj.centroid.forEach(num => {
         this.centroid.push(num);
       });
-    }
-
-    if (obj && obj.currentPeriod) {
-      this.commentPeriods.push(obj.currentPeriod);
     }
 
     // if (obj && obj.decision) {
