@@ -12,45 +12,6 @@
     }
 }
 
-.header-section {
-    margin-left: 20px;
-}
-
-.page-controls {
-    text-align: center;
-}
-
-.list-group-item {
-    margin-bottom: 1rem;
-    border: 1px #eee solid;
-    border-radius: 5px;
-    background-color: #f7f7f7;
-    &:nth-child(odd) {
-        // border: #f0f0f0 2px solid;
-        // background-color: #f7f8fa; // #f0f0f0;
-    }
-    &:nth-child(even) {
-        // border: #e7e7e7 2px solid;
-        // background-color: #f4f4f4; // #e7e7e7;
-    }
-    .comment__author {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: large;
-        color: $primary;
-    }
-    .comment__date {
-        padding-left: 0.25rem;
-    }
-    .comment__text {
-        margin-bottom: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: small;
-    }
-}
-
 .comments {
     background-color: #fff;
 
@@ -63,18 +24,5 @@
         border-radius: 5px;
         color: #fff;
         background-color: #003366;
-    }
-    
-    .comment-section {
-        overflow-y: auto;
-        font-size: medium;
-    }
-}
-
-@media (max-width: 991px) {
-    .comments {
-        main {
-            margin-bottom: 1rem;
-        }
     }
 }

@@ -10,7 +10,7 @@ import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { Constants } from 'app/utils/constants';
+import { Constants } from 'app/shared/utils/constants';
 import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';

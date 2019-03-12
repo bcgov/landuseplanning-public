@@ -1,0 +1,8 @@
+.list-group-item {
+
+    .show-less {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

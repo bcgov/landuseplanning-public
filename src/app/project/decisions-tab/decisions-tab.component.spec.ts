@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DecisionsTabComponent } from './decisions-tab.component';
-import { NewlinesPipe } from 'app/pipes/newlines.pipe';
-import { VarDirective } from 'app/utils/ng-var.directive';
+import { NewlinesPipe } from 'app/shared/pipes/newlines.pipe';
+import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'app/services/api';
 import { ProjectService } from 'app/services/project.service';

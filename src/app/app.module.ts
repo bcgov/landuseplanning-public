@@ -11,7 +11,7 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 
 // modules
-import { SharedModule } from 'app/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { ProjectModule } from 'app/project/project.module';
 import { ProjectsModule } from 'app/projects/projects.module';
 import { AppRoutingModule } from 'app/app-routing.module';
@@ -42,7 +42,6 @@ import { ConfigService } from 'app/services/config.service';
     FormsModule,
     HttpModule,
     NgbModule.forRoot(),
-    NgxPaginationModule,
     Ng2PageScrollModule.forRoot(),
     BootstrapModalModule,
     SharedModule,
@@ -55,7 +54,7 @@ import { ConfigService } from 'app/services/config.service';
     HomeComponent,
     ContactComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
   ],
   providers: [
     CookieService,
