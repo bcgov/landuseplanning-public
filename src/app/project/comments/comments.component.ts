@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { CommentPeriod } from 'app/models/commentperiod';
+import { Comment } from 'app/models/comment';
 
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { DialogService } from 'ng2-bootstrap-modal';
 
 @Component({
   selector: 'app-comments',
@@ -27,9 +29,12 @@ export class CommentsComponent implements OnInit {
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private commentPeriodId = '';
 
+  public listType = 'comments';
+
   constructor(
     private route: ActivatedRoute,
     private commentService: CommentService,
+    private dialogService: DialogService,
     private router: Router,
     public commentPeriodService: CommentPeriodService
   ) { }
@@ -65,7 +70,7 @@ export class CommentsComponent implements OnInit {
       );
   }
 
-  getPaginatedComments(pageNumber) {
+  public getPaginatedComments(pageNumber) {
     // Go to top of page after clicking to a different page.
     window.scrollTo(0, 0);
 
@@ -87,26 +92,4 @@ export class CommentsComponent implements OnInit {
     currentUrl += `?currentPage=${this.currentPage}&pageSize=${this.pageSize}`;
     window.history.replaceState({}, '', currentUrl);
   }
-
-  // private viewDetails(commentId: string) {
-  //   this.dialogService.addDialog(ViewCommentComponent,
-  //     {
-  //       commentId: commentId
-  //     }, {
-  //       // index: 0,
-  //       // autoCloseTimeout: 10000,
-  //       // closeByClickingOutside: true,
-  //       backdropColor: 'rgba(0, 0, 0, 0.5)'
-  //     })
-  //     .takeUntil(this.ngUnsubscribe)
-  //     .subscribe((isConfirmed) => {
-  //       // // we get dialog result
-  //       // if (isConfirmed) {
-  //       //   // TODO: reload page?
-  //       //   console.log('saved');
-  //       // } else {
-  //       //   console.log('canceled');
-  //       // }
-  //     });
-  // }
 }

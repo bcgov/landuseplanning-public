@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProjlistListComponent } from './projlist-list.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { VarDirective } from 'app/utils/ng-var.directive';
+import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { ConfigService } from 'app/services/config.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 

@@ -6,7 +6,6 @@ import { ProjectResolver } from './project-resolver.service';
 import { ProjectRoutes } from './project-routes';
 import { CommentsComponent } from 'app/project/comments/comments.component';
 import { CommentsResolver } from 'app/project/comments/comments-resolver.service';
-import { CommentsModule } from 'app/project/comments/comments.module';
 
 const routes: Routes = [
   {
@@ -38,8 +37,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [
-    RouterModule,
-    CommentsModule
+    RouterModule
   ],
   providers: [
     ProjectResolver,

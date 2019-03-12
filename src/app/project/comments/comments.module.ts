@@ -6,11 +6,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { RouterModule } from '@angular/router';
 
 // modules
-import { SharedModule } from 'app/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 // components
 import { CommentsComponent } from './comments.component';
-import { ViewCommentComponent } from './view-comment/view-comment.component';
 import { AddCommentComponent } from './add-comment/add-comment.component';
 
 
@@ -21,16 +20,14 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
     NgbModule.forRoot(),
     NgxPaginationModule,
     RouterModule,
-    SharedModule,
+    SharedModule
   ],
   declarations: [
     AddCommentComponent,
-    CommentsComponent,
-    ViewCommentComponent
+    CommentsComponent
   ],
   entryComponents: [
-    AddCommentComponent,
-    ViewCommentComponent,
+    AddCommentComponent
   ]
 })
 export class CommentsModule { }
