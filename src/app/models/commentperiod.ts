@@ -112,7 +112,7 @@ export class CommentPeriod {
       const days = moment(obj.dateCompleted).diff(moment(today), 'days') + 1;
       this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
       if (days <= 0) {
-        this.commentPeriodStatus = 'Completed';
+        this.commentPeriodStatus = 'Not in progress';
       } else {
         this.commentPeriodStatus = 'In progress';
       }
