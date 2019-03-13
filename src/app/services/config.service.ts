@@ -7,10 +7,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ConfigService {
-
   private _baseLayerName = 'World Topographic'; // NB: must match a valid base layer name
 
-  constructor() { }
+  constructor() {}
 
   // called by app constructor
   public init() {
@@ -22,7 +21,10 @@ export class ConfigService {
     // FUTURE: save settings to window.localStorage ?
   }
 
-  get baseLayerName(): string { return this._baseLayerName; }
-  set baseLayerName(val: string) { this._baseLayerName = val; }
-
+  get baseLayerName(): string {
+    return this._baseLayerName;
+  }
+  set baseLayerName(val: string) {
+    this._baseLayerName = val;
+  }
 }

@@ -12,17 +12,11 @@ describe('DecisionService', () => {
       providers: [
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getDecisionByAppId',
-            'getDecision',
-            'handleError'
-          ])
+          useValue: jasmine.createSpyObj('ApiService', ['getDecisionByAppId', 'getDecision', 'handleError'])
         },
         {
           provide: DocumentService,
-          useValue: jasmine.createSpyObj('DocumentService', [
-            'getAllByDecisionId'
-          ])
+          useValue: jasmine.createSpyObj('DocumentService', ['getAllByDecisionId'])
         },
         DecisionService
       ]
@@ -47,13 +41,9 @@ describe('DecisionService', () => {
     describe('when forceReload is set to true', () => {
       describe('when no decision is returned by the Api', () => {
         it('returns a null Decision', async(() => {
-          apiSpy.getDecisionByAppId.and.returnValue(
-            of({ text: () => {} })
-          );
+          apiSpy.getDecisionByAppId.and.returnValue(of({ text: () => {} }));
 
-          service
-            .getByApplicationId('1', true)
-            .subscribe(result => expect(result).toEqual(null as Decision));
+          service.getByApplicationId('1', true).subscribe(result => expect(result).toEqual(null as Decision));
         }));
       });
 
@@ -66,12 +56,10 @@ describe('DecisionService', () => {
             })
           );
 
-          documentServiceSpy.getAllByDecisionId.and.callFake(
-            (decisionId: String) => {
-              expect(decisionId).toEqual('1');
-              return of([new Document({ _id: '11' })]);
-            }
-          );
+          documentServiceSpy.getAllByDecisionId.and.callFake((decisionId: string) => {
+            expect(decisionId).toEqual('1');
+            return of([new Document({ _id: '11' })]);
+          });
 
           service.getByApplicationId('1', true).subscribe(result =>
             expect(result).toEqual(
@@ -120,11 +108,7 @@ describe('DecisionService', () => {
         beforeEach(async(() => {
           documentServiceSpy.getAllByDecisionId.and.returnValues(
             of([new Document({ _id: '33' })]),
-            throwError(
-              Error(
-                'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
-              )
-            )
+            throwError(Error('Was not expecting DocumentService.getAllByDecisionId to be called more than once.'))
           );
 
           apiSpy.getDecisionByAppId.and.returnValues(
@@ -132,11 +116,7 @@ describe('DecisionService', () => {
               text: () => 'notNull',
               json: () => [{ _id: '3', _application: '31' }]
             }),
-            throwError(
-              Error(
-                'Was not expecting ApiService.getDecisionByAppId to be called more than once.'
-              )
-            )
+            throwError(Error('Was not expecting ApiService.getDecisionByAppId to be called more than once.'))
           );
 
           // call once to set the cache
@@ -168,11 +148,7 @@ describe('DecisionService', () => {
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
             of([new Document({ _id: '44' })]),
-            throwError(
-              Error(
-                'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
-              )
-            )
+            throwError(Error('Was not expecting DocumentService.getAllByDecisionId to be called more than once.'))
           );
 
           service.getByApplicationId('41').subscribe(result => {
@@ -229,9 +205,7 @@ describe('DecisionService', () => {
         it('returns a null Decision', async(() => {
           apiSpy.getDecision.and.returnValue(of({ text: () => {} }));
 
-          service
-            .getById('1', true)
-            .subscribe(result => expect(result).toEqual(null as Decision));
+          service.getById('1', true).subscribe(result => expect(result).toEqual(null as Decision));
         }));
       });
 
@@ -244,12 +218,10 @@ describe('DecisionService', () => {
             })
           );
 
-          documentServiceSpy.getAllByDecisionId.and.callFake(
-            (decisionId: String) => {
-              expect(decisionId).toEqual('1');
-              return of([new Document({ _id: '11' })]);
-            }
-          );
+          documentServiceSpy.getAllByDecisionId.and.callFake((decisionId: string) => {
+            expect(decisionId).toEqual('1');
+            return of([new Document({ _id: '11' })]);
+          });
 
           service.getById('1', true).subscribe(result =>
             expect(result).toEqual(
@@ -273,11 +245,7 @@ describe('DecisionService', () => {
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
             of([new Document({ _id: '44' })]),
-            throwError(
-              Error(
-                'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
-              )
-            )
+            throwError(Error('Was not expecting DocumentService.getAllByDecisionId to be called more than once.'))
           );
 
           service.getById('4', true).subscribe(result => {
@@ -297,11 +265,7 @@ describe('DecisionService', () => {
         beforeEach(async(() => {
           documentServiceSpy.getAllByDecisionId.and.returnValues(
             of([new Document({ _id: '55' })]),
-            throwError(
-              new Error(
-                'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
-              )
-            )
+            throwError(new Error('Was not expecting DocumentService.getAllByDecisionId to be called more than once.'))
           );
 
           apiSpy.getDecision.and.returnValues(
@@ -309,11 +273,7 @@ describe('DecisionService', () => {
               text: () => 'notNull',
               json: () => [{ _id: '5', _application: '51' }]
             }),
-            throwError(
-              new Error(
-                'Was not expecting ApiService.getDecision to be called more than once.'
-              )
-            )
+            throwError(new Error('Was not expecting ApiService.getDecision to be called more than once.'))
           );
 
           // call once to set the cache
@@ -345,11 +305,7 @@ describe('DecisionService', () => {
 
           documentServiceSpy.getAllByDecisionId.and.returnValues(
             of([new Document({ _id: '77' })]),
-            throwError(
-              Error(
-                'Was not expecting DocumentService.getAllByDecisionId to be called more than once.'
-              )
-            )
+            throwError(Error('Was not expecting DocumentService.getAllByDecisionId to be called more than once.'))
           );
 
           service.getById('7').subscribe(result => {

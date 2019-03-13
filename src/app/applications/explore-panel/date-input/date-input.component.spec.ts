@@ -12,8 +12,7 @@ describe('DateInputComponent', () => {
       declarations: [DateInputComponent],
       imports: [NgbModule, FormsModule],
       providers: [NgbCalendar, NgbDateParserFormatter]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

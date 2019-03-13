@@ -7,7 +7,6 @@ import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class CommentPeriodService {
-
   // statuses / query param options
   // use helpers to compare against these
   readonly OPEN = 'OP';
@@ -15,25 +14,24 @@ export class CommentPeriodService {
 
   private commentPeriod: CommentPeriod = null; // for caching
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
   // get all comment periods for the specified application id
   getAllByApplicationId(appId: string): Observable<CommentPeriod[]> {
-    return this.api.getPeriodsByAppId(appId)
-      .pipe(
-        map((res: CommentPeriod[]) => {
-          if (!res || res.length === 0) {
-            return [] as CommentPeriod[];
-          }
+    return this.api.getPeriodsByAppId(appId).pipe(
+      map((res: CommentPeriod[]) => {
+        if (!res || res.length === 0) {
+          return [] as CommentPeriod[];
+        }
 
-          const periods: Array<CommentPeriod> = [];
-          res.forEach(cp => {
-            periods.push(new CommentPeriod(cp));
-          });
-          return periods;
-        }),
-        catchError(this.api.handleError)
-      );
+        const periods: CommentPeriod[] = [];
+        res.forEach(cp => {
+          periods.push(new CommentPeriod(cp));
+        });
+        return periods;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // get a specific comment period by its id
@@ -42,24 +40,23 @@ export class CommentPeriodService {
       return of(this.commentPeriod);
     }
 
-    return this.api.getPeriod(periodId)
-      .pipe(
-        map((res: CommentPeriod[])  => {
-          if (!res || res.length === 0) {
-            return null as CommentPeriod;
-          }
+    return this.api.getPeriod(periodId).pipe(
+      map((res: CommentPeriod[]) => {
+        if (!res || res.length === 0) {
+          return null as CommentPeriod;
+        }
 
-          // return the first (only) comment period
-          this.commentPeriod = new CommentPeriod(res[0]);
-          return this.commentPeriod;
-        }),
-        catchError(this.api.handleError)
-      );
+        // return the first (only) comment period
+        this.commentPeriod = new CommentPeriod(res[0]);
+        return this.commentPeriod;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // returns first period - multiple comment periods are currently not supported
   getCurrent(periods: CommentPeriod[]): CommentPeriod {
-    return (periods.length > 0) ? periods[0] : null;
+    return periods.length > 0 ? periods[0] : null;
   }
 
   /**
@@ -84,19 +81,20 @@ export class CommentPeriodService {
   getStatusString(statusCode: string): string {
     if (statusCode) {
       switch (statusCode) {
-        case this.OPEN: return 'Commenting Open';
-        case this.NOT_OPEN: return 'Commenting Closed';
+        case this.OPEN:
+          return 'Commenting Open';
+        case this.NOT_OPEN:
+          return 'Commenting Closed';
       }
     }
     return null as string;
   }
 
   isOpen(statusCode: string): boolean {
-    return (statusCode === this.OPEN);
+    return statusCode === this.OPEN;
   }
 
   isNotOpen(statusCode: string): boolean {
-    return (statusCode === this.NOT_OPEN);
+    return statusCode === this.NOT_OPEN;
   }
-
 }

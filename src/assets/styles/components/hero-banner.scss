@@ -65,6 +65,7 @@
 
     + span {
       @include flex(0 0 auto);
+
       padding: 0.65rem 0.4rem;
       vertical-align: middle;
     }
@@ -125,7 +126,7 @@
 }
 
 @media (min-width: 1200px) {
-  .hero-banner{
+  .hero-banner {
     background-size: 120%;
   }
 }

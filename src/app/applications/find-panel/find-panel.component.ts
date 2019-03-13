@@ -11,9 +11,7 @@ import { UrlService } from 'app/services/url.service';
   templateUrl: './find-panel.component.html',
   styleUrls: ['./find-panel.component.scss']
 })
-
 export class FindPanelComponent implements OnInit, OnDestroy {
-
   @Output() updateFilters = new EventEmitter(); // to applications component
   @Output() hideSidePanel = new EventEmitter(); // to applications component // used in template
   @Output() resetView = new EventEmitter(); // to applications component
@@ -27,27 +25,19 @@ export class FindPanelComponent implements OnInit, OnDestroy {
   public clidDtidFilter: number = null;
   public _clidDtidFilter: number = null; // temporary filters for Cancel feature
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private urlService: UrlService
-  ) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private urlService: UrlService) {
     // watch for URL param changes
     // NB: this must be in constructor to get initial parameters
-    this.urlService.onNavEnd$
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(() => {
-        // get initial or updated parameters
-        // TODO: could also get params from event.url
-        const hasChanges = this.getParameters();
+    this.urlService.onNavEnd$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      // get initial or updated parameters
+      // TODO: could also get params from event.url
+      const hasChanges = this.getParameters();
 
-        // notify applications component that we have new filters
-        if (hasChanges) {
-          this.updateFilters.emit(this.getFilters());
-        }
-      });
+      // notify applications component that we have new filters
+      if (hasChanges) {
+        this.updateFilters.emit(this.getFilters());
+      }
+    });
   }
 
   private getParameters(): boolean {
@@ -56,8 +46,8 @@ export class FindPanelComponent implements OnInit, OnDestroy {
 
     // const hasFilters = !!this.applicantFilter || !!this.clidDtidFilter;
 
-    const hasChanges = !_.isEqual(this._applicantFilter, this.applicantFilter)
-      || !_.isEqual(this._clidDtidFilter, this.clidDtidFilter);
+    const hasChanges =
+      !_.isEqual(this._applicantFilter, this.applicantFilter) || !_.isEqual(this._clidDtidFilter, this.clidDtidFilter);
 
     // copy all data from actual to temporary properties
     this._applicantFilter = this.applicantFilter;
@@ -66,7 +56,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
     return hasChanges;
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {}
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -75,7 +65,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
 
   public getFilters(): object {
     return {
-      applicant: this.applicantFilter && this.applicantFilter.trim() || null, // convert empty string to null
+      applicant: (this.applicantFilter && this.applicantFilter.trim()) || null, // convert empty string to null
       clidDtid: this.clidDtidFilter ? this.clidDtidFilter.toString() : null
     };
   }
@@ -92,7 +82,9 @@ export class FindPanelComponent implements OnInit, OnDestroy {
     this._saveParameters();
 
     // notify applications component that we have new filters
-    if (doNotify) { this.updateFilters.emit(this.getFilters()); }
+    if (doNotify) {
+      this.updateFilters.emit(this.getFilters());
+    }
   }
 
   private _saveParameters() {
@@ -114,7 +106,7 @@ export class FindPanelComponent implements OnInit, OnDestroy {
   public filterCount(): number {
     const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
     const applicantFilterCount = applicantFilter ? 1 : 0;
-    const clidDtidFilterCount = (this.clidDtidFilter && this.clidDtidFilter.toString().length > 0) ? 1 : 0;
+    const clidDtidFilterCount = this.clidDtidFilter && this.clidDtidFilter.toString().length > 0 ? 1 : 0;
 
     return applicantFilterCount + clidDtidFilterCount;
   }
@@ -124,5 +116,4 @@ export class FindPanelComponent implements OnInit, OnDestroy {
     // hard-navigate to remove any other URL parameters
     this.router.navigate([], { relativeTo: this.activatedRoute, fragment: 'explore' });
   }
-
 }

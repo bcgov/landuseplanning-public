@@ -8,19 +8,14 @@ describe('AppListComponent', () => {
   let component: AppListComponent;
   let fixture: ComponentFixture<AppListComponent>;
   const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getApplications']);
-  const commentPeriodService = new CommentPeriodService(
-    apiServiceSpy
-  );
+  const commentPeriodService = new CommentPeriodService(apiServiceSpy);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AppListComponent, VarDirective],
       imports: [RouterTestingModule],
-      providers: [
-        { provide: CommentPeriodService, useValue: commentPeriodService },
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: CommentPeriodService, useValue: commentPeriodService }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

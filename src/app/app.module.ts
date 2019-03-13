@@ -75,13 +75,8 @@ import { UrlService } from 'app/services/url.service';
     FeatureService,
     UrlService
   ],
-  entryComponents: [
-    CommentModalComponent,
-    ConfirmComponent
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+  entryComponents: [CommentModalComponent, ConfirmComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
 
@@ -93,7 +88,8 @@ export function easingLogic(t: number, b: number, c: number, d: number): number 
   if (t === d) {
     return b + c;
   }
-  if ((t /= d / 2) < 1) {
+  t /= d / 2;
+  if (t < 1) {
     return (c / 2) * Math.pow(2, 8 * (t - 1)) + b;
   }
   return (c / 2) * (-Math.pow(2, -8 * --t) + 2) + b;

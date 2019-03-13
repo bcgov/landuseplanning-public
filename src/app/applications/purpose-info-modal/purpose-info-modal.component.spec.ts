@@ -8,9 +8,8 @@ describe('PurposeInfoModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PurposeInfoModalComponent ]
-    })
-    .compileComponents();
+      declarations: [PurposeInfoModalComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

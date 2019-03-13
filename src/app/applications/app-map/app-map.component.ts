@@ -1,5 +1,17 @@
-import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnChanges,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+  ApplicationRef,
+  ElementRef,
+  SimpleChanges,
+  Injector,
+  ComponentFactoryResolver
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import 'leaflet';
@@ -13,6 +25,7 @@ import { UrlService } from 'app/services/url.service';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 declare module 'leaflet' {
+  // tslint:disable-next-line:interface-name
   export interface Marker<P = any> {
     dispositionId: number;
   }
@@ -34,7 +47,7 @@ const markerIconLg = L.icon({
   // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
   // iconRetinaUrl: 'assets/images/marker-icon-yellow-lg.svg',
   iconSize: [48, 48],
-  iconAnchor: [24, 48],
+  iconAnchor: [24, 48]
   // popupAnchor: [1, -34], // TODO: update, if needed
   // tooltipAnchor: [16, -28] // TODO: update, if needed
 });
@@ -44,17 +57,15 @@ const markerIconLg = L.icon({
   templateUrl: './app-map.component.html',
   styleUrls: ['./app-map.component.scss']
 })
-
 export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
-
   @Input() isLoading: boolean; // from applications component
-  @Input() applications: Array<Application> = []; // from applications component
-  @Input() isMapVisible: Array<Application> = []; // from applications component
+  @Input() applications: Application[] = []; // from applications component
+  @Input() isMapVisible: Application[] = []; // from applications component
   @Output() toggleCurrentApp = new EventEmitter(); // to applications component
   @Output() updateCoordinates = new EventEmitter(); // to applications component
 
   private map: L.Map = null;
-  private markerList: Array<L.Marker> = []; // list of markers
+  private markerList: L.Marker[] = []; // list of markers
   private currentMarker: L.Marker = null; // for removing previous marker
   private markerClusterGroup = L.markerClusterGroup({
     showCoverageOnHover: false,
@@ -77,28 +88,23 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     private injector: Injector,
     private resolver: ComponentFactoryResolver
   ) {
-    this.urlService.onNavEnd$
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(() => {
-        // FUTURE
-        // // try to load new map state
-        // if (this.isMapReady) {
-        //   // TODO: could also get params from event.url
-        //   const lat = this.urlService.query('lat');
-        //   const lng = this.urlService.query('lng');
-        //   const zoom = this.urlService.query('zoom');
-
-        //   if (lat && lng && zoom) {
-        //     console.log('...updating map state');
-        //     this.map.setView(L.latLng(+lat, +lng), +zoom);
-        //   } else {
-        //     console.log('...fitting default bounds');
-        //     this.fitBounds(); // default bounds
-        //   }
-        // }
-      });
+    this.urlService.onNavEnd$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      // FUTURE
+      // // try to load new map state
+      // if (this.isMapReady) {
+      //   // TODO: could also get params from event.url
+      //   const lat = this.urlService.query('lat');
+      //   const lng = this.urlService.query('lng');
+      //   const zoom = this.urlService.query('zoom');
+      //   if (lat && lng && zoom) {
+      //     console.log('...updating map state');
+      //     this.map.setView(L.latLng(+lat, +lng), +zoom);
+      //   } else {
+      //     console.log('...fitting default bounds');
+      //     this.fitBounds(); // default bounds
+      //   }
+      // }
+    });
   }
 
   // for creating custom cluster icon
@@ -123,19 +129,17 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   // create map after view (which contains map id) is initialized
   ngAfterViewInit() {
-    const self = this; // for closure function below
-
     // custom control to reset map view
     const resetViewControl = L.Control.extend({
       options: {
         position: 'bottomright'
       },
-      onAdd: function () {
+      onAdd: () => {
         const element = L.DomUtil.create('button');
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
-        element.onclick = () => self.resetView();
+        element.onclick = () => this.resetView();
         element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
@@ -143,29 +147,49 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
         L.DomEvent.disableScrollPropagation(element);
 
         return element;
-      },
+      }
     });
 
-    const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
-      maxZoom: 10.4,
-      noWrap: true
-    });
-    const Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
-      maxZoom: 16.4,
-      noWrap: true
-    });
-    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-      maxZoom: 17.5,
-      noWrap: true
-    });
-    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      maxZoom: 16.4,
-      noWrap: true
-    });
+    const Esri_OceanBasemap = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution:
+          // tslint:disable-next-line:max-line-length
+          'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
+        maxZoom: 10.4,
+        noWrap: true
+      }
+    );
+    const Esri_NatGeoWorldMap = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution:
+          // tslint:disable-next-line:max-line-length
+          'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+        maxZoom: 16.4,
+        noWrap: true
+      }
+    );
+    const World_Topo_Map = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution:
+          // tslint:disable-next-line:max-line-length
+          'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
+        maxZoom: 17.5,
+        noWrap: true
+      }
+    );
+    const World_Imagery = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution:
+          // tslint:disable-next-line:max-line-length
+          'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 16.4,
+        noWrap: true
+      }
+    );
 
     this.map = L.map('map', {
       zoomControl: false, // will be added manually below
@@ -176,13 +200,17 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
 
     // identify when map has initialized with a view
-    this.map.whenReady(() => this.isMapReady = true);
+    this.map.whenReady(() => (this.isMapReady = true));
 
     // map state change events
-    this.map.on('zoomstart', function () {
-      // console.log('zoomstart');
-      // this.oldZoom = this.map.getZoom();
-    }, this);
+    this.map.on(
+      'zoomstart',
+      () => {
+        // console.log('zoomstart');
+        // this.oldZoom = this.map.getZoom();
+      },
+      this
+    );
 
     // this.map.on('movestart', function () {
     //   console.log('movestart');
@@ -202,7 +230,9 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
       // const doEmit = newZoom <= this.oldZoom; // ignore zooming in
       // this.oldZoom = newZoom;
       // if (doEmit) { this.emitCoordinates(); }
-      if (this.isMapReady && this.doNotify) { this.emitCoordinates(); }
+      if (this.isMapReady && this.doNotify) {
+        this.emitCoordinates();
+      }
       this.doNotify = true; // reset for next time
 
       // FUTURE
@@ -292,8 +322,16 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
       if (changes.applications && !changes.applications.firstChange && changes.applications.currentValue) {
         // console.log('map: got changed apps =', changes.applications);
 
-        const deletedApps = _.differenceBy(changes.applications.previousValue as Array<Application>, changes.applications.currentValue as Array<Application>, '_id');
-        const addedApps = _.differenceBy(changes.applications.currentValue as Array<Application>, changes.applications.previousValue as Array<Application>, '_id');
+        const deletedApps = _.differenceBy(
+          changes.applications.previousValue as Application[],
+          changes.applications.currentValue as Application[],
+          '_id'
+        );
+        const addedApps = _.differenceBy(
+          changes.applications.currentValue as Application[],
+          changes.applications.previousValue as Application[],
+          '_id'
+        );
         // console.log('deleted =', deletedApps);
         // console.log('added =', addedApps);
 
@@ -317,7 +355,9 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.map) { this.map.remove(); }
+    if (this.map) {
+      this.map.remove();
+    }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -379,7 +419,9 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   private fitBounds(bounds: L.LatLngBounds = null) {
     // console.log('fitting bounds');
     const fitBoundsOptions: L.FitBoundsOptions = {
-      animate: false, paddingTopLeft: [0, 100], paddingBottomRight: [0, 20]
+      animate: false,
+      paddingTopLeft: [0, 100],
+      paddingBottomRight: [0, 20]
     };
     if (bounds && bounds.isValid()) {
       this.map.fitBounds(bounds, fitBoundsOptions);
@@ -406,15 +448,17 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     // draw added apps
     addedApps.forEach(app => {
       // add marker
-      if (app.centroid.length === 2) { // safety check
+      if (app.centroid.length === 2) {
+        // safety check
         // derive unique applicants
         if (app.client) {
           const clients = app.client.split(', ');
           app['applicants'] = _.uniq(clients).join(', ');
         }
-        const title = `${app['applicants'] || 'Applicant Name Not Available'}\n`
-          + `${app.purpose || '-'} / ${app.subpurpose || '-'}\n`
-          + `${app.location || 'Location Not Available'}\n`;
+        const title =
+          `${app['applicants'] || 'Applicant Name Not Available'}\n` +
+          `${app.purpose || '-'} / ${app.subpurpose || '-'}\n` +
+          `${app.location || 'Location Not Available'}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
           .setIcon(markerIcon)
           .on('click', L.Util.bind(this.onMarkerClick, this, app));
@@ -455,7 +499,9 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
       const wasOpen = popup.isOpen();
       popup.remove();
       marker.unbindPopup();
-      if (wasOpen) { return; }
+      if (wasOpen) {
+        return;
+      }
     }
 
     const popupOptions = {
@@ -491,10 +537,13 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     // set icon on new marker
-    if (show && app) { // safety check
+    if (show && app) {
+      // safety check
       // wait for apps to finish loading
       // ref: https://basarat.gitbooks.io/typescript/docs/async-await.html
-      while (this.isLoading) { await this.delay(100); }
+      while (this.isLoading) {
+        await this.delay(100);
+      }
 
       const marker = _.find(this.markerList, { dispositionId: app.tantalisID });
       if (marker) {
@@ -516,5 +565,4 @@ export class AppMapComponent implements AfterViewInit, OnChanges, OnDestroy {
   private delay(milliseconds: number): Promise<void> {
     return new Promise<void>(resolve => setTimeout(resolve, milliseconds));
   }
-
 }

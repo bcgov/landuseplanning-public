@@ -11,20 +11,44 @@ import { Application } from 'app/models/application';
 describe('MarkerPopupComponent', () => {
   let component: MarkerPopupComponent;
   let fixture: ComponentFixture<MarkerPopupComponent>;
-  const application = new Application({_id: 'BBBB', appStatus: 'Application Under Review'});
+  const application = new Application({ _id: 'BBBB', appStatus: 'Application Under Review' });
   const stubApplicationService = {
-    getStatusCode() { return 'AC'; },
-    isAccepted() { return true; },
-    isDispGoodStanding() { return false; },
-    isOffered() { return true; },
-    isOfferAccepted() { return true; },
-    isOfferNotAccepted() { return false; },
-    isAbandoned() { return false; },
-    isAllowed() { return false; },
-    isDisallowed() { return false; },
-    isSuspended() { return false; },
-    isUnknown() { return false; },
-    isCancelled() { return false; }
+    getStatusCode() {
+      return 'AC';
+    },
+    isAccepted() {
+      return true;
+    },
+    isDispGoodStanding() {
+      return false;
+    },
+    isOffered() {
+      return true;
+    },
+    isOfferAccepted() {
+      return true;
+    },
+    isOfferNotAccepted() {
+      return false;
+    },
+    isAbandoned() {
+      return false;
+    },
+    isAllowed() {
+      return false;
+    },
+    isDisallowed() {
+      return false;
+    },
+    isSuspended() {
+      return false;
+    },
+    isUnknown() {
+      return false;
+    },
+    isCancelled() {
+      return false;
+    }
   };
 
   const stubCommentPeriodService = {
@@ -35,17 +59,13 @@ describe('MarkerPopupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MarkerPopupComponent,
-        VarDirective
-      ],
+      declarations: [MarkerPopupComponent, VarDirective],
       imports: [NgxTextOverflowClampModule, RouterTestingModule],
       providers: [
         { provide: ApplicationService, useValue: stubApplicationService },
-        { provide: CommentPeriodService, useValue: stubCommentPeriodService },
+        { provide: CommentPeriodService, useValue: stubCommentPeriodService }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

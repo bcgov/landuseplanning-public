@@ -1,5 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, Input } from '@angular/core';
-import { ElementRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, Input, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
 
 import { Application } from 'app/models/application';
@@ -9,32 +8,26 @@ import { Application } from 'app/models/application';
   templateUrl: './details-map.component.html',
   styleUrls: ['./details-map.component.scss']
 })
-
 export class DetailsMapComponent implements AfterViewInit, OnDestroy {
-
   @Input() application: Application = null;
 
   public map: L.Map;
   public appFG = L.featureGroup(); // group of layers for subject app
 
-  constructor(
-    private elementRef: ElementRef
-  ) { }
+  constructor(private elementRef: ElementRef) {}
 
   ngAfterViewInit() {
-    const self = this; // for closure function below
-
     // custom control to reset map view
     const resetViewControl = L.Control.extend({
       options: {
         position: 'bottomright'
       },
-      onAdd: function () {
+      onAdd: () => {
         const element = L.DomUtil.create('button');
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
-        element.onclick = () => self.fitBounds();
+        element.onclick = () => this.fitBounds();
         element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
@@ -45,11 +38,16 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      maxZoom: 16.4,
-      noWrap: true
-    });
+    const World_Imagery = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution:
+          // tslint:disable-next-line:max-line-length
+          'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 16.4,
+        noWrap: true
+      }
+    );
 
     this.map = L.map('map', {
       layers: [World_Imagery],
@@ -72,7 +70,8 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
     this.map.addControl(new resetViewControl());
 
     // draw application features
-    if (this.application) { // safety check
+    if (this.application) {
+      // safety check
       this.application.features.forEach(f => {
         const feature = JSON.parse(JSON.stringify(f));
         // needs to be valid GeoJSON
@@ -107,7 +106,8 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.map) { this.map.remove(); }
+    if (this.map) {
+      this.map.remove();
+    }
   }
-
 }

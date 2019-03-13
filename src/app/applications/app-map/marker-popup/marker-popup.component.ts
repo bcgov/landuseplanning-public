@@ -11,9 +11,7 @@ import { UrlService } from 'app/services/url.service';
   templateUrl: './marker-popup.component.html',
   styleUrls: ['./marker-popup.component.scss']
 })
-
 export class MarkerPopupComponent implements OnInit, OnDestroy {
-
   public id: string;
   public app: Application = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -22,18 +20,14 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
     public applicationService: ApplicationService, // also used in template
     public commentPeriodService: CommentPeriodService, // used in template
     public urlService: UrlService
-  ) { }
+  ) {}
 
   public ngOnInit() {
     // load complete application
-    this.applicationService.getById(this.id, false)
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(
-        value => this.app = value,
-        error => console.log(error)
-      );
+    this.applicationService
+      .getById(this.id, false)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(value => (this.app = value), error => console.log(error));
   }
 
   public ngOnDestroy() {
@@ -46,5 +40,4 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
     this.urlService.save('id', this.app._id);
     this.urlService.setFragment('details');
   }
-
 }

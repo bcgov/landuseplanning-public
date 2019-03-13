@@ -1,6 +1,5 @@
 import { of } from 'rxjs';
 
-
 export class ActivatedRouteStub {
   public parent = {
     data: of({})

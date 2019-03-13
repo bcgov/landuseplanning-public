@@ -18,7 +18,7 @@ fdescribe('ApplicationService', () => {
     getApplication(id: string) {
       const response = {
         text() {
-          return [{_id: id, status: 'ACCEPTED'}];
+          return [{ _id: id, status: 'ACCEPTED' }];
         }
       };
       return of(response);
@@ -27,10 +27,7 @@ fdescribe('ApplicationService', () => {
     getApplications() {
       const response = {
         text() {
-          return [
-            {_id: 'AAAA', status: 'ACCEPTED'},
-            {_id: 'BBBB', status: 'OFFERED'}
-          ];
+          return [{ _id: 'AAAA', status: 'ACCEPTED' }, { _id: 'BBBB', status: 'OFFERED' }];
         }
       };
       return of(response);
@@ -58,10 +55,7 @@ fdescribe('ApplicationService', () => {
 
   const documentServiceStub = {
     getAllByApplicationId(applicationId: string) {
-      const documents = [
-        new Document({_id: 'DDDDD'}),
-        new Document({_id: 'EEEEE'})
-      ];
+      const documents = [new Document({ _id: 'DDDDD' }), new Document({ _id: 'EEEEE' })];
       return of(documents);
     }
   };
@@ -69,14 +63,14 @@ fdescribe('ApplicationService', () => {
   const commentPeriodServiceStub = {
     getAllByApplicationId(applicationId: string) {
       const commentPeriods = [
-        new CommentPeriod({_id: 'DDDDD', startDate: new Date(2018, 10, 1, ), endDate: new Date(2018, 11, 10)}),
-        new CommentPeriod({_id: 'EEEEE', startDate: new Date(2018, 10, 1, ), endDate: new Date(2018, 11, 10)})
+        new CommentPeriod({ _id: 'DDDDD', startDate: new Date(2018, 10, 1), endDate: new Date(2018, 11, 10) }),
+        new CommentPeriod({ _id: 'EEEEE', startDate: new Date(2018, 10, 1), endDate: new Date(2018, 11, 10) })
       ];
       return of(commentPeriods);
     },
 
     getCurrent(periods: CommentPeriod[]): CommentPeriod {
-      return (periods.length > 0) ? periods[0] : null;
+      return periods.length > 0 ? periods[0] : null;
     },
 
     getStatusCode(commentPeriod: CommentPeriod): string {
@@ -90,15 +84,15 @@ fdescribe('ApplicationService', () => {
 
   const decisionServiceStub = {
     getByApplicationId(applicationId: string) {
-      return of(new Decision({_id: 'IIIII'}));
+      return of(new Decision({ _id: 'IIIII' }));
     }
   };
 
   const featureServiceStub = {
     getByApplicationId(applicationId: string) {
       const features = [
-        new Feature({id: 'FFFFF', properties: { TENURE_AREA_IN_HECTARES: 12 }}),
-        new Feature({id: 'GGGGG', properties: { TENURE_AREA_IN_HECTARES: 13 }})
+        new Feature({ id: 'FFFFF', properties: { TENURE_AREA_IN_HECTARES: 12 } }),
+        new Feature({ id: 'GGGGG', properties: { TENURE_AREA_IN_HECTARES: 13 } })
       ];
       return of(features);
     }
@@ -112,7 +106,7 @@ fdescribe('ApplicationService', () => {
         { provide: DocumentService, useValue: documentServiceStub },
         { provide: CommentPeriodService, useValue: commentPeriodServiceStub },
         { provide: DecisionService, useValue: decisionServiceStub },
-        { provide: FeatureService, useValue: featureServiceStub },
+        { provide: FeatureService, useValue: featureServiceStub }
       ]
     });
 
@@ -125,8 +119,8 @@ fdescribe('ApplicationService', () => {
 
   describe('getCount()', () => {
     it('retrieves the x-total-count header', () => {
-      service.getCount().subscribe(number => {
-        expect(number).toEqual(300);
+      service.getCount().subscribe(num => {
+        expect(num).toEqual(300);
       });
     });
   });
@@ -135,13 +129,19 @@ fdescribe('ApplicationService', () => {
     let apiService;
     const existingApplicationsData = [
       {
-        _id: 'AAAA', status: 'ACCEPTED', description: 'Wonderful application',
-        cl_file: null, businessUnit: null
+        _id: 'AAAA',
+        status: 'ACCEPTED',
+        description: 'Wonderful application',
+        cl_file: null,
+        businessUnit: null
       },
       {
-        _id: 'BBBB', status: 'ABANDONED', description: 'Terrible application',
-        cl_file: null, businessUnit: null
-      },
+        _id: 'BBBB',
+        status: 'ABANDONED',
+        description: 'Terrible application',
+        cl_file: null,
+        businessUnit: null
+      }
     ];
 
     beforeEach(() => {
@@ -156,8 +156,7 @@ fdescribe('ApplicationService', () => {
         }
       };
 
-      spyOn(apiService, 'getApplications')
-        .and.returnValue(of(response));
+      spyOn(apiService, 'getApplications').and.returnValue(of(response));
     });
 
     describe('with no filters', () => {
@@ -179,8 +178,11 @@ fdescribe('ApplicationService', () => {
   describe('getById()', () => {
     let apiService;
     const freshApplicationData = {
-      _id: 'AAAA', status: 'ACCEPTED', description: 'Hot new application',
-      cl_file: null, businessUnit: null
+      _id: 'AAAA',
+      status: 'ACCEPTED',
+      description: 'Hot new application',
+      cl_file: null,
+      businessUnit: null
     };
 
     beforeEach(() => {
@@ -195,12 +197,11 @@ fdescribe('ApplicationService', () => {
         }
       };
 
-      spyOn(apiService, 'getApplication')
-        .and.returnValue(of(response));
+      spyOn(apiService, 'getApplication').and.returnValue(of(response));
     });
 
     describe('when an application has been cached', () => {
-      const cachedApplication = new Application({_id: 'AAAA', description: 'Old outdated application'});
+      const cachedApplication = new Application({ _id: 'AAAA', description: 'Old outdated application' });
       beforeEach(() => {
         service.application = cachedApplication;
       });
@@ -239,28 +240,28 @@ fdescribe('ApplicationService', () => {
       describe('application properties', () => {
         it('sets the appStatus property', () => {
           freshApplicationData.status = 'ACCEPTED';
-          service.getById('AAAA').subscribe( application => {
+          service.getById('AAAA').subscribe(application => {
             expect(application.appStatus).toBe('Application Under Review');
           });
         });
 
         it('clFile property is padded to be seven digits', () => {
           freshApplicationData.cl_file = 7777;
-          service.getById('AAAA').subscribe( application => {
+          service.getById('AAAA').subscribe(application => {
             expect(application.clFile).toBe('0007777');
           });
         });
 
         it('clFile property is null if there is no cl_file property', () => {
           freshApplicationData.cl_file = null;
-          service.getById('AAAA').subscribe( application => {
+          service.getById('AAAA').subscribe(application => {
             expect(application.clFile).toBeUndefined();
           });
         });
 
         it('sets the region property', () => {
           freshApplicationData.businessUnit = 'ZOO Keeper';
-          service.getById('AAAA').subscribe( application => {
+          service.getById('AAAA').subscribe(application => {
             expect(application.region).toBeDefined();
             expect(application.region).toEqual('ZOO');
           });
@@ -268,7 +269,7 @@ fdescribe('ApplicationService', () => {
       });
 
       it('sets the documents to the result of the document service', () => {
-        service.getById('AAAA').subscribe( application => {
+        service.getById('AAAA').subscribe(application => {
           expect(application.documents).toBeDefined();
           expect(application.documents).not.toBeNull();
           expect(application.documents[0]._id).toBe('DDDDD');
@@ -277,7 +278,7 @@ fdescribe('ApplicationService', () => {
       });
 
       it('gets the commentPeriods for the application, sets the current period and cpStatus ', () => {
-        service.getById('AAAA').subscribe( application => {
+        service.getById('AAAA').subscribe(application => {
           expect(application.currentPeriod).toBeDefined();
           expect(application.currentPeriod).not.toBeNull();
           expect(application.currentPeriod._id).toBe('DDDDD');
@@ -285,13 +286,13 @@ fdescribe('ApplicationService', () => {
       });
 
       it('sets the commentPeriod status', () => {
-        service.getById('AAAA').subscribe( application => {
+        service.getById('AAAA').subscribe(application => {
           expect(application.cpStatus).toEqual('Commenting Open');
         });
       });
 
       it('sets the decisions to the result of the decisionService', () => {
-        service.getById('AAAA').subscribe( application => {
+        service.getById('AAAA').subscribe(application => {
           expect(application.decision).toBeDefined();
           expect(application.decision).not.toBeNull();
           expect(application.decision._id).toBe('IIIII');
@@ -299,7 +300,7 @@ fdescribe('ApplicationService', () => {
       });
 
       it('sets the features to the result of the featureService', () => {
-        service.getById('AAAA').subscribe( application => {
+        service.getById('AAAA').subscribe(application => {
           expect(application.features).toBeDefined();
           expect(application.features).not.toBeNull();
           expect(application.features[0].id).toBe('FFFFF');
@@ -417,33 +418,44 @@ fdescribe('ApplicationService', () => {
 
   describe('getTantalisStatus()', () => {
     it('with "AB" status it returns Abandoned codes', () => {
-      expect(service.getTantalisStatus(service.ABANDONED)).toEqual(
-        ['ABANDONED', 'CANCELLED', 'OFFER NOT ACCEPTED', 'OFFER RESCINDED', 'RETURNED', 'REVERTED', 'SOLD', 'SUSPENDED', 'WITHDRAWN']
-      );
+      expect(service.getTantalisStatus(service.ABANDONED)).toEqual([
+        'ABANDONED',
+        'CANCELLED',
+        'OFFER NOT ACCEPTED',
+        'OFFER RESCINDED',
+        'RETURNED',
+        'REVERTED',
+        'SOLD',
+        'SUSPENDED',
+        'WITHDRAWN'
+      ]);
     });
 
     it('with "AUR" status it returns Application Under Review codes', () => {
-      expect(service.getTantalisStatus(service.APPLICATION_UNDER_REVIEW)).toEqual(
-        ['ACCEPTED', 'ALLOWED', 'PENDING', 'RECEIVED']
-      );
+      expect(service.getTantalisStatus(service.APPLICATION_UNDER_REVIEW)).toEqual([
+        'ACCEPTED',
+        'ALLOWED',
+        'PENDING',
+        'RECEIVED'
+      ]);
     });
 
     it('with "ARC" status it returns Application Review Complete codes', () => {
-      expect(service.getTantalisStatus(service.APPLICATION_REVIEW_COMPLETE)).toEqual(
-        ['OFFER ACCEPTED', 'OFFERED']
-      );
+      expect(service.getTantalisStatus(service.APPLICATION_REVIEW_COMPLETE)).toEqual(['OFFER ACCEPTED', 'OFFERED']);
     });
 
     it('with "DA" status it returns Decision Approved codes', () => {
-      expect(service.getTantalisStatus(service.DECISION_APPROVED)).toEqual(
-        ['ACTIVE', 'COMPLETED', 'DISPOSITION IN GOOD STANDING', 'EXPIRED', 'HISTORIC']
-      );
+      expect(service.getTantalisStatus(service.DECISION_APPROVED)).toEqual([
+        'ACTIVE',
+        'COMPLETED',
+        'DISPOSITION IN GOOD STANDING',
+        'EXPIRED',
+        'HISTORIC'
+      ]);
     });
 
     it('with "DNA" status it returns Decision Not Approved codes', () => {
-      expect(service.getTantalisStatus(service.DECISION_NOT_APPROVED)).toEqual(
-        ['DISALLOWED']
-      );
+      expect(service.getTantalisStatus(service.DECISION_NOT_APPROVED)).toEqual(['DISALLOWED']);
     });
   });
 
@@ -483,7 +495,9 @@ fdescribe('ApplicationService', () => {
     });
 
     it('with "ARC" code it returns "Application Review Complete - Decision Pending" string', () => {
-      expect(service.getLongStatusString(service.APPLICATION_REVIEW_COMPLETE)).toBe('Application Review Complete - Decision Pending');
+      expect(service.getLongStatusString(service.APPLICATION_REVIEW_COMPLETE)).toBe(
+        'Application Review Complete - Decision Pending'
+      );
     });
 
     it('with "DA" code it returns "Decision: Approved - Tenure Issued" string', () => {

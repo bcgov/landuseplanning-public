@@ -9,17 +9,10 @@ describe('SplashModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        SplashModalComponent
-      ],
-      imports: [
-        FormsModule
-      ],
-      providers: [
-        NgbActiveModal
-      ]
-    })
-      .compileComponents();
+      declarations: [SplashModalComponent],
+      imports: [FormsModule],
+      providers: [NgbActiveModal]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
