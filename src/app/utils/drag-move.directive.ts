@@ -8,7 +8,6 @@ import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/c
   // tslint:disable-next-line:directive-selector
   selector: '[dragMove]'
 })
-
 export class DragMoveDirective {
   @Input() x;
   @Input() y;

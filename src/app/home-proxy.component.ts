@@ -12,10 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   template: ''
 })
 export class HomeProxyComponent {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  constructor(private router: Router, private route: ActivatedRoute) {
     const showSplashModal = this.route.snapshot.paramMap.get('showSplashModal');
     if (showSplashModal === 'true') {
       this.router.navigate(['/applications'], { fragment: 'splash' });

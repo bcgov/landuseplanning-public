@@ -21,9 +21,7 @@ export class ApiService {
   public adminUrl: string;
   public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'beta' | 'master' | 'prod';
 
-  constructor(
-    private http: HttpClient
-  ) {
+  constructor(private http: HttpClient) {
     // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
     // this.token = currentUser && currentUser.token;
     this.isMS = window.navigator.msSaveOrOpenBlob ? true : false;
@@ -87,7 +85,11 @@ export class ApiService {
   }
 
   handleError(error: any): Observable<never> {
-    const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
+    const reason = error.message
+      ? error.message
+      : error.status
+      ? `${error.status} - ${error.statusText}`
+      : 'Server error';
     console.log('API error =', reason);
     return throwError(error);
   }
@@ -96,31 +98,62 @@ export class ApiService {
   // Applications
   //
   getCountApplications(params: object): Observable<number> {
-    let queryString = `application?`;
-    if (params['cpStartSince']) { queryString += `cpStart[since]=${params['cpStartSince']}&`; }
-    if (params['cpStartUntil']) { queryString += `cpStart[until]=${params['cpStartUntil']}&`; }
-    if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
-    if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
-    if (params['appStatuses']) { params['appStatuses'].forEach((status: string) => queryString += `status[eq]=${status}&`); }
-    if (params['applicant']) { queryString += `client=${encodeURIComponent(params['applicant'])}&`; }
-    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`); }
-    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`); }
-    if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
-    if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
-    if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
+    let queryString = 'application?';
+    if (params['cpStartSince']) {
+      queryString += `cpStart[since]=${params['cpStartSince']}&`;
+    }
+    if (params['cpStartUntil']) {
+      queryString += `cpStart[until]=${params['cpStartUntil']}&`;
+    }
+    if (params['cpEndSince']) {
+      queryString += `cpEnd[since]=${params['cpEndSince']}&`;
+    }
+    if (params['cpEndUntil']) {
+      queryString += `cpEnd[until]=${params['cpEndUntil']}&`;
+    }
+    if (params['appStatuses']) {
+      params['appStatuses'].forEach((status: string) => (queryString += `status[eq]=${status}&`));
+    }
+    if (params['applicant']) {
+      queryString += `client=${encodeURIComponent(params['applicant'])}&`;
+    }
+    if (params['purposes']) {
+      params['purposes'].forEach((purpose: string) => (queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`));
+    }
+    if (params['subpurposes']) {
+      params['subpurposes'].forEach(
+        (subpurpose: string) => (queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`)
+      );
+    }
+    if (params['publishSince']) {
+      queryString += `publishDate[since]=${params['publishSince']}&`;
+    }
+    if (params['publishUntil']) {
+      queryString += `publishDate[until]=${params['publishUntil']}&`;
+    }
+    if (params['coordinates']) {
+      queryString += `centroid=${params['coordinates']}&`;
+    }
 
     if (!params['clidDtid']) {
       // trim the last ? or &
       queryString = queryString.slice(0, -1);
 
       // retrieve the count from the response headers
-      return this.http.head<HttpResponse<Object>>(`${this.apiPath}/${queryString}`, { observe: 'response' })
+      return this.http
+        .head<HttpResponse<object>>(`${this.apiPath}/${queryString}`, { observe: 'response' })
         .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
     } else {
       // query for both CLID and DTID
-      const clid = this.http.head<HttpResponse<Object>>(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`, { observe: 'response' })
+      const clid = this.http
+        .head<HttpResponse<object>>(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`, {
+          observe: 'response'
+        })
         .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
-      const dtid = this.http.head<HttpResponse<Object>>(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`, { observe: 'response' })
+      const dtid = this.http
+        .head<HttpResponse<object>>(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`, {
+          observe: 'response'
+        })
         .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
 
       // return sum of counts
@@ -152,19 +185,47 @@ export class ApiService {
     ];
 
     let queryString = 'application?';
-    if (params['pageNum']) { queryString += `pageNum=${params['pageNum']}&`; }
-    if (params['pageSize']) { queryString += `pageSize=${params['pageSize']}&`; }
-    if (params['cpStartSince']) { queryString += `cpStart[since]=${params['cpStartSince']}&`; }
-    if (params['cpStartUntil']) { queryString += `cpStart[until]=${params['cpStartUntil']}&`; }
-    if (params['cpEndSince']) { queryString += `cpEnd[since]=${params['cpEndSince']}&`; }
-    if (params['cpEndUntil']) { queryString += `cpEnd[until]=${params['cpEndUntil']}&`; }
-    if (params['appStatuses']) { params['appStatuses'].forEach((status: string) => queryString += `status[eq]=${status}&`); }
-    if (params['applicant']) { queryString += `client=${encodeURIComponent(params['applicant'])}&`; }
-    if (params['purposes']) { params['purposes'].forEach((purpose: string) => queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`); }
-    if (params['subpurposes']) { params['subpurposes'].forEach((subpurpose: string) => queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`); }
-    if (params['publishSince']) { queryString += `publishDate[since]=${params['publishSince']}&`; }
-    if (params['publishUntil']) { queryString += `publishDate[until]=${params['publishUntil']}&`; }
-    if (params['coordinates']) { queryString += `centroid=${params['coordinates']}&`; }
+    if (params['pageNum']) {
+      queryString += `pageNum=${params['pageNum']}&`;
+    }
+    if (params['pageSize']) {
+      queryString += `pageSize=${params['pageSize']}&`;
+    }
+    if (params['cpStartSince']) {
+      queryString += `cpStart[since]=${params['cpStartSince']}&`;
+    }
+    if (params['cpStartUntil']) {
+      queryString += `cpStart[until]=${params['cpStartUntil']}&`;
+    }
+    if (params['cpEndSince']) {
+      queryString += `cpEnd[since]=${params['cpEndSince']}&`;
+    }
+    if (params['cpEndUntil']) {
+      queryString += `cpEnd[until]=${params['cpEndUntil']}&`;
+    }
+    if (params['appStatuses']) {
+      params['appStatuses'].forEach((status: string) => (queryString += `status[eq]=${status}&`));
+    }
+    if (params['applicant']) {
+      queryString += `client=${encodeURIComponent(params['applicant'])}&`;
+    }
+    if (params['purposes']) {
+      params['purposes'].forEach((purpose: string) => (queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`));
+    }
+    if (params['subpurposes']) {
+      params['subpurposes'].forEach(
+        (subpurpose: string) => (queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`)
+      );
+    }
+    if (params['publishSince']) {
+      queryString += `publishDate[since]=${params['publishSince']}&`;
+    }
+    if (params['publishUntil']) {
+      queryString += `publishDate[until]=${params['publishUntil']}&`;
+    }
+    if (params['coordinates']) {
+      queryString += `centroid=${params['coordinates']}&`;
+    }
     queryString += `fields=${this.buildValues(fields)}`;
 
     if (!params['clidDtid']) {
@@ -176,7 +237,10 @@ export class ApiService {
 
       // return merged results, using toArray to wait for all results (ie, single emit)
       // this is fine performance-wise because there should be no more than a few results
-      return merge(clid, dtid).pipe(toArray(), mergeMap(items => of(...items)));
+      return merge(clid, dtid).pipe(
+        toArray(),
+        mergeMap(items => of(...items))
+      );
     }
   }
 
@@ -210,25 +274,13 @@ export class ApiService {
   // Features
   //
   getFeaturesByTantalisId(tantalisID: number): Observable<Feature[]> {
-    const fields = [
-      'applicationID',
-      'geometry',
-      'geometryName',
-      'properties',
-      'type'
-    ];
+    const fields = ['applicationID', 'geometry', 'geometryName', 'properties', 'type'];
     const queryString = `feature?tantalisId=${tantalisID}&fields=${this.buildValues(fields)}`;
     return this.http.get<Feature[]>(`${this.apiPath}/${queryString}`);
   }
 
   getFeaturesByApplicationId(applicationId: string): Observable<Feature[]> {
-    const fields = [
-      'applicationID',
-      'geometry',
-      'geometryName',
-      'properties',
-      'type'
-    ];
+    const fields = ['applicationID', 'geometry', 'geometryName', 'properties', 'type'];
     const queryString = `feature?applicationId=${applicationId}&fields=${this.buildValues(fields)}`;
     return this.http.get<Feature[]>(`${this.apiPath}/${queryString}`);
   }
@@ -237,23 +289,13 @@ export class ApiService {
   // Decisions
   //
   getDecisionByAppId(appId: string): Observable<Decision[]> {
-    const fields = [
-      '_addedBy',
-      '_application',
-      'name',
-      'description'
-    ];
+    const fields = ['_addedBy', '_application', 'name', 'description'];
     const queryString = 'decision?_application=' + appId + '&fields=' + this.buildValues(fields);
     return this.http.get<Decision[]>(`${this.apiPath}/${queryString}`);
   }
 
   getDecision(id: string): Observable<Decision[]> {
-    const fields = [
-      '_addedBy',
-      '_application',
-      'name',
-      'description'
-    ];
+    const fields = ['_addedBy', '_application', 'name', 'description'];
     const queryString = 'decision/' + id + '?fields=' + this.buildValues(fields);
     return this.http.get<Decision[]>(`${this.apiPath}/${queryString}`);
   }
@@ -262,23 +304,13 @@ export class ApiService {
   // Comment Periods
   //
   getPeriodsByAppId(appId: string): Observable<CommentPeriod[]> {
-    const fields = [
-      '_addedBy',
-      '_application',
-      'startDate',
-      'endDate'
-    ];
+    const fields = ['_addedBy', '_application', 'startDate', 'endDate'];
     const queryString = 'commentperiod?_application=' + appId + '&fields=' + this.buildValues(fields);
     return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`);
   }
 
   getPeriod(id: string): Observable<CommentPeriod[]> {
-    const fields = [
-      '_addedBy',
-      '_application',
-      'startDate',
-      'endDate'
-    ];
+    const fields = ['_addedBy', '_application', 'startDate', 'endDate'];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`);
   }
@@ -317,10 +349,7 @@ export class ApiService {
   }
 
   addComment(comment: Comment): Observable<Comment> {
-    const fields = [
-      'comment',
-      'commentAuthor'
-    ];
+    const fields = ['comment', 'commentAuthor'];
     const queryString = 'comment?fields=' + this.buildValues(fields);
     return this.http.post<Comment>(`${this.apiPath}/${queryString}`, comment, {});
   }
@@ -329,37 +358,19 @@ export class ApiService {
   // Documents
   //
   getDocumentsByAppId(appId: string): Observable<Document[]> {
-    const fields = [
-      '_application',
-      'documentFileName',
-      'displayName',
-      'internalURL',
-      'internalMime'
-    ];
+    const fields = ['_application', 'documentFileName', 'displayName', 'internalURL', 'internalMime'];
     const queryString = 'document?_application=' + appId + '&fields=' + this.buildValues(fields);
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
 
   getDocumentsByCommentId(commentId: string): Observable<Document[]> {
-    const fields = [
-      '_comment',
-      'documentFileName',
-      'displayName',
-      'internalURL',
-      'internalMime'
-    ];
+    const fields = ['_comment', 'documentFileName', 'displayName', 'internalURL', 'internalMime'];
     const queryString = 'document?_comment=' + commentId + '&fields=' + this.buildValues(fields);
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
 
   getDocumentsByDecisionId(decisionId: string): Observable<Document[]> {
-    const fields = [
-      '_decision',
-      'documentFileName',
-      'displayName',
-      'internalURL',
-      'internalMime'
-    ];
+    const fields = ['_decision', 'documentFileName', 'displayName', 'internalURL', 'internalMime'];
     const queryString = 'document?_decision=' + decisionId + '&fields=' + this.buildValues(fields);
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
   }
@@ -370,30 +381,20 @@ export class ApiService {
   }
 
   uploadDocument(formData: FormData): Observable<Document> {
-    const fields = [
-      'documentFileName',
-      'displayName',
-      'internalURL',
-      'internalMime'
-    ];
+    const fields = ['documentFileName', 'displayName', 'internalURL', 'internalMime'];
     const queryString = 'document/?fields=' + this.buildValues(fields);
     return this.http.post<Document>(`${this.apiPath}/${queryString}`, formData, { reportProgress: true });
   }
 
   getDocumentUrl(document: Document): string {
-    return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
+    return document ? this.apiPath + '/document/' + document._id + '/download' : '';
   }
 
   //
   // Users
   //
   getAllUsers(): Observable<User[]> {
-    const fields = [
-      'displayName',
-      'username',
-      'firstName',
-      'lastName'
-    ];
+    const fields = ['displayName', 'username', 'firstName', 'lastName'];
     const queryString = 'user?fields=' + this.buildValues(fields);
     return this.http.get<User[]>(`${this.apiPath}/${queryString}`);
   }
@@ -403,7 +404,7 @@ export class ApiService {
   //
   private buildValues(collection: any[]): string {
     let values = '';
-    _.each(collection, function (a) {
+    _.each(collection, a => {
       values += a + '|';
     });
     // trim the last |

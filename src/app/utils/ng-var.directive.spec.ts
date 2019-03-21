@@ -3,9 +3,11 @@ import { Component, TemplateRef } from '@angular/core';
 import { VarDirective } from './ng-var.directive';
 
 @Component({
-  template: `<div id="tableTop"></div><button ngVar>`
+  template: `
+    <div id="tableTop"></div>
+    <button ngVar></button>
+  `
 })
-
 class TestVarComponent {}
 
 xdescribe('VarDirective', () => {

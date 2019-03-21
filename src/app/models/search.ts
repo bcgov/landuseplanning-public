@@ -13,17 +13,17 @@ export class SearchResults {
   status: string;
   hostname: string;
 
-  features: Array<Feature> = [];
-  sidsFound: Array<string> = [];
+  features: Feature[] = [];
+  sidsFound: string[] = [];
 
   constructor(search?: any, hostname?: any) {
-    this._id           = search && search._id           || null;
-    this.totalFeatures = search && search.totalFeatures || 0;
-    this.crs           = search && search.crs           || null;
-    this.type          = search && search.type          || null;
-    this.date          = search && search.date          || null;
-    this.status        = search && search.status        || null;
-    this.hostname      = hostname;
+    this._id = (search && search._id) || null;
+    this.totalFeatures = (search && search.totalFeatures) || 0;
+    this.crs = (search && search.crs) || null;
+    this.type = (search && search.type) || null;
+    this.date = (search && search.date) || null;
+    this.status = (search && search.status) || null;
+    this.hostname = hostname;
 
     if (search && search.date) {
       this.date = new Date(search.date);
@@ -46,7 +46,7 @@ export class SearchResults {
 }
 
 export class SearchArray {
-  items: Array<SearchResults>;
+  items: SearchResults[];
 
   constructor(obj?: any) {
     // copy items
@@ -58,7 +58,7 @@ export class SearchArray {
   }
 
   sort() {
-    this.items.sort(function (a: SearchResults, b: SearchResults) {
+    this.items.sort((a: SearchResults, b: SearchResults) => {
       const aDate = a && a.date ? new Date(a.date).getTime() : 0;
       const bDate = b && b.date ? new Date(b.date).getTime() : 0;
       return bDate - aDate;
@@ -82,9 +82,9 @@ export class SearchTerms {
   dateEnd: NgbDateStruct;
 
   constructor(obj?: any) {
-    this.keywords  = obj && obj.keywords  || null;
-    this.dateStart = obj && obj.dateStart || null;
-    this.dateEnd   = obj && obj.dateEnd   || null;
+    this.keywords = (obj && obj.keywords) || null;
+    this.dateStart = (obj && obj.dateStart) || null;
+    this.dateEnd = (obj && obj.dateEnd) || null;
   }
 
   getParams(): Params {

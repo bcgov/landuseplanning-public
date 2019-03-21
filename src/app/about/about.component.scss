@@ -2,6 +2,7 @@
 
 :host {
   @include flex(1 1 auto);
+
   display: block;
   background: $bg-default;
 }
@@ -28,16 +29,14 @@
 }
 
 section {
-  section {
-    margin-top: 1.4rem;
-    padding: 0;
-  }
-}
-
-section {
   h3 {
     margin-bottom: 0.75rem;
     font-size: 1.4rem;
+  }
+
+  section {
+    margin-top: 1.4rem;
+    padding: 0;
   }
 }
 
@@ -66,6 +65,7 @@ ol {
 
     .btn {
       @include flex(0 0 auto);
+
       align-self: flex-start;
       margin-top: 0.75rem;
       min-width: 8rem;

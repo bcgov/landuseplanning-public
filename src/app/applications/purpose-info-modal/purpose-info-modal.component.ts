@@ -7,14 +7,10 @@ import { Constants } from 'app/utils/constants';
   templateUrl: './purpose-info-modal.component.html',
   styleUrls: ['./purpose-info-modal.component.scss']
 })
-
 export class PurposeInfoModalComponent {
   @HostBinding('class') classes = 'modal-content-flex';
 
   constants = Constants;
 
-  constructor(
-    public activeModal: NgbActiveModal
-  ) { }
-
+  constructor(public activeModal: NgbActiveModal) {}
 }

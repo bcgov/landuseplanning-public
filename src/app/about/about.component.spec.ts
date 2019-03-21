@@ -10,8 +10,7 @@ describe('AboutComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AboutComponent],
       imports: [RouterTestingModule]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

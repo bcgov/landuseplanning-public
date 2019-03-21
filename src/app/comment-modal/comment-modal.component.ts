@@ -16,7 +16,6 @@ import { DocumentService } from 'app/services/document.service';
   templateUrl: './comment-modal.component.html',
   styleUrls: ['./comment-modal.component.scss']
 })
-
 export class CommentModalComponent implements OnInit {
   @Input() currentPeriod: CommentPeriod; // for the subject application
 
@@ -26,14 +25,14 @@ export class CommentModalComponent implements OnInit {
   public totalSize: number;
   public currentPage = 1;
   private comment: Comment;
-  public files: Array<File> = [];
+  public files: File[] = [];
 
   constructor(
     public activeModal: NgbActiveModal,
     private dialogService: DialogService,
     private commentService: CommentService,
     private documentService: DocumentService
-  ) { }
+  ) {}
 
   // check for unsaved changes before closing (or reloading) current tab/window
   @HostListener('window:beforeunload', ['$event'])
@@ -49,13 +48,17 @@ export class CommentModalComponent implements OnInit {
   public dismiss(reason: string) {
     if (this.currentPage < 4 && this.anyUnsavedData()) {
       // prompt to confirm
-      this.dialogService.addDialog(ConfirmComponent,
-        {
-          title: 'Are you sure?',
-          message: 'You are about to discard your comment. Do you want to continue?'
-        }, {
-          backdropColor: 'rgba(0, 0, 0, 0.5)'
-        })
+      this.dialogService
+        .addDialog(
+          ConfirmComponent,
+          {
+            title: 'Are you sure?',
+            message: 'You are about to discard your comment. Do you want to continue?'
+          },
+          {
+            backdropColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        )
         .subscribe(isConfirmed => {
           // dismiss if confirmed
           if (isConfirmed) {
@@ -69,7 +72,7 @@ export class CommentModalComponent implements OnInit {
   }
 
   private anyUnsavedData(): boolean {
-    return (this.comment.hasData() || this.files.length > 0);
+    return this.comment.hasData() || this.files.length > 0;
   }
 
   ngOnInit() {
@@ -99,14 +102,15 @@ export class CommentModalComponent implements OnInit {
     // approximate size of everything for progress reporting
     const commentSize = this.sizeof(this.comment);
     this.totalSize = commentSize;
-    this.files.forEach(file => this.totalSize += file.size);
+    this.files.forEach(file => (this.totalSize += file.size));
 
     // first add new comment
-    this.progressBufferValue += 100 * commentSize / this.totalSize;
-    this.commentService.add(this.comment)
+    this.progressBufferValue += (100 * commentSize) / this.totalSize;
+    this.commentService
+      .add(this.comment)
       .toPromise()
       .then((comment: Comment) => {
-        this.progressValue += 100 * commentSize / this.totalSize;
+        this.progressValue += (100 * commentSize) / this.totalSize;
         this.comment = comment;
         return comment;
       })
@@ -119,15 +123,15 @@ export class CommentModalComponent implements OnInit {
           formData.append('_comment', this.comment._id);
           formData.append('displayName', file.name);
           formData.append('upfile', file);
-          this.progressBufferValue += 100 * file.size / this.totalSize;
+          this.progressBufferValue += (100 * file.size) / this.totalSize;
 
           // TODO: improve progress bar by listening to progress events
           // see https://stackoverflow.com/questions/37158928/angular-2-http-progress-bar
           // see https://angular.io/guide/http#listening-to-progress-events
-          observables.push(this.documentService.add(formData)
-            .pipe(
+          observables.push(
+            this.documentService.add(formData).pipe(
               map((document: Document) => {
-                this.progressValue += 100 * file.size / this.totalSize;
+                this.progressValue += (100 * file.size) / this.totalSize;
                 return document;
               })
             )
@@ -160,10 +164,20 @@ export class CommentModalComponent implements OnInit {
       bytes += key.length;
       const obj = o[key];
       switch (typeof obj) {
-        case 'boolean': bytes += 4; break;
-        case 'number': bytes += 8; break;
-        case 'string': bytes += 2 * obj.length; break;
-        case 'object': if (obj) { bytes += this.sizeof(obj); } break;
+        case 'boolean':
+          bytes += 4;
+          break;
+        case 'number':
+          bytes += 8;
+          break;
+        case 'string':
+          bytes += 2 * obj.length;
+          break;
+        case 'object':
+          if (obj) {
+            bytes += this.sizeof(obj);
+          }
+          break;
       }
     });
     return bytes;

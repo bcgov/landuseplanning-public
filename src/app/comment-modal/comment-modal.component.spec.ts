@@ -15,21 +15,10 @@ describe('CommentModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CommentModalComponent,
-        FileUploadComponent
-      ],
-      imports: [
-        FormsModule,
-        MatProgressBarModule
-      ],
-      providers: [
-        NgbActiveModal,
-        { provide: CommentService },
-        { provide: DocumentService },
-      ]
-    })
-      .compileComponents();
+      declarations: [CommentModalComponent, FileUploadComponent],
+      imports: [FormsModule, MatProgressBarModule],
+      providers: [NgbActiveModal, { provide: CommentService }, { provide: DocumentService }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

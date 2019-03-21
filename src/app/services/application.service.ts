@@ -4,7 +4,7 @@ import { map, mergeMap, catchError } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { FiltersType } from 'app/applications/applications.component';
+import { IFiltersType } from 'app/applications/applications.component';
 import { Application } from 'app/models/application';
 import { ApiService } from './api';
 import { DocumentService } from './document.service';
@@ -14,7 +14,6 @@ import { FeatureService } from './feature.service';
 
 @Injectable()
 export class ApplicationService {
-
   //#region Constants
   // statuses / query param options
   readonly ABANDONED = 'AB';
@@ -43,10 +42,10 @@ export class ApplicationService {
     private commentPeriodService: CommentPeriodService,
     private decisionService: DecisionService,
     private featureService: FeatureService
-  ) { }
+  ) {}
 
   // get count of matching applications
-  getCount(filters: FiltersType, coordinates: string): Observable<number> {
+  getCount(filters: IFiltersType, coordinates: string): Observable<number> {
     // assign publish date filters
     const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
     const publishUntil = filters.publishTo ? filters.publishTo.toISOString() : null;
@@ -60,18 +59,18 @@ export class ApplicationService {
 
     // if both cpOpen and cpNotOpen or neither cpOpen nor cpNotOpen then use no cpStart or cpEnd filters
     if ((cpOpen && cpNotOpen) || (!cpOpen && !cpNotOpen)) {
-      return this.api.getCountApplications({
-        appStatuses: appStatuses,
-        applicant: filters.applicant,
-        clidDtid: filters.clidDtid,
-        purposes: filters.purposes,
-        subpurposes: filters.subpurposes,
-        publishSince: publishSince,
-        publishUntil: publishUntil,
-        coordinates: coordinates
-      }).pipe(
-        catchError(this.api.handleError)
-      );
+      return this.api
+        .getCountApplications({
+          appStatuses: appStatuses,
+          applicant: filters.applicant,
+          clidDtid: filters.clidDtid,
+          purposes: filters.purposes,
+          subpurposes: filters.subpurposes,
+          publishSince: publishSince,
+          publishUntil: publishUntil,
+          coordinates: coordinates
+        })
+        .pipe(catchError(this.api.handleError));
     }
 
     const now = moment();
@@ -81,20 +80,20 @@ export class ApplicationService {
 
     // if cpOpen then filter by cpStart <= today && cpEnd >= today
     if (cpOpen) {
-      return this.api.getCountApplications({
-        cpStartUntil: now.endOf('day').toISOString(),
-        cpEndSince: now.startOf('day').toISOString(),
-        appStatuses: appStatuses,
-        applicant: filters.applicant,
-        clidDtid: filters.clidDtid,
-        purposes: filters.purposes,
-        subpurposes: filters.subpurposes,
-        publishSince: publishSince,
-        publishUntil: publishUntil,
-        coordinates: coordinates
-      }).pipe(
-        catchError(this.api.handleError)
-      );
+      return this.api
+        .getCountApplications({
+          cpStartUntil: now.endOf('day').toISOString(),
+          cpEndSince: now.startOf('day').toISOString(),
+          appStatuses: appStatuses,
+          applicant: filters.applicant,
+          clidDtid: filters.clidDtid,
+          purposes: filters.purposes,
+          subpurposes: filters.subpurposes,
+          publishSince: publishSince,
+          publishUntil: publishUntil,
+          coordinates: coordinates
+        })
+        .pipe(catchError(this.api.handleError));
     }
 
     // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
@@ -122,14 +121,16 @@ export class ApplicationService {
       coordinates: coordinates
     });
 
-    return combineLatest(closed, future, (v1: number, v2: number) => v1 + v2)
-      .pipe(
-        catchError(this.api.handleError)
-      );
+    return combineLatest(closed, future, (v1: number, v2: number) => v1 + v2).pipe(catchError(this.api.handleError));
   }
 
   // get matching applications without their meta (documents, comment period, decisions, etc)
-  getAll(pageNum: number = 0, pageSize: number = 1000, filters: FiltersType, coordinates: string): Observable<Application[]> {
+  getAll(
+    pageNum: number = 0,
+    pageSize: number = 1000,
+    filters: IFiltersType,
+    coordinates: string
+  ): Observable<Application[]> {
     // assign publish date filters
     const publishSince = filters.publishFrom ? filters.publishFrom.toISOString() : null;
     const publishUntil = filters.publishTo ? filters.publishTo.toISOString() : null;
@@ -143,31 +144,33 @@ export class ApplicationService {
 
     // if both cpOpen and cpNotOpen or neither cpOpen nor cpNotOpen then use no cpStart or cpEnd filters
     if ((cpOpen && cpNotOpen) || (!cpOpen && !cpNotOpen)) {
-      return this.api.getApplications({
-        pageNum: pageNum,
-        pageSize: pageSize,
-        appStatuses: appStatuses,
-        applicant: filters.applicant,
-        clidDtid: filters.clidDtid,
-        purposes: filters.purposes,
-        subpurposes: filters.subpurposes,
-        publishSince: publishSince,
-        publishUntil: publishUntil,
-        coordinates: coordinates
-      }).pipe(
-        map((res: Application[]) => {
-          if (!res || res.length === 0) {
-            return [] as Application[];
-          }
+      return this.api
+        .getApplications({
+          pageNum: pageNum,
+          pageSize: pageSize,
+          appStatuses: appStatuses,
+          applicant: filters.applicant,
+          clidDtid: filters.clidDtid,
+          purposes: filters.purposes,
+          subpurposes: filters.subpurposes,
+          publishSince: publishSince,
+          publishUntil: publishUntil,
+          coordinates: coordinates
+        })
+        .pipe(
+          map((res: Application[]) => {
+            if (!res || res.length === 0) {
+              return [] as Application[];
+            }
 
-          const applications: Application[] = [];
-          res.forEach(application => {
-            applications.push(new Application(application));
-          });
-          return applications;
-        }),
-        catchError(this.api.handleError)
-      );
+            const applications: Application[] = [];
+            res.forEach(application => {
+              applications.push(new Application(application));
+            });
+            return applications;
+          }),
+          catchError(this.api.handleError)
+        );
     }
 
     const now = moment();
@@ -177,33 +180,35 @@ export class ApplicationService {
 
     // if cpOpen then filter by cpStart <= today && cpEnd >= today
     if (cpOpen) {
-      return this.api.getApplications({
-        pageNum: pageNum,
-        pageSize: pageSize,
-        cpStartUntil: now.endOf('day').toISOString(),
-        cpEndSince: now.startOf('day').toISOString(),
-        appStatuses: appStatuses,
-        applicant: filters.applicant,
-        clidDtid: filters.clidDtid,
-        purposes: filters.purposes,
-        subpurposes: filters.subpurposes,
-        publishSince: publishSince,
-        publishUntil: publishUntil,
-        coordinates: coordinates
-      }).pipe(
-        map((res: Application[]) => {
-          if (!res || res.length === 0) {
-            return [] as Application[];
-          }
+      return this.api
+        .getApplications({
+          pageNum: pageNum,
+          pageSize: pageSize,
+          cpStartUntil: now.endOf('day').toISOString(),
+          cpEndSince: now.startOf('day').toISOString(),
+          appStatuses: appStatuses,
+          applicant: filters.applicant,
+          clidDtid: filters.clidDtid,
+          purposes: filters.purposes,
+          subpurposes: filters.subpurposes,
+          publishSince: publishSince,
+          publishUntil: publishUntil,
+          coordinates: coordinates
+        })
+        .pipe(
+          map((res: Application[]) => {
+            if (!res || res.length === 0) {
+              return [] as Application[];
+            }
 
-          const applications: Application[] = [];
-          res.forEach(application => {
-            applications.push(new Application(application));
-          });
-          return applications;
-        }),
-        catchError(this.api.handleError)
-      );
+            const applications: Application[] = [];
+            res.forEach(application => {
+              applications.push(new Application(application));
+            });
+            return applications;
+          }),
+          catchError(this.api.handleError)
+        );
     }
 
     // else cpNotOpen (ie, closed or future) then filter by cpEnd <= yesterday || cpStart >= tomorrow
@@ -235,21 +240,20 @@ export class ApplicationService {
       coordinates: coordinates
     });
 
-    return merge(closed, future)
-      .pipe(
-        map((res: Application[]) => {
-          if (!res || res.length === 0) {
-            return [] as Application[];
-          }
+    return merge(closed, future).pipe(
+      map((res: Application[]) => {
+        if (!res || res.length === 0) {
+          return [] as Application[];
+        }
 
-          const applications: Application[] = [];
-          res.forEach(application => {
-            applications.push(new Application(application));
-          });
-          return applications;
-        }),
-        catchError(this.api.handleError)
-      );
+        const applications: Application[] = [];
+        res.forEach(application => {
+          applications.push(new Application(application));
+        });
+        return applications;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // get a specific application by its id
@@ -259,56 +263,64 @@ export class ApplicationService {
     }
 
     // first get the application
-    return this.api.getApplication(appId)
-      .pipe(
-        map((res: Application[]) => {
-          if (!res || res.length === 0) {
-            return null as Application;
-          }
+    return this.api.getApplication(appId).pipe(
+      map((res: Application[]) => {
+        if (!res || res.length === 0) {
+          return null as Application;
+        }
 
-          // return the first (only) application
-          return new Application(res[0]);
-        }),
-        mergeMap((application: Application) => {
-          if (!application) {
-            return of(null as Application);
-          }
+        // return the first (only) application
+        return new Application(res[0]);
+      }),
+      mergeMap((application: Application) => {
+        if (!application) {
+          return of(null as Application);
+        }
 
-          const promises: Array<Promise<any>> = [];
+        const promises: Array<Promise<any>> = [];
 
-          // derive region code
-          application.region = this.getRegionCode(application.businessUnit);
+        // derive region code
+        application.region = this.getRegionCode(application.businessUnit);
 
-          // application status code
-          application.appStatusCode = this.getStatusCode(application.status);
+        // application status code
+        application.appStatusCode = this.getStatusCode(application.status);
 
-          // user-friendly application status
-          application.appStatus = this.getLongStatusString(application.appStatusCode);
+        // user-friendly application status
+        application.appStatus = this.getLongStatusString(application.appStatusCode);
 
-          // derive retire date
-          if (application.statusHistoryEffectiveDate && [this.DECISION_APPROVED, this.DECISION_NOT_APPROVED, this.ABANDONED].includes(application.appStatusCode)) {
-            application['retireDate'] = moment(application.statusHistoryEffectiveDate).endOf('day').add(6, 'months');
-          }
+        // derive retire date
+        if (
+          application.statusHistoryEffectiveDate &&
+          [this.DECISION_APPROVED, this.DECISION_NOT_APPROVED, this.ABANDONED].includes(application.appStatusCode)
+        ) {
+          application['retireDate'] = moment(application.statusHistoryEffectiveDate)
+            .endOf('day')
+            .add(6, 'months');
+        }
 
-          // 7-digit CL File number for display
-          if (application.cl_file) {
-            application['clFile'] = application.cl_file.toString().padStart(7, '0');
-          }
+        // 7-digit CL File number for display
+        if (application.cl_file) {
+          application['clFile'] = application.cl_file.toString().padStart(7, '0');
+        }
 
-          // derive unique applicants
-          if (application.client) {
-            const clients = application.client.split(', ');
-            application['applicants'] = _.uniq(clients).join(', ');
-          }
+        // derive unique applicants
+        if (application.client) {
+          const clients = application.client.split(', ');
+          application['applicants'] = _.uniq(clients).join(', ');
+        }
 
-          // get the documents (may be empty array)
-          promises.push(this.documentService.getAllByApplicationId(application._id)
+        // get the documents (may be empty array)
+        promises.push(
+          this.documentService
+            .getAllByApplicationId(application._id)
             .toPromise()
-            .then(documents => application.documents = documents)
-          );
+            .then(documents => (application.documents = documents))
+        );
 
-          // get the comment periods (may be empty array)
-          promises.push(this.commentPeriodService.getAllByApplicationId(application._id)
+        // get the comment periods (may be empty array)
+        promises.push(
+          this.commentPeriodService
+            .getAllByApplicationId(application._id)
             .toPromise()
             .then(periods => {
               application.currentPeriod = this.commentPeriodService.getCurrent(periods); // may be null
@@ -321,31 +333,35 @@ export class ApplicationService {
               if (this.commentPeriodService.isOpen(application.cpStatusCode)) {
                 const now = new Date();
                 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                application.currentPeriod['daysRemaining']
-                  = moment(application.currentPeriod.endDate).diff(moment(today), 'days') + 1; // including today
+                application.currentPeriod['daysRemaining'] =
+                  moment(application.currentPeriod.endDate).diff(moment(today), 'days') + 1; // including today
               }
             })
-          );
+        );
 
-          // get the decision (may be null)
-          promises.push(this.decisionService.getByApplicationId(application._id, forceReload)
+        // get the decision (may be null)
+        promises.push(
+          this.decisionService
+            .getByApplicationId(application._id, forceReload)
             .toPromise()
-            .then(decision => application.decision = decision)
-          );
+            .then(decision => (application.decision = decision))
+        );
 
-          // get the features (may be empty array)
-          promises.push(this.featureService.getByApplicationId(application._id)
+        // get the features (may be empty array)
+        promises.push(
+          this.featureService
+            .getByApplicationId(application._id)
             .toPromise()
-            .then(features => application.features = features)
-          );
+            .then(features => (application.features = features))
+        );
 
-          return Promise.all(promises).then(() => {
-            this.application = application;
-            return this.application;
-          });
-        }),
-        catchError(this.api.handleError)
-      );
+        return Promise.all(promises).then(() => {
+          this.application = application;
+          return this.application;
+        });
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   /**
@@ -399,11 +415,26 @@ export class ApplicationService {
   getTantalisStatus(statusCode: string): string[] {
     if (statusCode) {
       switch (statusCode.toUpperCase()) {
-        case this.ABANDONED: return ['ABANDONED', 'CANCELLED', 'OFFER NOT ACCEPTED', 'OFFER RESCINDED', 'RETURNED', 'REVERTED', 'SOLD', 'SUSPENDED', 'WITHDRAWN'];
-        case this.APPLICATION_UNDER_REVIEW: return ['ACCEPTED', 'ALLOWED', 'PENDING', 'RECEIVED'];
-        case this.APPLICATION_REVIEW_COMPLETE: return ['OFFER ACCEPTED', 'OFFERED'];
-        case this.DECISION_APPROVED: return ['ACTIVE', 'COMPLETED', 'DISPOSITION IN GOOD STANDING', 'EXPIRED', 'HISTORIC'];
-        case this.DECISION_NOT_APPROVED: return ['DISALLOWED'];
+        case this.ABANDONED:
+          return [
+            'ABANDONED',
+            'CANCELLED',
+            'OFFER NOT ACCEPTED',
+            'OFFER RESCINDED',
+            'RETURNED',
+            'REVERTED',
+            'SOLD',
+            'SUSPENDED',
+            'WITHDRAWN'
+          ];
+        case this.APPLICATION_UNDER_REVIEW:
+          return ['ACCEPTED', 'ALLOWED', 'PENDING', 'RECEIVED'];
+        case this.APPLICATION_REVIEW_COMPLETE:
+          return ['OFFER ACCEPTED', 'OFFERED'];
+        case this.DECISION_APPROVED:
+          return ['ACTIVE', 'COMPLETED', 'DISPOSITION IN GOOD STANDING', 'EXPIRED', 'HISTORIC'];
+        case this.DECISION_NOT_APPROVED:
+          return ['DISALLOWED'];
       }
     }
     return null as string[];
@@ -415,12 +446,18 @@ export class ApplicationService {
   getShortStatusString(statusCode: string): string {
     if (statusCode) {
       switch (statusCode) {
-        case this.ABANDONED: return 'Abandoned';
-        case this.APPLICATION_UNDER_REVIEW: return 'Under Review';
-        case this.APPLICATION_REVIEW_COMPLETE: return 'Decision Pending';
-        case this.DECISION_APPROVED: return 'Approved';
-        case this.DECISION_NOT_APPROVED: return 'Not Approved';
-        case this.UNKNOWN: return 'Unknown';
+        case this.ABANDONED:
+          return 'Abandoned';
+        case this.APPLICATION_UNDER_REVIEW:
+          return 'Under Review';
+        case this.APPLICATION_REVIEW_COMPLETE:
+          return 'Decision Pending';
+        case this.DECISION_APPROVED:
+          return 'Approved';
+        case this.DECISION_NOT_APPROVED:
+          return 'Not Approved';
+        case this.UNKNOWN:
+          return 'Unknown';
       }
     }
     return null as string;
@@ -432,39 +469,45 @@ export class ApplicationService {
   getLongStatusString(statusCode: string): string {
     if (statusCode) {
       switch (statusCode) {
-        case this.ABANDONED: return 'Abandoned';
-        case this.APPLICATION_UNDER_REVIEW: return 'Application Under Review';
-        case this.APPLICATION_REVIEW_COMPLETE: return 'Application Review Complete - Decision Pending';
-        case this.DECISION_APPROVED: return 'Decision: Approved - Tenure Issued';
-        case this.DECISION_NOT_APPROVED: return 'Decision: Not Approved';
-        case this.UNKNOWN: return 'Unknown Status';
+        case this.ABANDONED:
+          return 'Abandoned';
+        case this.APPLICATION_UNDER_REVIEW:
+          return 'Application Under Review';
+        case this.APPLICATION_REVIEW_COMPLETE:
+          return 'Application Review Complete - Decision Pending';
+        case this.DECISION_APPROVED:
+          return 'Decision: Approved - Tenure Issued';
+        case this.DECISION_NOT_APPROVED:
+          return 'Decision: Not Approved';
+        case this.UNKNOWN:
+          return 'Unknown Status';
       }
     }
     return null as string;
   }
 
   isAbandoned(statusCode: string): boolean {
-    return (statusCode === this.ABANDONED);
+    return statusCode === this.ABANDONED;
   }
 
   isApplicationUnderReview(statusCode: string): boolean {
-    return (statusCode === this.APPLICATION_UNDER_REVIEW);
+    return statusCode === this.APPLICATION_UNDER_REVIEW;
   }
 
   isApplicationReviewComplete(statusCode: string): boolean {
-    return (statusCode === this.APPLICATION_REVIEW_COMPLETE);
+    return statusCode === this.APPLICATION_REVIEW_COMPLETE;
   }
 
   isDecisionApproved(statusCode: string): boolean {
-    return (statusCode === this.DECISION_APPROVED);
+    return statusCode === this.DECISION_APPROVED;
   }
 
   isDecisionNotApproved(statusCode: string): boolean {
-    return (statusCode === this.DECISION_NOT_APPROVED);
+    return statusCode === this.DECISION_NOT_APPROVED;
   }
 
   isUnknown(statusCode: string): boolean {
-    return (statusCode === this.UNKNOWN);
+    return statusCode === this.UNKNOWN;
   }
 
   /**
@@ -480,17 +523,24 @@ export class ApplicationService {
   getRegionString(abbrev: string): string {
     if (abbrev) {
       switch (abbrev) {
-        case this.CARIBOO: return 'Cariboo, Williams Lake';
-        case this.KOOTENAY: return 'Kootenay, Cranbrook';
-        case this.LOWER_MAINLAND: return 'Lower Mainland, Surrey';
-        case this.OMENICA: return 'Omenica/Peace, Prince George';
-        case this.PEACE: return 'Peace, Ft. St. John';
-        case this.SKEENA: return 'Skeena, Smithers';
-        case this.SOUTHERN_INTERIOR: return 'Thompson Okanagan, Kamloops';
-        case this.VANCOUVER_ISLAND: return 'West Coast, Nanaimo';
+        case this.CARIBOO:
+          return 'Cariboo, Williams Lake';
+        case this.KOOTENAY:
+          return 'Kootenay, Cranbrook';
+        case this.LOWER_MAINLAND:
+          return 'Lower Mainland, Surrey';
+        case this.OMENICA:
+          return 'Omenica/Peace, Prince George';
+        case this.PEACE:
+          return 'Peace, Ft. St. John';
+        case this.SKEENA:
+          return 'Skeena, Smithers';
+        case this.SOUTHERN_INTERIOR:
+          return 'Thompson Okanagan, Kamloops';
+        case this.VANCOUVER_ISLAND:
+          return 'West Coast, Nanaimo';
       }
     }
     return null as string;
   }
-
 }

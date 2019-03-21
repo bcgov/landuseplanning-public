@@ -2,9 +2,11 @@
 
 @function repeater($item, $count) {
   $string: "";
+
   @for $i from 1 through $count {
     $string: $string + $item;
   }
+
   @return "#{$string}";
 }
 
