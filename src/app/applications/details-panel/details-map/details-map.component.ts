@@ -68,7 +68,6 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
 
     // add reset view control
     this.map.addControl(new resetViewControl());
-
     // draw application features
     if (this.application) {
       // safety check
@@ -79,6 +78,11 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
         const featureObj: GeoJSON.Feature<any> = feature;
         const layer = L.geoJSON(featureObj);
         this.appFG.addLayer(layer);
+
+        this.map.on('zoomend', () => {
+          const weight = this.getWeight(feature.properties.TENURE_AREA_IN_HECTARES, this.map.getZoom());
+          layer.setStyle({ weight });
+        });
       });
       this.map.addLayer(this.appFG);
     }
@@ -103,6 +107,70 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
     if (bounds && bounds.isValid()) {
       this.map.fitBounds(bounds, { padding: [20, 20] });
     }
+  }
+
+  /**
+   * Given a features size in hectares and the maps zoom level, returns the weight to use when rendering the shape.
+   * Increasing the weight is used to allow features to remain visible on the map when zoomed out far.
+   *
+   * @private
+   * @param {number} size size of the feature, in hectares.
+   * @param {number} zoom zoom level of the map.
+   * @returns {number} a positive non-null weight for the layer to use when rendering the shape (default: 3)
+   * @memberof DetailsMapComponent
+   */
+  private getWeight(size: number, zoom: number): number {
+    if (!size || !zoom) {
+      return 3; // default
+    }
+
+    if (size < 2) {
+      if (zoom < 3) {
+        return 6;
+      }
+      if (zoom < 10) {
+        return 7;
+      }
+      if (zoom < 14) {
+        return 6;
+      }
+    }
+
+    if (size < 15) {
+      if (zoom < 12) {
+        return 6;
+      }
+    }
+
+    if (size < 30) {
+      if (zoom < 9) {
+        return 6;
+      }
+    }
+
+    if (size < 60) {
+      if (zoom < 12) {
+        return 5;
+      }
+    }
+
+    if (size < 150) {
+      if (zoom < 9) {
+        return 6;
+      }
+    }
+
+    if (size < 1000) {
+      if (zoom < 6) {
+        return 6;
+      }
+    }
+
+    if (zoom < 5) {
+      return 5;
+    }
+
+    return 3; // default
   }
 
   ngOnDestroy() {
