@@ -26,20 +26,6 @@
       "spec": {
         "runPolicy": "Serial",
         "completionDeadlineSeconds": 1800,
-        "triggers": [
-          {
-            "type": "ImageChange"
-          },
-          {
-            "type": "ImageChange",
-            "imageChange": {
-              "from": {
-                "kind": "ImageStreamTag",
-                "name": "nginx-runtime:latest"
-              }
-            }
-          }
-        ],
         "source": {
           "type": "Git",
           "git": {
@@ -98,7 +84,7 @@
       "displayName": "GIT Source Repo URL",
       "description": "A GIT URL to your source code.",
       "required": true,
-      "value": "https://github.com/bcgov/angular-scaffold"
+      "value": "https://github.com/bcgov/gcpe-lup-public"
     }
   ]
 }

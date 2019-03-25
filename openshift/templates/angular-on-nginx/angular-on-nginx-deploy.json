@@ -15,15 +15,15 @@
       "metadata": {
         "creationTimestamp": null,
         "labels": {
-          "app": "${NAME}-beta"
+          "app": "${NAME}-${TAG_NAME}"
         },
-        "name": "${NAME}-beta"
+        "name": "${NAME}-${TAG_NAME}"
       },
       "spec": {
         "replicas": 2,
         "selector": {
-          "app": "${NAME}-beta",
-          "deploymentconfig": "${NAME}-beta"
+          "app": "${NAME}-${TAG_NAME}",
+          "deploymentconfig": "${NAME}-${TAG_NAME}"
         },
         "strategy": {
           "rollingParams": {
@@ -39,16 +39,16 @@
           "metadata": {
             "creationTimestamp": null,
             "labels": {
-              "app": "${NAME}-beta",
-              "deploymentconfig": "${NAME}-beta"
+              "app": "${NAME}-${TAG_NAME}",
+              "deploymentconfig": "${NAME}-${TAG_NAME}"
             }
           },
           "spec": {
             "containers": [
               {
-                "image": "${NAME}-beta",
+                "image": "${NAME}-${TAG_NAME}",
                 "imagePullPolicy": "Always",
-                "name": "${NAME}-beta",
+                "name": "${NAME}-${TAG_NAME}",
                 "ports": [
                   {
                     "containerPort": 8080,
@@ -122,7 +122,7 @@
             "imageChangeParams": {
               "automatic": true,
               "containerNames": [
-                "${NAME}-beta"
+                "${NAME}-${TAG_NAME}"
               ],
               "from": {
                 "kind": "ImageStreamTag",
@@ -140,9 +140,9 @@
       "metadata": {
         "creationTimestamp": null,
         "labels": {
-          "app": "${NAME}-beta"
+          "app": "${NAME}-${TAG_NAME}"
         },
-        "name": "${NAME}-beta"
+        "name": "${NAME}-${TAG_NAME}"
       },
       "spec": {
         "ports": [
@@ -154,8 +154,8 @@
           }
         ],
         "selector": {
-          "app": "${NAME}-beta",
-          "deploymentconfig": "${NAME}-beta"
+          "app": "${NAME}",
+          "deploymentconfig": "${NAME}"
         },
         "sessionAffinity": "None",
         "type": "ClusterIP"
@@ -166,9 +166,9 @@
       "kind": "Route",
       "metadata": {
         "labels": {
-          "app": "${NAME}-beta"
+          "app": "${NAME}-${TAG_NAME}"
         },
-        "name": "${NAME}-beta"
+        "name": "${NAME}-${TAG_NAME}"
       },
       "spec": {
         "host": "${APPLICATION_DOMAIN}",
@@ -181,7 +181,7 @@
         },
         "to": {
           "kind": "Service",
-          "name": "${NAME}-beta",
+          "name": "${NAME}",
           "weight": 100
         }
       }
@@ -190,20 +190,20 @@
       "apiVersion": "autoscaling/v2beta1",
       "kind": "HorizontalPodAutoscaler",
       "metadata": {
-        "name": "${NAME}-beta",
+        "name": "${NAME}-${TAG_NAME}",
         "labels": {
-          "app": "${NAME}-beta"
+          "app": "${NAME}-${TAG_NAME}"
         }
       },
       "spec": {
         "scaleRef": {
           "kind": "DeploymentConfig",
-          "name": "${NAME}-beta",
+          "name": "${NAME}-${TAG_NAME}",
           "apiVersion": "autoscaling/v2beta1",
           "subresource": "scale"
         },
         "minReplicas": 2,
-        "maxReplicas": 6
+        "maxReplicas": 4
       }
     }
   ],
@@ -220,7 +220,7 @@
       "displayName": "Image Namespace",
       "name": "IMAGE_NAMESPACE",
       "required": true,
-      "value": "nrts-prc-tools"
+      "value": "gcpe-lup-tools"
     },
     {
       "description": "OpenShift cluster private IP range in CIDR notation, used by Nginx ngx_http_realip_module.",
@@ -244,13 +244,13 @@
       "description": "The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca, if left blank a value will be defaulted.",
       "displayName": "Application Hostname",
       "name": "APPLICATION_DOMAIN",
-      "value": "nrts-prc-beta.pathfinder.gov.bc.ca"
+      "value": "gcpe-lup-dev.pathfinder.gov.bc.ca"
     },
     {
       "description": "The TAG name for this environment, e.g., dev, test, prod",
       "displayName": "Env TAG name",
       "name": "TAG_NAME",
-      "value": "beta"
+      "value": "dev"
     }
   ]
 }
