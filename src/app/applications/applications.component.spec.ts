@@ -18,9 +18,7 @@ describe('ApplicationsComponent', () => {
   let component: ApplicationsComponent;
   let fixture: ComponentFixture<ApplicationsComponent>;
   const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getApplications']);
-  const commentPeriodService = new CommentPeriodService(
-    apiServiceSpy
-  );
+  const commentPeriodService = new CommentPeriodService(apiServiceSpy);
 
   const applicationServiceStub = {
     getCount() {
@@ -36,26 +34,15 @@ describe('ApplicationsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ApplicationsComponent,
-        FindPanelComponent,
-        AppListComponent,
-        AppMapComponent,
-        VarDirective
-      ],
-      imports: [
-        NgbModule,
-        FormsModule,
-        RouterTestingModule,
-      ],
+      declarations: [ApplicationsComponent, FindPanelComponent, AppListComponent, AppMapComponent, VarDirective],
+      imports: [NgbModule, FormsModule, RouterTestingModule],
       providers: [
         NgbTypeaheadConfig,
         { provide: ApplicationService, useValue: applicationServiceStub },
         { provide: MatSnackBar },
-        { provide: CommentPeriodService, useValue: commentPeriodService },
+        { provide: CommentPeriodService, useValue: commentPeriodService }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

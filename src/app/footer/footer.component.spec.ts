@@ -15,11 +15,8 @@ describe('FooterComponent', () => {
     TestBed.configureTestingModule({
       declarations: [FooterComponent],
       imports: [RouterTestingModule],
-      providers: [
-        {provide: ApiService, useValue: apiServiceStub }
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: ApiService, useValue: apiServiceStub }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatProgressBarModule } from '@angular/material';
-import { MatSnackBarModule } from '@angular/material';
+import { MatProgressBarModule, MatSnackBarModule } from '@angular/material';
 import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 
 import { OrderByPipe } from 'app/pipes/order-by.pipe';
@@ -13,20 +12,8 @@ import { VarDirective } from 'app/utils/ng-var.directive';
 import { DragMoveDirective } from 'app/utils/drag-move.directive';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    MatProgressBarModule,
-    MatSnackBarModule,
-    NgxTextOverflowClampModule
-  ],
-  declarations: [
-    OrderByPipe,
-    NewlinesPipe,
-    ObjectFilterPipe,
-    LinkifyPipe,
-    VarDirective,
-    DragMoveDirective
-  ],
+  imports: [BrowserModule, MatProgressBarModule, MatSnackBarModule, NgxTextOverflowClampModule],
+  declarations: [OrderByPipe, NewlinesPipe, ObjectFilterPipe, LinkifyPipe, VarDirective, DragMoveDirective],
   exports: [
     MatProgressBarModule,
     MatSnackBarModule,
@@ -39,5 +26,4 @@ import { DragMoveDirective } from 'app/utils/drag-move.directive';
     DragMoveDirective
   ]
 })
-
-export class SharedModule { }
+export class SharedModule {}

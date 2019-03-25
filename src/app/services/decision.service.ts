@@ -10,10 +10,7 @@ import { DocumentService } from './document.service';
 export class DecisionService {
   private decision: Decision = null;
 
-  constructor(
-    private api: ApiService,
-    private documentService: DocumentService
-  ) { }
+  constructor(private api: ApiService, private documentService: DocumentService) {}
 
   // get decision for the specified application id
   getByApplicationId(appId: string, forceReload: boolean = false): Observable<Decision> {
@@ -22,33 +19,33 @@ export class DecisionService {
     }
 
     // first get the decision data
-    return this.api.getDecisionByAppId(appId)
-      .pipe(
-        map((res: Decision[]) => {
-          if (!res || res.length === 0) {
-            return null as Decision;
-          }
+    return this.api.getDecisionByAppId(appId).pipe(
+      map((res: Decision[]) => {
+        if (!res || res.length === 0) {
+          return null as Decision;
+        }
 
-          // return the first (only) decision
-          return new Decision(res[0]);
-        }),
-        mergeMap(decision => {
-          if (!decision) {
-            return of(null as Decision);
-          }
+        // return the first (only) decision
+        return new Decision(res[0]);
+      }),
+      mergeMap(decision => {
+        if (!decision) {
+          return of(null as Decision);
+        }
 
-          // now get the decision documents
-          const promise = this.documentService.getAllByDecisionId(decision._id)
-            .toPromise()
-            .then(documents => decision.documents = documents);
+        // now get the decision documents
+        const promise = this.documentService
+          .getAllByDecisionId(decision._id)
+          .toPromise()
+          .then(documents => (decision.documents = documents));
 
-          return Promise.resolve(promise).then(() => {
-            this.decision = decision;
-            return decision;
-          });
-        }),
-        catchError(this.api.handleError)
-      );
+        return Promise.resolve(promise).then(() => {
+          this.decision = decision;
+          return decision;
+        });
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // get a specific decision by its id
@@ -58,31 +55,31 @@ export class DecisionService {
     }
 
     // first get the decision data
-    return this.api.getDecision(decisionId)
-      .pipe(
-        map((res: Decision[]) => {
-          if (!res || res.length === 0) {
-            return null as Decision;
-          }
-          // return the first (only) decision
-          return new Decision(res[0]);
-        }),
-        mergeMap(decision => {
-          if (!decision) {
-            return of(null as Decision);
-          }
+    return this.api.getDecision(decisionId).pipe(
+      map((res: Decision[]) => {
+        if (!res || res.length === 0) {
+          return null as Decision;
+        }
+        // return the first (only) decision
+        return new Decision(res[0]);
+      }),
+      mergeMap(decision => {
+        if (!decision) {
+          return of(null as Decision);
+        }
 
-          // now get the decision documents
-          const promise = this.documentService.getAllByDecisionId(decision._id)
-            .toPromise()
-            .then(documents => decision.documents = documents);
+        // now get the decision documents
+        const promise = this.documentService
+          .getAllByDecisionId(decision._id)
+          .toPromise()
+          .then(documents => (decision.documents = documents));
 
-          return Promise.resolve(promise).then(() => {
-            this.decision = decision;
-            return decision;
-          });
-        }),
-        catchError(this.api.handleError)
-      );
+        return Promise.resolve(promise).then(() => {
+          this.decision = decision;
+          return decision;
+        });
+      }),
+      catchError(this.api.handleError)
+    );
   }
 }

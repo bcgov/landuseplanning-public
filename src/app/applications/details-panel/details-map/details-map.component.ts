@@ -1,5 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, Input } from '@angular/core';
-import { ElementRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, Input, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
 
 import { Application } from 'app/models/application';
@@ -9,32 +8,26 @@ import { Application } from 'app/models/application';
   templateUrl: './details-map.component.html',
   styleUrls: ['./details-map.component.scss']
 })
-
 export class DetailsMapComponent implements AfterViewInit, OnDestroy {
-
   @Input() application: Application = null;
 
   public map: L.Map;
   public appFG = L.featureGroup(); // group of layers for subject app
 
-  constructor(
-    private elementRef: ElementRef
-  ) { }
+  constructor(private elementRef: ElementRef) {}
 
   ngAfterViewInit() {
-    const self = this; // for closure function below
-
     // custom control to reset map view
     const resetViewControl = L.Control.extend({
       options: {
         position: 'bottomright'
       },
-      onAdd: function () {
+      onAdd: () => {
         const element = L.DomUtil.create('button');
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
-        element.onclick = () => self.fitBounds();
+        element.onclick = () => this.fitBounds();
         element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
@@ -45,11 +38,16 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      maxZoom: 16.4,
-      noWrap: true
-    });
+    const World_Imagery = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution:
+          // tslint:disable-next-line:max-line-length
+          'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 16.4,
+        noWrap: true
+      }
+    );
 
     this.map = L.map('map', {
       layers: [World_Imagery],
@@ -70,9 +68,9 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
 
     // add reset view control
     this.map.addControl(new resetViewControl());
-
     // draw application features
-    if (this.application) { // safety check
+    if (this.application) {
+      // safety check
       this.application.features.forEach(f => {
         const feature = JSON.parse(JSON.stringify(f));
         // needs to be valid GeoJSON
@@ -80,6 +78,11 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
         const featureObj: GeoJSON.Feature<any> = feature;
         const layer = L.geoJSON(featureObj);
         this.appFG.addLayer(layer);
+
+        this.map.on('zoomend', () => {
+          const weight = this.getWeight(feature.properties.TENURE_AREA_IN_HECTARES, this.map.getZoom());
+          layer.setStyle({ weight });
+        });
       });
       this.map.addLayer(this.appFG);
     }
@@ -106,8 +109,73 @@ export class DetailsMapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    if (this.map) { this.map.remove(); }
+  /**
+   * Given a features size in hectares and the maps zoom level, returns the weight to use when rendering the shape.
+   * Increasing the weight is used to allow features to remain visible on the map when zoomed out far.
+   *
+   * @private
+   * @param {number} size size of the feature, in hectares.
+   * @param {number} zoom zoom level of the map.
+   * @returns {number} a positive non-null weight for the layer to use when rendering the shape (default: 3)
+   * @memberof DetailsMapComponent
+   */
+  private getWeight(size: number, zoom: number): number {
+    if (!size || !zoom) {
+      return 3; // default
+    }
+
+    if (size < 2) {
+      if (zoom < 3) {
+        return 6;
+      }
+      if (zoom < 10) {
+        return 7;
+      }
+      if (zoom < 14) {
+        return 6;
+      }
+    }
+
+    if (size < 15) {
+      if (zoom < 12) {
+        return 6;
+      }
+    }
+
+    if (size < 30) {
+      if (zoom < 9) {
+        return 6;
+      }
+    }
+
+    if (size < 60) {
+      if (zoom < 12) {
+        return 5;
+      }
+    }
+
+    if (size < 150) {
+      if (zoom < 9) {
+        return 6;
+      }
+    }
+
+    if (size < 1000) {
+      if (zoom < 6) {
+        return 6;
+      }
+    }
+
+    if (zoom < 5) {
+      return 5;
+    }
+
+    return 3; // default
   }
 
+  ngOnDestroy() {
+    if (this.map) {
+      this.map.remove();
+    }
+  }
 }

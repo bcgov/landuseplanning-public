@@ -16,7 +16,6 @@ import { UrlService } from 'app/services/url.service';
   styleUrls: ['./details-panel.component.scss']
 })
 export class DetailsPanelComponent implements OnInit, OnDestroy {
-
   @Output() loadingApp = new EventEmitter(); // to applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
@@ -35,42 +34,38 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
   ) {
     // watch for URL param changes
     // NB: this must be in constructor to get initial parameters
-    this.urlService.onNavEnd$
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(() => {
-        // TODO: could also get 'id' from event.url
-        const id = this.urlService.query('id');
-        if (!id) {
-          // nothing to display
-          this.application = null;
-        } else if (!this.application) {
-          // notify applications component that we will have an app
-          this.loadingApp.emit();
-          // initial load
-          this.loadApp(id);
-        } else if (this.application._id !== id) {
-          // notify applications component that we will have an app
-          this.loadingApp.emit();
-          // load new app
-          this.application = null;
-          this.loadApp(id);
-        }
-      });
+    this.urlService.onNavEnd$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      // TODO: could also get 'id' from event.url
+      const id = this.urlService.query('id');
+      if (!id) {
+        // nothing to display
+        this.application = null;
+      } else if (!this.application) {
+        // notify applications component that we will have an app
+        this.loadingApp.emit();
+        // initial load
+        this.loadApp(id);
+      } else if (this.application._id !== id) {
+        // notify applications component that we will have an app
+        this.loadingApp.emit();
+        // load new app
+        this.application = null;
+        this.loadApp(id);
+      }
+    });
   }
 
   private loadApp(id: string) {
     this.isAppLoading = true;
     // load entire application so we get extra data (documents, decision, features)
-    this.applicationService.getById(id, true)
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+    this.applicationService
+      .getById(id, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         application => {
           this.isAppLoading = false;
-          if (application) { // safety check
+          if (application) {
+            // safety check
             this.application = application;
 
             // save parameter
@@ -83,16 +78,16 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
         error => {
           this.isAppLoading = false;
           console.log('error =', error);
-          alert('Uh-oh, couldn\'t load application');
+          alert("Uh-oh, couldn't load application");
         }
       );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngOnDestroy() {
     if (this.addCommentModal) {
-      (<CommentModalComponent>this.addCommentModal.componentInstance).dismiss('destroying');
+      (this.addCommentModal.componentInstance as CommentModalComponent).dismiss('destroying');
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -109,9 +104,13 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
   public addComment() {
     if (this.application.currentPeriod) {
       // open modal
-      this.addCommentModal = this.modalService.open(CommentModalComponent, { backdrop: 'static', size: 'lg', windowClass: 'comment-modal' });
+      this.addCommentModal = this.modalService.open(CommentModalComponent, {
+        backdrop: 'static',
+        size: 'lg',
+        windowClass: 'comment-modal'
+      });
       // set input parameter
-      (<CommentModalComponent>this.addCommentModal.componentInstance).currentPeriod = this.application.currentPeriod;
+      (this.addCommentModal.componentInstance as CommentModalComponent).currentPeriod = this.application.currentPeriod;
       // check result
       this.addCommentModal.result.then(
         () => {
@@ -125,5 +124,4 @@ export class DetailsPanelComponent implements OnInit, OnDestroy {
       );
     }
   }
-
 }

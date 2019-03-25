@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { ApiService } from './services/api';
 import { ConfigService } from './services/config.service';
 
@@ -14,20 +14,13 @@ describe('AppComponent', () => {
   };
 
   const configServiceStub = {
-    init() {},
+    init() {}
   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent
-      ],
-      imports: [
-        RouterTestingModule,
-        Ng2PageScrollModule.forRoot(),
-      ],
+      declarations: [AppComponent, HeaderComponent, FooterComponent],
+      imports: [RouterTestingModule, NgxPageScrollModule],
       providers: [
         { provide: ApiService, useValue: apiServiceStub },
         { provide: ConfigService, useValue: configServiceStub }
@@ -45,7 +38,9 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('span.navbar-brand__title').textContent).toContain('Applications, Comments & Reasons for Decision');
+    expect(compiled.querySelector('span.navbar-brand__title').textContent).toContain(
+      'Applications, Comments & Reasons for Decision'
+    );
   }));
 
   it('sets the hostname to the apiPath', () => {

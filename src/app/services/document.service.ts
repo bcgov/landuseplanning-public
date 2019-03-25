@@ -9,63 +9,60 @@ import { Document } from 'app/models/document';
 export class DocumentService {
   private document: Document = null;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
   // get all documents for the specified application id
   getAllByApplicationId(appId: string): Observable<Document[]> {
-    return this.api.getDocumentsByAppId(appId)
-      .pipe(
-        map((res: Document[]) => {
-          if (!res || res.length === 0) {
-            return [] as Document[];
-          }
+    return this.api.getDocumentsByAppId(appId).pipe(
+      map((res: Document[]) => {
+        if (!res || res.length === 0) {
+          return [] as Document[];
+        }
 
-          const documents: Document[] = [];
-          res.forEach(document => {
-            documents.push(new Document(document));
-          });
-          return documents;
-        }),
-        catchError(this.api.handleError)
-      );
+        const documents: Document[] = [];
+        res.forEach(document => {
+          documents.push(new Document(document));
+        });
+        return documents;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // get all documents for the specified comment id
   getAllByCommentId(commentId: string): Observable<Document[]> {
-    return this.api.getDocumentsByCommentId(commentId)
-      .pipe(
-        map((res: Document[]) => {
-          if (!res || res.length === 0) {
-            return [] as Document[];
-          }
+    return this.api.getDocumentsByCommentId(commentId).pipe(
+      map((res: Document[]) => {
+        if (!res || res.length === 0) {
+          return [] as Document[];
+        }
 
-          const documents: Document[] = [];
-          res.forEach(document => {
-            documents.push(new Document(document));
-          });
-          return documents;
-        }),
-        catchError(this.api.handleError)
-      );
+        const documents: Document[] = [];
+        res.forEach(document => {
+          documents.push(new Document(document));
+        });
+        return documents;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // get all documents for the specified decision id
   getAllByDecisionId(decisionId: string): Observable<Document[]> {
-    return this.api.getDocumentsByDecisionId(decisionId)
-      .pipe(
-        map((res: Document[]) => {
-          if (!res || res.length === 0) {
-            return []  as Document[];
-          }
+    return this.api.getDocumentsByDecisionId(decisionId).pipe(
+      map((res: Document[]) => {
+        if (!res || res.length === 0) {
+          return [] as Document[];
+        }
 
-          const documents: Document[] = [];
-          res.forEach(document => {
-            documents.push(new Document(document));
-          });
-          return documents;
-        }),
-        catchError(this.api.handleError)
-      );
+        const documents: Document[] = [];
+        res.forEach(document => {
+          documents.push(new Document(document));
+        });
+        return documents;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   // get a specific document by its id
@@ -74,32 +71,30 @@ export class DocumentService {
       return of(this.document);
     }
 
-    return this.api.getDocument(documentId)
-      .pipe(
-        map((res: Document[]) => {
-          if (!res || res.length === 0) {
-            return null as Document;
-          }
+    return this.api.getDocument(documentId).pipe(
+      map((res: Document[]) => {
+        if (!res || res.length === 0) {
+          return null as Document;
+        }
 
-          // return the first (only) document
-          this.document = new Document(res[0]);
-          return this.document;
-        }),
-        catchError(this.api.handleError)
-      );
+        // return the first (only) document
+        this.document = new Document(res[0]);
+        return this.document;
+      }),
+      catchError(this.api.handleError)
+    );
   }
 
   add(formData: FormData): Observable<Document> {
-    return this.api.uploadDocument(formData)
-      .pipe(
-        map((res: Document) => {
-          if (!res) {
-            return null as Document;
-          }
+    return this.api.uploadDocument(formData).pipe(
+      map((res: Document) => {
+        if (!res) {
+          return null as Document;
+        }
 
-          return new Document(res);
-        }),
-        catchError(this.api.handleError)
-      );
+        return new Document(res);
+      }),
+      catchError(this.api.handleError)
+    );
   }
 }

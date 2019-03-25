@@ -12,15 +12,11 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class UrlService {
-
   public onNavEnd$: Observable<NavigationEnd>; // see details below
   private _params: Params = {};
   private _fragment: string = null;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router
-  ) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     // create a new observable that publishes only the NavigationEnd event
     // used for subscribers to know when to refresh their parameters
     // NB: use share() so this fires only once each time even with multiple subscriptions
@@ -30,20 +26,18 @@ export class UrlService {
     );
 
     // keep params up to date
-    this.activatedRoute.queryParamMap
-      .subscribe(paramMap => {
-        this._params = {}; // reset object
-        paramMap.keys.forEach(key => this._params[key] = paramMap.get(key));
-      });
+    this.activatedRoute.queryParamMap.subscribe(paramMap => {
+      this._params = {}; // reset object
+      paramMap.keys.forEach(key => (this._params[key] = paramMap.get(key)));
+    });
 
     // keep fragment up to date
-    this.onNavEnd$
-      .subscribe(event => {
-        const urlTree = router.parseUrl(event.url);
-        if (urlTree) {
-          this._fragment = urlTree.fragment;
-        }
-      });
+    this.onNavEnd$.subscribe(event => {
+      const urlTree = router.parseUrl(event.url);
+      if (urlTree) {
+        this._fragment = urlTree.fragment;
+      }
+    });
   }
 
   // query for specified key in URL
@@ -82,5 +76,4 @@ export class UrlService {
   private navigate = _.debounce(() => {
     this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: this._params, fragment: this._fragment });
   }, 100);
-
 }

@@ -12,9 +12,7 @@ describe('FindPanelComponent', () => {
   let fixture: ComponentFixture<FindPanelComponent>;
 
   const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getApplications']);
-  const commentPeriodService = new CommentPeriodService(
-    apiServiceSpy
-  );
+  const commentPeriodService = new CommentPeriodService(apiServiceSpy);
 
   const applicationService = new ApplicationService(
     apiServiceSpy,
@@ -27,18 +25,13 @@ describe('FindPanelComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [FindPanelComponent, VarDirective],
-      imports: [
-        NgbModule,
-        FormsModule,
-        RouterTestingModule
-      ],
+      imports: [NgbModule, FormsModule, RouterTestingModule],
       providers: [
         NgbTypeaheadConfig,
         { provide: ApplicationService, useValue: applicationService },
-        { provide: CommentPeriodService, useValue: commentPeriodService },
+        { provide: CommentPeriodService, useValue: commentPeriodService }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

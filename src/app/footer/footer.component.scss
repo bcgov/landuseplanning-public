@@ -68,7 +68,7 @@
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid $bg-dark-border-color;
-    
+
     .gov-links {
       text-align: center;
       margin: 0;
@@ -79,7 +79,7 @@
         margin: 0;
         line-height: 1;
 
-        &:after {
+        &::after {
           position: relative;
           top: -1px;
           display: inline-block;
@@ -89,7 +89,7 @@
         }
 
         &:last-child {
-          &:after {
+          &::after {
             display: none;
           }
         }
@@ -120,7 +120,7 @@
   }
 }
 
-.app-footer--sm  {
+.app-footer--sm {
   position: fixed;
   right: 0;
   bottom: 0;

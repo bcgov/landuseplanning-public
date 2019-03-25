@@ -17,7 +17,6 @@ import { UrlService } from 'app/services/url.service';
   styleUrls: ['./explore-panel.component.scss']
 })
 export class ExplorePanelComponent implements OnInit, OnDestroy {
-
   @Output() updateFilters = new EventEmitter(); // to applications component
   @Output() hideSidePanel = new EventEmitter(); // to applications component // used in template
   @Output() resetView = new EventEmitter(); // to applications component
@@ -28,10 +27,10 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   // search keys for lists
-  public cpStatusKeys: Array<string> = [];
-  public appStatusKeys: Array<string> = [];
-  public purposeKeys: Array<string> = [];
-  public subpurposeKeys: Array<string> = [];
+  public cpStatusKeys: string[] = [];
+  public appStatusKeys: string[] = [];
+  public purposeKeys: string[] = [];
+  public subpurposeKeys: string[] = [];
 
   public cpStatusFilters: object = {}; // array-like object
   public _cpStatusFilters: object = {}; // temporary filters for Cancel feature
@@ -81,27 +80,31 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     });
 
     // initialize temporary filters
-    this.cpStatusKeys.forEach(key => { this._cpStatusFilters[key] = false; });
-    this.appStatusKeys.forEach(key => { this._appStatusFilters[key] = false; });
-    this.purposeKeys.forEach(key => { this._purposeFilters[key] = false; });
-    this.subpurposeKeys.forEach(key => { this._subpurposeFilters[key] = false; });
+    this.cpStatusKeys.forEach(key => {
+      this._cpStatusFilters[key] = false;
+    });
+    this.appStatusKeys.forEach(key => {
+      this._appStatusFilters[key] = false;
+    });
+    this.purposeKeys.forEach(key => {
+      this._purposeFilters[key] = false;
+    });
+    this.subpurposeKeys.forEach(key => {
+      this._subpurposeFilters[key] = false;
+    });
 
     // watch for URL param changes
     // NB: this must be in constructor to get initial parameters
-    this.urlService.onNavEnd$
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(() => {
-        // get initial or updated parameters
-        // TODO: could also get params from event.url
-        const hasChanges = this.getParameters();
+    this.urlService.onNavEnd$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      // get initial or updated parameters
+      // TODO: could also get params from event.url
+      const hasChanges = this.getParameters();
 
-        // notify applications component that we have new filters
-        if (hasChanges) {
-          this.updateFilters.emit(this.getFilters());
-        }
-      });
+      // notify applications component that we have new filters
+      if (hasChanges) {
+        this.updateFilters.emit(this.getFilters());
+      }
+    });
   }
 
   private getParameters(): boolean {
@@ -125,8 +128,12 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
       this.subpurposeFilters[key] = subpurposes.includes(key);
     });
 
-    this.publishFromFilter = this.urlService.query('publishFrom') ? moment(this.urlService.query('publishFrom')).toDate() : null;
-    this.publishToFilter = this.urlService.query('publishTo') ? moment(this.urlService.query('publishTo')).toDate() : null;
+    this.publishFromFilter = this.urlService.query('publishFrom')
+      ? moment(this.urlService.query('publishFrom')).toDate()
+      : null;
+    this.publishToFilter = this.urlService.query('publishTo')
+      ? moment(this.urlService.query('publishTo')).toDate()
+      : null;
 
     // const hasFilters = _.values(this.cpStatusFilters).find(b => b)
     //   || _.values(this.appStatusFilters).find(b => b)
@@ -135,12 +142,13 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     //   || !!this.publishFromFilter
     //   || !!this.publishToFilter;
 
-    const hasChanges = !_.isEqual(this._cpStatusFilters, this.cpStatusFilters)
-      || !_.isEqual(this._appStatusFilters, this.appStatusFilters)
-      || !_.isEqual(this._purposeFilters, this.purposeFilters)
-      || !_.isEqual(this._subpurposeFilters, this.subpurposeFilters)
-      || !_.isEqual(this._publishFromFilter, this.publishFromFilter)
-      || !_.isEqual(this._publishToFilter, this.publishToFilter);
+    const hasChanges =
+      !_.isEqual(this._cpStatusFilters, this.cpStatusFilters) ||
+      !_.isEqual(this._appStatusFilters, this.appStatusFilters) ||
+      !_.isEqual(this._purposeFilters, this.purposeFilters) ||
+      !_.isEqual(this._subpurposeFilters, this.subpurposeFilters) ||
+      !_.isEqual(this._publishFromFilter, this.publishFromFilter) ||
+      !_.isEqual(this._publishToFilter, this.publishToFilter);
 
     // copy all data from actual to temporary properties
     this._cpStatusFilters = { ...this.cpStatusFilters };
@@ -153,7 +161,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     return hasChanges;
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {}
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -162,25 +170,49 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
 
   public getFilters(): object {
     // convert array-like objects to arrays
-    const cpStatuses: Array<string> = [];
-    Object.keys(this.cpStatusFilters).forEach(key => { if (this.cpStatusFilters[key]) { cpStatuses.push(key); } });
+    const cpStatuses: string[] = [];
+    Object.keys(this.cpStatusFilters).forEach(key => {
+      if (this.cpStatusFilters[key]) {
+        cpStatuses.push(key);
+      }
+    });
 
-    const appStatuses: Array<string> = [];
-    Object.keys(this.appStatusFilters).forEach(key => { if (this.appStatusFilters[key]) { appStatuses.push(key); } });
+    const appStatuses: string[] = [];
+    Object.keys(this.appStatusFilters).forEach(key => {
+      if (this.appStatusFilters[key]) {
+        appStatuses.push(key);
+      }
+    });
 
-    const purposes: Array<string> = [];
-    Object.keys(this.purposeFilters).forEach(key => { if (this.purposeFilters[key]) { purposes.push(key); } });
+    const purposes: string[] = [];
+    Object.keys(this.purposeFilters).forEach(key => {
+      if (this.purposeFilters[key]) {
+        purposes.push(key);
+      }
+    });
 
-    const subpurposes: Array<string> = [];
-    Object.keys(this.subpurposeFilters).forEach(key => { if (this.subpurposeFilters[key]) { subpurposes.push(key); } });
+    const subpurposes: string[] = [];
+    Object.keys(this.subpurposeFilters).forEach(key => {
+      if (this.subpurposeFilters[key]) {
+        subpurposes.push(key);
+      }
+    });
 
     return {
       cpStatuses: cpStatuses,
       appStatuses: appStatuses,
       purposes: purposes,
       subpurposes: subpurposes,
-      publishFrom: this.publishFromFilter ? moment(this.publishFromFilter).startOf('day').toDate() : null,
-      publishTo: this.publishToFilter ? moment(this.publishToFilter).endOf('day').toDate() : null
+      publishFrom: this.publishFromFilter
+        ? moment(this.publishFromFilter)
+            .startOf('day')
+            .toDate()
+        : null,
+      publishTo: this.publishToFilter
+        ? moment(this.publishToFilter)
+            .endOf('day')
+            .toDate()
+        : null
     };
   }
 
@@ -196,12 +228,13 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     this.publishFromFilter = this._publishFromFilter;
     this.publishToFilter = this._publishToFilter;
 
-
     // save parameters
     this._saveParameters();
 
     // notify applications component that we have new filters
-    if (doNotify) { this.updateFilters.emit(this.getFilters()); }
+    if (doNotify) {
+      this.updateFilters.emit(this.getFilters());
+    }
   }
 
   private _saveParameters() {
@@ -260,10 +293,18 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   // clear all temporary filters
   public clearAllFilters(doNotify: boolean = true) {
     if (this.filterCount() > 0) {
-      this.cpStatusKeys.forEach(key => { this._cpStatusFilters[key] = false; });
-      this.appStatusKeys.forEach(key => { this._appStatusFilters[key] = false; });
-      this.purposeKeys.forEach(key => { this._purposeFilters[key] = false; });
-      this.subpurposeKeys.forEach(key => { this._subpurposeFilters[key] = false; });
+      this.cpStatusKeys.forEach(key => {
+        this._cpStatusFilters[key] = false;
+      });
+      this.appStatusKeys.forEach(key => {
+        this._appStatusFilters[key] = false;
+      });
+      this.purposeKeys.forEach(key => {
+        this._purposeFilters[key] = false;
+      });
+      this.subpurposeKeys.forEach(key => {
+        this._subpurposeFilters[key] = false;
+      });
       this._publishFromFilter = null;
       this._publishToFilter = null;
 
@@ -277,7 +318,7 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
     const appStatusCount = this.appStatusKeys.filter(key => this.appStatusFilters[key]).length;
     const purposeCount = this.purposeKeys.filter(key => this.purposeFilters[key]).length;
     const subpurposeCount = this.subpurposeKeys.filter(key => this.subpurposeFilters[key]).length;
-    const publishCount = (this.publishFromFilter || this.publishToFilter) ? 1 : 0;
+    const publishCount = this.publishFromFilter || this.publishToFilter ? 1 : 0;
 
     return cpStatusCount + appStatusCount + purposeCount + subpurposeCount + publishCount;
   }
@@ -285,9 +326,8 @@ export class ExplorePanelComponent implements OnInit, OnDestroy {
   public showPurposeInfoModal() {
     // open modal
     this.modalService.open(PurposeInfoModalComponent, {
-        size: 'lg',
-        windowClass: 'modal-fixed'
-      }
-    );
+      size: 'lg',
+      windowClass: 'modal-fixed'
+    });
   }
 }

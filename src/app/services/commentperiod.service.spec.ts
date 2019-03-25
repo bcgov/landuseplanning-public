@@ -10,11 +10,7 @@ describe('CommentPeriodService', () => {
       providers: [
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getPeriodsByAppId',
-            'getPeriod',
-            'handleError'
-          ])
+          useValue: jasmine.createSpyObj('ApiService', ['getPeriodsByAppId', 'getPeriod', 'handleError'])
         },
         CommentPeriodService
       ]
@@ -36,27 +32,19 @@ describe('CommentPeriodService', () => {
 
     describe('when no comment periods are returned by the Api', () => {
       it('returns an empty CommentPeriod array', async(() => {
-        apiSpy.getPeriodsByAppId.and.returnValue(
-          of({ text: () => {} })
-        );
+        apiSpy.getPeriodsByAppId.and.returnValue(of({ text: () => {} }));
 
-        service
-          .getAllByApplicationId('123')
-          .subscribe(result => expect(result).toEqual([] as CommentPeriod[]));
+        service.getAllByApplicationId('123').subscribe(result => expect(result).toEqual([] as CommentPeriod[]));
       }));
     });
 
     describe('when one comment period is returned by the Api', () => {
       it('returns an array with one CommentPeriod element', async(() => {
-        apiSpy.getPeriodsByAppId.and.returnValue(
-          of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
-        );
+        apiSpy.getPeriodsByAppId.and.returnValue(of({ text: () => 'notNull', json: () => [{ _id: '1' }] }));
 
         service
           .getAllByApplicationId('123')
-          .subscribe(result =>
-            expect(result).toEqual([new CommentPeriod({ _id: '1' })])
-          );
+          .subscribe(result => expect(result).toEqual([new CommentPeriod({ _id: '1' })]));
       }));
     });
 
@@ -120,23 +108,15 @@ describe('CommentPeriodService', () => {
         it('returns a null CommentPeriod', async(() => {
           apiSpy.getPeriod.and.returnValue(of({ text: () => {} }));
 
-          service
-            .getById('1', true)
-            .subscribe(result => expect(result).toEqual(null as CommentPeriod));
+          service.getById('1', true).subscribe(result => expect(result).toEqual(null as CommentPeriod));
         }));
       });
 
       describe('when one comment period is returned by the Api', () => {
         it('returns one CommentPeriod', async(() => {
-          apiSpy.getPeriod.and.returnValue(
-            of({ text: () => 'notNull', json: () => [{ _id: '1' }] })
-          );
+          apiSpy.getPeriod.and.returnValue(of({ text: () => 'notNull', json: () => [{ _id: '1' }] }));
 
-          service
-            .getById('1', true)
-            .subscribe(result =>
-              expect(result).toEqual(new CommentPeriod({ _id: '1' }))
-            );
+          service.getById('1', true).subscribe(result => expect(result).toEqual(new CommentPeriod({ _id: '1' })));
         }));
       });
 
@@ -149,11 +129,7 @@ describe('CommentPeriodService', () => {
             })
           );
 
-          service
-            .getById('1', true)
-            .subscribe(result =>
-              expect(result).toEqual(new CommentPeriod({ _id: '1' }))
-            );
+          service.getById('1', true).subscribe(result => expect(result).toEqual(new CommentPeriod({ _id: '1' })));
         }));
       });
     });
@@ -166,11 +142,7 @@ describe('CommentPeriodService', () => {
               text: () => 'notNull',
               json: () => [{ _id: '1' }]
             }),
-            throwError(
-              Error(
-                'Was not expecting ApiService.getPeriod to be called more than once.'
-              )
-            )
+            throwError(Error('Was not expecting ApiService.getPeriod to be called more than once.'))
           );
 
           // call once to set the cache
@@ -179,25 +151,15 @@ describe('CommentPeriodService', () => {
 
         it('returns the cached comment period', async(() => {
           // assert cached comment period is returned
-          service
-            .getById('1')
-            .subscribe(result =>
-              expect(result).toEqual(new CommentPeriod({ _id: '1' }))
-            );
+          service.getById('1').subscribe(result => expect(result).toEqual(new CommentPeriod({ _id: '1' })));
         }));
       });
 
       describe('when no comment period is cached', () => {
         it('calls the api to fetch a comment period', async(() => {
-          apiSpy.getPeriod.and.returnValue(
-            of({ text: () => 'notNull', json: () => [{ _id: '3' }] })
-          );
+          apiSpy.getPeriod.and.returnValue(of({ text: () => 'notNull', json: () => [{ _id: '3' }] }));
 
-          service
-            .getById('1')
-            .subscribe(result =>
-              expect(result).toEqual(new CommentPeriod({ _id: '3' }))
-            );
+          service.getById('1').subscribe(result => expect(result).toEqual(new CommentPeriod({ _id: '3' })));
         }));
       });
     });
@@ -236,9 +198,7 @@ describe('CommentPeriodService', () => {
 
     describe('when no comment periods provided', () => {
       it('returns a null CommentPeriod', () => {
-        expect(service.getCurrent([] as CommentPeriod[])).toEqual(
-          null as CommentPeriod
-        );
+        expect(service.getCurrent([] as CommentPeriod[])).toEqual(null as CommentPeriod);
       });
     });
 
@@ -273,9 +233,7 @@ describe('CommentPeriodService', () => {
 
     describe('when no comment period is provided', () => {
       it('returns a NOT OPEN status', () => {
-        expect(service.getStatusCode(null as CommentPeriod)).toEqual(
-          service.NOT_OPEN
-        );
+        expect(service.getStatusCode(null as CommentPeriod)).toEqual(service.NOT_OPEN);
       });
     });
 
@@ -286,9 +244,7 @@ describe('CommentPeriodService', () => {
             _id: '1',
             endDate: today
           });
-          expect(service.getStatusCode(commentPeriod)).toEqual(
-            service.NOT_OPEN
-          );
+          expect(service.getStatusCode(commentPeriod)).toEqual(service.NOT_OPEN);
         });
       });
 
@@ -298,9 +254,7 @@ describe('CommentPeriodService', () => {
             _id: '1',
             startDate: today
           });
-          expect(service.getStatusCode(commentPeriod)).toEqual(
-            service.NOT_OPEN
-          );
+          expect(service.getStatusCode(commentPeriod)).toEqual(service.NOT_OPEN);
         });
       });
 
@@ -312,9 +266,7 @@ describe('CommentPeriodService', () => {
               startDate: today,
               endDate: today.setDate(today.getDate() - 3)
             });
-            expect(service.getStatusCode(commentPeriod)).toEqual(
-              service.NOT_OPEN
-            );
+            expect(service.getStatusCode(commentPeriod)).toEqual(service.NOT_OPEN);
           });
         });
 
@@ -325,9 +277,7 @@ describe('CommentPeriodService', () => {
               startDate: today.setDate(today.getDate() + 3),
               endDate: today.setDate(today.getDate() + 6)
             });
-            expect(service.getStatusCode(commentPeriod)).toEqual(
-              service.NOT_OPEN
-            );
+            expect(service.getStatusCode(commentPeriod)).toEqual(service.NOT_OPEN);
           });
         });
 
@@ -352,9 +302,7 @@ describe('CommentPeriodService', () => {
     });
 
     it('returns a human readable NOT OPEN status string', () => {
-      expect(service.getStatusString(service.NOT_OPEN)).toEqual(
-        'Not Open For Commenting'
-      );
+      expect(service.getStatusString(service.NOT_OPEN)).toEqual('Not Open For Commenting');
     });
 
     it('returns a human readable OPEN status string', () => {

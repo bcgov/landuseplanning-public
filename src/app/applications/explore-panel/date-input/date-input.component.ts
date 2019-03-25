@@ -6,9 +6,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './date-input.component.html',
   styleUrls: ['./date-input.component.scss']
 })
-
 export class DateInputComponent implements OnChanges {
-
   @Input() date: Date = null;
   @Input() isValidate = false; // whether to validate (FUTURE)
   @Input() minDate: Date = null;
@@ -19,7 +17,7 @@ export class DateInputComponent implements OnChanges {
   public minNgbDate: NgbDateStruct = null;
   public maxNgbDate: NgbDateStruct = null;
 
-  constructor() { }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.date) {
@@ -45,15 +43,14 @@ export class DateInputComponent implements OnChanges {
 
   // used in template
   public isValidDate(date: NgbDateStruct): boolean {
-    return (date && !isNaN(date.year) && !isNaN(date.month) && !isNaN(date.day));
+    return date && !isNaN(date.year) && !isNaN(date.month) && !isNaN(date.day);
   }
 
   private dateToNgbDate(date: Date): NgbDateStruct {
-    return date ? { 'year': date.getFullYear(), 'month': date.getMonth() + 1, 'day': date.getDate() } : null;
+    return date ? { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() } : null;
   }
 
   private ngbDateToDate(date: NgbDateStruct): Date {
-    return date ? new Date(date.year, (date.month - 1), date.day) : null;
+    return date ? new Date(date.year, date.month - 1, date.day) : null;
   }
-
 }

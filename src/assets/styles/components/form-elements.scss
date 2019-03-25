@@ -14,7 +14,7 @@ label {
     vertical-align: top;
   }
 
-  &:after {
+  &::after {
     white-space: pre;
   }
 
@@ -40,10 +40,6 @@ label {
   font-size: 0.85rem;
 }
 
-.invalid-feedback {
-  margin-top: 0.4rem;
-}
-
 .form-control-container {
   position: relative;
 }
@@ -51,9 +47,9 @@ label {
 // Fieldset/Legend
 fieldset {
   + fieldset {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid $fc-border-color;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid $fc-border-color;
   }
 }
 
@@ -97,10 +93,10 @@ input {
   }
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 select {
@@ -120,11 +116,12 @@ textarea.form-control {
   @include placeholder {
     color: $fc-placeholder-color;
   }
+
   resize: vertical;
   box-shadow: $fc-inner-shadow inset;
 }
 
-// Input Group 
+// Input Group
 .input-group-btn {
   .btn-icon {
     border-color: $fc-border-color;

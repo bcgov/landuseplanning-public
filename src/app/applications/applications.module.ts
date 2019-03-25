@@ -21,13 +21,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { PurposeInfoModalComponent } from './purpose-info-modal/purpose-info-modal.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgbModule.forRoot(),
-    RouterModule,
-    SharedModule
-  ],
+  imports: [CommonModule, FormsModule, NgbModule.forRoot(), RouterModule, SharedModule],
   declarations: [
     ApplicationsComponent,
     AppListComponent,
@@ -41,11 +35,6 @@ import { PurposeInfoModalComponent } from './purpose-info-modal/purpose-info-mod
     SplashModalComponent,
     PurposeInfoModalComponent
   ],
-  entryComponents: [
-    MarkerPopupComponent,
-    SplashModalComponent,
-    PurposeInfoModalComponent
-  ]
+  entryComponents: [MarkerPopupComponent, SplashModalComponent, PurposeInfoModalComponent]
 })
-
-export class ApplicationsModule { }
+export class ApplicationsModule {}

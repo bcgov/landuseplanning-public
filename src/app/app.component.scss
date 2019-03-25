@@ -1,12 +1,13 @@
 @import "~assets/styles/base/base.scss";
 
-
 :host {
   display: block;
+
   @include flex-box();
   @include flex-direction(column);
+
   min-height: 100vh;
-  background: #003366;
+  background: #036;
 }
 
 .no-scroll {

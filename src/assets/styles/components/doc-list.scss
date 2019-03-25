@@ -14,6 +14,7 @@ $doc-list-link-color: $primary2;
 .doc-list__item {
   @include flex-box();
   @include flex-direction(row);
+
   align-items: center;
   border-radius: 0.2rem;
   background: $gray2;
@@ -77,6 +78,7 @@ a.doc-list__item {
 // Default Cell behaviors
 .cell.doc-list__item-icon {
   @include flex(0 0 auto);
+
   padding-right: 0;
 }
 

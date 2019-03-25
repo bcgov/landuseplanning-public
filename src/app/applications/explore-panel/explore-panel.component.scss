@@ -101,7 +101,7 @@ $select-badge-active-bg: #a5d8ff;
     }
   }
 
-   input:checked {
+  input:checked {
     + label {
       color: $gray9;
       background-color: $select-badge-active-bg;

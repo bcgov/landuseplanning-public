@@ -14,12 +14,10 @@ const LIST_PAGE_SIZE = 10;
   templateUrl: './app-list.component.html',
   styleUrls: ['./app-list.component.scss']
 })
-
 export class AppListComponent implements OnInit, OnChanges, OnDestroy {
-
   @Input() isLoading: boolean; // from applications component
-  @Input() applications: Array<Application> = []; // from applications component
-  @Input() isListVisible: Array<Application> = []; // from applications component
+  @Input() applications: Application[] = []; // from applications component
+  @Input() isListVisible: Application[] = []; // from applications component
   @Output() setCurrentApp = new EventEmitter(); // to applications component
   @Output() unsetCurrentApp = new EventEmitter(); // to applications component
 
@@ -31,9 +29,9 @@ export class AppListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     public applicationService: ApplicationService,
     public commentPeriodService: CommentPeriodService // used in template
-  ) { }
+  ) {}
 
-  public ngOnInit() { }
+  public ngOnInit() {}
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
@@ -74,7 +72,7 @@ export class AppListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private isCurrentApp(item: Application): boolean {
-    return (item === this.currentApp);
+    return item === this.currentApp;
   }
 
   public toggleCurrentApp(item: Application) {
@@ -91,11 +89,11 @@ export class AppListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public loadedApps(): Array<Application> {
+  public loadedApps(): Application[] {
     return this.applications.filter(a => a.isLoaded);
   }
 
-  public appsWithShapes(): Array<Application> {
+  public appsWithShapes(): Application[] {
     return this.applications.filter(a => a.centroid.length === 2);
   }
 
@@ -110,13 +108,13 @@ export class AppListComponent implements OnInit, OnChanges, OnDestroy {
     for (let i = 0; i < this.applications.length && i < this.numToShow; i++) {
       if (!this.applications[i].isLoaded) {
         isNoneLoaded = false;
-        this.applicationService.getById(this.applications[i]._id, true)
-          .pipe(
-            takeUntil(this.ngUnsubscribe)
-          )
+        this.applicationService
+          .getById(this.applications[i]._id, true)
+          .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(
             app => {
-              if (app) { // safety check
+              if (app) {
+                // safety check
                 this.applications[i] = app;
                 this.applications[i].isLoaded = true;
               }
@@ -130,5 +128,4 @@ export class AppListComponent implements OnInit, OnChanges, OnDestroy {
       this.isListLoading = false;
     }
   }
-
 }

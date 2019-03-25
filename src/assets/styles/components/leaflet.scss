@@ -1,5 +1,5 @@
 .leaflet-container {
-  font-family: "myriad-pro", Calibri, Arial, 'sans serif';
+  font-family: "myriad-pro", Calibri, Arial, sans-serif;
 
   a.leaflet-popup-close-button {
     top: 0.5rem;
@@ -47,9 +47,9 @@
 }
 
 // Marker cluster size variants
-// * small  = 1-9 
+// * small  = 1-9
 // * medium = 10-99
-// * large  = 100+   
+// * large  = 100+
 
 .marker-cluster-small,
 .marker-cluster-medium,

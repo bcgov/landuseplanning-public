@@ -1,8 +1,8 @@
-@import "~assets/styles/base/base.scss";
+@import '~assets/styles/base/base.scss';
 
 $popup-border-radius: 0.2rem;
 $popup-title-color: #fff;
-$popup-title-bg: #003366;
+$popup-title-bg: #036;
 
 .popup-content {
   padding: 1rem;
@@ -11,6 +11,8 @@ $popup-title-bg: #003366;
 .popup-body {
   border-bottom-right-radius: $popup-border-radius;
   border-bottom-left-radius: $popup-border-radius;
+  line-height: 1.4em;
+  font-size: 0.875em;
 
   ul {
     margin-bottom: 0;
@@ -29,6 +31,7 @@ $popup-title-bg: #003366;
 .applicant-name {
   font-size: 1rem;
   font-weight: 600;
+  color: $gray9;
 }
 
 .applicant-name,
@@ -36,11 +39,7 @@ $popup-title-bg: #003366;
   line-height: 1.25rem;
 }
 
-.applicant-name {
-  color: $gray9;
-}
-
-// Status 
+// Status
 .status-container {
   margin-top: 0.8rem;
   margin-bottom: 0;
@@ -64,31 +63,31 @@ $popup-title-bg: #003366;
   }
 }
 
-// Status Iconography 
+// Status Iconography
 .commenting-open {
-  background: url("~assets/images/baseline-insert_comment-24px.svg");
+  background: url('~assets/images/baseline-insert_comment-24px.svg');
 }
 
 .commenting-closed {
-  background: url("~assets/images/baseline-cancel-24px.svg");
+  background: url('~assets/images/baseline-cancel-24px.svg');
 }
 
 .under-review {
-  background: url("~assets/images/baseline-access_time-24px.svg");
+  background: url('~assets/images/baseline-access_time-24px.svg');
 }
 
 .review-complete,
 .unknown {
-  background: url("~assets/images/outline-info-24px.svg");
+  background: url('~assets/images/outline-info-24px.svg');
 }
 
 .approved {
-  background: url("~assets/images/baseline-check-24px.svg");
+  background: url('~assets/images/baseline-check-24px.svg');
 }
 
 .abandoned,
 .not-approved {
-  background: url("~assets/images/baseline-cancel-24px.svg");
+  background: url('~assets/images/baseline-cancel-24px.svg');
 }
 
 .meta-container {
@@ -116,11 +115,6 @@ $popup-title-bg: #003366;
     padding-right: 0.25em;
     font-weight: 700;
   }
-}
-
-.popup-body {
-  line-height: 1.4em;
-  font-size: 0.875em;
 }
 
 hr {

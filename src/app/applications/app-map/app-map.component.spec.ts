@@ -21,12 +21,8 @@ describe('AppMapComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AppMapComponent],
-      providers: [
-        ConfigService,
-        { provide: ApplicationService, useValue: applicationServiceSpy }
-      ]
-    })
-      .compileComponents();
+      providers: [ConfigService, { provide: ApplicationService, useValue: applicationServiceSpy }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
