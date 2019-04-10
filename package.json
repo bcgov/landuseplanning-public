@@ -55,6 +55,7 @@
     "ngx-text-overflow-clamp": "0.0.1",
     "popper.js": "1.14.7",
     "rxjs": "6.4.0",
+    "rxjs-compat": "^6.4.0",
     "web-animations-js": "2.3.1",
     "zone.js": "0.8.29"
   },
