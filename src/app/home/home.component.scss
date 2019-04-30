@@ -16,6 +16,25 @@
   vertical-align: top;
 }
 
+main {
+  padding: 3rem 0 3.75rem;
+  text-align: center;
+
+  h2 {
+    text-align: center;
+    font-weight: 500;
+    font-size: 2rem;
+    margin-bottom: 1.75rem;
+  }
+
+  p {
+    line-height: 1.75;
+    font-size: 1.2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+}
+
 @media (max-width: 767px) {
   .hero-banner h1 {
     line-height: 2rem;
