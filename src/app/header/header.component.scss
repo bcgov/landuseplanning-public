@@ -4,7 +4,6 @@
   @include clearfix;
   position: relative;
   padding: 0;
-  border-bottom: 4px solid $gold;
   background: $header-bg;
   color: $header-font-color;
   z-index: 1005;
@@ -183,6 +182,7 @@
         }
         &:hover {
           background-color: #002663;
+          border-bottom: 2px solid #057aff;
         }
       }
 
@@ -241,13 +241,13 @@
 }
 
 .navbar-brand__title {
-  margin-top: 0.35rem;
+  margin-top: 0.78rem;
   margin-left: 75px;
   display: inline-block;
   color: #fff;
   line-height: 1.1rem;
-  font-size: 0.875rem;
-
+  font-weight: 800;
+  font-size: 2rem;
   .wb {
     display: block;
   }

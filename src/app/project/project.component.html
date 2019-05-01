@@ -2,27 +2,26 @@
   <div class="container">
     <div class="row">
       <main class="col-lg-5 project-info">
-        <section class="organization-item">
-          <p>{{project?.name || '-'}}</p>
-        </section>
-
         <section class="project-item">
-          <div class="project-item__commenting row">
-            <div class="col">
+          <div class="row">
+            <div class="organization-item">
+              <p>{{project?.name || '-'}}</p>
+            </div>
+            <div class="project-item__commenting col-12">
                 <label>Current Phase</label>
                 <span>{{project?.currentPhaseName || 'Unknown Project Phase'}}</span>
             </div>
-          </div>
-          <div class="row">
             <div class="col-12">
               <p class="proj-status">{{project?.status || 'Unknown Project Status'}}</p>
             </div>
-          </div>
-          <div class="row">
             <div class="col-6">
               <!-- This is currently just an ID. We will need to fetch the query proponent using the ID -->
               <label>Proponent</label>
               <p class="value">{{project?.proponent || "-" | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <label>EA Decision</label>
+              <p class="value">{{project && project.eacDecision || "-"}}</p>
             </div>
             <div class="col-6">
               <label>Region</label>
@@ -41,10 +40,6 @@
               <p class="value">{{project?.sector || "-" | titlecase}}</p>
             </div>
             <div class="col-6">
-              <label>EA Decision</label>
-              <p class="value">{{project && project.eacDecision || "-"}}</p>
-            </div>
-            <div class="col-6">
               <label>Project Lead</label>
               <p class="value">{{project?.projectLead || "-"}}</p>
               <p class="value">{{project?.projectLeadPhone || "-"}}</p>
@@ -57,11 +52,11 @@
               <p class="value"><a href="mailto:{{project?.responsibleEPDEmail}}">{{project?.responsibleEPDEmail || "-"}}</a></p>
             </div>
             <div class="col-6">
-                <label>Compliance & Enforcement Lead</label>
-                <p class="value">{{project?.CELead || "-"}}</p>
-                <p class="value">{{project?.CELeadPhone || "-"}}</p>
-                <p class="value"><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
-              </div>
+              <label>Compliance & Enforcement Lead</label>
+              <p class="value">{{project?.CELead || "-"}}</p>
+              <p class="value">{{project?.CELeadPhone || "-"}}</p>
+              <p class="value"><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
+            </div>
           </div>
         </section>
 

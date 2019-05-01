@@ -9,18 +9,14 @@
   box-shadow: 0 0 4rem #00264d inset;
 
   .container {
-    display: table;
-    height: 1px; // Fix Firefox - won't correnctly render min-height unless an initial value is added
     min-height: 20rem;
-
-    &-inner {
-      display: table-row;
+    @media (max-width: 767px) {
+      padding: 2rem 1rem 2.5rem;
     }
   }
 }
 
 .hero-banner__content {
-  display: table-cell;
   padding-top: 2rem;
   padding-bottom: 2rem;
   vertical-align: middle;
@@ -32,7 +28,10 @@
     margin-bottom: 1.15rem;
     line-height: 2.15rem;
     font-size: 2.25rem;
-
+    @media (max-width: 767px) {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
     .wb {
       display: block;
     }
@@ -45,6 +44,20 @@
     max-width: 860px;
     font-weight: 300;
     orphans: 3;
+    @media (max-width: 767px) {
+      font-size: 1.2rem;
+    }
+  }
+  @media (max-width: 767px) {
+    .btn {
+      i {
+        display: none;
+      }
+      span {
+        display: block;
+        transform: none;
+      }
+    }
   }
 }
 
