@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { RouterModule } from '@angular/router';
 
 // modules
-import { SharedModule } from 'app/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { ProjectRoutingModule } from './project-routing.module';
+import { CommentsModule } from 'app/project/comments/comments.module';
+
 
 // components
 import { ProjectComponent } from './project.component';
@@ -22,9 +23,9 @@ import { DateInputComponent } from 'app/date-input/date-input.component';
     CommonModule,
     FormsModule,
     NgbModule.forRoot(),
-    NgxPaginationModule,
     RouterModule,
     SharedModule,
+    CommentsModule,
     ProjectRoutingModule
   ],
   declarations: [

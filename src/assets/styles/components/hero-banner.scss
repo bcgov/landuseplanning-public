@@ -9,28 +9,29 @@
   box-shadow: 0 0 4rem #00264d inset;
 
   .container {
-    display: table;
-    height: 1px; // Fix Firefox - won't correnctly render min-height unless an initial value is added
     min-height: 20rem;
-
-    &-inner {
-      display: table-row;
+    @media (max-width: 767px) {
+      padding: 2rem 1rem 2.5rem;
     }
   }
 }
 
 .hero-banner__content {
-  display: table-cell;
   padding-top: 2rem;
   padding-bottom: 2rem;
   vertical-align: middle;
   color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   h1 {
     margin-bottom: 1.15rem;
     line-height: 2.15rem;
     font-size: 2.25rem;
-
+    @media (max-width: 767px) {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
     .wb {
       display: block;
     }
@@ -38,10 +39,25 @@
 
   p {
     margin-bottom: 0;
-    line-height: 1.5rem;
-    font-size: 1rem;
+    line-height: 1.5;
+    font-size: 1.65rem;
+    max-width: 860px;
     font-weight: 300;
     orphans: 3;
+    @media (max-width: 767px) {
+      font-size: 1.2rem;
+    }
+  }
+  @media (max-width: 767px) {
+    .btn {
+      i {
+        display: none;
+      }
+      span {
+        display: block;
+        transform: none;
+      }
+    }
   }
 }
 
@@ -56,6 +72,8 @@
 
 .hero-banner__actions-buttons {
   .btn {
+    background: #007bff;
+    border: none;
     padding: 0.5rem;
     text-transform: uppercase;
     font-size: 0.85rem;
@@ -95,7 +113,8 @@
   }
 
   .hero-banner__content {
-    padding-top: 2rem;
+    padding-top: 8rem;
+    padding-bottom: 6rem;
 
     h1 {
       line-height: 2.8rem;
@@ -103,8 +122,8 @@
     }
 
     p {
-      line-height: 1.75rem;
-      font-size: 1.25rem;
+      line-height: 1.75;
+      font-size: 1.35rem;
     }
   }
 }

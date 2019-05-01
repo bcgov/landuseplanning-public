@@ -1,0 +1,28 @@
+@import "~assets/styles/base/base.scss";
+
+:host {
+    @include flex(1 1 auto);
+    display: block;
+    background: $bg-default;
+}  
+
+@media (min-width: 768px) {
+    :host {
+        padding-top: 4.8rem;
+    }
+}
+
+.comments {
+    background-color: #fff;
+
+    .header-section{
+        margin-top: 20px;
+        overflow-y: auto;
+        font-size: medium;
+        padding: 1rem;
+        border: 1px #ccc solid;
+        border-radius: 5px;
+        color: #fff;
+        background-color: #003366;
+    }
+}

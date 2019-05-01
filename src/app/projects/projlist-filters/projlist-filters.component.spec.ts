@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProjlistFiltersComponent } from './projlist-filters.component';
 import { NgbModule, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { VarDirective } from 'app/utils/ng-var.directive';
+import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';

@@ -5,7 +5,7 @@ import { ProjlistListComponent } from 'app/projects/projlist-list/projlist-list.
 import { ProjlistMapComponent } from './projlist-map/projlist-map.component';
 import { NgbModule, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { VarDirective } from 'app/utils/ng-var.directive';
+import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar } from '@angular/material';
 import { ProjectService } from 'app/services/project.service';

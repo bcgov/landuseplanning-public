@@ -1,6 +1,5 @@
 import * as moment from 'moment';
 
-import { Comment } from './comment';
 
 export class CommentPeriod {
   _id: string;
@@ -52,9 +51,6 @@ export class CommentPeriod {
   // Not from API
   commentPeriodStatus: String;
   daysRemaining: String;
-  currentPage: number;
-  pageSize: number;
-  totalComments: number;
 
   constructor(obj?: any) {
     this._id                  = obj && obj._id                  || null;
@@ -101,10 +97,6 @@ export class CommentPeriod {
     this.write                = obj && obj.write                || null;
     this.delete               = obj && obj.delete               || null;
 
-    this.currentPage          = obj && obj.currentPage          || null;
-    this.pageSize             = obj && obj.pageSize             || null;
-    this.totalComments        = obj && obj.totalComments        || null;
-
     if (obj && obj.dateStarted) {
       this.dateStarted = new Date(obj.dateStarted);
     }
@@ -120,14 +112,10 @@ export class CommentPeriod {
       const days = moment(obj.dateCompleted).diff(moment(today), 'days') + 1;
       this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
       if (days <= 0) {
-        this.commentPeriodStatus = 'Completed';
+        this.commentPeriodStatus = 'Not in progress';
       } else {
         this.commentPeriodStatus = 'In progress';
       }
     }
-
-    // if (obj && obj.comments) {
-    //   this.comments.push(obj.comments);
-    // }
   }
 }
