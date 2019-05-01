@@ -1,142 +1,188 @@
 @import "~assets/styles/base/base.scss";
 
 :host {
-    @include flex(1 1 auto);
-    display: block;
-    background: $bg-default;
-}  
+  @include flex(1 1 auto);
+  display: block;
+  background: $bg-default;
+}
 
 @media (min-width: 768px) {
-    :host {
-        padding-top: 4.8rem;
-    }
+  :host {
+    padding-top: 4.8rem;
+  }
 }
 
 .project {
-    main {
-        overflow-y: auto;
-        font-size: medium;
-        background-color: #fff;
-        padding: 1rem;
-        border: 1px #ccc solid;
-        border-radius: 5px;
-        section {
-            word-wrap: break-word;
-            border: 1px #ccc solid;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-            margin-left: 0;
-            margin-right: 0;
-            >div {
-                padding: 0px;
-            }
-        }
-        section:last-of-type {
-            margin-bottom: 0;
-        }
-        .proj-status,
-        .shape-id {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: $primary;
-            margin-bottom: 5px;
-        }
-        label {
-            font-weight: bold;
-            color: $primary;
-            margin-bottom: 0;
-        }
-        .value {
-            font-size: 0.83rem;
-            line-height: 1.25;
-            margin-bottom: 5px;
-        }
-        .organization-item {
-            margin-top: 0;
-            color: #fff;
-            background-color: #38598a;
-            padding: 5px 10px;
-            p {
-                font-size: large;
-                font-weight: bold;
-                margin-bottom: 0;
-            }
-        }
-        .project-item {
-            &__commenting {
-                margin: -10px -10px 5px -10px;
-                background-color: #ddd;
-                .col {
-                    padding: 5px 10px;
-                }
-            }
-        }
-        .map-item {
-            position: relative;
-            padding: 0;
-            .map-container {
-                display: block;
-                position: relative;
-                overflow: hidden;
-                height: (300px - 33px); // to hide attribution
-            }
-            .map {
-                position: relative;
-                height: 300px;
-                outline: none;
-                touch-action: none;
-                background-color: $map-bg;
-            }
-        }
-        .map-item__no-results {
-          text-align: center;
-          position: absolute;
-          background: #eee;
-          z-index: 2000;
-          width: 100%;
-          height: 100%;
-        }
-        .no-results-msg {
-          position: absolute;
-          top: 50%;
-          width: 100%;
-          left: 0;
-          margin-top: -12px;
-          text-align: center;
-        }
-        .shape-info-item {
-            hr {
-                margin: 1rem 0;
-            }
-        }
+  background: #f7f8fa;
+
+  .container {
+    @media (max-width: 767px) {
+      padding: 1rem;
     }
-    aside {
+  }
+
+  main {
+    font-size: .9rem;
+
+    section {
+      word-wrap: break-word;
+      border-radius: 5px;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      margin-left: 0;
+      margin-right: 0;
+      background-color: #fff;
+      padding: 0 1rem 1rem;
+      border-radius: 4px;
+      box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15);
+
+      .row {
+        margin-right: -16px;
+        margin-left: -16px;
+        @media (max-width: 767px) {
+          display: block;
+          font-size: 1rem;
+          .value,
+          p {
+            font-size: 1rem;
+          }
+          .col-6 {
+            max-width: 100%;
+            margin-bottom: 12px;
+          }
+        }
+      }
+      >div {
+        padding: 0px;
+      }
+    }
+    section:last-of-type {
+      margin-bottom: 0;
+    }
+    .proj-status,
+    .shape-id {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: $primary;
+      margin-bottom: 5px;
+    }
+    .col-6 {
+      margin-bottom: 2px;
+    }
+    label {
+      font-weight: bold;
+      color: $primary;
+      margin-bottom: 0;
+      line-height: 1.2;
+    }
+    .value {
+      font-size: .8rem;
+      line-height: 1.25;
+      margin-bottom: 5px;
+    }
+    .organization-item {
+      margin-top: 0;
+      color: #fff;
+      background-color: #38598a;
+      border-radius: 4px 4px 0 0;
+      padding: 7px 10px;
+      width: 100%;
+      text-align: center;
+      p {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0;
+      }
+    }
+    .project-item {
+      &__commenting {
+        background-color: #ddd;
+        margin-bottom: 8px;
+        padding: 7px 1rem;
+      }
+    }
+    .map-item {
+      position: relative;
+      padding: 0;
+      .map-container {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        height: (300px - 33px); // to hide attribution
+      }
+      .map {
+        position: relative;
+        height: 300px;
+        outline: none;
+        touch-action: none;
+        background-color: $map-bg;
+      }
+    }
+    .map-item__no-results {
+      text-align: center;
+      position: absolute;
+      background: #eee;
+      z-index: 2000;
+      width: 100%;
+      height: 100%;
+    }
+    .no-results-msg {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      left: 0;
+      margin-top: -12px;
+      text-align: center;
+    }
+    .shape-info-item {
+      hr {
+          margin: 1rem 0;
+      }
+    }
+  }
+
+  aside {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    button {
+      margin-bottom: 1rem;
+    }
+    >section {
+      position: relative;
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 5px;
+      min-height: 20rem;
+      box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15);
+
+      ul.nav-tabs {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+  .people {
+    h2 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #036;
+      margin-bottom: 5px;
+    }
+    .flex-container {
+      @media (min-width: 991px) {
         display: flex;
-        flex-direction: column;
-        margin-top: 0;
-        button {
-            margin-bottom: 1rem;
+        .inner-col {
+          flex: 32%;
         }
-        >section {
-            position: relative;
-            background-color: #fff;
-            padding: 1rem;
-            border: 1px #ccc solid;
-            border-radius: 5px;
-            min-height: 20rem;
-            ul.nav-tabs {
-                margin-bottom: 1.5rem;
-            }
-        }
+      }
     }
+  }
 }
 
 @media (max-width: 991px) {
-    .project {
-        main {
-            margin-bottom: 1rem;
-        }
+  .project {
+    main {
+      margin-bottom: 1rem;
     }
+  }
 }

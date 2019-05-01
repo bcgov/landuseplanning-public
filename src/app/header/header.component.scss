@@ -4,7 +4,6 @@
   @include clearfix;
   position: relative;
   padding: 0;
-  border-bottom: 4px solid $gold;
   background: $header-bg;
   color: $header-font-color;
   z-index: 1005;
@@ -26,14 +25,11 @@
   .app-header--flex {
     @include flex(0 0 auto);
     position: relative;
-    border-bottom-width: 4px;
-    border-bottom-color: $gold;
     background: $header-bg;
     color: $header-font-color;
   }
 
   .app-header--solid {
-    border-bottom: 4px solid $gold;
     background: $header-bg;
     color: $header-font-color;
   }
@@ -49,7 +45,7 @@
   font-size: medium;
   font-weight: 600;
   outline: none; // override user agent stylesheet default
-  
+
   &:hover {
     cursor: pointer;
   }
@@ -94,6 +90,7 @@
 
   .navbar-nav {
     margin-top: 0.5rem;
+    padding-right: 30px;
 
     .nav-link {
       position: relative;
@@ -105,6 +102,16 @@
       font-size: $mn-font-size;
       font-weight: 700;
       cursor: pointer;
+
+      span {
+        font-size: 1rem;
+        text-transform: none;
+        font-weight: normal;
+      }
+
+      .icon {
+        margin-top: 0;
+      }
     }
 
     .dropdown {
@@ -128,23 +135,23 @@
         font-size: $mn-dropdown-menu-size;
         white-space: normal;
         cursor: pointer;
-        
+
         strong {
           font-weight: 600;
           transition: color 0.2s ease-out;
         }
-        
+
         .dd-item-desc {
           display: block;
           font-size: small;
           opacity: 0.5;
           transition: opacity 0.2s ease-out;
         }
-        
+
         &:focus,
         &:hover {
           background: transparent;
-          
+
           strong {
             color: $mn-hover-color;
           }
@@ -161,10 +168,10 @@
 @media (min-width: 768px) {
   .navbar {
     background: transparent;
-    
+
     .navbar-nav {
       margin-top: 0;
-      
+
       .nav-link {
         height: 4.2rem; // 60px to match the branding height
         padding: 0.5rem 0.75rem !important;
@@ -175,6 +182,7 @@
         }
         &:hover {
           background-color: #002663;
+          border-bottom: 2px solid #057aff;
         }
       }
 
@@ -233,13 +241,13 @@
 }
 
 .navbar-brand__title {
-  margin-top: 0.35rem;
+  margin-top: 0.78rem;
   margin-left: 75px;
   display: inline-block;
   color: #fff;
   line-height: 1.1rem;
-  font-size: 0.875rem;
-
+  font-weight: 800;
+  font-size: 2rem;
   .wb {
     display: block;
   }
@@ -263,10 +271,10 @@
 
   .navbar-brand__title {
     margin-left: 88px;
-    margin-top: 0.65rem;
     line-height: 1.2rem;
-    font-size: 1rem;
-    font-weight: 400;
+    font-weight: 800;
+    font-size: 3rem;
+    margin-top: 17px;
   }
 
   .navbar-brand__version {

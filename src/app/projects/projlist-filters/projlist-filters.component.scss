@@ -7,6 +7,7 @@ $app-filters-font-lg: 0.9375rem;
 .app-filters__container {
   background: $app-filters-bg;
   font-size: 0.875rem;
+  border-radius: 4px;
 
   &.open {
     position: absolute;
@@ -23,6 +24,40 @@ $app-filters-font-lg: 0.9375rem;
     font-size: $app-filters-font-sm;
   }
 
+  .search-container {
+    padding: .5rem 1rem .2rem;
+    background: #f7f8fa;
+    position: relative;
+    border-radius: 4px;
+
+    label {
+      font-size: 1.4rem;
+      letter-spacing: -.015em;
+      font-weight: 400;
+    }
+
+    .gtm-filter-applicant {
+      padding-right: 85px;
+      border-radius: 2px;
+      box-shadow: none;
+      -webkit-appearance: none;
+      border: 1px solid #ababab;
+      font-size: 1rem;
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #5091cd;
+      }
+    }
+
+    .btn {
+      border-radius: 0 4px 4px 0;
+      font-size: 1rem;
+      position: absolute;
+      right: 15px;
+      bottom: 19px;
+    }
+  }
+
   legend {
     margin-bottom: 0.5rem;
   }
@@ -30,7 +65,6 @@ $app-filters-font-lg: 0.9375rem;
 
 @media (min-width: 1200px) {
   .app-filters__container {
-    border-radius: 0.2rem;
     font-size: 0.9375rem;
 
     &.open {
@@ -42,7 +76,7 @@ $app-filters-font-lg: 0.9375rem;
       height: 2.5rem;
       font-size: $app-filters-font-lg;
     }
-  }  
+  }
 }
 
 .app-filters__header {
@@ -175,7 +209,8 @@ $app-filters-font-lg: 0.9375rem;
   ::ng-deep {
     .dropdown-menu {
       right: 0;
-      overflow: hidden;
+      overflow-y: scroll;
+      max-height: 50vh;
     }
   }
 }
@@ -202,7 +237,7 @@ $app-filters-font-lg: 0.9375rem;
   }
 }
 
-// Date Range 
+// Date Range
 .date-range {
   @include flex-box();
   @include clearfix();
