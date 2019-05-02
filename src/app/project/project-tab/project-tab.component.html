@@ -1,12 +1,8 @@
 <div class="tab-pane" role="tabpanel">
     <section class="tab-section" *ngIf="project">
-        <div class="status mb-3">
-          {{project.status || 'Unknown Project Status'}}
-        </div>
-
         <div>
-            <h2 class="title">Description</h2>
-            <p [innerHTML]="(project.description || '-') | newlines"></p>
+            <h2>Documents</h2>
+            <!-- Documents -->
         </div>
 
         <div>

@@ -13,7 +13,7 @@ app-projects:host {
 
 @media (min-width: 768px) {
   app-projects:host {
-    top: 4.2rem;            
+    top: 4.2rem;
   }
 }
 
@@ -30,16 +30,16 @@ app-projects:host {
   @include flex(0 0 auto);
   display: block;
   z-index: 1004;
+  box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 @media (min-width: 1200px) {
   .app-filters {
     position: absolute;
-    top: 0.5rem;
+    top: 20px;
     left: 50%;
-    margin-left: -24rem;
+    transform: translateX(-50%);
     width: 48rem;
-    z-index: 999;
     box-shadow: $map-component-shadow;
     transition: left ease-out $toggle-list-anim-duration;
   }
@@ -83,7 +83,7 @@ app-projects:host {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   background: #fff;
-  transition: left ease-out $toggle-list-anim-duration; 
+  transition: left ease-out $toggle-list-anim-duration;
   clip: rect(0,3.5rem,3.5rem,0);
 
   i {

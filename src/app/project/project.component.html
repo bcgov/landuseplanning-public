@@ -1,77 +1,56 @@
 <div class="project" id="anchor-point">
-  <div class="container">
-    <div class="row">
-      <main class="col-lg-5 project-info">
-        <section class="project-item">
-          <div class="row">
-            <div class="organization-item">
-              <p>{{project?.name || '-'}}</p>
-            </div>
-            <div class="project-item__commenting col-12">
-                <label>Current Phase</label>
-                <span>{{project?.currentPhaseName || 'Unknown Project Phase'}}</span>
-            </div>
-            <div class="col-12">
-              <p class="proj-status">{{project?.status || 'Unknown Project Status'}}</p>
-            </div>
-            <div class="col-6">
-              <!-- This is currently just an ID. We will need to fetch the query proponent using the ID -->
+  <main class="project-info">
+    <div class="hero-banner-alt">
+      <div class="container">
+        <div class="hero-banner__content">
+          <h1>{{project?.name || '-'}}</h1>        <span class="proj-status">{{project?.status || 'Unknown Project Status'}}</span>
+          <p class="desc" [innerHTML]="(project.description || '-') | newlines"></p>
+          <span class="ea-decision">{{project && project.eacDecision || "-"}}</span>
+          <div class="basic-info">
+            <div>
               <label>Proponent</label>
               <p class="value">{{project?.proponent || "-" | titlecase}}</p>
             </div>
-            <div class="col-6">
-              <label>EA Decision</label>
-              <p class="value">{{project && project.eacDecision || "-"}}</p>
-            </div>
-            <div class="col-6">
-              <label>Region</label>
-              <p class="value">{{project?.region || "-" | titlecase}}</p>
-            </div>
-            <div class="col-6">
-              <label>Location</label>
-              <p class="value">{{project?.location || "-" | titlecase}}</p>
-            </div>
-            <div class="col-6">
+            <div>
               <label>Type</label>
               <p class="value">{{project?.type || "-" | titlecase}}</p>
             </div>
-            <div class="col-6">
+            <div>
               <label>Sub-type</label>
               <p class="value">{{project?.sector || "-" | titlecase}}</p>
             </div>
-            <div class="col-6">
-              <label>Project Lead</label>
-              <p class="value">{{project?.projectLead || "-"}}</p>
-              <p class="value">{{project?.projectLeadPhone || "-"}}</p>
-              <p class="value"><a href="mailto:{{project?.projectLeadEmail}}">{{project?.projectLeadEmail || "-"}}</a></p>
-            </div>
-            <div class="col-6">
-              <label>Executive Project Director</label>
-              <p class="value">{{project?.responsibleEPD || "-"}}</p>
-              <p class="value">{{project?.responsibleEPDPhone || "-"}}</p>
-              <p class="value"><a href="mailto:{{project?.responsibleEPDEmail}}">{{project?.responsibleEPDEmail || "-"}}</a></p>
-            </div>
-            <div class="col-6">
-              <label>Compliance & Enforcement Lead</label>
-              <p class="value">{{project?.CELead || "-"}}</p>
-              <p class="value">{{project?.CELeadPhone || "-"}}</p>
-              <p class="value"><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
-            </div>
           </div>
-        </section>
+        </div>
+      </div>
+    </div>
 
-        <section class="map-item">
+    <section class="map-item">
+      <div class="container">
+        <div class="map-wrapper">
           <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
             <span class="no-results-msg">No map available</span>
           </div>
           <div class="map-container">
             <div class="map" id="map"></div>
           </div>
-        </section>
-      </main>
+        </div>
+        <div class="location-info">
+          <h2>Location</h2>
+          <div>
+            <label>Region</label>
+            <p class="value">{{project?.region || "-" | titlecase}}</p>
+          </div>
+          <div>
+            <label>Location</label>
+            <p class="value">{{project?.location || "-" | titlecase}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <aside class="col-lg-7 project-tabs">
-        <section>
+    <section class="project-tabs">
+      <div class="container">
+        <div class="tab-container">
           <div role="navigation">
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
@@ -79,11 +58,36 @@
               </li>
             </ul>
           </div>
-
           <router-outlet></router-outlet>
+        </div>
 
-        </section>
-      </aside>
-    </div>
-  </div>
+      </div>
+    </section>
+
+    <section class="people">
+      <div class="container">
+        <h2>Contacts</h2>
+        <div class="flex-container">
+          <div class="inner-col">
+            <h3>Project Lead</h3>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">person</i>{{project?.projectLead || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">phone</i>{{project?.projectLeadPhone || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">email</i><a href="mailto:{{project?.projectLeadEmail}}">{{project?.projectLeadEmail || "-"}}</a></p>
+          </div>
+          <div class="inner-col">
+            <h3>Executive Project Director</h3>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">person</i>{{project?.responsibleEPD || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">phone</i>{{project?.responsibleEPDPhone || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">email</i><a href="mailto:{{project?.responsibleEPDEmail}}">{{project?.responsibleEPDEmail || "-"}}</a></p>
+          </div>
+          <div class="inner-col">
+            <h3>Compliance & Enforcement Lead</h3>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">person</i>{{project?.CELead || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">phone</i>{{project?.CELeadPhone || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">email</i><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>

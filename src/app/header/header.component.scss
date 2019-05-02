@@ -97,7 +97,7 @@
       z-index: 1001; // +1 to keep above dropdown menus
       padding: 0.875rem 1rem;
       border-top: 1px solid $mn-border-color;
-      color: $mn-color;
+      color: #fcba18;
       text-transform: uppercase;
       font-size: $mn-font-size;
       font-weight: 700;
@@ -181,8 +181,7 @@
           display: inline-block;
         }
         &:hover {
-          background-color: #002663;
-          border-bottom: 2px solid #057aff;
+          border-bottom: 2px solid #fcba18;
         }
       }
 
