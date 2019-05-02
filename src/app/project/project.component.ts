@@ -159,7 +159,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }, this);
 
     // Disable zoom on project details - iterferes with scrolling page.
-    this.map.scrollWheelZoom.disable()
+    this.map.scrollWheelZoom.disable();
 
     // draw project marker
     if (this.project) {
