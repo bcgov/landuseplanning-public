@@ -5,9 +5,6 @@ $app-filters-font-sm: 0.75rem;
 $app-filters-font-lg: 0.9375rem;
 
 .app-filters__container {
-  background: $app-filters-bg;
-  font-size: 0.875rem;
-  border-radius: 4px;
 
   &.open {
     position: absolute;
@@ -25,24 +22,31 @@ $app-filters-font-lg: 0.9375rem;
   }
 
   .search-container {
-    padding: .5rem 1rem .2rem;
-    background: #f7f8fa;
+    padding: .75rem 1.4rem .2rem;
+    color: #036;
     position: relative;
-    border-radius: 4px;
+    font-weight: 700;
+    border-radius: 0px;
+    background: rgba(255,255,255,1);
 
     label {
-      font-size: 1.4rem;
-      letter-spacing: -.015em;
-      font-weight: 400;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: .25rem;
+      letter-spacing: -.025em;
+      color: #003367;
     }
 
     .gtm-filter-applicant {
+      padding: .7rem;
       padding-right: 85px;
       border-radius: 2px;
       box-shadow: none;
       -webkit-appearance: none;
-      border: 1px solid #ababab;
+      border: 2px solid #c6d0da;
       font-size: 1rem;
+      font-weight: 400;
+      height: auto;
       &:focus {
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         border-color: #5091cd;
@@ -53,8 +57,21 @@ $app-filters-font-lg: 0.9375rem;
       border-radius: 0 4px 4px 0;
       font-size: 1rem;
       position: absolute;
-      right: 15px;
+      right: 22px;
       bottom: 19px;
+      height: 50px;
+      background: #fcba18;
+      color: #003367;
+      border: none;
+      font-weight: bold;
+      padding: .5rem 1.4rem .6rem;
+
+      i {
+        vertical-align: top;
+        margin-top: 2px;
+        margin-right: 4px;
+        font-size: 20px;
+      }
     }
   }
 

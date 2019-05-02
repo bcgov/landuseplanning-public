@@ -17,8 +17,8 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 })
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly tabLinks = [
-    { label: 'Project', link: 'project' },
-    { label: 'Commenting', link: 'commenting' }
+    { label: 'Commenting', link: 'commenting' },
+    { label: 'Documents', link: 'document' }
   ];
 
   public project: Project = null;

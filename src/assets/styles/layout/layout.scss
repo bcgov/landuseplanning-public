@@ -41,6 +41,11 @@ main {
   }
 }
 
+.leaflet-tile-container.leaflet-zoom-animated img {
+  -webkit-filter: saturate(160%);
+  filter: saturate(160%);
+}
+
 @media (min-width: 768px) {
   main {
     h2 {

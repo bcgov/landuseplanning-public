@@ -16,6 +16,23 @@
   }
 }
 
+.hero-banner-alt {
+  position: relative;
+  background-color: rgba($header-bg, 1);
+
+  .container {
+    min-height: 20rem;
+    @media (max-width: 767px) {
+      padding: 2rem 1rem 2.5rem;
+    }
+  }
+
+  .hero-banner__content {
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+}
+
 .hero-banner__content {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -72,13 +89,17 @@
 
 .hero-banner__actions-buttons {
   .btn {
-    background: #007bff;
-    border: none;
+    border: 2px solid #e9a603;
     padding: 0.5rem;
     text-transform: uppercase;
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 900;
     cursor: pointer;
+    color: #e9a603;
+
+    &:hover {
+      color: #036;
+    }
 
     + span {
       @include flex(0 0 auto);
