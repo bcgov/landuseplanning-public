@@ -14,7 +14,7 @@ export class Project {
   projectLead: String;
   projectLeadEmail: String;
   projectLeadPhone: String;
-  proponent: String;
+  proponent: any;
   region: String;
   responsibleEPD: String;
   responsibleEPDEmail: String;
