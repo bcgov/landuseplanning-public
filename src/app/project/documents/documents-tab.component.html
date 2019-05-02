@@ -1,0 +1,15 @@
+<div class="tab-pane" role="tabpanel">
+  <div class="spinner-container" *ngIf="loading" [@visibility]>
+      <div class="spinner-new rotating"></div>
+  </div>
+
+  <section class="tab-section" *ngIf="!loading">
+      <div *ngIf="documents.length === 0">
+          No documents visible yet.
+      </div>
+
+      <div *ngIf="documents.length > 0">
+          Documents go here.
+      </div>
+  </section>
+</div>
