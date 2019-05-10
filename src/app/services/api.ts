@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 
 import { Comment } from 'app/models/comment';
 import { Document } from 'app/models/document';
+import { SearchResults } from 'app/models/search';
 
 @Injectable()
 export class ApiService {
@@ -46,10 +47,86 @@ export class ApiService {
     };
   }
 
-  handleError(error: any): ErrorObservable {
+  handleError(error: any): ErrorObservable<never> {
     const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
     console.log('API error =', reason);
     return Observable.throw(error);
+  }
+
+  getFullDataSet(dataSet: string) {
+    return this.get(`search?pageSize=1000&dataset=${dataSet}`, {});
+  }
+
+  public async downloadDocument(document: Document): Promise<void> {
+    const blob = await this.downloadResource(document._id);
+    let filename;
+    if (document.documentSource === 'COMMENT') {
+      filename = document.internalOriginalName;
+    } else {
+      filename = document.documentFileName;
+    }
+
+    if (this.isMS) {
+      window.navigator.msSaveBlob(blob, filename);
+    } else {
+      const url = window.URL.createObjectURL(blob);
+      const a = window.document.createElement('a');
+      window.document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    }
+  }
+
+  public async openDocument(document: Document): Promise<void> {
+    const blob = await this.downloadResource(document._id);
+    const filename = document.documentFileName;
+
+    if (this.isMS) {
+      window.navigator.msSaveBlob(blob, filename);
+    } else {
+      const tab = window.open();
+      const fileURL = URL.createObjectURL(blob);
+      tab.location.href = fileURL;
+    }
+  }
+
+  private downloadResource(id: string) {
+    const queryString = `document/${id}/download`;
+    return this.get(queryString, { responseType: 'blob' as 'json' }).toPromise();
+  }
+
+  getItem(_id: string, schema: string) {
+    let queryString = `search?dataset=Item&_id=${_id}&_schemaName=${schema}`;
+    return this.get(`${queryString}`, {});
+  }
+
+  //
+  // Searching
+  //
+  searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier = null, populate = false) {
+    let queryString = `search?dataset=${dataset}`;
+    if (fields && fields.length > 0) {
+      fields.map(item => {
+        queryString += `&${item.name}=${item.value}`;
+      });
+    }
+    if (keys) {
+      queryString += `&keywords=${keys}`;
+    }
+    if (pageNum !== null) { queryString += `&pageNum=${pageNum - 1}`; }
+    if (pageSize !== null) { queryString += `&pageSize=${pageSize}`; }
+    if (sortBy !== null) { queryString += `&sortBy=${sortBy}`; }
+    if (populate !== null) { queryString += `&populate=${populate}`; }
+    if (queryModifier !== null) {
+      queryString += `&query` + queryModifier;
+    }
+    queryString += `&fields=${this.buildValues(fields)}`;
+    console.log('here is the query', queryString);
+    return this.get(`${queryString}`, {});
   }
 
   //

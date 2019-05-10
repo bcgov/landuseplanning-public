@@ -1,5 +1,5 @@
 <div class="tab-pane" role="tabpanel">
-  <div class="spinner-container" *ngIf="loading" [@visibility]>
+  <div class="spinner-container" *ngIf="loading" >
       <div class="spinner-new rotating"></div>
   </div>
 
@@ -8,8 +8,13 @@
           No documents visible yet.
       </div>
 
-      <div *ngIf="documents.length > 0">
-          Documents go here.
-      </div>
+      <app-table-template *ngIf="!loading && tableParams.totalListItems != 0"
+                    (checkboxChange)='checkChange($event)'
+                    [columns]="documentTableColumns"
+                    [data]="documentTableData"
+                    (onColumnSort)='setColumnSort($event)'
+                    (onSelectedRow)='updateSelectedRow($event)'
+                    (onPageNumUpdate)='getPaginatedDocs($event, null, null)'>
+      d</app-table-template>
   </section>
 </div>

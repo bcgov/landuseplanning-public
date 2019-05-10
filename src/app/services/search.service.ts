@@ -1,86 +1,64 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, merge, forkJoin } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import * as _ from 'lodash';
 
 import { ApiService } from './api';
+import { ProjectService } from 'app/services/project.service';
 import { SearchResults } from 'app/models/search';
-import { Feature } from 'app/models/feature';
-import { Client } from 'app/models/client';
 
 @Injectable()
 export class SearchService {
-  private clients: Array<Client> = null;
-  private search: SearchResults = null;
-  private features: Array<Feature> = null;
 
-  constructor(private api: ApiService) { }
+  public isError = false;
 
-  // get clients by disposition ID (transaction ID)
-  getClientsByDispositionId(dispositionId: number, forceReload: boolean = false): Observable<Client[]> {
-    if (!forceReload && this.clients && this.clients.length > 0 && this.clients[0].DISPOSITION_TRANSACTION_SID === dispositionId) {
-      return Observable.of(this.clients);
-    }
+  constructor(
+    private api: ApiService,
+    private projectService: ProjectService
+  ) { }
 
-    return this.api.getClientsInfoByDispositionId(dispositionId)
-      .map(res => {
-        const clients = res.text() ? res.json() : [];
-        clients.forEach((client, i) => {
-          clients[i] = new Client(client);
-        });
-        return clients;
-      })
-      .map((clients: Client[]) => {
-        if (clients.length === 0) {
-          return [];
-        }
-
-        this.clients = clients;
-        return this.clients;
-      })
-      .catch(this.api.handleError);
+  getItem(_id: string, schema: string): Observable<any> {
+    const searchResults = this.api.getItem(_id, schema)
+    .map((res: any) => {
+      let records = JSON.parse(<string>res._body);
+      let allResults = <any>[];
+      records.forEach(item => {
+        const r = new SearchResults({type: item._schemaName, data: item});
+        allResults.push(r);
+      });
+      console.log('Service results: ', allResults);
+      if (allResults.length === 1) {
+        return allResults[0];
+      } else {
+        return {};
+      }
+    })
+    .catch(() => {
+      this.isError = true;
+      // if call fails, return null results
+      return of(null as SearchResults);
+    });
+    return searchResults;
   }
 
-  // get search results by CL file #
-  getByCLFile(clfile: string, forceReload: boolean = false): Observable<SearchResults> {
-    if (!forceReload && this.search && this.search.features && this.search.features.length > 0 && this.search.features[0].properties
-      && this.search.features[0].properties.CROWN_LANDS_FILE === clfile) {
-      return Observable.of(this.search);
-    }
-
-    return this.api.getBCGWCrownLands(clfile)
-      .map(res => {
-        return res.text() ? new SearchResults(res.json()) : null;
-      })
-      .map((search: SearchResults) => {
-        if (!search) { return null; }
-
-        this.search = search;
-        return this.search;
-      })
-      .catch(this.api.handleError);
-  }
-
-  // get features by disposition ID (transaction ID)
-  getByDTID(dtid: number, forceReload: boolean = false): Observable<Feature[]> {
-    if (!forceReload && this.features && this.features.length > 0 && this.features[0].properties
-      && this.features[0].properties.DISPOSITION_TRANSACTION_SID === dtid) {
-      // console.log('cached features =', this.features);
-      return Observable.of(this.features);
-    }
-
-    return this.api.getBCGWDispositionTransactionId(dtid)
-      .map(res => {
-        const results = res.text() ? new SearchResults(res.json()) : null;
-        return results.features;
-      })
-      .map((features: Feature[]) => {
-        if (!features) { return null; }
-
-        // console.log('new features =', features);
-        this.features = features;
-        return this.features;
-      })
-      .catch(this.api.handleError);
+  getSearchResults(keys: string, dataset: string, fields: any[], pageNum: number = 1, pageSize: number = 10, sortBy: string = null, queryModifier: string = null, populate: boolean = false): Observable<any[]> {
+    const searchResults = this.api.searchKeywords(keys, dataset, fields, pageNum, pageSize, sortBy, queryModifier, populate)
+    .map((res: any) => {
+      let records = JSON.parse(<string>res._body);
+      let allResults = <any>[];
+      records.forEach(item => {
+        const r = new SearchResults({type: item._schemaName, data: item});
+        allResults.push(r);
+      });
+      console.log('Service results: ', allResults);
+      return allResults;
+    })
+    .catch(() => {
+      this.isError = true;
+      // if call fails, return null results
+      return of(null as SearchResults);
+    });
+    return searchResults;
   }
 }

@@ -51,7 +51,8 @@
     "ngx-pagination": "3.1.0",
     "ngx-text-overflow-clamp": "0.0.1",
     "popper.js": "^1.14.1",
-    "rxjs": "5.5.7",
+    "rxjs": "6.3.2",
+    "rxjs-compat": "^6.5.1",
     "web-animations-js": "^2.3.1",
     "zone.js": "0.8.20"
   },

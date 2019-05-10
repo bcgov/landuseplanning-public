@@ -9,6 +9,7 @@ import { Project } from 'app/models/project';
 import { ConfigService } from 'app/services/config.service';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { StorageService } from 'app/services/storage.service';
 
 @Component({
   selector: 'app-project',
@@ -32,6 +33,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private elementRef: ElementRef,
     private route: ActivatedRoute,
+    private storageService: StorageService,
     private router: Router,
     private modalService: NgbModal,
     public configService: ConfigService,
@@ -46,6 +48,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(
         (data: { project: Project }) => {
           if (data.project) {
+            this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
             this.project = data.project;
           } else {
             alert('Uh-oh, couldn\'t load project');

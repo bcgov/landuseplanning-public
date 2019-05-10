@@ -36,8 +36,8 @@ import { ConfigService } from 'app/services/config.service';
 
 @NgModule({
   imports: [
-    TagInputModule,
     BrowserAnimationsModule,
+    TagInputModule,
     BrowserModule,
     FormsModule,
     HttpModule,

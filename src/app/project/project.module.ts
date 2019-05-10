@@ -18,6 +18,10 @@ import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 import { DateInputComponent } from 'app/date-input/date-input.component';
 import { DocumentsTabComponent } from './documents/documents-tab.component';
+import { DocumentTableRowsComponent } from 'app/project/documents/project-document-table-rows/project-document-table-rows.component';
+import { DocumentDetailComponent } from 'app/project/documents/detail/detail.component';
+
+import { StorageService } from 'app/services/storage.service';
 
 @NgModule({
   imports: [
@@ -35,8 +39,16 @@ import { DocumentsTabComponent } from './documents/documents-tab.component';
     CommentingTabComponent,
     DecisionsTabComponent,
     FileUploadComponent,
+    DocumentDetailComponent,
     DateInputComponent,
-    DocumentsTabComponent
+    DocumentsTabComponent,
+    DocumentTableRowsComponent
+  ],
+  providers: [
+    StorageService
+  ],
+  entryComponents: [
+    DocumentTableRowsComponent
   ]
 })
 

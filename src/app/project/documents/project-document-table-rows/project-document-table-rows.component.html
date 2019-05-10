@@ -1,0 +1,17 @@
+<tr *ngFor="let document of documents | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }"
+  class="clickable-row">
+    <!-- <td data-label="Select" (click)="selectItem(document)"
+        scope="row"
+        class="col-1">
+      <input type="checkbox"
+             aria-label="Checkbox for row item"
+             [(ngModel)]='document.checkbox'>
+    </td> -->
+    <td data-label="Name" (click)="goToItem(document)" scope="row" class="col-6">{{document.displayName}}</td>
+    <td data-label="Date" (click)="goToItem(document)" scope="row" class="col-2">{{document.datePosted | date:'longDate'}}</td>
+    <td data-label="Type" (click)="goToItem(document)" scope="row" class="col-2">{{document.type | listConverter}}</td>
+    <td data-label="Milestone" (click)="goToItem(document)" scope="row" class="col-2">{{document.milestone | listConverter}}</td>
+    <!-- <td>
+            <button type="button" (click)="deleteVC(valuedComponent)" class="btn btn-danger">Delete</button>
+        </td> -->
+</tr>

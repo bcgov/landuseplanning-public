@@ -14,6 +14,12 @@ import { DragMoveDirective } from 'app/shared/utils/drag-move.directive';
 import { ItemTableComponent } from 'app/shared/components/item-table/item-table.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ExpandableItemsComponent } from './components/item-table/expandable-items/expandable-items.component';
+import { TableTemplateComponent } from 'app/shared/components/table-template/table-template.component';
+import { ListConverterPipe } from './pipes/list-converter.pipe';
+import { OrgNamePipe } from './pipes/org-name.pipe';
+import { TableTemplateUtils } from './utils/table-template-utils';
+import { TableDirective } from './components/table-template/table.directive';
+import { PublishedPipe } from 'app/shared/pipes/published.pipe';
 
 @NgModule({
   imports: [
@@ -27,10 +33,15 @@ import { ExpandableItemsComponent } from './components/item-table/expandable-ite
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
+    PublishedPipe,
     VarDirective,
     DragMoveDirective,
     ItemTableComponent,
     ExpandableItemsComponent,
+    TableTemplateComponent,
+    TableDirective,
+    ListConverterPipe,
+    OrgNamePipe
   ],
   exports: [
     BrowserModule,
@@ -40,9 +51,17 @@ import { ExpandableItemsComponent } from './components/item-table/expandable-ite
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
+    PublishedPipe,
     VarDirective,
     DragMoveDirective,
-    ItemTableComponent
+    ItemTableComponent,
+    TableTemplateComponent,
+    NgxPaginationModule,
+    ListConverterPipe,
+    OrgNamePipe
+  ],
+  providers: [
+    TableTemplateUtils
   ]
 })
 
