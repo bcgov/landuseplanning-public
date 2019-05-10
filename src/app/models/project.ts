@@ -47,6 +47,8 @@ export class Project {
   status: String;
   substitution: Boolean;
   updatedBy: String;
+  operational: any;
+  nature: any;
 
   // Permissions
   read: Array<String> = [];
@@ -59,6 +61,8 @@ export class Project {
 
   constructor(obj?: any) {
     this._id                 = obj && obj._id                 || null;
+    this.operational     = obj && obj.operational     || null;
+    this.nature     = obj && obj.nature     || null;
     this.CEAAInvolvement     = obj && obj.CEAAInvolvement     || null;
     this.CELead              = obj && obj.CELead              || null;
     this.CELeadEmail         = obj && obj.CELeadEmail         || null;
