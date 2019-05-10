@@ -89,51 +89,28 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
     this.currentProject = this.storageService.state.currentProject.data;
 
-    this.searchService.getSearchResults(
-      null,
-      'Document',
-      [{ 'name': 'project', 'value': '58851197aaecd9001b8227cc' }],
-      2,
-      10,
-      null,
-      '[documentSource]=PROJECT',
-      false)
-    .takeUntil(this.ngUnsubscribe)
-    .subscribe((res: any) => {
-      if (res[0].data && res[0].data.meta && res[0].data.meta.length > 0) {
-        this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-        this.documents = res[0].data.searchResults;
-      } else {
-        this.tableParams.totalListItems = 0;
-        this.documents = [];
+    this.route.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((res: any) => {
+        if (res) {
+          if (res.documents && res.documents[0].data.meta && res.documents[0].data.meta.length > 0) {
+            this.tableParams.totalListItems = res.documents[0].data.meta[0].searchResultsTotal;
+            this.documents = res.documents[0].data.searchResults;
+          } else {
+            this.tableParams.totalListItems = 0;
+            this.documents = [];
+          }
+          this.loading = false;
+          this.setDocumentRowData();
+          this._changeDetectionRef.detectChanges();
+        } else {
+          alert('Uh-oh, couldn\'t load valued components');
+          // project not found --> navigate back to search
+          this.router.navigate(['/search']);
+          this.loading = false;
+        }
       }
-      this.loading = false;
-      this.setDocumentRowData();
-      this._changeDetectionRef.detectChanges();
-    });
-
-    // this.route.data
-    //   .takeUntil(this.ngUnsubscribe)
-    //   .subscribe((res: any) => {
-    //     if (res) {
-    //       if (res.documents && res.documents[0].data.meta && res.documents[0].data.meta.length > 0) {
-    //         this.tableParams.totalListItems = res.documents[0].data.meta[0].searchResultsTotal;
-    //         this.documents = res.documents[0].data.searchResults;
-    //       } else {
-    //         this.tableParams.totalListItems = 0;
-    //         this.documents = [];
-    //       }
-    //       this.loading = false;
-    //       this.setDocumentRowData();
-    //       this._changeDetectionRef.detectChanges();
-    //     } else {
-    //       alert('Uh-oh, couldn\'t load valued components');
-    //       // project not found --> navigate back to search
-    //       this.router.navigate(['/search']);
-    //       this.loading = false;
-    //     }
-    //   }
-    //   );
+      );
   }
 
   public selectAction(action) {

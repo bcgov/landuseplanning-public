@@ -48,7 +48,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(
         (data: { project: Project }) => {
           if (data.project) {
-            this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
+            this.storageService.state.currentProject = { type: 'currentProject', data: data.project };
             this.project = data.project;
           } else {
             alert('Uh-oh, couldn\'t load project');

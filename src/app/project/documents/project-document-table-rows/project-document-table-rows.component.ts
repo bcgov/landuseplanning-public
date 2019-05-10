@@ -3,6 +3,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { TableComponent } from 'app/shared/components/table-template/table.component';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { Router } from '@angular/router';
+import { ApiService } from 'app/services/api';
 
 @Component({
   selector: 'tbody[app-document-table-rows]',
@@ -18,6 +19,7 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
   public paginationData: any;
 
   constructor(
+    private api: ApiService,
     private router: Router
   ) { }
 
@@ -39,6 +41,7 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
   }
 
   goToItem(item) {
-    this.router.navigate(['p', item.project._id, 'project-documents', 'detail', item._id]);
+    // this.router.navigate(['p', item.project._id, 'project-documents', 'detail', item._id]);
+    this.api.openDocument(item._id);
   }
 }
