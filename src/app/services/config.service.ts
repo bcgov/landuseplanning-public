@@ -23,9 +23,8 @@ export class ConfigService {
   constructor(private api: ApiService) {
     this.api.getFullDataSet('List')
     .subscribe((res: any) => {
-      // console.log('svc lists:', res._body);
       // Store here for later use across the application.
-      this._lists = res._body[0].searchResults;
+      this._lists = res;
     });
   }
 

@@ -42,6 +42,6 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
 
   goToItem(item) {
     // this.router.navigate(['p', item.project._id, 'project-documents', 'detail', item._id]);
-    this.api.openDocument(item._id);
+    this.api.openDocument(item);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/observable/throw';
@@ -54,22 +54,22 @@ export class ApiService {
   }
 
   getFullDataSet(dataSet: string) {
-    return this.get(`search?pageSize=1000&dataset=${dataSet}`, {});
+    return this.get(`search?pageSize=1000&dataset=${dataSet}`, {})
+    .map((res: any) => {
+      let records = JSON.parse(<string>res._body);
+      // console.log("records:", records[0].searchResults);
+      return records[0].searchResults;
+    });
   }
 
   public async downloadDocument(document: Document): Promise<void> {
     const blob = await this.downloadResource(document._id);
-    let filename;
-    if (document.documentSource === 'COMMENT') {
-      filename = document.internalOriginalName;
-    } else {
-      filename = document.documentFileName;
-    }
+    let filename = document.displayName;
 
     if (this.isMS) {
-      window.navigator.msSaveBlob(blob, filename);
+      window.navigator.msSaveBlob(blob._body, filename);
     } else {
-      const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blob._body);
       const a = window.document.createElement('a');
       window.document.body.appendChild(a);
       a.setAttribute('style', 'display: none');
@@ -83,20 +83,22 @@ export class ApiService {
 
   public async openDocument(document: Document): Promise<void> {
     const blob = await this.downloadResource(document._id);
-    const filename = document.documentFileName;
+    const filename = document.displayName;
 
     if (this.isMS) {
-      window.navigator.msSaveBlob(blob, filename);
+      window.navigator.msSaveBlob(blob._body, filename);
     } else {
       const tab = window.open();
-      const fileURL = URL.createObjectURL(blob);
+      const fileURL = URL.createObjectURL(blob._body);
       tab.location.href = fileURL;
     }
   }
 
   private downloadResource(id: string) {
     const queryString = `document/${id}/download`;
-    return this.get(queryString, { responseType: 'blob' as 'json' }).toPromise();
+    return this.get(queryString, { responseType: ResponseContentType.Blob })
+    .map((res: any) => res)
+    .toPromise();
   }
 
   getItem(_id: string, schema: string) {

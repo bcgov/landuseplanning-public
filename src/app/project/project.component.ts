@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
@@ -36,6 +36,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private storageService: StorageService,
     private router: Router,
     private modalService: NgbModal,
+    private renderer: Renderer2,
     public configService: ConfigService,
     public projectService: ProjectService, // used in template
     public commentPeriodService: CommentPeriodService // used in template
@@ -49,6 +50,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         (data: { project: Project }) => {
           if (data.project) {
             this.storageService.state.currentProject = { type: 'currentProject', data: data.project };
+            this.renderer.removeClass(document.body, 'no-scroll');
             this.project = data.project;
           } else {
             alert('Uh-oh, couldn\'t load project');
