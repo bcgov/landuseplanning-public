@@ -10,6 +10,7 @@ import { ConfigService } from 'app/services/config.service';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { StorageService } from 'app/services/storage.service';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @Component({
   selector: 'app-project',
@@ -27,6 +28,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   public appFG = L.featureGroup(); // group of layers for subject app
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private ngbModal: NgbModalRef = null;
+  public period: CommentPeriod = null;
 
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
 
@@ -52,6 +54,39 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             this.storageService.state.currentProject = { type: 'currentProject', data: data.project };
             this.renderer.removeClass(document.body, 'no-scroll');
             this.project = data.project;
+
+            // ***************************************************
+            // TODO Resolve this period from the actual project.
+            // Open
+            this.period = new CommentPeriod({
+              _id: '5980d4f8436253001dcaf8b8',
+              informationLabel: 'Lorem Ipsum',
+              dateStarted: '2019-01-17 22:03:52.162Z',
+              dateCompleted: '2019-12-01 19:25:37.113Z'
+            });
+            // // Closed
+            // this.period = new CommentPeriod({
+            //   _id: '5980d4f8436253001dcaf8b8',
+            //   informationLabel: 'Lorem Ipsum',
+            //   dateStarted: '2019-01-17 22:03:52.162Z',
+            //   dateCompleted: '2019-02-01 19:25:37.113Z'
+            // });
+            // Scheduled shouldn't show because non 7 day window
+            // this.period = new CommentPeriod({
+            //   _id: '5980d4f8436253001dcaf8b8',
+            //   informationLabel: 'Lorem Ipsum',
+            //   dateStarted: '2019-12-17 22:03:52.162Z',
+            //   dateCompleted: '2019-12-22 19:25:37.113Z'
+            // });
+            // Scheduled fix this to be within 7 days of coding test
+            // this.period = new CommentPeriod({
+            //   _id: '5980d4f8436253001dcaf8b8',
+            //   informationLabel: 'Lorem Ipsum',
+            //   dateStarted: '2019-05-17 22:03:52.162Z',
+            //   dateCompleted: '2019-05-18 19:25:37.113Z'
+            // });
+            console.log('period:', this.period);
+
           } else {
             alert('Uh-oh, couldn\'t load project');
             // project not found --> navigate back to project list

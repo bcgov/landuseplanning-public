@@ -105,16 +105,24 @@ export class CommentPeriod {
       this.dateCompleted = new Date(obj.dateCompleted);
     }
 
-    // get comment period days remaining and determine status of the period
+    // get comment period days remaining and determine commentPeriodStatus of the period
     if (obj && obj.dateCompleted) {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const days = moment(obj.dateCompleted).diff(moment(today), 'days') + 1;
       this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
-      if (days <= 0) {
-        this.commentPeriodStatus = 'Not in progress';
-      } else {
-        this.commentPeriodStatus = 'In progress';
+
+      const dateStarted = moment(obj.dateStarted);
+      const dateCompleted = moment(obj.dateCompleted);
+      const sevenDays = new Date(obj.dateStarted);
+      sevenDays.setDate(sevenDays.getDate() - 7);
+
+      if (moment(now).isBetween(dateStarted, dateCompleted)) {
+        this.commentPeriodStatus = 'Open';
+      } else if (moment(now).isAfter(dateCompleted)) {
+        this.commentPeriodStatus = 'Closed';
+      } else if (moment(now).isBetween(moment(sevenDays), dateStarted)) {
+        this.commentPeriodStatus = 'Pending';
       }
     }
   }

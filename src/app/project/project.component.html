@@ -24,6 +24,21 @@
       </div>
     </div>
 
+    <div class="pcp-banner" *ngIf="period.commentPeriodStatus==='Open' || period.commentPeriodStatus === 'Pending' || period.commentPeriodStatus === 'Closed'">
+      <section class="pcp-info">
+        <h2>Public Comment Period is
+          <span *ngIf="period.commentPeriodStatus === 'Pending'">Scheduled</span>
+          <span *ngIf="period.commentPeriodStatus === 'Closed'">Closed</span>
+          <span *ngIf="period.commentPeriodStatus === 'Open'">Now Open</span></h2>
+        <span class="pcp-dates"><strong>{{ period.dateStarted | date:'longDate' }}</strong> &nbsp;-&nbsp;
+          <strong>{{ period.dateCompleted | date:'longDate' }}</strong></span>
+        <div class="pcp-banner-btns">
+          <button class="btn btn-light" type="button" *ngIf="period.commentPeriodStatus === 'Open'">Submit Comment</button>
+          <button class="btn btn-light" type="button" *ngIf="period.commentPeriodStatus === 'Closed'">View Comments</button>
+        </div>
+      </section>
+    </div>
+
     <section class="map-item">
       <div class="container">
         <div class="location-info">
