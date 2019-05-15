@@ -11,6 +11,7 @@ import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { StorageService } from 'app/services/storage.service';
 import { CommentPeriod } from 'app/models/commentperiod';
+import { AddCommentComponent } from './comments/add-comment/add-comment.component';
 
 @Component({
   selector: 'app-project',
@@ -265,22 +266,22 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addComment() {
-    // if (this.project.currentPeriod) {
-    //   // open modal
-    //   this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
-    //   // set input parameter
-    //   (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.currentPeriod;
-    //   // check result
-    //   this.ngbModal.result.then(
-    //     value => {
-    //       // saved
-    //       console.log(`Success, value = ${value}`);
-    //     },
-    //     reason => {
-    //       // cancelled
-    //       console.log(`Cancelled, reason = ${reason}`);
-    //     }
-    //   );
-    // }
+    if (this.period) {
+      // open modal
+      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      // set input parameter
+      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.period;
+      // check result
+      this.ngbModal.result.then(
+        value => {
+          // saved
+          console.log(`Success, value = ${value}`);
+        },
+        reason => {
+          // cancelled
+          console.log(`Cancelled, reason = ${reason}`);
+        }
+      );
+    }
   }
 }

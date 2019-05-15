@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 
 // modules
 import { SharedModule } from 'app/shared/shared.module';
+import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 
 // components
 import { CommentsComponent } from './comments.component';
@@ -23,8 +24,12 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
     SharedModule
   ],
   declarations: [
+    FileUploadComponent,
     AddCommentComponent,
     CommentsComponent
+  ],
+  exports: [
+    FileUploadComponent
   ],
   entryComponents: [
     AddCommentComponent

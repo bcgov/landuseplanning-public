@@ -33,7 +33,7 @@
         <span class="pcp-dates"><strong>{{ period.dateStarted | date:'longDate' }}</strong> &nbsp;-&nbsp;
           <strong>{{ period.dateCompleted | date:'longDate' }}</strong></span>
         <div class="pcp-banner-btns">
-          <button class="btn btn-light" type="button" *ngIf="period.commentPeriodStatus === 'Open'">Submit Comment</button>
+          <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="period.commentPeriodStatus === 'Open'">Submit Comment</button>
           <button class="btn btn-light" type="button" *ngIf="period.commentPeriodStatus === 'Closed'">View Comments</button>
         </div>
       </section>

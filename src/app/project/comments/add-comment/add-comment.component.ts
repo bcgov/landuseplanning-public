@@ -26,6 +26,13 @@ export class AddCommentComponent implements OnInit {
   public currentPage = 1;
   private comment: Comment;
   public files: Array<File> = [];
+  public documents: Document[] = [];
+
+  public contactName: any;
+  public commentInput: any;
+  public locationInput: any;
+  public anonymous: any;
+  public commentFiles: any;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -37,6 +44,38 @@ export class AddCommentComponent implements OnInit {
     this.comment = new Comment();
     this.comment.period = this.currentPeriod._id;
     this.comment.isAnonymous = false;
+    this.commentFiles = [];
+  }
+
+  register() {
+  }
+
+  public addFiles(files: FileList) {
+    if (files) { // safety check
+      for (let i = 0; i < files.length; i++) {
+        if (files[i]) {
+          // ensure file is not already in the list
+          if (this.documents.find(x => x.documentFileName === files[i].name)) {
+            continue;
+          }
+          this.commentFiles.push(files[i]);
+          const document = new Document();
+          document.upfile = files[i];
+          document.documentFileName = files[i].name;
+          document.internalOriginalName = files[i].name;
+          // save document for upload to db when project is added or saved
+          this.documents.push(document);
+        }
+      }
+    }
+  }
+
+  public deleteFile(doc: Document) {
+    if (doc && this.documents) { // safety check
+      // remove doc from current list
+      this.commentFiles = this.commentFiles.filter(item => (item.name !== doc.documentFileName));
+      this.documents = this.documents.filter(item => (item.documentFileName !== doc.documentFileName));
+    }
   }
 
   private p1_next() {
@@ -48,21 +87,20 @@ export class AddCommentComponent implements OnInit {
   }
 
   private p2_next() {
-    this.currentPage++;
-  }
-
-  private p3_back() {
-    this.currentPage--;
-  }
-
-  private p3_next() {
     this.submitting = true;
     this.progressValue = this.progressBufferValue = 0;
 
     // approximate size of everything for progress reporting
     const commentSize = this.sizeof(this.comment);
     this.totalSize = commentSize;
-    this.files.forEach(file => this.totalSize += file.size);
+
+    const files = [];
+    this.documents.map((item) => {
+      console.log('upfile', item.upfile);
+      files.push(item.upfile);
+    });
+
+    files.forEach(file => this.totalSize += file.size);
 
     // first add new comment
     this.progressBufferValue += 100 * commentSize / this.totalSize;
@@ -77,7 +115,7 @@ export class AddCommentComponent implements OnInit {
         // then upload all documents
         const observables: Array<Observable<Document>> = [];
 
-        this.files.forEach(file => {
+        files.forEach(file => {
           const formData = new FormData();
           formData.append('_comment', this.comment._id);
           formData.append('displayName', file.name);

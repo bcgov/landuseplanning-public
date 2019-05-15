@@ -19,34 +19,29 @@
     </div>
 
     <div class="modal-body">
-      <h5>How it works...</h5>
-      <p>Your comments, including but not limited to your opinion, name, phone number, email and mailing address, are collected by the Ministry of Forests, Lands, and Natural Resource Operations &amp; Rural Development (the Ministry) under Section 26(c) of the <em>Freedom of Information and Protection of Privacy Act</em> for the purposes of collecting your thoughts on EAO Projects. Your personal information may be used by the Ministry to contact you to follow up on your comments. Should you have any questions about the collection of personal information, please contact:
-      </p>
-      <ul class="contact-info">
-        <li class="contact-info__name">Dean Hardman</li>
-        <li>Natural Resource Permitting Project Director</li>
-        <li>5th Floor - 727 Fisgard Street</li>
-        <li>Victoria BC V8W 9R1</li>
-        <li>250-893-0884</li>
-      </ul>
-      <div class="form-check confirm-check">
-        <label class="form-check-label" for="iAgree">
-          <input class="form-check-input" type="checkbox" id="iAgree" name="iAgree" [(ngModel)]="iAgreeModel" #iAgree />
-          I agree
-        </label>
-      </div>
+      <section>
+        <h2>How it Works</h2>
+        <p>All accepted comments submitted to the Environmental Assessment Office (EAO) will be published online within seven days of receipt. Comments are not accepted if - in EAO’s view - they are profane, abusive or do not relate to the matter being consulted upon as stated in our  <a href="https://www2.gov.bc.ca/assets/gov/environment/natural-resource-stewardship/environmental-assessments/commenting-on-projects/eao-public-comment-policy.pdf" target="_blank">Public Comment Policy [PDF]</a>.</p>
+        <p>EAO forwards all accepted comments to the project proponent so they can be considered during the project's environmental assessment.</p>
+        <p><strong>EAO requires that you provide your name and city/town</strong> when making a comment, but in order to have your name displayed with your comment; you must select the 'Make my Name visible to public' option. All hyperlinks in comments will be converted to plain text. All attachments must be no larger than <strong>5MB</strong> and must be a <strong>.png, .pdf, .gif, .jpg, .jpeg, or .bmp</strong> file.</p>
+      </section>
+      <section class="m-b-0">
+        <h2>Privacy Policy</h2>
+        <p>Personal information collected through this comment period will inform the Environmental Assessment Office on the <em>PROJECT.NAME Project</em> under the authority of s.26 (c) and (e) of the <a href="http://www.bclaws.ca/Recon/document/ID/freeside/96165_00" target="_blank">Freedom of Information and Protection of Privacy Act</a>. If you have any questions about the collection, use and disclosure of your personal information, please contact:</p>
+        <p class="m-b-0">Director, Engagement &amp; Digital Services<br>Environmental Assessment Office<br>836 Yates Street, Victoria, BC<br>epicsupport.eao@gov.bc.ca<br>(250) 356-7441
+      </section>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="p1_next()" [disabled]="!iAgreeModel">Next</button>
+      <button type="button" class="btn btn-primary" (click)="p1_next()">Next</button>
     </div>
   </div>
 </form>
 
 <!-- Contact Information Form-->
-<form #commentForm1="ngForm">
+<form #commentForm1="ngForm" (ngSubmit)="register()">
   <div class="modal-content" *ngIf="this.currentPage === 2">
     <div class="modal-header">
-      <h4 class="modal-title">Enter your contact information</h4>
+      <h4 class="modal-title">Submit a Comment</h4>
       <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg2" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page2')">
         <i class="material-icons">
           close
@@ -54,97 +49,60 @@
       </button>
     </div>
     <div class="modal-body">
-      <p class="step-desc">Providing contact information allows us to follow-up with you if we have questions or need more clarity on your comment.</p>
       <fieldset>
           <div class="form-group">
-            <label class="control-label" for="contactName">Name</label>
+            <label class="control-label">Name (required)</label>
             <div class="form-control-container">
-              <input class="form-control" type="text" placeholder="Enter your full name" maxlength="50" id="contactName" name="contactName"
-                [ngClass]="{'has-success': !contactName.errors?.minlength && (!contactName.dirty || contactName.touched)}"
-                [(ngModel)]="comment.commentAuthor.contactName" 
-                #contactName="ngModel" />
+              <input class="form-control" type="text" name="nameInput" placeholder="Anonymous"
+                id="nameInput" [(ngModel)]="contactName" autofocus />
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label" for="location">Location</label>
-            <input class="form-control" type="text" placeholder="e.g. city, town, etc." maxlength="50" id="location" name="location"
-              [(ngModel)]="comment.commentAuthor.location" 
-              #location="ngModel" />
+            <label class="control-label" >Location (required)</label>
+            <input class="form-control" type="text" name="locationInput" placeholder="IE: City, Province, etc."
+              id="locationInput" [(ngModel)]="locationInput" autofocus />
           </div>
           <div class="form-group">
-            <label class="control-label" for="orgName">Organization</label>
-            <input class="form-control" type="text" placeholder="Enter your organization" maxlength="100" id="orgName" name="orgName"
-              [(ngModel)]="comment.commentAuthor.orgName"
-              #orgName="ngModel" />
+            <label class="control-label" >Make my Name visible to the public.</label>
+            <input type="checkbox" aria-label="Checkbox for row item" name="anonymous" [(ngModel)]='anonymous'><label class="control-label" >All comments are submitted anonymously by default. Checking this option will display your Name (if entered) on the public site.</label>
           </div>
           <div class="form-group">
-            <label class="control-label" for="email">Email</label>
-            <input class="form-control" type="email" placeholder="e.g. email@example.com" id="email" name="email" 
-              [ngClass]="{'is-invalid': (email.invalid)}"
-              [(ngModel)]="comment.commentAuthor.internal.email" 
-              #email="ngModel" 
-              pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" />
-            <div class="invalid-feedback" *ngIf="email.invalid && (email.dirty || email.touched)">
-              Enter a valid email address (e.g. email@example.com)
-            </div>
+            <label class="control-label" >Your Comment</label>
+            <textarea class="form-control" rows="8" name="commentInput" id="commentInput" [(ngModel)]="commentInput" autofocus></textarea>
           </div>
-          <div class="form-group">
-            <label class="control-label" for="phone">Phone</label>
-            <input class="form-control" type="tel" placeholder="e.g. 123-456-7890" id="phone" name="phone" 
-              [ngClass]="{'is-invalid': (phone.invalid)}"
-              [(ngModel)]="comment.commentAuthor.internal.phone" 
-              #phone="ngModel" 
-              pattern="^(?:\+?1[-. ]?)?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$" />
-            <div class="invalid-feedback" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
-              <div *ngIf="phone.invalid">Enter a valid phone number (e.g. 123-456-7890 or 123.456.7890)</div>
-            </div>
+
+          <app-file-upload [maxFiles]="50" [maxSize]="300" [showInfo]="false" [showList]="false" [files]="commentFiles"
+                           (filesChange)="addFiles($event); commentFiles = []"></app-file-upload>
+          <ul class="doc-list mb-3" *ngIf="documents?.length > 0">
+            <li *ngFor="let doc of documents">
+              <span class="cell icon">
+                <i class="material-icons">insert_drive_file</i>
+              </span>
+              <span class="cell name" [title]="doc.displayName || ''">
+                <span class="cell__txt-content">{{doc.internalOriginalName}}</span>
+              </span>
+              <span class="cell actions">
+                <button class="btn btn-icon" type="button" title="Remove this file"
+                  (click)="deleteFile(doc, documents)">
+                  <i class="material-icons">delete</i>
+                </button>
+              </span>
+            </li>
+          </ul>
+          <div *ngIf="documents?.length === 0">
+            <p>No attached files.</p>
           </div>
       </fieldset>
     </div>
     <div class="modal-footer">
       <button class="btn btn-light" type="button" (click)="p2_back()">Back</button>
-      <button class="btn btn-primary" type="button" (click)="p2_next()" [disabled]="!commentForm1.form.valid">Next</button>
-    </div>
-  </div>
-</form>
-
-<!-- Comment Form -->
-<form #commentForm2="ngForm">
-  <div class="modal-content" *ngIf="this.currentPage === 3" [hidden]="submitting">
-    <div class="modal-header">
-      <h4 class="modal-title">Enter your comment</h4>
-      <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page3')">
-        <i class="material-icons">
-          close
-        </i>
-      </button>
-    </div>
-    <div class="modal-body">
-     <fieldset>
-        <div class="form-group">
-          <label class="control-label" for="comment">Your Comment (Required)</label>
-          <!-- <textarea class="your-comment form-control" rows="8" id="comment" name="comment" required aria-required="true" 
-            [(ngModel)]="comment.comment"
-            #comment2="ngModel">
-          </textarea> -->
-        </div>
-        <div class="upload-attachments">
-          <label class="control-label mb-0" for="attachments">Attachments (Optional)</label>
-          <!-- <app-file-upload [(files)]="files"></app-file-upload> -->
-        </div>
-      </fieldset>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-light" type="button"(click)="p3_back()">Back</button>
-      <button class="btn btn-primary gtm-submit-comment-submit" type="button" title="Submit your comment"
-        [disabled]="!commentForm2.form.valid || submitting" 
-        (click)="p3_next()">Submit</button>
+      <button class="btn btn-primary" type="button" (click)="p2_next()" [disabled]="!commentForm1.form.valid">Submit</button>
     </div>
   </div>
 </form>
 
 <!-- Success -->
-<div class="modal-content thank-you-content" *ngIf="this.currentPage === 4">
+<div class="modal-content thank-you-content" *ngIf="this.currentPage === 3">
   <div class="modal-header">
     <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page3')">
       <i class="material-icons">
