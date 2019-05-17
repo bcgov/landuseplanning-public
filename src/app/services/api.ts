@@ -39,10 +39,17 @@ export class ApiService {
         this.env = 'dev';
         break;
 
-      default:
-        // Prod
+      case 'eagle-test.pathfinder.gov.bc.ca':
+        // Dev
         this.apiPath = 'https://eagle-dev.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://eagle-dev.pathfinder.gov.bc.ca/admin/';
+        this.env = 'dev';
+        break;
+
+      default:
+        // Prod
+        this.apiPath = 'https://eagle-prod.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://eagle-prod.pathfinder.gov.bc.ca/admin/';
         this.env = 'prod';
     };
   }
