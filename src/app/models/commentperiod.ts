@@ -110,7 +110,11 @@ export class CommentPeriod {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const days = moment(obj.dateCompleted).diff(moment(today), 'days') + 1;
-      this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
+      if (days < 0) {
+        this.daysRemaining = 'Completed';
+      } else {
+        this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
+      }
 
       const dateStarted = moment(obj.dateStarted);
       const dateCompleted = moment(obj.dateCompleted);
