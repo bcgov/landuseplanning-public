@@ -49,7 +49,7 @@
                     Submit/View Comments
                   </a>
                   <a class="btn btn-sm content-btn-alt" title="View more information" href="{{item.documentUrl}}"
-                    target="_blank" *ngIf="item.documentUrl">
+                    target="_blank" *ngIf="item.documentUrl && item.documentUrl.slice(-4)[0] === '.'">
                     View Document(s)
                   </a>
                 </div>
