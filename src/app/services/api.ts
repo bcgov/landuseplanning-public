@@ -116,7 +116,7 @@ export class ApiService {
   //
   // Searching
   //
-  searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier = null, populate = false) {
+  searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier = null, populate = false, secondarySort: string = null) {
     let queryString = `search?dataset=${dataset}`;
     if (fields && fields.length > 0) {
       fields.map(item => {
@@ -129,6 +129,7 @@ export class ApiService {
     if (pageNum !== null) { queryString += `&pageNum=${pageNum - 1}`; }
     if (pageSize !== null) { queryString += `&pageSize=${pageSize}`; }
     if (sortBy !== null) { queryString += `&sortBy=${sortBy}`; }
+    if (secondarySort !== null) { queryString += `&sortBy=${secondarySort}`; }
     if (populate !== null) { queryString += `&populate=${populate}`; }
     if (queryModifier !== null) {
       queryString += `&query` + queryModifier;
