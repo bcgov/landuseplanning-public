@@ -28,7 +28,9 @@ export class ProjDetailPopupComponent implements OnInit {
     this.commentPeriodService.getAllByProjectId(this.proj._id)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(data => {
+        if (data && data.length > 0 && data[0]) {
           this.commentPeriodStatus = data[0].commentPeriodStatus;
+        }
       });
   }
 }

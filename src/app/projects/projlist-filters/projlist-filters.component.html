@@ -3,7 +3,7 @@
     <fieldset class="additional-filters" (click)="$event.stopPropagation()">
       <div class="form-group typeahead-container">
         <label for="applicantInput">Search Environmental Assessment Projects</label>
-        <input type="text" class="form-control gtm-filter-applicant " placeholder="Start Typing Applicant Name" id="applicantInput"
+        <input type="text" class="form-control gtm-filter-applicant " placeholder="Start Typing A Project Name" id="applicantInput"
         [(ngModel)]="_applicantFilter"
         [ngbTypeahead]="applicantSearch" [focusFirst]="false">
       </div>
