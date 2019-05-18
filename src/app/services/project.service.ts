@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { Project } from 'app/models/project';
 import { ApiService } from './api';
 import { CommentPeriodService } from './commentperiod.service';
+import { CommentPeriod } from 'app/models/commentperiod';
 
 @Injectable()
 export class ProjectService {
@@ -78,15 +79,21 @@ export class ProjectService {
   }
 
   // get a specific project by its id
-  getById(projId: string, forceReload: boolean = false): Observable<Project> {
+  getById(projId: string, forceReload: boolean = false, cpStart: Date = null, cpEnd: Date = null): Observable<Project> {
     if (this.project && this.project._id === projId && !forceReload) {
       return Observable.of(this.project);
     }
 
     // first get the project
-    return this.api.getProject(projId)
+    return this.api.getProject(projId, cpStart, cpEnd)
       .map(res => {
         const projects = res.text() ? res.json() : [];
+
+        if (projects[0].upcomingCommentPeriod.length > 0) {
+          projects[0].upcomingCommentPeriod = new CommentPeriod(projects[0].upcomingCommentPeriod[0]);
+        } else {
+          projects[0].upcomingCommentPeriod = null;
+        }
         // return the first (only) project
         return projects.length > 0 ? new Project(projects[0]) : null;
       })

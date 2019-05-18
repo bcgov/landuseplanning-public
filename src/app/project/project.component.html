@@ -3,7 +3,8 @@
     <div class="hero-banner-alt">
       <div class="container">
         <div class="hero-banner__content">
-          <h1>{{project?.name || '-'}}</h1>        <span class="proj-status">{{project?.status || 'Unknown Project Status'}}</span>
+          <h1>{{project?.name || '-'}}</h1> <span
+            class="proj-status">{{project?.status || 'Unknown Project Status'}}</span>
           <p class="desc" [innerHTML]="(project.description || '-') | newlines"></p>
           <span class="ea-decision">{{project && project.eacDecision || "-"}}</span>
           <div class="basic-info">
@@ -24,65 +25,13 @@
       </div>
     </div>
 
-    <div class="pcp-banner" *ngIf="period.commentPeriodStatus==='Open' || period.commentPeriodStatus === 'Pending' || period.commentPeriodStatus === 'Closed'">
-      <section class="pcp-info">
-        <h2>Public Comment Period is
-          <span *ngIf="period.commentPeriodStatus === 'Pending'">Scheduled</span>
-          <span *ngIf="period.commentPeriodStatus === 'Closed'">Closed</span>
-          <span *ngIf="period.commentPeriodStatus === 'Open'">Now Open</span></h2>
-        <span class="pcp-dates"><strong>{{ period.dateStarted | date:'longDate' }}</strong> &nbsp;-&nbsp;
-          <strong>{{ period.dateCompleted | date:'longDate' }}</strong></span>
-        <div class="pcp-banner-btns">
-          <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="period.commentPeriodStatus === 'Open'">Submit Comment</button>
-          <button class="btn btn-light" type="button" *ngIf="period.commentPeriodStatus === 'Closed'">View Comments</button>
-        </div>
-      </section>
-    </div>
-
     <section class="map-item">
-      <div class="container">
-        <div class="location-info">
-          <h2>Location</h2>
-          <div>
-            <label>Region</label>
-            <p class="value">{{project?.region || "-" | titlecase}}</p>
-          </div>
-          <div>
-            <label>Location</label>
-            <p class="value">{{project?.location || "-" | titlecase}}</p>
-          </div>
-          <div>
-            <label>Nature</label>
-            <p class="value">{{project?.nature || "No nature description available" | titlecase}}</p>
-          </div>
-          <div *ngIf="project?.status">
-            <label>CEAA Involvement</label>
-            <p class="value">{{project?.CEAAInvolvement || "-" | titlecase}}</p>
-          </div>
-          <div *ngIf="project?.CEAALink">
-            <label>CEAA URL</label>
-            <p class="value"><a class="value" target="_blank" href="{{project.CEAALink}}">{{project?.CEAALink || "-"}}</a></p>
-          </div>
-          <div *ngIf="project?.status">
-            <label>Project Status</label>
-            <p class="value">{{project?.status || "-"}}</p>
-          </div>
-          <div *ngIf="project?.operational">
-            <label>Active Phase</label>
-            <p class="value">{{project?.operational?.label || '-'}} | {{project?.operational?.date | date: 'longDate' || '-'}}</p>
-          </div>
-          <div *ngIf="project?.eacDecision">
-            <label>EAC Status</label>
-            <p class="value">{{project?.eacDecision || '-'}} | {{project?.decisionDate | date: 'longDate' || '-'}}</p>
-          </div>
+      <div class="map-wrapper mx-auto">
+        <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
+          <span class="no-results-msg">No map available</span>
         </div>
-        <div class="map-wrapper">
-          <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
-            <span class="no-results-msg">No map available</span>
-          </div>
-          <div class="map-container">
-            <div class="map" id="map"></div>
-          </div>
+        <div class="map-container">
+          <div class="map" id="map"></div>
         </div>
       </div>
     </section>
@@ -93,7 +42,8 @@
           <div role="navigation">
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation" *ngFor="let tabLink of tabLinks">
-                <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true" routerLinkActive="active">{{tabLink.label}}</a>
+                <a class="nav-link" role="tab" [routerLink]="tabLink.link" [replaceUrl]="true"
+                  routerLinkActive="active">{{tabLink.label}}</a>
               </li>
             </ul>
           </div>
@@ -108,21 +58,32 @@
         <div class="flex-container">
           <div class="inner-col">
             <h3>Project Lead</h3>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">person</i>{{project?.projectLead || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">phone</i>{{project?.projectLeadPhone || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">email</i><a href="mailto:{{project?.projectLeadEmail}}">{{project?.projectLeadEmail || "-"}}</a></p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">person</i>{{project?.projectLead || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">phone</i>{{project?.projectLeadPhone || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">email</i><a
+                href="mailto:{{project?.projectLeadEmail}}">{{project?.projectLeadEmail || "-"}}</a></p>
           </div>
           <div class="inner-col">
             <h3>Executive Project Director</h3>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">person</i>{{project?.responsibleEPD || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">phone</i>{{project?.responsibleEPDPhone || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">email</i><a href="mailto:{{project?.responsibleEPDEmail}}">{{project?.responsibleEPDEmail || "-"}}</a></p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">person</i>{{project?.responsibleEPD || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">phone</i>{{project?.responsibleEPDPhone || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">email</i><a
+                href="mailto:{{project?.responsibleEPDEmail}}">{{project?.responsibleEPDEmail || "-"}}</a></p>
           </div>
           <div class="inner-col">
             <h3>Compliance & Enforcement Lead</h3>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">person</i>{{project?.CELead || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">phone</i>{{project?.CELeadPhone || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation" wiid="C937">email</i><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">person</i>{{project?.CELead || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">phone</i>{{project?.CELeadPhone || "-"}}</p>
+            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                wiid="C937">email</i><a href="mailto:{{project?.CELeadEmail}}">{{project?.CELeadEmail || "-"}}</a></p>
           </div>
         </div>
       </div>

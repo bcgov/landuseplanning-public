@@ -20,6 +20,7 @@ import { AddCommentComponent } from './comments/add-comment/add-comment.componen
 })
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly tabLinks = [
+    { label: 'Project Details', link: 'project-details' },
     { label: 'Commenting', link: 'commenting' },
     { label: 'Documents', link: 'documents' }
   ];

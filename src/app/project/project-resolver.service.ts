@@ -14,7 +14,11 @@ export class ProjectResolver implements Resolve<Project> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Project> {
     const projId = route.paramMap.get('projId');
     // force-reload so we always have latest data
-    return this.projectService.getById(projId, true)
+    let start = new Date();
+    let end = new Date();
+    start.setDate(start.getDate() + 7);
+    end.setDate(end.getDate() - 7);
+    return this.projectService.getById(projId, false, start, end)
       .catch(() => { return Observable.of(null); });
   }
 }
