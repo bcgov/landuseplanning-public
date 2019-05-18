@@ -49,6 +49,7 @@ export class Project {
   updatedBy: String;
   operational: any;
   nature: any;
+  upcomingCommentPeriod: any;
 
   // Permissions
   read: Array<String> = [];
@@ -103,6 +104,7 @@ export class Project {
     this.status              = obj && obj.status              || null;
     this.substitution        = obj && obj.substitution        || null;
     this.updatedBy           = obj && obj.updatedBy           || null;
+    this.upcomingCommentPeriod           = obj && obj.upcomingCommentPeriod           || null;
     this.read                = obj && obj.read                || null;
     this.write               = obj && obj.write               || null;
     this.delete              = obj && obj.delete              || null;

@@ -164,7 +164,7 @@
       }
     }
     .map-wrapper {
-      width: 400px;
+      width: 1000px;
     }
     .map-item {
       position: relative;
@@ -242,8 +242,12 @@
     }
   }
   section.people {
-    background: #ffe198;
-    color: #003365;
+    background: #3f668c;
+    color: white;
+
+    a {
+      color: #FCBA19;
+    }
 
     h3 {
       margin-bottom: .5rem;

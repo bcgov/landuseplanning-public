@@ -62,11 +62,11 @@ export class ApiService {
 
   getFullDataSet(dataSet: string) {
     return this.get(`search?pageSize=1000&dataset=${dataSet}`, {})
-    .map((res: any) => {
-      let records = JSON.parse(<string>res._body);
-      // console.log("records:", records[0].searchResults);
-      return records[0].searchResults;
-    });
+      .map((res: any) => {
+        let records = JSON.parse(<string>res._body);
+        // console.log("records:", records[0].searchResults);
+        return records[0].searchResults;
+      });
   }
 
   public async downloadDocument(document: Document): Promise<void> {
@@ -104,8 +104,8 @@ export class ApiService {
   private downloadResource(id: string) {
     const queryString = `document/${id}/download`;
     return this.get(queryString, { responseType: ResponseContentType.Blob })
-    .map((res: any) => res)
-    .toPromise();
+      .map((res: any) => res)
+      .toPromise();
   }
 
   getItem(_id: string, schema: string) {
@@ -187,7 +187,7 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  getProject(id: string) {
+  getProject(id: string, cpStart: Date, cpEnd: Date) {
     const fields = [
       'CEAAInvolvement',
       'CELead',
@@ -236,7 +236,10 @@ export class ApiService {
       'write',
       'delete'
     ];
-    const queryString = 'project/' + id + '?fields=' + this.buildValues(fields);
+    let queryString = `project/${id}?populate=true`;
+    if (cpStart !== null) { queryString += `&cpStart[until]=${cpStart.getFullYear()}-${cpStart.getMonth()}-${cpStart.getDate()}`; }
+    if (cpEnd !== null) { queryString += `&cpEnd[since]=${cpEnd.getFullYear()}-${cpEnd.getMonth()}-${cpEnd.getDate()}`; }
+    queryString += `&fields=${this.buildValues(fields)}`;
     return this.get(queryString);
   }
 

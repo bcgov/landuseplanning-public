@@ -20,6 +20,7 @@ import { DocumentTableRowsComponent } from 'app/project/documents/project-docume
 import { DocumentDetailComponent } from 'app/project/documents/detail/detail.component';
 
 import { StorageService } from 'app/services/storage.service';
+import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { StorageService } from 'app/services/storage.service';
     DocumentDetailComponent,
     DateInputComponent,
     DocumentsTabComponent,
-    DocumentTableRowsComponent
+    DocumentTableRowsComponent,
+    ProjectDetailsTabComponent
   ],
   providers: [
     StorageService
