@@ -1,24 +1,53 @@
-<div class="comments">
-    <div *ngIf="loading" class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-    <div class="header-section m-4">
-        <h1>
-            {{commentPeriodHeader}}
-        </h1>
-        <h2>
-            {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
-        </h2>
-        <p>
-            This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
-        </p>
-    </div>
-
-    <div class="mx-4">
-        <div *ngIf="comments?.length === 0">
-            <em>No comments have been received for this project at this time.</em>
+<div class="project" id="anchor-point">
+    <main class="project-info">
+      <div class="hero-banner-alt">
+        <div class="container">
+          <div class="hero-banner__content">
+            <h1>{{project?.name || '-'}}</h1>
+            <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
+            <span class="ea-decision">{{project?.eacDecision || "-"}}</span>
+            <div class="basic-info">
+              <div>
+                <label>Proponent</label>
+                <p class="value">{{project?.proponent?.name || "-" | titlecase}}</p>
+              </div>
+              <div>
+                <label>Type</label>
+                <p class="value">{{project?.type || "-" | titlecase}}</p>
+              </div>
+              <div>
+                <label>Sub-type</label>
+                <p class="value">{{project?.sector || "-" | titlecase}}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <app-item-table [listType]="listType" [items]="comments" [pageSize]='pageSize' [currentPage]='currentPage'
+      </div>
+
+
+      <div class="comments">
+          <div *ngIf="loading" class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+          </div>
+          <div class="header-section m-4" *ngIf="project.upcomingCommentPeriod !== null && project.upcomingCommentPeriod._id == commentPeriod._id">
+              <h1>
+                  {{commentPeriodHeader}}
+              </h1>
+              <h2>
+                  {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
+              </h2>
+              <p>
+                  This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
+                </p>
+                <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="commentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
+          </div>
+          <div class="mx-4">
+            <app-item-table [listType]="listType" [items]="comments" [pageSize]='pageSize' [currentPage]='currentPage'
             [totalComments]='totalComments' (onPageNumUpdate)='getPaginatedComments($event)'></app-item-table>
-    </div>
+            <div *ngIf="comments?.length === 0">
+                <em>No comments have been received for this project at this time.</em>
+            </div>
+          </div>
+      </div>
+    </main>
 </div>

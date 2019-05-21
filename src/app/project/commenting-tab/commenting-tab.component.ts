@@ -8,6 +8,7 @@ import 'rxjs/add/operator/takeUntil';
 import { Project } from 'app/models/project';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { CommentPeriod } from 'app/models/commentperiod';
+import { StorageService } from 'app/services/storage.service';
 
 @Component({
   templateUrl: './commenting-tab.component.html',
@@ -24,14 +25,17 @@ import { CommentPeriod } from 'app/models/commentperiod';
   ]
 })
 export class CommentingTabComponent implements OnInit, OnDestroy {
+  public currentProject: Project = null;
   public loading = true;
   public commentPeriods: Array<CommentPeriod> = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public commentPeriodService: CommentPeriodService, // used in template
+    private storageService: StorageService
   ) { }
 
   ngOnInit() {
@@ -41,6 +45,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: { project: Project }) => {
           if (data.project) {
+            this.currentProject = data.project;
             this.getCommentPeriods(data.project._id);
             this.loading = false;
           } else {
@@ -51,6 +56,10 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  goToCP(commentPeriod) {
+    this.router.navigate(['p', this.currentProject._id, 'cp', commentPeriod._id]);
   }
 
   getCommentPeriods(projectId) {

@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import { Project } from './project';
 
 
 export class CommentPeriod {
@@ -32,7 +33,7 @@ export class CommentPeriod {
   periodType: String;
   phase: String;
   phaseName: String;
-  project: String;
+  project: Project;
   publishedPercent: Number;
   rangeOption: String;
   rangeType: String;

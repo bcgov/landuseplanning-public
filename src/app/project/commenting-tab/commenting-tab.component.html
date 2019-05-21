@@ -9,7 +9,9 @@
         </div>
 
         <div *ngIf="commentPeriods">
-            <div [routerLink]="['../cp', commentPeriod._id]" class="d-flex justify-content-between list-group-item" *ngFor="let commentPeriod of commentPeriods">
+            <div class="d-flex justify-content-between list-group-item"
+                 *ngFor="let commentPeriod of commentPeriods"
+                 (click)=goToCP(commentPeriod)>
                 <div>
                     <label class="title">{{commentPeriod.commentPeriodStatus || 'Unknown Comment Period Status'}}</label>
                     <p class="mb-0">{{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}</p>

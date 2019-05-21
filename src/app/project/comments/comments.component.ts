@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
@@ -8,6 +9,8 @@ import { Comment } from 'app/models/comment';
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DialogService } from 'ng2-bootstrap-modal';
+import { AddCommentComponent } from './add-comment/add-comment.component';
+import { Project } from 'app/models/project';
 
 @Component({
   selector: 'app-comments',
@@ -19,6 +22,7 @@ export class CommentsComponent implements OnInit {
   public commentsLoading = true;
 
   public commentPeriod: CommentPeriod;
+  public project: Project;
   public comments: Comment[];
 
   public commentPeriodHeader: String;
@@ -27,13 +31,15 @@ export class CommentsComponent implements OnInit {
   public totalComments = 0;
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  private commentPeriodId = '';
+  private commentPeriodId = null;
+  private ngbModal: NgbModalRef = null;
 
   public listType = 'comments';
 
   constructor(
     private route: ActivatedRoute,
     private commentService: CommentService,
+    private modalService: NgbModal,
     private dialogService: DialogService,
     private router: Router,
     public commentPeriodService: CommentPeriodService
@@ -50,7 +56,12 @@ export class CommentsComponent implements OnInit {
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { commentPeriod: CommentPeriod }) => {
+        (data: { commentPeriod: CommentPeriod, project: Project }) => {
+
+          if (data.project) {
+            this.project = data.project;
+          }
+
           if (data.commentPeriod) {
             // To fix the issue where the last page is empty.
             this.commentPeriod = data.commentPeriod;
@@ -91,5 +102,26 @@ export class CommentsComponent implements OnInit {
     currentUrl = currentUrl.split('?')[0];
     currentUrl += `?currentPage=${this.currentPage}&pageSize=${this.pageSize}`;
     window.history.replaceState({}, '', currentUrl);
+  }
+
+  public addComment() {
+    if (this.commentPeriodId) {
+      // open modal
+      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      // set input parameter
+      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriodId;
+      // (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
+      // check result
+      this.ngbModal.result.then(
+        value => {
+          // saved
+          console.log(`Success, value = ${value}`);
+        },
+        reason => {
+          // cancelled
+          console.log(`Cancelled, reason = ${reason}`);
+        }
+      );
+    }
   }
 }

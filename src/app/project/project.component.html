@@ -3,10 +3,9 @@
     <div class="hero-banner-alt">
       <div class="container">
         <div class="hero-banner__content">
-          <h1>{{project?.name || '-'}}</h1> <span
-            class="proj-status">{{project?.status || 'Unknown Project Status'}}</span>
-          <p class="desc" [innerHTML]="(project.description || '-') | newlines"></p>
-          <span class="ea-decision">{{project && project.eacDecision || "-"}}</span>
+          <h1>{{project?.name || '-'}}</h1>
+          <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
+          <span class="ea-decision">{{project?.eacDecision || "-"}}</span>
           <div class="basic-info">
             <div>
               <label>Proponent</label>

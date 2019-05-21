@@ -18,7 +18,8 @@ const routes: Routes = [
     path: 'p/:projId/cp/:commentPeriodId/details',
     component: CommentsComponent,
     resolve: {
-      commentPeriod: CommentsResolver
+      commentPeriod: CommentsResolver,
+      project: ProjectResolver
     }
   },
   {

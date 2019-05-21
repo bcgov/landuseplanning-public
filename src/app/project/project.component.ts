@@ -52,37 +52,6 @@ export class ProjectComponent implements OnInit {
             this.storageService.state.currentProject = { type: 'currentProject', data: data.project };
             this.renderer.removeClass(document.body, 'no-scroll');
             this.project = data.project;
-
-            // ***************************************************
-            // TODO Resolve this period from the actual project.
-            // Open
-            // this.period = new CommentPeriod({
-            //   _id: '5980d4f8436253001dcaf8b8',
-            //   informationLabel: 'Lorem Ipsum',
-            //   dateStarted: '2019-01-17 22:03:52.162Z',
-            //   dateCompleted: '2019-12-01 19:25:37.113Z'
-            // });
-            // // Closed
-            // this.period = new CommentPeriod({
-            //   _id: '5980d4f8436253001dcaf8b8',
-            //   informationLabel: 'Lorem Ipsum',
-            //   dateStarted: '2019-01-17 22:03:52.162Z',
-            //   dateCompleted: '2019-02-01 19:25:37.113Z'
-            // });
-            // Scheduled shouldn't show because non 7 day window
-            // this.period = new CommentPeriod({
-            //   _id: '5980d4f8436253001dcaf8b8',
-            //   informationLabel: 'Lorem Ipsum',
-            //   dateStarted: '2019-12-17 22:03:52.162Z',
-            //   dateCompleted: '2019-12-22 19:25:37.113Z'
-            // });
-            // Scheduled fix this to be within 7 days of coding test
-            // this.period = new CommentPeriod({
-            //   _id: '5980d4f8436253001dcaf8b8',
-            //   informationLabel: 'Lorem Ipsum',
-            //   dateStarted: '2019-05-17 22:03:52.162Z',
-            //   dateCompleted: '2019-05-18 19:25:37.113Z'
-            // });
             console.log('period:', this.period);
             this._changeDetectionRef.detectChanges();
           } else {
