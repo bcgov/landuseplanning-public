@@ -60,12 +60,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             // ***************************************************
             // TODO Resolve this period from the actual project.
             // Open
-            this.period = new CommentPeriod({
-              _id: '5980d4f8436253001dcaf8b8',
-              informationLabel: 'Lorem Ipsum',
-              dateStarted: '2019-01-17 22:03:52.162Z',
-              dateCompleted: '2019-12-01 19:25:37.113Z'
-            });
+            // this.period = new CommentPeriod({
+            //   _id: '5980d4f8436253001dcaf8b8',
+            //   informationLabel: 'Lorem Ipsum',
+            //   dateStarted: '2019-01-17 22:03:52.162Z',
+            //   dateCompleted: '2019-12-01 19:25:37.113Z'
+            // });
             // // Closed
             // this.period = new CommentPeriod({
             //   _id: '5980d4f8436253001dcaf8b8',
@@ -267,11 +267,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addComment() {
-    if (this.period) {
+    if (this.project.upcomingCommentPeriod) {
       // open modal
       this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
       // set input parameter
-      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.period;
+      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.upcomingCommentPeriod;
+      (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
       // check result
       this.ngbModal.result.then(
         value => {

@@ -10,6 +10,8 @@ import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
+import * as moment from 'moment-timezone';
+import { Project } from 'app/models/project';
 
 @Component({
   templateUrl: './add-comment.component.html',
@@ -18,6 +20,7 @@ import { DocumentService } from 'app/services/document.service';
 
 export class AddCommentComponent implements OnInit {
   @Input() currentPeriod: CommentPeriod;
+  @Input() project: Project;
 
   public submitting = false;
   private progressValue: number;
@@ -104,6 +107,13 @@ export class AddCommentComponent implements OnInit {
 
     // first add new comment
     this.progressBufferValue += 100 * commentSize / this.totalSize;
+
+    // Build the comment
+    this.comment.author = this.contactName;
+    this.comment.comment = this.commentInput;
+    this.comment.location = this.locationInput;
+    this.comment.isAnonymous = this.anonymous;
+
     this.commentService.add(this.comment)
       .toPromise()
       .then((comment: Comment) => {
@@ -119,6 +129,13 @@ export class AddCommentComponent implements OnInit {
           const formData = new FormData();
           formData.append('_comment', this.comment._id);
           formData.append('displayName', file.name);
+          formData.append('documentSource', 'COMMENT');
+          formData.append('project', this.project._id);
+          formData.append('documentFileName', file.name);
+          formData.append('internalOriginalName', file.name);
+          formData.append('documentSource', 'COMMENT');
+          formData.append('dateUploaded', moment());
+          formData.append('datePosted', moment());
           formData.append('upfile', file);
           this.progressBufferValue += 100 * file.size / this.totalSize;
 
