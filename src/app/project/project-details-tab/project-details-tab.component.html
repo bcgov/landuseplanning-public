@@ -37,15 +37,16 @@
                 <p class="value">{{project?.eacDecision || '-'}} |
                     {{project?.decisionDate | date: 'longDate' || '-'}}</p>
             </div>
-
-            <div class="map-wrapper">
-                <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
-                    <span class="no-results-msg">No map available</span>
-                </div>
-                <div class="map-container">
-                    <div class="map" id="map"></div>
-                </div>
-            </div>
         </div>
+    </section>
+    <section class="map-item">
+      <div class="map-wrapper">
+        <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
+          <span class="no-results-msg">No map available</span>
+        </div>
+        <div class="map-container">
+          <div class="map" id="map"></div>
+        </div>
+      </div>
     </section>
 </div>
