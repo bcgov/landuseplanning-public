@@ -6,9 +6,33 @@
     h2 {
         color: #003364;
     }
-    label,
+    label {
+      font-weight: bold;
+      color: $primary;
+      margin-bottom: 0;
+      line-height: 1.2;
+    }
     p {
         font-size: 1rem;
+    }
+    .value {
+      font-size: .8rem;
+      line-height: 1.25;
+      margin-bottom: 5px;
+    }
+    .organization-item {
+      margin-top: 0;
+      color: #fff;
+      background-color: #38598a;
+      border-radius: 4px 4px 0 0;
+      padding: 7px 10px;
+      width: 100%;
+      text-align: center;
+      p {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0;
+      }
     }
 }
 
@@ -40,10 +64,12 @@
   }
 
   .map-wrapper {
-    width: auto;
+    width: 100%;
+    height: 100%;
   }
   .map-item {
     position: relative;
+    height: 100%;
     .container {
       position: relative;
       @media (min-width: 400px) {
@@ -54,7 +80,7 @@
       display: block;
       position: relative;
       overflow: hidden;
-      height: (400px - 33px); // to hide attribution
+      // height: (400px - 33px); // to hide attribution
     }
     .map {
       position: relative;
