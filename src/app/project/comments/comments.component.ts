@@ -65,7 +65,13 @@ export class CommentsComponent implements OnInit {
           if (data.commentPeriod) {
             // To fix the issue where the last page is empty.
             this.commentPeriod = data.commentPeriod;
-            this.commentPeriodHeader = this.commentPeriod.commentPeriodStatus === 'Completed' ? 'Public Comment Period is Now Closed' : 'Public Comment Period is Now Open';
+            if (this.commentPeriod.commentPeriodStatus === 'Closed') {
+              this.commentPeriodHeader = 'Public Comment Period is Now Closed';
+            } else if (this.commentPeriod.commentPeriodStatus === 'Pending') {
+              this.commentPeriodHeader = 'Public Comment Period is Pending';
+            } else if (this.commentPeriod.commentPeriodStatus === 'Open') {
+              this.commentPeriodHeader = 'Public Comment Period is Now Open';
+            }
             this.loading = false;
 
             this.updateUrl();
