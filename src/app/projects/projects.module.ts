@@ -13,6 +13,8 @@ import { ProjlistListComponent } from './projlist-list/projlist-list.component';
 import { ProjlistMapComponent } from './projlist-map/projlist-map.component';
 import { ProjlistFiltersComponent } from './projlist-filters/projlist-filters.component';
 import { ProjDetailPopupComponent } from './proj-detail-popup/proj-detail-popup.component';
+import { ProjectListComponent } from './project-list/project-list.component';
+import { ProjectListTableRowsComponent } from './project-list/project-list-table-rows/project-list-table-rows.component';
 
 @NgModule({
   imports: [
@@ -27,10 +29,13 @@ import { ProjDetailPopupComponent } from './proj-detail-popup/proj-detail-popup.
     ProjlistListComponent,
     ProjlistMapComponent,
     ProjlistFiltersComponent,
-    ProjDetailPopupComponent
+    ProjDetailPopupComponent,
+    ProjectListComponent,
+    ProjectListTableRowsComponent
   ],
   entryComponents: [
-    ProjDetailPopupComponent
+    ProjDetailPopupComponent,
+    ProjectListTableRowsComponent
   ]
 })
 

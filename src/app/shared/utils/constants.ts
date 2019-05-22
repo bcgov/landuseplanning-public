@@ -1,7 +1,9 @@
 export class Constants {
   public static readonly tableDefaults = {
     DEFAULT_CURRENT_PAGE: 1,
-    DEFAULT_PAGE_SIZE: 10
+    DEFAULT_PAGE_SIZE: 10,
+    DEFAULT_SORT_BY: '-datePosted',
+    DEFAULT_KEYWORDS: ''
   };
 
   public static readonly types = [

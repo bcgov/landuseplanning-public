@@ -135,7 +135,6 @@ export class ApiService {
       queryString += `&query` + queryModifier;
     }
     queryString += `&fields=${this.buildValues(fields)}`;
-    console.log('here is the query', queryString);
     return this.get(`${queryString}`, {});
   }
 

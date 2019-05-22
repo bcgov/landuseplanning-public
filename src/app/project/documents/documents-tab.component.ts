@@ -1,13 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { DialogService } from 'ng2-bootstrap-modal';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { Document } from 'app/models/document';
-import { SearchTerms, SearchResults } from 'app/models/search';
+import { SearchTerms } from 'app/models/search';
 
 import { ApiService } from 'app/services/api';
-import { DocumentService } from 'app/services/document.service';
 import { SearchService } from 'app/services/search.service';
 import { StorageService } from 'app/services/storage.service';
 
@@ -59,7 +57,6 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   ];
 
   public selectedCount = 0;
-  public keywords = '';
 
   public currentProject;
 
@@ -68,8 +65,6 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   constructor(
     private _changeDetectionRef: ChangeDetectorRef,
     private api: ApiService,
-    private dialogService: DialogService,
-    private documentService: DocumentService,
     private route: ActivatedRoute,
     private router: Router,
     private searchService: SearchService,
@@ -79,11 +74,9 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // get data from route resolver
-
     this.route.params
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
-        this.keywords = params.keywords;
         this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
       });
 
@@ -186,9 +179,12 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   }
 
   setColumnSort(column) {
-    this.tableParams.sortBy = column;
-    this.tableParams.sortDirection = this.tableParams.sortDirection > 0 ? -1 : 1;
-    this.getPaginatedDocs(this.tableParams.currentPage, this.tableParams.sortBy, this.tableParams.sortDirection);
+    if (this.tableParams.sortBy.charAt(0) === '+') {
+      this.tableParams.sortBy = '-' + column;
+    } else {
+      this.tableParams.sortBy = '+' + column;
+    }
+    this.getPaginatedDocs(this.tableParams.currentPage);
   }
 
   isEnabled(button) {
@@ -204,27 +200,27 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     this.selectedCount = count;
   }
 
-  getPaginatedDocs(pageNumber, newSortBy, newSortDirection) {
+  getPaginatedDocs(pageNumber) {
     // Go to top of page after clicking to a different page.
     window.scrollTo(0, 0);
     this.loading = true;
 
-    this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, newSortBy, newSortDirection);
+    this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
 
     this.searchService.getSearchResults(
-      this.keywords,
+      this.tableParams.keywords,
       'Document',
       [{ 'name': 'project', 'value': this.currentProject._id }],
       pageNumber,
       this.tableParams.pageSize,
-      this.tableParams.sortString,
+      this.tableParams.sortBy,
       '[documentSource]=PROJECT',
       true)
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
         this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
         this.documents = res[0].data.searchResults;
-        this.tableTemplateUtils.updateUrl(this.tableParams.sortString, this.tableParams.currentPage, this.tableParams.pageSize);
+        this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
         this.setDocumentRowData();
         this.loading = false;
         this._changeDetectionRef.detectChanges();
@@ -239,18 +235,13 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     // REF: https://stackoverflow.com/questions/40983055/how-to-reload-the-current-route-with-the-angular-2-router
     // WORKAROUND: add timestamp to force URL to be different than last time
 
-    // Reset page.
-    this.tableParams.currentPage = 1;
-    this.tableParams.sortBy = '';
-    this.tableParams.sortDirection = 0;
-
     const params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
-    params['currentPage'] = this.tableParams.currentPage;
-    params['sortBy'] = this.tableParams.sortBy;
-    params['sortDirection'] = this.tableParams.sortDirection;
-
+    params['currentPage'] = this.tableParams.currentPage = 1;
+    params['sortBy'] = this.tableParams.sortBy = '';
+    params['keywords'] = this.tableParams.keywords;
+    params['pageSize'] = this.tableParams.pageSize = 10;
 
     console.log('params =', params);
     console.log('nav:', ['p', this.currentProject._id, 'documents', params]);
