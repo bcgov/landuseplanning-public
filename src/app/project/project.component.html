@@ -39,7 +39,10 @@
                         </button>
                         &nbsp;
                       -->
-                        <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="project.upcomingCommentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
+                        <button class="btn btn-light"
+                                (click)="addComment()"
+                                type="button"
+                                *ngIf="project.upcomingCommentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
                     </div>
                 </div>
             </div>

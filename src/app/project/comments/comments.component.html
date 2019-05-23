@@ -29,7 +29,7 @@
           <div *ngIf="loading" class="spinner-border" role="status">
               <span class="sr-only">Loading...</span>
           </div>
-          <div class="header-section m-4" *ngIf="project.upcomingCommentPeriod !== null && project.upcomingCommentPeriod._id == commentPeriod._id">
+          <div class="header-section m-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
               <h1>
                   {{commentPeriodHeader}}
               </h1>

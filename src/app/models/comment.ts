@@ -7,7 +7,7 @@ export class Comment {
   dateUpdated: Date;
   isAnonymous: boolean;
   location: string;
-  period: string;
+  period: any;
 
   // Permissions
   read: Array<String> = [];
