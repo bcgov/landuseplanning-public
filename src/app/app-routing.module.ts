@@ -5,6 +5,7 @@ import { ContactComponent } from 'app/contact/contact.component';
 import { ProjectsComponent } from 'app/projects/projects.component';
 import { HomeComponent } from 'app/home/home.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
+import { NewsListComponent } from './news/news.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'projects-list',
     component: ProjectListComponent
+  },
+  {
+    path: 'news',
+    component: NewsListComponent
   },
   {
     // default route

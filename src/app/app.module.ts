@@ -22,6 +22,7 @@ import { HomeComponent } from 'app/home/home.component';
 import { ContactComponent } from 'app/contact/contact.component';
 import { HeaderComponent } from 'app/header/header.component';
 import { FooterComponent } from 'app/footer/footer.component';
+import { NewsListTableRowsComponent } from 'app/news/news-list-table-rows/news-list-table-rows.component';
 
 // services
 import { ApiService } from 'app/services/api';
@@ -33,6 +34,9 @@ import { SearchService } from 'app/services/search.service';
 import { FeatureService } from 'app/services/feature.service';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
+import { NewsListComponent } from 'app/news/news.component';
+import { NewsTypeFilterPipe } from 'app/shared/pipes/news-type-filter.pipe';
+import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filter.pipe';
 
 @NgModule({
   imports: [
@@ -55,6 +59,13 @@ import { ConfigService } from 'app/services/config.service';
     ContactComponent,
     HeaderComponent,
     FooterComponent,
+    NewsListComponent,
+    NewsTypeFilterPipe,
+    NewsMultifieldFilterPipe,
+    NewsListTableRowsComponent
+  ],
+  entryComponents: [
+    NewsListTableRowsComponent
   ],
   providers: [
     CookieService,
