@@ -3,13 +3,13 @@
     <tr>
       <th *ngFor="let entry of columns"
         class="project-table__name-col sortable"
-        (click)="sort(entry.value)"
+        (click)="!entry.nosort && sort(entry.value)"
         [ngClass]="entry.width"
         >
         {{entry.name}}
-        <i class="sort"
-           [ngClass]="{'sort-asc': (column == entry.value && direction < 0), 'sort-desc': (column == entry.value && direction > 0) }"
-           aria-hidden="true"></i>
+        <i *ngIf="entry.nosort !== true" class="sort"
+            [ngClass]="{'sort-asc': (column.slice(1) == entry.value && column.charAt(0) === '+'), 'sort-desc': (column.slice(1) == entry.value && column.charAt(0) === '-') }"
+            aria-hidden="true"></i>
       </th>
     </tr>
   </thead>
@@ -21,3 +21,4 @@
   <pagination-controls (pageChange)="updatePageNumber($event)" id="table-template-pagination" autoHide="true">
   </pagination-controls>
 </div>
+  

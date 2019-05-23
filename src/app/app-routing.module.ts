@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContactComponent } from 'app/contact/contact.component';
 import { ProjectsComponent } from 'app/projects/projects.component';
 import { HomeComponent } from 'app/home/home.component';
+import { ProjectListComponent } from './projects/project-list/project-list.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'projects',
     component: ProjectsComponent
+  },
+  {
+    path: 'projects-list',
+    component: ProjectListComponent
   },
   {
     // default route
