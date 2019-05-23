@@ -4,6 +4,7 @@ export class News {
   _id: number;
   headline: string;
   content: string;
+  active: boolean;
   project: Project;
   priority: number;
   type: string;
@@ -18,6 +19,7 @@ export class News {
     this.project = obj && obj.project || null;
     this.priority = obj && obj.priority || null;
     this.type = obj && obj.type || null;
+    this.active = obj && obj.active || null;
     this.dateAdded = obj && obj.dateAdded || null;
     this.dateUpdated = obj && obj.dateUpdated || null;
     this.contentUrl = obj && obj.contentUrl || null;

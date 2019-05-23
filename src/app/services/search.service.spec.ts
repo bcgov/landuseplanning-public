@@ -3,11 +3,7 @@ import { SearchService } from './search.service';
 import { ApiService } from './api';
 
 describe('SearchService', () => {
-  const apiServiceSpy = jasmine.createSpyObj('ApiService', [
-    'getClientsInfoByDispositionId',
-    'getBCGWCrownLands',
-    'getBCGWDispositionTransactionId'
-  ]);
+  const apiServiceSpy = jasmine.createSpyObj('ApiService', []);
 
   beforeEach(() => {
     TestBed.configureTestingModule({

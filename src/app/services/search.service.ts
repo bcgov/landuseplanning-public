@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { ApiService } from './api';
 import { ProjectService } from 'app/services/project.service';
 import { SearchResults } from 'app/models/search';
+import { News } from 'app/models/news';
 
 @Injectable()
 export class SearchService {
@@ -58,6 +59,26 @@ export class SearchService {
       this.isError = true;
       // if call fails, return null results
       return of(null as SearchResults);
+    });
+    return searchResults;
+  }
+
+  getTopNewsItems() {
+    const searchResults = this.api.getTopNewsItems()
+    .map((res: any) => {
+      let records = JSON.parse(<string>res._body);
+      let allResults = <any>[];
+      records.forEach(item => {
+        const r = new News(item);
+        allResults.push(r);
+      });
+      console.log('Service results: ', allResults);
+      return allResults;
+    })
+    .catch(() => {
+      this.isError = true;
+      // if call fails, return null results
+      return of(null as News);
     });
     return searchResults;
   }

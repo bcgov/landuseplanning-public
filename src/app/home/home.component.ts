@@ -18,21 +18,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.searchService.getSearchResults('',
-    'RecentActivity',
-    null,
-    1,
-    4,
-    '-dateAdded',
-    null,
-    true,
-    null // Secondary sort
-    )
+    this.searchService.getTopNewsItems()
     .takeUntil(this.ngUnsubscribe)
     .subscribe((res: any) => {
-      if (res[0].data.meta && res[0].data.meta.length > 0) {
-        this.results = res[0].data.searchResults;
-      }
+      this.results = res;
       this._changeDetectionRef.detectChanges();
     });
   }

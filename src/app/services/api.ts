@@ -512,31 +512,8 @@ export class ApiService {
     return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
   }
 
-  //
-  // Crown Lands files
-  //
-  getBCGWCrownLands(id: string) {
-    const fields = [
-      'name',
-      'isImported'
-    ];
-    const queryString = 'search/bcgw/crownLandsId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getBCGWDispositionTransactionId(id: number) {
-    const fields = [
-      'name'
-    ];
-    const queryString = 'search/bcgw/dispositionTransactionId/' + id + '?fields=' + this.buildValues(fields);
-    return this.get(queryString);
-  }
-
-  getClientsInfoByDispositionId(id: number) {
-    const fields = [
-      'name'
-    ];
-    const queryString = 'search/bcgw/getClientsInfoByDispositionId/' + id + '?fields=' + this.buildValues(fields);
+  getTopNewsItems(): any {
+    const queryString = 'recentActivity?top=true';
     return this.get(queryString);
   }
 
