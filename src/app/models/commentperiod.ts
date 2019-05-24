@@ -37,7 +37,7 @@ export class CommentPeriod {
   publishedPercent: Number;
   rangeOption: String;
   rangeType: String;
-  relatedDocuments: String;
+  relatedDocuments: Array<String> = [];
   resolvedPercent: Number;
   updatedBy: String;
   userCan: String;
@@ -66,9 +66,7 @@ export class CommentPeriod {
     this.classifiedPercent    = obj && obj.classifiedPercent    || null;
     this.commenterRoles       = obj && obj.commenterRoles       || null;
     this.dateAdded            = obj && obj.dateAdded            || null;
-    // this.dateCompleted        = obj && obj.dateCompleted        || null;
     this.dateCompletedEst     = obj && obj.dateCompletedEst     || null;
-    // this.dateStarted          = obj && obj.dateStarted          || null;
     this.dateStartedEst       = obj && obj.dateStartedEst       || null;
     this.dateUpdated          = obj && obj.dateUpdated          || null;
     this.downloadRoles        = obj && obj.downloadRoles        || null;

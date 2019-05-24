@@ -384,10 +384,14 @@ export class ApiService {
 
   getPeriod(id: string) {
     const fields = [
-      'project',
-      'dateStarted',
+      'additionalText',
       'dateCompleted',
-      'informationLabel'
+      'dateStarted',
+      'informationLabel',
+      'instructions',
+      'openHouses',
+      'project',
+      'relatedDocuments'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.get(queryString);
@@ -494,6 +498,34 @@ export class ApiService {
 
   getDocument(id: string) {
     const queryString = 'document/' + id;
+    return this.get(queryString);
+  }
+
+  getDocumentsByMultiId(ids: Array<String>) {
+    const fields = [
+      'eaoStatus',
+      'internalOriginalName',
+      'documentFileName',
+      'labels',
+      'internalOriginalName',
+      'displayName',
+      'documentType',
+      'datePosted',
+      'dateUploaded',
+      'dateReceived',
+      'documentFileSize',
+      'documentSource',
+      'internalURL',
+      'internalMime',
+      'checkbox',
+      'project',
+      'type',
+      'documentAuthor',
+      'milestone',
+      'description',
+      'isPublished'
+    ];
+    const queryString = `document?docIds=${this.buildValues(ids)}&fields=${this.buildValues(fields)}`;
     return this.get(queryString);
   }
 

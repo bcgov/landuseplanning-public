@@ -243,8 +243,6 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
-    console.log('params =', params);
-    console.log('nav:', ['p', this.currentProject._id, 'documents', params]);
     this.router.navigate(['p', this.currentProject._id, 'documents', params]);
   }
 

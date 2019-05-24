@@ -7,10 +7,10 @@ import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
 
 import { CommentService } from 'app/services/comment.service';
-import { CommentPeriodService } from 'app/services/commentperiod.service';
-import { DialogService } from 'ng2-bootstrap-modal';
 import { AddCommentComponent } from './add-comment/add-comment.component';
 import { Project } from 'app/models/project';
+import { DocumentService } from 'app/services/document.service';
+import { ApiService } from 'app/services/api';
 
 @Component({
   selector: 'app-comments',
@@ -24,6 +24,7 @@ export class CommentsComponent implements OnInit {
   public commentPeriod: CommentPeriod;
   public project: Project;
   public comments: Comment[];
+  public commentPeriodDocs;
 
   public commentPeriodHeader: String;
   public currentPage = 1;
@@ -37,12 +38,12 @@ export class CommentsComponent implements OnInit {
   public listType = 'comments';
 
   constructor(
+    private api: ApiService,
     private route: ActivatedRoute,
     private commentService: CommentService,
+    private documentService: DocumentService,
     private modalService: NgbModal,
-    private dialogService: DialogService,
     private router: Router,
-    public commentPeriodService: CommentPeriodService
   ) { }
 
   ngOnInit() {
@@ -72,6 +73,15 @@ export class CommentsComponent implements OnInit {
             } else if (this.commentPeriod.commentPeriodStatus === 'Open') {
               this.commentPeriodHeader = 'Public Comment Period is Now Open';
             }
+
+            if (this.commentPeriod.relatedDocuments && this.commentPeriod.relatedDocuments.length > 0) {
+              this.documentService.getByMultiId(this.commentPeriod.relatedDocuments)
+                .takeUntil(this.ngUnsubscribe)
+                .subscribe(docs => {
+                  this.commentPeriodDocs = docs;
+                });
+            }
+
             this.loading = false;
 
             this.updateUrl();
@@ -108,6 +118,12 @@ export class CommentsComponent implements OnInit {
     currentUrl = currentUrl.split('?')[0];
     currentUrl += `?currentPage=${this.currentPage}&pageSize=${this.pageSize}`;
     window.history.replaceState({}, '', currentUrl);
+  }
+
+  public downloadDocument(document) {
+    return this.api.downloadDocument(document).then(() => {
+      console.log('Download initiated for file(s)');
+    });
   }
 
   public addComment() {

@@ -90,6 +90,9 @@
         display: inline-block;
       }
     }
+    .hero-banner__content {
+      padding-top: 3rem;
+    }
   }
 
   main {
@@ -251,20 +254,77 @@
   }
 }
 
-// :after {
-//   content: '';
-//   width: 100%;
-//   top: 0;
-//   right: 0;
-//   height: 100%;
-//   background: #136bc378;
-//   z-index: 999;
-// }
+.clickable-row {
+  cursor: pointer;
+}
 
 @media (max-width: 991px) {
   .project {
     main {
       margin-bottom: 1rem;
     }
+  }
+}
+
+// Document List
+.doc-list {
+  color: black;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  padding: 0;
+
+  li {
+    @include flex-box();
+    @include flex-direction(row);
+    background: #f7f8fa;
+
+    + li {
+      margin-top: 2px;
+    }
+  }
+
+  .cell {
+    padding: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    // Text Content
+    &__txt-content {
+      margin-top: 0.5rem;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    // Icon Column
+    &.icon {
+      @include flex(0 0 auto);
+      padding-left: 0.75rem;
+      padding-right: 0;
+  
+      i {
+        margin-top: 0.5rem;
+        font-size: 1.35rem;
+        color: #999;
+        cursor: default;
+      }
+    }
+  
+    // Name Column
+    &.name {
+      @include flex(1 1 auto);
+      font-size: 0.875rem;
+    }
+
+    // Actions Column
+    &.actions {
+      @include flex(0 0 auto);
+    }
+  }
+}
+
+.open-houses {
+  color: black;
+  span {
+    font-size: 14px;
   }
 }
