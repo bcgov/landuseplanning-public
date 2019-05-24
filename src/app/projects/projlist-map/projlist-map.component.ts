@@ -401,6 +401,10 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     }
   }
 
+  public resetMap() {
+    this.fitBounds(); // use default bounds
+  }
+
   /**
    * Center map on specified point, applying offset if needed.
    */
