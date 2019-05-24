@@ -23,6 +23,8 @@ import { ContactComponent } from 'app/contact/contact.component';
 import { HeaderComponent } from 'app/header/header.component';
 import { FooterComponent } from 'app/footer/footer.component';
 import { NewsListTableRowsComponent } from 'app/news/news-list-table-rows/news-list-table-rows.component';
+import { SplashModalComponent } from './splash-modal/splash-modal.component';
+
 
 // services
 import { ApiService } from 'app/services/api';
@@ -62,10 +64,12 @@ import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filte
     NewsListComponent,
     NewsTypeFilterPipe,
     NewsMultifieldFilterPipe,
-    NewsListTableRowsComponent
+    NewsListTableRowsComponent,
+    SplashModalComponent
   ],
   entryComponents: [
-    NewsListTableRowsComponent
+    NewsListTableRowsComponent,
+    SplashModalComponent
   ],
   providers: [
     CookieService,

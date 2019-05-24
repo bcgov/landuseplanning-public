@@ -7,6 +7,8 @@ import 'rxjs/add/operator/takeUntil';
 
 import { ApiService } from 'app/services/api';
 import { ConfigService } from 'app/services/config.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SplashModalComponent } from './splash-modal/splash-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -18,13 +20,15 @@ export class AppComponent implements OnInit, OnDestroy {
   isSafari: boolean;
   loggedIn: string;
   hostname: string;
+  showIntroModal: string;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public router: Router,
     private cookieService: CookieService,
     private api: ApiService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private modalService: NgbModal,
   ) {
     // ref: https://stackoverflow.com/questions/5899783/detect-safari-using-jquery
     this.isSafari = (/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
@@ -49,18 +53,45 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     };
 
+    // watch for URL param changes
+    // NB: this must be in constructor to get initial filters
+
     this.configService.init();
   }
 
   ngOnInit() {
     this.loggedIn = this.cookieService.get('loggedIn');
 
+    this.showIntroModal = '';
+
+    if (!this.cookieService.check('showIntroModal')) {
+      this.cookieService.set('showIntroModal', 'true');
+    }
+    this.showIntroModal = this.cookieService.get('showIntroModal');
+
     this.router.events
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        document.body.scrollTop = 0;
+        document.body.scrollTop = 0
+
         document.documentElement.scrollTop = 0;
       });
+  }
+
+  ngAfterViewInit() {
+    // show splash modal (unless a sub-component has already turned off this flag)
+    // do this in another event so it's not in current change detection cycle
+    if (this.showIntroModal === 'true') {
+      setTimeout(() => {
+        // this.splashModal =
+        this.modalService.open(SplashModalComponent, {
+          backdrop: 'static',
+          windowClass: 'splash-modal'
+        });
+        this.cookieService.set('showIntroModal', 'false');
+      });
+    }
+    return;
   }
 
   ngOnDestroy() {
