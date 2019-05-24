@@ -346,11 +346,21 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       if (wasOpen) { return; }
     }
 
-    const popupOptions = {
-      className: 'map-popup-content',
-      autoPanPaddingTopLeft: L.point(40, 150),
-      autoPanPaddingBottomRight: L.point(40, 20)
-    };
+    let popupOptions = {};
+    // Fix for different viewports on scrolling for map display
+    if (this.map.getSize().y < 800) {
+      popupOptions = {
+        className: 'map-popup-content',
+        autoPanPaddingTopLeft: L.point(2, 100),
+        autoPanPaddingBottomRight: L.point(2, 30)
+      };
+    } else {
+      popupOptions = {
+        className: 'map-popup-content',
+        autoPanPaddingTopLeft: L.point(80, 200),
+        autoPanPaddingBottomRight: L.point(80, 30)
+      };
+    }
 
     // compile marker popup component
     const compFactory = this.resolver.resolveComponentFactory(ProjDetailPopupComponent);

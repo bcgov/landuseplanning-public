@@ -43,7 +43,7 @@ $toggle-list-anim-duration: 0.2s;
   }
 
   .leaflet-popup {
-    margin-bottom: 60px; // Offset so we can see the marker
+    margin-bottom: 30px; // Offset so we can see the marker
   }
   
   .leaflet-popup-content-wrapper {
@@ -59,7 +59,7 @@ $toggle-list-anim-duration: 0.2s;
 
   .leaflet-control-attribution {
     padding: 0.5rem;
-    height: 4rem;
+    height: 3rem;
     line-height: 0.75rem;
     font-size: 0.75rem;
   }
