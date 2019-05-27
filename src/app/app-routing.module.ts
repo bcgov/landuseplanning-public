@@ -6,6 +6,9 @@ import { ProjectsComponent } from 'app/projects/projects.component';
 import { HomeComponent } from 'app/home/home.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
 import { NewsListComponent } from './news/news.component';
+import { LegislationComponent } from './legislation/legislation.component';
+import { ProcessComponent } from './process/process.component';
+import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
 
 const routes: Routes = [
   {
@@ -23,6 +26,18 @@ const routes: Routes = [
   {
     path: 'news',
     component: NewsListComponent
+  },
+  {
+    path: 'legislation',
+    component: LegislationComponent
+  },
+  {
+    path: 'compliance-oversight',
+    component: ComplianceOversightComponent
+  },
+  {
+    path: 'process',
+    component: ProcessComponent
   },
   {
     // default route

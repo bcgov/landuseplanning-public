@@ -39,6 +39,9 @@ import { ConfigService } from 'app/services/config.service';
 import { NewsListComponent } from 'app/news/news.component';
 import { NewsTypeFilterPipe } from 'app/shared/pipes/news-type-filter.pipe';
 import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filter.pipe';
+import { LegislationComponent } from 'app/legislation/legislation.component';
+import { ProcessComponent } from 'app/process/process.component';
+import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
 
 @NgModule({
   imports: [
@@ -65,7 +68,10 @@ import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filte
     NewsTypeFilterPipe,
     NewsMultifieldFilterPipe,
     NewsListTableRowsComponent,
-    SplashModalComponent
+    SplashModalComponent,
+    LegislationComponent,
+    ProcessComponent,
+    ComplianceOversightComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,
