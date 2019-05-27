@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageScrollConfig } from 'ng2-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
@@ -16,7 +16,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isSafari: boolean;
   loggedIn: string;
   hostname: string;
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.router.events
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        document.body.scrollTop = 0
+        document.body.scrollTop = 0;
 
         document.documentElement.scrollTop = 0;
       });
