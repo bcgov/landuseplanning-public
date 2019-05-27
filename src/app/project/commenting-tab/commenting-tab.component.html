@@ -4,11 +4,11 @@
     </div>
 
     <section class="tab-section" *ngIf="!loading">
-        <div *ngIf="!project?.currentPeriod">
+        <div *ngIf="commentPeriods.length < 1">
             No comment periods are currently scheduled for this project.
         </div>
 
-        <div *ngIf="commentPeriods">
+        <div *ngIf="commentPeriods.length > 0">
             <div class="d-flex justify-content-between list-group-item"
                  *ngFor="let commentPeriod of commentPeriods"
                  (click)=goToCP(commentPeriod)>
