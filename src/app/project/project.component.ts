@@ -52,7 +52,6 @@ export class ProjectComponent implements OnInit {
             this.storageService.state.currentProject = { type: 'currentProject', data: data.project };
             this.renderer.removeClass(document.body, 'no-scroll');
             this.project = data.project;
-            console.log('period:', this.period);
             this._changeDetectionRef.detectChanges();
           } else {
             alert('Uh-oh, couldn\'t load project');

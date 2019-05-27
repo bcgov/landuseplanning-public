@@ -13,6 +13,24 @@ export class DocumentService {
 
   constructor(private api: ApiService) { }
 
+  // get a specific document by its id
+  getByMultiId(ids: Array<String>): Observable<Document[]> {
+    return this.api.getDocumentsByMultiId(ids)
+      .map(res => {
+        const documents = res.text() ? res.json() : [];
+        if (documents.length > 0) {
+          // return the first (only) document
+          let docs = [];
+          documents.forEach(doc => {
+            docs.push(new Document(doc));
+          });
+          return docs;
+        }
+        return null;
+      })
+      .catch(error => this.api.handleError(error));
+  }
+
   // get all documents for the specified application id
   getAllByProjectId(appId: string): Observable<Document[]> {
     return this.api.getDocumentsByAppId(appId)

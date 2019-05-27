@@ -1,53 +1,90 @@
-<div class="project" id="anchor-point">
-    <main class="project-info">
-      <div class="hero-banner-alt">
-        <div class="container">
-          <div class="hero-banner__content">
-            <h1>{{project?.name || '-'}}</h1>
-            <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
-            <span class="ea-decision">{{project?.eacDecision || "-"}}</span>
-            <div class="basic-info">
-              <div>
-                <label>Proponent</label>
-                <p class="value">{{project?.proponent?.name || "-" | titlecase}}</p>
+<div *ngIf="loading" class="spinner-border" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+<div class="project">
+  <main class="project-info">
+    <div class="hero-banner-alt">
+      <div class="container">
+        <div class="hero-banner__content">
+          <h1>{{project?.name || '-'}}</h1>
+          <div class="header-section mb-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
+            <h3>
+              {{commentPeriodHeader}}
+            </h3>
+            <h3>
+              {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
+            </h3>
+            <p *ngIf="commentPeriod.informationLabel !== null">
+              This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
+            </p>
+            <p *ngIf="commentPeriod.informationLabel === null">
+              {{commentPeriod.instructions}}
+            </p>
+            <button class="btn btn-light" (click)="addComment()" type="button"
+              *ngIf="commentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
+          </div>
+          <!-- <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p> -->
+          <span class="ea-decision">{{project?.eacDecision || "-"}}</span>
+          <div class="basic-info">
+            <div>
+              <label>Proponent</label>
+              <p class="value">{{project?.proponent?.name || "-" | titlecase}}</p>
+            </div>
+            <div>
+              <label>Type</label>
+              <p class="value">{{project?.type || "-" | titlecase}}</p>
+            </div>
+            <div>
+              <label>Sub-type</label>
+              <p class="value">{{project?.sector || "-" | titlecase}}</p>
+            </div>
+          </div>
+          <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">
+            <div class="card">
+              <div class="card-header">
+                Related Documents
               </div>
-              <div>
-                <label>Type</label>
-                <p class="value">{{project?.type || "-" | titlecase}}</p>
+              <ul class="doc-list mt-0">
+                <li class="clickable-row" *ngFor="let doc of commentPeriodDocs" (click)="downloadDocument(doc)">
+                  <span class="cell icon">
+                    <i class="material-icons">insert_drive_file</i>
+                  </span>
+                  <span class="cell name" [title]="doc.displayName || ''">
+                    <span class="cell__txt-content">{{doc.displayName}}</span>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="open-houses value mt-4" *ngIf="commentPeriod.openHouses.length > 0">
+            <div class="card">
+              <div class="card-header">
+                Open Houses
               </div>
-              <div>
-                <label>Sub-type</label>
-                <p class="value">{{project?.sector || "-" | titlecase}}</p>
-              </div>
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let openHouse of commentPeriod.openHouses">
+                  <h6>
+                    <b>Date:</b>&nbsp;{{openHouse.eventDate | date}}
+                  </h6>
+                  <br>
+                  <h6>
+                    <b>Description:</b>&nbsp;{{openHouse.description}}
+                  </h6>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-
-
-      <div class="comments">
-          <div *ngIf="loading" class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-          </div>
-          <div class="header-section m-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
-              <h1>
-                  {{commentPeriodHeader}}
-              </h1>
-              <h2>
-                  {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
-              </h2>
-              <p>
-                  This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
-                </p>
-                <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="commentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
-          </div>
-          <div class="mx-4">
-            <app-item-table [listType]="listType" [items]="comments" [pageSize]='pageSize' [currentPage]='currentPage'
-            [totalComments]='totalComments' (onPageNumUpdate)='getPaginatedComments($event)'></app-item-table>
-            <div *ngIf="comments?.length === 0">
-                <em>No comments have been received for this project at this time.</em>
-            </div>
-          </div>
-      </div>
-    </main>
+    </div>
+  </main>
+</div>
+<div class="container comments">
+  <app-item-table *ngIf="this.totalComments > 0" [listType]="listType" [items]="comments" [pageSize]='pageSize'
+    [currentPage]='currentPage' [totalComments]='totalComments' (onPageNumUpdate)='getPaginatedComments($event)'>
+  </app-item-table>
+  <div *ngIf="comments?.length === 0">
+    <em>No comments have been received for this project at this time.</em>
+  </div>
 </div>
