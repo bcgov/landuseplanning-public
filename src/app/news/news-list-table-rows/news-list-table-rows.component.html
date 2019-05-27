@@ -1,7 +1,11 @@
 <tr
   *ngFor="let activity of activities | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }">
-  <td data-label="Headline" class="col col-10">
-    <span class="font-weight-bold">{{activity.headline || '-'}}</span>
+  <td scope="row" data-label="Headline" class="col-10">
+    <span class="font-weight-bold">{{activity.project.name || '-'}}</span>
+    <br>
+    <span>{{activity.headline || '-'}}</span>
+    <br>
+    <br>
     <span [innerHtml]="activity.content"></span>
     <a *ngIf="isSingleDoc(activity?.documentUrl)" class="btn content-btn-alt" href="{{activity.documentUrl}}">
       <span>View Document(s)</span>
@@ -13,5 +17,5 @@
       <span>View Project</span>
     </a>
   </td>
-  <td data-label="Date" class="col col-2">{{activity.dateUpdated | date:'longDate'}}</td>
+  <td scope="row" data-label="Date" class="col-2">{{activity.dateUpdated | date:'longDate'}}</td>
 </tr>
