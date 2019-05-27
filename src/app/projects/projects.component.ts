@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -56,6 +56,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(
     public snackBar: MatSnackBar,
     private router: Router,
+    private _changeDetectionRef: ChangeDetectorRef,
     private projectService: ProjectService,
     public configService: ConfigService, // used in template
     private renderer: Renderer2
@@ -67,11 +68,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       .subscribe((event) => {
         if (event instanceof NavigationEnd) {
           const currentUrlSlug = event.url.slice(1);
-          if (currentUrlSlug === 'projects') {
-            this.renderer.addClass(document.body, 'no-scroll');
-          } else {
-            this.renderer.removeClass(document.body, 'no-scroll');
-          }
+          this.renderer.removeClass(document.body, 'no-scroll');
+          this._changeDetectionRef.detectChanges();
         }
       });
   }
