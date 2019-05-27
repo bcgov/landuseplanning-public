@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'ng2-bootstrap-modal';
@@ -27,7 +27,7 @@ import { StorageService } from 'app/services/storage.service';
 export class CommentingTabComponent implements OnInit, OnDestroy {
   public currentProject: Project = null;
   public loading = true;
-  public commentPeriods: Array<CommentPeriod> = null;
+  public commentPeriods: Array<CommentPeriod> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
 
@@ -35,7 +35,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     public commentPeriodService: CommentPeriodService, // used in template
-    private storageService: StorageService
+    private _changeDetectionRef: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -47,13 +47,13 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
           if (data.project) {
             this.currentProject = data.project;
             this.getCommentPeriods(data.project._id);
-            this.loading = false;
           } else {
             alert('Uh-oh, couldn\'t load project');
-            this.loading = false;
             // project not found --> navigate back to project list
             this.router.navigate(['/projects']);
           }
+          this.loading = false;
+          this._changeDetectionRef.detectChanges();
         }
       );
   }
