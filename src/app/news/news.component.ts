@@ -35,13 +35,13 @@ export class NewsListComponent implements OnInit, OnDestroy {
     {
       name: 'Headline',
       value: 'headine',
-      width: 'col col-10',
+      width: 'col-10',
       nosort: true
     },
     {
       name: 'Date',
       value: 'dateUpdated',
-      width: 'col col-2',
+      width: 'col-2',
       nosort: true
     }
   ];
@@ -52,7 +52,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private tableTemplateUtils: TableTemplateUtils,
-    private storageService: StorageService,
     private searchService: SearchService,
     private _changeDetectionRef: ChangeDetectorRef
   ) { }
@@ -72,7 +71,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
           this.tableParams.pageSize,
           this.tableParams.sortBy,
           null,
-          false)
+          true)
           .takeUntil(this.ngUnsubscribe)
           .subscribe((res: any) => {
             if (res[0].data) {
