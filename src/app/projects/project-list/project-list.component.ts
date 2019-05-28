@@ -80,7 +80,16 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     this.route.params
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
-        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
+
+        let newParams = params;
+
+        if (Object.keys(newParams).length === 0 && newParams.constructor === Object) {
+          newParams = {
+            sortBy: '-score'
+          };
+        }
+
+        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(newParams);
 
         this.searchService.getSearchResults(
           this.tableParams.keywords,
@@ -196,7 +205,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '';
+    params['sortBy'] = this.tableParams.sortBy = '-score';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
