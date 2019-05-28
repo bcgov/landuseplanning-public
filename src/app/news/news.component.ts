@@ -137,6 +137,8 @@ export class NewsListComponent implements OnInit, OnDestroy {
       pageNumber,
       this.tableParams.pageSize,
       this.tableParams.sortBy,
+      null,
+      true
     )
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
