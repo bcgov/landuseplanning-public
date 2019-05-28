@@ -37,6 +37,23 @@ main {
   }
 }
 
+.feature-blocks {
+  margin-top: 50px;
+
+  > div {
+    margin-bottom: 20px;
+    padding: 8px;
+  }
+
+  .feature-block {
+    padding: 2rem 1.5rem;
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+}
+
 @media (max-width: 767px) {
   .hero-banner h1 {
     line-height: 2rem;
