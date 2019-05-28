@@ -24,36 +24,36 @@
       </div>
     </div>
 
-    <div *ngIf="project.upcomingCommentPeriod" class="banner">
-        <div class="m-3 py-3">
-            <div class="row">
-                <div class="col-md-6">
-                    <h2 class="mb-0">Public Comment Period is {{project.upcomingCommentPeriod.commentPeriodStatus}}</h2>
-                    <h5>{{project.upcomingCommentPeriod.dateStarted | date: 'MMMM d'}} - {{project.upcomingCommentPeriod.dateCompleted | date}}</h5>
-                </div>
-                <div class="col-md-6 text-right">
-                    <div *ngIf="project.upcomingCommentPeriod.commentPeriodStatus !== Open">
-                        <!-- Todo: get these buttons working -->
-                        <!-- <button type="button" class="btn btn-primary" (click)="goToViewComments()">
-                            View Comment Period
-                        </button>
-                        &nbsp;
-                      -->
-                        <button class="btn btn-light"
-                                (click)="addComment()"
-                                type="button"
-                                *ngIf="project.upcomingCommentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
-                    </div>
-                </div>
+    <div *ngIf="project.commentPeriodForBanner" class="container my-4 banner">
+      <div class="m-3 py-3">
+        <div class="row">
+          <div class="col-md-6">
+            <h2 class="mb-0">Public Comment Period is {{project.commentPeriodForBanner.commentPeriodStatus}}</h2>
+            <h5>{{project.commentPeriodForBanner.dateStarted | date: 'MMMM d'}} -
+              {{project.commentPeriodForBanner.dateCompleted | date}}</h5>
+          </div>
+          <div class="col-md-6 text-right">
+            <div *ngIf="project.commentPeriodForBanner.commentPeriodStatus !== Open">
+              <button type="button" class="btn btn-light" (click)="goToViewComments()">
+                View Comment Period
+              </button>
+              &nbsp;
+              <button class="btn btn-light" (click)="addComment()" type="button"
+                *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'">Submit Comment</button>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="mb-0">
-                        This Public Comment Period is regarding the <b>{{project.upcomingCommentPeriod.informationLabel}}</b>
-                    </p>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p *ngIf="project.commentPeriodForBanner.informationLabel" class="mb-0">
+              This Public Comment Period is regarding the <b>{{project.commentPeriodForBanner.informationLabel}}</b>
+            </p>
+            <p *ngIf="project.commentPeriodForBanner.informationLabel == null" class="mb-0">
+              {{project.commentPeriodForBanner.instructions}}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <section class="project-tabs">

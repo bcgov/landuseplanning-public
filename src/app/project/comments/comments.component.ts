@@ -146,4 +146,8 @@ export class CommentsComponent implements OnInit {
       );
     }
   }
+
+  public goBackToProjectDetails() {
+    this.router.navigate(['/p', this.project._id]);
+  }
 }

@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { StorageService } from 'app/services/storage.service';
 import { Subject } from 'rxjs';
 import { ConfigService } from 'app/services/config.service';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-project-details-tab',
@@ -22,14 +22,13 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
   constructor(
     private storageService: StorageService,
-    private modalService: NgbModal,
     private elementRef: ElementRef,
     public configService: ConfigService
   ) { }
 
   ngOnInit() {
     this.project = this.storageService.state.currentProject.data;
-    this.commentPeriod = this.project.upcomingCommentPeriod;
+    this.commentPeriod = this.project.commentPeriodForBanner;
   }
 
   ngAfterViewInit() {
