@@ -29,12 +29,22 @@ $app-filters-font-lg: 0.9375rem;
     border-radius: 0px;
     background: rgba(255,255,255,1);
 
+    @media (max-width: 768px) {
+      padding: .75rem .75rem .2rem;
+    }
+
     label {
       font-size: 1.3rem;
       font-weight: 700;
       margin-bottom: .25rem;
       letter-spacing: -.025em;
       color: #003367;
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+      }
     }
 
     .gtm-filter-applicant {
@@ -65,6 +75,14 @@ $app-filters-font-lg: 0.9375rem;
       border: none;
       font-weight: bold;
       padding: .5rem 1.4rem .6rem;
+
+      @media (max-width: 768px) {
+        position: relative;
+        width: 100%;
+        left: auto;
+        right: auto;
+        margin-top: 10px;
+      }
 
       i {
         vertical-align: top;
