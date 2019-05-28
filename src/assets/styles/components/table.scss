@@ -24,13 +24,16 @@
   }
 
   tr {
-    align-items: center;
     display: flex;
   }
 
   thead {
     background: $table-header-bg;
     border-bottom: 2px solid #fff;
+
+    tr {
+      align-items: center;
+    }
 
     th {
       padding: 0.5rem;
@@ -66,6 +69,9 @@
 
       &:nth-child(even){
         background: $table-alt-row-bg;
+        &:hover {
+          background: #e2f1ff;
+        }
       }
     }
 
@@ -209,6 +215,10 @@ th {
     user-select: none;
     max-width: 50%;
     border-color: #fff;
+  }
+
+  .table tbody tr:hover {
+    background: #e2f1ff;
   }
 
 }
