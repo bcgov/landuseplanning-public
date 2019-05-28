@@ -70,7 +70,7 @@ export class ProjectService {
         const promises: Array<Promise<any>> = [];
 
         projects.forEach((project) => {
-            // Set relevant things here
+          // Set relevant things here
         });
 
         return Promise.all(promises).then(() => { return projects; });
@@ -83,16 +83,14 @@ export class ProjectService {
     if (this.project && this.project._id === projId && !forceReload) {
       return Observable.of(this.project);
     }
-
     // first get the project
     return this.api.getProject(projId, cpStart, cpEnd)
       .map(res => {
         const projects = res.text() ? res.json() : [];
-
-        if (projects[0].upcomingCommentPeriod.length > 0) {
-          projects[0].upcomingCommentPeriod = new CommentPeriod(projects[0].upcomingCommentPeriod[0]);
+        if (projects[0].commentPeriodForBanner && projects[0].commentPeriodForBanner.length > 0) {
+          projects[0].commentPeriodForBanner = new CommentPeriod(projects[0].commentPeriodForBanner[0]);
         } else {
-          projects[0].upcomingCommentPeriod = null;
+          projects[0].commentPeriodForBanner = null;
         }
         // return the first (only) project
         return projects.length > 0 ? new Project(projects[0]) : null;

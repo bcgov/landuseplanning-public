@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { ProjectService } from 'app/services/project.service';
 import { Project } from 'app/models/project';
-import { isNullOrUndefined } from 'util';
 
 @Injectable()
 export class ProjectResolver implements Resolve<Project> {
@@ -16,8 +15,8 @@ export class ProjectResolver implements Resolve<Project> {
     // force-reload so we always have latest data
     let start = new Date();
     let end = new Date();
-    start.setDate(start.getDate() + 7);
-    end.setDate(end.getDate() - 7);
+    start.setDate(start.getDate() - 7);
+    end.setDate(end.getDate() + 7);
     return this.projectService.getById(projId, false, start, end)
       .catch(() => { return Observable.of(null); });
   }

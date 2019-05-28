@@ -15,14 +15,16 @@
             <h3>
               {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
             </h3>
-            <p *ngIf="commentPeriod.informationLabel !== null">
+            <p *ngIf="commentPeriod.informationLabel">
               This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
             </p>
-            <p *ngIf="commentPeriod.informationLabel === null">
+            <p *ngIf="commentPeriod.informationLabel == null">
               {{commentPeriod.instructions}}
             </p>
-            <button class="btn btn-light" (click)="addComment()" type="button"
-              *ngIf="commentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-light" (click)="addComment()" type="button"
+                *ngIf="commentPeriod.commentPeriodStatus === 'Open'">Submit Comment</button>
+            </div>
           </div>
           <!-- <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p> -->
           <span class="ea-decision">{{project?.eacDecision || "-"}}</span>
@@ -81,6 +83,9 @@
   </main>
 </div>
 <div class="container comments">
+  <button class="btn btn-light mb-3" (click)="goBackToProjectDetails()" type="button">
+    Back to project details
+  </button>
   <app-item-table *ngIf="this.totalComments > 0" [listType]="listType" [items]="comments" [pageSize]='pageSize'
     [currentPage]='currentPage' [totalComments]='totalComments' (onPageNumUpdate)='getPaginatedComments($event)'>
   </app-item-table>

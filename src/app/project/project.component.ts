@@ -63,11 +63,11 @@ export class ProjectComponent implements OnInit {
   }
 
   public addComment() {
-    if (this.project.upcomingCommentPeriod) {
+    if (this.project.commentPeriodForBanner) {
       // open modal
       this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
       // set input parameter
-      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.upcomingCommentPeriod;
+      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
       (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
       // check result
       this.ngbModal.result.then(
@@ -81,5 +81,9 @@ export class ProjectComponent implements OnInit {
         }
       );
     }
+  }
+
+  public goToViewComments() {
+    this.router.navigate(['/p', this.project._id, 'cp', this.project.commentPeriodForBanner._id, 'details']);
   }
 }
