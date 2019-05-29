@@ -28,9 +28,6 @@ export class NewsListTableRowsComponent implements OnInit, TableComponent {
     isSingleDoc(item) {
       if (item !== ''
          && item !== null
-         && item.indexOf('https://projects.eao.gov.bc.ca/p/') === -1
-         && item.indexOf('docs?folder') === -1
-         && item.indexOf('commentperiod') === -1
          ) {
         return true;
       } else {
