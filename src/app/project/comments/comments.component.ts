@@ -132,7 +132,7 @@ export class CommentsComponent implements OnInit {
       this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
       // set input parameter
       (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
-      // (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
+      (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
       // check result
       this.ngbModal.result.then(
         value => {

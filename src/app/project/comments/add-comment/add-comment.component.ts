@@ -163,6 +163,7 @@ export class AddCommentComponent implements OnInit {
         this.currentPage++;
       })
       .catch(error => {
+        console.log('error', error);
         alert('Uh-oh, error submitting comment');
         this.submitting = false;
       });
