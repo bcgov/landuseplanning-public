@@ -15,10 +15,20 @@
             <h3>
               {{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}
             </h3>
-            <p *ngIf="commentPeriod.informationLabel">
-              This Public Comment Period is regarding the <b>{{commentPeriod.informationLabel}}</b>
-            </p>
-            <p *ngIf="commentPeriod.informationLabel == null">
+            <div *ngIf="commentPeriod.informationLabel !== null">
+              <p>
+                {{commentPeriod.instructions}}
+              </p>
+              <br>
+              <p>
+                {{commentPeriod.additionalText}}
+              </p>
+              <br>
+              <p>
+                {{commentPeriod.informationLabel}}
+              </p>
+            </div>
+            <p *ngIf="commentPeriod.informationLabel === null">
               {{commentPeriod.instructions}}
             </p>
             <div class="d-flex justify-content-end">
