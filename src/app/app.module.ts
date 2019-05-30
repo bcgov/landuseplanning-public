@@ -24,6 +24,7 @@ import { HeaderComponent } from 'app/header/header.component';
 import { FooterComponent } from 'app/footer/footer.component';
 import { NewsListTableRowsComponent } from 'app/news/news-list-table-rows/news-list-table-rows.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
+import { SearchHelpComponent } from './search-help/search-help.component';
 
 
 // services
@@ -71,7 +72,8 @@ import { ComplianceOversightComponent } from 'app/compliance-oversight/complianc
     SplashModalComponent,
     LegislationComponent,
     ProcessComponent,
-    ComplianceOversightComponent
+    ComplianceOversightComponent,
+    SearchHelpComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,
