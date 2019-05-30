@@ -34,7 +34,7 @@ export class AddCommentComponent implements OnInit {
   public contactName: any;
   public commentInput: any;
   public locationInput: any;
-  public anonymous: any;
+  public makePublic: any;
   public commentFiles: any;
 
   constructor(
@@ -112,7 +112,7 @@ export class AddCommentComponent implements OnInit {
     this.comment.author = this.contactName;
     this.comment.comment = this.commentInput;
     this.comment.location = this.locationInput;
-    this.comment.isAnonymous = this.anonymous;
+    this.comment.isAnonymous = !this.makePublic;
 
     this.commentService.add(this.comment)
       .toPromise()

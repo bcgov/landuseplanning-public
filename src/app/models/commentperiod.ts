@@ -54,47 +54,47 @@ export class CommentPeriod {
   daysRemaining: String;
 
   constructor(obj?: any) {
-    this._id                  = obj && obj._id                  || null;
-    this.__v                  = obj && obj.__v                  || null;
-    this._schemaName          = obj && obj._schemaName          || null;
-    this.addedBy              = obj && obj.addedBy              || null;
-    this.additionalText       = obj && obj.additionalText       || null;
-    this.ceaaAdditionalText   = obj && obj.ceaaAdditionalText   || null;
+    this._id = obj && obj._id || null;
+    this.__v = obj && obj.__v || null;
+    this._schemaName = obj && obj._schemaName || null;
+    this.addedBy = obj && obj.addedBy || null;
+    this.additionalText = obj && obj.additionalText || null;
+    this.ceaaAdditionalText = obj && obj.ceaaAdditionalText || null;
     this.ceaaInformationLabel = obj && obj.ceaaInformationLabel || null;
     this.ceaaRelatedDocuments = obj && obj.ceaaRelatedDocuments || null;
-    this.classificationRoles  = obj && obj.classificationRoles  || null;
-    this.classifiedPercent    = obj && obj.classifiedPercent    || null;
-    this.commenterRoles       = obj && obj.commenterRoles       || null;
-    this.dateAdded            = obj && obj.dateAdded            || null;
-    this.dateCompletedEst     = obj && obj.dateCompletedEst     || null;
-    this.dateStartedEst       = obj && obj.dateStartedEst       || null;
-    this.dateUpdated          = obj && obj.dateUpdated          || null;
-    this.downloadRoles        = obj && obj.downloadRoles        || null;
-    this.informationLabel     = obj && obj.informationLabel     || null;
-    this.instructions         = obj && obj.instructions         || null;
-    this.isClassified         = obj && obj.isClassified         || null;
-    this.isPublished          = obj && obj.isPublished          || null;
-    this.isResolved           = obj && obj.isResolved           || null;
-    this.isVetted             = obj && obj.isVetted             || null;
-    this.milestone            = obj && obj.milestone            || null;
-    this.openHouses           = obj && obj.openHouses           || null;
-    this.periodType           = obj && obj.periodType           || null;
-    this.phase                = obj && obj.phase                || null;
-    this.phaseName            = obj && obj.phaseName            || null;
-    this.project              = obj && obj.project              || null;
-    this.publishedPercent     = obj && obj.publishedPercent     || null;
-    this.rangeOption          = obj && obj.rangeOption          || null;
-    this.rangeType            = obj && obj.rangeType            || null;
-    this.relatedDocuments     = obj && obj.relatedDocuments     || null;
-    this.resolvedPercent      = obj && obj.resolvedPercent      || null;
-    this.updatedBy            = obj && obj.updatedBy            || null;
-    this.userCan              = obj && obj.userCan              || null;
-    this.vettedPercent        = obj && obj.vettedPercent        || null;
-    this.vettingRoles         = obj && obj.vettingRoles         || null;
+    this.classificationRoles = obj && obj.classificationRoles || null;
+    this.classifiedPercent = obj && obj.classifiedPercent || null;
+    this.commenterRoles = obj && obj.commenterRoles || null;
+    this.dateAdded = obj && obj.dateAdded || null;
+    this.dateCompletedEst = obj && obj.dateCompletedEst || null;
+    this.dateStartedEst = obj && obj.dateStartedEst || null;
+    this.dateUpdated = obj && obj.dateUpdated || null;
+    this.downloadRoles = obj && obj.downloadRoles || null;
+    this.informationLabel = obj && obj.informationLabel || null;
+    this.instructions = obj && obj.instructions || null;
+    this.isClassified = obj && obj.isClassified || null;
+    this.isPublished = obj && obj.isPublished || null;
+    this.isResolved = obj && obj.isResolved || null;
+    this.isVetted = obj && obj.isVetted || null;
+    this.milestone = obj && obj.milestone || null;
+    this.openHouses = obj && obj.openHouses || null;
+    this.periodType = obj && obj.periodType || null;
+    this.phase = obj && obj.phase || null;
+    this.phaseName = obj && obj.phaseName || null;
+    this.project = obj && obj.project || null;
+    this.publishedPercent = obj && obj.publishedPercent || null;
+    this.rangeOption = obj && obj.rangeOption || null;
+    this.rangeType = obj && obj.rangeType || null;
+    this.relatedDocuments = obj && obj.relatedDocuments || null;
+    this.resolvedPercent = obj && obj.resolvedPercent || null;
+    this.updatedBy = obj && obj.updatedBy || null;
+    this.userCan = obj && obj.userCan || null;
+    this.vettedPercent = obj && obj.vettedPercent || null;
+    this.vettingRoles = obj && obj.vettingRoles || null;
 
-    this.read                 = obj && obj.read                 || null;
-    this.write                = obj && obj.write                || null;
-    this.delete               = obj && obj.delete               || null;
+    this.read = obj && obj.read || null;
+    this.write = obj && obj.write || null;
+    this.delete = obj && obj.delete || null;
 
     if (obj && obj.dateStarted) {
       this.dateStarted = new Date(obj.dateStarted);
@@ -105,16 +105,8 @@ export class CommentPeriod {
     }
 
     // get comment period days remaining and determine commentPeriodStatus of the period
-    if (obj && obj.dateCompleted) {
+    if (obj && obj.dateStarted && obj.dateCompleted) {
       const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const days = moment(obj.dateCompleted).diff(moment(today), 'days') + 1;
-      if (days < 0) {
-        this.daysRemaining = 'Completed';
-      } else {
-        this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
-      }
-
       const dateStarted = moment(obj.dateStarted);
       const dateCompleted = moment(obj.dateCompleted);
       const sevenDays = new Date(obj.dateStarted);
@@ -122,10 +114,14 @@ export class CommentPeriod {
 
       if (moment(now).isBetween(dateStarted, dateCompleted)) {
         this.commentPeriodStatus = 'Open';
+        let days = dateCompleted.diff(moment(now), 'days');
+        this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
       } else if (moment(now).isAfter(dateCompleted)) {
         this.commentPeriodStatus = 'Closed';
+        this.daysRemaining = 'Completed';
       } else if (moment(now).isBetween(moment(sevenDays), dateStarted)) {
         this.commentPeriodStatus = 'Pending';
+        this.daysRemaining = 'Pending';
       }
     }
   }
