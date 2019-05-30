@@ -107,7 +107,7 @@ export class CommentsComponent implements OnInit {
     this.commentService.getByPeriodId(this.commentPeriodId, pageNumber, this.pageSize, true)
       .takeUntil(this.ngUnsubscribe)
       .subscribe((data: any) => {
-        this.totalComments = Math.floor(data['totalCount'] / this.pageSize) * this.pageSize;
+        this.totalComments = data['totalCount'];
         this.currentPage = pageNumber;
         this.updateUrl();
         this.comments = data['currentComments'];
