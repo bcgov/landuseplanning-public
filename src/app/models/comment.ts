@@ -8,6 +8,8 @@ export class Comment {
   isAnonymous: boolean;
   location: string;
   period: any;
+  documents: any;
+  documentsList: any;
 
   // Permissions
   read: Array<String> = [];
@@ -23,6 +25,8 @@ export class Comment {
     this.delete         = obj && obj.delete      || null;
     this.isAnonymous    = obj && obj.isAnonymous || null;
     this.location       = obj && obj.location    || null;
+    this.documents       = obj && obj.documents    || null;
+    this.documentsList       = obj && obj.documentsList    || [];
     this.period         = obj && obj.period      || null;
     this.read           = obj && obj.read        || null;
     this.write          = obj && obj.write       || null;

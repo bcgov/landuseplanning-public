@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { ApiService } from 'app/services/api';
+
+import { Document } from 'app/models/document';
 
 @Component({
   selector: 'app-expandable-items',
@@ -7,7 +10,7 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 })
 export class ExpandableItemsComponent implements OnInit {
   @Input() listType: String;
-  @Input() item: any[];
+  @Input() item: any;
   @Input() itemIndex: number;
 
 
@@ -15,14 +18,37 @@ export class ExpandableItemsComponent implements OnInit {
   public hideShowMoreButton: Boolean;
   public itemIndexId: string;
 
-  constructor(private elRef: ElementRef) { }
+  constructor(
+    private elRef: ElementRef,
+    private api: ApiService,
+    ) { }
 
   ngOnInit() {
     this.itemIndexId = 'comment-index-' + this.itemIndex;
+
+    // Populate the documents for this item.
+    if (this.item.documents && this.item.documents.length > 0) {
+      // populate the docs.
+      this.item.documents.map(doc => {
+        // console.log("doc:", doc);
+        this.api.getDocument(doc)
+        .subscribe( (res: any) => {
+          let record = JSON.parse(<string>res._body);
+          // console.log("record:", record[0]);
+          doc = record[0];
+          return doc;
+        });
+      });
+    }
   }
 
   public toggleShowMore() {
     this.showMore = !this.showMore;
+  }
+
+  public openAttachment(file) {
+    let doc = new Document({_id: file});
+    this.api.openDocument(doc);
   }
 
   // checkOverflow(element) {

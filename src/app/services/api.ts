@@ -409,6 +409,7 @@ export class ApiService {
     const fields = [
       'author',
       'comment',
+      'documents',
       'commentId',
       'dateAdded',
       'dateUpdated',
