@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +27,7 @@ export class CommentsComponent implements OnInit {
   public commentPeriodDocs;
 
   public commentPeriodHeader: String;
-  public currentPage = 1;
+  public currentPage = 0;
   public pageSize = 10;
   public totalComments = 0;
 
@@ -42,6 +42,7 @@ export class CommentsComponent implements OnInit {
     private route: ActivatedRoute,
     private commentService: CommentService,
     private documentService: DocumentService,
+    private _changeDetectionRef: ChangeDetectorRef,
     private modalService: NgbModal,
     private router: Router,
   ) { }
@@ -49,7 +50,7 @@ export class CommentsComponent implements OnInit {
   ngOnInit() {
     // Get page size and current page from url
     this.route.queryParams.subscribe(params => {
-      this.currentPage = Number(params['currentPage'] ? params['currentPage'] : 1);
+      this.currentPage = Number(params['currentPage'] ? params['currentPage'] : 0);
       this.pageSize = Number(params['pageSize'] ? params['pageSize'] : 10);
     });
 
@@ -79,6 +80,7 @@ export class CommentsComponent implements OnInit {
                 .takeUntil(this.ngUnsubscribe)
                 .subscribe(docs => {
                   this.commentPeriodDocs = docs;
+                  this._changeDetectionRef.detectChanges();
                 });
             }
 
@@ -110,6 +112,7 @@ export class CommentsComponent implements OnInit {
         this.updateUrl();
         this.comments = data['currentComments'];
         this.commentsLoading = false;
+        this._changeDetectionRef.detectChanges();
       });
   }
 
