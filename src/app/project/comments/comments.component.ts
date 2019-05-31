@@ -27,7 +27,7 @@ export class CommentsComponent implements OnInit {
   public commentPeriodDocs;
 
   public commentPeriodHeader: String;
-  public currentPage = 0;
+  public currentPage = 1;
   public pageSize = 10;
   public totalComments = 0;
 
@@ -50,7 +50,7 @@ export class CommentsComponent implements OnInit {
   ngOnInit() {
     // Get page size and current page from url
     this.route.queryParams.subscribe(params => {
-      this.currentPage = Number(params['currentPage'] ? params['currentPage'] : 0);
+      this.currentPage = Number(params['currentPage'] ? params['currentPage'] : 1);
       this.pageSize = Number(params['pageSize'] ? params['pageSize'] : 10);
     });
 
@@ -80,14 +80,12 @@ export class CommentsComponent implements OnInit {
                 .takeUntil(this.ngUnsubscribe)
                 .subscribe(docs => {
                   this.commentPeriodDocs = docs;
-                  this._changeDetectionRef.detectChanges();
                 });
             }
 
             this.loading = false;
 
             this.updateUrl();
-
             this.commentPeriodId = this.commentPeriod._id;
             this.getPaginatedComments(this.currentPage);
           } else {
