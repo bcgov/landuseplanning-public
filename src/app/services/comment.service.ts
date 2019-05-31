@@ -33,7 +33,7 @@ export class CommentService {
   // get all comments for the specified comment period id
   // (without documents)
   getByPeriodId(periodId: string, pageNum: number = null, pageSize: number = null, getCount: boolean = false) {
-    return this.api.getCommentsByPeriodId(pageNum ? pageNum -1 : pageNum, pageSize, getCount, periodId)
+    return this.api.getCommentsByPeriodId(pageNum ? pageNum - 1 : pageNum, pageSize, getCount, periodId)
       .map(res => {
         const comments = res.text() ? res.json() : [];
         comments.forEach((comment, i) => {
