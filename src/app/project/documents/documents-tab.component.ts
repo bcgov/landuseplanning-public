@@ -163,7 +163,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
       this.documents.forEach(document => {
         documentList.push(
           {
-            // displayName: document.displayName || document.internalOriginalName,
+            documentFileName: document.displayName || document.internalOriginalName,
             // date: document.dateUploaded || document.datePosted,
             displayName: document.displayName,
             datePosted: document.datePosted,
