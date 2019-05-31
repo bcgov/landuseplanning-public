@@ -48,8 +48,8 @@ export class ApiService {
 
       default:
         // Prod
-        this.apiPath = 'https://eagle-prod.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://eagle-prod.pathfinder.gov.bc.ca/admin/';
+        this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
+        this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
         this.env = 'prod';
     };
   }
