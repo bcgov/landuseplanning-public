@@ -41,6 +41,8 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
   }
 
   goToItem(item) {
-    window.open('/api/document/' + item._id + '/fetch/' + item.documentFileName, '_blank');
+    let filename = item.documentFileName;
+    const safeName = filename.replace(/ /g, '_');
+    window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 }
