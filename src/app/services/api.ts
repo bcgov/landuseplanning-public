@@ -96,7 +96,6 @@ export class ApiService {
       filename = document.documentFileName;
     }
     const safeName = filename.replace(/ /g, '_');
-    alert(safeName);
     window.open('/api/document/' + document._id + '/fetch/' + safeName, '_blank');
   }
 
