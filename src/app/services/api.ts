@@ -43,7 +43,7 @@ export class ApiService {
         case 'eagle-test.pathfinder.gov.bc.ca':
         case 'test.projects.eao.gov.bc.ca':
             // Test
-          this.apiPath = 'https://test.projects.eao.gov.bc.ca/api/public';
+          this.apiPath = 'https://eagle-test.pathfinder.gov.bc.ca/api/public';
           this.adminUrl = 'https://test.projects.eao.gov.bc.ca/admin/';
           this.env = 'test';
           break;
@@ -51,14 +51,14 @@ export class ApiService {
         case 'www.projects.eao.gov.bc.ca':
         case 'projects.eao.gov.bc.ca':
           // prod
-          this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
+          this.apiPath = 'https://eagle-prod.pathfinder.gov.bc.ca/api/public';
           this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
           this.env = 'prod';
           break;
 
       default:
         // Prod
-        this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
+        this.apiPath = 'https://eagle-prod.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
         this.env = 'dev';
     };
