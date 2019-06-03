@@ -32,24 +32,45 @@ export class ApiService {
         this.env = 'local';
         break;
 
-      case 'projects.eao.gov.bc.ca':
-        // Dev
-        this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
-        this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
-        this.env = 'prod';
-        break;
+        case 'eagle-dev.pathfinder.gov.bc.ca':
+          // prod
+          this.apiPath = 'https://eagle-dev.pathfinder.gov.bc.ca/api/public';
+          this.adminUrl = 'https://eagle-dev.pathfinder.gov.bc.ca/admin/';
+          this.env = 'dev';
+          break;
 
-      case 'test.projects.eao.gov.bc.ca':
-        // Test
-        this.apiPath = 'https://test.projects.eao.gov.bc.ca/api/public';
-        this.adminUrl = 'https://test.projects.eao.gov.bc.ca/admin/';
-        this.env = 'test';
-        break;
+        case 'www.projects.eao.gov.bc.ca':
+          // prod
+          this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
+          this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
+          this.env = 'prod';
+          break;
+
+        case 'www.test.projects.eao.gov.bc.ca':
+          // Test
+          this.apiPath = 'https://test.projects.eao.gov.bc.ca/api/public';
+          this.adminUrl = 'https://test.projects.eao.gov.bc.ca/admin/';
+          this.env = 'test';
+          break;
+
+        case 'test.projects.eao.gov.bc.ca':
+          // Test
+          this.apiPath = 'https://test.projects.eao.gov.bc.ca/api/public';
+          this.adminUrl = 'https://test.projects.eao.gov.bc.ca/admin/';
+          this.env = 'test';
+          break;
+
+        case 'projects.eao.gov.bc.ca':
+          // prod
+          this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
+          this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
+          this.env = 'prod';
+          break;
 
       default:
         // Prod
-        this.apiPath = 'https://eagle-dev.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://eagle-dev.pathfinder.gov.bc.ca/admin/';
+        this.apiPath = 'https://projects.eao.gov.bc.ca/api/public';
+        this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
         this.env = 'dev';
     };
   }
