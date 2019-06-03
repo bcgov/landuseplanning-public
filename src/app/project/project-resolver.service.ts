@@ -17,7 +17,7 @@ export class ProjectResolver implements Resolve<Project> {
     let end = new Date();
     start.setDate(start.getDate() - 7);
     end.setDate(end.getDate() + 7);
-    return this.projectService.getById(projId, false, start, end)
+    return this.projectService.getById(projId, false, start.toISOString(), end.toISOString())
       .catch(() => { return Observable.of(null); });
   }
 }
