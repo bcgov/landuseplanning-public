@@ -8,7 +8,6 @@ import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
 import { ApiService } from './api';
-import { DocumentService } from './document.service';
 import { Comment } from 'app/models/comment';
 
 @Injectable()
@@ -17,7 +16,6 @@ export class CommentService {
 
   constructor(
     private api: ApiService,
-    private documentService: DocumentService
   ) { }
 
   // get count of projects

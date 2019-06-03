@@ -79,7 +79,7 @@ export class ProjectService {
   }
 
   // get a specific project by its id
-  getById(projId: string, forceReload: boolean = false, cpStart: Date = null, cpEnd: Date = null): Observable<Project> {
+  getById(projId: string, forceReload: boolean = false, cpStart: string = null, cpEnd: string = null): Observable<Project> {
     if (this.project && this.project._id === projId && !forceReload) {
       return Observable.of(this.project);
     }
