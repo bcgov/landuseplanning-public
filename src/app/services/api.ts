@@ -91,6 +91,7 @@ export class ApiService {
   }
 
   public async downloadDocument(document: Document): Promise<void> {
+    console.log(document);
     const blob = await this.downloadResource(document._id);
     let filename = document.displayName;
 
@@ -116,7 +117,13 @@ export class ApiService {
     } else {
       filename = document.documentFileName;
     }
-    const safeName = filename.replace(/ /g, '_');
+    console.log(document);
+    let safeName = '';
+    try {
+      safeName = filename.replace(/ /g, '_');
+    } catch (e) {
+      // fall through
+    }
     window.open('/api/document/' + document._id + '/fetch/' + safeName, '_blank');
   }
 
