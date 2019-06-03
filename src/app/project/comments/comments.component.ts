@@ -79,7 +79,6 @@ export class CommentsComponent implements OnInit {
               this.documentService.getByMultiId(this.commentPeriod.relatedDocuments)
                 .takeUntil(this.ngUnsubscribe)
                 .subscribe(docs => {
-                  console.log(docs);
                   this.commentPeriodDocs = docs;
                   this._changeDetectionRef.detectChanges();
                 });

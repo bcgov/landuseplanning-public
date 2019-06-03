@@ -51,11 +51,7 @@ export class CommentPeriodService {
   }
 
   // get a specific comment period by its id
-  getById(periodId: string, forceReload: boolean = false): Observable<CommentPeriod> {
-    if (this.commentPeriod && this.commentPeriod._id === periodId && !forceReload) {
-      return Observable.of(this.commentPeriod);
-    }
-
+  getById(periodId: string): Observable<CommentPeriod> {
     return this.api.getPeriod(periodId)
       .map(res => {
         const periods = res.text() ? res.json() : [];
