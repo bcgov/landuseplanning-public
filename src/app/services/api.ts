@@ -212,7 +212,7 @@ export class ApiService {
     return this.get(queryString);
   }
 
-  getProject(id: string, cpStart: Date, cpEnd: Date) {
+  getProject(id: string, cpStart: string, cpEnd: string) {
     const fields = [
       'CEAAInvolvement',
       'CELead',
@@ -262,8 +262,8 @@ export class ApiService {
       'delete'
     ];
     let queryString = `project/${id}?populate=true`;
-    if (cpStart !== null) { queryString += `&cpStart[since]=${cpStart.getFullYear()}-${cpStart.getMonth() + 1}-${cpStart.getDate()}`; }
-    if (cpEnd !== null) { queryString += `&cpEnd[until]=${cpEnd.getFullYear()}-${cpEnd.getMonth() + 1}-${cpEnd.getDate()}`; }
+    if (cpStart !== null) { queryString += `&cpStart[since]=${cpStart}`; }
+    if (cpEnd !== null) { queryString += `&cpEnd[until]=${cpEnd}`; }
     queryString += `&fields=${this.buildValues(fields)}`;
     return this.get(queryString);
   }
