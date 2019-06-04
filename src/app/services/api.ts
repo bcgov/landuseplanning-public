@@ -436,7 +436,7 @@ export class ApiService {
       'delete'
     ];
     // TODO: May want to pass this as a parameter in the future.
-    const sort = '-dateAdded';
+    const sort = '-commentId';
 
     let queryString = 'comment?period=' + periodId + '&fields=' + this.buildValues(fields) + '&';
     if (sort !== null) { queryString += `sortBy=${sort}&`; }
