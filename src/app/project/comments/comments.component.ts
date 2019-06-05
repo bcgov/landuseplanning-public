@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -11,13 +11,17 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
 import { Project } from 'app/models/project';
 import { DocumentService } from 'app/services/document.service';
 import { ApiService } from 'app/services/api';
+import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
+import { TableObject } from 'app/shared/components/table-template/table-object';
+import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
+import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
 
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss']
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnInit, OnDestroy {
   public loading = true;
   public commentsLoading = true;
 
@@ -26,16 +30,16 @@ export class CommentsComponent implements OnInit {
   public comments: Comment[];
   public commentPeriodDocs;
 
+  public commentTableData: TableObject;
   public commentPeriodHeader: String;
-  public currentPage = 1;
-  public pageSize = 10;
-  public totalComments = 0;
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private commentPeriodId = null;
   private ngbModal: NgbModalRef = null;
 
-  public listType = 'comments';
+  public tableParams: TableParamsObject = new TableParamsObject();
+
+  public commentTableColumns = [];
 
   constructor(
     private api: ApiService,
@@ -45,13 +49,13 @@ export class CommentsComponent implements OnInit {
     private _changeDetectionRef: ChangeDetectorRef,
     private modalService: NgbModal,
     private router: Router,
+    private tableTemplateUtils: TableTemplateUtils
   ) { }
 
   ngOnInit() {
     // Get page size and current page from url
-    this.route.queryParams.subscribe(params => {
-      this.currentPage = Number(params['currentPage'] ? params['currentPage'] : 1);
-      this.pageSize = Number(params['pageSize'] ? params['pageSize'] : 10);
+    this.route.params.subscribe(params => {
+      this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
     });
 
     // get data from route resolver
@@ -84,11 +88,27 @@ export class CommentsComponent implements OnInit {
                 });
             }
 
-            this.loading = false;
 
-            this.updateUrl();
             this.commentPeriodId = this.commentPeriod._id;
-            this.getPaginatedComments(this.currentPage);
+            this.commentService.getByPeriodId(this.commentPeriodId, this.tableParams.currentPage, this.tableParams.pageSize, true)
+              .takeUntil(this.ngUnsubscribe)
+              .subscribe((res: any) => {
+                this.comments = res.currentComments;
+                this.tableParams.totalListItems = res.totalCount;
+                this.commentTableColumns = [
+                  {
+                    name: `Showing ${this.comments.length} comments out of ${this.tableParams.totalListItems}:`,
+                    value: 'comment',
+                    width: 'no-sort',
+                    nosort: true
+                  },
+                ];
+                this.setCommentRowData();
+
+                this.loading = false;
+                this._changeDetectionRef.detectChanges();
+              });
+
           } else {
             alert('Uh-oh, couldn\'t load comment period');
             // project not found --> navigate back to project list
@@ -98,28 +118,22 @@ export class CommentsComponent implements OnInit {
       );
   }
 
-  public getPaginatedComments(pageNumber) {
-    // Go to top of page after clicking to a different page.
-    window.scrollTo(0, 0);
 
-    this.commentsLoading = true;
-    this.commentService.getByPeriodId(this.commentPeriodId, pageNumber, this.pageSize, true)
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((data: any) => {
-        this.totalComments = data['totalCount'];
-        this.currentPage = pageNumber;
-        this.updateUrl();
-        this.comments = data['currentComments'];
-        this.commentsLoading = false;
-        this._changeDetectionRef.detectChanges();
-      });
+  setCommentRowData() {
+    this.commentTableData = new TableObject(
+      CommentsTableRowsComponent,
+      this.comments,
+      this.tableParams
+    );
   }
 
-  updateUrl() {
-    let currentUrl = this.router.url;
-    currentUrl = currentUrl.split('?')[0];
-    currentUrl += `?currentPage=${this.currentPage}&pageSize=${this.pageSize}`;
-    window.history.replaceState({}, '', currentUrl);
+  setColumnSort(column) {
+    if (this.tableParams.sortBy.charAt(0) === '+') {
+      this.tableParams.sortBy = '-' + column;
+    } else {
+      this.tableParams.sortBy = '+' + column;
+    }
+    this.getPaginatedComments(this.tableParams.currentPage);
   }
 
   public downloadDocument(document) {
@@ -151,5 +165,29 @@ export class CommentsComponent implements OnInit {
 
   public goBackToProjectDetails() {
     this.router.navigate(['/p', this.project._id]);
+  }
+
+  getPaginatedComments(pageNumber) {
+    // Go to top of page after clicking to a different page.
+    // window.scrollTo(0, 0);
+    this.loading = true;
+
+    this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
+
+    this.commentService.getByPeriodId(this.commentPeriodId, this.tableParams.currentPage, this.tableParams.pageSize, true)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((res: any) => {
+        this.tableParams.totalListItems = res.totalCount;
+        this.comments = res.currentComments;
+        this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize);
+        this.setCommentRowData();
+        this.loading = false;
+        this._changeDetectionRef.detectChanges();
+      });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

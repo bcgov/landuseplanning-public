@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExpandableItemsComponent } from './expandable-items.component';
+import { CommentsTableRowsComponent } from './comments-table-rows.component';
 
 describe('ExpandableItemsComponent', () => {
-  let component: ExpandableItemsComponent;
-  let fixture: ComponentFixture<ExpandableItemsComponent>;
+  let component: CommentsTableRowsComponent;
+  let fixture: ComponentFixture<CommentsTableRowsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExpandableItemsComponent ]
+      declarations: [ CommentsTableRowsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExpandableItemsComponent);
+    fixture = TestBed.createComponent(CommentsTableRowsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
