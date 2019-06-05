@@ -5,6 +5,14 @@ import { TableObject } from 'app/shared/components/table-template/table-object';
 import { Router } from '@angular/router';
 import { ApiService } from 'app/services/api';
 
+const encode = encodeURIComponent;
+window['encodeURIComponent'] = (component: string) => {
+  return encode(component).replace(/[!'()*]/g, (c) => {
+    // Also encode !, ', (, ), and *
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+};
+
 @Component({
   selector: 'tbody[app-document-table-rows]',
   templateUrl: './project-document-table-rows.component.html',
@@ -42,7 +50,7 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
 
   goToItem(item) {
     let filename = item.documentFileName;
-    const safeName = filename.replace(/ /g, '_');
+    const safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_');
     window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 }
