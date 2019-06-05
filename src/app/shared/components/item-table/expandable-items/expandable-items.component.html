@@ -20,9 +20,11 @@
       <p [ngClass]="showMore ? '' : 'show-less'">{{item.comment}}</p>
     </div>
     <div class="attachment" *ngFor="let file of documents" (click)="openAttachment(file)">
-      <i class="material-icons">
-        attach_file
-      </i>{{file.internalOriginalName}}
+      <div *ngIf="file.internalOriginalName">
+        <i class="material-icons">
+          attach_file
+        </i>{{file.internalOriginalName}}
+      </div>
     </div>
     <div class="clickable" (click)="toggleShowMore()">Read More &nbsp; &rsaquo;</div>
   </div>
