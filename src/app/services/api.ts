@@ -117,7 +117,7 @@ export class ApiService {
     console.log(document);
     let safeName = '';
     try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_');
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
     } catch (e) {
       // fall through
       console.log('error', e);

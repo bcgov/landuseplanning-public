@@ -52,7 +52,7 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
     let filename = item.documentFileName;
     let safeName = filename;
     try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_');
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
     } catch (e) {
       console.log('error:', e);
     }
