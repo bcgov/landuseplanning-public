@@ -50,7 +50,7 @@ export class DocumentTableRowsComponent implements OnInit, TableComponent {
 
   goToItem(item) {
     let filename = item.documentFileName;
-    const safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_');
+    const safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_');
     window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 }

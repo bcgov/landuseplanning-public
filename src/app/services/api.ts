@@ -91,7 +91,7 @@ export class ApiService {
     console.log(document);
     const blob = await this.downloadResource(document._id);
     let filename = document.displayName;
-    filename = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_');
+    filename = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_');
     if (this.isMS) {
       window.navigator.msSaveBlob(blob._body, filename);
     } else {
@@ -117,7 +117,7 @@ export class ApiService {
     console.log(document);
     let safeName = '';
     try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_');
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_');
     } catch (e) {
       // fall through
     }
