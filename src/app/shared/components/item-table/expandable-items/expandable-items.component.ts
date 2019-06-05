@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from 'app/services/api';
 
 import { Document } from 'app/models/document';
+import { DocumentsResolver } from 'app/project/documents/documents-resolver.service';
 
 @Component({
   selector: 'app-expandable-items',
@@ -17,28 +18,31 @@ export class ExpandableItemsComponent implements OnInit {
   public showMore: Boolean = false;
   public hideShowMoreButton: Boolean;
   public itemIndexId: string;
+  public documents: any[];
 
   constructor(
+    private _changeDetectionRef: ChangeDetectorRef,
     private elRef: ElementRef,
     private api: ApiService,
-    ) { }
+    ) {
+      this.documents = [];
+    }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.itemIndexId = 'comment-index-' + this.itemIndex;
 
     // Populate the documents for this item.
     if (this.item.documents && this.item.documents.length > 0) {
       // populate the docs.
-      this.item.documents.map(doc => {
-        // console.log("doc:", doc);
-        this.api.getDocument(doc)
-        .subscribe( (res: any) => {
+      for (let doc of this.item.documents) {
+        let docs = await this.api.getDocument(doc)
+        .map( async (res: any) => {
           let record = JSON.parse(<string>res._body);
           // console.log("record:", record[0]);
-          doc = record[0];
-          return doc;
-        });
-      });
+          return new Document(record[0]);
+        }).toPromise();
+        this.documents.push(docs);
+      }
     }
   }
 
@@ -47,7 +51,12 @@ export class ExpandableItemsComponent implements OnInit {
   }
 
   public openAttachment(file) {
-    let doc = new Document({_id: file});
+    let doc = new Document(
+      {
+        _id: file._id,
+        internalOriginalName: file.internalOriginalName,
+        documentSource: file.documentSource
+      });
     this.api.openDocument(doc);
   }
 

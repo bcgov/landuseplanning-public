@@ -521,7 +521,7 @@ export class ApiService {
   }
 
   getDocument(id: string) {
-    const queryString = 'document/' + id;
+    const queryString = 'document/' + id + '?fields=internalOriginalName|documentSource';
     return this.get(queryString);
   }
 
