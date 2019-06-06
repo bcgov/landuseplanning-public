@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from 'app/services/api';
-
 import { Document } from 'app/models/document';
 import { DocumentsResolver } from 'app/project/documents/documents-resolver.service';
 
@@ -9,14 +8,16 @@ import { DocumentsResolver } from 'app/project/documents/documents-resolver.serv
   templateUrl: './expandable-items.component.html',
   styleUrls: ['./expandable-items.component.scss']
 })
+
 export class ExpandableItemsComponent implements OnInit {
   @Input() listType: String;
   @Input() item: any;
   @Input() itemIndex: number;
 
+  public buttonName:any = 'Read More';
+  public show:boolean = false;
+  public expanded:boolean = false;
 
-  public showMore: Boolean = false;
-  public hideShowMoreButton: Boolean;
   public itemIndexId: string;
   public documents: any[];
 
@@ -46,8 +47,16 @@ export class ExpandableItemsComponent implements OnInit {
     }
   }
 
-  public toggleShowMore() {
-    this.showMore = !this.showMore;
+
+  toggle() {
+    this.show = !this.show;
+    this.expanded = !this.expanded;
+
+    // CHANGE THE NAME OF THE BUTTON.
+    if(this.show)
+      this.buttonName = "Read Less";
+    else
+      this.buttonName = "Read More";
   }
 
   public openAttachment(file) {
@@ -59,15 +68,5 @@ export class ExpandableItemsComponent implements OnInit {
       });
     this.api.openDocument(doc);
   }
-
-  // checkOverflow(element) {
-  //   console.log(element);
-  //   if (element.offsetHeight < element.scrollHeight ||
-  //     element.offsetWidth < element.scrollWidth) {
-  //     this.hideShowMoreButton = true;
-  //   } else {
-  //     this.hideShowMoreButton = false;
-  //   }
-  // }
 
 }
