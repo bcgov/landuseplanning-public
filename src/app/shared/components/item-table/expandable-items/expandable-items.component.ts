@@ -15,7 +15,6 @@ export class ExpandableItemsComponent implements OnInit {
   @Input() itemIndex: number;
 
   public buttonName:any = 'Read More';
-  public show:boolean = false;
   public expanded:boolean = false;
 
   public itemIndexId: string;
@@ -49,11 +48,10 @@ export class ExpandableItemsComponent implements OnInit {
 
 
   toggle() {
-    this.show = !this.show;
     this.expanded = !this.expanded;
 
     // CHANGE THE NAME OF THE BUTTON.
-    if(this.show)
+    if(this.expanded)
       this.buttonName = "Read Less";
     else
       this.buttonName = "Read More";
