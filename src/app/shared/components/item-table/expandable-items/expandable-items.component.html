@@ -16,25 +16,9 @@
         {{(item.dateAdded | date:'longDate') || "-"}}
       </div>
     </div>
-
-<!--     <div *ngIf="show">
-      <p [ngClass]="showMore ? '' : 'show-less'">{{item.comment}}</p>
-    </div> -->
-
     <div>
-      <div *ngIf="item.comment.length > 120">
-        <p *ngIf="expanded == true">
-          {{item.comment}}
-        </p>
-        <p *ngIf="expanded == false">
-          {{item.comment.substr(0, 120)}} ...
-        </p>
-        <button class="clickable" (click)="toggle()">{{buttonName}}</button>
-      </div>
-
-      <p *ngIf="item.comment.length <= 120">{{item.comment}}</p>
+      <p [ngClass]="showMore ? '' : 'show-less'">{{item.comment}}</p>
     </div>
-
     <div class="attachment" *ngFor="let file of documents" (click)="openAttachment(file)">
       <div *ngIf="file.internalOriginalName">
         <i class="material-icons">
@@ -42,6 +26,6 @@
         </i>{{file.internalOriginalName}}
       </div>
     </div>
-
+    <div class="clickable" (click)="toggleShowMore()">Read More &nbsp; &rsaquo;</div>
   </div>
 </div>
