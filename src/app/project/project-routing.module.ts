@@ -7,6 +7,7 @@ import { ProjectRoutes } from './project-routes';
 import { CommentsComponent } from 'app/project/comments/comments.component';
 import { CommentsResolver } from 'app/project/comments/comments-resolver.service';
 import { DocumentsResolver } from './documents/documents-resolver.service';
+import { ProjectActivitiesResolver } from './project-activites/project-activities-resolver.service';
 
 const routes: Routes = [
   {
@@ -44,7 +45,8 @@ const routes: Routes = [
   providers: [
     ProjectResolver,
     CommentsResolver,
-    DocumentsResolver
+    DocumentsResolver,
+    ProjectActivitiesResolver
   ]
 })
 

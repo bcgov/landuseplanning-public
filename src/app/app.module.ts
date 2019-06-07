@@ -43,6 +43,7 @@ import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filte
 import { LegislationComponent } from 'app/legislation/legislation.component';
 import { ProcessComponent } from 'app/process/process.component';
 import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
+import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
 
 @NgModule({
   imports: [
@@ -69,6 +70,7 @@ import { ComplianceOversightComponent } from 'app/compliance-oversight/complianc
     NewsTypeFilterPipe,
     NewsMultifieldFilterPipe,
     NewsListTableRowsComponent,
+    ActivitiesListTableRowsComponent,
     SplashModalComponent,
     LegislationComponent,
     ProcessComponent,
@@ -77,6 +79,7 @@ import { ComplianceOversightComponent } from 'app/compliance-oversight/complianc
   ],
   entryComponents: [
     NewsListTableRowsComponent,
+    ActivitiesListTableRowsComponent,
     SplashModalComponent
   ],
   providers: [

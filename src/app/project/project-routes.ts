@@ -6,6 +6,8 @@ import { CommentsComponent } from './comments/comments.component';
 import { DocumentsTabComponent } from './documents/documents-tab.component';
 import { DocumentsResolver } from './documents/documents-resolver.service';
 import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
+import { ProjectActivitesComponent } from './project-activites/project-activites.component';
+import { ProjectActivitiesResolver } from './project-activites/project-activities-resolver.service';
 
 export const ProjectRoutes: Routes = [
   {
@@ -16,6 +18,13 @@ export const ProjectRoutes: Routes = [
   {
     path: 'project-details',
     component: ProjectDetailsTabComponent
+  },
+  {
+    path: 'project-activities',
+    component: ProjectActivitesComponent,
+    resolve: {
+      documents: ProjectActivitiesResolver
+    }
   },
   {
     path: 'commenting',

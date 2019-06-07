@@ -21,7 +21,8 @@ export class ProjectComponent implements OnInit {
   readonly tabLinks = [
     { label: 'Project Details', link: 'project-details' },
     { label: 'Commenting', link: 'commenting' },
-    { label: 'Documents', link: 'documents' }
+    { label: 'Documents', link: 'documents' },
+    { label: 'Activities and Updates', link: 'project-activities' }
   ];
 
   public project: Project = null;
