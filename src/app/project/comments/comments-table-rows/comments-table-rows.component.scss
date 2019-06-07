@@ -13,3 +13,11 @@
 .attachment {
   cursor: pointer;
 }
+
+.clickable {
+  background: none;
+  border: none;
+  font-weight: bold;
+  padding: 0;
+  -webkit-appearance: none;
+}
