@@ -11,9 +11,7 @@ import { ObjectFilterPipe } from 'app/shared/pipes/object-filter.pipe';
 import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { DragMoveDirective } from 'app/shared/utils/drag-move.directive';
 
-import { ItemTableComponent } from 'app/shared/components/item-table/item-table.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ExpandableItemsComponent } from './components/item-table/expandable-items/expandable-items.component';
 import { TableTemplateComponent } from 'app/shared/components/table-template/table-template.component';
 import { ListConverterPipe } from './pipes/list-converter.pipe';
 import { OrgNamePipe } from './pipes/org-name.pipe';
@@ -36,8 +34,6 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     PublishedPipe,
     VarDirective,
     DragMoveDirective,
-    ItemTableComponent,
-    ExpandableItemsComponent,
     TableTemplateComponent,
     TableDirective,
     ListConverterPipe,
@@ -54,7 +50,6 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     PublishedPipe,
     VarDirective,
     DragMoveDirective,
-    ItemTableComponent,
     TableTemplateComponent,
     NgxPaginationModule,
     ListConverterPipe,

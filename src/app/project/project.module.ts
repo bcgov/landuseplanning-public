@@ -21,6 +21,7 @@ import { DocumentDetailComponent } from 'app/project/documents/detail/detail.com
 
 import { StorageService } from 'app/services/storage.service';
 import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
+import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
 
 @NgModule({
   imports: [
@@ -40,13 +41,16 @@ import { ProjectDetailsTabComponent } from './project-details-tab/project-detail
     DateInputComponent,
     DocumentsTabComponent,
     DocumentTableRowsComponent,
+    CommentsTableRowsComponent,
     ProjectDetailsTabComponent
   ],
   providers: [
     StorageService
   ],
   entryComponents: [
-    DocumentTableRowsComponent
+    DocumentTableRowsComponent,
+    CommentsTableRowsComponent
+
   ]
 })
 

@@ -2,7 +2,7 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<div class="project">
+<div *ngIf="!loading" class="project">
   <main class="project-info">
     <div class="hero-banner-alt">
       <div class="container">
@@ -88,18 +88,20 @@
             </div>
           </div>
         </div>
+        <button class="btn btn-sm inverted mb-3" (click)="goBackToProjectDetails()" type="button">
+          Back to project details
+        </button>
       </div>
     </div>
   </main>
 </div>
-<div class="container comments">
-  <button class="btn btn-light mb-3" (click)="goBackToProjectDetails()" type="button">
-    Back to project details
-  </button>
-  <app-item-table *ngIf="totalComments > 0" [listType]="listType" [items]="comments" [pageSize]='pageSize'
-    [currentPage]='currentPage' [totalComments]='totalComments' (onPageNumUpdate)='getPaginatedComments($event)'>
-  </app-item-table>
-  <div *ngIf="comments?.length === 0">
-    <em>No comments have been received for this project at this time.</em>
+<div *ngIf="!loading" class="container comments mt-3">
+  <div *ngIf="tableParams.totalListItems > 0">
+    <app-table-template [columns]="commentTableColumns" [data]="commentTableData" (onColumnSort)='setColumnSort($event)'
+      (onPageNumUpdate)='getPaginatedComments($event)'>
+    </app-table-template>
+  </div>
+  <div *ngIf="tableParams.totalListItems == 0">
+    There are no comments.
   </div>
 </div>
