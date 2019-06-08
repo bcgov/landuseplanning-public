@@ -156,7 +156,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = pageNumber;
-    params['sortBy'] = this.tableParams.sortBy = '';
+    params['sortBy'] = this.tableParams.sortBy = '-dateUpdated';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
@@ -175,7 +175,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '';
+    params['sortBy'] = this.tableParams.sortBy = '-dateUpdated';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
