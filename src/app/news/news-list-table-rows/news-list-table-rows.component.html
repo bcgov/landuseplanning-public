@@ -13,7 +13,7 @@
     <a *ngIf="isSingleDoc(activity?.contentUrl)" class="btn content-btn-alt" href="{{activity.contentUrl}}">
       <span>Submit/View Comment(s)</span>
     </a>
-    <a *ngIf="activity.project" class="btn content-btn-alt" [routerLink]="['/p', activity.project ]">
+    <a *ngIf="activity.project" class="btn content-btn-alt" [routerLink]="['/p', activity.project._id ]">
       <span>View Project</span>
     </a>
   </td>
