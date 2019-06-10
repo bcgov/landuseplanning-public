@@ -40,7 +40,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     },
     {
       name: 'Date',
-      value: 'dateUpdated',
+      value: 'dateAdded',
       width: 'col-2',
       nosort: true
     }
@@ -61,7 +61,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
-        this.tableParams.sortBy = '-dateUpdated';
+        this.tableParams.sortBy = '-dateAdded';
 
         this.searchService.getSearchResults(
           this.tableParams.keywords,
@@ -82,7 +82,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
                 this.tableParams.totalListItems = 0;
                 this.recentActivities = [];
               }
-              this.tableParams.sortBy = '-dateUpdated';
+              this.tableParams.sortBy = '-dateAdded';
               this.setRowData();
             } else {
               alert('Uh-oh, couldn\'t load topics');
@@ -126,9 +126,9 @@ export class NewsListComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.loading = true;
 
-    this.tableParams.sortBy = '-dateUpdated';
+    this.tableParams.sortBy = '-dateAdded';
     this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
-    this.tableParams.sortBy = '-dateUpdated';
+    this.tableParams.sortBy = '-dateAdded';
 
     this.searchService.getSearchResults(
       this.tableParams.keywords,
@@ -169,7 +169,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '-dateUpdated';
+    params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
