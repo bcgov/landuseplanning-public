@@ -85,7 +85,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
         if (Object.keys(newParams).length === 0 && newParams.constructor === Object) {
           newParams = {
-            sortBy: '-score'
+            sortBy: '+name'
           };
         }
 
@@ -205,7 +205,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '-score';
+    params['sortBy'] = this.tableParams.sortBy = '+name';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
