@@ -61,7 +61,6 @@ export class CommentsTableRowsComponent implements OnInit {
   }
 
   public openAttachment(file) {
-    let doc = new Document({ _id: file });
-    this.api.openDocument(doc);
+    this.api.openDocument(file);
   }
 }
