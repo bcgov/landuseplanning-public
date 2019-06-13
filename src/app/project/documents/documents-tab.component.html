@@ -14,6 +14,10 @@
       <a _ngcontent-c7 class="btn btn-primary btn-search-help" [routerLink]="['/search-help']" target="_blank">
           <span> Search Help</span>
       </a>
+      <button *ngIf="!loading && tableParams.totalListItems > tableParams.pageSize"
+        class="btn btn-primary btn-search-help" (click)="onShowAll()">
+        <span> Show All Results</span>
+      </button>
     </div>
     <div class="results">
       <p *ngIf="!loading && tableParams.totalListItems == 0">
@@ -43,4 +47,6 @@
                         (onPageNumUpdate)='getPaginatedDocs($event)'>
     </app-table-template>
   </section>
+
+
 </div>
