@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
-import { SearchService } from 'app/services/search.service';
 import { Subject } from 'rxjs';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { News } from 'app/models/news';
@@ -33,7 +32,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     },
     {
       name: 'Date',
-      value: 'dateUpdated',
+      value: 'dateAdded',
       width: 'col-2',
       nosort: true
     }
@@ -41,8 +40,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private tableTemplateUtils: TableTemplateUtils,
-    private searchService: SearchService,
-    private _changeDetectionRef: ChangeDetectorRef) {}
+    private _changeDetectionRef: ChangeDetectorRef) { }
 
   ngOnInit() {
 
@@ -57,7 +55,6 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
             // project not found --> navigate back to project list
             this.router.navigate(['/projects']);
           }
-          this.loading = false;
           this._changeDetectionRef.detectChanges();
         }
       );
@@ -66,60 +63,32 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
-        this.tableParams.sortBy = '-dateUpdated';
-      });
-
-      this.route.data
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((data: any) => {
-        if (data) {
-          if (data.documents && data.documents[0].data.meta && data.documents[0].data.meta.length > 0) {
-            this.tableParams.totalListItems = data.documents[0].data.meta[0].searchResultsTotal;
-            this.recentActivities = data.documents[0].data.searchResults;
-          } else {
-            this.tableParams.totalListItems = 0;
-            this.recentActivities = [];
-          }
-          this.loading = false;
-          this.setRowData();
-          this._changeDetectionRef.detectChanges();
-        } else {
-          alert('Uh-oh, couldn\'t load valued components');
-          // project not found --> navigate back to search
-          this.router.navigate(['/search']);
-          this.loading = false;
+        if (this.tableParams.sortBy === '-datePosted') {
+          this.tableParams.sortBy = '-dateAdded';
+          this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
         }
+        this._changeDetectionRef.detectChanges();
 
-        // this.searchService.getSearchResults(
-        //   this.tableParams.keywords,
-        //   'RecentActivity',
-        //   [],
-        //   this.tableParams.currentPage,
-        //   this.tableParams.pageSize,
-        //   this.tableParams.sortBy,
-        //   null,
-        //   true)
-        //   .takeUntil(this.ngUnsubscribe)
-        //   .subscribe((res: any) => {
-        //     console.log('RES:', res);
-        //     if (res[0].data) {
-        //       if (res[0].data.searchResults.length > 0) {
-        //         this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-        //         this.recentActivities = res[0].data.searchResults;
-        //       } else {
-        //         this.tableParams.totalListItems = 0;
-        //         this.recentActivities = [];
-        //       }
-        //       this.tableParams.sortBy = '-dateUpdated';
-        //       this.setRowData();
-        //     } else {
-        //       alert('Uh-oh, couldn\'t load topics');
-        //       // activity not found --> navigate back to search
-        //       this.router.navigate(['/']);
-        //     }
-        //     this.loading = false;
-        //     this._changeDetectionRef.detectChanges();
-        //   });
+        this.route.data
+          .takeUntil(this.ngUnsubscribe)
+          .subscribe((data: any) => {
+            if (data) {
+              if (data.documents && data.documents[0].data.meta && data.documents[0].data.meta.length > 0) {
+                this.tableParams.totalListItems = data.documents[0].data.meta[0].searchResultsTotal;
+                this.recentActivities = data.documents[0].data.searchResults;
+              } else {
+                this.tableParams.totalListItems = 0;
+                this.recentActivities = [];
+              }
+              this.setRowData();
+              this.loading = false;
+              this._changeDetectionRef.detectChanges();
+            } else {
+              alert('Uh-oh, couldn\'t load valued components');
+              // project not found --> navigate back to search
+              this.router.navigate(['/search']);
+            }
+          });
       });
   }
   setRowData() {
@@ -156,7 +125,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = pageNumber;
-    params['sortBy'] = this.tableParams.sortBy = '-dateUpdated';
+    params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
@@ -175,7 +144,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '-dateUpdated';
+    params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 

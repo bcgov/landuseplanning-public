@@ -61,21 +61,20 @@ export class SearchService {
 
   getTopNewsItems() {
     const searchResults = this.api.getTopNewsItems()
-    .map((res: any) => {
-      let records = JSON.parse(<string>res._body);
-      let allResults = <any>[];
-      records.forEach(item => {
-        const r = new News(item);
-        allResults.push(r);
+      .map((res: any) => {
+        let records = JSON.parse(<string>res._body);
+        let allResults = <any>[];
+        records.forEach(item => {
+          const r = new News(item);
+          allResults.push(r);
+        });
+        return allResults;
+      })
+      .catch(() => {
+        this.isError = true;
+        // if call fails, return null results
+        return of(null as News);
       });
-      console.log('Service results: ', allResults);
-      return allResults;
-    })
-    .catch(() => {
-      this.isError = true;
-      // if call fails, return null results
-      return of(null as News);
-    });
     return searchResults;
   }
 }

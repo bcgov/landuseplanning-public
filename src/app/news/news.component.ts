@@ -61,36 +61,31 @@ export class NewsListComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
-        this.tableParams.sortBy = '-dateAdded';
+        if (this.tableParams.sortBy === '-datePosted') {
+          this.tableParams.sortBy = '-dateAdded';
+          this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
+        }
+        this._changeDetectionRef.detectChanges();
 
-        this.searchService.getSearchResults(
-          this.tableParams.keywords,
-          'RecentActivity',
-          [],
-          this.tableParams.currentPage,
-          this.tableParams.pageSize,
-          this.tableParams.sortBy,
-          null,
-          true)
+        this.route.data
           .takeUntil(this.ngUnsubscribe)
           .subscribe((res: any) => {
-            if (res[0].data) {
-              if (res[0].data.searchResults.length > 0) {
-                this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-                this.recentActivities = res[0].data.searchResults;
+            if (res.activities[0].data) {
+              if (res.activities[0].data.searchResults.length > 0) {
+                this.tableParams.totalListItems = res.activities[0].data.meta[0].searchResultsTotal;
+                this.recentActivities = res.activities[0].data.searchResults;
               } else {
                 this.tableParams.totalListItems = 0;
                 this.recentActivities = [];
               }
-              this.tableParams.sortBy = '-dateAdded';
               this.setRowData();
+              this.loading = false;
+              this._changeDetectionRef.detectChanges();
             } else {
               alert('Uh-oh, couldn\'t load topics');
               // activity not found --> navigate back to search
               this.router.navigate(['/']);
             }
-            this.loading = false;
-            this._changeDetectionRef.detectChanges();
           });
       });
   }
