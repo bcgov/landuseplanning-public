@@ -87,8 +87,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
                   this._changeDetectionRef.detectChanges();
                 });
             }
-
-
             this.commentPeriodId = this.commentPeriod._id;
             this.commentService.getByPeriodId(this.commentPeriodId, this.tableParams.currentPage, this.tableParams.pageSize, true)
               .takeUntil(this.ngUnsubscribe)

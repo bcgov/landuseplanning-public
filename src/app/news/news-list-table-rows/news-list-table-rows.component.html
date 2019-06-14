@@ -10,10 +10,12 @@
     <a *ngIf="activity.project" class="btn content-btn-alt" [routerLink]="['/p', activity.project._id ]">
       <span>View Project</span>
     </a>
-    <a *ngIf="isSingleDoc(activity?.documentUrl)" class="btn content-btn-alt" href="{{activity.documentUrl}}">
+    <a *ngIf="isSingleDoc(activity?.documentUrl) && !activity?.documentUrl.includes('docs?folder')"
+      class="btn content-btn-alt" href="{{activity.documentUrl}}">
       <span>View Document(s)</span>
     </a>
-    <a *ngIf="isSingleDoc(activity?.contentUrl)" class="btn content-btn-alt" href="{{activity.contentUrl}}">
+    <a *ngIf="isSingleDoc(activity?.contentUrl) && !activity?.contentUrl.includes('docs?folder')"
+      class="btn content-btn-alt" href="{{activity.contentUrl}}">
       <span>Submit/View Comment(s)</span>
     </a>
   </td>

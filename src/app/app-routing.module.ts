@@ -10,6 +10,7 @@ import { LegislationComponent } from './legislation/legislation.component';
 import { ProcessComponent } from './process/process.component';
 import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
 import { SearchHelpComponent } from './search-help/search-help.component';
+import { NewsResolver } from './news/news-resolver.service';
 
 const routes: Routes = [
   {
@@ -26,7 +27,10 @@ const routes: Routes = [
   },
   {
     path: 'news',
-    component: NewsListComponent
+    component: NewsListComponent,
+    resolve: {
+      activities: NewsResolver
+    }
   },
   {
     path: 'legislation',
@@ -59,7 +63,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [NewsResolver]
 })
 
 export class AppRoutingModule { }
