@@ -51,8 +51,8 @@
                     [routerLink]="['/p', item.project?._id ]">
                     Submit/View Comments
                   </a>
-                  <a *ngIf="!item?.documentUrl.includes('docs?folder')" class="btn btn-sm content-btn-alt" title="View more information" href="{{item.documentUrl}}"
-                    target="_blank" *ngIf="item.documentUrl">
+                  <a *ngIf="item.documentUrl && !item?.documentUrl.includes('docs?folder')" class="btn btn-sm content-btn-alt" title="View more information" href="{{item.documentUrl}}"
+                    target="_blank">
                     View Document(s)
                   </a>
                 </div>
