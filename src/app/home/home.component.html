@@ -47,11 +47,11 @@
                     [routerLink]="['/p', item.project?._id ]" *ngIf="item.project?._id">
                     Project Info
                   </a>
-                  <a class="btn btn-sm content-btn-alt" title="View this Public Comment Period"
-                    [routerLink]="['/p', item.project?._id ]" *ngIf="item.contentUrl">
+                  <a *ngIf="item.contentUrl && !item?.contentUrl.includes('docs?folder')" class="btn btn-sm content-btn-alt" title="View this Public Comment Period"
+                    [routerLink]="['/p', item.project?._id ]">
                     Submit/View Comments
                   </a>
-                  <a class="btn btn-sm content-btn-alt" title="View more information" href="{{item.documentUrl}}"
+                  <a *ngIf="!item?.documentUrl.includes('docs?folder')" class="btn btn-sm content-btn-alt" title="View more information" href="{{item.documentUrl}}"
                     target="_blank" *ngIf="item.documentUrl">
                     View Document(s)
                   </a>
