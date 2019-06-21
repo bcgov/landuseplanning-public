@@ -204,7 +204,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '+name';
+    params['sortBy'] = this.tableParams.sortBy = '-score';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
