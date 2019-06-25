@@ -1,7 +1,7 @@
 <div class="tab-pane" role="tabpanel">
   <section class="tab-section">
     <div class="row">
-      <div class="col-5">
+      <div class="col-7">
         <div class="location-info">
           <h2>Details</h2>
           <div>
@@ -22,7 +22,8 @@
           </div>
           <div *ngIf="project?.CEAALink">
             <label>CEAA URL</label>
-            <p class="value"><a class="value" target="_blank" href="{{project.CEAALink}}">{{project?.CEAALink || "-"}}</a>
+            <p class="value"><a class="value" target="_blank"
+                href="{{project.CEAALink}}">{{project?.CEAALink || "-"}}</a>
             </p>
           </div>
           <div *ngIf="project?.status">
@@ -41,18 +42,23 @@
           </div>
         </div>
       </div>
-      <div class="col-7">
-          <div class="map-item">
-            <div class="map-wrapper">
-              <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
-                <span class="no-results-msg">No map available</span>
-              </div>
-              <div class="map-container">
-                <div class="map" id="map"></div>
-              </div>
+      <div class="col-5">
+        <div class="map-item">
+          <div class="map-wrapper">
+            <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
+              <span class="no-results-msg">No map available</span>
+            </div>
+            <div class="map-container">
+              <div class="map" id="map"></div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <app-certificates></app-certificates>
+      </div>
     </div>
   </section>
 </div>

@@ -97,7 +97,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
           this.tableParams.currentPage,
           this.tableParams.pageSize,
           this.tableParams.sortBy,
-          '',
+          {},
           true)
           .takeUntil(this.ngUnsubscribe)
           .subscribe((res: any) => {

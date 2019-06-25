@@ -23,6 +23,7 @@ import { StorageService } from 'app/services/storage.service';
 import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
 import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
 import { ProjectActivitesComponent } from './project-activites/project-activites.component';
+import { CertificatesComponent } from './certificates/certificates.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { ProjectActivitesComponent } from './project-activites/project-activites
     DocumentTableRowsComponent,
     CommentsTableRowsComponent,
     ProjectDetailsTabComponent,
-    ProjectActivitesComponent
+    ProjectActivitesComponent,
+    CertificatesComponent
   ],
   providers: [
     StorageService

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { SearchService } from 'app/services/search.service';
 
 @Injectable()
-export class DocumentsResolver implements Resolve<Observable<object>> {
+export class CertificatesResolver implements Resolve<Observable<object>> {
   constructor(
     private searchService: SearchService
   ) { }
@@ -23,7 +23,13 @@ export class DocumentsResolver implements Resolve<Observable<object>> {
       currentPage,
       pageSize,
       sortBy,
-      { documentSource: 'PROJECT' },
+      {
+        // Search only Certificate Package/EAO/Certificate
+        documentSource: 'PROJECT',
+        type: '5cf00c03a266b7e1877504d5',
+        documentAuthor: '5cf00c03a266b7e1877504db',
+        milestone: '5cf00c03a266b7e1877504eb'
+      },
       true);
   }
 }
