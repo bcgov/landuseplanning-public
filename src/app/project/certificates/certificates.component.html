@@ -1,9 +1,6 @@
-<div>
+<div *ngIf="documents.length !== 0">
   <section class="tab-section" *ngIf="!loading">
     <h2>Project Certificates:</h2>
-    <div *ngIf="documents.length === 0">
-      No certificates visible yet.
-    </div>
     <div *ngIf="documents.length > 0" class="location-info">
       <app-table-template *ngIf="!loading && tableParams.totalListItems != 0"
                           (checkboxChange)='checkChange($event)'
