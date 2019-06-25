@@ -9,6 +9,7 @@
       <br>
       <span [innerHtml]="activity.content"></span>
     </div>
+    <br>
     <div>
       <a *ngIf="isSingleDoc(activity?.documentUrl) && !activity?.documentUrl.includes('docs?folder')"
         class="btn content-btn-alt" href="{{activity.documentUrl}}">
