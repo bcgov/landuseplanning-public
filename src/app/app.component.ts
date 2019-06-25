@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // watch for URL param changes
     // NB: this must be in constructor to get initial filters
 
-    this.configService.init();
+    // this.configService.init();
   }
 
   ngOnInit() {

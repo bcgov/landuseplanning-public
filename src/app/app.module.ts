@@ -83,12 +83,12 @@ import { ActivitiesListTableRowsComponent } from './project/project-activites/ac
     SplashModalComponent
   ],
   providers: [
+    ConfigService,
     CookieService,
     ApiService,
     ProjectService,
     CommentService,
     CommentPeriodService,
-    ConfigService,
     DecisionService,
     DocumentService,
     SearchService,

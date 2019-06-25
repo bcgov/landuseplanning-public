@@ -8,6 +8,7 @@ import { DocumentsResolver } from './documents/documents-resolver.service';
 import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
 import { ProjectActivitesComponent } from './project-activites/project-activites.component';
 import { ProjectActivitiesResolver } from './project-activites/project-activities-resolver.service';
+import { CertificatesResolver } from './certificates/certificates-resolver.service';
 
 export const ProjectRoutes: Routes = [
   {
@@ -17,7 +18,10 @@ export const ProjectRoutes: Routes = [
   },
   {
     path: 'project-details',
-    component: ProjectDetailsTabComponent
+    component: ProjectDetailsTabComponent,
+    resolve: {
+      documents: CertificatesResolver
+    }
   },
   {
     path: 'project-activities',
