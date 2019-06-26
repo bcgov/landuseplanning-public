@@ -1,7 +1,7 @@
 <div class="tab-pane" role="tabpanel">
   <section class="tab-section">
     <div class="row">
-      <div class="col-7">
+      <div class="col-6">
         <div class="location-info">
           <h2>Details</h2>
           <div>
@@ -42,8 +42,8 @@
           </div>
         </div>
       </div>
-      <div class="col-5">
-        <div class="map-item">
+      <div class="col-6">
+              <div class="map-item">
           <div class="map-wrapper">
             <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
               <span class="no-results-msg">No map available</span>
@@ -55,9 +55,13 @@
         </div>
       </div>
     </div>
+    <br>
     <div class="row">
       <div class="col-12">
-        <app-certificates></app-certificates>
+          <div class="location-info">
+            <h2>Activities and Updates</h2>
+            <app-project-activites></app-project-activites>
+          </div>
       </div>
     </div>
   </section>

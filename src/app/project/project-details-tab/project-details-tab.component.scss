@@ -88,7 +88,8 @@
     }
     .map {
       position: relative;
-      height: 400px;
+      min-height: 322px;
+      height: 100%;
       outline: none;
       touch-action: none;
       background-color: $map-bg;
