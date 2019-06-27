@@ -111,7 +111,7 @@ export class CertificatesComponent implements OnInit {
         documentList.push(
           {
             _id: document._id,
-            documentFileName: document.displayName || document.internalOriginalName,
+            documentFileName: document.documentFileName || document.displayName || document.internalOriginalName,
             displayName: document.displayName,
             datePosted: document.datePosted,
             type: document.type,
