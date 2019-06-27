@@ -129,7 +129,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
-    this.router.navigate(['p', this.currentProject._id, 'project-activities', params]);
+    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
   }
 
   public onSubmit() {
@@ -148,7 +148,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
-    this.router.navigate(['p', this.currentProject._id, 'project-activities', params]);
+    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
   }
 
   ngOnDestroy() {

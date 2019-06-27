@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { SearchService } from 'app/services/search.service';
 
 @Injectable()
-export class CertificatesResolver implements Resolve<Observable<object>> {
+export class AmendmentsResolverService implements Resolve<Observable<object>> {
   constructor(
     private searchService: SearchService
   ) { }
@@ -14,7 +14,7 @@ export class CertificatesResolver implements Resolve<Observable<object>> {
     const projectId = route.parent.paramMap.get('projId');
     const currentPage = route.params.currentPage ? route.params.currentPage : 1;
     const pageSize = route.params.pageSize ? route.params.pageSize : 10;
-    const sortBy = route.params.sortBy && route.params.sortBy !== 'null' ? route.params.sortBy : '+displayName';
+    const sortBy = route.params.sortBy && route.params.sortBy !== 'null' ? route.params.sortBy : '-datePosted';
     const keywords = route.params.keywords;
     return this.searchService.getSearchResults(
       keywords,
@@ -24,11 +24,10 @@ export class CertificatesResolver implements Resolve<Observable<object>> {
       pageSize,
       sortBy,
       {
-        // Search only Certificate Package/EAO/Certificate
+        // Search only Amendment Package/Amendment
         documentSource: 'PROJECT',
-        type: '5cf00c03a266b7e1877504d5',
-        documentAuthor: '5cf00c03a266b7e1877504db',
-        milestone: '5cf00c03a266b7e1877504eb'
+        type: '5cf00c03a266b7e1877504d7',
+        milestone: '5cf00c03a266b7e1877504f2'
       },
       true);
   }

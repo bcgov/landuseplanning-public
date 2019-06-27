@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { ApiService } from 'app/services/api';
@@ -9,6 +9,7 @@ import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { Subject } from 'rxjs';
 import { DocumentTableRowsComponent } from '../documents/project-document-table-rows/project-document-table-rows.component';
 import { SearchTerms } from 'app/models/search';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'app-certificates',
@@ -24,6 +25,7 @@ export class CertificatesComponent implements OnInit {
   public typeFilters = [];
   public terms = new SearchTerms();
   public loading: Boolean = true;
+  public currentUrl: String = '';
   public documentTableColumns: any[] = [
     {
       name: 'Name',
@@ -49,18 +51,31 @@ export class CertificatesComponent implements OnInit {
   constructor(
     private _changeDetectionRef: ChangeDetectorRef,
     private api: ApiService,
+    private platformLocation: PlatformLocation,
     private route: ActivatedRoute,
     private router: Router,
     private searchService: SearchService,
     private storageService: StorageService,
     private tableTemplateUtils: TableTemplateUtils
-  ) { }
+  ) {
+    try {
+      let currRoute = router.url.split(';')[0];
+      this.currentUrl = currRoute.substring(currRoute.lastIndexOf('/') + 1);
+    } catch (e) {
+      console.log('e:', e);
+    }
+  }
 
   ngOnInit() {
     this.route.params
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
-        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
+        if (this.currentUrl === 'amendments') {
+          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
+        } else {
+          // Different sort order:
+          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params, null, '+displayName');
+        }
       });
 
     this.currentProject = this.storageService.state.currentProject.data;
@@ -145,6 +160,11 @@ export class CertificatesComponent implements OnInit {
     // params['dateAddedStart'] = this.utils.convertFormGroupNGBDateToJSDate(this.filter.dateAddedStart).toISOString();
     // params['dateAddedEnd'] = this.utils.convertFormGroupNGBDateToJSDate(this.filter.dateAddedEnd).toISOString();
     if (this.typeFilters.length > 0) { params['type'] = this.typeFilters.toString(); }
-    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
+
+    if (this.currentUrl === 'amendments') {
+      this.router.navigate(['p', this.currentProject._id, 'amendments', params]);
+    } else {
+      this.router.navigate(['p', this.currentProject._id, 'certificates', params]);
+    }
   }
 }

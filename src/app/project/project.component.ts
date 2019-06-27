@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -22,7 +22,8 @@ export class ProjectComponent implements OnInit {
     { label: 'Project Details', link: 'project-details' },
     { label: 'Commenting', link: 'commenting' },
     { label: 'Documents', link: 'documents' },
-    { label: 'Activities and Updates', link: 'project-activities' }
+    { label: 'Certificate', link: 'certificates' },
+    { label: 'Amendment(s)', link: 'amendments' }
   ];
 
   public project: Project = null;
