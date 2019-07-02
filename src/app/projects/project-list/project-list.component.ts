@@ -49,7 +49,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   public filterForUI: ProjectFilterObject = new ProjectFilterObject();
 
-  public showAdvancedSearch: boolean = false;
+  public showAdvancedSearch: boolean;
+
   public showFilters: object = {
     type: false,
     eacDecision: false,
@@ -283,7 +284,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   }
 
   updateCount(name) {
-    const getCount = (name) => { return Object.keys(this.filterForUI[name]).filter(key => this.filterForUI[name][key]).length; };
+    const getCount = (n) => { return Object.keys(this.filterForUI[n]).filter(k => this.filterForUI[n][k]).length; };
 
     let num = 0;
     if (name === 'more') {
