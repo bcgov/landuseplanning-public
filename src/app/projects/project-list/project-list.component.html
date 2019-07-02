@@ -20,6 +20,240 @@
           </button>
         </div>
       </div>
+      <div *ngIf="!showAdvancedSearch" class="advanced-search-button">
+        <br>
+        <button class="btn btn-secondary" type="button" (click)="showAdvancedSearch = !showAdvancedSearch;">
+          <span>Show Advanced Search</span>
+        </button>
+      </div>
+      <br>
+      <div *ngIf="showAdvancedSearch" class="advanced-search">
+        <div class="row">
+          <div class="btn-group col-md-8" role="group">
+            <button type="button" (click)="toggleFilter('type');"
+              [ngClass]="{
+                'btn btn-dark': showFilters.type,
+                'btn btn-secondary': !showFilters.type && numFilters.type > 0,
+                'btn btn-outline-dark': !showFilters.type && numFilters.type == 0}">
+              <span>Project Type<span *ngIf="numFilters.type > 0 && !showFilters.type">&nbsp;({{ numFilters.type }})</span></span>
+            </button>
+            <button type="button" (click)="toggleFilter('eacDecision');"
+              [ngClass]="{
+                'btn btn-dark': showFilters.eacDecision,
+                'btn btn-secondary': !showFilters.eacDecision && numFilters.eacDecision > 0,
+                'btn btn-outline-dark': !showFilters.eacDecision && numFilters.eacDecision == 0}">
+              <span>EA Decision<span *ngIf="numFilters.eacDecision > 0 && !showFilters.eacDecision">&nbsp;({{ numFilters.eacDecision }})</span></span>
+            </button>
+            <button hidden type="button" (click)="toggleFilter('pcp');"
+              [ngClass]="{
+                'btn btn-dark': showFilters.pcp,
+                'btn btn-secondary': !showFilters.pcp && numFilters.pcp > 0,
+                'btn btn-outline-dark': !showFilters.pcp && numFilters.pcp == 0}">
+              <span>Public Comment Period<span *ngIf="numFilters.pcp > 0 && !showFilters.pcp">&nbsp;({{ numFilters.pcp }})</span></span>
+            </button>
+            <button type="button" (click)="toggleFilter('more');"
+              [ngClass]="{
+                'btn btn-dark': showFilters.more,
+                'btn btn-secondary': !showFilters.more && numFilters.more > 0,
+                'btn btn-outline-dark': !showFilters.more && numFilters.more == 0}">
+              <span>More Filters&hellip;<span *ngIf="numFilters.more > 0 && !showFilters.more">&nbsp;({{ numFilters.more }})</span></span>
+            </button>
+          </div>
+          <div class="advanced-search-button col-md-4">
+            <button class="btn btn-secondary" type="button" (click)="showAdvancedSearch = !showAdvancedSearch;">
+              <span>Hide Advanced Search</span>
+            </button>
+            <button class="btn btn-outline-secondary" type="button" (click)="clearAll();">
+              <span>Clear All</span>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="showFilters.type" class="type-filters project-filter row">
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="energyElectricity" name="energyElectricity"
+                [(ngModel)]="filterForUI.type.energyElectricity">
+              <label class="form-check-label" for="energyElectricity">Energy-Electricity</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="energyPetroleum" name="energyPetroleum"
+                [(ngModel)]="filterForUI.type.energyPetroleum">
+              <label class="form-check-label" for="energyPetroleum">Energy-Petroleum &amp; Natural Gas</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="foodProcessing" name="foodProcessing"
+                [(ngModel)]="filterForUI.type.foodProcessing">
+              <label class="form-check-label" for="foodProcessing">Food Processing</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="industrial" name="industrial"
+                [(ngModel)]="filterForUI.type.industrial">
+              <label class="form-check-label" for="industrial">Industrial</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="mines" name="mines"
+                [(ngModel)]="filterForUI.type.mines">
+              <label class="form-check-label" for="mines">Mines</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="other" name="other"
+                [(ngModel)]="filterForUI.type.other">
+              <label class="form-check-label" for="other">Other</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="tourist" name="tourist"
+                [(ngModel)]="filterForUI.type.tourist">
+              <label class="form-check-label" for="tourist">Tourist Destination Resorts</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="transportation" name="transportation"
+                [(ngModel)]="filterForUI.type.transportation">
+              <label class="form-check-label" for="transportation">Transportation</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="wasteDisposal" name="wasteDisposal"
+                [(ngModel)]="filterForUI.type.wasteDisposal">
+              <label class="form-check-label" for="wasteDisposal">Waste Disposal</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="wasteManagement" name="wasteManagement"
+                [(ngModel)]="filterForUI.type.wasteManagement">
+              <label class="form-check-label" for="wasteManagement">Waste Management</label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showFilters.eacDecision" class="decision-filters project-filter row">
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="certificateExpired" name="certificateExpired"
+                [(ngModel)]="filterForUI.eacDecision.certificateExpired">
+              <label class="form-check-label" for="certificateExpired">Certificate Expired</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="certificateIssued" name="certificateIssued"
+                [(ngModel)]="filterForUI.eacDecision.certificateIssued">
+              <label class="form-check-label" for="certificateIssued">Certificate Issued</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="certificateNotRequired" name="certificateNotRequired"
+                [(ngModel)]="filterForUI.eacDecision.certificateNotRequired">
+              <label class="form-check-label" for="certificateNotRequired">Certificate Not Required</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="certificateRefused" name="certificateRefused"
+                [(ngModel)]="filterForUI.eacDecision.certificateRefused">
+              <label class="form-check-label" for="certificateRefused">Certificate Refused</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="furtherAssessmentRequired" name="furtherAssessmentRequired"
+                [(ngModel)]="filterForUI.eacDecision.furtherAssessmentRequired">
+              <label class="form-check-label" for="furtherAssessmentRequired">Further Assessment Required</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="inProgress" name="inProgress"
+                [(ngModel)]="filterForUI.eacDecision.inProgress">
+              <label class="form-check-label" for="inProgress">In Progress</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="notReviewable" name="notReviewable"
+                [(ngModel)]="filterForUI.eacDecision.notReviewable">
+              <label class="form-check-label" for="notReviewable">Not Designated Reviewable</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="preEA" name="preEA"
+                [(ngModel)]="filterForUI.eacDecision.preEA">
+              <label class="form-check-label" for="preEA">Pre-EA Act Approval</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="terminated" name="terminated"
+                [(ngModel)]="filterForUI.eacDecision.terminated">
+              <label class="form-check-label" for="terminated">Terminated</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="withdrawn" name="withdrawn"
+                [(ngModel)]="filterForUI.eacDecision.withdrawn">
+              <label class="form-check-label" for="withdrawn">Withdrawn</label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showFilters.pcp" class="pcp-filters project-filter row">
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="pending" name="pending"
+                [(ngModel)]="filterForUI.pcp.pending">
+              <label class="form-check-label" for="pending">Pending</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="open" name="open"
+                [(ngModel)]="filterForUI.pcp.open">
+              <label class="form-check-label" for="open">Open</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="closed" name="closed"
+                [(ngModel)]="filterForUI.pcp.closed">
+              <label class="form-check-label" for="closed">Closed</label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showFilters.more" class="more-filters project-filter row">
+          <div class="col-md-1">
+            <b>Region</b>
+          </div>
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="cariboo" name="cariboo"
+                [(ngModel)]="filterForUI.region.cariboo">
+              <label class="form-check-label" for="cariboo">Cariboo</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="kootenay" name="kootenay"
+                [(ngModel)]="filterForUI.region.kootenay">
+              <label class="form-check-label" for="kootenay">Kootenay</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="lowerMainland" name="lowerMainland"
+                [(ngModel)]="filterForUI.region.lowerMainland">
+              <label class="form-check-label" for="lowerMainland">Lower Mainland</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="okanagan" name="okanagan"
+                [(ngModel)]="filterForUI.region.okanagan">
+              <label class="form-check-label" for="okanagan">Okanagan</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="omineca" name="omineca"
+                [(ngModel)]="filterForUI.region.omineca">
+              <label class="form-check-label" for="omineca">Omineca</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="peace" name="peace"
+                [(ngModel)]="filterForUI.region.peace">
+              <label class="form-check-label" for="peace">Peace</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="skeena" name="skeena"
+                [(ngModel)]="filterForUI.region.skeena">
+              <label class="form-check-label" for="skeena">Skeena</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="thompsonNicola" name="thompsonNicola"
+                [(ngModel)]="filterForUI.region.thompsonNicola">
+              <label class="form-check-label" for="thompsonNicola">Thompson-Nicola</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="vancouverIsland" name="vancouverIsland"
+                [(ngModel)]="filterForUI.region.vancouverIsland">
+              <label class="form-check-label" for="vancouverIsland">Vancouver Island</label>
+            </div>
+          </div>
+        </div>
+      </div>
       <br>
       <div class="results">
         <p *ngIf="!loading && tableParams.totalListItems == 0">

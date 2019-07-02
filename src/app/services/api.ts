@@ -141,7 +141,7 @@ export class ApiService {
   //
   // Searching
   //
-  searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier: object = {}, populate = false, secondarySort: string = null) {
+  searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier: object = {}, populate = false, secondarySort: string = null, filter: object = {}) {
     let queryString = `search?dataset=${dataset}`;
     if (fields && fields.length > 0) {
       fields.map(item => {
@@ -160,6 +160,13 @@ export class ApiService {
       Object.keys(queryModifier).map(key => {
         queryModifier[key].split(',').map(item => {
           queryString += `&and[${key}]=${item}`;
+        });
+      });
+    }
+    if (filter !== {}) {
+      Object.keys(filter).map(key => {
+        filter[key].split(',').map(item => {
+          queryString += `&or[${key}]=${item}`;
         });
       });
     }
