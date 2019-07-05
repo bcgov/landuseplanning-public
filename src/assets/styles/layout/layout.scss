@@ -1,18 +1,21 @@
 // Container
 .container {
-  margin: 0 auto;
-  padding-top: 2rem;
-  padding-right: 2rem;
-  padding-bottom: 2.25rem;
-  padding-left: 2rem;
-  max-width: 1100px;
+  // margin: 0 auto;
+  // padding-top: 1rem;
+  // padding-right: 2rem;
+  // padding-bottom: 1.25rem;
+  // padding-left: 2rem;
+  // max-width: 1100px;
+  // @media (max-width: 767px) {
+  //   padding: 1rem;
+  // }
 }
 
 // Main Element
 main {
   section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
   h2 {
@@ -39,6 +42,11 @@ main {
     line-height: 1.4rem;
     font-size: 0.9375rem;
   }
+}
+
+.leaflet-tile-container.leaflet-zoom-animated img {
+  -webkit-filter: saturate(160%);
+  filter: saturate(160%);
 }
 
 @media (min-width: 768px) {
@@ -70,51 +78,5 @@ hr {
       padding-top: 2.5rem;
       padding-bottom: 2.75rem;
     }
-  }
-}
-
-// Flex panel
-.flex-panel {
-  @include flex-box();
-  @include flex-direction(column);
-
-  background: $gray0;
-}
-
-.flex-panel__header {
-  @include flex-box();
-  @include flex-direction(row);
-  @include flex(0 0 auto);
-
-  padding: 0.75rem 1.5rem;
-  height: 4rem;
-  align-items: center;
-  border-bottom: 1px solid $gray2;
-  background: #fff;
-
-  .title {
-    @include flex(1 1 auto);
-
-    margin: 0;
-    letter-spacing: -0.01rem;
-    font-size: 1rem;
-    font-weight: 400;
-  }
-}
-
-.flex-panel__scroll {
-  @include flex(1 1 auto);
-
-  padding: 1.5rem;
-  overflow-y: auto;
-}
-
-.flex-panel__footer {
-  @include flex(0 0 auto);
-}
-
-@media (min-width: 1200px) {
-  .flex-panel__scroll {
-    overflow-y: auto;
   }
 }

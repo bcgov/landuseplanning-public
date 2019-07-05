@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-
-import { Observable, of, combineLatest, merge, throwError } from 'rxjs';
-import { map, mergeMap, toArray } from 'rxjs/operators';
+import { Http, ResponseContentType } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import 'rxjs/add/observable/throw';
 import * as _ from 'lodash';
 
-import { Application } from 'app/models/application';
 import { Comment } from 'app/models/comment';
-import { CommentPeriod } from 'app/models/commentperiod';
-import { Decision } from 'app/models/decision';
 import { Document } from 'app/models/document';
-import { Feature } from 'app/models/feature';
-import { User } from 'app/models/user';
+import { SearchResults } from 'app/models/search';
+
+const encode = encodeURIComponent;
+window['encodeURIComponent'] = (component: string) => {
+  return encode(component).replace(/[!'()*]/g, (c) => {
+    // Also encode !, ', (, ), and *
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+};
 
 @Injectable()
 export class ApiService {
@@ -19,9 +23,11 @@ export class ApiService {
   public isMS: boolean; // IE, Edge, etc
   public apiPath: string;
   public adminUrl: string;
-  public env: 'local' | 'dev' | 'test' | 'demo' | 'scale' | 'beta' | 'master' | 'prod';
+  public env: 'local' | 'dev' | 'test' | 'prod';
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: Http
+  ) {
     // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
     // this.token = currentUser && currentUser.token;
     this.isMS = window.navigator.msSaveOrOpenBlob ? true : false;
@@ -34,134 +40,254 @@ export class ApiService {
         this.env = 'local';
         break;
 
-      case 'nrts-prc-dev.pathfinder.gov.bc.ca':
-        // Dev
-        this.apiPath = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-dev.pathfinder.gov.bc.ca/admin/';
+      case 'eagle-dev.pathfinder.gov.bc.ca':
+        // prod
+        this.apiPath = 'https://eagle-dev.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://eagle-dev.pathfinder.gov.bc.ca/admin/';
         this.env = 'dev';
         break;
 
-      case 'nrts-prc-test.pathfinder.gov.bc.ca':
+      case 'www.test.projects.eao.gov.bc.ca':
+      case 'eagle-test.pathfinder.gov.bc.ca':
+      case 'test.projects.eao.gov.bc.ca':
         // Test
-        this.apiPath = 'https://nrts-prc-test.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-test.pathfinder.gov.bc.ca/admin/';
+        this.apiPath = 'https://eagle-test.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://test.projects.eao.gov.bc.ca/admin/';
         this.env = 'test';
         break;
 
-      case 'nrts-prc-demo.pathfinder.gov.bc.ca':
-        // Demo
-        this.apiPath = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-demo.pathfinder.gov.bc.ca/admin/';
-        this.env = 'demo';
-        break;
-
-      case 'nrts-prc-scale.pathfinder.gov.bc.ca':
-        // Scale
-        this.apiPath = 'https://nrts-prc-scale.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-scale.pathfinder.gov.bc.ca/admin/';
-        this.env = 'scale';
-        break;
-
-      case 'nrts-prc-beta.pathfinder.gov.bc.ca':
-        // Beta
-        this.apiPath = 'https://nrts-prc-beta.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-beta.pathfinder.gov.bc.ca/admin/';
-        this.env = 'beta';
-        break;
-
-      case 'nrts-prc-master.pathfinder.gov.bc.ca':
-        // Master
-        this.apiPath = 'https://nrts-prc-master.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://nrts-prc-master.pathfinder.gov.bc.ca/admin/';
-        this.env = 'master';
+      case 'www.projects.eao.gov.bc.ca':
+      case 'projects.eao.gov.bc.ca':
+        // prod
+        this.apiPath = 'https://eagle-prod.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
+        this.env = 'prod';
         break;
 
       default:
         // Prod
-        this.apiPath = 'https://comment.nrs.gov.bc.ca/api/public';
-        this.adminUrl = 'https://comment.nrs.gov.bc.ca/admin/';
-        this.env = 'prod';
+        this.apiPath = 'https://eagle-prod.pathfinder.gov.bc.ca/api/public';
+        this.adminUrl = 'https://projects.eao.gov.bc.ca/admin/';
+        this.env = 'dev';
+    };
+  }
+
+  handleError(error: any): ErrorObservable<never> {
+    const reason = error.message ? error.message : (error.status ? `${error.status} - ${error.statusText}` : 'Server error');
+    console.log('API error =', reason);
+    return Observable.throw(error);
+  }
+
+  getFullDataSet(dataSet: string) {
+    return this.get(`search?pageSize=1000&dataset=${dataSet}`, {})
+      .map((res: any) => {
+        let records = JSON.parse(<string>res._body);
+        // console.log("records:", records[0].searchResults);
+        return records[0].searchResults;
+      });
+  }
+
+  public async downloadDocument(document: Document): Promise<void> {
+    console.log(document);
+    const blob = await this.downloadResource(document._id);
+    let filename = document.displayName;
+    filename = encode(filename).replace(/\\/g, '_').replace(/\//g, '_');
+    if (this.isMS) {
+      window.navigator.msSaveBlob(blob._body, filename);
+    } else {
+      const url = window.URL.createObjectURL(blob._body);
+      const a = window.document.createElement('a');
+      window.document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
     }
   }
 
-  handleError(error: any): Observable<never> {
-    const reason = error.message
-      ? error.message
-      : error.status
-      ? `${error.status} - ${error.statusText}`
-      : 'Server error';
-    console.log('API error =', reason);
-    return throwError(error);
+  public async openDocument(document: Document): Promise<void> {
+    let filename;
+    if (document.documentSource === 'COMMENT') {
+      filename = document.internalOriginalName;
+    } else {
+      filename = document.documentFileName;
+    }
+    console.log(document);
+    let safeName = '';
+    try {
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+    } catch (e) {
+      // fall through
+      console.log('error', e);
+    }
+    console.log('safeName', safeName);
+    window.open('/api/document/' + document._id + '/fetch/' + safeName, '_blank');
+  }
+
+  private downloadResource(id: string) {
+    const queryString = `document/${id}/download`;
+    return this.get(queryString, { responseType: ResponseContentType.Blob })
+      .map((res: any) => res)
+      .toPromise();
+  }
+
+  getItem(_id: string, schema: string) {
+    let queryString = `search?dataset=Item&_id=${_id}&_schemaName=${schema}`;
+    return this.get(`${queryString}`, {});
+  }
+
+  //
+  // Searching
+  //
+  searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier: object = {}, populate = false, secondarySort: string = null, filter: object = {}) {
+    let queryString = `search?dataset=${dataset}`;
+    if (fields && fields.length > 0) {
+      fields.map(item => {
+        queryString += `&${item.name}=${item.value}`;
+      });
+    }
+    if (keys) {
+      queryString += `&keywords=${keys}`;
+    }
+    if (pageNum !== null) { queryString += `&pageNum=${pageNum - 1}`; }
+    if (pageSize !== null) { queryString += `&pageSize=${pageSize}`; }
+    if (sortBy !== null) { queryString += `&sortBy=${sortBy}`; }
+    if (secondarySort !== null) { queryString += `&sortBy=${secondarySort}`; }
+    if (populate !== null) { queryString += `&populate=${populate}`; }
+    if (queryModifier !== {}) {
+      Object.keys(queryModifier).map(key => {
+        queryModifier[key].split(',').map(item => {
+          queryString += `&and[${key}]=${item}`;
+        });
+      });
+    }
+    if (filter !== {}) {
+      Object.keys(filter).map(key => {
+        filter[key].split(',').map(item => {
+          queryString += `&or[${key}]=${item}`;
+        });
+      });
+    }
+    queryString += `&fields=${this.buildValues(fields)}`;
+    return this.get(`${queryString}`, {});
+  }
+
+  //
+  // Projects
+  //
+  getCountProjects() {
+    const queryString = `project`;
+    return this.http.head(`${this.apiPath}/${queryString}`);
+  }
+
+  getProjects(pageNum: number, pageSize: number, regions: string[], cpStatuses: string[], appStatuses: string[], applicant: string,
+    clFile: string, dispId: string, purpose: string) {
+    const fields = [
+      'agency',
+      'areaHectares',
+      'businessUnit',
+      'centroid',
+      'cl_file',
+      'client',
+      'currentPhaseName',
+      'eacDecision',
+      'epicProjectID',
+      'description',
+      'legalDescription',
+      'location',
+      'name',
+      'publishDate',
+      'purpose',
+      'status',
+      'subpurpose',
+      'tantalisID',
+      'tenureStage',
+      'type'
+    ];
+
+    let queryString = 'project?';
+    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
+    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
+    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
+    if (cpStatuses !== null && cpStatuses.length > 0) { queryString += `cpStatuses=${this.buildValues(cpStatuses)}&`; }
+    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
+    if (applicant !== null) { queryString += `client=${applicant}&`; }
+    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
+    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
+    if (purpose !== null) { queryString += `purpose=${purpose}&`; }
+    queryString += `fields=${this.buildValues(fields)}`;
+
+    return this.get(queryString);
+  }
+
+  getProject(id: string, cpStart: string, cpEnd: string) {
+    const fields = [
+      'CEAAInvolvement',
+      'CELead',
+      'CELeadEmail',
+      'CELeadPhone',
+      'centroid',
+      'description',
+      'eacDecision',
+      'location',
+      'name',
+      'projectLead',
+      'projectLeadEmail',
+      'projectLeadPhone',
+      'proponent',
+      'region',
+      'responsibleEPD',
+      'responsibleEPDEmail',
+      'responsibleEPDPhone',
+      'type',
+      'addedBy',
+      'build',
+      'CEAALink',
+      'code',
+      'commodity',
+      'currentPhaseName',
+      'dateAdded',
+      'dateCommentsClosed',
+      'commentPeriodStatus',
+      'dateUpdated',
+      'decisionDate',
+      'duration',
+      'eaoMember',
+      'epicProjectID',
+      'fedElecDist',
+      'isTermsAgreed',
+      'overallProgress',
+      'primaryContact',
+      'proMember',
+      'provElecDist',
+      'sector',
+      'shortName',
+      'status',
+      'substitution',
+      'updatedBy',
+      'read',
+      'write',
+      'delete'
+    ];
+    let queryString = `project/${id}?populate=true`;
+    if (cpStart !== null) { queryString += `&cpStart[since]=${cpStart}`; }
+    if (cpEnd !== null) { queryString += `&cpEnd[until]=${cpEnd}`; }
+    queryString += `&fields=${this.buildValues(fields)}`;
+    return this.get(queryString);
   }
 
   //
   // Applications
   //
-  getCountApplications(params: object): Observable<number> {
-    let queryString = 'application?';
-    if (params['cpStartSince']) {
-      queryString += `cpStart[since]=${params['cpStartSince']}&`;
-    }
-    if (params['cpStartUntil']) {
-      queryString += `cpStart[until]=${params['cpStartUntil']}&`;
-    }
-    if (params['cpEndSince']) {
-      queryString += `cpEnd[since]=${params['cpEndSince']}&`;
-    }
-    if (params['cpEndUntil']) {
-      queryString += `cpEnd[until]=${params['cpEndUntil']}&`;
-    }
-    if (params['appStatuses']) {
-      params['appStatuses'].forEach((status: string) => (queryString += `status[eq]=${status}&`));
-    }
-    if (params['applicant']) {
-      queryString += `client=${encodeURIComponent(params['applicant'])}&`;
-    }
-    if (params['purposes']) {
-      params['purposes'].forEach((purpose: string) => (queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`));
-    }
-    if (params['subpurposes']) {
-      params['subpurposes'].forEach(
-        (subpurpose: string) => (queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`)
-      );
-    }
-    if (params['publishSince']) {
-      queryString += `publishDate[since]=${params['publishSince']}&`;
-    }
-    if (params['publishUntil']) {
-      queryString += `publishDate[until]=${params['publishUntil']}&`;
-    }
-    if (params['coordinates']) {
-      queryString += `centroid=${params['coordinates']}&`;
-    }
-
-    if (!params['clidDtid']) {
-      // trim the last ? or &
-      queryString = queryString.slice(0, -1);
-
-      // retrieve the count from the response headers
-      return this.http
-        .head<HttpResponse<object>>(`${this.apiPath}/${queryString}`, { observe: 'response' })
-        .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
-    } else {
-      // query for both CLID and DTID
-      const clid = this.http
-        .head<HttpResponse<object>>(`${this.apiPath}/${queryString}cl_file=${params['clidDtid']}`, {
-          observe: 'response'
-        })
-        .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
-      const dtid = this.http
-        .head<HttpResponse<object>>(`${this.apiPath}/${queryString}tantalisId=${params['clidDtid']}`, {
-          observe: 'response'
-        })
-        .pipe(map(res => parseInt(res.headers.get('x-total-count'), 10)));
-
-      // return sum of counts
-      return combineLatest(clid, dtid, (v1, v2) => v1 + v2);
-    }
+  getCountApplications() {
+    const queryString = `application`;
+    return this.http.head(`${this.apiPath}/${queryString}`);
   }
 
-  getApplications(params: object): Observable<Application[]> {
+  getApplications(pageNum: number, pageSize: number, regions: string[], cpStatuses: string[], appStatuses: string[], applicant: string,
+    clFile: string, dispId: string, purpose: string) {
     const fields = [
       'agency',
       'areaHectares',
@@ -176,7 +302,6 @@ export class ApiService {
       'publishDate',
       'purpose',
       'status',
-      'statusHistoryEffectiveDate',
       'subpurpose',
       'subtype',
       'tantalisID',
@@ -185,66 +310,21 @@ export class ApiService {
     ];
 
     let queryString = 'application?';
-    if (params['pageNum']) {
-      queryString += `pageNum=${params['pageNum']}&`;
-    }
-    if (params['pageSize']) {
-      queryString += `pageSize=${params['pageSize']}&`;
-    }
-    if (params['cpStartSince']) {
-      queryString += `cpStart[since]=${params['cpStartSince']}&`;
-    }
-    if (params['cpStartUntil']) {
-      queryString += `cpStart[until]=${params['cpStartUntil']}&`;
-    }
-    if (params['cpEndSince']) {
-      queryString += `cpEnd[since]=${params['cpEndSince']}&`;
-    }
-    if (params['cpEndUntil']) {
-      queryString += `cpEnd[until]=${params['cpEndUntil']}&`;
-    }
-    if (params['appStatuses']) {
-      params['appStatuses'].forEach((status: string) => (queryString += `status[eq]=${status}&`));
-    }
-    if (params['applicant']) {
-      queryString += `client=${encodeURIComponent(params['applicant'])}&`;
-    }
-    if (params['purposes']) {
-      params['purposes'].forEach((purpose: string) => (queryString += `purpose[eq]=${encodeURIComponent(purpose)}&`));
-    }
-    if (params['subpurposes']) {
-      params['subpurposes'].forEach(
-        (subpurpose: string) => (queryString += `subpurpose[eq]=${encodeURIComponent(subpurpose)}&`)
-      );
-    }
-    if (params['publishSince']) {
-      queryString += `publishDate[since]=${params['publishSince']}&`;
-    }
-    if (params['publishUntil']) {
-      queryString += `publishDate[until]=${params['publishUntil']}&`;
-    }
-    if (params['coordinates']) {
-      queryString += `centroid=${params['coordinates']}&`;
-    }
+    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
+    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
+    if (regions !== null && regions.length > 0) { queryString += `regions=${this.buildValues(regions)}&`; }
+    if (cpStatuses !== null && cpStatuses.length > 0) { queryString += `cpStatuses=${this.buildValues(cpStatuses)}&`; }
+    if (appStatuses !== null && appStatuses.length > 0) { queryString += `statuses=${this.buildValues(appStatuses)}&`; }
+    if (applicant !== null) { queryString += `client=${applicant}&`; }
+    if (clFile !== null) { queryString += `cl_file=${clFile}&`; }
+    if (dispId !== null) { queryString += `tantalisId=${dispId}&`; }
+    if (purpose !== null) { queryString += `purpose=${purpose}&`; }
     queryString += `fields=${this.buildValues(fields)}`;
 
-    if (!params['clidDtid']) {
-      return this.http.get<Application[]>(`${this.apiPath}/${queryString}`);
-    } else {
-      // query for both CLID and DTID
-      const clid = this.http.get<Application[]>(`${this.apiPath}/${queryString}&cl_file=${params['clidDtid']}`);
-      const dtid = this.http.get<Application[]>(`${this.apiPath}/${queryString}&tantalisId=${params['clidDtid']}`);
-
-      // return merged results, using toArray to wait for all results (ie, single emit)
-      // this is fine performance-wise because there should be no more than a few results
-      return merge(clid, dtid).pipe(
-        toArray(),
-        mergeMap(items => of(...items))
-      );
-    }
+    return this.get(queryString);
   }
 
-  getApplication(id: string): Observable<Application[]> {
+  getApplication(id: string) {
     const fields = [
       'agency',
       'areaHectares',
@@ -259,7 +339,6 @@ export class ApiService {
       'publishDate',
       'purpose',
       'status',
-      'statusHistoryEffectiveDate',
       'subpurpose',
       'subtype',
       'tantalisID',
@@ -267,136 +346,258 @@ export class ApiService {
       'type'
     ];
     const queryString = 'application/' + id + '?fields=' + this.buildValues(fields);
-    return this.http.get<Application[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
   //
   // Features
   //
-  getFeaturesByTantalisId(tantalisID: number): Observable<Feature[]> {
-    const fields = ['applicationID', 'geometry', 'geometryName', 'properties', 'type'];
+  getFeaturesByTantalisId(tantalisID: number) {
+    const fields = [
+      'applicationID',
+      'geometry',
+      'geometryName',
+      'properties',
+      'type'
+    ];
     const queryString = `feature?tantalisId=${tantalisID}&fields=${this.buildValues(fields)}`;
-    return this.http.get<Feature[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
-  getFeaturesByApplicationId(applicationId: string): Observable<Feature[]> {
-    const fields = ['applicationID', 'geometry', 'geometryName', 'properties', 'type'];
+  getFeaturesByApplicationId(applicationId: string) {
+    const fields = [
+      'applicationID',
+      'geometry',
+      'geometryName',
+      'properties',
+      'type'
+    ];
     const queryString = `feature?applicationId=${applicationId}&fields=${this.buildValues(fields)}`;
-    return this.http.get<Feature[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
   //
   // Decisions
   //
-  getDecisionByAppId(appId: string): Observable<Decision[]> {
-    const fields = ['_addedBy', '_application', 'name', 'description'];
+  getDecisionByAppId(appId: string) {
+    const fields = [
+      '_addedBy',
+      '_application',
+      'name',
+      'description'
+    ];
     const queryString = 'decision?_application=' + appId + '&fields=' + this.buildValues(fields);
-    return this.http.get<Decision[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
-  getDecision(id: string): Observable<Decision[]> {
-    const fields = ['_addedBy', '_application', 'name', 'description'];
+  getDecision(id: string) {
+    const fields = [
+      '_addedBy',
+      '_application',
+      'name',
+      'description'
+    ];
     const queryString = 'decision/' + id + '?fields=' + this.buildValues(fields);
-    return this.http.get<Decision[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
   //
   // Comment Periods
   //
-  getPeriodsByAppId(appId: string): Observable<CommentPeriod[]> {
-    const fields = ['_addedBy', '_application', 'startDate', 'endDate'];
-    const queryString = 'commentperiod?_application=' + appId + '&fields=' + this.buildValues(fields);
-    return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`);
+  getPeriodsByProjId(projId: string) {
+    const fields = [
+      'project',
+      'dateStarted',
+      'dateCompleted'
+    ];
+    // TODO: May want to pass this as a parameter in the future.
+    const sort = '&sortBy=-dateStarted';
+
+    let queryString = 'commentperiod?project=' + projId + '&fields=' + this.buildValues(fields) + '&';
+    if (sort !== null) { queryString += `sortBy=${sort}&`; }
+    return this.get(queryString);
   }
 
-  getPeriod(id: string): Observable<CommentPeriod[]> {
-    const fields = ['_addedBy', '_application', 'startDate', 'endDate'];
+  getPeriod(id: string) {
+    const fields = [
+      'additionalText',
+      'dateCompleted',
+      'dateStarted',
+      'informationLabel',
+      'instructions',
+      'openHouses',
+      'project',
+      'relatedDocuments'
+    ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
-    return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
   //
   // Comments
   //
-  getCommentsByPeriodId(periodId: string): Observable<Comment[]> {
-    const fields = [
-      '_addedBy',
-      '_commentPeriod',
-      'commentNumber',
-      'comment',
-      'commentAuthor',
-      'review',
-      'dateAdded',
-      'commentStatus'
-    ];
-    const queryString = 'comment?_commentPeriod=' + periodId + '&fields=' + this.buildValues(fields);
-    return this.http.get<Comment[]>(`${this.apiPath}/${queryString}`);
+  getCountCommentsById(commentPeriodId) {
+    const queryString = `comment?period=${commentPeriodId}`;
+    return this.http.head(`${this.apiPath}/${queryString}`);
   }
 
-  getComment(id: string): Observable<Comment[]> {
+  getCommentsByPeriodId(pageNum: number, pageSize: number, getCount: boolean, periodId: string) {
     const fields = [
-      '_addedBy',
-      '_commentPeriod',
-      'commentNumber',
+      'author',
       'comment',
-      'commentAuthor',
-      'review',
+      'documents',
+      'commentId',
       'dateAdded',
-      'commentStatus'
+      'dateUpdated',
+      'isAnonymous',
+      'location',
+      'period',
+      'read',
+      'write',
+      'delete'
+    ];
+    // TODO: May want to pass this as a parameter in the future.
+    const sort = '-commentId';
+
+    let queryString = 'comment?period=' + periodId + '&fields=' + this.buildValues(fields) + '&';
+    if (sort !== null) { queryString += `sortBy=${sort}&`; }
+    if (pageNum !== null) { queryString += `pageNum=${pageNum}&`; }
+    if (pageSize !== null) { queryString += `pageSize=${pageSize}&`; }
+    if (getCount !== null) { queryString += `count=${getCount}&`; }
+    return this.get(queryString);
+  }
+
+  getComment(id: string) {
+    const fields = [
+      'author',
+      'comment',
+      'commentId',
+      'dateAdded',
+      'dateUpdated',
+      'isAnonymous',
+      'location',
+      'period',
+      'read',
+      'write',
+      'delete'
     ];
     const queryString = 'comment/' + id + '?fields=' + this.buildValues(fields);
-    return this.http.get<Comment[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
-  addComment(comment: Comment): Observable<Comment> {
-    const fields = ['comment', 'commentAuthor'];
+  addComment(comment: Comment) {
+    const fields = [
+      'comment',
+      'author'
+    ];
     const queryString = 'comment?fields=' + this.buildValues(fields);
-    return this.http.post<Comment>(`${this.apiPath}/${queryString}`, comment, {});
+    return this.post(queryString, comment);
   }
 
   //
   // Documents
   //
-  getDocumentsByAppId(appId: string): Observable<Document[]> {
-    const fields = ['_application', 'documentFileName', 'displayName', 'internalURL', 'internalMime'];
+  getDocumentsByAppId(appId: string) {
+    const fields = [
+      '_application',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
     const queryString = 'document?_application=' + appId + '&fields=' + this.buildValues(fields);
-    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
-  getDocumentsByCommentId(commentId: string): Observable<Document[]> {
-    const fields = ['_comment', 'documentFileName', 'displayName', 'internalURL', 'internalMime'];
+  getDocumentsByCommentId(commentId: string) {
+    const fields = [
+      '_comment',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
     const queryString = 'document?_comment=' + commentId + '&fields=' + this.buildValues(fields);
-    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
-  getDocumentsByDecisionId(decisionId: string): Observable<Document[]> {
-    const fields = ['_decision', 'documentFileName', 'displayName', 'internalURL', 'internalMime'];
+  getDocumentsByDecisionId(decisionId: string) {
+    const fields = [
+      '_decision',
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
     const queryString = 'document?_decision=' + decisionId + '&fields=' + this.buildValues(fields);
-    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
-  getDocument(id: string): Observable<Document[]> {
-    const queryString = 'document/' + id;
-    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`);
+  getDocument(id: string) {
+    const queryString = 'document/' + id + '?fields=internalOriginalName|documentSource';
+    return this.get(queryString);
   }
 
-  uploadDocument(formData: FormData): Observable<Document> {
-    const fields = ['documentFileName', 'displayName', 'internalURL', 'internalMime'];
+  getDocumentsByMultiId(ids: Array<String>) {
+    const fields = [
+      'eaoStatus',
+      'internalOriginalName',
+      'documentFileName',
+      'labels',
+      'internalOriginalName',
+      'displayName',
+      'documentType',
+      'datePosted',
+      'dateUploaded',
+      'dateReceived',
+      'documentFileSize',
+      'documentSource',
+      'internalURL',
+      'internalMime',
+      'checkbox',
+      'project',
+      'type',
+      'documentAuthor',
+      'milestone',
+      'description',
+      'isPublished'
+    ];
+    const queryString = `document?docIds=${this.buildValues(ids)}&fields=${this.buildValues(fields)}`;
+    return this.get(queryString);
+  }
+
+  uploadDocument(formData: FormData) {
+    const fields = [
+      'documentFileName',
+      'displayName',
+      'internalURL',
+      'internalMime'
+    ];
     const queryString = 'document/?fields=' + this.buildValues(fields);
-    return this.http.post<Document>(`${this.apiPath}/${queryString}`, formData, { reportProgress: true });
+    return this.post(queryString, formData, { reportProgress: true });
   }
 
   getDocumentUrl(document: Document): string {
-    return document ? this.apiPath + '/document/' + document._id + '/download' : '';
+    return document ? (this.apiPath + '/document/' + document._id + '/download') : '';
+  }
+
+  getTopNewsItems(): any {
+    const queryString = 'recentActivity?top=true';
+    return this.get(queryString);
   }
 
   //
   // Users
   //
-  getAllUsers(): Observable<User[]> {
-    const fields = ['displayName', 'username', 'firstName', 'lastName'];
+  getAllUsers() {
+    const fields = [
+      'displayName',
+      'username',
+      'firstName',
+      'lastName'
+    ];
     const queryString = 'user?fields=' + this.buildValues(fields);
-    return this.http.get<User[]>(`${this.apiPath}/${queryString}`);
+    return this.get(queryString);
   }
 
   //
@@ -404,10 +605,25 @@ export class ApiService {
   //
   private buildValues(collection: any[]): string {
     let values = '';
-    _.each(collection, a => {
+    _.each(collection, function (a) {
       values += a + '|';
     });
     // trim the last |
     return values.replace(/\|$/, '');
+  }
+
+  private get(apiRoute: string, options?: object) {
+    return this.http.get(`${this.apiPath}/${apiRoute}`, options || null);
+  }
+
+  private put(apiRoute: string, body?: object, options?: object) {
+    return this.http.put(`${this.apiPath}/${apiRoute}`, body || null, options || null);
+  }
+
+  private post(apiRoute: string, body?: object, options?: object) {
+    return this.http.post(`${this.apiPath}/${apiRoute}`, body || null, options || null);
+  }
+  private delete(apiRoute: string, body?: object, options?: object) {
+    return this.http.delete(`${this.apiPath}/${apiRoute}`, options || null);
   }
 }

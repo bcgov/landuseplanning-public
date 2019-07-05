@@ -238,10 +238,16 @@ ng set default.styleExt css
 ng new my-app --routing --style scss
 ```
 
-# OpenShift Build and Deployment
+## Getting Help
 
-For dev, test, and prod builds on OpenShift/Jenkins see [openshift/README.md](https://github.com/bcgov/gcpe-lup-public/blob/master/openshift/README.md) for detailed instructions on how to setup in an OpenShift environment using nginx.
+1. To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+1. `ng doc component` to look up documentation for features.
+1. `ng serve --help` to look up doc for `ng serve` command.
+
+<!-- # Build and Deployment
+
+For dev, test, and production builds on OpenShift/Jenkins see [openshift/README.md](https://github.com/bcgov/eagle-public/blob/master/openshift/README.md) for detailed instructions on how to setup in an OpenShift environment using nginx.
 
 # How to Contribute
 
-Create pull requests against the `master` branch.
+Feel free to create pull requests from the default "master" branch, click here to create one automatically: https://github.com/bcgov/eagle-public/pull/new/master -->

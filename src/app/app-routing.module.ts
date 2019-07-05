@@ -1,52 +1,70 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AboutComponent } from 'app/about/about.component';
 import { ContactComponent } from 'app/contact/contact.component';
-import { ApplicationsComponent } from 'app/applications/applications.component';
-import { HomeProxyComponent } from './home-proxy.component';
-import { ApplicationsProxyComponent } from './applications-proxy.component';
+import { ProjectsComponent } from 'app/projects/projects.component';
+import { HomeComponent } from 'app/home/home.component';
+import { ProjectListComponent } from './projects/project-list/project-list.component';
+import { NewsListComponent } from './news/news.component';
+import { LegislationComponent } from './legislation/legislation.component';
+import { ProcessComponent } from './process/process.component';
+import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
+import { SearchHelpComponent } from './search-help/search-help.component';
+import { NewsResolver } from './news/news-resolver.service';
 
 const routes: Routes = [
-  {
-    // proxy component is needed because fragment in redirectTo doesn't work in Angular v4
-    path: 'home/:showSplashModal',
-    component: HomeProxyComponent
-  },
-  {
-    path: 'about',
-    component: AboutComponent
-  },
   {
     path: 'contact',
     component: ContactComponent
   },
   {
-    path: 'applications',
-    component: ApplicationsComponent
+    path: 'projects',
+    component: ProjectsComponent
   },
   {
-    // redirect from legacy route to new route
-    // eg, /a/5b15c2f743cf9c0019391cfc/application => /applications?id=5b15c2f743cf9c0019391cfc#details
-    // proxy component is needed because query parameter and fragment in redirectTo don't work in Angular v4
-    path: 'a/:id/:tab',
-    component: ApplicationsProxyComponent
+    path: 'projects-list',
+    component: ProjectListComponent
+  },
+  {
+    path: 'news',
+    component: NewsListComponent,
+    resolve: {
+      activities: NewsResolver
+    }
+  },
+  {
+    path: 'legislation',
+    component: LegislationComponent
+  },
+  {
+    path: 'compliance-oversight',
+    component: ComplianceOversightComponent
+  },
+  {
+    path: 'process',
+    component: ProcessComponent
+  },
+  {
+    path: 'search-help',
+    component: SearchHelpComponent
   },
   {
     // default route
     path: '',
-    redirectTo: 'home/true',
-    pathMatch: 'full'
+    component: HomeComponent
   },
   {
     // wildcard route
     path: '**',
-    redirectTo: '/home/true'
+    redirectTo: '/',
+    pathMatch: 'full'
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [NewsResolver]
 })
-export class AppRoutingModule {}
+
+export class AppRoutingModule { }

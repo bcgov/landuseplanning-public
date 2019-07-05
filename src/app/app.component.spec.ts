@@ -4,9 +4,10 @@ import { AppComponent } from './app.component';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { NgxPageScrollModule } from 'ngx-page-scroll';
-import { ApiService } from './services/api';
-import { ConfigService } from './services/config.service';
+import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { CookieService } from 'ngx-cookie-service';
+import { ApiService } from 'app/services/api';
+import { ConfigService } from 'app/services/config.service';
 
 describe('AppComponent', () => {
   const apiServiceStub = {
@@ -14,15 +15,27 @@ describe('AppComponent', () => {
   };
 
   const configServiceStub = {
-    init() {}
+    init() { },
+  };
+
+  const cookieServiceStub = {
+    get() { return true; }
   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent, HeaderComponent, FooterComponent],
-      imports: [RouterTestingModule, NgxPageScrollModule],
+      declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent
+      ],
+      imports: [
+        RouterTestingModule,
+        Ng2PageScrollModule.forRoot(),
+      ],
       providers: [
         { provide: ApiService, useValue: apiServiceStub },
+        { provide: CookieService, useValue: cookieServiceStub },
         { provide: ConfigService, useValue: configServiceStub }
       ]
     }).compileComponents();
@@ -38,9 +51,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('span.navbar-brand__title').textContent).toContain(
-      'Applications, Comments & Reasons for Decision'
-    );
+    expect(compiled.querySelector('span.navbar-brand__title').textContent).toContain('EPIC');
   }));
 
   it('sets the hostname to the apiPath', () => {

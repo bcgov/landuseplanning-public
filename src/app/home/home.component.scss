@@ -1,0 +1,66 @@
+@import "~assets/styles/base/base.scss";
+
+:host {
+  @include flex(1 1 auto);
+  display: block;
+  background: $bg-default;
+}
+
+.hero-banner__version {
+  margin-top: -0.25rem;
+  margin-left: -0.25rem;
+  display: inline-block;
+  color: $gold;
+  font-size: 0.875rem;
+  font-weight: 700;
+  vertical-align: top;
+}
+
+main {
+  padding: 3rem 0 3.75rem;
+  text-align: center;
+
+  h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    @media (max-width: 767px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    line-height: 1.75;
+    font-size: 1.2rem;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+}
+
+.feature-blocks {
+  margin-top: 50px;
+
+  > div {
+    margin-bottom: 20px;
+    padding: 8px;
+  }
+
+  .feature-block {
+    padding: 2rem 1.5rem;
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-banner h1 {
+    line-height: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .hero-banner__version {
+    margin-top: -0.3rem;
+  }
+}
