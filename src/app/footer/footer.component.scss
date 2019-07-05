@@ -1,7 +1,6 @@
 @import "~assets/styles/base/base.scss";
 
 .app-footer {
-  border-top: 4px solid $gold;
   background: $footer-bg;
   color: $footer-color;
 
@@ -27,7 +26,6 @@
 
   h4 {
     margin-bottom: 1rem;
-    color: $color-inverted;
     font-size: medium;
     font-weight: bold;
   }
@@ -65,9 +63,7 @@
   }
 
   .footer-admin {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid $bg-dark-border-color;
+  text-align: center;
 
     .gov-links {
       text-align: center;
@@ -79,7 +75,7 @@
         margin: 0;
         line-height: 1;
 
-        &::after {
+        &:after {
           position: relative;
           top: -1px;
           display: inline-block;
@@ -89,7 +85,7 @@
         }
 
         &:last-child {
-          &::after {
+          &:after {
             display: none;
           }
         }
@@ -111,21 +107,14 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid $bg-dark-border-color;
     }
-
-    .footer-admin {
-      .gov-links {
-        text-align: left;
-      }
-    }
   }
 }
 
-.app-footer--sm {
+.app-footer--sm  {
   position: fixed;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1002;
   height: 2rem;
   border: none;
 
@@ -136,7 +125,7 @@
 
   .footer-admin {
     margin: 0;
-    padding-top: 0.5rem;
+    padding-top: 0.4rem;
     padding-bottom: 0;
     border: none;
   }
@@ -156,18 +145,18 @@
 
 @media (min-width: 768px) {
   .app-footer--sm {
-    font-size: 0.8rem;
+    font-size: 0.825rem;
 
     .container {
       padding: 0 1rem;
     }
 
     .footer-admin {
-      padding-top: 0.5rem;
+      padding-top: 0.3rem;
     }
 
     ul {
-      font-size: 0.8rem;
+      font-size: 0.825rem;
     }
   }
 }

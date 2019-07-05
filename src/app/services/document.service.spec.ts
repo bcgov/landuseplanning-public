@@ -8,7 +8,10 @@ describe('DocumentService', () => {
       providers: [
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', ['getDocumentsByAppId', 'handleError'])
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getDocumentsByAppId',
+            'handleError'
+          ])
         },
         DocumentService
       ]

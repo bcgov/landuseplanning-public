@@ -1,0 +1,37 @@
+.table {
+	border: none;
+
+	thead th{
+    background-color: #e8eff5;
+    padding: .7rem 0.5rem .85rem;
+    border: none;
+  }
+
+  td {
+    border: none;
+  }
+
+  tr {
+    border: none;
+  }
+
+  tbody td {
+    padding: 0.25rem 0.5rem;
+  }
+
+	tr td:first-child,
+	tr th:first-child {
+    padding-left: 1rem;
+    @media screen and (max-width: 600px) {
+      padding-left: .5rem;
+    }
+	}
+
+	thead {
+		border-bottom: none;
+	}
+}
+
+.no-sort {
+  cursor: default !important;
+}

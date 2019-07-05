@@ -1,0 +1,66 @@
+<div class="tab-pane" role="tabpanel">
+  <section class="tab-section">
+    <div class="row">
+      <div class="col-6">
+        <div class="location-info">
+          <h2>Details</h2>
+          <div>
+            <label>Region</label>
+            <p class="value">{{project?.region || "-" | titlecase}}</p>
+          </div>
+          <div>
+            <label>Location</label>
+            <p class="value">{{project?.location || "-" | titlecase}}</p>
+          </div>
+          <div>
+            <label>Nature</label>
+            <p class="value">{{project?.nature || "No nature description available" | titlecase}}</p>
+          </div>
+          <div *ngIf="project?.status">
+            <label>CEAA Involvement</label>
+            <p class="value">{{project?.CEAAInvolvement || "-" | titlecase}}</p>
+          </div>
+          <div *ngIf="project?.CEAALink">
+            <label>CEAA URL</label>
+            <p class="value"><a class="value" target="_blank"
+                href="{{project.CEAALink}}">{{project?.CEAALink || "-"}}</a>
+            </p>
+          </div>
+          <div *ngIf="project?.status">
+            <label>Project Status</label>
+            <p class="value">{{project?.status || "-"}}</p>
+          </div>
+          <div *ngIf="project?.operational">
+            <label>Active Phase</label>
+            <p class="value">{{project?.operational?.label || '-'}} |
+              {{project?.operational?.date | date: 'longDate' || '-'}}</p>
+          </div>
+          <div *ngIf="project?.eacDecision">
+            <label>EAC Status</label>
+            <p class="value">{{project?.eacDecision || '-'}} |
+              {{project?.decisionDate | date: 'longDate' || '-'}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+              <div class="map-item">
+          <div class="map-wrapper">
+            <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
+              <span class="no-results-msg">No map available</span>
+            </div>
+            <div class="map-container">
+              <div class="map" id="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <h2>Activities and Updates</h2>
+        <app-project-activites></app-project-activites>
+      </div>
+    </div>
+  </section>
+</div>

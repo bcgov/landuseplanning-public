@@ -2,14 +2,12 @@
 
 :host {
   @include flex(1 1 auto);
-
   display: block;
   background: $bg-default;
 }
 
 .block-container {
   @include clearfix();
-
   margin: -0.75rem;
 }
 
@@ -40,6 +38,7 @@
   a {
     display: inline-block;
     font-weight: 600;
+    width:100%;
   }
 
   strong {

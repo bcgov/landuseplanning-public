@@ -9,28 +9,46 @@
   box-shadow: 0 0 4rem #00264d inset;
 
   .container {
-    display: table;
-    height: 1px; // Fix Firefox - won't correnctly render min-height unless an initial value is added
     min-height: 20rem;
-
-    &-inner {
-      display: table-row;
+    @media (max-width: 767px) {
+      padding: 2rem 1rem 2.5rem;
     }
   }
 }
 
+.hero-banner-alt {
+  position: relative;
+  background-color: rgba($header-bg, 1);
+
+  .container {
+    min-height: 20rem;
+    @media (max-width: 767px) {
+      padding: 2rem 1rem 2.5rem;
+    }
+  }
+
+  .hero-banner__content {
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+}
+
 .hero-banner__content {
-  display: table-cell;
   padding-top: 2rem;
   padding-bottom: 2rem;
   vertical-align: middle;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   h1 {
     margin-bottom: 1.15rem;
     line-height: 2.15rem;
     font-size: 2.25rem;
-    color: #fff;
-
+    @media (max-width: 767px) {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
     .wb {
       display: block;
     }
@@ -38,11 +56,25 @@
 
   p {
     margin-bottom: 0;
-    color: #fff;
-    line-height: 1.5rem;
-    font-size: 1rem;
+    line-height: 1.5;
+    font-size: 1.65rem;
+    max-width: 860px;
     font-weight: 300;
     orphans: 3;
+    @media (max-width: 767px) {
+      font-size: 1.2rem;
+    }
+  }
+  @media (max-width: 767px) {
+    .btn {
+      i {
+        display: none;
+      }
+      span {
+        display: block;
+        transform: none;
+      }
+    }
   }
 }
 
@@ -57,15 +89,27 @@
 
 .hero-banner__actions-buttons {
   .btn {
+    border: 2px solid #e9a603;
     padding: 0.5rem;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    font-weight: 700;
+    text-transform: none;
+    font-size: 1rem;
+    font-weight: 900;
     cursor: pointer;
+    color: #e9a603;
+    margin-bottom: 10px;
+
+    @media (min-width: 400px) {
+      &:first-of-type {
+        margin-right: 20px;
+      }
+    }
+
+    &:hover {
+      color: #036;
+    }
 
     + span {
       @include flex(0 0 auto);
-
       padding: 0.65rem 0.4rem;
       vertical-align: middle;
     }
@@ -97,7 +141,8 @@
   }
 
   .hero-banner__content {
-    padding-top: 2rem;
+    padding-top: 8rem;
+    padding-bottom: 6rem;
 
     h1 {
       line-height: 2.8rem;
@@ -105,8 +150,8 @@
     }
 
     p {
-      line-height: 1.75rem;
-      font-size: 1.25rem;
+      line-height: 1.75;
+      font-size: 1.35rem;
     }
   }
 }
@@ -126,7 +171,7 @@
 }
 
 @media (min-width: 1200px) {
-  .hero-banner {
+  .hero-banner{
     background-size: 120%;
   }
 }

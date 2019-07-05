@@ -2,10 +2,8 @@
 
 .app-header {
   @include clearfix;
-
   position: relative;
   padding: 0;
-  border-bottom: 2px solid $gold;
   background: $header-bg;
   color: $header-font-color;
   z-index: 1005;
@@ -20,26 +18,23 @@
     border-bottom-style: solid;
     border-bottom-width: 0;
     border-bottom-color: rgba(#5475a7, 0.4);
-    background-color: transparent;
+    // background-color: transparent;
     transition: all linear 0.2s;
   }
 
   .app-header--flex {
     @include flex(0 0 auto);
-
     position: relative;
-    border-bottom-width: 2px;
-    border-bottom-color: $gold;
     background: $header-bg;
     color: $header-font-color;
   }
 
   .app-header--solid {
-    border-bottom: 2px solid $gold;
     background: $header-bg;
     color: $header-font-color;
   }
 }
+
 
 // Navbar Toggle Button
 .navbar-toggler {
@@ -86,6 +81,7 @@
   }
 }
 
+
 // NAVBAR
 .navbar {
   padding: 0;
@@ -94,18 +90,28 @@
 
   .navbar-nav {
     margin-top: 0.5rem;
+    padding-right: 30px;
 
     .nav-link {
       position: relative;
       z-index: 1001; // +1 to keep above dropdown menus
       padding: 0.875rem 1rem;
       border-top: 1px solid $mn-border-color;
-      color: $mn-color;
+      color: #fcba18;
       text-transform: uppercase;
-      white-space: nowrap;
       font-size: $mn-font-size;
       font-weight: 700;
       cursor: pointer;
+
+      span {
+        font-size: 1rem;
+        text-transform: none;
+        font-weight: normal;
+      }
+
+      .icon {
+        margin-top: 0;
+      }
     }
 
     .dropdown {
@@ -170,14 +176,12 @@
         height: 4.2rem; // 60px to match the branding height
         padding: 0.5rem 0.75rem !important;
         border-top: none;
-
         span {
           margin-top: 0.9rem;
           display: inline-block;
         }
-
         &:hover {
-          background-color: #002663;
+          border-bottom: 2px solid #fcba18;
         }
       }
 
@@ -187,11 +191,9 @@
           padding: 0.5rem;
           min-width: 16rem;
           background-color: #002663;
-
           &.dm-sm {
             min-width: 12rem;
           }
-
           .dropdown-item {
             padding: 0.5rem;
           }
@@ -202,20 +204,18 @@
             .dropdown-toggle {
               color: $mn-color;
             }
-
             .dropdown-menu {
               display: none;
             }
           }
 
           &:hover {
-            > a,
-            > a:hover,
-            > a:focus {
+            >a,
+            >a:hover,
+            >a:focus {
               background-color: #002663;
               border: none;
             }
-
             .dropdown-menu {
               display: block;
             }
@@ -240,13 +240,13 @@
 }
 
 .navbar-brand__title {
-  margin-top: 0.35rem;
+  margin-top: 0.78rem;
   margin-left: 75px;
   display: inline-block;
   color: #fff;
   line-height: 1.1rem;
-  font-size: 0.875rem;
-
+  font-weight: 800;
+  font-size: 2rem;
   .wb {
     display: block;
   }
@@ -270,10 +270,10 @@
 
   .navbar-brand__title {
     margin-left: 88px;
-    margin-top: 0.65rem;
     line-height: 1.2rem;
-    font-size: 1rem;
-    font-weight: 400;
+    font-weight: 800;
+    font-size: 3rem;
+    margin-top: 17px;
   }
 
   .navbar-brand__version {
