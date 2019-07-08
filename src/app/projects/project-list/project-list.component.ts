@@ -16,6 +16,20 @@ import { ProjectListTableRowsComponent } from './project-list-table-rows/project
 import { SearchService } from 'app/services/search.service';
 import { StorageService } from 'app/services/storage.service';
 
+class ProjectFilterObject {
+  constructor(
+    public type: object = {},
+    public eacDecision: object = {},
+    public decisionDateStart: object = {},
+    public decisionDateEnd: object = {},
+    public pcp: object = {},
+    public proponent: object = {},
+    public region: object = {},
+    public CEAAInvolvement: object = {},
+    public vc: object = {}
+  ) { }
+}
+
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
@@ -29,6 +43,27 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   public showOnlyOpenApps: boolean;
   public tableParams: TableParamsObject = new TableParamsObject();
   public terms = new SearchTerms();
+
+  public filterForURL: object = {};
+  public filterForAPI: object = {};
+
+  public filterForUI: ProjectFilterObject = new ProjectFilterObject();
+
+  public showAdvancedSearch: boolean;
+
+  public showFilters: object = {
+    type: false,
+    eacDecision: false,
+    pcp: false,
+    more: false
+  };
+
+  public numFilters: object = {
+    type: 0,
+    eacDecision: 0,
+    pcp: 0,
+    more: 0
+  };
 
   public projectTableData: TableObject;
   public projectTableColumns: any[] = [
@@ -66,6 +101,44 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
+  private TYPE_MAP: object = {
+    energyElectricity: 'Energy-Electricity',
+    energyPetroleum: 'Energy-Petroleum & Natural Gas',
+    foodProcessing: 'Food Processing',
+    industrial: 'Industrial',
+    mines: 'Mines',
+    other: 'Other',
+    tourist: 'Tourist Destination Resorts',
+    transportation: 'Transportation',
+    wasteDisposal: 'Waste Disposal',
+    wasteManagement: 'Water Management'
+  };
+
+  private EAC_DECISIONS_MAP: object = {
+    inProgress: 'In Progress',
+    certificateIssued: 'Certificate Issued',
+    certificateRefused: 'Certificate Refused',
+    furtherAssessmentRequired: 'Further Assessment Required',
+    certificateNotRequired: 'Certificate Not Required',
+    certificateExpired: 'Certificate Expired',
+    withdrawn: 'Withdrawn',
+    terminated: 'Terminated',
+    preEA: 'Pre-EA Act Approval',
+    notReviewable: 'Not Designated Reviewable'
+  };
+
+  private REGION_MAP: object = {
+    cariboo: 'cariboo',
+    kootenay: 'kootenay',
+    lowerMainland: 'lower mainland',
+    okanagan: 'okanagan',
+    omineca: 'omineca',
+    peace: 'peace',
+    skeena: 'skeena',
+    thompsonNicola: 'thompson-nicola',
+    vancouverIsland: 'vancouver island'
+  };
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -79,7 +152,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     this.route.params
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
-
         let newParams = params;
 
         if (Object.keys(newParams).length === 0 && newParams.constructor === Object) {
@@ -88,7 +160,13 @@ export class ProjectListComponent implements OnInit, OnDestroy {
           };
         }
 
-        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(newParams);
+        this.setFiltersFromParams(params);
+
+        this.updateCounts();
+
+        this.showAdvancedSearch = (this.numFilters['type'] + this.numFilters['eacDecision'] + this.numFilters['pcp'] + this.numFilters['more'] > 0);
+
+        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(newParams, this.filterForURL);
 
         this.searchService.getSearchResults(
           this.tableParams.keywords,
@@ -98,7 +176,9 @@ export class ProjectListComponent implements OnInit, OnDestroy {
           this.tableParams.pageSize,
           this.tableParams.sortBy,
           {},
-          true)
+          true,
+          null,
+          this.filterForAPI)
           .takeUntil(this.ngUnsubscribe)
           .subscribe((res: any) => {
             if (res[0].data) {
@@ -126,6 +206,102 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/projects', 'add']);
   }
 
+  paramsToFilters(params, name, map = null) {
+    this.filterForUI[name] = {};
+    delete this.filterForURL[name];
+    delete this.filterForAPI[name];
+
+    if (params[name]) {
+      this.filterForURL[name] = params[name];
+      const values = params[name].split(',');
+      let apiValues = [];
+      values.forEach(value => {
+        this.filterForUI[name][value] = true;
+        apiValues.push(map && map[value] ? map[value] : value);
+      });
+      if (apiValues.length) {
+        this.filterForAPI[name] = apiValues.join(',');
+      }
+    }
+  }
+
+  setFiltersFromParams(params) {
+    this.paramsToFilters(params, 'type', this.TYPE_MAP);
+    this.paramsToFilters(params, 'eacDecision', this.EAC_DECISIONS_MAP);
+    this.paramsToFilters(params, 'region', this.REGION_MAP);
+
+    this.paramsToFilters(params, 'pcp');
+    this.paramsToFilters(params, 'proponent');
+    this.paramsToFilters(params, 'CEAAInvolvement');
+    this.paramsToFilters(params, 'vc');
+
+    this.paramsToFilters(params, 'decisionDateStart');
+    this.paramsToFilters(params, 'decisionDateEnd');
+  }
+
+  filterToParams(params, name) {
+    let keys = [];
+    Object.keys(this.filterForUI[name]).forEach(key => {
+      if (this.filterForUI[name][key]) { keys.push(key); }
+    });
+    if (keys.length) { params[name] = keys.join(','); }
+  }
+
+  getParamsFromFilter(params) {
+    this.filterToParams(params, 'type');
+    this.filterToParams(params, 'eacDecision');
+    this.filterToParams(params, 'pcp');
+    this.filterToParams(params, 'region');
+
+    this.filterToParams(params, 'proponent');
+    this.filterToParams(params, 'CEAAInvolvement');
+    this.filterToParams(params, 'vc');
+
+    this.filterToParams(params, 'decisionDateStart');
+    this.filterToParams(params, 'decisionDateEnd');
+  }
+
+  toggleFilter(name) {
+    if (this.showFilters[name]) {
+      this.updateCount(name);
+      this.showFilters[name] = false;
+    } else {
+      Object.keys(this.showFilters).forEach(key => {
+        if (this.showFilters[key]) {
+          this.updateCount(key);
+          this.showFilters[key] = false;
+        }
+      });
+      this.showFilters[name] = true;
+    }
+  }
+
+  clearAll() {
+    Object.keys(this.filterForUI).forEach(key => {
+      this.filterForUI[key] = {};
+    });
+    this.updateCounts();
+  }
+
+  updateCount(name) {
+    const getCount = (n) => { return Object.keys(this.filterForUI[n]).filter(k => this.filterForUI[n][k]).length; };
+
+    let num = 0;
+    if (name === 'more') {
+      num = getCount('region') + getCount('proponent') + getCount('CEAAInvolvement') + getCount('vc');
+    } else {
+      num = getCount(name);
+    }
+    this.numFilters[name] = num;
+  }
+
+  updateCounts() {
+    this.updateCount('type');
+    this.updateCount('eacDecision');
+    this.updateCount('pcp');
+    this.updateCount('more');
+  }
+
   setRowData() {
     let projectList = [];
     if (this.projects && this.projects.length > 0) {
@@ -150,7 +326,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     }
   }
 
-
   setColumnSort(column) {
     if (this.tableParams.sortBy.charAt(0) === '+') {
       this.tableParams.sortBy = '-' + column;
@@ -174,13 +349,17 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       pageNumber,
       this.tableParams.pageSize,
       this.tableParams.sortBy,
+      {},
+      true,
+      null,
+      this.filterForAPI
     )
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
         if (res[0].data) {
           this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
           this.projects = res[0].data.searchResults;
-          this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
+          this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords);
           this.setRowData();
           this.loading = false;
           this._changeDetectionRef.detectChanges();
@@ -200,7 +379,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     // REF: https://stackoverflow.com/questions/40983055/how-to-reload-the-current-route-with-the-angular-2-router
     // WORKAROUND: add timestamp to force URL to be different than last time
 
-    const params = this.terms.getParams();
+    let params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage = 1;
@@ -208,8 +387,9 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
-    console.log('params =', params);
-    console.log('nav:', ['projects-list', params]);
+    this.getParamsFromFilter(params);
+
+    console.log('params', params);
     this.router.navigate(['projects-list', params]);
   }
 
