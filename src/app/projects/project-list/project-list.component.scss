@@ -156,6 +156,19 @@
   background-color: white;
 }
 
+.advanced-search-button .btn {
+  float: right;
+  margin-left: 8px;
+}
+
+.advanced-search {
+  background-color: white;
+
+  .project-filter {
+    margin: 15px;
+  }
+}
+
 .results {
   color: white;
 }

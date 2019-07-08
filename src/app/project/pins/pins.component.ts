@@ -7,46 +7,40 @@ import { SearchService } from 'app/services/search.service';
 import { StorageService } from 'app/services/storage.service';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { Subject } from 'rxjs';
-import { DocumentTableRowsComponent } from '../documents/project-document-table-rows/project-document-table-rows.component';
 import { SearchTerms } from 'app/models/search';
 import { PlatformLocation } from '@angular/common';
+import { PinsTableRowsComponent } from './pins-table-rows/pins-table-rows.component';
 
 @Component({
-  selector: 'app-certificates',
-  templateUrl: './certificates.component.html',
-  styleUrls: ['./certificates.component.scss']
+  selector: 'app-pins',
+  templateUrl: './pins.component.html',
+  styleUrls: ['./pins.component.scss']
 })
-export class CertificatesComponent implements OnInit {
-  public documents = [];
+export class PinsComponent implements OnInit {
+  public pins = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  public documentTableData: TableObject;
+  public tableData: TableObject;
   public tableParams: TableParamsObject = new TableParamsObject();
   public currentProject;
   public typeFilters = [];
   public terms = new SearchTerms();
   public loading: Boolean = true;
-  public currentUrl: String = '';
-  public documentTableColumns: any[] = [
+  public tableColumns: any[] = [
     {
-      name: 'Name',
-      value: 'displayName',
-      width: 'col-6'
+      name: 'Nation Name',
+      value: 'name',
+      width: 'col-8'
     },
     {
-      name: 'Date',
-      value: 'datePosted',
-      width: 'col-2'
-    },
-    {
-      name: 'Type',
-      value: 'type',
-      width: 'col-2'
-    },
-    {
-      name: 'Milestone',
-      value: 'milestone',
-      width: 'col-2'
+      name: 'Province',
+      value: 'province',
+      width: 'col-4'
     }
+    // {
+    //   name: 'Link to Nation Information',
+    //   value: 'link',
+    //   width: 'col-3'
+    // }
   ];
   constructor(
     private _changeDetectionRef: ChangeDetectorRef,
@@ -60,7 +54,6 @@ export class CertificatesComponent implements OnInit {
   ) {
     try {
       let currRoute = router.url.split(';')[0];
-      this.currentUrl = currRoute.substring(currRoute.lastIndexOf('/') + 1);
     } catch (e) {
       console.log('e:', e);
     }
@@ -70,12 +63,8 @@ export class CertificatesComponent implements OnInit {
     this.route.params
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
-        if (this.currentUrl === 'amendments') {
-          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
-        } else {
-          // Different sort order:
-          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params, null, '+displayName');
-        }
+        // Different sort order:
+        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params, null, '+name');
       });
 
     this.currentProject = this.storageService.state.currentProject.data;
@@ -84,12 +73,12 @@ export class CertificatesComponent implements OnInit {
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
         if (res) {
-          if (res.documents && res.documents[0].data.meta && res.documents[0].data.meta.length > 0) {
-            this.tableParams.totalListItems = res.documents[0].data.meta[0].searchResultsTotal;
-            this.documents = res.documents[0].data.searchResults;
+          if (res.pins && res.pins[0].data.total_items > 0) {
+            this.tableParams.totalListItems = res.pins[0].data.total_items;
+            this.pins = res.pins[0].data.results;
           } else {
             this.tableParams.totalListItems = 0;
-            this.documents = [];
+            this.pins = [];
           }
           this.loading = false;
           this.setDocumentRowData();
@@ -106,22 +95,12 @@ export class CertificatesComponent implements OnInit {
 
   setDocumentRowData() {
     let documentList = [];
-    if (this.documents && this.documents.length > 0) {
-      this.documents.forEach(document => {
-        documentList.push(
-          {
-            _id: document._id,
-            documentFileName: document.documentFileName || document.displayName || document.internalOriginalName,
-            displayName: document.displayName,
-            datePosted: document.datePosted,
-            type: document.type,
-            milestone: document.milestone,
-            project: document.project
-          }
-        );
+    if (this.pins && this.pins.length > 0) {
+      this.pins.forEach(contact => {
+        documentList.push(contact);
       });
-      this.documentTableData = new TableObject(
-        DocumentTableRowsComponent,
+      this.tableData = new TableObject(
+        PinsTableRowsComponent,
         documentList,
         this.tableParams
       );
@@ -134,10 +113,10 @@ export class CertificatesComponent implements OnInit {
     } else {
       this.tableParams.sortBy = '+' + column;
     }
-    this.getPaginatedDocs(this.tableParams.currentPage);
+    this.getPaginated(this.tableParams.currentPage);
   }
 
-  getPaginatedDocs(pageNumber, reset = false) {
+  getPaginated(pageNumber, reset = false) {
     // Go to top of page after clicking to a different page.
     this.loading = true;
     this._changeDetectionRef.detectChanges();
@@ -157,14 +136,8 @@ export class CertificatesComponent implements OnInit {
     params['sortBy'] = this.tableParams.sortBy;
     params['pageSize'] = this.tableParams.pageSize;
     params['keywords'] = this.tableParams.keywords;
-    // params['dateAddedStart'] = this.utils.convertFormGroupNGBDateToJSDate(this.filter.dateAddedStart).toISOString();
-    // params['dateAddedEnd'] = this.utils.convertFormGroupNGBDateToJSDate(this.filter.dateAddedEnd).toISOString();
     if (this.typeFilters.length > 0) { params['type'] = this.typeFilters.toString(); }
 
-    if (this.currentUrl === 'amendments') {
-      this.router.navigate(['p', this.currentProject._id, 'amendments', params]);
-    } else {
-      this.router.navigate(['p', this.currentProject._id, 'certificates', params]);
-    }
+    this.router.navigate(['p', this.currentProject._id, 'pins', params]);
   }
 }
