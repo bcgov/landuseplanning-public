@@ -111,7 +111,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     tourist: 'Tourist Destination Resorts',
     transportation: 'Transportation',
     wasteDisposal: 'Waste Disposal',
-    wasteManagement: 'Water Management'
+    waterManagement: 'Water Management'
   };
 
   private EAC_DECISIONS_MAP: object = {
