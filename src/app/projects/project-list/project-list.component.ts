@@ -128,15 +128,15 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   };
 
   private REGION_MAP: object = {
-    cariboo: 'cariboo',
-    kootenay: 'kootenay',
-    lowerMainland: 'lower mainland',
-    okanagan: 'okanagan',
-    omineca: 'omineca',
-    peace: 'peace',
-    skeena: 'skeena',
-    thompsonNicola: 'thompson-nicola',
-    vancouverIsland: 'vancouver island'
+    cariboo: 'Cariboo',
+    kootenay: 'Kootenay',
+    lowerMainland: 'Lower Mainland',
+    okanagan: 'Okanagan',
+    omineca: 'Omineca',
+    peace: 'Peace',
+    skeena: 'Skeena',
+    thompsonNicola: 'Thompson-Nicola',
+    vancouverIsland: 'Vancouver Island'
   };
 
   constructor(
