@@ -141,12 +141,12 @@ parameters:
     displayName: Builder Image
     description: The image to use as the Builder Image.
     required: true
-    value: admin-angular-builder
+    value: angular-builder
   - name: RUNTIME_IMAGE
     displayName: Runtime Image
     description: The image to use as the application runtime.
     required: true
-    value: admin-nginx-runtime
+    value: nginx-runtime
   - name: GIT_REPO_URL
     displayName: Git Repository URL
     description: The URL of the repository with your application source code.

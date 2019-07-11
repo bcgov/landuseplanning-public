@@ -33,7 +33,7 @@ RUN yum -y install pango.x86_64 \
       rm -rf /var/cache/yum/*
 
 # update npm, and install some dependencies that are slow to install.	  
-RUN npm i npm@6.4.1 webpack -g	&& \       
+RUN npm i npm@6.4.1 -g	&& \       
   rm -R /opt/rh/rh-nodejs8/root/usr/lib/node_modules/npm 
 
 
