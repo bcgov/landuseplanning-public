@@ -40,7 +40,8 @@ RUN npm i npm@6.4.1 webpack -g	&& \
 # Required in order to mount .npm as a volume to cache downloaded files
 RUN chown -R 1001:0 .npm && \
   chmod -R ug+rwx .npm && \  
-  chown -R 1001:0 /opt/app-root/src/.config
+  chown -R 1001:0 /opt/app-root/src/.config && \  
+  chown -R 1001:0 /opt/app-root/src/.npm-global
 	  
 # Run container by default as user with id 1001 (default)
 USER 1001 
