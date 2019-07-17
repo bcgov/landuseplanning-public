@@ -5,9 +5,16 @@
 
 ## Node and NPM 
 
-Node 6.9.x or greater must be installed. Run `node -v` to verify.
+We use a version manager so as to allow concurrent versions of node and other software.  [asdf](https://github.com/asdf-vm/asdf) is recommended.
 
-npm 3.x.x or greater must be installed. Run `npm -v` to verify.
+Run the following commands:
+```
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf reshim nodejs
+npm i -g yarn
+yarn install
+```
+We use a config file for asdf called .tool-versions that the reshim command picks up so that all collaborators are using the same versions.
 
 ## Install [Angular CLI](https://angular.io/)
 
