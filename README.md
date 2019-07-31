@@ -31,11 +31,17 @@ Installation of *asdf* and required node packages is covered [here](https://gith
 
 ## Angular Code scaffolding
 
-A brief guide to Angular CLI's code scaffolding can be found in [eagle-common-components](https://github.com/bcgov/eagle-common-components/dev_guides/angular_scaffolding.md)
+A brief guide to Angular CLI's code scaffolding can be found in [eagle-common-components](https://github.com/bcgov/eagle-common-components/blob/master/dev_guides/angular_scaffolding.md)
 
 <!-- # Build and Deployment
 
 For dev, test, and production builds on OpenShift/Jenkins see [openshift/README.md](https://github.com/bcgov/eagle-public/blob/master/openshift/README.md) for detailed instructions on how to setup in an OpenShift environment using nginx. -->
+
+# Testing
+
+An overview of the EPIC test stack can be found in our documentation guides: [EPIC Test Stack](https://github.com/bcgov/eagle-common-components/blob/master/dev_guides/testing_components.md).
+
+Instructions on how running tests unit tests and end-to-end tests can be found in our [test documentation](https://github.com/bcgov/eagle-common-components/blob/master/dev_guides/angular_scaffolding.md#running-tests).
 
 # How to Contribute
 
