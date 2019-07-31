@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { ApiService } from 'app/services/api';
@@ -16,7 +16,7 @@ import { PinsTableRowsComponent } from './pins-table-rows/pins-table-rows.compon
   templateUrl: './pins.component.html',
   styleUrls: ['./pins.component.scss']
 })
-export class PinsComponent implements OnInit {
+export class PinsComponent implements OnInit, OnDestroy {
   public pins = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   public tableData: TableObject;
@@ -73,9 +73,9 @@ export class PinsComponent implements OnInit {
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
         if (res) {
-          if (res.pins && res.pins[0].data.total_items > 0) {
-            this.tableParams.totalListItems = res.pins[0].data.total_items;
-            this.pins = res.pins[0].data.results;
+          if (res.pins && res.pins.length > 0) {
+            this.tableParams.totalListItems = res.pins.length;
+            this.pins = res.pins;
           } else {
             this.tableParams.totalListItems = 0;
             this.pins = [];
@@ -139,5 +139,10 @@ export class PinsComponent implements OnInit {
     if (this.typeFilters.length > 0) { params['type'] = this.typeFilters.toString(); }
 
     this.router.navigate(['p', this.currentProject._id, 'pins', params]);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

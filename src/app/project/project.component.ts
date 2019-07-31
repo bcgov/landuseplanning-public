@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -17,14 +17,14 @@ import { AddCommentComponent } from './comments/add-comment/add-comment.componen
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
-export class ProjectComponent implements OnInit {
+export class ProjectComponent implements OnInit, OnDestroy {
   readonly tabLinks = [
     { label: 'Project Details', link: 'project-details' },
     { label: 'Commenting', link: 'commenting' },
     { label: 'Documents', link: 'documents' },
     { label: 'Certificate', link: 'certificates' },
     { label: 'Amendment(s)', link: 'amendments' },
-    { label: 'Participating Indigenous Nations', link: 'pins' }
+    // { label: 'Participating Indigenous Nations', link: 'pins' }
   ];
 
   public project: Project = null;
@@ -52,7 +52,8 @@ export class ProjectComponent implements OnInit {
       .subscribe(
         (data: { project: Project }) => {
           if (data.project) {
-            this.storageService.state.currentProject = { type: 'currentProject', data: data.project };
+            this.project = data.project;
+            this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
             this.renderer.removeClass(document.body, 'no-scroll');
             this.project = data.project;
             this._changeDetectionRef.detectChanges();
@@ -88,5 +89,10 @@ export class ProjectComponent implements OnInit {
 
   public goToViewComments() {
     this.router.navigate(['/p', this.project._id, 'cp', this.project.commentPeriodForBanner._id, 'details']);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
