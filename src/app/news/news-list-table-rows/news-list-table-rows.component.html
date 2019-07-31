@@ -14,10 +14,10 @@
       class="btn content-btn-alt" href="{{activity.documentUrl}}">
       <span>View Document(s)</span>
     </a>
-    <a *ngIf="isSingleDoc(activity?.contentUrl) && !activity?.contentUrl.includes('docs?folder')"
-      class="btn content-btn-alt" href="{{activity.contentUrl}}">
-      <span>Submit/View Comment(s)</span>
-    </a>
+    <button *ngIf="activity?.pcp"
+      class="btn content-btn-alt" (click)="goToCP(activity)">
+      <span>Submit/ View Comment(s)</span>
+    </button>
   </td>
   <td scope="row" data-label="Date" class="col-2">{{activity.dateAdded | date:'longDate'}}</td>
 </tr>

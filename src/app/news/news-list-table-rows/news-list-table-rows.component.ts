@@ -16,11 +16,17 @@ export class NewsListTableRowsComponent implements OnInit, TableComponent {
     public activities: any;
     public paginationData: any;
 
-    constructor() { }
+    constructor(
+      private router: Router
+    ) { }
 
     ngOnInit() {
         this.activities = this.data.data;
         this.paginationData = this.data.paginationData;
+    }
+
+    goToCP(activity) {
+      this.router.navigate(['p', activity.project._id, 'cp', activity.pcp]);
     }
 
     isSingleDoc(item) {
