@@ -44,6 +44,8 @@ import { LegislationComponent } from 'app/legislation/legislation.component';
 import { ProcessComponent } from 'app/process/process.component';
 import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
 import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
+import { EngagementComponent } from './engagement/engagement.component';
+import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
 
 @NgModule({
   imports: [
@@ -75,7 +77,9 @@ import { ActivitiesListTableRowsComponent } from './project/project-activites/ac
     LegislationComponent,
     ProcessComponent,
     ComplianceOversightComponent,
-    SearchHelpComponent
+    SearchHelpComponent,
+    EngagementComponent,
+    LegalDirectionComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,
