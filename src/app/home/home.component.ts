@@ -26,6 +26,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() { }
-
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
@@ -12,7 +12,7 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./proj-detail-popup.component.scss']
 })
 
-export class ProjDetailPopupComponent implements OnInit {
+export class ProjDetailPopupComponent implements OnInit, OnDestroy {
   public proj: Project = null;
   public commentPeriod: CommentPeriod = null;
   public commentPeriodStatus: String;
@@ -27,10 +27,15 @@ export class ProjDetailPopupComponent implements OnInit {
   ngOnInit() {
     this.commentPeriodService.getAllByProjectId(this.proj._id)
       .takeUntil(this.ngUnsubscribe)
-      .subscribe(data => {
+      .subscribe((data: any) => {
         if (data && data.length > 0 && data[0]) {
           this.commentPeriodStatus = data[0].commentPeriodStatus;
         }
       });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

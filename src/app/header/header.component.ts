@@ -7,5 +7,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  constructor(public router: Router) {}
+  constructor(
+    public router: Router
+  ) { }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnInit() {
+  let isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
+  const browser_alert = document.getElementById('browser-alert');
+  if ( isIEOrEdge) {
+    browser_alert.classList.add('showForIEorEdge');
+  }
+  }
 }

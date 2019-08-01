@@ -7,8 +7,10 @@ import { HomeComponent } from 'app/home/home.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
 import { NewsListComponent } from './news/news.component';
 import { LegislationComponent } from './legislation/legislation.component';
+import { EngagementComponent } from './engagement/engagement.component';
 import { ProcessComponent } from './process/process.component';
 import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
+import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
 import { SearchHelpComponent } from './search-help/search-help.component';
 import { NewsResolver } from './news/news-resolver.service';
 
@@ -37,8 +39,16 @@ const routes: Routes = [
     component: LegislationComponent
   },
   {
+    path: 'engagement',
+    component: EngagementComponent
+  },
+  {
     path: 'compliance-oversight',
     component: ComplianceOversightComponent
+  },
+  {
+    path: 'legal-direction',
+    component: LegalDirectionComponent
   },
   {
     path: 'process',

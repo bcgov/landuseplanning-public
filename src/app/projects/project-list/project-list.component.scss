@@ -156,16 +156,70 @@
   background-color: white;
 }
 
+.btn-primary {
+  height: 100%;
+}
+
 .advanced-search-button .btn {
   float: right;
   margin-left: 8px;
 }
 
+.advanced-search-buttons-right .btn {
+  float: right;
+  margin-right: 8px !important;
+}
+
 .advanced-search {
   background-color: white;
 
+  hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
   .project-filter {
-    margin: 15px;
+    margin-left: 15px;
+    margin-top: 5px;
+  }
+
+  .project-sub-filter {
+    margin-left: -10px;
+    margin-top: 5px;
+  }
+
+  .type-filters {
+    margin-left: 15px;
+  }
+
+  .decision-filters {
+    margin-left: 145px;
+  }
+
+  .pcp-filters {
+    margin-left: 270px;
+  }
+
+  .btn {
+    margin: 8px 0px 8px 8px;
+  }
+
+  .calendar {
+    margin: 0px;
+  }
+
+  .date-range {
+    margin-left: -30px;
+    margin-top: 15px;
+
+    .form-control {
+      z-index: 0px !important;
+    }
+  }
+
+  .form-check label {
+    padding-left: 0.25rem;
+    font-size: 1rem;
   }
 }
 

@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { TagInputModule } from 'ngx-chips';
+import { NgModule, ApplicationRef } from '@angular/core';
+// import { TagInputModule } from 'ngx-chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -44,16 +44,18 @@ import { LegislationComponent } from 'app/legislation/legislation.component';
 import { ProcessComponent } from 'app/process/process.component';
 import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
 import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
+import { EngagementComponent } from './engagement/engagement.component';
+import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    TagInputModule,
+    // TagInputModule,
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     NgbModule.forRoot(),
-    Ng2PageScrollModule.forRoot(),
+    NgxPageScrollModule,
     BootstrapModalModule,
     SharedModule,
     ProjectModule,
@@ -75,7 +77,9 @@ import { ActivitiesListTableRowsComponent } from './project/project-activites/ac
     LegislationComponent,
     ProcessComponent,
     ComplianceOversightComponent,
-    SearchHelpComponent
+    SearchHelpComponent,
+    EngagementComponent,
+    LegalDirectionComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,
@@ -99,4 +103,8 @@ import { ActivitiesListTableRowsComponent } from './project/project-activites/ac
   ]
 })
 
-export class AppModule { }
+export class AppModule {
+  constructor(applicationRef: ApplicationRef) {
+    Object.defineProperty(applicationRef, '_rootComponents', {get: () => applicationRef['components']});
+  }
+}
