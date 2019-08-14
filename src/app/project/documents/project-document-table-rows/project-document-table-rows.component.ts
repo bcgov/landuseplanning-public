@@ -42,7 +42,7 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
       .subscribe((res: any) => {
         if (res) {
           if (res.documentsTableRow && res.documentsTableRow.length > 0) {
-            this.lists = res.documentsTableRow;
+            this.lists = res.documentsTableRow[0].searchResults;
           } else if (res.documents && res.documents.length > 0) {
             this.lists = res.documents[0].data.searchResults;
           } else {
