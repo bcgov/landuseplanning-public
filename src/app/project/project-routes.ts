@@ -32,14 +32,16 @@ export const ProjectRoutes: Routes = [
     path: 'certificates',
     component: CertificatesComponent,
     resolve: {
-      documents: CertificatesResolver
+      documents: CertificatesResolver,
+      documentsTableRow: DocumentTableResolver
     }
   },
   {
     path: 'amendments',
     component: CertificatesComponent,
     resolve: {
-      documents: AmendmentsResolverService
+      documents: AmendmentsResolverService,
+      documentsTableRow: DocumentTableResolver
     }
   },
   {
