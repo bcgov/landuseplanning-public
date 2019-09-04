@@ -37,19 +37,15 @@
             </div>
           </div>
           <!-- <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p> -->
-          <span class="ea-decision">{{project?.eacDecision || "-"}}</span>
+          <span class="engagement-status">{{project?.engagementStatus || "-"}}</span>
           <div class="basic-info">
             <div>
-              <label>Proponent</label>
-              <p class="value">{{project?.proponent?.name || "-" | titlecase}}</p>
+              <label>Partner(s)</label>
+              <p class="value">{{project?.partner || "-" | titlecase}}</p>
             </div>
             <div>
               <label>Type</label>
               <p class="value">{{project?.type || "-" | titlecase}}</p>
-            </div>
-            <div>
-              <label>Sub-type</label>
-              <p class="value">{{project?.sector || "-" | titlecase}}</p>
             </div>
           </div>
           <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">

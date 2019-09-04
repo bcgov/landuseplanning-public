@@ -9,36 +9,26 @@
             <p class="value">{{project?.region || "-" | titlecase}}</p>
           </div>
           <div>
-            <label>Location</label>
-            <p class="value">{{project?.location || "-" | titlecase}}</p>
+            <label>Regional Districts</label>
+            <p class="value">{{project?.overlappingRegionalDistricts || "-" | titlecase}}</p>
           </div>
-          <div>
-            <label>Nature</label>
-            <p class="value">{{project?.nature || "No nature description available" | titlecase}}</p>
+          <div *ngIf="project?.projectPhase">
+            <label>Project Phase</label>
+            <p class="value">{{project?.projectPhase || "-"}}</p>
           </div>
-          <div *ngIf="project?.status">
-            <label>CEAA Involvement</label>
-            <p class="value">{{project?.CEAAInvolvement || "-" | titlecase}}</p>
+          <div *ngIf="project?.engagementStatus">
+            <label>Engagement Status</label>
+            <p class="value">{{project?.engagementStatus || '-'}}</p>
           </div>
-          <div *ngIf="project?.CEAALink">
-            <label>CEAA URL</label>
+          <div *ngIf="project?.existingLandUsePlans">
+            <label>Existing Land Use Plan</label>
+            <p class="value">{{project?.existingLandUsePlans || "-" | titlecase}}</p>
+          </div>
+          <div *ngIf="project?.existingLandUsePlanURLs">
+            <label>Existing Land Use Plan URL</label>
             <p class="value"><a class="value" target="_blank"
-                href="{{project.CEAALink}}">{{project?.CEAALink || "-"}}</a>
+                href="{{project.existingLandUsePlanURLs}}">{{project?.existingLandUsePlanURLs || "-"}}</a>
             </p>
-          </div>
-          <div *ngIf="project?.status">
-            <label>Project Status</label>
-            <p class="value">{{project?.status || "-"}}</p>
-          </div>
-          <div *ngIf="project?.operational">
-            <label>Active Phase</label>
-            <p class="value">{{project?.operational?.label || '-'}} |
-              {{project?.operational?.date | date: 'longDate' || '-'}}</p>
-          </div>
-          <div *ngIf="project?.eacDecision">
-            <label>EAC Status</label>
-            <p class="value">{{project?.eacDecision || '-'}} |
-              {{project?.decisionDate | date: 'longDate' || '-'}}</p>
           </div>
         </div>
       </div>

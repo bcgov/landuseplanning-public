@@ -170,6 +170,7 @@ export class ApiService {
       });
     }
     queryString += `&fields=${this.buildValues(fields)}`;
+    console.log(queryString);
     return this.http.get<SearchResults[]>(`${this.apiPath}/${queryString}`, {});
   }
 
@@ -197,11 +198,12 @@ export class ApiService {
       'cl_file',
       'client',
       'currentPhaseName',
-      'eacDecision',
+      'engagementStatus',
+      'backgroundInfo',
       'epicProjectID',
       'description',
       'legalDescription',
-      'location',
+      'overlappingRegionalDistricts',
       'name',
       'publishDate',
       'purpose',
@@ -229,27 +231,20 @@ export class ApiService {
 
   getProject(id: string, cpStart: string, cpEnd: string): Observable<Project[]> {
     const fields = [
-      'CEAAInvolvement',
-      'CELead',
-      'CELeadEmail',
-      'CELeadPhone',
+      'existingLandUsePlans',
       'centroid',
       'description',
-      'eacDecision',
-      'location',
+      'engagementStatus',
+      'backgroundInfo',
+      'overlappingRegionalDistricts',
       'name',
       'projectLead',
-      'projectLeadEmail',
-      'projectLeadPhone',
-      'proponent',
+      'partner',
       'region',
-      'responsibleEPD',
-      'responsibleEPDEmail',
-      'responsibleEPDPhone',
+      'projectDirector',
       'type',
       'addedBy',
-      'build',
-      'CEAALink',
+      'existingLandUsePlanURLs',
       'code',
       'commodity',
       'currentPhaseName',
@@ -257,7 +252,6 @@ export class ApiService {
       'dateCommentsClosed',
       'commentPeriodStatus',
       'dateUpdated',
-      'decisionDate',
       'duration',
       'eaoMember',
       'epicProjectID',
@@ -267,7 +261,6 @@ export class ApiService {
       'primaryContact',
       'proMember',
       'provElecDist',
-      'sector',
       'shortName',
       'status',
       'substitution',
@@ -289,6 +282,17 @@ export class ApiService {
     if (pageSize !== null) { queryString += `&pageSize=${pageSize}`; }
     if (sortBy !== '' && sortBy !== null) { queryString += `&sortBy=${sortBy}`; }
     return this.http.get<any>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  // Organizations
+
+  getOrgsByCompanyType(type: string): Observable<Org[]> {
+    const fields = [
+      'name'
+    ];
+
+    const queryString = `organization?companyType=${type}&sortBy=+name&fields=${this.buildValues(fields)}`;
+    return this.http.get<Org[]>(`${this.apiPath}/${queryString}`, {});
   }
 
   // TODO: delete these "Applications" calls, cruft.
@@ -585,6 +589,7 @@ export class ApiService {
       'project',
       'type',
       'documentAuthor',
+      'documentAuthorType',
       'milestone',
       'description',
       'isPublished'

@@ -185,9 +185,7 @@ After generating a service, we must go to its owning module and add the service 
 
 ### Example: Generate a service and include it in a module automatically
 
-```
-ng g s general-data2 -m app.module
-```
+A brief guide to Angular CLI's code scaffolding can be found in [eagle-dev-guides](https://github.com/bcgov/eagle-dev-guides/blob/master/dev_guides/angular_scaffolding.md)
 
 ### Example: Generate a class, an interface and enum
 
@@ -238,16 +236,14 @@ ng set default.styleExt css
 ng new my-app --routing --style scss
 ```
 
-## Getting Help
+For dev, test, and production builds on OpenShift/Jenkins see [openshift/README.md](https://github.com/bcgov/eagle-public/blob/master/openshift/README.md) for detailed instructions on how to setup in an OpenShift environment using nginx. -->
 
-1. To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-1. `ng doc component` to look up documentation for features.
-1. `ng serve --help` to look up doc for `ng serve` command.
+# Testing
 
-<!-- # Build and Deployment
+An overview of the EPIC test stack can be found in our documentation guides: [EPIC Test Stack](https://github.com/bcgov/eagle-dev-guides/blob/master/dev_guides/testing_components.md).
 
-For dev, test, and production builds on OpenShift/Jenkins see [openshift/README.md](https://github.com/bcgov/eagle-public/blob/master/openshift/README.md) for detailed instructions on how to setup in an OpenShift environment using nginx.
+Instructions on how running tests unit tests and end-to-end tests can be found in our [test documentation](https://github.com/bcgov/eagle-dev-guides/blob/master/dev_guides/angular_scaffolding.md#running-tests).
 
 # How to Contribute
 
-Feel free to create pull requests from the default "master" branch, click here to create one automatically: https://github.com/bcgov/eagle-public/pull/new/master -->
+Feel free to create pull requests from the default "develop" branch, click here to create one automatically: https://github.com/bcgov/eagle-public/pull/new/develop 

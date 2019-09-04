@@ -316,8 +316,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       // add marker
       if (app.centroid.length === 2) { // safety check
         const title = `${app.name}\n`
-          + `${app.sector}\n`
-          + `${app.location}\n`;
+          + `${app.overlappingRegionalDistricts}\n`;
         const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { title: title })
           .setIcon(markerIconYellow)
           .on('click', L.Util.bind(this.onMarkerClick, this, app));

@@ -146,8 +146,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       });
 
       const title = `${this.project.name}\n`
-        + `${this.project.sector}\n`
-        + `${this.project.location}\n`;
+        + `${this.project.overlappingRegionalDistricts}\n`;
       const marker = L.marker(L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
         .setIcon(markerIconYellow);
       this.map.addLayer(marker);

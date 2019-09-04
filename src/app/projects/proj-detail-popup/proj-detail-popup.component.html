@@ -15,8 +15,8 @@
             <span class="value">{{proj?.epicProjectID || '-'}}</span>
           </li>
           <li>
-            <span class="key">Decision:</span>
-            <span class="value">{{proj?.eacDecision || '-'}}</span>
+            <span class="key">Engagement Status:</span>
+            <span class="value">{{proj?.engagementStatus || '-'}}</span>
           </li>
           <li>
             <!-- Phase object not ready -->
@@ -24,8 +24,8 @@
             <span class="value">{{proj?.currentPhaseName || '-'}}</span>
           </li>
           <li>
-            <span class="key">Location:</span>
-            <span class="value">{{proj?.location || '-'}}</span>
+            <span class="key">Overlapping Regional Districts:</span>
+            <span class="value">{{proj?.overlappingRegionalDistricts || '-'}}</span>
           </li>
           <li *ngIf="commentPeriodStatus">
             <span class="key">Comment Period Status:</span>

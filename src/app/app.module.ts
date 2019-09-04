@@ -34,6 +34,7 @@ import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DecisionService } from 'app/services/decision.service';
 import { DocumentService } from 'app/services/document.service';
 import { SearchService } from 'app/services/search.service';
+import { OrgService } from 'app/services/org.service';
 import { FeatureService } from 'app/services/feature.service';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
@@ -96,6 +97,7 @@ import { LegalDirectionComponent } from './legal-direction/legal-direction.compo
     DecisionService,
     DocumentService,
     SearchService,
+    OrgService,
     FeatureService
   ],
   bootstrap: [

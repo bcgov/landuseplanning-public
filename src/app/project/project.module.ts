@@ -14,6 +14,7 @@ import { CommentsModule } from 'app/project/comments/comments.module';
 import { ProjectComponent } from './project.component';
 import { CommentingTabComponent } from './commenting-tab/commenting-tab.component';
 import { DecisionsTabComponent } from './decisions-tab/decisions-tab.component';
+import { BackgroundInfoTabComponent } from './background-info-tab/background-info-tab.component';
 import { DateInputComponent } from 'app/date-input/date-input.component';
 import { DocumentsTabComponent } from './documents/documents-tab.component';
 import { DocumentTableRowsComponent } from 'app/project/documents/project-document-table-rows/project-document-table-rows.component';
@@ -41,6 +42,7 @@ import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.c
     ProjectComponent,
     CommentingTabComponent,
     DecisionsTabComponent,
+    BackgroundInfoTabComponent,
     DocumentDetailComponent,
     DateInputComponent,
     DocumentsTabComponent,

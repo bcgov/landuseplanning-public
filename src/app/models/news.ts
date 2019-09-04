@@ -1,4 +1,5 @@
 import { Project } from './project';
+import { CommentPeriod } from './commentperiod';
 
 export class News {
   _id: number;
@@ -7,6 +8,7 @@ export class News {
   active: boolean;
   project: Project;
   type: string;
+  pcp: string;
   dateAdded: string;
   dateUpdated: string;
   contentUrl: string;
@@ -17,6 +19,7 @@ export class News {
     this.content = obj && obj.content || null;
     this.project = obj && obj.project || null;
     this.type = obj && obj.type || null;
+    this.pcp = obj && obj.pcp || null;
     this.active = obj && obj.active || null;
     this.dateAdded = obj && obj.dateAdded || null;
     this.dateUpdated = obj && obj.dateUpdated || null;

@@ -156,60 +156,72 @@
   background-color: white;
 }
 
-.btn-primary {
-  height: 100%;
+.search-area {
+  background-color: white;
 }
 
-.advanced-search-button .btn {
-  float: right;
-  margin-left: 8px;
+.main-search-field {
+  margin-left: 0px;
+  padding: 8px;
 }
 
-.advanced-search-buttons-right .btn {
+.show-advanced-search-button .btn {
   float: right;
   margin-right: 8px !important;
+  width: 200px;
 }
 
 .advanced-search {
-  background-color: white;
-
   hr {
     margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 
   .project-filter {
     margin-left: 15px;
-    margin-top: 5px;
-  }
-
-  .project-sub-filter {
-    margin-left: -10px;
-    margin-top: 5px;
+    margin-top: 10px;
+    margin-right: 15px;
+    padding-bottom: 10px;
   }
 
   .type-filters {
-    margin-left: 15px;
+    margin-left: -5px;
   }
 
   .decision-filters {
-    margin-left: 145px;
+    margin-left: 155px;
   }
 
   .pcp-filters {
-    margin-left: 270px;
+    margin-left: 320px;
   }
 
   .btn {
     margin: 8px 0px 8px 8px;
   }
 
+  .type-btn {
+    width: 155px;
+  }
+
+  .decision-btn {
+    width: 155px;
+  }
+
+  .pcp-btn {
+    width: 230px;
+  }
+
   .calendar {
     margin: 0px;
   }
 
+  .date {
+    margin-left: 0px;
+  }
+
   .date-range {
-    margin-left: -30px;
+    margin-left: -15px;
     margin-top: 15px;
 
     .form-control {
@@ -220,6 +232,15 @@
   .form-check label {
     padding-left: 0.25rem;
     font-size: 1rem;
+  }
+
+  .search-button {
+    margin-top: -12px;
+
+    .btn {
+      float: right;
+      margin-right: 8px !important;
+    }
   }
 }
 
