@@ -5,19 +5,21 @@
         <div class="hero-banner__content">
           <h1>{{project?.name || '-'}}</h1>
           <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
-          <span class="engagement-status">{{project?.engagementStatus || "-"}} for engagement</span>
+          <div class="engagement-info">
+            <span class="engagement-status">{{project?.engagementStatus || "-"}} for engagement</span>
+          </div>
           <div class="basic-info">
             <div>
               <label>Partner(s)</label>
               <p class="value">{{project?.partner || "-" | titlecase}}</p>
             </div>
-          </div>
+          </div><!--
           <div>
             <a class="btn btn-dark legislation-button" target=”_blank” href="http://www.bclaws.ca/civix/document/id/complete/statreg/02043_01">
               <label>Legislation</label>
               <p>2002 Environmental Assessment Act</p>
             </a>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>

@@ -20,16 +20,18 @@
             <label>Engagement Status</label>
             <p class="value">{{project?.engagementStatus || '-'}}</p>
           </div>
-          <div *ngIf="project?.existingLandUsePlans">
+          <div *ngIf="project?.existingLandUsePlanURLs && project?.existingLandUsePlans; else noPlanURL">
             <label>Existing Land Use Plan</label>
-            <p class="value">{{project?.existingLandUsePlans || "-" | titlecase}}</p>
-          </div>
-          <div *ngIf="project?.existingLandUsePlanURLs">
-            <label>Existing Land Use Plan URL</label>
             <p class="value"><a class="value" target="_blank"
-                href="{{project.existingLandUsePlanURLs}}">{{project?.existingLandUsePlanURLs || "-"}}</a>
+                href="{{project.existingLandUsePlanURLs}}">{{project?.existingLandUsePlans || "-" | titlecase}}</a>
             </p>
           </div>
+          <ng-template #noPlanURL>
+            <div *ngIf="project?.existingLandUsePlans">
+              <label>Existing Land Use Plan</label>
+              <p class="value">{{project?.existingLandUsePlans || "-" | titlecase}}</p>
+            </div>
+          </ng-template>
         </div>
       </div>
       <div class="col-6">

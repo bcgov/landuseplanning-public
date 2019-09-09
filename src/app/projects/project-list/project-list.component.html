@@ -20,7 +20,7 @@
               <span>Search</span>
             </button>
           </div>
-        </div>
+        </div><!--
         <div class="advanced-search">
           <div class="row">
             <div *ngIf="showAdvancedSearch" class="col-md-9">
@@ -30,14 +30,7 @@
                   'btn-secondary': !showFilters.type && numFilters.type > 0,
                   'btn-outline-dark': !showFilters.type && numFilters.type == 0}">
                 Project Type<span *ngIf="numFilters.type > 0 && !showFilters.type">&nbsp;({{ numFilters.type }})</span>
-              </button><!--
-              <button type="button" (click)="toggleFilter('eacDecision');"
-                [ngClass]="{'btn': true, 'decision-btn': true,
-                  'btn-dark': showFilters.eacDecision,
-                  'btn-secondary': !showFilters.eacDecision && numFilters.eacDecision > 0,
-                  'btn-outline-dark': !showFilters.eacDecision && numFilters.eacDecision == 0}">
-                EA Decision<span *ngIf="numFilters.eacDecision > 0 && !showFilters.eacDecision">&nbsp;({{ numFilters.eacDecision }})</span>
-              </button>-->
+              </button>
               <button type="button" (click)="toggleFilter('pcp');"
                 [ngClass]="{'btn': true, 'pcp-button': true,
                   'btn-dark': showFilters.pcp,
@@ -115,103 +108,7 @@
                 <label class="form-check-label" for="waterManagement">Water Management</label>
               </div>
             </div>
-          </div><!--
-          <div *ngIf="showAdvancedSearch && showFilters.eacDecision" class="decision-filters project-filter row">
-            <div class="col-md-12">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="inProgress" name="inProgress"
-                      [(ngModel)]="filterForUI.eacDecision.inProgress">
-                    <label class="form-check-label" for="inProgress">In Progress</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="certificateRefused" name="certificateRefused"
-                      [(ngModel)]="filterForUI.eacDecision.certificateRefused">
-                    <label class="form-check-label" for="certificateRefused">Certificate Refused</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="certificateNotRequired" name="certificateNotRequired"
-                      [(ngModel)]="filterForUI.eacDecision.certificateNotRequired">
-                    <label class="form-check-label" for="certificateNotRequired">Certificate Not Required</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="withdrawn" name="withdrawn"
-                      [(ngModel)]="filterForUI.eacDecision.withdrawn">
-                    <label class="form-check-label" for="withdrawn">Withdrawn</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="preEA" name="preEA"
-                      [(ngModel)]="filterForUI.eacDecision.preEA">
-                    <label class="form-check-label" for="preEA">Pre-EA Act Approval</label>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="certificateIssued" name="certificateIssued"
-                      [(ngModel)]="filterForUI.eacDecision.certificateIssued">
-                    <label class="form-check-label" for="certificateIssued">Certificate Issued</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="furtherAssessmentRequired" name="furtherAssessmentRequired"
-                      [(ngModel)]="filterForUI.eacDecision.furtherAssessmentRequired">
-                    <label class="form-check-label" for="furtherAssessmentRequired">Further Assessment Required</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="certificateExpired" name="certificateExpired"
-                      [(ngModel)]="filterForUI.eacDecision.certificateExpired">
-                    <label class="form-check-label" for="certificateExpired">Certificate Expired</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="terminated" name="terminated"
-                      [(ngModel)]="filterForUI.eacDecision.terminated">
-                    <label class="form-check-label" for="terminated">Terminated</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="notReviewable" name="notReviewable"
-                      [(ngModel)]="filterForUI.eacDecision.notReviewable">
-                    <label class="form-check-label" for="notReviewable">Not Designated Reviewable</label>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-7">
-                  <hr />
-                </div>
-              </div>
-              <div>
-                <div class="row date">
-                  <b>Decision Date</b>
-                </div>
-                <div class="row date-range">
-                  <div class="col-md-5">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="decisionDateStart"
-                        [(ngModel)]="filterForUI.decisionDateStart" ngbDatepicker
-                        #decisionDateStartPicker="ngbDatepicker">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary calendar" (click)="decisionDateStartPicker.toggle()" type="button">
-                          <i class="material-icons">date_range</i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-5">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="decisionDateEnd"
-                        [(ngModel)]="filterForUI.decisionDateEnd" ngbDatepicker
-                        #decisionDateEndPicker="ngbDatepicker">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary calendar" (click)="decisionDateEndPicker.toggle()" type="button">
-                          <i class="material-icons">date_range</i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>-->
+          </div>
           <div *ngIf="showAdvancedSearch && showFilters.pcp" class="pcp-filters project-filter row">
             <div class="col-md-3">
               <div class="form-check">
@@ -280,19 +177,7 @@
               <div class="row">
                 <b>Existing Land Use Plans</b>
               </div>
-              <div class="row"><!--
-                <div class="form-group">
-                  <tag-input id="existingLandUsePlans" name="existingLandUsePlans"
-                    [(ngModel)]="filterForUI.existingLandUsePlans" [identifyBy]="'code'" [displayBy]="'name'"
-                    [onlyFromAutocomplete]="true" [onTextChangeDebounce]="200" [inputClass]="'tag-input-input'"
-                    [placeholder]="'Type Involvement'" [secondaryPlaceholder]="'Type Involvement'"
-                  >
-                    <tag-input-dropdown [autocompleteItems]="s" [identifyBy]="'code'" [displayBy]="'name'"
-                      [showDropdownIfEmpty]="true" [keepOpen]="false"
-                    >
-                    </tag-input-dropdown>
-                  </tag-input>
-                </div>-->
+              <div class="row">
               </div>
             </div>
           </div>
@@ -303,7 +188,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
       <br>
       <div class="results">

@@ -81,6 +81,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     // show splash modal (unless a sub-component has already turned off this flag)
     // do this in another event so it's not in current change detection cycle
+    /*
     if (this.showIntroModal === 'true') {
       setTimeout(() => {
         // this.splashModal =
@@ -90,7 +91,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.cookieService.set('showIntroModal', 'false');
       });
-    }
+    }*/
     return;
   }
 
