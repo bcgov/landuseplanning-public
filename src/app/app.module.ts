@@ -47,6 +47,7 @@ import { ComplianceOversightComponent } from 'app/compliance-oversight/complianc
 import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
 import { EngagementComponent } from './engagement/engagement.component';
 import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
+import { FaqComponent } from './faq/faq.component';
 
 @NgModule({
   imports: [
@@ -80,7 +81,8 @@ import { LegalDirectionComponent } from './legal-direction/legal-direction.compo
     ComplianceOversightComponent,
     SearchHelpComponent,
     EngagementComponent,
-    LegalDirectionComponent
+    LegalDirectionComponent,
+    FaqComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,

@@ -8,6 +8,7 @@ import { ProjectListComponent } from './projects/project-list/project-list.compo
 import { NewsListComponent } from './news/news.component';
 import { LegislationComponent } from './legislation/legislation.component';
 import { EngagementComponent } from './engagement/engagement.component';
+import { FaqComponent } from './faq/faq.component';
 import { ProcessComponent } from './process/process.component';
 import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
 import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: 'engagement',
     component: EngagementComponent
+  },
+  {
+    path: 'faq',
+    component: FaqComponent
   },
   {
     path: 'compliance-oversight',

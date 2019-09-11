@@ -39,6 +39,11 @@
     display: inline-block;
     font-weight: 600;
     width:100%;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    text-decoration: none;
   }
 
   strong {
