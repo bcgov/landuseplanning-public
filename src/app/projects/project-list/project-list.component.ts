@@ -78,100 +78,31 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     {
       name: 'Name',
       value: 'name',
+      width: 'col-3'
+    },
+    {
+      name: 'Partner',
+      value: 'partner',
       width: 'col-2'
     },
     {
-      name: 'Proponent',
-      value: 'proponent.name',
-      width: 'col-2'
+      name: 'Regional Districts',
+      value: 'overlappingRegionalDistricts',
+      width: 'col-3'
     },
     {
-      name: 'Agreements',
-      value: 'agreements',
-      width: 'col-2'
-    },
-    {
-      name: 'Region',
-      value: 'region',
+      name: 'Engagement Status',
+      value: 'engagementStatus',
       width: 'col-2'
     },
     {
       name: 'Phase',
-      value: 'currentPhaseName',
-      width: 'col-2'
-    },
-    {
-      name: 'Decision',
-      value: 'engagementStatus',
+      value: 'projectPhase',
       width: 'col-2'
     }
   ];
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-
-  private TYPE_MAP: object = {
-    energyElectricity: 'Energy-Electricity',
-    energyPetroleum: 'Energy-Petroleum & Natural Gas',
-    foodProcessing: 'Food Processing',
-    industrial: 'Industrial',
-    mines: 'Mines',
-    other: 'Other',
-    tourist: 'Tourist Destination Resorts',
-    transportation: 'Transportation',
-    wasteDisposal: 'Waste Disposal',
-    waterManagement: 'Water Management'
-  };
-
-  private EAC_DECISIONS_MAP: object = {
-    inProgress: 'In Progress',
-    certificateIssued: 'Certificate Issued',
-    certificateRefused: 'Certificate Refused',
-    furtherAssessmentRequired: 'Further Assessment Required',
-    certificateNotRequired: 'Certificate Not Required',
-    certificateExpired: 'Certificate Expired',
-    withdrawn: 'Withdrawn',
-    terminated: 'Terminated',
-    preEA: 'Pre-EA Act Approval',
-    notReviewable: 'Not Designated Reviewable'
-  };
-
-  private PCP_MAP: object = {
-    pending: 'pending',
-    open: 'open',
-    closed: 'closed'
-  };
-
-  private REGIONS_COLLECTION: Array<object> = [
-    { code: 'Cariboo', name: 'Cariboo' },
-    { code: 'Kootenay', name: 'Kootenay' },
-    { code: 'Lower Mainland', name: 'Lower Mainland' },
-    { code: 'Okanagan', name: 'Okanagan' },
-    { code: 'Omineca', name: 'Omineca' },
-    { code: 'Peace', name: 'Peace' },
-    { code: 'Skeena', name: 'Skeena' },
-    { code: 'Thompson-Nicola', name: 'Thompson-Nicola' },
-    { code: 'Vancouver Island', name: 'Vancouver Island' }
-  ];
-
-  private CEAA_INVOLVEMENTS_COLLECTION: Array<object> = [
-    { code: 'None', name: 'None' },
-    { code: 'Panel', name: 'Panel' },
-    { code: 'Panel (CEAA 2012)', name: 'Panel (CEAA 2012)' },
-    { code: 'Coordinated', name: 'Coordinated' },
-    { code: 'Screening', name: 'Screening' },
-    { code: 'Screening - Confirmed', name: 'Screening - Confirmed' },
-    { code: 'Substituted', name: 'Substituted' },
-    { code: 'Substituted (Provincial Lead)', name: 'Substituted (Provincial Lead)' },
-    { code: 'Comprehensive Study', name: 'Comprehensive Study' },
-    { code: 'Comprehensive Study - Unconfirmed', name: 'Comprehensive Study - Unconfirmed' },
-    { code: 'Comprehensive Study - Confirmed', name: 'Comprehensive Study - Confirmed' },
-    { code: 'Comprehensive Study (Pre CEAA 2012)', name: 'Comprehensive Study (Pre CEAA 2012)' },
-    { code: 'Comp Study', name: 'Comp Study' },
-    { code: 'Comp Study - Unconfirmed', name: 'Comp Study - Unconfirmed' },
-    { code: 'To be determined', name: 'To be determined' },
-    { code: 'Equivalent - NEB', name: 'Equivalent - NEB' },
-    { code: 'Yes', name: 'Yes' }
-  ];
 
   constructor(
     private router: Router,
@@ -201,9 +132,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
           .subscribe((proponents: any) => {
             if (proponents) {
               this.proponents = proponents;
-
-              this.regions = this.REGIONS_COLLECTION;
-              this.ceaaInvolvements = this.CEAA_INVOLVEMENTS_COLLECTION;
 
               this.setFiltersFromParams(params);
 
@@ -313,9 +241,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   }
 
   setFiltersFromParams(params) {
-    this.paramsToCheckboxFilters(params, 'type', this.TYPE_MAP);
-    this.paramsToCheckboxFilters(params, 'engagementStatus', this.EAC_DECISIONS_MAP);
-    this.paramsToCheckboxFilters(params, 'pcp', this.PCP_MAP);
 
     this.paramsToCollectionFilters(params, 'region', this.regions, 'code');
     this.paramsToCollectionFilters(params, 'CEAAInvolvement', this.ceaaInvolvements, 'code');
@@ -436,10 +361,9 @@ export class ProjectListComponent implements OnInit, OnDestroy {
             _id: project._id,
             name: project.name,
             partner: project.partner,
-            agreements: project.agreements,
-            region: project.region,
-            currentPhaseName: project.currentPhaseName,
-            engagementStatus: project.engagementStatus
+            overlappingRegionalDistricts: project.overlappingRegionalDistricts,
+            engagementStatus: project.engagementStatus,
+            projectPhase: project.projectPhase
           }
         );
       });

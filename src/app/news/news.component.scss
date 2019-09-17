@@ -103,6 +103,10 @@
 }
 
 @media (min-width: 768px) {
+    .hero-banner__content {
+      padding-bottom: 2rem;
+    }
+    
     .project-table {
         &__name-col {
             // width: 20%;

@@ -7,7 +7,6 @@ export class News {
   content: string;
   active: boolean;
   project: Project;
-  type: string;
   pcp: string;
   dateAdded: string;
   dateUpdated: string;
@@ -18,7 +17,6 @@ export class News {
     this.headline = obj && obj.headline || null;
     this.content = obj && obj.content || null;
     this.project = obj && obj.project || null;
-    this.type = obj && obj.type || null;
     this.pcp = obj && obj.pcp || null;
     this.active = obj && obj.active || null;
     this.dateAdded = obj && obj.dateAdded || null;

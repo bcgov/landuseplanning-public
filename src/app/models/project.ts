@@ -11,6 +11,7 @@ export class Project {
   name: String;
   projectLead: any;
   partner: String;
+  traditionalTerritory: String;
   region: String;
   projectDirector: any;
   agreements: String;
@@ -62,6 +63,7 @@ export class Project {
     this.name = obj && obj.name || null;
     this.projectLead = obj && obj.projectLead || null;
     this.partner = obj && obj.partner || null;
+    this.traditionalTerritory = obj && obj.traditionalTerritory || null;
     this.region = obj && obj.region || null;
     this.projectDirector = obj && obj.projectDirector || null;
     this.agreements = obj && obj.agreements || null;

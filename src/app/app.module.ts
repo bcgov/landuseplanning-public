@@ -39,7 +39,6 @@ import { FeatureService } from 'app/services/feature.service';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 import { NewsListComponent } from 'app/news/news.component';
-import { NewsTypeFilterPipe } from 'app/shared/pipes/news-type-filter.pipe';
 import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filter.pipe';
 import { LegislationComponent } from 'app/legislation/legislation.component';
 import { ProcessComponent } from 'app/process/process.component';
@@ -48,6 +47,7 @@ import { ActivitiesListTableRowsComponent } from './project/project-activites/ac
 import { EngagementComponent } from './engagement/engagement.component';
 import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
 import { FaqComponent } from './faq/faq.component';
+import { ShareButtonsComponent } from './share-buttons/share-buttons.component';
 
 @NgModule({
   imports: [
@@ -71,7 +71,6 @@ import { FaqComponent } from './faq/faq.component';
     HeaderComponent,
     FooterComponent,
     NewsListComponent,
-    NewsTypeFilterPipe,
     NewsMultifieldFilterPipe,
     NewsListTableRowsComponent,
     ActivitiesListTableRowsComponent,
@@ -82,7 +81,8 @@ import { FaqComponent } from './faq/faq.component';
     SearchHelpComponent,
     EngagementComponent,
     LegalDirectionComponent,
-    FaqComponent
+    FaqComponent,
+    ShareButtonsComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,

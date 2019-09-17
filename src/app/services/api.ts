@@ -240,6 +240,7 @@ export class ApiService {
       'name',
       'projectLead',
       'partner',
+      'traditionalTerritory',
       'region',
       'projectDirector',
       'type',
