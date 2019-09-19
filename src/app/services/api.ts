@@ -56,17 +56,17 @@ export class ApiService {
         this.env = 'dev';
         break;
 
-      case 'gcpe-lup-test.pathfinder.gov.bc.ca':
+      case 'lup-test.pathfinder.gov.bc.ca':
         // Test
         this.apiPath = 'https://lup-test.pathfinder.gov.bc.ca/api/public';
         this.adminUrl = 'https://lup-test.pathfinder.gov.bc.ca/admin';
         this.env = 'test';
         break;
 
-      case 'gcpe-lup-prod.gov.bc.ca':
+      case 'landuseplanning.gov.bc.ca':
         // Prod
-        this.apiPath = 'https://lup-prod.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://lup-prod.pathfinder.gov.bc.ca/admin';
+        this.apiPath = 'https://landuseplanning.gov.bc.ca/api/public';
+        this.adminUrl = 'https://landuseplanning.gov.bc.ca/admin';
         this.env = 'prod';
         break;
 

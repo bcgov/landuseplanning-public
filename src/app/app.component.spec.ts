@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { ShareButtonsComponent } from './share-buttons/share-buttons.component';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from 'app/services/api';
@@ -27,7 +28,8 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
+        ShareButtonsComponent
       ],
       imports: [
         RouterTestingModule,

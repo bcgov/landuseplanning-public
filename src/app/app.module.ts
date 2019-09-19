@@ -25,6 +25,7 @@ import { FooterComponent } from 'app/footer/footer.component';
 import { NewsListTableRowsComponent } from 'app/news/news-list-table-rows/news-list-table-rows.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { SearchHelpComponent } from './search-help/search-help.component';
+import { ShareButtonsComponent } from './share-buttons/share-buttons.component';
 
 
 // services
@@ -47,7 +48,6 @@ import { ActivitiesListTableRowsComponent } from './project/project-activites/ac
 import { EngagementComponent } from './engagement/engagement.component';
 import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
 import { FaqComponent } from './faq/faq.component';
-import { ShareButtonsComponent } from './share-buttons/share-buttons.component';
 
 @NgModule({
   imports: [
