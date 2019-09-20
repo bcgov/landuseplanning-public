@@ -24,7 +24,7 @@
     background: #f7f8fa;
   }
 
-  h3 {
+  h2 {
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -85,4 +85,14 @@
 
 .material-icons {
   line-height: 32px !important;
+}
+
+.hero-banner__content {
+  a {
+    color: #fff;
+    text-decoration: underline;
+  }
+  a:hover {
+    text-decoration: none;
+  }
 }
