@@ -11,77 +11,26 @@
             <div class="value" [clamp]="3" [innerHTML]="proj.description"></div>
           </li>
           <li>
-            <span class="key">EAO Project Number:</span>
-            <span class="value">{{proj?.epicProjectID || '-'}}</span>
-          </li>
-          <li>
             <span class="key">Engagement Status:</span>
             <span class="value">{{proj?.engagementStatus || '-'}}</span>
           </li>
           <li>
-            <!-- Phase object not ready -->
-            <span class="key">Phase:</span>
-            <span class="value">{{proj?.currentPhaseName || '-'}}</span>
+            <span class="key">Project Phase:</span>
+            <span class="value">{{proj?.projectPhase || '-'}}</span>
           </li>
           <li>
-            <span class="key">Overlapping Regional Districts:</span>
-            <span class="value">{{proj?.overlappingRegionalDistricts || '-'}}</span>
+            <span class="key">Partner First Nation(s):</span>
+            <span class="value">{{proj?.partners || '-'}}</span>
           </li>
-          <li *ngIf="commentPeriodStatus">
-            <span class="key">Comment Period Status:</span>
-            <span class="value">{{commentPeriodStatus}}</span>
+          <li>
+            <span class="key">Agreement(s):</span>
+            <span class="value">{{proj?.aggreements || '-'}}</span>
           </li>
         </ul>
       </div>
 
       <hr>
 
-      <!-- Status -->
-      <!-- <ul class="status-container">
-        <li>
-          <i class="material-icons" title="{{proj?.cpStatus}}">
-            {{commentPeriodService.isOpen(proj?.currentPeriod) ? 'comment' : 'highlight_off'}}
-          </i><span>{{proj?.cpStatus}}</span>
-        </li>
-        <li *ngVar="projectService.getStatusCode(proj?.status) as projStatusCode">
-          
-          <i class="material-icons" title="{{proj?.projStatus}}"
-            *ngIf="projectService.isAccepted(projStatusCode)">
-            access_time
-          </i>
-
-          <i class="material-icons" title="{{proj?.projStatus}}"
-            *ngIf="projectService.isAllowed(projStatusCode)">
-            error_outline
-          </i>
-
-          <i class="material-icons" title="{{proj?.projStatus}}"
-            *ngIf="projectService.isDispGoodStanding(projStatusCode)
-              || projectService.isOffered(projStatusCode)
-              || projectService.isOfferAccepted(projStatusCode)">
-            check
-          </i>
-
-          <i class="material-icons" title="{{proj?.projStatus}}"
-            *ngIf="projectService.isCancelled(projStatusCode)
-            || projectService.isAbandoned(projStatusCode)
-            || projectService.isOfferNotAccepted(projStatusCode)">
-            cancel
-          </i>
-
-          <i class="material-icons" title="{{proj?.projStatus}}"
-            *ngIf="projectService.isDisallowed(projStatusCode)
-            || projectService.isSuspended(projStatusCode)">
-            warning
-          </i>
-
-          <i class="material-icons" title="{{proj?.projStatus}}"
-            *ngIf="projectService.isUnknown(projStatusCode)">
-            warning
-          </i>
-          <span>{{proj?.projStatus}}</span>
-        </li>
-      </ul> -->
       <a class="app-link btn btn-primary" [routerLink]="['/p', proj?._id]"
         title="View more information about this project">
         View Project Details

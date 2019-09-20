@@ -11,9 +11,6 @@
           <div>
             <label>Regional Districts</label>
             <p class="value">{{project?.overlappingRegionalDistricts || "-" | titlecase}}</p>
-          </div><div *ngIf="project?.traditionalTerritory">
-            <label>First Nation's Traditional Territory</label>
-            <p class="value">{{project?.traditionalTerritory || "-"}}</p>
           </div>
           <div *ngIf="project?.projectPhase">
             <label>Project Phase</label>
