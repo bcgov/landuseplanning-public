@@ -33,8 +33,9 @@
     left: 0;
     right: 0;
     border-bottom-style: solid;
-    border-bottom-width: 0;
-    border-bottom-color: rgba(#5475a7, 0.4);
+    border-bottom-width: 2px;
+    border-bottom-color: #fcba19;
+    padding: 5px;
     // background-color: transparent;
     transition: all linear 0.2s;
   }
@@ -250,15 +251,17 @@
 // Navbar Brand
 .navbar-brand {
   height: 3.4375rem;
-  background-image: url("/assets/images/bcgov-header-vert-SM.png");
+  /*background-image: url("/assets/images/bcgov-header-vert-SM.png");*/
+  background-image: url("/assets/images/BCID_H_rgb_rev.png");
   background-position: 8px center;
+  background-size: contain;
   background-repeat: no-repeat;
   white-space: normal;
 }
 
 .navbar-brand__title {
   margin-top: 0.78rem;
-  margin-left: 75px;
+  margin-left: 175px;
   display: inline-block;
   color: #fff;
   line-height: 1.1rem;
@@ -292,28 +295,29 @@
 
 @media (min-width: 992px) {
   .navbar-brand__title {
-    font-size: 1.5rem;
+    font-size: 1.05rem;
   }
 }
 
 @media (min-width: 1096px) {
   .navbar-brand__title {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 }
 
 @media (min-width: 1224px) {
   .navbar-brand {
-    height: 4.2rem;
-    background-image: url("/assets/images/bcgov-header-vert-MD.png");
+    /*background-image: url("/assets/images/bcgov-header-vert-SM.png");*/
+    background-image: url("/assets/images/BCID_H_rgb_rev.png");
     background-position: 10px center;
+    background-size: contain;
   }
 
   .navbar-brand__title {
-    margin-left: 88px;
+    margin-left: 188px;
     line-height: 1.2rem;
     font-weight: 800;
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-top: 17px;
   }
 
@@ -321,9 +325,9 @@
     font-size: 0.6rem;
   }
 }
-
+/*
 @media (min-width: 1340px) {
   .navbar-brand__title {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
-}
+}*/
