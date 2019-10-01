@@ -1,18 +1,26 @@
 <div class="share-bar">
-  <div class="share-icon share-facebook">
-    <img src="assets/images/share-facebook.png" alt="Share to Facebook">
-    <span class="share-label">Share</span>
-  </div>
-  <div class="share-icon share-twitter">
-    <img src="assets/images/share-twitter.png" alt="Share to twitter">
-    <span class="share-label">Tweet</span>
-  </div>
-  <div class="share-icon share-linkedin">
-    <img src="assets/images/share-linkedin.png" alt="Share to Linkedin">
-    <span class="share-label">Share</span>
-  </div>
-  <div class="share-icon share-email">
-    <img src="assets/images/share-email.png" alt="Share by email">
-    <span class="share-label">Email</span>
-  </div>
+  <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ pageURL }}">
+    <div class="share-icon share-facebook">
+      <img src="assets/images/share-facebook.png" alt="Share to Facebook">
+      <span class="share-label">Share</span>
+    </div>
+  </a>
+  <a target="_blank" href="https://twitter.com/home?status={{ pageURL }}">
+    <div class="share-icon share-twitter">
+      <img src="assets/images/share-twitter.png" alt="Share to twitter">
+      <span class="share-label">Tweet</span>
+    </div>
+  </a>
+  <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url={{ pageURL }}&title=&summary={{ pageTitle }}&source=">
+    <div class="share-icon share-linkedin">
+      <img src="assets/images/share-linkedin.png" alt="Share to Linkedin">
+      <span class="share-label">Share</span>
+    </div>
+  </a>
+  <a href="mailto:no-reply@gov.bc.ca?&cc=&bcc=&subject={{ pageTitle }}&body={{ pageTitle }}">
+    <div class="share-icon share-email">
+      <img src="assets/images/share-email.png" alt="Share by email">
+      <span class="share-label">Email</span>
+    </div>
+  </a>
 </div>
