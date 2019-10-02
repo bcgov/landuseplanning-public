@@ -1,3 +1,10 @@
 .static-content {
-  background: white
+  background: white;
+
+  section {
+    img {
+      width: 100%;
+    }
+  }
 }
+
