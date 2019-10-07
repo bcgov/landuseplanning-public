@@ -2,7 +2,7 @@
     'app-header--flex': (router.url.startsWith('/projects')),
     'app-header--solid': (router.url.startsWith('/p/'))}">
   <nav class="navbar navbar-expand-lg justify-content-between">
-    <a class="navbar-brand" title="Provincial Land Use Planning" routerLink="/home">
+    <a class="navbar-brand" routerLink="/home">
       <span class="navbar-brand__title">Provincial Land Use Planning</span>
     </a>
     <button class="navbar-toggler" type="button" title="Toggle Main Navigation" data-toggle="collapse"
@@ -25,34 +25,32 @@
           </a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="aboutMMTI" tabindex="4" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false"><span>LUP Process</span><span class="caret"></span>
+          <a class="nav-link dropdown-toggle" id="aboutMMTI" tabindex="0" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false"><span>Learn More</span><span class="caret"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="aboutMMTI">
-            <a class="dropdown-item" href="/process" [routerLink]="['/process']" tabindex="5">
+            <a class="dropdown-item" href="/process" [routerLink]="['/process']" tabindex="0">
               <strong>Process and Phases</strong>
               <span class="dd-item-desc">Learn about the steps that are required to complete a modernized
                 land use plan, and have it approved and implemented.</span>
             </a>
-            <a class="dropdown-item" href="/engagement" [routerLink]="['/engagement']" tabindex="6">
+            <a class="dropdown-item" href="/engagement" [routerLink]="['/engagement']" tabindex="0">
               <strong>Public Engagement</strong>
               <span class="dd-item-desc">Learn about the important role of the public and stakeholders 
                 throughout land use planning processes.</span>
             </a>
-            <a class="dropdown-item" href="/legal-direction" [routerLink]="['/legal-direction']" tabindex="7">
+            <a class="dropdown-item" href="/legal-direction" [routerLink]="['/legal-direction']" tabindex="0">
               <strong>Land & Resource Use Legal Direction</strong>
-              <span class="dd-item-desc">Learn about how we collaborate with other agencies to coordinate oversight of
-                environmental assessment projects.</span>
+              <span class="dd-item-desc">Learn about the applicable legal and policy tools that can bring land use objectives into legal effect.</span>
             </a>
-            <a class="dropdown-item" href="/faq" [routerLink]="['/faq']" tabindex="8">
+            <a class="dropdown-item" href="/faq" [routerLink]="['/faq']" tabindex="0">
               <strong>Frequently Asked Questions</strong>
-              <span class="dd-item-desc">Learn about how we collaborate with other agencies to coordinate oversight of
-                environmental assessment projects.</span>
+              <span class="dd-item-desc">Learn more about land use planning in B.C.</span>
             </a>
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" title="Contact Us" routerLink="/contact">
+          <a class="nav-link" routerLink="/contact">
             <span>Contact Us</span>
           </a>
         </li>
