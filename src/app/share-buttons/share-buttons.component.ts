@@ -17,6 +17,7 @@ export class ShareButtonsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageTitle = document.title;
   }
 
 }

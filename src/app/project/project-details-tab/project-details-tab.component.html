@@ -18,7 +18,8 @@
           </div>
           <div *ngIf="project?.engagementStatus">
             <label>Engagement Status</label>
-            <p class="value">{{project?.engagementStatus || '-'}}</p>
+            <p class="value" *ngIf="project?.engagementStatus === 'Open'">Open for Public Comment</p>
+            <p class="value" *ngIf="project?.engagementStatus === 'Closed'">Currently Closed</p>
           </div>
           <div *ngIf="project?.existingLandUsePlanURLs && project?.existingLandUsePlans; else noPlanURL">
             <label>Existing Land Use Plan</label>
