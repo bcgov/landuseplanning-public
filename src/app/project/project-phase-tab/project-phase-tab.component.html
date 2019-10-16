@@ -1,0 +1,26 @@
+<div class="tab-pane" role="tabpanel">
+    <section class="tab-section" *ngIf="project">
+        <div *ngIf="project.projectPhase">
+            <h2>Current Project Phase</h2>
+            <a href="/process">
+                <div *ngIf="project.projectPhase === 'Pre-Planning'" class="process-image">
+                    <img src="/assets/images/process-preplanning.png" alt="The current project phase is Pre-Planning. Click for more details about the Land Use Planning process">
+                </div>
+                <div *ngIf="project.projectPhase === 'Plan Initiation'" class="process-image">
+                    <img src="/assets/images/process-planinitiation.png" alt="The current project phase is Plan Initiation. Click for more details about the Land Use Planning process">
+                </div>
+                <div *ngIf="project.projectPhase === 'Plan Development'" class="process-image">
+                    <img src="/assets/images/process-plandevelopment.png"
+                        alt="The current project phase is Plan Development. Click for more details about the Land Use Planning process">
+                </div>
+                <div *ngIf="project.projectPhase === 'Plan Evaluation and Approval'" class="process-image">
+                    <img src="/assets/images/process-planevaluation.png"
+                        alt="The current project phase is Plan Evaluation and Approval. Click for more details about the Land Use Planning process">
+                </div>
+                <div *ngIf="project.projectPhase === 'Plan Implementation and Monitoring'" class="process-image">
+                    <img src="/assets/images/process-planimplementation.png" alt="The current project phase is Plan Implementation and Monitoring. Click for more details about the Land Use Planning process">
+                </div>
+            </a>
+        </div>
+    </section>
+</div>

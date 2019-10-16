@@ -9,6 +9,7 @@ import { DocumentsResolver } from './documents/documents-resolver.service';
 import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
 import { ProjectActivitesComponent } from './project-activites/project-activites.component';
 import { ProjectActivitiesResolver } from './project-activites/project-activities-resolver.service';
+import { ProjectPhaseTabComponent } from './project-phase-tab/project-phase-tab.component';
 import { DocumentTableResolver } from './documents/project-document-table-rows/project-document-table-rows-resolver.service';
 import { CertificatesResolver } from './certificates/certificates-resolver.service';
 import { CertificatesComponent } from './certificates/certificates.component';
@@ -38,12 +39,8 @@ export const ProjectRoutes: Routes = [
     }
   },
   {
-    path: 'amendments',
-    component: CertificatesComponent,
-    resolve: {
-      documents: AmendmentsResolverService,
-      documentsTableRow: DocumentTableResolver
-    }
+    path: 'project-phase',
+    component: ProjectPhaseTabComponent,
   },
   {
     path: 'pins',

@@ -23,7 +23,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     { label: 'Background', link: 'background-info' },
     { label: 'Engagement', link: 'commenting' },
     { label: 'Documents', link: 'documents' },
-    { label: 'Project Phase', link: 'amendments' },
+    { label: 'Project Phase', link: 'project-phase' },
     // { label: 'Participating Indigenous Nations', link: 'pins' }
   ];
 
