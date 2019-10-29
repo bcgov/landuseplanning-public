@@ -39,7 +39,9 @@
               "node_modules/moment/min/moment.min.js",
               "node_modules/leaflet/dist/leaflet.js",
               "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
-              "src/assets/js/utils.js"
+              "node_modules/shpjs/dist/shp.min.js",
+              "src/assets/js/utils.js",
+              "src/assets/js/leaflet.shpfile.js"
             ]
           },
           "configurations": {
@@ -94,7 +96,9 @@
               "node_modules/moment/min/moment.min.js",
               "node_modules/leaflet/dist/leaflet.js",
               "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
-              "src/assets/js/utils.js"
+              "node_modules/shpjs/dist/shp.min.js",
+              "src/assets/js/utils.js",
+              "src/assets/js/leaflet.shpfile.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",

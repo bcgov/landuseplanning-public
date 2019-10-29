@@ -12,6 +12,7 @@ import { DocumentTableResolver } from './documents/project-document-table-rows/p
 import { CertificatesResolver } from './certificates/certificates-resolver.service';
 import { AmendmentsResolverService } from './certificates/amendments-resolver.service';
 import { PinsResolverService } from './pins/pins-resolver.service';
+import { ShapeFileResolver } from './project-details-tab/project-shapefile-resolver.service';
 
 const routes: Routes = [
   {
@@ -57,7 +58,8 @@ const routes: Routes = [
     AmendmentsResolverService,
     ProjectActivitiesResolver,
     DocumentTableResolver,
-    PinsResolverService
+    PinsResolverService,
+    ShapeFileResolver
   ]
 })
 

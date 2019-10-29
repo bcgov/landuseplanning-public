@@ -16,6 +16,7 @@ import { CertificatesComponent } from './certificates/certificates.component';
 import { AmendmentsResolverService } from './certificates/amendments-resolver.service';
 import { PinsComponent } from './pins/pins.component';
 import { PinsResolverService } from './pins/pins-resolver.service';
+import { ShapeFileResolver } from './project-details-tab/project-shapefile-resolver.service';
 
 export const ProjectRoutes: Routes = [
   {
@@ -27,7 +28,8 @@ export const ProjectRoutes: Routes = [
     path: 'project-details',
     component: ProjectDetailsTabComponent,
     resolve: {
-      documents: ProjectActivitiesResolver
+      documents: ProjectActivitiesResolver,
+      shapefile: ShapeFileResolver
     }
   },
   {
