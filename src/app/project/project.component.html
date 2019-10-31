@@ -5,9 +5,6 @@
         <div class="hero-banner__content">
           <h1>{{project?.name || '-'}}</h1>
           <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
-          <div class="engagement-info">
-            <span class="engagement-status">{{project?.engagementStatus || "-"}} for engagement</span>
-          </div>
           <div class="basic-info">
             <div>
               <label>Partner First Nation(s)</label>
