@@ -4,6 +4,9 @@
     </div>
 
     <section class="tab-section" *ngIf="!loading">
+        <div *ngIf="currentProject.backgroundInfo">
+            <div class="mb-3" [innerHTML]="currentProject.backgroundInfo | newlines"></div>
+        </div>
         <div *ngIf="commentPeriods.length < 1">
             No comment periods are currently scheduled for this project.
         </div>
@@ -17,8 +20,8 @@
                     <div class="commentInfo">{{commentPeriod.instructions}}</div>
                     <p class="mb-0">{{commentPeriod.dateStarted | date:'mediumDate'}} - {{commentPeriod.dateCompleted | date:'mediumDate'}}</p>
                 </div>
-                <div *ngIf="commentPeriodService.isOpen(commentPeriod)">
-                    <div class="badge badge-secondary p-3">{{commentPeriod.daysRemaining}}</div>
+                <div>
+                    <div class="badge badge-secondary p-3">View details</div>
                 </div>
             </div>
         </div>

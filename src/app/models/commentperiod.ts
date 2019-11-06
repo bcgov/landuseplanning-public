@@ -43,6 +43,7 @@ export class CommentPeriod {
   userCan: String;
   vettedPercent: Number;
   vettingRoles: String;
+  commentPeriodInfo: String;
 
   // Permissions
   read: Array<String> = [];
@@ -91,6 +92,7 @@ export class CommentPeriod {
     this.userCan = obj && obj.userCan || null;
     this.vettedPercent = obj && obj.vettedPercent || null;
     this.vettingRoles = obj && obj.vettingRoles || null;
+    this.commentPeriodInfo = obj && obj.commentPeriodInfo || null;
 
     this.read = obj && obj.read || null;
     this.write = obj && obj.write || null;

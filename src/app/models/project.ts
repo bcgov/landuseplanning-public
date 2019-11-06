@@ -7,6 +7,8 @@ export class Project {
   description: String;
   engagementStatus: String;
   backgroundInfo: String;
+  engagementInfo: String;
+  documentInfo: String;
   overlappingRegionalDistricts: String;
   name: String;
   projectLead: any;
@@ -58,6 +60,8 @@ export class Project {
     this.description = obj && obj.description || null;
     this.engagementStatus = obj && obj.engagementStatus || null;
     this.backgroundInfo = obj && obj.backgroundInfo || null;
+    this.engagementInfo = obj && obj.engagementInfo || null;
+    this.documentInfo = obj && obj.documentInfo || null;
     this.overlappingRegionalDistricts = obj && obj.overlappingRegionalDistricts || null;
     this.name = obj && obj.name || null;
     this.projectLead = obj && obj.projectLead || null;

@@ -203,6 +203,8 @@ export class ApiService {
       'partner',
       'projectPhase',
       'backgroundInfo',
+      'engagementInfo',
+      'documentInfo',
       'epicProjectID',
       'description',
       'legalDescription',
@@ -242,6 +244,8 @@ export class ApiService {
       'partner',
       'projectPhase',
       'backgroundInfo',
+      'engagementInfo',
+      'documentInfo',
       'overlappingRegionalDistricts',
       'name',
       'projectLead',
@@ -439,7 +443,7 @@ export class ApiService {
       'project',
       'dateStarted',
       'dateCompleted',
-      'instructions'
+      'instructions',
     ];
     // TODO: May want to pass this as a parameter in the future.
     const sort = '&sortBy=-dateStarted';
@@ -458,6 +462,7 @@ export class ApiService {
       'instructions',
       'openHouses',
       'project',
+      'commentPeriodInfo',
       'relatedDocuments'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);

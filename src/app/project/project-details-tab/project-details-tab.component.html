@@ -16,11 +16,6 @@
             <label>Project Phase</label>
             <p class="value">{{project?.projectPhase || "-"}}</p>
           </div>
-          <div *ngIf="project?.engagementStatus">
-            <label>Engagement Status</label>
-            <p class="value" *ngIf="project?.engagementStatus === 'Open'">Open for Public Comment</p>
-            <p class="value" *ngIf="project?.engagementStatus === 'Closed'">Currently Closed</p>
-          </div>
           <div *ngIf="project?.existingLandUsePlanURLs && project?.existingLandUsePlans; else noPlanURL">
             <label>Existing Land Use Plan</label>
             <p class="value"><a class="value" target="_blank"
