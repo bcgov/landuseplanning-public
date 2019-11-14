@@ -88,17 +88,12 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     {
       name: 'Regional Districts',
       value: 'overlappingRegionalDistricts',
-      width: 'col-2'
-    },
-    {
-      name: 'Engagement Status',
-      value: 'engagementStatus',
-      width: 'col-2'
+      width: 'col-3'
     },
     {
       name: 'Phase',
       value: 'projectPhase',
-      width: 'col-2'
+      width: 'col-3'
     }
   ];
 
@@ -347,7 +342,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   updateCounts() {
     this.updateCount('agreements');
-    this.updateCount('engagementStatus');
     this.updateCount('pcp');
     this.updateCount('more');
   }
@@ -362,7 +356,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
             name: project.name,
             partner: project.partner,
             overlappingRegionalDistricts: project.overlappingRegionalDistricts,
-            engagementStatus: project.engagementStatus,
             projectPhase: project.projectPhase
           }
         );
