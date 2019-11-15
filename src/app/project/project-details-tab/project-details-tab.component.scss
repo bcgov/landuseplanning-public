@@ -34,12 +34,6 @@
       margin-bottom: 0;
     }
   }
-  a {
-    text-decoration: underline;
-  }
-  a:hover {
-    text-decoration: none;
-  }
 }
 
 .tab-section {
@@ -56,6 +50,10 @@
   }
   a {
       display: inline-flex;
+      text-decoration: underline;
+  }
+  a:hover {
+    text-decoration: none;
   }
   .row {
     @media (max-width: 767px) {

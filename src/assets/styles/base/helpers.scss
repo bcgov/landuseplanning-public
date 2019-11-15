@@ -37,3 +37,13 @@
 .no-scroll {
     overflow: hidden;
 }
+
+// had to put this here as it didn;t work in the individual components
+.tab-section {
+    a {
+        text-decoration: underline !important;
+    }
+    a:hover {
+        text-decoration: none !important;
+    }
+}

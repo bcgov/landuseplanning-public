@@ -1,3 +1,12 @@
+.tab-section {
+    a {
+        text-decoration: underline !important;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+}
+
 .input-group-prepend {
 	flex-wrap: wrap;
 

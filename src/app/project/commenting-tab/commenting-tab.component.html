@@ -4,8 +4,8 @@
     </div>
 
     <section class="tab-section" *ngIf="!loading">
-        <div *ngIf="currentProject.backgroundInfo">
-            <div class="mb-3" [innerHTML]="currentProject.backgroundInfo | newlines"></div>
+        <div *ngIf="currentProject.engagementInfo">
+            <div class="mb-3" [innerHTML]="currentProject.engagementInfo | newlines"></div>
         </div>
         <div *ngIf="commentPeriods.length < 1">
             No comment periods are currently scheduled for this project.
