@@ -6,11 +6,11 @@
           <h2>Details</h2>
           <div>
             <label>Region</label>
-            <p class="value">{{project?.region || "-" | titlecase}}</p>
+            <p class="value">{{project?.region || "-" }}</p>
           </div>
           <div>
             <label>Regional Districts</label>
-            <p class="value">{{project?.overlappingRegionalDistricts || "-" | titlecase}}</p>
+            <p class="value">{{project?.overlappingRegionalDistricts || "-" }}</p>
           </div>
           <div *ngIf="project?.projectPhase">
             <label>Project Phase</label>
@@ -19,13 +19,13 @@
           <div *ngIf="project?.existingLandUsePlanURLs && project?.existingLandUsePlans; else noPlanURL">
             <label>Existing Land Use Plan</label>
             <p class="value"><a class="value" target="_blank"
-                href="{{project.existingLandUsePlanURLs}}">{{project?.existingLandUsePlans || "-" | titlecase}}</a>
+                href="{{project.existingLandUsePlanURLs}}">{{project?.existingLandUsePlans || "-" }}</a>
             </p>
           </div>
           <ng-template #noPlanURL>
             <div *ngIf="project?.existingLandUsePlans">
               <label>Existing Land Use Plan</label>
-              <p class="value">{{project?.existingLandUsePlans || "-" | titlecase}}</p>
+              <p class="value">{{project?.existingLandUsePlans || "-" }}</p>
             </div>
           </ng-template>
         </div>

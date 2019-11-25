@@ -11,7 +11,7 @@ import { EngagementComponent } from './engagement/engagement.component';
 import { FaqComponent } from './faq/faq.component';
 import { ProcessComponent } from './process/process.component';
 import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
-import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
+import { ModernizingComponent } from './modernizing/modernizing.component';
 import { SearchHelpComponent } from './search-help/search-help.component';
 import { NewsResolver } from './news/news-resolver.service';
 
@@ -52,11 +52,11 @@ const routes: Routes = [
     component: ComplianceOversightComponent
   },
   {
-    path: 'legal-direction',
-    component: LegalDirectionComponent
+    path: 'modernizing',
+    component: ModernizingComponent
   },
   {
-    path: 'process',
+    path: 'phases',
     component: ProcessComponent
   },
   {

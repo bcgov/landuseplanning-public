@@ -46,7 +46,7 @@ import { ProcessComponent } from 'app/process/process.component';
 import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
 import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
 import { EngagementComponent } from './engagement/engagement.component';
-import { LegalDirectionComponent } from './legal-direction/legal-direction.component';
+import { ModernizingComponent } from './modernizing/modernizing.component';
 import { FaqComponent } from './faq/faq.component';
 
 @NgModule({
@@ -80,7 +80,7 @@ import { FaqComponent } from './faq/faq.component';
     ComplianceOversightComponent,
     SearchHelpComponent,
     EngagementComponent,
-    LegalDirectionComponent,
+    ModernizingComponent,
     FaqComponent,
     ShareButtonsComponent
   ],
