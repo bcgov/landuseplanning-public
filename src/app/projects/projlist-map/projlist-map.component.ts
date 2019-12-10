@@ -3,6 +3,7 @@ import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryRe
 import { Subject } from 'rxjs/Subject';
 import 'leaflet';
 import 'leaflet.markercluster';
+import 'assets/js/leaflet.ajax.js';
 import * as _ from 'lodash';
 
 import { Project } from 'app/models/project';
@@ -139,6 +140,15 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       zoomSnap: 0.1, // for greater granularity when fitting bounds
       attributionControl: false
     });
+
+    // add LUP regions to map
+    const regions = L.geoJSON.ajax('assets/js/regions.json', {style: function (feature) {
+        return {color: feature.properties.COLOR};
+    },
+    onEachFeature: function (feature, layer) {
+        layer.bindTooltip(feature.properties.REGION_NAME);
+    }});
+    regions.addTo(this.map);
 
     // map state change events
     // this.map.on('zoomstart', function () {
@@ -423,4 +433,31 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   public onLoadStart() { this.loading = true; }
 
   public onLoadEnd() { this.loading = false; }
+
+  private regionStyle(feature) {
+    console.log('Feature', feature);
+    console.log('Feature object id', feature.properties.OBJECTID);
+    console.log('Fill colour', this.regionColour(feature.properties.OBJECTID));
+    return {
+      fillColor: this.regionColour(feature.properties.OBJECTID),/*
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.7*/
+    };
+  }
+
+  private regionColour(id) {
+    console.log('Colour for ID', id);
+    return  id === 1 ? 'red' :
+            id === 2 ? 'green' :
+            id === 3 ? 'yellow' :
+            id === 4 ? 'purple' :
+            id === 5 ? 'black' :
+            id === 6 ? 'white' :
+            id === 7 ? 'orange' :
+            id === 8 ? 'brown' :
+                       'blue';
+  }
 }
