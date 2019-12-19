@@ -559,9 +559,9 @@ pipeline {
                 ROCKET_DEPLOY_WEBHOOK = sh(returnStdout: true, script: 'cat rocket-deploy-webhook')
 
                 echo "Building landuseplanning-public develop branch"
-                //openshiftBuild bldCfg: 'angular-builder', showBuildLogs: 'true'
-                //openshiftBuild bldCfg: 'lup-public', showBuildLogs: 'true'
-                //openshiftBuild bldCfg: 'lup-public-static', showBuildLogs: 'true'
+                openshiftBuild bldCfg: 'angular-builder', showBuildLogs: 'true'
+                openshiftBuild bldCfg: 'lup-public', showBuildLogs: 'true'
+                openshiftBuild bldCfg: 'lup-public-static', showBuildLogs: 'true'
                 echo "Build done"
 
                 echo ">>> Get Image Hash"
@@ -610,7 +610,7 @@ pipeline {
         }
       }
     }
-/*
+
     stage('Deploy to dev'){
       steps {
         script {
@@ -664,7 +664,7 @@ pipeline {
           }
         }
       }
-    }*/
+    }
 /* commenting out zap for now in public
     stage('Zap') {
       steps {

@@ -68,7 +68,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
           this.commentPeriods = res.data;
           console.log('commenting-tab', res.data);
           this.commentPeriods.forEach(element => {
-            //element.instructions = element.instructions.match(/Comment Period on the (.*?) for /)[1];
+            // element.instructions = element.instructions.match(/Comment Period on the (.*?) for /)[1];
           });
         }
       });
