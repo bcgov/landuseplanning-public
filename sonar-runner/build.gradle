@@ -47,14 +47,14 @@ if ( project.hasProperty('project_key_extension') ) {
 }
 
 sonarqube {
-    properties {
-        property "sonar.host.url", "https://sonarqube-prc-tools.pathfinder.gov.bc.ca"        
-        property "sonar.projectName", "prc-public$pne"
-        property "sonar.projectKey", "org.sonarqube:prc-public$pke"
+    properties {      
+        property "sonar.projectName", "lup-public"
+        property "sonar.projectKey", "lup-public"
         property "sonar.projectBaseDir", "../"
         property "sonar.sources", "./src/app"
         //property "sonar.tests", "test"
         property "sourceEncoding", "UTF-8"
+        property "sonar.verbose", "true"
     }
 }
 
