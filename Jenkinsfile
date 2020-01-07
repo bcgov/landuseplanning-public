@@ -723,7 +723,7 @@ pipeline {
             openshiftTag destStream: 'lup-public-static', verbose: 'false', destTag: 'test', srcStream: 'lup-public-static', srcTag: "${IMAGE_HASH}"
 
             // wait for deployment to complete
-            if ( CHANGELOG && CHANGELOG != "No new changes" && !imageTaggingComplete ('latest', 'test', 'deploy')) {
+            if ( !imageTaggingComplete ('latest', 'test', 'deploy')) {
               echo "Test image deployment failed"
 
               notifyRocketChat(
