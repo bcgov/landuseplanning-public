@@ -105,6 +105,13 @@
 @media (min-width: 768px) {
     .hero-banner__content {
       padding-bottom: 2rem;
+      a {
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
     }
     .project-table {
         &__name-col {

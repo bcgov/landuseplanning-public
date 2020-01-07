@@ -142,13 +142,14 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     });
 
     // add LUP regions to map
+    /* commenting out for now until it is its own layer
     const regions = L.geoJSON.ajax('assets/js/regions.json', {style: function (feature) {
         return {color: feature.properties.COLOR};
     },
     onEachFeature: function (feature, layer) {
         layer.bindTooltip(feature.properties.REGION_NAME);
     }});
-    regions.addTo(this.map);
+    regions.addTo(this.map);*/
 
     // map state change events
     // this.map.on('zoomstart', function () {
