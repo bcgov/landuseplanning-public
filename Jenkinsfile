@@ -422,15 +422,15 @@ def postZapToSonar () {
     openshift.withProject() {
       // The jenkins-python3nodejs template has been purpose built for supporting SonarQube scanning.
       podTemplate(
-        label: 'jenkins-python3nodejs',
-        name: 'jenkins-python3nodejs',
+        label: 'jenkins-nodejs-8',
+        name: 'jenkins-nodejs-8',
         serviceAccount: 'jenkins',
         cloud: 'openshift',
         slaveConnectTimeout: 300,
         containers: [
           containerTemplate(
             name: 'jnlp',
-            image: '172.50.0.2:5000/openshift/jenkins-slave-python3nodejs',
+            image: '172.50.0.2:5000/openshift/jenkins-slave-nodejs-8',
             resourceRequestCpu: '1000m',
             resourceLimitCpu: '2000m',
             resourceRequestMemory: '2Gi',
@@ -441,7 +441,7 @@ def postZapToSonar () {
           )
         ]
       ){
-        node('jenkins-python3nodejs') {
+        node('jenkins-nodejs-8') {
           // The name  of the ZAP report
           def ZAP_REPORT_NAME = "zap-report.xml"
 
