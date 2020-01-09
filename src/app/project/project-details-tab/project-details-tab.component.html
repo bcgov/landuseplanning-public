@@ -16,17 +16,33 @@
             <label>Project Phase</label>
             <p class="value">{{project?.projectPhase || "-"}}</p>
           </div>
-          <div *ngIf="project?.existingLandUsePlanURLs && project?.existingLandUsePlans; else noPlanURL">
-            <label>Existing Land Use Plan</label>
-            <p class="value"><a class="value" target="_blank"
-                href="{{project.existingLandUsePlanURLs}}">{{project?.existingLandUsePlans || "-" }}</a>
-            </p>
-          </div>
-          <ng-template #noPlanURL>
-            <div *ngIf="project?.existingLandUsePlans">
-              <label>Existing Land Use Plan</label>
-              <p class="value">{{project?.existingLandUsePlans || "-" }}</p>
+          <label>Existing Land Use Plan(s)</label>
+          <div *ngIf="multipleExistingPlans else singleExistingPlan">
+            <p class="value" *ngIf="project.existingLandUsePlans.length === 0">-</p>
+            <div *ngFor="let existingPlan of project.existingLandUsePlans; let i=index">
+              <div *ngIf="existingPlan.existingLandUsePlan && existingPlan.existingLandUsePlanURL else noPlanURL">
+                <p class="value"><a *ngIf="true" class="value" target="_blank"
+                  href="{{existingPlan.existingLandUsePlanURL}}">{{existingPlan.existingLandUsePlan || "-" }}</a>
+                </p>
+              </div>
+              <ng-template #noPlanURL>
+                <div *ngIf="existingPlan.existingLandUsePlan">
+                  <p class="value">{{existingPlan.existingLandUsePlan || "-" }}</p>
+                </div>
+              </ng-template>
             </div>
+          </div>
+          <ng-template #singleExistingPlan>
+            <div *ngIf="project.existingLandUsePlanURLs && project.existingLandUsePlans; else noPlanURL">
+              <p class="value"><a *ngIf="project.existingLandUsePlanURLs" class="value" target="_blank"
+                href="{{project.existingLandUsePlanURLs}}">{{project.existingLandUsePlans || "-" }}</a>
+              </p>
+            </div>
+            <ng-template #noPlanURL>
+              <div *ngIf="project?.existingLandUsePlans">
+                <p class="value">{{project?.existingLandUsePlans || "-" }}</p>
+              </div>
+            </ng-template>
           </ng-template>
         </div>
       </div>
