@@ -430,7 +430,7 @@ def postZapToSonar () {
         containers: [
           containerTemplate(
             name: 'jnlp',
-            image: '172.50.0.2:5000/openshift/jenkins-slave-nodejs-8',
+            image: '172.50.0.2:5000/openshift3/jenkins-agent-nodejs-8-rhel7',
             resourceRequestCpu: '1000m',
             resourceLimitCpu: '2000m',
             resourceRequestMemory: '2Gi',
