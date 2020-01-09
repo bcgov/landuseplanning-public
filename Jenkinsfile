@@ -477,6 +477,7 @@ def postZapToSonar () {
 
           echo "Publishing the report ..."
           dir('sonar-runner') {
+            sh "npm install typescript@3.2.1"
             sh (
               // 'sonar.zaproxy.reportPath' must be set to the absolute path of the xml formatted ZAP report.
               // Exclude the report from being scanned as an xml file.  We only care about the results of the ZAP scan.
