@@ -441,7 +441,7 @@ def postZapToSonar () {
           )
         ]
       ){
-        node('jenkins-nodejs-8') {
+        node('zap-to-sonnar') {
           // The name  of the ZAP report
           def ZAP_REPORT_NAME = "zap-report.xml"
 
