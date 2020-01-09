@@ -23,6 +23,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   public commentPeriod = null;
   public map: L.Map = null;
   public appFG = L.featureGroup(); // group of layers for subject app
+  public multipleExistingPlans: boolean;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
   private ngbModal: NgbModalRef = null;
@@ -37,6 +38,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnInit() {
     this.project = this.storageService.state.currentProject.data;
+    this.multipleExistingPlans = Array.isArray(this.project.existingLandUsePlans);
     this.commentPeriod = this.project.commentPeriodForBanner;
     this.route.data.subscribe((res: any) => {
       if (res) {
