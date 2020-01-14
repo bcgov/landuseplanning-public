@@ -346,6 +346,16 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     this.updateCount('more');
   }
 
+  stringifyOverlappingDistricts(districts: string | string[]): string {
+    let overlappingDistrictsListString: string;
+    if (Array.isArray(districts) === true ) {
+      overlappingDistrictsListString = (<string[]>districts).join(', ');
+    } else {
+      overlappingDistrictsListString = districts as string;
+    }
+    return overlappingDistrictsListString;
+  }
+
   setRowData() {
     let projectList = [];
     if (this.projects && this.projects.length > 0) {
@@ -355,7 +365,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
             _id: project._id,
             name: project.name,
             partner: project.partner,
-            overlappingRegionalDistricts: project.overlappingRegionalDistricts,
+            overlappingRegionalDistricts: this.stringifyOverlappingDistricts(project.overlappingRegionalDistricts as string | string[]),
             projectPhase: project.projectPhase
           }
         );

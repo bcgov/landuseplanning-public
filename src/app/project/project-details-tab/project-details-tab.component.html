@@ -10,7 +10,7 @@
           </div>
           <div>
             <label>Regional Districts</label>
-            <p class="value">{{project?.overlappingRegionalDistricts || "-" }}</p>
+            <p class="value">{{ overlappingDistrictsListString || "-" }}</p>
           </div>
           <div *ngIf="project?.projectPhase">
             <label>Project Phase</label>
