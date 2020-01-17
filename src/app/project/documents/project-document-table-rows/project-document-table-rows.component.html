@@ -7,8 +7,12 @@
              aria-label="Checkbox for row item"
              [(ngModel)]='document.checkbox'>
     </td> -->
-    <td data-label="Name" (click)="goToItem(document)" scope="row" class="col-8">{{document.displayName}}</td>
-    <td data-label="Date" (click)="goToItem(document)" scope="row" class="col-4"><div *ngIf="document.datePosted !== '1900-01-01T08:00:00.000Z'">{{document.datePosted | date:'longDate'}}</div></td>
+    <td data-label="Name" (click)="goToItem(document)" scope="row" class="col-7 doc-table-item doc-main-details">
+      <p class="doc-name">{{document.displayName}}</p>
+      <p class="doc-description">{{document.description}}</p>
+    </td>
+    <td data-label="Name" (click)="goToItem(document)" scope="row" class="col-3 doc-table-item ">{{document.projectPhase}}</td>
+    <td data-label="Date" (click)="goToItem(document)" scope="row" class="col-2 doc-table-item "><div *ngIf="document.datePosted !== '1900-01-01T08:00:00.000Z'">{{document.datePosted | date:'longDate'}}</div></td>
     <!-- <td>
             <button type="button" (click)="deleteVC(valuedComponent)" class="btn btn-danger">Delete</button>
         </td> -->

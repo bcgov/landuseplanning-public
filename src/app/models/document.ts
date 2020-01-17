@@ -20,6 +20,7 @@ export class Document {
   eaoStatus: string;
   datePosted: Date;
   dateUpdated: Date;
+  projectPhase: string;
 
   checkbox: boolean;
   upfile: File;

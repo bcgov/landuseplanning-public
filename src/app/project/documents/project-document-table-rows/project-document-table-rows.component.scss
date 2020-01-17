@@ -8,3 +8,24 @@ tr:hover {
 .inputCheckBox {
   cursor: pointer;
 }
+
+.doc-table-item {
+  display: flex;
+  align-items: center;
+}
+
+.doc-name {
+  font-weight: 700;
+}
+
+.doc-name, .doc-description {
+  margin: 0;
+}
+
+.doc-main-details {
+  align-items: flex-start;
+  flex-direction: column;
+
+}
+
+
