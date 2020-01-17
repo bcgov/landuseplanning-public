@@ -35,14 +35,19 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     //   width: 'col-1'
     // },
     {
-      name: 'Name',
+      name: 'Document',
       value: 'displayName',
-      width: 'col-8'
+      width: 'col-7'
+    },
+    {
+      name: 'Project Phase',
+      value: 'projectPhase',
+      width: 'col-3'
     },
     {
       name: 'Date',
       value: 'datePosted',
-      width: 'col-4'
+      width: 'col-2'
     }
   ];
 
@@ -157,6 +162,8 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
             // date: document.dateUploaded || document.datePosted,
             displayName: document.displayName,
             datePosted: document.datePosted,
+            description: document.description,
+            projectPhase: document.projectPhase,
             type: document.type,
             milestone: document.milestone,
             _id: document._id,
