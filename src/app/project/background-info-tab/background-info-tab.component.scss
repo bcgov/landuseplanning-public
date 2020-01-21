@@ -21,3 +21,13 @@
         display: inline-flex;
     }
 }
+
+.tab-section-text {
+  a {
+    color: $light-link-color;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

@@ -104,7 +104,8 @@
       }
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: #036;
     }
 

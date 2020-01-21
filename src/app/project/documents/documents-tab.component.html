@@ -41,7 +41,7 @@
 
   <section class="tab-section" *ngIf="!loading">
     <div *ngIf="currentProject.documentInfo">
-      <div class="mb-3" [innerHTML]="currentProject.documentInfo | newlines"></div>
+      <div class="mb-3 tab-section-text" [innerHTML]="currentProject.documentInfo | newlines"></div>
     </div>
     <div *ngIf="documents.length === 0">
       No documents visible yet.

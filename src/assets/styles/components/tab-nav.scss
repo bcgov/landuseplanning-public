@@ -7,8 +7,9 @@
         border: none;
         background: $tab-sm-bg;
         text-align: center;
-        text-transform: uppercase;
+        // text-transform: uppercase;
         font-weight: 700;
+        font-size: 1rem;
         transition: all ease-in 0.2s;
     }
 }
@@ -49,7 +50,7 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         background-color: transparent;
-        font-size: 0.85rem;
+        font-size: 1rem;
 
         &:hover {
             background-color: $tab-hover-bg;

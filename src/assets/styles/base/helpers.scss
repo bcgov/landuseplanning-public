@@ -14,12 +14,37 @@
 .clickable {
     cursor: pointer !important;
     color: $link-color !important;
-    
+
     &:focus,
     &:hover {
       text-decoration: underline !important;
     }
 }
+
+.paragraph-link {
+  color: $link-color !important;
+  text-decoration: underline;
+
+  &:focus,
+  &:hover {
+    color: $light-link-color !important;
+    text-decoration: none;
+  }
+}
+
+.hero-link {
+  color: #4DA3FF !important;
+  text-decoration: underline;
+
+  &:focus,
+  &:hover {
+    color: #4DA3FF !important;
+    text-decoration: none;
+  }
+}
+
+
+
 
 // Named Anchors
 .pg-anchor[id]:before {

@@ -21,7 +21,7 @@
             <p class="value" *ngIf="project.existingLandUsePlans.length === 0">-</p>
             <div *ngFor="let existingPlan of project.existingLandUsePlans; let i=index">
               <div *ngIf="existingPlan.existingLandUsePlan && existingPlan.existingLandUsePlanURL else noPlanURL">
-                <p class="value"><a *ngIf="true" class="value" target="_blank"
+                <p class="value"><a *ngIf="true" class="value clickable" target="_blank"
                   href="{{existingPlan.existingLandUsePlanURL}}">{{existingPlan.existingLandUsePlan || "-" }}</a>
                 </p>
               </div>

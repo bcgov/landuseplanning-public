@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -9,7 +9,8 @@ import { ProjectService } from 'app/services/project.service';
 
 @Component({
   templateUrl: './background-info-tab.component.html',
-  styleUrls: ['./background-info-tab.component.scss']
+  styleUrls: ['./background-info-tab.component.scss'],
+  encapsulation: ViewEncapsulation.Native
 })
 export class BackgroundInfoTabComponent implements OnInit, OnDestroy {
   public project: Project = null;

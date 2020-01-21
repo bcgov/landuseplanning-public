@@ -4,7 +4,7 @@
     </div>
 
     <section class="tab-section" *ngIf="!loading">
-        <div *ngIf="currentProject.engagementInfo">
+        <div class="tab-section-text" *ngIf="currentProject.engagementInfo">
             <div class="mb-3" [innerHTML]="currentProject.engagementInfo | newlines"></div>
         </div>
         <div *ngIf="commentPeriods.length < 1">

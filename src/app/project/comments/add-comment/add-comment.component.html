@@ -27,21 +27,21 @@
         land use planning process. Comments may be quoted or summarized in a publicly available ‘What We Heard’ report following
         the engagement period. Comments will not be considered if - in the technical planning team’s view - they are profane,
         abusive or do not relate to the matter being consulted upon.</p>
-        <p> All attachments must be no larger than <strong>5MB</strong> and must be a 
+        <p> All attachments must be no larger than <strong>5MB</strong> and must be a
           <strong>.png, .pdf, .gif, .jpg, .jpeg, or .bmp</strong> file.</p>
       </section>
       <section class="m-b-0">
         <h2>Collection Statement</h2>
         <p>Personal information collected through this comment period will inform the <em>{{project?.name || 'project'}}</em> technical planning team under section
-        26 (c) and 26 (e) of the <a href="http://www.bclaws.ca/Recon/document/ID/freeside/96165_00" target="_blank">Freedom of Information and Protection of Privacy Act (“FOIPPA”)</a>. Please do not include any
+        26 (c) and 26 (e) of the <a class="paragraph-link" href="http://www.bclaws.ca/Recon/document/ID/freeside/96165_00" target="_blank">Freedom of Information and Protection of Privacy Act (“FOIPPA”)</a>. Please do not include any
         personally identifiable information about yourself or others in your responses. If you have any questions about the
         collection, use and disclosure of your personal information, please contact:</p>
-        <p class="m-b-0">Director, Resource Planning and Assessment Branch<br>Ministry of Forests, Lands, Natural Resource Operations and Rural Development<br><a href="mailto:landuseplanning@gov.bc.ca">landuseplanning@gov.bc.ca</a>
+        <p class="m-b-0">Director, Resource Planning and Assessment Branch<br>Ministry of Forests, Lands, Natural Resource Operations and Rural Development<br><a class="paragraph-link" href="mailto:landuseplanning@gov.bc.ca">landuseplanning@gov.bc.ca</a>
           <br>PO Box 9484, STN PROV GOVT<br>Victoria BC, V8W 9W6<br>250-208-3591
       </section>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="p1_next()">Next</button>
+      <button type="button" class="btn btn-main" (click)="p1_next()">Next</button>
     </div>
   </div>
 </form>
@@ -108,7 +108,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-light" type="button" (click)="p2_back()">Back</button>
-      <button class="btn btn-primary" type="button" (click)="p2_next()"
+      <button class="btn btn-main" type="button" (click)="p2_next()"
         [disabled]="!commentForm1.form.valid">Submit</button>
     </div>
   </div>
