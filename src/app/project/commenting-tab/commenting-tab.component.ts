@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -11,6 +11,7 @@ import { CommentPeriod } from 'app/models/commentperiod';
 @Component({
   templateUrl: './commenting-tab.component.html',
   styleUrls: ['./commenting-tab.component.scss'],
+  encapsulation: ViewEncapsulation.Native,
   animations: [
     trigger('visibility', [
       transition(':enter', [   // :enter is alias to 'void => *'

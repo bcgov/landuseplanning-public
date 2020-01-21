@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -19,7 +19,8 @@ import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 @Component({
   selector: 'app-documents',
   templateUrl: './documents-tab.component.html',
-  styleUrls: ['./documents-tab.component.scss']
+  styleUrls: ['./documents-tab.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DocumentsTabComponent implements OnInit, OnDestroy {
   public terms = new SearchTerms();

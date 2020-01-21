@@ -22,15 +22,15 @@
             (click)="toggleCurrentApp(item);$event.stopPropagation();" *ngIf="item.isVisible">
 
             <!-- Project Details -->
-            <ul class="app-card__details">
+            <!-- <ul class="app-card__details">
               <li>
                 <span class="key">Applicant</span>
                 <span class="value client-name">{{item.client || 'Unknown Client'}}</span>
               </li>
-              <li>
-                <span class="key">Purpose / Subpurpose</span>
+              <li> -->
+                <!-- <span class="key">Purpose / Subpurpose</span> -->
                 <!-- TODO: Need a better way of handling values that are not available - see also below -->
-                <span class="value">
+                <!-- <span class="value">
                   <span *ngIf="item.purpose || item.subpurpose">{{item.purpose | titlecase}} /
                     {{item.subpurpose | titlecase}}</span>
                   <span *ngIf="!item.purpose || !item.subpurpose">Not Available</span>
@@ -41,15 +41,15 @@
                 <span class="value">{{item.tantalisID}}</span>
               </li>
               <li>
-                <span class="key">EAO Project #</span>
+                <span class="key">EAO Project #</span> -->
                 <!-- TODO: Need a better way of handling values that are not available - see also above -->
-                <span class="value">{{item['clFile'] || 'Not Available'}}</span>
+                <!-- <span class="value">{{item['clFile'] || 'Not Available'}}</span>
               </li>
               <li>
                 <span class="key">Status</span>
                 <span class="value">{{item.appStatus || 'Unknown'}}</span>
               </li>
-            </ul>
+            </ul> -->
 
             <!-- FOR TESTING -->
             <!-- <div class="mt-3 font-weight-bold" *ngIf="item.features && item.features.length === 0">THIS APPLICATION HAS NO SHAPES</div> -->

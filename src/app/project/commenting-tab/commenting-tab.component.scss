@@ -3,14 +3,14 @@
 .tab-section {
     overflow-y: auto;
     font-size: medium;
-    
+
     a {
         text-decoration: underline !important;
     }
     a:hover {
         text-decoration: none;
     }
-   
+
     >div {
         margin: 1em;
     }
@@ -61,3 +61,12 @@
     }
 }
 
+.tab-section-text {
+  a {
+    color: $light-link-color;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
