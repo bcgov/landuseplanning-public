@@ -10,7 +10,7 @@ import { ProjectService } from 'app/services/project.service';
 @Component({
   templateUrl: './background-info-tab.component.html',
   styleUrls: ['./background-info-tab.component.scss'],
-  encapsulation: ViewEncapsulation.Native
+  encapsulation: ViewEncapsulation.None
 })
 export class BackgroundInfoTabComponent implements OnInit, OnDestroy {
   public project: Project = null;

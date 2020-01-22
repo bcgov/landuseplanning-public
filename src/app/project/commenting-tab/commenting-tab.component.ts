@@ -11,7 +11,7 @@ import { CommentPeriod } from 'app/models/commentperiod';
 @Component({
   templateUrl: './commenting-tab.component.html',
   styleUrls: ['./commenting-tab.component.scss'],
-  encapsulation: ViewEncapsulation.Native,
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('visibility', [
       transition(':enter', [   // :enter is alias to 'void => *'
