@@ -43,7 +43,7 @@
               <p class="value">{{project?.partner || "-" | titlecase}}</p>
             </div>
           </div>
-          
+
         </div>
         <button class="btn btn-sm inverted mb-3" (click)="goBackToProjectDetails()" type="button">
           Back to project details
@@ -62,12 +62,13 @@
     <div class="mb-3" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
   </div>
   <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">
+    <p class="table-instructions">Click on a document to download it.</p>
     <div class="card">
       <div class="card-header">
         Related Documents
       </div>
       <ul class="doc-list mt-0">
-        <li class="clickable-row" *ngFor="let doc of commentPeriodDocs" (click)="downloadDocument(doc)">
+        <li class="clickable-row" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="downloadDocument(doc)" (keyup.Enter)="downloadDocument(doc)">
           <span class="cell icon">
             <i class="material-icons">insert_drive_file</i>
           </span>

@@ -40,6 +40,7 @@
 
   <section *ngIf="tableParams.totalListItems > 0" class="project-list table-container">
     <div class="container">
+      <p class="table-instructions">Click on a project to view more information.</p>
       <app-table-template
         [columns]="projectTableColumns"
         [data]="projectTableData"

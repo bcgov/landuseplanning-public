@@ -15,9 +15,11 @@
     top: 60px;
     height: 50px;
     opacity: 0;
+    display:none;
 }
 .showForIEorEdge{
     opacity: 0.78;
+    display: block;
 }
 .md-24{
     display: inline-flex;
@@ -227,7 +229,8 @@
             }
           }
 
-          &:hover {
+          &:hover,
+          &:focus {
             >a,
             >a:hover,
             >a:focus {
@@ -331,3 +334,8 @@
     font-size: 2.5rem;
   }
 }*/
+
+
+.visible {
+  display: block;
+}

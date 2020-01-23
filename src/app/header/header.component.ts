@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+
+  public isVisible: boolean;
+
   constructor(
     public router: Router
   ) { }
@@ -16,6 +19,18 @@ export class HeaderComponent {
   const browser_alert = document.getElementById('browser-alert');
   if ( isIEOrEdge) {
     browser_alert.classList.add('showForIEorEdge');
+    }
   }
+
+  dropDownVisible() {
+    this.isVisible = true;
   }
+
+  dropDownHide() {
+    this.isVisible = false;
+  }
+
+  // const learnMore = document.getElementById('aboutMMTI');
+
+
 }

@@ -1,5 +1,5 @@
-<tr
-  (click)="goToProject(project)"
+<tr tabindex="0"
+  (click)="goToProject(project)" (keyup.Enter)="goToProject(project)"
   *ngFor="let project of projects | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }">
   <td scope="row" data-label="Name" class="col-3">{{project.name || '-'}}</td>
   <td scope="row" data-label="Partner First Nation(s)" class="col-3">{{project.partner || '-'}}</td>
