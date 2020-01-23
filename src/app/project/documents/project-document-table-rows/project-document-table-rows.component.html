@@ -1,5 +1,5 @@
 <tr *ngFor="let document of documents | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }"
-  class="clickable-row">
+  class="clickable-row" tabindex="0" (click)="goToItem(document)" (keyup.Enter)="goToItem(document)">
     <!-- <td data-label="Select" (click)="selectItem(document)"
         scope="row"
         class="col-1">
@@ -7,12 +7,12 @@
              aria-label="Checkbox for row item"
              [(ngModel)]='document.checkbox'>
     </td> -->
-    <td data-label="Name" (click)="goToItem(document)" scope="row" class="col-7 doc-table-item doc-main-details">
+    <td data-label="Name"  scope="row" class="col-7 doc-table-item doc-main-details">
       <p class="doc-name">{{document.displayName}}</p>
       <p class="doc-description">{{document.description}}</p>
     </td>
-    <td data-label="Name" (click)="goToItem(document)" scope="row" class="col-3 doc-table-item ">{{document.projectPhase}}</td>
-    <td data-label="Date" (click)="goToItem(document)" scope="row" class="col-2 doc-table-item "><div *ngIf="document.datePosted !== '1900-01-01T08:00:00.000Z'">{{document.datePosted | date:'longDate'}}</div></td>
+    <td data-label="Name" scope="row" class="col-3 doc-table-item ">{{document.projectPhase}}</td>
+    <td data-label="Date" scope="row" class="col-2 doc-table-item "><div *ngIf="document.datePosted !== '1900-01-01T08:00:00.000Z'">{{document.datePosted | date:'longDate'}}</div></td>
     <!-- <td>
             <button type="button" (click)="deleteVC(valuedComponent)" class="btn btn-danger">Delete</button>
         </td> -->
