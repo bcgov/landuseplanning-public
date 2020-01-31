@@ -11,7 +11,7 @@
   .container {
     min-height: 20rem;
     @media (max-width: 767px) {
-      padding: 2rem 1rem 2.5rem;
+      padding: 2rem 1rem 2.5rem 2rem;
     }
   }
 }
@@ -23,7 +23,7 @@
   .container {
     min-height: 20rem;
     @media (max-width: 767px) {
-      padding: 2rem 1rem 2.5rem;
+      padding: 2rem 1rem 2.5rem 2rem;
     }
   }
 
@@ -136,7 +136,7 @@
     background-size: 200%;
 
     .container {
-      padding-top: 67px;
+      padding: 67px 0;
       min-height: 30rem;
     }
   }
@@ -173,7 +173,7 @@
 
 @media (min-width: 1200px) {
   .hero-banner{
-    background-size: 120%;
+    background-size: 140%;
   }
 }
 
@@ -185,6 +185,6 @@
 
 @media (min-width: 1900px) {
   .hero-banner {
-    background-size: 100%;
+    background-size: 120%;
   }
 }

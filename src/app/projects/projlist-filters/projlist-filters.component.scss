@@ -33,7 +33,7 @@ $app-filters-font-lg: 0.9375rem;
       font-weight: normal;
       a {
         text-decoration: underline;
-      
+
         &:hover {
           text-decoration: none;
         }
@@ -312,4 +312,10 @@ $app-filters-font-lg: 0.9375rem;
       width: 100%;
     }
   }
+}
+
+.map-instructions {
+  margin: 0;
+  background: white;
+  padding: 0 0 1rem 1.5rem;
 }

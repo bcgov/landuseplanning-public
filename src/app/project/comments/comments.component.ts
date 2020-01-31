@@ -144,10 +144,11 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public addComment() {
     if (this.commentPeriodId) {
       // open modal
-      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
       // set input parameter
       (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
       (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
+
       // check result
       this.ngbModal.result.then(
         value => {
@@ -183,6 +184,14 @@ export class CommentsComponent implements OnInit, OnDestroy {
         this.loading = false;
         this._changeDetectionRef.detectChanges();
       });
+  }
+
+  makeAriaLabel(projName) {
+    if (projName) {
+      return `Submit a comment to the ${projName} project comment period.`;
+    } else {
+      return `Submit a comment to this project's comment period.`;
+    }
   }
 
   ngOnDestroy() {

@@ -1,8 +1,9 @@
 <div class="tab-pane" role="tabpanel">
   <form #f="ngForm" class="search-form ui form" (ngSubmit)="onSubmit()">
+    <label for="keywordInput">Search activities and updates by title.</label>
     <div class="input-group main-search-field">
-      <input class="form-control" type="text" name="keywordInput" placeholder="Enter keywords to search..."
-        id="keywordInput" [(ngModel)]="tableParams.keywords" autofocus />
+      <input class="form-control" type="text" name="keywordInput"
+        id="keywordInput" [(ngModel)]="tableParams.keywords" />
       <div class="input-group-append">
         <!-- prevent searching if input is empty or we're already searching -->
         <button class="btn btn-main" type="submit">

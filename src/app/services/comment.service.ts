@@ -79,17 +79,6 @@ export class CommentService {
     // ID must not exist on POST
     delete comment._id;
 
-    // don't send documents
-    // delete comment.documents;
-
-    // // replace newlines with \\n (JSON format)
-    // if (comment.comment) {
-    //   comment.comment = comment.comment.replace(/\n/g, '\\n');
-    // }
-    // if (comment.review && comment.review.reviewerNotes) {
-    //   comment.review.reviewerNotes = comment.review.reviewerNotes.replace(/\n/g, '\\n');
-    // }
-
     return this.api.addComment(comment)
       .map((res: Comment) => {
         return res ? new Comment(res) : null;

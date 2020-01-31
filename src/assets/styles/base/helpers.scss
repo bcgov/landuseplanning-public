@@ -33,19 +33,23 @@
 }
 
 .hero-link {
-  color: #4DA3FF !important;
+  color: white !important;
   text-decoration: underline;
 
   &:focus,
   &:hover {
-    color: #4DA3FF !important;
+    color: white !important;
     text-decoration: none;
   }
 }
 
-.table-instructions {
+.instructions {
   font-style: italic;
   margin: 1rem 0;
+
+  &__white {
+    color: white;
+  }
 }
 
 

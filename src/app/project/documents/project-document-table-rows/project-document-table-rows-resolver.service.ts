@@ -7,6 +7,7 @@ export class DocumentTableResolver implements Resolve<Observable<object>> {
   constructor(
     private searchService: SearchService
   ) { }
+
   resolve(): Observable<object> {
    return this.searchService.getFullList('List');
   }
