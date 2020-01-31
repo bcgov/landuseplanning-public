@@ -53,9 +53,9 @@
                     Submit/ View Comments
                   </a>
                   <a *ngIf="item.documentUrl && !item?.documentUrl.includes('docs?folder')"
-                    class="btn btn-sm content-btn-alt" title="View more information" href="{{item.documentUrl}}"
+                    class="btn btn-sm content-btn-alt" [attr.aria-label]="makeAriaLabel(item.headline)" title="View more information" href="{{item.documentUrl}}"
                     target="_blank">
-                    View Document(s)
+                    View Document
                   </a>
                 </div>
               </td>
@@ -90,21 +90,21 @@
             <div class="feature-block">
               <h3>Modernizing Land Use Planning</h3>
               <p>Learn about the B.C. government’s commitment and approach to modernize land use planning in B.C.</p>
-              <a class="btn btn-sm inverted" href="/modernizing" [routerLink]="['/modernizing']">Learn More</a>
+              <a class="btn btn-sm inverted" href="/modernizing" [routerLink]="['/modernizing']" aria-label="Learn more about modernizing land use planning.">Learn More</a>
             </div>
           </div>
           <div class="col-md-4">
             <div class="feature-block">
               <h3>Land Use Planning Project Phases</h3>
               <p>Learn about the steps that are required to complete a land use plan, and have it approved and implemented.</p>
-              <a class="btn btn-sm inverted" href="/phases" [routerLink]="['/phases']">Learn More</a>
+              <a class="btn btn-sm inverted" href="/phases" [routerLink]="['/phases']" aria-label="Learn more about land use plan project phases.">Learn More</a>
             </div>
           </div>
           <div class="col-md-4">
             <div class="feature-block">
               <h3>Program and Project Engagement</h3>
               <p>Learn about engagement to inform both program development and active planning projects.</p>
-              <a class="btn btn-sm inverted" href="/engagement" [routerLink]="['/engagement']">Learn
+              <a class="btn btn-sm inverted" href="/engagement" [routerLink]="['/engagement']" aria-label="Learn more about the program and project engagement.">Learn
                 More</a>
             </div>
           </div>

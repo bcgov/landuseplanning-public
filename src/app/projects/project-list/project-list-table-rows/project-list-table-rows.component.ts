@@ -28,4 +28,8 @@ export class ProjectListTableRowsComponent implements OnInit, TableComponent {
     goToProject(project) {
         this.router.navigate([`p/${project._id}/project-details`]);
     }
+
+    makeAriaLabel(projName) {
+      return `View more information about the ${projName} project. Link.`;
+    }
 }

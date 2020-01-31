@@ -88,6 +88,17 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
     }
     window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
+
+  makeAriaLabel(docName) {
+    let ariaLabel: string;
+    if (docName) {
+      ariaLabel = `Download ${docName} document. Link.`;
+    } else {
+      ariaLabel = 'Download this document. Link.';
+    }
+    return ariaLabel;
+  }
+
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

@@ -2,16 +2,18 @@
   <div class="search-container" id="applist-filters">
     <fieldset class="additional-filters" (click)="$event.stopPropagation()">
       <div class="form-group typeahead-container">
-        <label for="applicantInput">Search Active Land Use Planning Projects</label>
+        <label for="applicantInput">Search Active Land Use Planning Projects by title</label>
         <p class="additional-text">Additional land use planning projects will be added to the map as they are initiated. Visit the B.C. government's <a class="paragraph-link" href="https://www2.gov.bc.ca/gov/content/industry/crown-land-water/land-use-planning/regions">Land
           Use Plans</a> webpage to access all completed provincial land use plans.</p>
-        <input type="text" class="form-control gtm-filter-applicant " placeholder="Start Typing A Project Name"
+          <input type="text" class="form-control gtm-filter-applicant "
           id="applicantInput" [(ngModel)]="_applicantFilter" [ngbTypeahead]="applicantSearch" [focusFirst]="false">
-      </div>
-      <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();"
-        [disabled]="loading"><i class="material-icons">search</i>Search</button>
-    </fieldset>
-  </div>
+        </div>
+        <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();"
+        [disabled]="loading"><i class="material-icons" aria-hidden="true">search</i>Search</button>
+      </fieldset>
+
+    </div>
+    <div class="instructions map-instructions">You can also <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a></div>
 </div>
 
 <!--   <div class="app-filters__header d-flex justify-content-between">

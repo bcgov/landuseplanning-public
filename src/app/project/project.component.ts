@@ -69,7 +69,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public addComment() {
     if (this.project.commentPeriodForBanner) {
       // open modal
-      this.ngbModal = this.modalService.open(AddCommentComponent, { backdrop: 'static', size: 'lg' });
+      this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
       // set input parameter
       (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
       (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
@@ -86,6 +86,23 @@ export class ProjectComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+  makeViewDetailsAriaLabel(projName) {
+    if (projName) {
+      return `View more details about the ${projName} project comment period.`;
+    } else {
+      return `View more details about this project's open comment period.`;
+    }
+  }
+
+  makeSubmitCommentAriaLabel(projName) {
+    if (projName) {
+      return `Submit a comment to the ${projName} project comment period.`;
+    } else {
+      return `Submit a comment this project's open comment period.`;
+    }
+  }
+
 
   public goToViewComments() {
     this.router.navigate(['/p', this.project._id, 'cp', this.project.commentPeriodForBanner._id, 'details']);

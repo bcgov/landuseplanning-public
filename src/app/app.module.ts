@@ -3,6 +3,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { A11yModule } from '@angular/cdk/a11y';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -62,6 +63,7 @@ import { FaqComponent } from './faq/faq.component';
     SharedModule,
     ProjectModule,
     ProjectsModule,
+    A11yModule,
     AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
   ],
   declarations: [

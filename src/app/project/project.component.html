@@ -37,12 +37,12 @@
           </div>
           <div class="col-md-6 text-right">
             <div *ngIf="project.commentPeriodForBanner.commentPeriodStatus !== Open">
-              <button type="button" class="btn btn-light" (click)="goToViewComments()">
+              <button type="button" class="btn btn-light" (click)="goToViewComments()" [attr.aria-label]="makeViewDetailsAriaLabel(project.name)">
                 View Details
               </button>
               &nbsp;
               <button class="btn btn-light" (click)="addComment()" type="button"
-                *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'">Submit Comment</button>
+                *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="makeSubmitCommentAriaLabel(project.name)">Submit Comment</button>
             </div>
           </div>
         </div>

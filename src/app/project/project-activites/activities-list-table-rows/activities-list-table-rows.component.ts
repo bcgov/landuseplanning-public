@@ -38,4 +38,12 @@ export class ActivitiesListTableRowsComponent implements OnInit, TableComponent 
         return false;
       }
     }
+
+    makeAriaLabel(activityName) {
+      if (activityName) {
+        return `View document attached to ${activityName}.`;
+      } else {
+        return `View document attached to this update.`;
+      }
+    }
 }

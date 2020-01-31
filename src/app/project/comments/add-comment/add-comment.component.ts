@@ -146,7 +146,6 @@ export class AddCommentComponent implements OnInit {
           formData.append('displayName', file.name);
           formData.append('documentSource', 'COMMENT');
           formData.append('documentAuthor', this.comment.author);
-          formData.append('documentAuthorType', this.documentAuthorType._id);
           formData.append('project', this.project._id);
           formData.append('documentFileName', file.name);
           formData.append('internalOriginalName', file.name);
@@ -184,6 +183,14 @@ export class AddCommentComponent implements OnInit {
         alert('Uh-oh, error submitting comment');
         this.submitting = false;
       });
+  }
+
+  makeAriaLabel(docName) {
+    if (docName) {
+      return `Remove ${docName} uploaded document.`;
+    } else {
+      return `Remove this uploaded document.`;
+    }
   }
 
   // approximate size (keys + data)

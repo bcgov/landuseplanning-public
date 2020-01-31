@@ -19,6 +19,10 @@
   }
 }
 
+#modal-instructions {
+  display: none;
+}
+
 .modal-footer {
   .btn {
     min-width: 6rem;
@@ -75,6 +79,7 @@
     padding-bottom: 3rem;
   }
 
+
   h4 {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -100,4 +105,13 @@
   background-position: center center;
   background-repeat: no-repeat;
   background-size: 72px;
+}
+
+.form-warning {
+  color: red;
+  display: none;
+}
+
+.form-warning__show {
+  display: inline;
 }

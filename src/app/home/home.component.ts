@@ -26,6 +26,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
+
+  makeAriaLabel(activityName) {
+    if (activityName) {
+      return `View document attached to ${activityName}`;
+    } else {
+      return `View document attached to this update`;
+    }
+  }
+
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

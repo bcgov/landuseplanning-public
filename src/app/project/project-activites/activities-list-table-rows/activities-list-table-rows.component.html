@@ -12,8 +12,8 @@
     <br>
     <div>
       <a *ngIf="isSingleDoc(activity?.documentUrl) && !activity?.documentUrl.includes('docs?folder')"
-        class="btn content-btn-alt" href="{{activity.documentUrl}}">
-        <span>View Document(s)</span>
+        class="btn content-btn-alt" href="{{activity.documentUrl}}" [attr.aria-label]="makeAriaLabel(activity.headline)">
+        <span>View Document</span>
       </a>
       <button *ngIf="activity?.pcp"
         class="btn content-btn-alt" (click)="goToCP(activity)">

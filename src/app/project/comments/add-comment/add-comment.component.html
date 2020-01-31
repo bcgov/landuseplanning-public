@@ -1,3 +1,5 @@
+<div id="modal-instructions">Use tab to navigate form elements. Escape key to close.</div>
+
 <!-- only show when submitting larger submissions -->
 <div class="modal-content progress-content" *ngIf="submitting && (totalSize > 100000)">
   <div class="modal-body">
@@ -8,7 +10,7 @@
 </div>
 
 <!-- FIRST PAGE -->
-<form #preCommentForm="ngForm">
+<form #preCommentForm="ngForm" cdkTrapFocus>
   <div class="modal-content" *ngIf="this.currentPage === 1">
     <div class="modal-header">
       <h4 class="modal-title">Submit a Comment</h4>
@@ -41,47 +43,51 @@
       </section>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-main" (click)="p1_next()">Next</button>
+      <button type="button" class="btn btn-main" aria-label="Go to next page of comment submission form." (click)="p1_next()">Next</button>
     </div>
   </div>
 </form>
 
 <!-- Contact Information Form-->
-<form #commentForm1="ngForm" (ngSubmit)="register()">
+<form #commentForm1="ngForm" (ngSubmit)="register()" cdkTrapFocus>
   <div class="modal-content" *ngIf="this.currentPage === 2">
     <div class="modal-header">
       <h4 class="modal-title">Submit a Comment</h4>
-      <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg2" type="button" aria-label="Close"
+      <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg2" type="button" aria-label="Close comment submission form."
         (click)="activeModal.dismiss('dismissed page2')">
-        <i class="material-icons">
+        <i class="material-icons" aria-hidden="true">
           close
         </i>
       </button>
     </div>
     <div class="modal-body">
+      <p class="form-warning">Please complete all required fields.</p>
       <fieldset>
         <div class="form-group">
-          <label class="control-label">Name (required)</label>
+          <label class="control-label" for="nameInput">Name (required)</label>
           <div class="form-control-container">
-            <input class="form-control" type="text" name="nameInput" placeholder="Anonymous" id="nameInput"
-              [(ngModel)]="contactName" autofocus />
+            <input class="form-control" type="text" name="nameInput" id="nameInput" required
+              [(ngModel)]="contactName" #name="ngModel" autofocus />
+              <div [hidden]="name.valid || name.pristine" class="alert alert-danger" role="alert">Name is required to submit form</div>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label">Location (required)</label>
-          <input class="form-control" type="text" name="locationInput" placeholder="IE: City, Province, etc."
-            id="locationInput" [(ngModel)]="locationInput" autofocus />
+          <label class="control-label" for="locationInput">Location (required)</label>
+          <input class="form-control" type="text" name="locationInput"
+            id="locationInput" required [(ngModel)]="locationInput" #location="ngModel" />
+            <div [hidden]="location.valid || location.pristine" class="alert alert-danger" role="alert">Location is required to submit form</div>
         </div>
         <div class="form-group">
-          <label class="control-label">Make my Name visible to the public.</label>
-          <input type="checkbox" aria-label="Checkbox for row item" name="anonymous" [(ngModel)]='makePublic'><label
-            class="control-label">All comments are submitted anonymously by default. Checking this option will display
-            your Name (if entered) on the public site.</label>
+          <label class="control-label" for="anonymousCheck">
+          <input type="checkbox" aria-checked="false" name="anonymous" id="anonymousCheck" [(ngModel)]='makePublic'>
+          Make my Name visible to the public.
+        </label>
+        <label for="anonymousCheck">All comments are submitted anonymously by default. Checking this option will display
+          your Name (if entered) on the public site.</label>
         </div>
         <div class="form-group">
-          <label class="control-label">Your Comment</label>
-          <textarea class="form-control" rows="8" name="commentInput" id="commentInput" [(ngModel)]="commentInput"
-            autofocus></textarea>
+          <label class="control-label" for="commentInput">Your Comment</label>
+          <textarea class="form-control" rows="8" name="commentInput" id="commentInput" [(ngModel)]="commentInput"></textarea>
         </div>
 
         <app-file-upload [maxFiles]="50" [maxSize]="300" [showInfo]="false" [showList]="false" [files]="commentFiles"
@@ -95,8 +101,8 @@
               <span class="cell__txt-content">{{doc.internalOriginalName}}</span>
             </span>
             <span class="cell actions">
-              <button class="btn btn-icon" type="button" title="Remove this file" (click)="deleteFile(doc, documents)">
-                <i class="material-icons">delete</i>
+              <button class="btn btn-icon" type="button" [attr.aria-label]="makeAriaLabel(doc.internalOriginalName)" title="Remove this file" (click)="deleteFile(doc, documents)">
+                <i class="material-icons" aria-hidden="true">delete</i>
               </button>
             </span>
           </li>
@@ -107,8 +113,8 @@
       </fieldset>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-light" type="button" (click)="p2_back()">Back</button>
-      <button class="btn btn-main" type="button" (click)="p2_next()"
+      <button class="btn btn-light" type="button" aria-label="Go to previous page of comment submission form." (click)="p2_back()">Back</button>
+      <button class="btn btn-main" type="button" aria-label="Submit your comment." (click)="p2_next()"
         [disabled]="!commentForm1.form.valid">Submit</button>
     </div>
   </div>
@@ -117,9 +123,10 @@
 <!-- Success -->
 <div class="modal-content thank-you-content" *ngIf="this.currentPage === 3">
   <div class="modal-header">
-    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" type="button" aria-label="Close"
+    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" aria-label="Close comment submission form."
+      type="button" aria-label="Close"
       (click)="activeModal.dismiss('dismissed page3')">
-      <i class="material-icons">
+      <i class="material-icons" aria-hidden="true">
         close
       </i>
     </button>
