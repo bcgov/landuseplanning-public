@@ -1,10 +1,14 @@
 # Get community edition of nodejs v6.x
 FROM angular-builder:latest as builder
-FROM nginx-runtime:latest
+FROM nginx-runtime:latest as nginx
 
 # Copy the build artifacts from the 'builder' image
 # to the distribution folder on the runtime image.
 COPY --from=builder /opt/app-root/src/dist/. /tmp/app/dist/
+
+# Copy the environment settings from the 'nginx' image
+# to the distribution folder on the runtime image.
+COPY --from=nginx /etc/nginx/publicServerEnvironmentSettings.js /tmp/app/dist/
 
 # Since the runtime image is itself an s2i image we need to
 # short circuit the s2i lifecycle.

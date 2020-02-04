@@ -32,7 +32,7 @@ export class ApiService {
   public isMS: boolean; // IE, Edge, etc
   public apiPath: string;
   public adminUrl: string;
-  public env: 'local' | 'dev' | 'test' | 'prod';
+  public env: string;  // Could be anything per Openshift settings but generally is one of 'local' | 'dev' | 'test' | 'prod' | 'demo'
 
   constructor(
     private http: HttpClient
@@ -40,42 +40,16 @@ export class ApiService {
     // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
     // this.token = currentUser && currentUser.token;
     this.isMS = window.navigator.msSaveOrOpenBlob ? true : false;
-    const { hostname } = window.location;
-    switch (hostname) {
-      case 'localhost':
-        // Local
-        this.apiPath = 'http://localhost:3000/api/public';
-        this.adminUrl = 'http://localhost:4200';
-        this.env = 'local';
-        break;
 
-      case 'lup-dev.pathfinder.gov.bc.ca':
-        // Dev
-        this.apiPath = 'https://lup-dev.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://lup-dev.pathfinder.gov.bc.ca/admin';
-        this.env = 'dev';
-        break;
+    // The following items are loaded by a file that is only present on cluster builds.
+    // Locally, this will be empty and local defaults will be used.
+    const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_path');
+    const remote_admin_path = window.localStorage.getItem('from_public_server--remote_admin_path');
+    const deployment_env = window.localStorage.getItem('from_public_server--deployment_env');
 
-      case 'lup-test.pathfinder.gov.bc.ca':
-        // Test
-        this.apiPath = 'https://lup-test.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://lup-test.pathfinder.gov.bc.ca/admin';
-        this.env = 'test';
-        break;
-
-      case 'landuseplanning.gov.bc.ca':
-        // Prod
-        this.apiPath = 'https://landuseplanning.gov.bc.ca/api/public';
-        this.adminUrl = 'https://landuseplanning.gov.bc.ca/admin';
-        this.env = 'prod';
-        break;
-
-      default:
-        // Dev
-        this.apiPath = 'https://lup-dev.pathfinder.gov.bc.ca/api/public';
-        this.adminUrl = 'https://lup-dev.pathfinder.gov.bc.ca/admin';
-        this.env = 'dev';
-    };
+    this.apiPath = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api/public' : remote_api_path;
+    this.adminUrl = (_.isEmpty(remote_admin_path)) ? 'http://localhost:4200' : remote_admin_path;
+    this.env = (_.isEmpty(deployment_env)) ? 'local' : deployment_env;
   }
 
   handleError(error: any): Observable<any> {
