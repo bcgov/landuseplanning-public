@@ -6,9 +6,9 @@ FROM nginx-runtime:latest as nginx
 # to the distribution folder on the runtime image.
 COPY --from=builder /opt/app-root/src/dist/. /tmp/app/dist/
 
-# Copy the environment settings from the 'nginx' image
+# Link the environment settings from the 'nginx' image
 # to the distribution folder on the runtime image.
-COPY --from=nginx /etc/nginx/publicServerEnvironmentSettings.js /tmp/app/dist/
+RUN ln -sf /etc/nginx/publicServerEnvironmentSettings.js /tmp/app/dist/
 
 # Since the runtime image is itself an s2i image we need to
 # short circuit the s2i lifecycle.
