@@ -418,6 +418,8 @@ export class ApiService {
       'dateStarted',
       'dateCompleted',
       'instructions',
+      'externalEngagementTool',
+      'externalToolPopupText'
     ];
     // TODO: May want to pass this as a parameter in the future.
     const sort = '&sortBy=-dateStarted';
@@ -437,7 +439,9 @@ export class ApiService {
       'openHouses',
       'project',
       'commentPeriodInfo',
-      'relatedDocuments'
+      'relatedDocuments',
+      'externalEngagementTool',
+      'externalToolPopupText'
     ];
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`, {});

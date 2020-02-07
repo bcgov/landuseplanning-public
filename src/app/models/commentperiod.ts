@@ -27,6 +27,8 @@ export class CommentPeriod {
   isPublished: Boolean;
   isResolved: Boolean;
   isVetted: String;
+  externalEngagementTool: Boolean;
+  externalToolPopupText: String;
   milestone: String;
   openCommentPeriod: String;
   openHouses: String;
@@ -77,6 +79,8 @@ export class CommentPeriod {
     this.isPublished = obj && obj.isPublished || null;
     this.isResolved = obj && obj.isResolved || null;
     this.isVetted = obj && obj.isVetted || null;
+    this.externalEngagementTool = obj && obj.externalEngagementTool || null;
+    this.externalToolPopupText = obj && obj.externalToolPopupText || null;
     this.milestone = obj && obj.milestone || null;
     this.openHouses = obj && obj.openHouses || null;
     this.periodType = obj && obj.periodType || null;

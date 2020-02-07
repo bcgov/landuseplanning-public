@@ -39,25 +39,29 @@ export class AddCommentComponent implements OnInit {
   public locationInput: any;
   public makePublic: any;
   public commentFiles: any;
+  public externalEngagementTool: Boolean;
 
   constructor(
     public activeModal: NgbActiveModal,
     private commentService: CommentService,
     private documentService: DocumentService,
     private config: ConfigService,
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.comment = new Comment();
-    this.comment.period = this.currentPeriod._id;
-    this.comment.isAnonymous = false;
-    this.commentFiles = [];
-    this.documentAuthorType = null;
-    this.config.lists[0].searchResults.map((item) => {
-      if (item.type === 'author' && item.name === 'Public') {
+    this.externalEngagementTool = this.currentPeriod.externalEngagementTool;
+    if (!this.externalEngagementTool) {
+      this.comment = new Comment();
+      this.comment.period = this.currentPeriod._id;
+      this.comment.isAnonymous = false;
+      this.commentFiles = [];
+      this.documentAuthorType = null;
+      this.config.lists[0].searchResults.map((item) => {
+        if (item.type === 'author' && item.name === 'Public') {
           this.documentAuthorType = Object.assign({}, item);
-      }
-    });
+        }
+      });
+    }
   }
 
   register() {
