@@ -22,7 +22,7 @@
       </button>
     </div>
 
-    <div class="modal-body">
+    <div *ngIf="!this.externalEngagementTool else externalToolText" class="modal-body">
       <section>
         <h2>How it Works</h2>
         <p>All accepted comments submitted to the <em>{{project?.name || 'project'}}</em> technical planning team will be evaluated and considered throughout the
@@ -42,9 +42,12 @@
           <br>PO Box 9484, STN PROV GOVT<br>Victoria BC, V8W 9W6<br>250-208-3591
       </section>
     </div>
-    <div class="modal-footer">
+    <div *ngIf="!this.externalEngagementTool" class="modal-footer">
       <button type="button" class="btn btn-main" aria-label="Go to next page of comment submission form." (click)="p1_next()">Next</button>
     </div>
+    <ng-template #externalToolText>
+      <div class="modal-body" [innerHTML]="currentPeriod.externalToolPopupText"></div>
+    </ng-template>
   </div>
 </form>
 
