@@ -6,7 +6,7 @@
         <p class="additional-text">Additional land use planning projects will be added to the map as they are initiated. Visit the B.C. government's <a class="paragraph-link" href="https://www2.gov.bc.ca/gov/content/industry/crown-land-water/land-use-planning/regions">Land
           Use Plans</a> webpage to access all completed provincial land use plans.</p>
           <input type="text" class="form-control gtm-filter-applicant "
-          id="applicantInput" [(ngModel)]="_applicantFilter" [ngbTypeahead]="applicantSearch" [focusFirst]="false">
+          id="applicantInput" [(ngModel)]="_applicantFilter" [ngbTypeahead]="applicantSearch">
         </div>
         <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();"
         [disabled]="loading"><i class="material-icons" aria-hidden="true">search</i>Search</button>

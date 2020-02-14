@@ -119,7 +119,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
 
   getPaginatedDocs(pageNumber) {
     // Go to top of page after clicking to a different page.
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
 
     const params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();

@@ -26,6 +26,9 @@ const routes: Routes = [
     resolve: {
       commentPeriod: CommentsResolver,
       project: ProjectResolver
+    },
+    data: {
+      title: 'Project Comment Period'
     }
   },
   {

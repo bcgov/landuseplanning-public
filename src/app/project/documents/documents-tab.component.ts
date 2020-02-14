@@ -204,7 +204,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
   getPaginatedDocs(pageNumber) {
     // Go to top of page after clicking to a different page.
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     this.loading = true;
 
     this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);

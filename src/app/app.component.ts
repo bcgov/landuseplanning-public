@@ -1,9 +1,13 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { PageScrollConfig } from 'ngx-page-scroll';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs/Subject';
+import { zip, Observable } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
 
 import { ApiService } from 'app/services/api';
 import { ConfigService } from 'app/services/config.service';
@@ -17,6 +21,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
 })
 
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
+  appName: string;
   isSafari: boolean;
   loggedIn: string;
   hostname: string;
@@ -25,11 +30,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     public router: Router,
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title,
     private cookieService: CookieService,
     private api: ApiService,
     private configService: ConfigService,
     private modalService: NgbModal,
   ) {
+
+    // Set the app name. Used as part of dynamically set page titles.
+    this.appName = 'Land Use Planning';
+
     // ref: https://stackoverflow.com/questions/5899783/detect-safari-using-jquery
     this.isSafari = (/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
 
@@ -69,13 +80,62 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.showIntroModal = this.cookieService.get('showIntroModal');
 
-    this.router.events
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(() => {
-        document.body.scrollTop = 0;
+    this.routerConfig();
 
-        document.documentElement.scrollTop = 0;
+  }
+
+  routerConfig() {
+    // Return route data for end of routing event
+    let routerNavEnd$ = this.router.events
+      .filter((event) => event instanceof NavigationEnd)
+      .map(() => this.activatedRoute);
+
+    // Return route data for beginning of routing event and correct if stream returns null
+    let routerNavStartComponent$ = this.router.events
+      .filter(event => event instanceof NavigationStart)
+      .map(() => this.activatedRoute.firstChild)
+      .map((event: any) => {
+        if (event !== null) {
+          return event;
+        } else {
+          return { 'component': { 'name': 'none' } };
+        }
+      })
+      .map((event: any) => event.component.name)
+
+
+    let routerNavEndComponent$ = routerNavEnd$
+      .map((route: any) => route.firstChild.component.name)
+
+    // Set page titles dependent on component loaded and route data
+    routerNavEnd$
+      .map((route) => {
+        while (route.firstChild) {
+          route = route.firstChild
+        }
+        return route;
+      })
+      .filter((route) => route.outlet === 'primary')
+      .mergeMap((route) => route.data)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((event) => {
+        this.titleService.setTitle(event['title'] + ' - ' + this.appName);
       });
+
+    // Focus the h1 element(when applicable) for ease of keyboard nav
+    zip(routerNavStartComponent$, routerNavEndComponent$)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(([startComponent, endComponent]) => {
+      let pageh1 = document.getElementsByTagName('h1')[0];
+      if (startComponent === endComponent && pageh1) {
+      } else if (startComponent !== 'ProjectComponent' && endComponent === 'ProjectComponent' && pageh1) {
+        pageh1.focus();
+      } else if (startComponent === 'ProjectComponent' && endComponent !== 'ProjectComponent' && pageh1) {
+        pageh1.focus();
+      } else if (pageh1) {
+        pageh1.focus();
+      }
+    });
   }
 
   ngAfterViewInit() {
