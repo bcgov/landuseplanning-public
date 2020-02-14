@@ -18,55 +18,91 @@ import { NewsResolver } from './news/news-resolver.service';
 const routes: Routes = [
   {
     path: 'contact',
-    component: ContactComponent
+    component: ContactComponent,
+    data: {
+      title: 'Contact Us'
+    }
   },
   {
     path: 'projects',
-    component: ProjectsComponent
+    component: ProjectsComponent,
+    data: {
+      title: 'List View of Projects'
+    }
   },
   {
     path: 'projects-list',
-    component: ProjectListComponent
+    component: ProjectListComponent,
+    data: {
+      title: 'Map View of Projects'
+    }
   },
   {
     path: 'news',
     component: NewsListComponent,
     resolve: {
       activities: NewsResolver
+    },
+    data: {
+      title: 'Activities and Updates'
     }
   },
   {
     path: 'legislation',
-    component: LegislationComponent
+    component: LegislationComponent,
+    data: {
+      title: 'Legislation'
+    }
   },
   {
     path: 'engagement',
-    component: EngagementComponent
+    component: EngagementComponent,
+    data: {
+      title: 'Engagement'
+    }
   },
   {
     path: 'faq',
-    component: FaqComponent
+    component: FaqComponent,
+    data: {
+      title: 'Frequently Asked Questions'
+    }
   },
   {
     path: 'compliance-oversight',
-    component: ComplianceOversightComponent
+    component: ComplianceOversightComponent,
+    data: {
+      title: 'Compliance Oversight'
+    }
   },
   {
     path: 'modernizing',
-    component: ModernizingComponent
+    component: ModernizingComponent,
+    data: {
+      title: 'Modernized Land Use Planning'
+    }
   },
   {
     path: 'phases',
-    component: ProcessComponent
+    component: ProcessComponent,
+    data: {
+      title: 'Project Phases'
+    }
   },
   {
     path: 'search-help',
-    component: SearchHelpComponent
+    component: SearchHelpComponent,
+    data: {
+      title: 'Search Help'
+    }
   },
   {
     // default route
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    data: {
+      title: 'Home'
+    }
   },
   {
     // wildcard route

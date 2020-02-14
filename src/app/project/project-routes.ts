@@ -30,6 +30,9 @@ export const ProjectRoutes: Routes = [
     resolve: {
       documents: ProjectActivitiesResolver,
       shapefile: ShapeFileResolver
+    },
+    data: {
+      title: 'Project Details'
     }
   },
   {
@@ -38,22 +41,34 @@ export const ProjectRoutes: Routes = [
     resolve: {
       documents: CertificatesResolver,
       documentsTableRow: DocumentTableResolver
+    },
+    data: {
+      title: 'Certificates'
     }
   },
   {
     path: 'project-phase',
     component: ProjectPhaseTabComponent,
+    data: {
+      title: 'Project Phase'
+    }
   },
   {
     path: 'pins',
     component: PinsComponent,
     resolve: {
       pins: PinsResolverService
+    },
+    data: {
+      title: 'Project Pins'
     }
   },
   {
     path: 'commenting',
-    component: CommentingTabComponent
+    component: CommentingTabComponent,
+    data: {
+      title: 'Project Comments'
+    }
   },
   {
     path: 'documents',
@@ -61,18 +76,30 @@ export const ProjectRoutes: Routes = [
     resolve: {
       documents: DocumentsResolver,
       documentsTableRow: DocumentTableResolver
+    },
+    data: {
+      title: 'Project Documents'
     }
   },
   {
     path: 'decisions',
-    component: DecisionsTabComponent
+    component: DecisionsTabComponent,
+    data: {
+      title: 'Project Decisions'
+    }
   },
   {
     path: 'background-info',
-    component: BackgroundInfoTabComponent
+    component: BackgroundInfoTabComponent,
+    data: {
+      title: 'Project Background Information'
+    }
   },
   {
     path: 'cp',
-    component: CommentsComponent
+    component: CommentsComponent,
+    data: {
+      title: 'Project Comments'
+    }
   }
 ];

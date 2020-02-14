@@ -31,20 +31,20 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right" [class.visible]="isVisible" aria-labelledby="aboutMMTI">
             <a class="dropdown-item" href="/modernizing" [routerLink]="['/modernizing']" tabindex="0" (click)="dropDownHide()" alt="List of Projects">
-              <strong>Modernizing Land Use Planning</strong>
-              <span class="dd-item-desc">Learn about the B.C. government’s commitment and approach to modernize land use planning in B.C.</span>
+              <strong aria-label="Learn about modernizing land use planning.">Modernizing Land Use Planning</strong>
+              <span class="dd-item-desc" [attr.aria-hidden]="true">Learn about the B.C. government’s commitment and approach to modernize land use planning in B.C.</span>
             </a>
             <a class="dropdown-item" href="/phases" [routerLink]="['/phases']" tabindex="0" (click)="dropDownHide()">
-              <strong>Land Use Planning Project Phases</strong>
-              <span class="dd-item-desc">Learn about the steps that are required to complete a land use plan, and have it approved and implemented.</span>
+              <strong aria-label="Learn about land use planning project phases.">Land Use Planning Project Phases</strong>
+              <span class="dd-item-desc" [attr.aria-hidden]="true">Learn about the steps that are required to complete a land use plan, and have it approved and implemented.</span>
             </a>
             <a class="dropdown-item" href="/engagement" [routerLink]="['/engagement']" tabindex="0" (click)="dropDownHide()">
-              <strong>Program and Project Engagement</strong>
-              <span class="dd-item-desc">Learn about engagement to inform both program development and active planning projects.</span>
+              <strong aria-label="Learn about program and project engagement.">Program and Project Engagement</strong>
+              <span class="dd-item-desc" [attr.aria-hidden]="true">Learn about engagement to inform both program development and active planning projects.</span>
             </a>
             <a class="dropdown-item" href="/faq" [routerLink]="['/faq']" tabindex="0" (click)="dropDownHide()">
-              <strong>Frequently Asked Questions</strong>
-              <span class="dd-item-desc">Learn more about land use planning in B.C.</span>
+              <strong aria-label="Go to frequently asked questions.">Frequently Asked Questions</strong>
+              <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about land use planning in B.C.</span>
             </a>
           </div>
         </li>

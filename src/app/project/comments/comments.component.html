@@ -7,7 +7,7 @@
     <div class="hero-banner-alt">
       <div class="container">
         <div class="hero-banner__content">
-          <h1>{{project?.name || '-'}}</h1>
+          <h1 tabindex="0">{{project?.name || '-'}}</h1>
           <div class="header-section mb-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
             <h3>
               {{commentPeriodHeader}}

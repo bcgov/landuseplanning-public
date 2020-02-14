@@ -6,7 +6,7 @@
   <div class="hero-banner">
     <div class="container">
       <div class="hero-banner__content">
-        <h1>Land Use Planning in British Columbia</h1>
+        <h1 tabindex="0">Land Use Planning in British Columbia</h1>
         <p>Use the list below to navigate to individual Projects. Click on any project to go
           directly to its details page.</p>
       </div>
@@ -33,11 +33,11 @@
       </form>
     </div>
   </div>
-  
+
 
   <section *ngIf="tableParams.totalListItems > 0" class="project-list table-container">
     <div class="container">
-      <h1>Activities & Updates</h1>
+      <h2>Activities & Updates</h2>
       <br>
       <app-table-template
         [columns]="projectTableColumns"
