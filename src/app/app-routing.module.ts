@@ -20,21 +20,24 @@ const routes: Routes = [
     path: 'contact',
     component: ContactComponent,
     data: {
-      title: 'Contact Us'
+      title: 'Contact Us',
+      focush1: true
     }
   },
   {
     path: 'projects',
     component: ProjectsComponent,
     data: {
-      title: 'List View of Projects'
+      title: 'List View of Projects',
+      focush1: true
     }
   },
   {
     path: 'projects-list',
     component: ProjectListComponent,
     data: {
-      title: 'Map View of Projects'
+      title: 'Map View of Projects',
+      focush1: true
     }
   },
   {
@@ -44,56 +47,64 @@ const routes: Routes = [
       activities: NewsResolver
     },
     data: {
-      title: 'Activities and Updates'
+      title: 'Activities and Updates',
+      focush1: true
     }
   },
   {
     path: 'legislation',
     component: LegislationComponent,
     data: {
-      title: 'Legislation'
+      title: 'Legislation',
+      focush1: true
     }
   },
   {
     path: 'engagement',
     component: EngagementComponent,
     data: {
-      title: 'Engagement'
+      title: 'Engagement',
+      focush1: true
     }
   },
   {
     path: 'faq',
     component: FaqComponent,
     data: {
-      title: 'Frequently Asked Questions'
+      title: 'Frequently Asked Questions',
+      focush1: true
     }
   },
   {
     path: 'compliance-oversight',
     component: ComplianceOversightComponent,
     data: {
-      title: 'Compliance Oversight'
+      title: 'Compliance Oversight',
+      focush1: true
     }
   },
   {
     path: 'modernizing',
     component: ModernizingComponent,
     data: {
-      title: 'Modernized Land Use Planning'
+      title: 'Modernized Land Use Planning',
+      focush1: true
     }
   },
   {
     path: 'phases',
     component: ProcessComponent,
     data: {
-      title: 'Project Phases'
+      title: 'Project Phases',
+      focush1: true
     }
   },
   {
     path: 'search-help',
     component: SearchHelpComponent,
     data: {
-      title: 'Search Help'
+      title: 'Search Help',
+      focush1: true
     }
   },
   {
@@ -101,7 +112,8 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      title: 'Home'
+      title: 'Home',
+      focush1: true
     }
   },
   {

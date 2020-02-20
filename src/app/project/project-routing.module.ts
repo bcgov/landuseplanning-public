@@ -28,7 +28,8 @@ const routes: Routes = [
       project: ProjectResolver
     },
     data: {
-      title: 'Project Comment Period'
+      title: 'Project Comment Period',
+      focush1: true
     }
   },
   {

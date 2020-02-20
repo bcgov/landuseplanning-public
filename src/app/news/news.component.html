@@ -6,13 +6,14 @@
   <div class="hero-banner">
     <div class="container">
       <div class="hero-banner__content">
-        <h1 tabindex="0">Land Use Planning in British Columbia</h1>
-        <p>Use the list below to navigate to individual Projects. Click on any project to go
+        <h1 tabindex="-1">Land Use Plan Activities and Updates</h1>
+        <p>Use the list below to navigate individual projects that have updates. Click on any project to go
           directly to its details page.</p>
       </div>
       <form #f="ngForm" class="search-form ui form" (ngSubmit)="onSubmit()">
+        <label class="instructions__white" for="keywordInput">Search activities and updates by title</label>
         <div class="input-group main-search-field">
-          <input class="form-control" type="text" name="keywordInput" placeholder="Enter keywords to search..."
+          <input class="form-control" type="text" name="keywordInput"
             id="keywordInput" [(ngModel)]="tableParams.keywords" autofocus />
           <div class="input-group-append">
             <!-- prevent searching if input is empty or we're already searching -->
@@ -22,29 +23,29 @@
           </div>
         </div>
         <br>
-        <div class="results">
-          <p *ngIf="!loading && tableParams.totalListItems == 0">
-            No result<span *ngIf="count != 1">s</span> found for "{{tableParams.keywords}}"
-          </p>
-          <div *ngIf="!loading && tableParams.totalListItems > 0">
-            {{tableParams.totalListItems}} result<span *ngIf="tableParams.totalListItems != 1">s found</span>
-          </div>
-        </div>
       </form>
     </div>
   </div>
 
 
-  <section *ngIf="tableParams.totalListItems > 0" class="project-list table-container">
+  <section class="project-list table-container">
     <div class="container">
-      <h2>Activities & Updates</h2>
       <br>
-      <app-table-template
+      <app-table-template *ngIf="tableParams.totalListItems > 0"
         [columns]="projectTableColumns"
         [data]="projectTableData"
         (onColumnSort)='setColumnSort($event)'
         (onPageNumUpdate)='getPaginatedProjects($event)'>
       </app-table-template>
+      <strong>
+
+        <p *ngIf="!loading && tableParams.totalListItems === 0 && tableParams.keywords.length !== 0">
+          No result<span *ngIf="count !== 1">s</span> found for "{{tableParams.keywords}}"
+        </p>
+        <p *ngIf="!loading && tableParams.totalListItems === 0 && tableParams.keywords.length === 0">
+          No results found
+        </p>
+      </strong>
     </div>
   </section>
 </main>
