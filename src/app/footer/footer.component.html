@@ -1,25 +1,8 @@
 <footer class="app-footer" id="footer" [ngClass]="{'app-footer--sm': (router.url.startsWith('/projects'))}">
   <div class="container">
-    <!--     <div class="footer-info row">
-      <div class="col-md-4">
-        <section>
-          <h4>Navigate</h4>
-          <ul class="nav-links">
-            <li><a routerLink="/projects">Find Environmental Assessment Projects</a></li>
-            <li><a routerLink="/contact">Contact Us</a></li>
-          </ul>
-        </section>
-      </div>
-      <div class="col-md-8">
-        <section>
-          <h4>More Information</h4>
-          <p class="mb-0">EPIC</p>
-        </section>
-      </div>
-    </div> -->
     <div class="footer-admin clearfix">
       <ul class="gov-links">
-        <li><a href="#">Home</a></li>
+        <li><a routerLink="/home">Home</a></li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">Copyright</a></li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">Disclaimer</a></li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">Privacy</a></li>

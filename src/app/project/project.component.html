@@ -3,7 +3,7 @@
     <div class="hero-banner-alt">
       <div class="container">
         <div class="hero-banner__content">
-          <h1 tabindex="0">{{project?.name || '-'}}</h1>
+          <h1 tabindex="-1">{{project?.name || '-'}}</h1>
           <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
           <div class="basic-info">
             <div>

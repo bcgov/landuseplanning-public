@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Renderer2, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -17,7 +17,7 @@ import { AddCommentComponent } from './comments/add-comment/add-comment.componen
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
-export class ProjectComponent implements OnInit, OnDestroy {
+export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly tabLinks = [
     { label: 'Project Details', link: 'project-details' },
     { label: 'Background', link: 'background-info' },
@@ -29,6 +29,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public project: Project = null;
   public period: CommentPeriod = null;
+  public appHeader: HTMLHeadingElement;
   private ngbModal: NgbModalRef = null;
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -64,6 +65,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  ngAfterViewInit() {
+    this.appHeader = document.getElementsByTagName('h1')[0];
+    if ( this.appHeader ) {
+      this.appHeader.focus();
+    }
   }
 
   public addComment() {

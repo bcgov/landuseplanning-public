@@ -32,7 +32,8 @@ export const ProjectRoutes: Routes = [
       shapefile: ShapeFileResolver
     },
     data: {
-      title: 'Project Details'
+      title: 'Project Details',
+      focush1: false
     }
   },
   {
@@ -43,14 +44,16 @@ export const ProjectRoutes: Routes = [
       documentsTableRow: DocumentTableResolver
     },
     data: {
-      title: 'Certificates'
+      title: 'Certificates',
+      focush1: false
     }
   },
   {
     path: 'project-phase',
     component: ProjectPhaseTabComponent,
     data: {
-      title: 'Project Phase'
+      title: 'Project Phase',
+      focush1: false
     }
   },
   {
@@ -60,14 +63,16 @@ export const ProjectRoutes: Routes = [
       pins: PinsResolverService
     },
     data: {
-      title: 'Project Pins'
+      title: 'Project Pins',
+      focush1: false
     }
   },
   {
     path: 'commenting',
     component: CommentingTabComponent,
     data: {
-      title: 'Project Comments'
+      title: 'Project Comments',
+      focush1: false
     }
   },
   {
@@ -78,28 +83,32 @@ export const ProjectRoutes: Routes = [
       documentsTableRow: DocumentTableResolver
     },
     data: {
-      title: 'Project Documents'
+      title: 'Project Documents',
+      focush1: false
     }
   },
   {
     path: 'decisions',
     component: DecisionsTabComponent,
     data: {
-      title: 'Project Decisions'
+      title: 'Project Decisions',
+      focush1: false
     }
   },
   {
     path: 'background-info',
     component: BackgroundInfoTabComponent,
     data: {
-      title: 'Project Background Information'
+      title: 'Project Background Information',
+      focush1: false
     }
   },
   {
     path: 'cp',
     component: CommentsComponent,
     data: {
-      title: 'Project Comments'
+      title: 'Project Comments',
+      focush1: true
     }
   }
 ];

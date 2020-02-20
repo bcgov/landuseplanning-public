@@ -1,6 +1,9 @@
 @import "~assets/styles/base/base.scss";
 
 .project-list {
+
+  min-height: 20rem;
+
   &__options {
     @include flex(0 0 auto);
     padding: 1rem 0rem;
@@ -8,6 +11,8 @@
       white-space: normal;
     }
   }
+
+
 }
 
 .clickable-row {
@@ -106,7 +111,7 @@
     .hero-banner__content {
       padding-bottom: 2rem;
     }
-    
+
     .project-table {
         &__name-col {
             // width: 20%;
