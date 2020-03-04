@@ -1,6 +1,7 @@
-<header class="app-header" id="header" [ngClass]="{
+<header #header class="app-header" id="header" [ngClass]="{
     'app-header--flex': (router.url.startsWith('/projects')),
     'app-header--solid': (router.url.startsWith('/p/'))}">
+  <app-env-banner></app-env-banner>
   <div class="navbar navbar-expand-lg justify-content-between">
     <a class="navbar-brand" routerLink="/home">
       <span class="navbar-brand__title">Provincial Land Use Planning</span>

@@ -27,6 +27,7 @@ import { NewsListTableRowsComponent } from 'app/news/news-list-table-rows/news-l
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { SearchHelpComponent } from './search-help/search-help.component';
 import { ShareButtonsComponent } from './share-buttons/share-buttons.component';
+import { EnvBannerComponent } from './header/env-banner/env-banner.component';
 
 
 // services
@@ -84,7 +85,8 @@ import { FaqComponent } from './faq/faq.component';
     EngagementComponent,
     ModernizingComponent,
     FaqComponent,
-    ShareButtonsComponent
+    ShareButtonsComponent,
+    EnvBannerComponent
   ],
   entryComponents: [
     NewsListTableRowsComponent,

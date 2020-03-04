@@ -6,12 +6,6 @@
   background: $bg-default;
 }
 
-@media (min-width: 768px) {
-  :host {
-    padding-top: .2rem;
-  }
-}
-
 .banner {
   background-color: #003366;
   color: white;
@@ -27,7 +21,7 @@
   }
 
   .hero-banner-alt {
-    padding-top: 50px;
+    /*padding-top: 50px;*/
     h1 {
       display: inline-block;
     }

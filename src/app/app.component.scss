@@ -5,6 +5,7 @@
 
   @include flex-box();
   @include flex-direction(column);
+  display: -webkit-box;
 
   min-height: 100vh;
   background: #036;

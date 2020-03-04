@@ -4,7 +4,7 @@ $toggle-list-anim-duration: 0.2s;
 $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
 
 app-projects:host {
-  position: absolute;     // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
+  /*position: absolute;*/    // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
   top: 3.7rem;            // Offset height of header
   right: 0;
   bottom: 2rem;
@@ -22,7 +22,7 @@ app-projects:host {
   @include flex-flow(column nowrap);
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 80px - 32px);
 }
 
 // Project Filters
