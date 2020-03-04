@@ -65,20 +65,14 @@
       display: inline-block;
       margin-bottom: 45px;
     }
+
     .basic-info {
-      @media (min-width: 767px) {
-        display: flex;
-      }
+      display: block;
 
       > div {
         padding: 0px 15px 0 0;
         margin-right: 15px;
-        @media (min-width: 767px) {
-          border-right: 1px solid #46617b;
-        }
-        &:last-of-type {
-          border-right: none;
-        }
+        margin-top: 1.4rem;
       }
       label {
         font-weight: bold;
