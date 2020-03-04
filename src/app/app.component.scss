@@ -3,14 +3,9 @@
 :host {
   display: block;
 
-  @include flex-box();
+  /*@include flex-box();*/
   @include flex-direction(column);
-  display: -webkit-box;
-  /* had to manually add these as they weren't getting added on Openshift */
-  /* clean-css ignore:start */
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  /* clean-css ignore:end */
+  /*display: -webkit-box;*/
 
   min-height: 100vh;
   background: #036;
