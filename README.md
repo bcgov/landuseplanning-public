@@ -1,10 +1,10 @@
-# bcgov/gcpe-lup-public
+# bcgov/landuseplanning-public
 
 Public front-end for the Land Use Planning application. Based on the PRC Application [bcgov/nrts-prc-public](https://github.com/bcgov/nrts-prc-public).
 
-* [Admin](https://github.com/bcgov/gcpe-lup-admin) - front-end for admin users.
-* [Public](https://github.com/bcgov/gcpe-lup-public) - front-end for public users.
-* [Api](https://github.com/bcgov/gcpe-lup-api) - back-end that serves both admin and public requests.
+* [Admin](https://github.com/bcgov/landuseplanning-admin) - front-end for admin users.
+* [Public](https://github.com/bcgov/landuseplanning-public) - front-end for public users.
+* [Api](https://github.com/bcgov/landuseplanning-api) - back-end that serves both admin and public requests.
 
 # Prerequisites
 
@@ -15,7 +15,7 @@ Public front-end for the Land Use Planning application. Based on the PRC Applica
 | ng         | 6.x.x   | https://cli.angular.io/ | Angular CLI                               |
 | yarn       | latest  | https://yarnpkg.com/en/ | Package Manager (more efficient than npm) |
 
-_Note: This app also requires [bcgov/gcpe-lup-api](https://github.com/bcgov/gcpe-lup-api) to handle its requests._
+_Note: This app also requires [bcgov/landuseplanning-api](https://github.com/bcgov/landuseplanning-api) to handle its requests._
 
 ## Install [Node + NPM](https://nodejs.org/en/)
 
