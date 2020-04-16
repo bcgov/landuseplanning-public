@@ -16,7 +16,7 @@
             <label>Project Phase</label>
             <p class="value">{{project?.projectPhase || "-"}}</p>
           </div>
-          <label>Existing Land Use Plan(s)</label>
+          <label>Existing Provincial Land Use Plan(s)</label>
           <div *ngIf="multipleExistingPlans else singleExistingPlan">
             <p class="value" *ngIf="project.existingLandUsePlans.length === 0">-</p>
             <div *ngFor="let existingPlan of project.existingLandUsePlans; let i=index">
