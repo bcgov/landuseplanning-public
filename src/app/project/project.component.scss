@@ -102,8 +102,8 @@
         @media (max-width: 767px) {
           display: block;
           font-size: 1rem;
-          .value,
-          p {
+
+          .value, p {
             font-size: 1rem;
           }
           .col-6 {
@@ -129,6 +129,12 @@
       margin-bottom: 0;
       line-height: 1.2;
     }
+
+    .partner-nations, .agreements {
+      display: flex;
+      margin: 0.2rem 0;
+    }
+
     .value {
       font-size: .8rem;
       line-height: 1.25;
