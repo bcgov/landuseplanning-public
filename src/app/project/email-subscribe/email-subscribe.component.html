@@ -1,0 +1,82 @@
+<div id="modal-instructions">Use tab to navigate form elements. Escape key to close.</div>
+
+<!-- Contact Information Form-->
+<form #commentForm1="ngForm" (ngSubmit)="register()" cdkTrapFocus>
+    <div class="modal-content" *ngIf="this.currentPage === 1">
+        <div class="modal-header">
+            <h2 class="modal-title">Sign up to Receive Updates</h2>
+            <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg1" type="button"
+                aria-label="Close comment submission form." (click)="activeModal.dismiss('dismissed page1')">
+                <i class="material-icons" aria-hidden="true">
+                    close
+                </i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <section>
+                <p>If you are interested in getting more information on this project, sign up for email updates by providing your email
+                address below:</p>
+                <p class="form-warning">Please complete all required fields.</p>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="control-label" for="emailInput">Email Address (required)</label>
+                        <div class="form-control-container">
+                            <input class="form-control" type="text" name="emailInput" id="emailInput" required
+                                [(ngModel)]="emailAddress" #name="ngModel" autofocus />
+                            <div [hidden]="name.valid || name.pristine" class="alert alert-danger" role="alert">Email Address
+                                is required to submit form</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="confirmEmailInput">Confirm Email Address (required)</label>
+                        <input class="form-control" type="text" name="confirmEmailInput" id="confirmEmailInput" required
+                            [(ngModel)]="confirmEmailAddress" #location="ngModel" />
+                        <div [hidden]="location.valid || location.pristine" class="alert alert-danger" role="alert">Email Address
+                            is required to submit form</div>
+                    </div>
+                </fieldset>
+            </section>
+            <section class="m-b-0">
+                <h3>Notice of Collection</h3>
+                    <p>This information is collected by Ministry of Forests, Lands Natural Resource Operations and Rural Development under
+                    Section 26(c) of the <a class="paragraph-link" href="http://www.bclaws.ca/Recon/document/ID/freeside/96165_00" target="_blank">
+                        Freedom of Information and Protection of Privacy Act</a> and will be used to provide you with email
+                    updates. Should you have any questions about the collection of your personal information, please contact:</p>
+                <p class="m-b-0">Director
+                    <br>Resource Planning and Assessment Branch
+                    <br>Ministry of Forests, Lands,
+                    Natural Resource Operations and Rural Development
+                    <br>PO Box 9484, STN PROV GOVT
+                    <br>Victoria BC, V8W 9W6
+                    <br><a class="paragraph-link" href="mailto:landuseplanning@gov.bc.ca">landuseplanning@gov.bc.ca</a>
+                    <br>250-208-3591
+            </section>
+            <section>
+                <p>If you do not want to receive these emails please Unsubscribe here</p>
+            </section>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-main" type="button" aria-label="Submit your email address." (click)="p2_next()"
+                [disabled]="!commentForm1.form.valid">Submit</button>
+        </div>
+    </div>
+</form>
+
+<!-- Success -->
+<div class="modal-content thank-you-content" *ngIf="this.currentPage === 2">
+    <div class="modal-header">
+        <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" aria-label="Close comment submission form."
+            type="button" aria-label="Close" (click)="activeModal.dismiss('dismissed page3')">
+            <i class="material-icons" aria-hidden="true">
+                close
+            </i>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="thank-you-icon"></div>
+        <h4>Thank you for signing up for email updates!</h4>
+        <p>All comments will be provided to the technical planning team.</p>
+        <button class="btn btn-primary gtm-submit-comment-done" type="button"
+            (click)="activeModal.close('closed page4')">Back to Project Details</button>
+    </div>
+</div>
