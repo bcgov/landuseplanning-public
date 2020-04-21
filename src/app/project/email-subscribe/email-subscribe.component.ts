@@ -58,6 +58,7 @@ export class EmailSubscribeComponent implements OnInit {
       .toPromise()
       .then((emailSubscribe: EmailSubscribe) => {
         this.emailSubscribe = emailSubscribe;
+        console.log('ES Object', this.emailSubscribe);
         return emailSubscribe;
       })
       .then(() => {

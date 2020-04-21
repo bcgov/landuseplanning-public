@@ -53,6 +53,25 @@ export class EmailSubscribeService {
 
     return this.api.addEmail(emailSubscribe)
       .map((res: EmailSubscribe) => {
+        console.log('Email submitted', res);
+        return res ? new EmailSubscribe(res) : null;
+      })
+      .catch(this.api.handleError);
+  }
+
+  unsubscribe(emailAddress: string): Observable<EmailSubscribe> {
+
+    return this.api.unsubscribeEmail(emailAddress)
+      .map((res: EmailSubscribe) => {
+        return res ? new EmailSubscribe(res) : null;
+      })
+      .catch(this.api.handleError);
+  }
+
+  confirm(emailAddress: string, confirmKey: string): Observable<EmailSubscribe> {
+
+    return this.api.confirmEmail(emailAddress, confirmKey)
+      .map((res: EmailSubscribe) => {
         return res ? new EmailSubscribe(res) : null;
       })
       .catch(this.api.handleError);

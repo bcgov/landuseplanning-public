@@ -1,0 +1,24 @@
+<div class="hero-banner hb-sm">
+  <div class="container">
+    <div class="container-inner">
+      <div class="hero-banner__content">
+        <h1 tabindex="-1">Confirm Your Email Address</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="static-content">
+  <div class="container" id="anchor-point">
+    <main>
+      <section *ngIf="emailConfirmed">
+        <p>Thank you for confirming your email address.</p>
+        <p>If you do not wish to receive emails from the project administrator, please <a class="paragraph-link" href="/unsubscribe" [routerLink]="['/unsubscribe']"
+          (click)="activeModal.dismiss()">Unsubscribe here</a></p>
+      </section>
+      <section *ngIf="!emailConfirmed">
+        <p>Sorry, we were unable to confirm this email address.</p>
+        <p>Either the email address or the confirmation token are incorrect.</p>
+      </section>
+    </main>
+  </div>
+</section>

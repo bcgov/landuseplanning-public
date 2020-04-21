@@ -1,5 +1,3 @@
-import { Project } from './project';
-
 export class EmailSubscribe {
   _id: string;
   email: string;

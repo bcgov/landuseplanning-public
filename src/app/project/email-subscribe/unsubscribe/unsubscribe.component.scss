@@ -1,0 +1,18 @@
+.static-content {
+  background: white
+}
+
+@media (min-width: 768px) {
+    .hero-banner .container {
+        min-height: 15rem;
+    }
+}
+
+.form-warning {
+  color: red;
+  display: none;
+}
+
+.form-warning__show {
+  display: inline;
+}

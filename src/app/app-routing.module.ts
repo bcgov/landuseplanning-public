@@ -12,7 +12,8 @@ import { FaqComponent } from './faq/faq.component';
 import { ProcessComponent } from './process/process.component';
 import { ComplianceOversightComponent } from './compliance-oversight/compliance-oversight.component';
 import { ModernizingComponent } from './modernizing/modernizing.component';
-import { SearchHelpComponent } from './search-help/search-help.component';
+import { UnsubscribeComponent } from './project/email-subscribe/unsubscribe/unsubscribe.component';
+import { ConfirmEmailComponent } from './project/email-subscribe/confirm-email/confirm-email.component';
 import { NewsResolver } from './news/news-resolver.service';
 
 const routes: Routes = [
@@ -100,10 +101,18 @@ const routes: Routes = [
     }
   },
   {
-    path: 'search-help',
-    component: SearchHelpComponent,
+    path: 'unsubscribe',
+    component: UnsubscribeComponent,
     data: {
-      title: 'Search Help',
+      title: 'Unsubscribe from project updates',
+      focush1: true
+    }
+  },
+  {
+    path: 'confirm-email/:emailAddress/:confirmKey',
+    component: ConfirmEmailComponent,
+    data: {
+      title: 'Confirm Email Address',
       focush1: true
     }
   },

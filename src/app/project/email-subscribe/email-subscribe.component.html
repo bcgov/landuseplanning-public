@@ -52,7 +52,7 @@
                     <br>250-208-3591
             </section>
             <section>
-                <p>If you do not want to receive these emails please Unsubscribe here</p>
+                <p>If you do not want to receive these emails please <a class="paragraph-link" href="/unsubscribe" [routerLink]="['/unsubscribe']" (click)="activeModal.dismiss()">Unsubscribe here</a></p>
             </section>
         </div>
         <div class="modal-footer">
@@ -75,7 +75,7 @@
     <div class="modal-body">
         <div class="thank-you-icon"></div>
         <h4>Thank you for signing up for email updates!</h4>
-        <p>All comments will be provided to the technical planning team.</p>
+        <p>All emails will be provided to the technical planning team.</p>
         <button class="btn btn-primary gtm-submit-comment-done" type="button"
             (click)="activeModal.close('closed page4')">Back to Project Details</button>
     </div>

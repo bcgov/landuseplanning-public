@@ -29,6 +29,8 @@ import { ProjectActivitesComponent } from './project-activites/project-activites
 import { CertificatesComponent } from './certificates/certificates.component';
 import { PinsComponent } from './pins/pins.component';
 import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.component';
+import { UnsubscribeComponent } from './email-subscribe/unsubscribe/unsubscribe.component';
+import { ConfirmEmailComponent } from './email-subscribe/confirm-email/confirm-email.component';
 
 @NgModule({
   imports: [
@@ -57,6 +59,8 @@ import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.c
     CertificatesComponent,
     PinsComponent,
     EmailSubscribeComponent,
+    UnsubscribeComponent,
+    ConfirmEmailComponent,
   ],
   providers: [
     StorageService

@@ -620,6 +620,16 @@ export class ApiService {
     return this.http.post<EmailSubscribe>(`${this.apiPath}/${queryString}`, emailSubscribe, {});
   }
 
+  unsubscribeEmail(emailAddress: string): Observable<EmailSubscribe> {
+    const queryString = `emailSubscribe?email=${emailAddress}`;
+    return this.http.delete<EmailSubscribe>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  confirmEmail(emailAddress: string, confirmKey: string): Observable<EmailSubscribe> {
+    const queryString = `emailSubscribe?email=${emailAddress}&confirmKey=${confirmKey}`;
+    return this.http.put<EmailSubscribe>(`${this.apiPath}/${queryString}`, {});
+  }
+
   //
   // Users
   //
