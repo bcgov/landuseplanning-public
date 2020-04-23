@@ -11,13 +11,14 @@
   <div class="container" id="anchor-point">
     <main>
       <section *ngIf="emailConfirmed">
-        <p>Thank you for confirming your email address.</p>
-        <p>If you do not wish to receive emails from the project administrator, please <a class="paragraph-link" href="/unsubscribe" [routerLink]="['/unsubscribe']"
-          (click)="activeModal.dismiss()">Unsubscribe here</a></p>
+        <p>Sign up complete! Your email address has been sent to the Project Team.</p>
+        <p>If you do not wish to receive emails from the Project Team, please <a class="paragraph-link" href="/unsubscribe" [routerLink]="['/unsubscribe']"
+          (click)="activeModal.dismiss()">Unsubscribe</a></p>
       </section>
       <section *ngIf="!emailConfirmed">
         <p>Sorry, we were unable to confirm this email address.</p>
         <p>Either the email address or the confirmation token are incorrect.</p>
+        <p>Please try again or contact the Engagement Lead for assistance.</p>
       </section>
     </main>
   </div>
