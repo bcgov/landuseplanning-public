@@ -49,7 +49,7 @@ export class ApiService {
 
     this.apiPath = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api/public' : remote_api_path;
     this.adminUrl = (_.isEmpty(remote_admin_path)) ? 'http://localhost:4200' : remote_admin_path;
-    this.env = (_.isEmpty(deployment_env)) ? 'local' : deployment_env;
+    this.env = (_.isEmpty(deployment_env)) ? 'prod' : deployment_env;
   }
 
   handleError(error: any): Observable<any> {
