@@ -12,6 +12,8 @@ import { Feature } from 'app/models/feature';
 import { News } from 'app/models/news';
 import { Comment } from 'app/models/comment';
 import { CommentPeriod } from 'app/models/commentperiod';
+import { Survey } from 'app/models/survey';
+import { SurveyResponse } from 'app/models/surveyResponse';
 import { Document } from 'app/models/document';
 import { SearchResults } from 'app/models/search';
 import { Org } from 'app/models/organization';
@@ -410,6 +412,41 @@ export class ApiService {
   }
 
   //
+  // Surveys
+  //
+  getSurvey(id: string): Observable<Survey[]> {
+    const fields = [
+      '_id',
+      'name',
+      'lastSaved',
+      'commentPeriod',
+      'project',
+      'questions'
+    ];
+    const queryString = 'survey/' + id + '?fields=' + this.buildValues(fields);
+    return this.http.get<Survey[]>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  //
+  // Survey Response
+  //
+
+  addSurveyResponse(comment: SurveyResponse): Observable<SurveyResponse> {
+    const fields = [
+      'author',
+      'dateAdded',
+      'location',
+      'responses',
+      'commentPeriod',
+      'project',
+      'survey',
+      'responses'
+    ];
+    const queryString = 'surveyResponse?fields=' + this.buildValues(fields);
+    return this.http.post<SurveyResponse>(`${this.apiPath}/${queryString}`, comment, {});
+  }
+
+  //
   // Comment Periods
   //
   getPeriodsByProjId(projId: string): Observable<Object> {
@@ -446,6 +483,22 @@ export class ApiService {
     const queryString = 'commentperiod/' + id + '?fields=' + this.buildValues(fields);
     return this.http.get<CommentPeriod[]>(`${this.apiPath}/${queryString}`, {});
   }
+
+  getPeriodSelectedSurvey(periodId: string): Observable<Survey[]> {
+    const fields = [
+      '_id',
+      'name',
+      'lastSaved',
+      'commentPeriod',
+      'project',
+      'questions',
+    ];
+
+    const queryString = `survey?commentPeriod=${periodId}&fields=` + this.buildValues(fields);
+    return this.http.get<Survey[]>(`${this.apiPath}/${queryString}`, {});
+  }
+
+
 
   //
   // Comments

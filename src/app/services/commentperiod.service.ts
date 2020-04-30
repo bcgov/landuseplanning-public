@@ -6,6 +6,7 @@ import 'rxjs/add/observable/of';
 
 import { ApiService } from './api';
 import { CommentPeriod } from 'app/models/commentperiod';
+import { Survey } from 'app/models/survey';
 import { CommentService } from './comment.service';
 
 @Injectable()
@@ -18,6 +19,7 @@ export class CommentPeriodService {
 
   private commentPeriodStatuses: Array<string> = []; // use helper to get these
   private commentPeriod: CommentPeriod = null; // for caching
+  private survey: Survey = null; // for caching
 
   constructor(
     private api: ApiService,

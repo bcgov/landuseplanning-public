@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import { Project } from './project';
+import { Survey } from './survey';
 
 
 export class CommentPeriod {
@@ -27,8 +28,9 @@ export class CommentPeriod {
   isPublished: Boolean;
   isResolved: Boolean;
   isVetted: String;
-  externalEngagementTool: Boolean;
-  externalToolPopupText: String;
+  commentingMethod: string;
+  externalToolPopupText: string;
+  surveySelected: Survey;
   milestone: String;
   openCommentPeriod: String;
   openHouses: String;
@@ -79,8 +81,9 @@ export class CommentPeriod {
     this.isPublished = obj && obj.isPublished || null;
     this.isResolved = obj && obj.isResolved || null;
     this.isVetted = obj && obj.isVetted || null;
-    this.externalEngagementTool = obj && obj.externalEngagementTool || null;
+    this.commentingMethod = obj && obj.commentingMethod || null;
     this.externalToolPopupText = obj && obj.externalToolPopupText || null;
+    this.surveySelected = obj && obj.surveySelected || null;
     this.milestone = obj && obj.milestone || null;
     this.openHouses = obj && obj.openHouses || null;
     this.periodType = obj && obj.periodType || null;

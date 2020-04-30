@@ -39,7 +39,8 @@ export class AddCommentComponent implements OnInit {
   public locationInput: any;
   public makePublic: any;
   public commentFiles: any;
-  public externalEngagementTool: Boolean;
+  public externalEngagementTool: boolean;
+  public commentingMethod: string;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -49,8 +50,8 @@ export class AddCommentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.externalEngagementTool = this.currentPeriod.externalEngagementTool;
-    if (!this.externalEngagementTool) {
+    this.commentingMethod = this.currentPeriod.commentingMethod;
+    if (this.commentingMethod === 'basicForm') {
       this.comment = new Comment();
       this.comment.period = this.currentPeriod._id;
       this.comment.isAnonymous = false;
