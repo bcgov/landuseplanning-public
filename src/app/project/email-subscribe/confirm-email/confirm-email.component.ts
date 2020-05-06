@@ -13,6 +13,7 @@ export class ConfirmEmailComponent implements OnInit {
   public emailAddress;
   private confirmKey;
   public emailConfirmed;
+  public loading;
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -22,6 +23,7 @@ export class ConfirmEmailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     this.emailConfirmed = false;
     // get data from route resolver
     this.route.paramMap
@@ -35,6 +37,7 @@ export class ConfirmEmailComponent implements OnInit {
       .subscribe( data => {
           console.log('subscribe', data);
           this.emailConfirmed = true;
+          this.loading = false;
       },
       error => {
         console.log('Confirm error:', error);
