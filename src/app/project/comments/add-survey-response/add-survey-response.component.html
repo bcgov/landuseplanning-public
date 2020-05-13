@@ -1,8 +1,20 @@
 <div id="modal-instructions">Use tab to navigate form elements.</div>
 
+<!-- FIRST PAGE -->
+<form cdkTrapFocus>
+  <div class="modal-header">
+    <h4 class="modal-title">Submit a Comment</h4>
+    <button class="btn btn-icon close-btn gtm-submit-comment_cancel-pg1" type="button" aria-label="Close"
+      (click)="closeDialog()">
+      <i class="material-icons">
+        close
+      </i>
+    </button>
+  </div>
+
 <!-- only show when submitting larger submissions -->
 <div class="modal-content progress-content" *ngIf="submitting && (totalSize > 100000)">
-  <div class="modal-body">
+  <div class="modal-body submitting-modal">
     <h4 class="modal-title">Submitting your comment...</h4>
     <mat-progress-bar color="primary" mode="buffer" [value]="progressValue" [bufferValue]="progressBufferValue">
     </mat-progress-bar>
@@ -10,19 +22,9 @@
 </div>
 
 
-<!-- FIRST PAGE -->
-<form #preCommentForm="ngForm" cdkTrapFocus>
-  <div class="modal-header">
-    <h4 class="modal-title">Submit a Comment</h4>
-    <button class="btn btn-icon close-btn gtm-submit-comment_cancel-pg1" type="button" aria-label="Close"
-      (click)="this.close = true">
-      <i class="material-icons">
-        close
-      </i>
-    </button>
-  </div>
+  <mat-progress-bar *ngIf="this.currentPage === 2 && this.close === false && this.submitting === false" mode="determinate" value="{{ formProgress }}"></mat-progress-bar>
 
-  <mat-progress-bar *ngIf="this.currentPage === 2 && this.close === false" mode="determinate" value="{{ formProgress }}"></mat-progress-bar>
+  <div id="survey-window" class="survey-window">
 
   <div class="modal-content" *ngIf="this.close === true">
     <section class="close-warning">
@@ -62,48 +64,158 @@
       <button type="button" class="btn btn-main" aria-label="Go to next page of comment submission form." (click)="p1_next()">Next</button>
     </div>
   </div>
-</form>
 
 <!-- Contact Information Form-->
-<form cdkTrapFocus [formGroup]="surveyResponseObj" class="survey-form-window">
-  <div class="modal-content" *ngIf="this.currentPage === 2 && this.close === false">
+<form cdkTrapFocus [formGroup]="surveyResponseForm" class="survey-form-window">
+  <div class="modal-content" *ngIf="this.currentPage === 2 && this.close === false && this.submitting === false">
     <div class="modal-body">
-      <p class="form-warning">Please complete all required fields.</p>
-      <form class="survey-canvas" >
+      <p class="form-warning"><span class="required">*</span> = Required Field</p>
+      <div class="survey">
+        <div class="survey-canvas-list-item">
+          <div class="form-group">
+            <label class="control-label" for="author">1. Your Name<span class="required">*</span></label>
+            <input class="form-control" formControlName="author" value="">
+            <p *ngIf="author.invalid && author.touched" class="danger">This field is required.</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="location">2. Location<span class="required">*</span></label>
+            <input class="form-control" formControlName="location" value="">
+            <p *ngIf="location.invalid && location.touched" class="danger">This field is required.</p>
+          </div>
+        </div>
         <div
-        class="survey-canvas-list"
-        class="new-component"
-        *ngFor="let entry of surveyResponseObj.responses; let i = index">
-        <div class="form-group"  *ngIf="entry.question.type === 'smallText'">
-          <label class="control-label" for="sus">{{i +1 }}. {{entry.question.questionText}}<span *ngIf="entry.question.answerRequired">*</span></label>
-          <input formControlName="textResponse" value="">
+        class="survey-canvas-list-item"
+        *ngFor="let entry of surveyResponseForm.controls.responses.controls; let i = index">
+        <div [formGroup]="entry">
+          <div class="form-group" *ngIf="survey.questions[i].type === 'smallText'">
+            <label class="control-label" for="textAnswer">{{countArray[i]}}. {{survey.questions[i].questionText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <label for="textAnswer">Please do not include any personally identifiable information about yourself or others in your responses.</label>
+            <input class="form-control" formControlName="textAnswer">
+            <p *ngIf="entry.invalid &&  entry.touched" class="danger">This field is required. <span *ngIf="survey.questions[i].maxChars">{{survey.questions[i].maxChars}} character limit.</span></p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'largeText'">
+            <label class="control-label" for="textAnswer">{{countArray[i]}}. {{survey.questions[i].questionText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <label for="textAnswer">Please do not include any personally identifiable information about yourself or others in your responses.</label>
+            <textarea class="form-control" rows="5" formControlName="textAnswer" value="large text"></textarea>
+            <p *ngIf="entry.invalid &&  entry.touched" class="danger">This field is required. <span *ngIf="survey.questions[i].maxChars">{{survey.questions[i].maxChars}} character limit.</span></p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'singleChoice'">
+            <label class="control-label" for="choices">{{countArray[i]}}. {{survey.questions[i].questionText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <br>
+            <label class="" for="choices">(Choose one)</label>
+            <div class="choices">
+              <div *ngFor="let choice of survey.questions[i].choices; let j = index">
+                <label class="form-check-label" for="choice">
+                  <input class="form-check-input" type="radio" name="singleChoice" formControlName="singleChoice" value="{{choice}}">
+                  {{choice}}
+              </label>
+              </div>
+              <div *ngIf="survey.questions[i].other">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" (change)="checkedState($event, i, survey.questions[i].choose)" formControlName="singleChoice" value="other">
+                  <label>Other: <input class="form-other-input" formControlName="otherText"></label>
+                </label>
+              </div>
+            </div>
+            <p *ngIf="entry.invalid && entry.touched && !survey.questions[i].other" class="danger">Please make a selection.</p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'multiChoice'">
+            <label class="control-label" for="choices">{{countArray[i]}}. {{survey.questions[i].questionText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <br>
+            <label class="" for="choices">(Choose {{chooseAmount(survey.questions[i])}})</label>
+            <div class="choices">
+                <div *ngFor="let choice of entry.controls.multiChoices.controls; let j = index">
+                  <label class="form-check-label" for="choice">
+                    <input class="form-check-input" size=20 type="checkbox" name="{{i}}" (change)="checkedState($event, i, survey.questions[i].choose)" [formControl]="choice" value="{{survey.questions[i].choices[j]}}">
+                    {{survey.questions[i].choices[j]}}
+                  </label>
+                </div>
+                <div *ngIf="survey.questions[i].other">
+                  <label class="form-check-label">
+                    <input class="form-check-input" size=20 type="checkbox" (change)="checkedState($event, i, survey.questions[i].choose)" value="other">
+                    <label>Other: <input class="form-other-input" formControlName="otherText"></label>
+                  </label>
+                </div>
+            </div>
+            <p *ngIf="entry.invalid &&  entry.touched" class="danger">Please make {{chooseAmount(survey.questions[i])}} selection(s).</p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'likert'">
+
+            <label class="control-label" for="choices">{{countArray[i]}}. {{survey.questions[i].questionText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <div *ngFor="let attribute of entry.controls.attributeChoices.controls; let ai = index">
+              <div [formGroup]="attribute">
+                <label class="attribute">{{survey.questions[i].attributes[ai].attribute}}</label>
+                <ul class='likert'>
+                  <li *ngFor="let choice of survey.questions[i].attributes[ai].choices; let ci = index">
+                    <input class="form-check-input" type="radio" formControlName="choice" value="{{choice}}">
+                    <label class="form-check-label" for="choice">{{choice}}</label>
+                  </li>
+                </ul>
+                <p *ngIf="entry.invalid && entry.touched" class="danger">Please make a selection.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="survey.questions[i].type === 'info'">
+            <p class="info-display control-label">{{survey.questions[i].infoText}}</p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'email'">
+            <label class="control-label" for="emailAnswer">{{countArray[i]}}. {{survey.questions[i].emailText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <input class="form-control" formControlName="emailAnswer" email>
+            <p *ngIf="entry.invalid &&  entry.touched" class="danger">Must be a valid email address.</p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'phoneNumber'">
+            <label class="control-label" for="phoneNumberAnswer">{{countArray[i]}}. {{survey.questions[i].phoneNumberText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <input class="form-control" formControlName="phoneNumberAnswer">
+            <p *ngIf="entry.invalid &&  entry.touched" class="danger">Must be a valid phone number.</p>
+          </div>
+          <div class="form-group" *ngIf="survey.questions[i].type === 'docPicker'">
+            <label class="control-label">{{countArray[i]}}. {{survey.questions[i].docPickerText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
+            <label>All attachments must be no larger than 5MB and must be a .png, .pdf, .gif, .jpg, .jpeg, or .bmp file.</label>
+            <app-file-upload [maxFiles]="50" [maxSize]="300" [showInfo]="false" [showList]="false" [files]="commentFiles"
+            (filesChange)="addFiles($event); commentFiles = []"></app-file-upload>
+            <ul class="doc-list mb-3" *ngIf="documents?.length > 0">
+              <li *ngFor="let doc of documents">
+                <span class="cell icon">
+                  <i class="material-icons">insert_drive_file</i>
+                </span>
+                <span class="cell name" [title]="doc.displayName || ''">
+                  <span class="cell__txt-content">{{doc.internalOriginalName}}</span>
+                </span>
+                <span class="cell actions">
+                  <button class="btn btn-icon" type="button" [attr.aria-label]="makeAriaLabel(doc.internalOriginalName)" title="Remove this file" (click)="deleteFile(doc, documents)">
+                    <i class="material-icons" aria-hidden="true">delete</i>
+                  </button>
+                </span>
+              </li>
+            </ul>
+            <div *ngIf="documents?.length === 0">
+              <p>No attached files.</p>
+            </div>
+            <p *ngIf="entry.invalid &&  entry.touched" class="danger">This field is required.</p>
+          </div>
         </div>
         </div>
-      </form>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-light" type="button" aria-label="Go to previous page of comment submission form." (click)="p2_back()">Back</button>
-      <button class="btn btn-main" type="button" aria-label="Submit your comment." (click)="p2_next()"
-        >Submit</button>
+      <button class="btn btn-light btn-back" type="button" aria-label="Go to previous page of comment submission form." (click)="p2_back()">Back</button>
+      <div *ngIf="!surveyResponseForm.valid" class="form-warning">Please complete all required fields.</div>
+      <button class="btn btn-main btn-submit" type="button" aria-label="Submit your comment." (click)="p2_next()"
+        [disabled]=!surveyResponseForm.valid>Submit</button>
     </div>
   </div>
 </form>
+</div>
+
+
 
 <!-- Success -->
 <div class="modal-content thank-you-content" *ngIf="this.currentPage === 3">
-  <div class="modal-header">
-    <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg3" aria-label="Close comment submission form."
-      type="button" aria-label="Close"
-      (click)="activeModal.dismiss('dismissed page3')">
-      <i class="material-icons" aria-hidden="true">
-        close
-      </i>
-    </button>
-  </div>
-  <div class="modal-body">
+  <div class="modal-body thank-you-body">
     <div class="thank-you-icon"></div>
-    <h4>Thank you for your comment!</h4>
-    <p>All comments will be provided to the technical planning team.</p>
+    <h4 class="thank-you-header">Thank you for your comment!</h4>
+    <p class="thank-you-text">All comments will be provided to the technical planning team.</p>
     <button class="btn btn-primary gtm-submit-comment-done" type="button"
       (click)="activeModal.close('closed page4')">Back to Project Details</button>
   </div>

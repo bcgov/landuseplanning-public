@@ -5,8 +5,11 @@ export class SurveyQuestion {
     answerRequired: boolean;
     maxChars?: number;
     choices?: string[];
+    choose?: number;
     other?: boolean;
-    likert?: any;
+    attributes?: any;
     infoText?: string;
     docPickerText?: string;
+    emailText: string;
+    phoneNumberText: string;
 }

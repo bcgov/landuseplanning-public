@@ -72,14 +72,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       );
-
-    console.log('here isyour porj', this.project)
-
-    this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
-        .subscribe((res: Survey) => {
-          this.surveySelected = res;
-          console.log('hereshe is', res)
-        })
   }
 
   ngAfterViewInit() {
@@ -91,43 +83,28 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public addComment() {
     if (this.project.commentPeriodForBanner) {
-      if (true) {
-        // open modal
-        this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg', keyboard: false });
-        // set input parameter
-        (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-        (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
-        (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = this.surveySelected;
-        // check result
-        this.ngbModal.result.then(
-          value => {
-            // saved
-            console.log(`Success, value = ${value}`);
-          },
-          reason => {
-            // cancelled
-            console.log(`Cancelled, reason = ${reason}`);
-          }
-          );
+        this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
+        .subscribe((loadedSurvey: Survey) => {
+          console.log('survey', loadedSurvey)
+          if (loadedSurvey) {
+
+          // open modal
+          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg', keyboard: false });
+          // set input parameter
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
+
         } else {
 
-        // open modal
-        this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
-        // set input parameter
-        (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-        (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
-        // check result
-        this.ngbModal.result.then(
-          value => {
-            // saved
-            console.log(`Success, value = ${value}`);
-          },
-          reason => {
-            // cancelled
-            console.log(`Cancelled, reason = ${reason}`);
-          }
-          );
+          // open modal
+          this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+          // set input parameter
+          (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+          (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
         }
+      })
+
     }
   }
 

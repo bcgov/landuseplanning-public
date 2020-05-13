@@ -143,13 +143,15 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   public addComment() {
-    if (true) {
+
+    if (this.commentPeriod.surveySelected) {
+
       // open modal
       this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
       // set input parameter
       (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
       (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
-      // (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = this.survey;
+      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = this.commentPeriod.surveySelected;
 
       // check result
       this.ngbModal.result.then(

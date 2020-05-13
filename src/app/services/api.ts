@@ -427,23 +427,38 @@ export class ApiService {
     return this.http.get<Survey[]>(`${this.apiPath}/${queryString}`, {});
   }
 
+  getProjectSelectedSurvey(projId: string): Observable<Object> {
+    const fields = [
+      '_id',
+      'name',
+      'lastSaved',
+      'commentPeriod',
+      'project',
+      'author',
+      'location',
+      'questions'
+    ];
+
+    let queryString = 'survey?project=' + projId + '&fields=' + this.buildValues(fields) + '&';
+    // if (sort !== null) { queryString += `sortBy=${sort}&`; }
+    return this.http.get<Object>(`${this.apiPath}/${queryString}`, {});
+  }
+
   //
   // Survey Response
   //
-
-  addSurveyResponse(comment: SurveyResponse): Observable<SurveyResponse> {
+  addSurveyResponse(surveyResponse: SurveyResponse): Observable<SurveyResponse> {
     const fields = [
-      'author',
       'dateAdded',
-      'location',
-      'responses',
-      'commentPeriod',
+      'period',
       'project',
       'survey',
+      'author',
+      'location',
       'responses'
     ];
     const queryString = 'surveyResponse?fields=' + this.buildValues(fields);
-    return this.http.post<SurveyResponse>(`${this.apiPath}/${queryString}`, comment, {});
+    return this.http.post<SurveyResponse>(`${this.apiPath}/${queryString}`, surveyResponse, {});
   }
 
   //

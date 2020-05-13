@@ -1,45 +1,48 @@
-import { Component, Input, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Renderer2, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormArray } from '@angular/forms';
-// import { HttpEventType } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { Utils } from 'app/shared/utils/utils';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
 import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
-import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
-import { SurveyService } from 'app/services/survey.service';
 import { SurveyResponseService } from 'app/services/surveyResponse.service';
 import { SurveyBuilderService } from 'app/services/surveyBuilder.service';
 import * as moment from 'moment-timezone';
 import { Project } from 'app/models/project';
 import { Survey } from 'app/models/survey';
+import { SurveyQuestion } from 'app/models/surveyQuestion';
 import { SurveyResponse } from 'app/models/surveyResponse';
 import { ConfigService } from 'app/services/config.service';
+import { mergeAnalyzedFiles } from '@angular/compiler';
 
 @Component({
   selector: 'app-add-survey-response',
   templateUrl: './add-survey-response.component.html',
   styleUrls: ['./add-survey-response.component.scss'],
 })
-export class AddSurveyResponseComponent implements OnInit, OnDestroy {
+export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() currentPeriod: CommentPeriod;
   @Input() project: Project;
   @Input() survey: Survey;
 
   public submitting = false;
   public close = false;
-  private progressValue: number;
+  public progressValue: number;
+  public progressBufferValue: number;
   public formProgress: number;
-  public tempSurvey: Survey;
+  public countArray = [];
+  public surveyQuestions: any;
   public surveyResponse: SurveyResponse;
   public surveyResponseObj: any;
-  public surveyResponseForm: FormGroup;
+  public surveyResponseForm: any;
   public surveyResponseQuestionsForm: FormArray;
-  private progressBufferValue: number;
+  public checkedCounter = 0;
+  public chooseArray = [];
   public totalSize: number;
   public currentPage = 1;
   public files: Array<File> = [];
@@ -56,11 +59,12 @@ export class AddSurveyResponseComponent implements OnInit, OnDestroy {
   public makePublic: any;
   public commentFiles: any;
   public commentingMethod: string;
+  public scrollListener: () => void;
 
   constructor(
     public activeModal: NgbActiveModal,
-    private commentService: CommentService,
-    private surveyService: SurveyService,
+    private utils: Utils,
+    private renderer: Renderer2,
     private surveyResponseService: SurveyResponseService,
     private surveyBuilderService: SurveyBuilderService,
     private documentService: DocumentService,
@@ -68,68 +72,65 @@ export class AddSurveyResponseComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // this.commentingMethod = this.currentPeriod.commentingMethod;
     this.documentAuthorType = null;
-
+    this.surveyResponse = new SurveyResponse({responses: []})
     this.formProgress = 0;
 
     // this.onFormValuesUpdate();
-
-    console.log('what', this.survey)
+    this.commentFiles = [];
 
     this.formInit();
+  }
 
+  ngAfterViewInit() {
+    this.scrollListener = this.renderer.listen(document.querySelector('#survey-window'), 'scroll', (event) => {
+      let scrollAmount = event.srcElement.scrollHeight - event.srcElement.clientHeight;
+      let formProgressDecimal = event.srcElement.scrollTop / scrollAmount;
+      this.formProgress = formProgressDecimal * 100;
+    })
+
+    // this.surveyResponseForm.valueChanges
+    //   .subscribe(form => {
+    //     console.log('here is the form', form)
+    //   })
+
+      // console.log('this is the form control', this.surveyResponseForm)
   }
 
   public formInit() {
-    this.surveyResponseForm = new FormGroup({
-      author: new FormControl(),
-      location: new FormControl(),
-    });
+    this.surveyItemCount(this.survey.questions)
+    this.surveyResponseForm = this.surveyBuilderService.buildSurveyResponseForm(this.survey)
 
-    this.surveyResponseObj = this.surveyBuilderService.buildSurveyResponseObj(this.survey);
-
-    // this.surveyResponseQuestionsForm = this.surveyBuilderService.buildForm(this.surveyResponseObj.responses)
-
-    // this.surveyResponseForm.addControl('responses', this.surveyResponseQuestionsForm)
-
-    // this.surveyResponseQuestionsForm = this.surveyResponseForm.get('responses') as FormArray;
-
-    // this.surveyResponseQuestionsForm.insert(0, new FormGroup({
-    //   'question': new FormControl(),
-    //   'response': new FormControl()
-    // }))
-
-    // this.surveyBuilderService.buildForm(this.surveyResponseQuestionsForm, this.survey.questions)
-
-    console.log('here is something', this.surveyResponseObj)
-
-    // const surveySubmit =
-
-    this.surveyResponseObj.responses.forEach(entry => {
-      if (entry.answer) {
-        entry.answer = entry.answer.value;
+    this.chooseArray = this.survey.questions.map(question => {
+      if (question.choose) {
+        return 0;
+      } else {
+        return null
       }
     })
 
-    console.log('and then there is this', this.surveyResponseObj)
   }
 
-  // public onFormValuesUpdate() {
-  //   this.surveyResponseForm.valueChanges
-  //     .takeUntil(this.ngUnsubscribe)
-  //     .subscribe(val => {
-  //       let formValues = Object.values(val);
-  //       let completedValues = formValues.filter(value => {
-  //         if (value !== "" && value !== null) {
-  //           return value;
-  //         }
-  //       })
-  //       let completedAmount = formValues.length / completedValues.length
-  //       this.formProgress = 100 / completedAmount;
-  //       console.log(completedAmount)
-  //     })
-  // }
+  get author() { return this.surveyResponseForm.get('author'); }
+  get location() { return this.surveyResponseForm.get('location'); }
+
+  surveyItemCount(questions) {
+    let infoCount = 0;
+    for (let i = 0; i < questions.length; i++) {
+      // Count is incremented by three to account for author
+      // and location fields and to display array indexes on view
+      let count = i + 3;
+      if (questions[i].type === 'info') {
+        this.countArray.push('')
+        infoCount++;
+      } else {
+        this.countArray.push(count - infoCount)
+      }
+    }
+  }
+
+  register() {
+  }
 
   public addFiles(files: FileList) {
     if (files) { // safety check
@@ -159,8 +160,34 @@ export class AddSurveyResponseComponent implements OnInit, OnDestroy {
     }
   }
 
-  public toggleClose() {
-    this.close = true;
+  public closeDialog() {
+    if (this.currentPage !== 3) {
+      this.close = true;
+    } else {
+      this.activeModal.dismiss()
+    }
+  }
+
+  public checkedState(event, index, choose) {
+    if (event.target.checked) {
+      this.chooseArray[index]++
+    }
+    if (!event.target.checked) {
+      this.chooseArray[index]--
+    }
+    if (this.chooseArray[index] === choose) {
+      this.surveyResponseForm.controls.responses.controls[index].setErrors(null);
+    } else {
+      this.surveyResponseForm.controls.responses.controls[index].setErrors({'incorrect': true});
+    }
+  }
+
+  public chooseAmount(question) {
+    if (question.choose && question.choose > 0) {
+      return this.utils.numToWord(question.choose)
+    } else {
+      return 'many';
+    }
   }
 
   private p1_next() {
@@ -173,89 +200,109 @@ export class AddSurveyResponseComponent implements OnInit, OnDestroy {
 
   private p2_next() {
     this.submitting = true;
-    // this.progressValue = this.progressBufferValue = 0;
+    this.progressValue = this.progressBufferValue = 0;
+
+    this.surveyResponse.dateAdded = new Date();
+    this.surveyResponse.survey = this.survey._id;
+    this.surveyResponse.period = this.currentPeriod._id;
+    this.surveyResponse.project = this.project._id;
+
+    this.surveyResponse.author = this.surveyResponseForm.get('author').value;
+    this.surveyResponse.location = this.surveyResponseForm.get('location').value;
+    this.surveyResponse.responses = [];
+
+
+    for (let i = 0; i < this.survey.questions.length; i++) {
+      let response;
+      if (this.surveyResponseForm.get('responses').at(i).value.attributeChoices) {
+        // save likert attribute choices
+        response = {};
+        response.attributeChoices = this.surveyResponseForm.get('responses').at(i).value.attributeChoices.map(attribute => attribute.choice)
+      } else if (this.surveyResponseForm.get('responses').at(i).value.multiChoices) {
+        // save multiple choices with other text if present
+        response = { multiChoices: [], otherText: null };
+        this.surveyResponseForm.get('responses').at(i).value.multiChoices.forEach((choice, ci) => {
+          if (choice === true) {
+            response.multiChoices.push(this.survey.questions[i].choices[ci])
+          }
+        })
+        if (this.surveyResponseForm.get('responses').at(i).value.otherText) {
+          response.otherText = this.surveyResponseForm.get('responses').at(i).value.otherText;
+        }
+      } else {
+        // else save field value without any additional processing
+        response = this.surveyResponseForm.get('responses').at(i).value;
+      }
+      this.surveyResponse.responses.push({
+        question: this.survey.questions[i],
+        answer: response
+      })
+
+    }
 
     // approximate size of everything for progress reporting
-    // const commentSize = this.sizeof(this.comment);
-    // this.totalSize = commentSize;
+    const surveyResponseSize = this.sizeof(this.surveyResponse);
+    this.totalSize = surveyResponseSize;
 
     const files = [];
-    /*this.documents.map((item) => {
+
+    this.documents.forEach(item => {
       console.log('upfile', item.upfile);
       files.push(item.upfile);
-    });*/
+    });
 
-    // this.documents.forEach(item => {
-    //   console.log('upfile', item.upfile);
-    //   files.push(item.upfile);
-    // });
-
-    // files.forEach(file => this.totalSize += file.size);
+    files.forEach(file => this.totalSize += file.size);
 
     // first add new comment
-    // this.progressBufferValue += 100 * commentSize / this.totalSize;
+    this.progressBufferValue += 100 * surveyResponseSize / this.totalSize;
 
-    // Build the comment
-    // this.comment.author = this.contactName;
-    // this.comment.comment = this.commentInput;
-    // this.comment.location = this.locationInput;
-    // this.comment.isAnonymous = !this.makePublic;
+    console.log('attempting to save sr', this.surveyResponse)
 
-
-
-    this.surveyResponseService.add(this.surveyResponseObj)
+    this.surveyResponseService.add(this.surveyResponse)
       .toPromise()
       .then((surveyResponse: SurveyResponse) => {
-        // this.progressValue += 100 * commentSize / this.totalSize;
-        // this.surveyResponse = surveyResponse;
-        console.log(surveyResponse)
+        this.progressValue += 100 * surveyResponseSize / this.totalSize;
+        this.surveyResponse = surveyResponse;
         return surveyResponse;
       })
-      // .then((surveyResponse: SurveyResponse) => {
+      .then((surveyResponse: SurveyResponse) => {
         // then upload all documents
-        // const observables: Array<Observable<Document>> = [];
+        const observables: Array<Observable<Document>> = [];
 
-        // files.forEach(file => {
-        //   const formData = new FormData();
-        //   formData.append('_comment', this.comment._id);
-        //   formData.append('displayName', file.name);
-        //   formData.append('documentSource', 'COMMENT');
-        //   formData.append('documentAuthor', this.comment.author);
-        //   formData.append('project', this.project._id);
-        //   formData.append('documentFileName', file.name);
-        //   formData.append('internalOriginalName', file.name);
-        //   formData.append('documentSource', 'COMMENT');
-        //   formData.append('dateUploaded', moment());
-        //   formData.append('datePosted', moment());
-        //   formData.append('upfile', file);
-        //   this.progressBufferValue += 100 * file.size / this.totalSize;
+        files.forEach(file => {
+          const formData = new FormData();
+          formData.append('_comment', this.surveyResponse._id);
+          formData.append('displayName', file.name);
+          formData.append('documentSource', 'COMMENT');
+          formData.append('documentAuthor', this.surveyResponse.author);
+          formData.append('project', this.project._id);
+          formData.append('documentFileName', file.name);
+          formData.append('internalOriginalName', file.name);
+          formData.append('documentSource', 'COMMENT');
+          formData.append('dateUploaded', moment());
+          formData.append('datePosted', moment());
+          formData.append('upfile', file);
+          this.progressBufferValue += 100 * file.size / this.totalSize;
 
-        //   // TODO: improve progress bar by listening to progress events
-        //   // see https://stackoverflow.com/questions/37158928/angular-2-http-progress-bar
-        //   // see https://angular.io/guide/http#listening-to-progress-events
-        //   observables.push(this.documentService.add(formData)
-        //     .map((document: Document) => {
-        //       this.progressValue += 100 * file.size / this.totalSize;
-        //       return document;
-        //     })
-        //     // .subscribe((event: HttpEventType) => {
-        //     //   if (event.type === HttpEventType.UploadProgress) {
-        //     //     // TODO: do something here
-        //     //   }
-        //     // })
-        //   );
-        // });
+          observables.push(this.documentService.add(formData)
+            .map((document: Document) => {
+              this.progressValue += 100 * file.size / this.totalSize;
+              return document;
+            })
+          );
+        });
 
         // execute all uploads in parallel
-        // return Observable.forkJoin(observables).toPromise();
-      // })
+        return Observable.forkJoin(observables).toPromise();
+      })
       .then(() => {
         this.submitting = false;
         this.currentPage++;
       })
       .catch(error => {
         console.log('error', error);
-        alert('Uh-oh, error submitting survey response');
+        alert('Uh-oh, error submitting comment');
+        this.surveyResponse = new SurveyResponse({responses: {}})
         this.submitting = false;
       });
   }
@@ -286,6 +333,10 @@ export class AddSurveyResponseComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Remove scroll listener
+    if (this.scrollListener) {
+      this.scrollListener();
+    }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

@@ -77,6 +77,25 @@ export class SurveyService {
       .catch(this.api.handleError);
   }
 
+    // get a survey selected by comment period associated with a given project
+    getSelectedSurveyByProjId(projId: string): Observable<Survey> {
+      return this.api.getProjectSelectedSurvey(projId)
+        .map((res: any) => {
+          if (res) {
+            const surveys = res;
+            // return the first (only) comment period
+            return surveys.length > 0 ? new Survey(surveys[0]) : null;
+          }
+        })
+        .map((survey: Survey) => {
+          if (!survey) { return null as Survey; }
+
+          this.survey = survey;
+          return this.survey;
+        })
+        .catch(this.api.handleError);
+    }
+
   // get a specific comment period by its id
   // getByIdWithComments(periodId: string, forceReload: boolean = false): Observable<CommentPeriod> {
   //   if (this.commentPeriod && this.commentPeriod._id === periodId && !forceReload) {

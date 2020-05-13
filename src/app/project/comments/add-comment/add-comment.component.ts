@@ -24,8 +24,8 @@ export class AddCommentComponent implements OnInit {
   @Input() project: Project;
 
   public submitting = false;
-  private progressValue: number;
-  private progressBufferValue: number;
+  public progressValue: number;
+  public progressBufferValue: number;
   public totalSize: number;
   public currentPage = 1;
   private comment: Comment;
@@ -39,7 +39,6 @@ export class AddCommentComponent implements OnInit {
   public locationInput: any;
   public makePublic: any;
   public commentFiles: any;
-  public externalEngagementTool: boolean;
   public commentingMethod: string;
 
   constructor(
@@ -50,8 +49,10 @@ export class AddCommentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+  this.commentingMethod = this.currentPeriod.commentingMethod;
+
+   if (this.commentingMethod !== 'externalEngagementTool') {
     this.commentingMethod = this.currentPeriod.commentingMethod;
-    if (this.commentingMethod === 'basicForm') {
       this.comment = new Comment();
       this.comment.period = this.currentPeriod._id;
       this.comment.isAnonymous = false;
