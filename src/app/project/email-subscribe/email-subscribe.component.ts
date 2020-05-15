@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -13,7 +13,7 @@ import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
   templateUrl: './email-subscribe.component.html',
   styleUrls: ['./email-subscribe.component.scss']
 })
-export class EmailSubscribeComponent implements OnInit {
+export class EmailSubscribeComponent implements OnInit, OnDestroy {
   @Input() project: Project;
 
   public currentPage = 1;
