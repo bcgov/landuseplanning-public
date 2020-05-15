@@ -20,6 +20,7 @@ import { DocumentsTabComponent } from './documents/documents-tab.component';
 import { DocumentTableRowsComponent } from 'app/project/documents/project-document-table-rows/project-document-table-rows.component';
 import { DocumentDetailComponent } from 'app/project/documents/detail/detail.component';
 import { ProjectPhaseTabComponent } from './project-phase-tab/project-phase-tab.component';
+import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
 
 import { StorageService } from 'app/services/storage.service';
 import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
@@ -28,6 +29,8 @@ import { ProjectActivitesComponent } from './project-activites/project-activites
 import { CertificatesComponent } from './certificates/certificates.component';
 import { PinsComponent } from './pins/pins.component';
 import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.component';
+import { UnsubscribeComponent } from './email-subscribe/unsubscribe/unsubscribe.component';
+import { ConfirmEmailComponent } from './email-subscribe/confirm-email/confirm-email.component';
 
 @NgModule({
   imports: [
@@ -54,7 +57,10 @@ import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.c
     ProjectDetailsTabComponent,
     ProjectActivitesComponent,
     CertificatesComponent,
-    PinsComponent
+    PinsComponent,
+    EmailSubscribeComponent,
+    UnsubscribeComponent,
+    ConfirmEmailComponent,
   ],
   providers: [
     StorageService

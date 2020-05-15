@@ -17,6 +17,7 @@ import { AmendmentsResolverService } from './certificates/amendments-resolver.se
 import { PinsComponent } from './pins/pins.component';
 import { PinsResolverService } from './pins/pins-resolver.service';
 import { ShapeFileResolver } from './project-details-tab/project-shapefile-resolver.service';
+import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
 
 export const ProjectRoutes: Routes = [
   {
@@ -100,6 +101,14 @@ export const ProjectRoutes: Routes = [
     component: BackgroundInfoTabComponent,
     data: {
       title: 'Project Background Information',
+      focush1: false
+    }
+  },
+  {
+    path: 'email-subscribe',
+    component: EmailSubscribeComponent,
+    data: {
+      title: 'Email Subscribe',
       focush1: false
     }
   },
