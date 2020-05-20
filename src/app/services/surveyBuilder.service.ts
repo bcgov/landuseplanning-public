@@ -81,6 +81,7 @@ export class SurveyBuilderService {
       })
       return new FormGroup({
         multiChoices: choicesArray,
+        other: new FormControl(),
         otherText: new FormControl()
       })
     } else if (question.type === 'docPicker') {

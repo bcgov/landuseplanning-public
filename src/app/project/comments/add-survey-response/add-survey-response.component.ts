@@ -88,13 +88,6 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
       let formProgressDecimal = event.srcElement.scrollTop / scrollAmount;
       this.formProgress = formProgressDecimal * 100;
     })
-
-    // this.surveyResponseForm.valueChanges
-    //   .subscribe(form => {
-    //     console.log('here is the form', form)
-    //   })
-
-      // console.log('this is the form control', this.surveyResponseForm)
   }
 
   public formInit() {
@@ -168,7 +161,7 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  public checkedState(event, index, choose) {
+  public checkedState(event, index: number, choose) {
     if (event.target.checked) {
       this.chooseArray[index]++
     }
@@ -212,27 +205,36 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
     this.surveyResponse.responses = [];
 
 
+    // Loop through survey response form and save to response object
     for (let i = 0; i < this.survey.questions.length; i++) {
       let response;
       if (this.surveyResponseForm.get('responses').at(i).value.attributeChoices) {
         // save likert attribute choices
         response = {};
         response.attributeChoices = this.surveyResponseForm.get('responses').at(i).value.attributeChoices.map(attribute => attribute.choice)
-      } else if (this.surveyResponseForm.get('responses').at(i).value.multiChoices) {
-        // save multiple choices with other text if present
-        response = { multiChoices: [], otherText: null };
-        this.surveyResponseForm.get('responses').at(i).value.multiChoices.forEach((choice, ci) => {
-          if (choice === true) {
-            response.multiChoices.push(this.survey.questions[i].choices[ci])
+      } else if (this.surveyResponseForm.get('responses').at(i).value.multiChoices || this.surveyResponseForm.get('responses').at(i).value.singleChoice) {
+          response = {};
+          // save multiple choices
+          if (this.surveyResponseForm.get('responses').at(i).value.multiChoices) {
+            response.multiChoices = [];
+            this.surveyResponseForm.get('responses').at(i).value.multiChoices.forEach((choice, ci) => {
+              if (choice === true) {
+                response.multiChoices.push(this.survey.questions[i].choices[ci])
+              }
+            })
           }
-        })
-        if (this.surveyResponseForm.get('responses').at(i).value.otherText) {
-          response.otherText = this.surveyResponseForm.get('responses').at(i).value.otherText;
-        }
+          // Check if other options is selected before saving other text
+          if (this.surveyResponseForm.get('responses').at(i).value.other || this.surveyResponseForm.get('responses').at(i).value.singleChoice === 'other') {
+            response.otherText = this.surveyResponseForm.get('responses').at(i).value.otherText;
+          } else {
+            // Save single choice value if other is not selected
+            response.singleChoice = this.surveyResponseForm.get('responses').at(i).value.singleChoice;
+          }
       } else {
         // else save field value without any additional processing
         response = this.surveyResponseForm.get('responses').at(i).value;
       }
+
       this.surveyResponse.responses.push({
         question: this.survey.questions[i],
         answer: response
