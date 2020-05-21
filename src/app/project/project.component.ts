@@ -5,12 +5,16 @@ import 'rxjs/add/operator/takeUntil';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Project } from 'app/models/project';
+import { Survey } from 'app/models/survey';
+import { CommentPeriod } from 'app/models/commentperiod';
+
 import { ConfigService } from 'app/services/config.service';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
+import { SurveyService } from 'app/services/survey.service';
 import { StorageService } from 'app/services/storage.service';
-import { CommentPeriod } from 'app/models/commentperiod';
 import { AddCommentComponent } from './comments/add-comment/add-comment.component';
+import { AddSurveyResponseComponent } from './comments/add-survey-response/add-survey-response.component';
 import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
 
 @Component({
@@ -32,6 +36,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   public period: CommentPeriod = null;
   public appHeader: HTMLHeadingElement;
   private ngbModal: NgbModalRef = null;
+  public surveySelected: Survey;
+
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -44,7 +50,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     public configService: ConfigService,
     public projectService: ProjectService, // used in template
-    public commentPeriodService: CommentPeriodService // used in template
+    public commentPeriodService: CommentPeriodService, // used in template
+    public surveyService: SurveyService
   ) { }
 
   ngOnInit() {
@@ -77,22 +84,28 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public addComment() {
     if (this.project.commentPeriodForBanner) {
-      // open modal
-      this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
-      // set input parameter
-      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-      (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
-      // check result
-      this.ngbModal.result.then(
-        value => {
-          // saved
-          console.log(`Success, value = ${value}`);
-        },
-        reason => {
-          // cancelled
-          console.log(`Cancelled, reason = ${reason}`);
+        this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
+        .subscribe((loadedSurvey: Survey) => {
+          console.log('survey', loadedSurvey)
+          if (loadedSurvey) {
+
+          // open modal
+          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg', keyboard: false });
+          // set input parameter
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
+
+        } else {
+
+          // open modal
+          this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+          // set input parameter
+          (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+          (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
         }
-      );
+      })
+
     }
   }
 

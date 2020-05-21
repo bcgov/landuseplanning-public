@@ -7,6 +7,7 @@ import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 import { OrderByPipe } from 'app/shared/pipes/order-by.pipe';
 import { NewlinesPipe } from 'app/shared/pipes/newlines.pipe';
 import { ObjectFilterPipe } from 'app/shared/pipes/object-filter.pipe';
+import { NumberToWordPipe } from 'app/shared/pipes/number-to-word.pipe';
 
 import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { DragMoveDirective } from 'app/shared/utils/drag-move.directive';
@@ -16,6 +17,7 @@ import { TableTemplateComponent } from 'app/shared/components/table-template/tab
 import { ListConverterPipe } from './pipes/list-converter.pipe';
 import { OrgNamePipe } from './pipes/org-name.pipe';
 import { TableTemplateUtils } from './utils/table-template-utils';
+import { Utils } from 'app/shared/utils/utils';
 import { TableDirective } from './components/table-template/table.directive';
 import { PublishedPipe } from 'app/shared/pipes/published.pipe';
 
@@ -31,6 +33,7 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     OrderByPipe,
     NewlinesPipe,
     ObjectFilterPipe,
+    NumberToWordPipe,
     PublishedPipe,
     VarDirective,
     DragMoveDirective,
@@ -45,6 +48,7 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     MatSnackBarModule,
     NgxTextOverflowClampModule,
     OrderByPipe,
+    NumberToWordPipe,
     NewlinesPipe,
     ObjectFilterPipe,
     PublishedPipe,
@@ -56,7 +60,8 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     OrgNamePipe
   ],
   providers: [
-    TableTemplateUtils
+    TableTemplateUtils,
+    Utils
   ]
 })
 

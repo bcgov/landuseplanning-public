@@ -8,6 +8,7 @@ import { Comment } from 'app/models/comment';
 
 import { CommentService } from 'app/services/comment.service';
 import { AddCommentComponent } from './add-comment/add-comment.component';
+import { AddSurveyResponseComponent } from './add-survey-response/add-survey-response.component';
 import { Project } from 'app/models/project';
 import { DocumentService } from 'app/services/document.service';
 import { ApiService } from 'app/services/api';
@@ -142,7 +143,28 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   public addComment() {
-    if (this.commentPeriodId) {
+
+    if (this.commentPeriod.surveySelected) {
+
+      // open modal
+      this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+      // set input parameter
+      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
+      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
+      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = this.commentPeriod.surveySelected;
+
+      // check result
+      this.ngbModal.result.then(
+        value => {
+          // saved
+          console.log(`Success, value = ${value}`);
+        },
+        reason => {
+          // cancelled
+          console.log(`Cancelled, reason = ${reason}`);
+        }
+      );
+    } else if (this.commentPeriodId) {
       // open modal
       this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
       // set input parameter

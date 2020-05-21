@@ -35,6 +35,9 @@ import { FaqComponent } from './faq/faq.component';
 
 // services
 import { ApiService } from 'app/services/api';
+import { SurveyService } from 'app/services/survey.service';
+import { SurveyResponseService } from 'app/services/surveyResponse.service';
+import { SurveyBuilderService } from 'app/services/surveyBuilder.service';
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DecisionService } from 'app/services/decision.service';
@@ -99,6 +102,9 @@ import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
     CookieService,
     ApiService,
     ProjectService,
+    SurveyService,
+    SurveyResponseService,
+    SurveyBuilderService,
     CommentService,
     CommentPeriodService,
     DecisionService,
