@@ -15,6 +15,7 @@ import { SurveyService } from 'app/services/survey.service';
 import { StorageService } from 'app/services/storage.service';
 import { AddCommentComponent } from './comments/add-comment/add-comment.component';
 import { AddSurveyResponseComponent } from './comments/add-survey-response/add-survey-response.component';
+import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
 
 @Component({
   selector: 'app-project',
@@ -106,6 +107,24 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       })
 
     }
+  }
+
+  public addEmail() {
+      // open modal
+      this.ngbModal = this.modalService.open(EmailSubscribeComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+      // set input parameter
+    (<EmailSubscribeComponent>this.ngbModal.componentInstance).project = this.project;
+      // check result
+      this.ngbModal.result.then(
+        value => {
+          // saved
+          console.log(`Success, value = ${value}`);
+        },
+        reason => {
+          // cancelled
+          console.log(`Cancelled, reason = ${reason}`);
+        }
+      );
   }
 
   makeViewDetailsAriaLabel(projName) {

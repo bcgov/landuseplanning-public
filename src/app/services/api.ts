@@ -19,6 +19,7 @@ import { SearchResults } from 'app/models/search';
 import { Org } from 'app/models/organization';
 import { Decision } from 'app/models/decision';
 import { User } from 'app/models/user';
+import { EmailSubscribe } from 'app/models/emailSubscribe';
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -51,7 +52,7 @@ export class ApiService {
 
     this.apiPath = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api/public' : remote_api_path;
     this.adminUrl = (_.isEmpty(remote_admin_path)) ? 'http://localhost:4200' : remote_admin_path;
-    this.env = (_.isEmpty(deployment_env)) ? 'local' : deployment_env;
+    this.env = (_.isEmpty(deployment_env)) ? 'prod' : deployment_env;
   }
 
   handleError(error: any): Observable<any> {
@@ -673,6 +674,28 @@ export class ApiService {
   getTopNewsItems(): Observable<any[]> {
     const queryString = 'recentActivity?top=true';
     return this.http.get<any[]>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  //
+  // Email subscribe
+  //
+  addEmail(emailSubscribe: EmailSubscribe): Observable<EmailSubscribe> {
+    const fields = [
+      'email',
+      'project'
+    ];
+    const queryString = 'emailSubscribe?fields=' + this.buildValues(fields);
+    return this.http.post<EmailSubscribe>(`${this.apiPath}/${queryString}`, emailSubscribe, {});
+  }
+
+  unsubscribeEmail(emailAddress: string): Observable<EmailSubscribe> {
+    const queryString = `emailSubscribe?email=${emailAddress}`;
+    return this.http.delete<EmailSubscribe>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  confirmEmail(emailAddress: string, confirmKey: string): Observable<EmailSubscribe> {
+    const queryString = `emailSubscribe?email=${emailAddress}&confirmKey=${confirmKey}`;
+    return this.http.put<EmailSubscribe>(`${this.apiPath}/${queryString}`, {});
   }
 
   //

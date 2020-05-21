@@ -6,12 +6,11 @@
           <h1 tabindex="-1">{{project?.name || '-'}}</h1>
           <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
           <div class="basic-info">
-            <div>
+            <div class="partner-nations">
               <label>Partner First Nation(s)</label>
               <p class="value">{{project?.partner || "-"}}</p>
             </div>
-          <br>
-            <div>
+            <div class="agreements">
               <label>Agreement(s)</label>
               <p class="value">{{project?.agreements || "-"}}</p>
             </div>
@@ -99,6 +98,9 @@
                 wiid="C937">email</i><a
                 href="mailto:{{project?.projectDirector?.email}}">{{project?.projectDirector?.email || "-"}}</a></p>
           </div>-->
+          <div class="inner-col">
+            <button class="btn btn-small inverted" (click)="addEmail()" type="button">Sign up for project updates</button>
+          </div>
         </div>
       </div>
     </section>
