@@ -41,6 +41,8 @@ export class ConfirmEmailComponent implements OnInit {
       },
       error => {
         console.log('Confirm error:', error);
+        this.emailConfirmed = false;
+        this.loading = false;
       }
       )
   }
