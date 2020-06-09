@@ -127,11 +127,21 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
+  CPActionAriaLabel(projName, action) {
+    let projPhrase;
+    let actionPhrases = {
+      submit: 'Submit a comment to',
+      view: 'View more details about'
+    }
+    projName ? projPhrase = `the ${projName} project` : projPhrase = `this project's`
+    return `${actionPhrases[action]} ${projPhrase} comment period.`;
+  }
+
   makeViewDetailsAriaLabel(projName) {
     if (projName) {
       return `View more details about the ${projName} project comment period.`;
     } else {
-      return `View more details about this project's open comment period.`;
+      return `View more details about this project's comment period.`;
     }
   }
 
@@ -139,8 +149,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (projName) {
       return `Submit a comment to the ${projName} project comment period.`;
     } else {
-      return `Submit a comment this project's open comment period.`;
+      return `Submit a comment this project's comment period.`;
     }
+  }
+
+  public projectFieldType(fieldType) {
+    return typeof fieldType;
   }
 
 

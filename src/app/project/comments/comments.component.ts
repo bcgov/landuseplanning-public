@@ -208,12 +208,14 @@ export class CommentsComponent implements OnInit, OnDestroy {
       });
   }
 
+  projectFieldType(fieldType) {
+    return typeof fieldType;
+  }
+
   makeAriaLabel(projName) {
-    if (projName) {
-      return `Submit a comment to the ${projName} project comment period.`;
-    } else {
-      return `Submit a comment to this project's comment period.`;
-    }
+    let projPhrase;
+    projName ? projPhrase = `the ${projName} project` : projPhrase = `this project's`;
+    return `Submit a comment to ${projPhrase} comment period.`;
   }
 
   ngOnDestroy() {

@@ -18,9 +18,25 @@
             <span class="key">Partner First Nation(s):</span>
             <span class="value">{{proj?.partner || '-'}}</span>
           </li>
-          <li>
+          <li *ngIf="projectFieldType(proj?.agreements) ==='string'" class="agreements">
             <span class="key">Agreement(s):</span>
-            <span class="value">{{proj?.agreements || '-'}}</span>
+            <p class="agreement-value">{{proj?.agreements || "-"}}</p>
+          </li>
+          <li *ngIf="projectFieldType(proj?.agreements) ==='object'" class="agreements">
+            <span class="key">Agreement(s):</span>
+            <p class="value" *ngIf="proj.agreements.length === 0">-</p>
+            <div class="agreement" *ngFor="let agreement of proj.agreements; let i=index">
+              <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL" class="agreement-container">
+                <p class="agreement-value"><a *ngIf="true" class="agreement-link" target="_blank"
+                  href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
+                </p>
+                <span *ngIf="i !== proj.agreements.length - 1">, </span>
+              </div>
+              <ng-template #noAgreementURL>
+                <p class="agreement-value">{{agreement.agreementName || "-" }}</p>
+                <span *ngIf="i !== proj.agreements.length - 1">,</span>
+              </ng-template>
+            </div>
           </li>
         </ul>
       </div>

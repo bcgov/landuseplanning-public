@@ -192,11 +192,9 @@ export class AddCommentComponent implements OnInit {
   }
 
   makeAriaLabel(docName) {
-    if (docName) {
-      return `Remove ${docName} uploaded document.`;
-    } else {
-      return `Remove this uploaded document.`;
-    }
+    let docPhrase;
+    docName ? docPhrase = docName : docPhrase = 'this';
+    return `Remove ${docPhrase} uploaded document.`;
   }
 
   // approximate size (keys + data)

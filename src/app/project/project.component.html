@@ -10,18 +10,27 @@
               <label>Partner First Nation(s)</label>
               <p class="value">{{project?.partner || "-"}}</p>
             </div>
-            <div class="agreements">
+            <div *ngIf="projectFieldType(project?.agreements) ==='string'" class="agreements">
               <label>Agreement(s)</label>
               <p class="value">{{project?.agreements || "-"}}</p>
             </div>
+            <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
+              <label>Agreement(s)</label>
+              <p class="value" *ngIf="project.agreements.length === 0">-</p>
+              <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
+                <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
+                  <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
+                    href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
+                  </p>
+                  <span *ngIf="i !== project.agreements.length - 1">,</span>
+                </div>
+                <ng-template #noAgreementURL>
+                  <p class="value">{{agreement.agreementName || "-" }}</p>
+                  <span *ngIf="i !== project.agreements.length - 1">,</span>
+                </ng-template>
+              </div>
+            </div>
           </div>
-          <!--
-          <div>
-            <a class="btn btn-dark legislation-button" target=”_blank” href="http://www.bclaws.ca/civix/document/id/complete/statreg/02043_01">
-              <label>Legislation</label>
-              <p>2002 Environmental Assessment Act</p>
-            </a>
-          </div>-->
         </div>
       </div>
     </div>
@@ -35,13 +44,13 @@
               {{project.commentPeriodForBanner.dateCompleted | date: 'longDate'}}</h5>
           </div>
           <div class="col-md-6 text-right">
-            <div *ngIf="project.commentPeriodForBanner.commentPeriodStatus !== Open">
-              <button type="button" class="btn btn-light" (click)="goToViewComments()" [attr.aria-label]="makeViewDetailsAriaLabel(project.name)">
+            <div>
+              <button type="button" class="btn btn-light" (click)="goToViewComments()" [attr.aria-label]="CPActionAriaLabel(project.name, 'view')">
                 View Details
               </button>
               &nbsp;
               <button class="btn btn-light" (click)="addComment()" type="button"
-                *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="makeSubmitCommentAriaLabel(project.name)">Submit Comment</button>
+                *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="CPActionAriaLabel(project.name, 'submit')">Submit Comment</button>
             </div>
           </div>
         </div>

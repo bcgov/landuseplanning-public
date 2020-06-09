@@ -90,13 +90,9 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
   }
 
   makeAriaLabel(docName) {
-    let ariaLabel: string;
-    if (docName) {
-      ariaLabel = `Download ${docName} document. Link.`;
-    } else {
-      ariaLabel = 'Download this document. Link.';
-    }
-    return ariaLabel;
+    let docPhrase;
+    docName ? docPhrase = docName : docPhrase = 'this';
+    return `Download ${docPhrase} document. Link.`;
   }
 
   ngOnDestroy() {

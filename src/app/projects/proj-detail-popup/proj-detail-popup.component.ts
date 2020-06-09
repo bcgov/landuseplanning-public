@@ -34,6 +34,10 @@ export class ProjDetailPopupComponent implements OnInit, OnDestroy {
       });
   }
 
+  projectFieldType(fieldType) {
+    return typeof fieldType;
+  }
+
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
