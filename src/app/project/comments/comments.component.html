@@ -36,15 +36,30 @@
                 *ngIf="commentPeriod.commentPeriodStatus === 'Open'" [attr.aria-label]=makeAriaLabel(project.name)>Submit Comment</button>
             </div>
           </div>
-          <!-- <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p> -->
           <div class="basic-info">
             <div>
               <label>Partner First Nation(s)</label>
               <p class="value">{{project?.partner || "-" | titlecase}}</p>
             </div>
-            <div>
+            <div *ngIf="projectFieldType(project?.agreements) ==='string'" class="agreements">
               <label>Agreement(s)</label>
-              <p class="value">{{project?.agreements || "-" | titlecase}}</p>
+              <p class="value">{{project?.agreements || "-"}}</p>
+            </div>
+            <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
+              <label>Agreement(s)</label>
+              <p class="value" *ngIf="project.agreements.length === 0">-</p>
+              <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
+                <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
+                  <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
+                    href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
+                  </p>
+                  <span *ngIf="i !== project.agreements.length - 1">,</span>
+                </div>
+                <ng-template #noAgreementURL>
+                  <p class="value">{{agreement.agreementName || "-" }}</p>
+                  <span *ngIf="i !== project.agreements.length - 1">,</span>
+                </ng-template>
+              </div>
             </div>
           </div>
 
@@ -57,11 +72,6 @@
   </main>
 </div>
 <div *ngIf="!loading" class="container comments mt-3">
-  <!--<div *ngIf="tableParams.totalListItems > 0">
-    <app-table-template [columns]="commentTableColumns" [data]="commentTableData" (onColumnSort)='setColumnSort($event)'
-      (onPageNumUpdate)='getPaginatedComments($event)'>
-    </app-table-template>
-  </div>-->
   <div *ngIf="commentPeriod.commentPeriodInfo">
     <div class="mb-3" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
   </div>
@@ -101,10 +111,4 @@
       </ul>
     </div>
   </div>
-  <!--<div *ngIf="tableParams.totalListItems == 0">
-    There are no comments.
-  </div>-->
-  <!--<div>
-    There are no publicly visible comments.
-  </div>-->
 </div>

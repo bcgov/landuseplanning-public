@@ -15,7 +15,7 @@ export class Project {
   partner: String;
   region: String;
   projectDirector: any;
-  agreements: String;
+  agreements: {agreementName: string, agreementUrl: string}[];
 
   // Everything else
   addedBy: String;
@@ -26,7 +26,6 @@ export class Project {
   dateAdded: String;
   dateUpdated: String;
   duration: String;
-  // TODO: directoryStructure
   eaoMember: String;
   epicProjectID: Number;
   fedElecDist: String;
@@ -112,10 +111,6 @@ export class Project {
         this.centroid.push(num);
       });
     }
-
-    // if (obj && obj.decision) {
-    //   this.decision = new Decision(obj.decision);
-    // }
 
     // // copy documents
     // if (obj && obj.documents) {

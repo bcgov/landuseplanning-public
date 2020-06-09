@@ -135,6 +135,19 @@
       margin: 0.2rem 0;
     }
 
+    .agreement {
+
+    }
+
+    .agreement-link {
+      color: white;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
     .value {
       font-size: .8rem;
       line-height: 1.25;

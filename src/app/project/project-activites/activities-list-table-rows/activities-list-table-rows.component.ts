@@ -40,10 +40,8 @@ export class ActivitiesListTableRowsComponent implements OnInit, TableComponent 
     }
 
     makeAriaLabel(activityName) {
-      if (activityName) {
-        return `View document attached to ${activityName}.`;
-      } else {
-        return `View document attached to this update.`;
-      }
+      let activityPhrase;
+      activityName ? activityPhrase = activityName : activityPhrase = `this update`;
+      return `View document attached to ${activityName}`;
     }
 }
