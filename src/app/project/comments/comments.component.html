@@ -82,7 +82,7 @@
         Related Documents
       </div>
       <ul class="doc-list mt-0">
-        <li class="clickable-row" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="downloadDocument(doc)" (keyup.Enter)="downloadDocument(doc)">
+        <li class="clickable-row" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="goToItem(doc)" (keyup.Enter)="downloadDocument(doc)">
           <span class="cell icon">
             <i class="material-icons">insert_drive_file</i>
           </span>
