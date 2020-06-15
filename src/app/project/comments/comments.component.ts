@@ -17,6 +17,14 @@ import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
 
+const encode = encodeURIComponent;
+window['encodeURIComponent'] = (component: string) => {
+  return encode(component).replace(/[!'()*]/g, (c) => {
+    // Also encode !, ', (, ), and *
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+};
+
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
@@ -41,6 +49,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public tableParams: TableParamsObject = new TableParamsObject();
 
   public commentTableColumns = [];
+
 
   constructor(
     private api: ApiService,
@@ -136,10 +145,21 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.getPaginatedComments(this.tableParams.currentPage);
   }
 
-  public downloadDocument(document) {
-    return this.api.downloadDocument(document).then(() => {
-      console.log('Download initiated for file(s)');
-    });
+  // public downloadDocument(document) {
+  //   return this.api.downloadDocument(document).then(() => {
+  //     console.log('Download initiated for file(s)');
+  //   });
+  // }
+
+  public goToItem(item) {
+    let filename = item.documentFileName;
+    let safeName = filename;
+    try {
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+    } catch (e) {
+      console.log('error:', e);
+    }
+    window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 
   public addComment() {

@@ -29,6 +29,10 @@ export class NewsListTableRowsComponent implements OnInit, TableComponent {
       this.router.navigate(['p', activity.project._id, 'cp', activity.pcp]);
     }
 
+    public goToItem(itemURL) {
+      window.open(itemURL);
+    }
+
     isSingleDoc(item) {
       if (item !== ''
          && item !== null
