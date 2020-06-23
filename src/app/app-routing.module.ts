@@ -29,7 +29,7 @@ const routes: Routes = [
     path: 'projects',
     component: ProjectsComponent,
     data: {
-      title: 'List View of Projects',
+      title: 'Map View of Projects',
       focush1: true
     }
   },
@@ -37,7 +37,7 @@ const routes: Routes = [
     path: 'projects-list',
     component: ProjectListComponent,
     data: {
-      title: 'Map View of Projects',
+      title: 'List View of Projects',
       focush1: true
     }
   },

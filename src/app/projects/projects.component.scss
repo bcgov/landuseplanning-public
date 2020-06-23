@@ -19,7 +19,7 @@ app-projects:host {
 
 .projects-view {
   @include flex-box();
-  @include flex-flow(column nowrap);
+  @include flex-flow(row nowrap);
   position: absolute;
   width: 100%;
   height: calc(100vh - 80px - 32px);
@@ -31,19 +31,30 @@ app-projects:host {
   display: block;
   z-index: 1004;
   box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.15);
+  position: absolute;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 768px) {
   .app-filters {
-    position: absolute;
-    top: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 48rem;
+    // position: absolute;
+    // top: 2px;
+    // left: 50%;
+    // transform: translateX(-50%);
+    position: static;
+    height: 100%;
+    background-color: white;
+    width: 33%;
     box-shadow: $map-component-shadow;
     transition: left ease-out $toggle-list-anim-duration;
   }
 }
+
+@media (min-width: 1200px) {
+  .app-filters {
+    width: 25%;
+  }
+}
+
 
 // List Container
 .app-list-container {

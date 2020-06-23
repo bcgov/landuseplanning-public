@@ -31,6 +31,7 @@ $app-filters-font-lg: 0.9375rem;
 
     .additional-text {
       font-weight: normal;
+      margin-bottom: 2rem;
       a {
         text-decoration: underline;
 
@@ -47,7 +48,7 @@ $app-filters-font-lg: 0.9375rem;
     label {
       font-size: 1.3rem;
       font-weight: 700;
-      margin-bottom: .25rem;
+      margin-bottom: 1.25rem;
       letter-spacing: -.025em;
       color: #003367;
 
@@ -87,7 +88,7 @@ $app-filters-font-lg: 0.9375rem;
       font-weight: bold;
       padding: .5rem 1.4rem .6rem;
 
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         position: relative;
         width: 100%;
         left: auto;
