@@ -126,10 +126,10 @@ def nodejsTester () {
   openshift.withCluster() {
     openshift.withProject() {
       podTemplate(
-        label: 'node-tester', 
-        name: 'node-tester', 
-        serviceAccount: 'jenkins', 
-        cloud: 'openshift', 
+        label: 'node-tester',
+        name: 'node-tester',
+        serviceAccount: 'jenkins',
+        cloud: 'openshift',
         slaveConnectTimeout: 300,
         containers: [
           containerTemplate(
@@ -161,10 +161,10 @@ def nodejsLinter () {
   openshift.withCluster() {
     openshift.withProject() {
       podTemplate(
-        label: 'node-linter', 
-        name: 'node-linter', 
-        serviceAccount: 'jenkins', 
-        cloud: 'openshift', 
+        label: 'node-linter',
+        name: 'node-linter',
+        serviceAccount: 'jenkins',
+        cloud: 'openshift',
         slaveConnectTimeout: 300,
         containers: [
           containerTemplate(
@@ -203,10 +203,10 @@ def nodejsSonarqube () {
   openshift.withCluster() {
     openshift.withProject() {
       podTemplate(
-        label: 'node-sonarqube', 
-        name: 'node-sonarqube', 
-        serviceAccount: 'jenkins', 
-        cloud: 'openshift', 
+        label: 'node-sonarqube',
+        name: 'node-sonarqube',
+        serviceAccount: 'jenkins',
+        cloud: 'openshift',
         slaveConnectTimeout: 300,
         containers: [
           containerTemplate(
@@ -621,14 +621,14 @@ pipeline {
           }
         }
 
-        stage('Sonarqube') {
-          steps {
-            script {
-              echo "Running Sonarqube"
-              def result = nodejsSonarqube()
-            }
-          }
-        }
+        // stage('Sonarqube') {
+        //   steps {
+        //     script {
+        //       echo "Running Sonarqube"
+        //       def result = nodejsSonarqube()
+        //     }
+        //   }
+        // }
       }
     }
 
