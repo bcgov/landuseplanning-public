@@ -292,7 +292,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // console.log('fitting bounds');
     const fitBoundsOptions: L.FitBoundsOptions = {
       // use top padding to adjust for filters header (which is always visible)
-      paddingTopLeft: L.point(0, this.appfilters.clientHeight),
+      // paddingTopLeft: L.point(0, this.appfilters.clientHeight),
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false
