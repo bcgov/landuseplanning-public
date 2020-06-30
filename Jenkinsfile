@@ -261,15 +261,15 @@ def nodejsSonarqube () {
 
               // run scan
               sh "npm install typescript@3.2.1"
-              sh returnStdout: true, script: "ls -la ."
               sh returnStdout: true, script: "./gradlew sonarqube --stacktrace --info --debug \
                 -Dsonar.host.url=${SONARQUBE_URL} \
                 -Dsonar. \
                 -Dsonar.verbose=true \
                 -Dsonar.projectName='${SONAR_PROJECT_NAME}' \
                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR} \
-                -Dsonar.sources=${SONAR_SOURCES}"
+                -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR}"
+
+                // -Dsonar.sources=${SONAR_SOURCES}
 
               if ( !firstScan ) {
                 // wiat for report to be updated
