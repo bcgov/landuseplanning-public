@@ -261,15 +261,18 @@ def nodejsSonarqube () {
 
               // run scan
               sh "npm install typescript@3.2.1"
-              sh returnStdout: true, script: "./gradlew sonarqube --stacktrace --info --debug \
-                -Dsonar.host.url=${SONARQUBE_URL} \
-                -Dsonar. \
-                -Dsonar.verbose=true \
-                -Dsonar.projectName='${SONAR_PROJECT_NAME}' \
-                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR}"
 
-                // -Dsonar.sources=${SONAR_SOURCES}
+              sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info"
+
+              // sh returnStdout: true, script: "./gradlew sonarqube --stacktrace --info --debug \
+              //   -Dsonar.host.url=${SONARQUBE_URL} \
+              //   -Dsonar. \
+              //   -Dsonar.verbose=true \
+              //   -Dsonar.projectName='${SONAR_PROJECT_NAME}' \
+              //   -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+              //   -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR} \
+              //   -Dsonar.sources=./src/app"
+
 
               if ( !firstScan ) {
                 // wiat for report to be updated
@@ -489,7 +492,7 @@ def postZapToSonar () {
                 -Dsonar.projectName='lup-public-zap-scan'\
                 -Dsonar.projectKey='lup-public-zap-scan' \
                 -Dsonar.projectBaseDir='../' \
-                -Dsonar.sources='./src/app' \
+                -Dsonar.sources=./src/app \
                 -Dsonar.zaproxy.reportPath=${WORKSPACE}${ZAP_REPORT_PATH} \
                 -Dsonar.exclusions=**/*.xml"
             )
@@ -622,14 +625,14 @@ pipeline {
           }
         }
 
-        // stage('Sonarqube') {
-        //   steps {
-        //     script {
-        //       echo "Running Sonarqube"
-        //       def result = nodejsSonarqube()
-        //     }
-        //   }
-        // }
+        stage('Sonarqube') {
+          steps {
+            script {
+              echo "Running Sonarqube"
+              def result = nodejsSonarqube()
+            }
+          }
+        }
       }
     }
 
