@@ -262,7 +262,7 @@ def nodejsSonarqube () {
               // run scan
               sh "npm install typescript@3.2.1"
 
-              sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info"
+              sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true -Dsonar.sources=src/app --stacktrace --info"
 
               // sh returnStdout: true, script: "./gradlew sonarqube --stacktrace --info --debug \
               //   -Dsonar.host.url=${SONARQUBE_URL} \
