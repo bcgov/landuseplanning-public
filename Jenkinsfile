@@ -268,8 +268,8 @@ def nodejsSonarqube () {
                 -Dsonar.verbose=true \
                 -Dsonar.projectName='${SONAR_PROJECT_NAME}' \
                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR} \
-                -Dsonar.sources=./src/app"
+                -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR}" // \
+                //-Dsonar.sources=./src/app"
 
 
               if ( !firstScan ) {
@@ -623,14 +623,14 @@ pipeline {
           }
         }
 
-        // stage('Sonarqube') {
-        //   steps {
-        //     script {
-        //       echo "Running Sonarqube"
-        //       def result = nodejsSonarqube()
-        //     }
-        //   }
-        // }
+        stage('Sonarqube') {
+          steps {
+            script {
+              echo "Running Sonarqube"
+              def result = nodejsSonarqube()
+            }
+          }
+        }
       }
     }
 
