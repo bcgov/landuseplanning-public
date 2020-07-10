@@ -269,7 +269,7 @@ def nodejsSonarqube () {
                 -Dsonar.projectName='${SONAR_PROJECT_NAME}' \
                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                 -Dsonar.projectBaseDir=${SONAR_PROJECT_BASE_DIR} \
-                -Dsonar.sources=src/app"
+                -Dsonar.sources=${SONAR_PROJECT_BASE_DIR}/src/app"
 
 
               if ( !firstScan ) {
