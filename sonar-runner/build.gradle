@@ -51,7 +51,7 @@ sonarqube {
         property "sonar.projectName", "lup-public"
         property "sonar.projectKey", "lup-public"
         property "sonar.projectBaseDir", "../"
-        property "sonar.sources", "../src/app"
+        property "sonar.sources", "src/app"
         //property "sonar.tests", "test"
         property "sourceEncoding", "UTF-8"
         property "sonar.verbose", "true"
