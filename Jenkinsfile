@@ -624,7 +624,7 @@ pipeline {
             }
           }
         }
-
+        /*
         stage('Sonarqube') {
           steps {
             script {
@@ -632,7 +632,7 @@ pipeline {
               def result = nodejsSonarqube()
             }
           }
-        }
+        } */
       }
     }
 
