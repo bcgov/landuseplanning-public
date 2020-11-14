@@ -48,6 +48,7 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         (data: { project: Project }) => {
+          console.log('the data', data)
           if (data.project) {
             this.currentProject = data.project;
           } else {
