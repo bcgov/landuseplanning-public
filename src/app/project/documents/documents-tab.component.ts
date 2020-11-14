@@ -14,6 +14,7 @@ import { DocumentTableRowsComponent } from './project-document-table-rows/projec
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
+import { Utils } from 'app/shared/utils/utils';
 
 
 @Component({
@@ -65,7 +66,8 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     private router: Router,
     private searchService: SearchService,
     private storageService: StorageService,
-    private tableTemplateUtils: TableTemplateUtils
+    private tableTemplateUtils: TableTemplateUtils,
+    private utils: Utils
   ) { }
 
   ngOnInit() {
@@ -160,10 +162,11 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
         documentList.push(
           {
             documentFileName: document.documentFileName || document.displayName || document.internalOriginalName,
-            // date: document.dateUploaded || document.datePosted,
             displayName: document.displayName,
             datePosted: document.datePosted,
             description: document.description,
+            size: this.utils.formatBytes(document.internalSize),
+            ext: document.internalExt.toUpperCase(),
             projectPhase: document.projectPhase,
             type: document.type,
             milestone: document.milestone,

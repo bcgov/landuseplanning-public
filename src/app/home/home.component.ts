@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.searchService.getTopNewsItems()
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
+        console.log('activities', res)
         this.results = res;
         this._changeDetectionRef.detectChanges();
       });

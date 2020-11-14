@@ -592,7 +592,9 @@ export class ApiService {
       'documentFileName',
       'displayName',
       'internalURL',
-      'internalMime'
+      'internalMime',
+      'internalExt',
+      'internalSize'
     ];
     const queryString = 'document?_application=' + appId + '&fields=' + this.buildValues(fields);
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});

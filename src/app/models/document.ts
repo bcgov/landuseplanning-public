@@ -9,6 +9,7 @@ export class Document {
   passedAVCheck: boolean;
   internalMime: string;
   internalSize: string;
+  internalExt: string;
   documentSource: string;
   displayName: string;
   milestone: string;
@@ -37,6 +38,7 @@ export class Document {
     this.passedAVCheck = obj && obj.passedAVCheck || null;
     this.internalMime = obj && obj.internalMime || null;
     this.internalSize = obj && obj.internalSize || null;
+    this.internalExt = obj && obj.internalExt || null;
     this.documentSource = obj && obj.documentSource || null;
 
     this.displayName = obj && obj.displayName || null;

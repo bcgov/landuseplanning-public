@@ -1,7 +1,7 @@
 <tr *ngFor="let document of documents | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }"
   class="clickable-row" tabindex="0" (click)="goToItem(document)" (keyup.Enter)="goToItem(document)">
-    <td data-label="Name"  scope="row" [attr.aria-label]="makeAriaLabel(document.displayName)" class="col-7 doc-table-item doc-main-details">
-      <p class="doc-name">{{document.displayName || "-"}}</p>
+    <td data-label="Name"  scope="row" [attr.aria-label]="makeAriaLabel(document.displayName, document.size, document.ext)" class="col-7 doc-table-item doc-main-details">
+      <p class="doc-name">{{document.displayName || "-"}}<span>, {{document.size || "-"}}, {{document.ext || "-"}}</span></p>
       <p class="doc-description">{{document.description || "-"}}</p>
     </td>
     <td data-label="Name" scope="row" [attr.aria-hidden]="true" class="col-3 doc-table-item ">{{document.projectPhase || "_"}}</td>

@@ -4,6 +4,7 @@ import { TableComponent } from 'app/shared/components/table-template/table.compo
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'app/services/api';
+import { Utils } from 'app/shared/utils/utils';
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -31,11 +32,14 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
     private _changeDetectionRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private utils: Utils
   ) { }
 
   ngOnInit() {
     this.documents = this.data.data;
+    console.log('documents', this.data);
+
     this.paginationData = this.data.paginationData;
     this.route.data
       .takeUntil(this.ngUnsubscribe)
@@ -89,10 +93,10 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
     window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 
-  makeAriaLabel(docName) {
+  makeAriaLabel(docName, docSize, docExt) {
     let docPhrase;
     docName ? docPhrase = docName : docPhrase = 'this';
-    return `Download ${docPhrase} document. Link.`;
+    return `View ${docPhrase} document. ${docSize}. ${docExt}. Link.`;
   }
 
   ngOnDestroy() {
