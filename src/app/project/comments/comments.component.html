@@ -1,114 +1,118 @@
-<div *ngIf="loading" class="spinner-border" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
+<div class="app-comments">
 
-<div *ngIf="!loading" class="project">
-  <main class="project-info">
-    <div class="hero-banner-alt">
-      <div class="container">
-        <div class="hero-banner__content">
-          <h1 tabindex="-1">{{project?.name || '-'}}</h1>
-          <div class="header-section mb-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
-            <h3>
-              {{commentPeriodHeader}}
-            </h3>
-            <h3>
-              {{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}
-            </h3>
-            <div *ngIf="commentPeriod.informationLabel !== null">
-              <p>
+  <div *ngIf="loading" class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+
+  <div *ngIf="!loading" class="project">
+    <main class="project-info">
+      <div class="hero-banner-alt">
+        <div class="container">
+          <div class="hero-banner__content">
+            <h1 tabindex="-1">{{project?.name || '-'}}</h1>
+            <div class="header-section mb-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
+              <h3>
+                {{commentPeriodHeader}}
+              </h3>
+              <h3>
+                {{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}
+              </h3>
+              <div *ngIf="commentPeriod.informationLabel !== null">
+                <p>
+                  {{commentPeriod.instructions}}
+                </p>
+                <br>
+                <p>
+                  {{commentPeriod.additionalText}}
+                </p>
+                <br>
+                <p>
+                  {{commentPeriod.informationLabel}}
+                </p>
+              </div>
+              <p *ngIf="commentPeriod.informationLabel === null">
                 {{commentPeriod.instructions}}
               </p>
-              <br>
-              <p>
-                {{commentPeriod.additionalText}}
-              </p>
-              <br>
-              <p>
-                {{commentPeriod.informationLabel}}
-              </p>
-            </div>
-            <p *ngIf="commentPeriod.informationLabel === null">
-              {{commentPeriod.instructions}}
-            </p>
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-light" (click)="addComment()" type="button"
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-light" (click)="addComment()" type="button"
                 *ngIf="commentPeriod.commentPeriodStatus === 'Open'" [attr.aria-label]=makeAriaLabel(project.name)>Submit Comment</button>
-            </div>
-          </div>
-          <div class="basic-info">
-            <div>
-              <label>Partner First Nation(s)</label>
-              <p class="value">{{project?.partner || "-" | titlecase}}</p>
-            </div>
-            <div *ngIf="projectFieldType(project?.agreements) ==='string'" class="agreements">
-              <label>Agreement(s)</label>
-              <p class="value">{{project?.agreements || "-"}}</p>
-            </div>
-            <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
-              <label>Agreement(s)</label>
-              <p class="value" *ngIf="project.agreements.length === 0">-</p>
-              <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
-                <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
-                  <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
-                    href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
-                  </p>
-                  <span *ngIf="i !== project.agreements.length - 1">,</span>
-                </div>
-                <ng-template #noAgreementURL>
-                  <p class="value">{{agreement.agreementName || "-" }}</p>
-                  <span *ngIf="i !== project.agreements.length - 1">,</span>
-                </ng-template>
               </div>
             </div>
-          </div>
+            <div class="basic-info">
+              <div>
+                <label>Partner First Nation(s)</label>
+                <p class="value">{{project?.partner || "-" | titlecase}}</p>
+              </div>
+              <div *ngIf="projectFieldType(project?.agreements) ==='string'" class="agreements">
+                <label>Agreement(s)</label>
+                <p class="value">{{project?.agreements || "-"}}</p>
+              </div>
+              <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
+                <label>Agreement(s)</label>
+                <p class="value" *ngIf="project.agreements.length === 0">-</p>
+                <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
+                  <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
+                    <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
+                      href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
+                    </p>
+                    <span *ngIf="i !== project.agreements.length - 1">,</span>
+                  </div>
+                  <ng-template #noAgreementURL>
+                    <p class="value">{{agreement.agreementName || "-" }}</p>
+                    <span *ngIf="i !== project.agreements.length - 1">,</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
 
+          </div>
+          <button class="btn btn-sm inverted mb-3" (click)="goBackToProjectDetails()" type="button">
+            Back to project details
+          </button>
         </div>
-        <button class="btn btn-sm inverted mb-3" (click)="goBackToProjectDetails()" type="button">
-          Back to project details
-        </button>
+      </div>
+    </main>
+  </div>
+  <div *ngIf="!loading" class="container comments mt-3">
+    <div *ngIf="commentPeriod.commentPeriodInfo">
+      <div class="mb-3" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
+    </div>
+    <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">
+      <p class="table-instructions">Click on a document to download it.</p>
+      <div class="card">
+        <div class="card-header">
+          Related Documents
+        </div>
+        <ul class="doc-list mt-0">
+          <li class="clickable-row" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="goToItem(doc)" (keyup.Enter)="downloadDocument(doc)">
+            <span class="cell icon">
+              <i class="material-icons">insert_drive_file</i>
+            </span>
+            <span class="cell name" [title]="doc.displayName || ''">
+              <span class="cell__txt-content">{{doc.displayName}}</span>
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
-  </main>
-</div>
-<div *ngIf="!loading" class="container comments mt-3">
-  <div *ngIf="commentPeriod.commentPeriodInfo">
-    <div class="mb-3" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
-  </div>
-  <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">
-    <p class="table-instructions">Click on a document to download it.</p>
-    <div class="card">
-      <div class="card-header">
-        Related Documents
+    <div class="open-houses value mt-4" *ngIf="commentPeriod.openHouses.length > 0">
+      <div class="card">
+        <div class="card-header">
+          Open Houses
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let openHouse of commentPeriod.openHouses">
+            <h6>
+              <b>Date:</b>&nbsp;{{openHouse.eventDate | date}}
+            </h6>
+            <br>
+            <h6>
+              <b>Description:</b>&nbsp;{{openHouse.description}}
+            </h6>
+          </li>
+        </ul>
       </div>
-      <ul class="doc-list mt-0">
-        <li class="clickable-row" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="goToItem(doc)" (keyup.Enter)="downloadDocument(doc)">
-          <span class="cell icon">
-            <i class="material-icons">insert_drive_file</i>
-          </span>
-          <span class="cell name" [title]="doc.displayName || ''">
-            <span class="cell__txt-content">{{doc.displayName}}</span>
-          </span>
-        </li>
-      </ul>
     </div>
   </div>
-  <div class="open-houses value mt-4" *ngIf="commentPeriod.openHouses.length > 0">
-    <div class="card">
-      <div class="card-header">
-        Open Houses
-      </div>
-      <ul class="list-group">
-        <li class="list-group-item" *ngFor="let openHouse of commentPeriod.openHouses">
-          <h6>
-            <b>Date:</b>&nbsp;{{openHouse.eventDate | date}}
-          </h6>
-          <br>
-          <h6>
-            <b>Description:</b>&nbsp;{{openHouse.description}}
-          </h6>
-        </li>
-      </ul>
-    </div>
-  </div>
+
 </div>

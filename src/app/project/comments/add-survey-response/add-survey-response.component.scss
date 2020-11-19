@@ -1,6 +1,5 @@
 @import "~assets/styles/base/base.scss";
 
-
 #modal-instructions {
   display: none;
 }
@@ -111,18 +110,9 @@ input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched {
   margin-left: 2rem;
 }
 
-.info-display {
-  border-top: 1px solid grey;
-  border-bottom: 1px solid grey;
-  text-align: center;
-  padding: 1rem;
-  font-size: 1.1rem;
-}
-
 div .attribute {
   display:block;
   font-size: 14px;
-  font-weight: bold;
   padding: 30px 0 0 4.25%;
   margin-bottom:10px;
 }
@@ -168,4 +158,19 @@ div .likert li label {
 
 app-file-upload {
   margin: 1rem;
+}
+
+.control-label {
+  font-weight: normal;
+  font-size: 1.1rem;
+}
+
+.question-count {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+::ng-deep .control-label > p {
+  margin-bottom: 0;
+
 }
