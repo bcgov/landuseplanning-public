@@ -163,14 +163,16 @@ app-file-upload {
 .control-label {
   font-weight: normal;
   font-size: 1.1rem;
+  vertical-align: top;
 }
 
 .question-count {
   font-size: 1.1rem;
   font-weight: bold;
+  vertical-align: top;
 }
 
-::ng-deep .control-label > p {
-  margin-bottom: 0;
+// ::ng-deep .control-label > p {
+//   margin-bottom: 0;
 
-}
+// }
