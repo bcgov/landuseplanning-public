@@ -71,7 +71,7 @@
     <div class="modal-body">
       <p class="form-warning"><span class="required">*</span> = Required Field</p>
       <div class="survey">
-        <div class="survey-canvas-list-item">
+        <!-- <div class="survey-canvas-list-item">
           <div class="form-group">
             <label class="control-label" for="author"><span class="question-count">1. </span>Your Name<span class="required">*</span></label>
             <input class="form-control" formControlName="author" value="">
@@ -82,27 +82,27 @@
             <input class="form-control" formControlName="location" value="">
             <p *ngIf="location.invalid && location.touched" class="danger">This field is required.</p>
           </div>
-        </div>
+        </div> -->
         <div
         class="survey-canvas-list-item"
         *ngFor="let entry of surveyResponseForm.controls.responses.controls; let i = index">
         <div [formGroup]="entry">
           <div class="form-group" *ngIf="survey.questions[i].type === 'smallText'">
-            <span class="question-count">{{countArray[i]}}. </span><label class="control-label the-thing" for="textAnswer" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span>
+            <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label the-thing" for="textAnswer" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
             <label for="textAnswer">Please do not include any personally identifiable information about yourself or others in your responses.</label>
             <input class="form-control" formControlName="textAnswer">
             <p *ngIf="entry.invalid &&  entry.touched" class="danger">This field is required. <span *ngIf="survey.questions[i].maxChars">{{survey.questions[i].maxChars}} character limit.</span></p>
           </div>
           <div class="form-group" *ngIf="survey.questions[i].type === 'largeText'">
-            <span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="textAnswer" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span>
+            <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="textAnswer" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
             <label for="textAnswer">Please do not include any personally identifiable information about yourself or others in your responses.</label>
             <textarea class="form-control" rows="5" formControlName="textAnswer" value="large text"></textarea>
             <p *ngIf="entry.invalid &&  entry.touched" class="danger">This field is required. <span *ngIf="survey.questions[i].maxChars">{{survey.questions[i].maxChars}} character limit.</span></p>
           </div>
           <div class="form-group" *ngIf="survey.questions[i].type === 'singleChoice'">
-            <span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span>
-            <br>
-            <label class="" for="choices">(Choose one)</label>
+            <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
+            <!-- <br> -->
+            <label class="" for="choices">(Make one selection)</label>
             <div class="choices">
               <div *ngFor="let choice of survey.questions[i].choices; let j = index">
                 <label class="form-check-label" for="choice">
@@ -120,27 +120,27 @@
             <p *ngIf="entry.invalid && entry.touched && !survey.questions[i].other" class="danger">Please make a selection.</p>
           </div>
           <div class="form-group" *ngIf="survey.questions[i].type === 'multiChoice'">
-            <span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span>
-            <br>
-            <label class="" for="choices">(Choose {{chooseAmount(survey.questions[i])}})</label>
+            <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
+            <!-- <br> -->
+            <label class="" for="choices">(Please make {{chooseAmount(survey.questions[i])}} selection(s).)</label>
             <div class="choices">
                 <div *ngFor="let choice of entry.controls.multiChoices.controls; let j = index">
                   <label class="form-check-label" for="choice">
-                    <input class="form-check-input" size=20 type="checkbox" name="{{i}}" (change)="checkedState($event, i, survey.questions[i].choose)" [formControl]="choice" value="{{survey.questions[i].choices[j]}}">
+                    <input class="form-check-input" size=20 type="checkbox" name="{{i}}" (change)="checkedState($event, i, survey.questions[i])" [formControl]="choice" value="{{survey.questions[i].choices[j]}}">
                     {{survey.questions[i].choices[j]}}
                   </label>
                 </div>
                 <div *ngIf="survey.questions[i].other">
                   <label class="form-check-label">
-                    <input class="form-check-input" size=20 type="checkbox" (change)="checkedState($event, i, survey.questions[i].choose)" formControlName="other" value="other">
+                    <input class="form-check-input" size=20 type="checkbox" (change)="checkedState($event, i, survey.questions[i])" formControlName="other" value="other">
                     <label>Other: <input class="form-other-input" formControlName="otherText"></label>
                   </label>
                 </div>
             </div>
-            <p *ngIf="entry.invalid &&  entry.touched" class="danger">Please make {{chooseAmount(survey.questions[i])}} selection(s).</p>
+            <p *ngIf="entry.invalid && entry.touched" class="danger">Please make {{chooseAmount(survey.questions[i])}} selection(s).</p>
           </div>
           <div class="form-group" *ngIf="survey.questions[i].type === 'likert'">
-            <span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span>
+            <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
             <div *ngFor="let attribute of entry.controls.attributeChoices.controls; let ai = index">
               <div [formGroup]="attribute">
                 <label class="attribute">{{survey.questions[i].attributes[ai].attribute}}</label>
@@ -169,7 +169,7 @@
             <p *ngIf="entry.invalid &&  entry.touched" class="danger">Must be a valid phone number.</p>
           </div>
           <div class="form-group" *ngIf="survey.questions[i].type === 'docPicker'">
-            <span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].docPickerText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span>
+            <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].docPickerText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
             <label class="doc-format-label">All attachments must be no larger than 5MB and must be a .png, .pdf, .gif, .jpg, .jpeg, or .bmp file.</label>
             <app-file-upload [maxFiles]="50" [maxSize]="300" [showInfo]="false" [showList]="false" [files]="commentFiles"
             (filesChange)="addFiles($event); commentFiles = []"></app-file-upload>

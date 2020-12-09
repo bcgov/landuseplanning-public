@@ -117,6 +117,18 @@ div .attribute {
   margin-bottom:10px;
 }
 
+@media (max-width: 500px) {
+  div .likert {
+    list-style:none;
+    width:100%;
+    margin:0;
+    display:block;
+    padding-left: 0;
+    // border-bottom:2px solid #efefef;
+  }
+}
+
+
 div .likert {
   list-style:none;
   width:100%;
@@ -166,11 +178,17 @@ app-file-upload {
   vertical-align: top;
 }
 
+.question {
+  display: flex;
+}
+
 .question-count {
   font-size: 1.1rem;
   font-weight: bold;
   vertical-align: top;
+  margin-right: 0.25rem;
 }
+
 
 // ::ng-deep .control-label > p {
 //   margin-bottom: 0;

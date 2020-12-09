@@ -277,11 +277,6 @@
   }
 }
 
-
-.modal-xl {
-  width: 80vw;
-}
-
 .clickable-row {
   cursor: pointer;
 }
@@ -356,3 +351,20 @@
     font-size: 14px;
   }
 }
+
+
+.comment-modal {
+  background-color: red !important;
+  display: none !important;
+  overflow-x: hidden !important;
+    overflow-y: auto;
+    color: green;
+
+   .modal-dialog {
+    width: 80vw !important;
+  }
+}
+
+// .modal-xl .modal-lg {
+//   width: 80vw;
+// }

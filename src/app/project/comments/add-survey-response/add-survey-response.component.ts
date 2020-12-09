@@ -94,13 +94,7 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
     this.surveyItemCount(this.survey.questions)
     this.surveyResponseForm = this.surveyBuilderService.buildSurveyResponseForm(this.survey)
 
-    this.chooseArray = this.survey.questions.map(question => {
-      if (question.choose) {
-        return 0;
-      } else {
-        return null
-      }
-    })
+    this.chooseArray = this.survey.questions.map(question => (question.choose ? 0 : null))
 
   }
 
@@ -110,9 +104,11 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
   surveyItemCount(questions) {
     let infoCount = 0;
     for (let i = 0; i < questions.length; i++) {
-      // Count is incremented by three to account for author
+      // Count is noramlly incremented by three to account for author
       // and location fields and to display array indexes on view
-      let count = i + 3;
+      // Author and Location temporarily removed and so count
+      // is incremeneted by 1
+      let count = i + 1;
       if (questions[i].type === 'info') {
         this.countArray.push('')
         infoCount++;
@@ -161,17 +157,29 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  public checkedState(event, index: number, choose) {
+  public checkedState(event, index: number, question) {
+    console.log('here is the question ', question)
     if (event.target.checked) {
       this.chooseArray[index]++
     }
     if (!event.target.checked) {
       this.chooseArray[index]--
     }
-    if (this.chooseArray[index] === choose) {
-      this.surveyResponseForm.controls.responses.controls[index].setErrors(null);
-    } else {
-      this.surveyResponseForm.controls.responses.controls[index].setErrors({'incorrect': true});
+    if (question.choose) {
+      if (this.chooseArray[index] < question.choose) {
+        this.surveyResponseForm.controls.responses.controls[index].setErrors(null);
+        console.log('errors nullified')
+      } else {
+        this.surveyResponseForm.controls.responses.controls[index].setErrors({'incorrect': true});
+        console.log('errors set')
+      }
+    }
+    if (question.answerRequired) {
+      if (this.chooseArray[index] >= 1) {
+        this.surveyResponseForm.controls.responses.controls[index].setErrors(null);
+      } else {
+        this.surveyResponseForm.controls.responses.controls[index].setErrors({'incorrect': true});
+      }
     }
   }
 
@@ -179,7 +187,7 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
     if (question.choose && question.choose > 0) {
       return this.utils.numToWord(question.choose)
     } else {
-      return 'many';
+      return 'at least one';
     }
   }
 
