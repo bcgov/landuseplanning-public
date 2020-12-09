@@ -90,7 +90,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
           if (loadedSurvey) {
 
           // open modal
-          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg', keyboard: false });
+          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false });
           // set input parameter
           (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
           (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
@@ -99,7 +99,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
 
           // open modal
-          this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+          this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
           // set input parameter
           (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
           (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
@@ -111,7 +111,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public addEmail() {
       // open modal
-      this.ngbModal = this.modalService.open(EmailSubscribeComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+      this.ngbModal = this.modalService.open(EmailSubscribeComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
       // set input parameter
     (<EmailSubscribeComponent>this.ngbModal.componentInstance).project = this.project;
       // check result

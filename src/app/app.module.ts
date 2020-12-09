@@ -64,7 +64,7 @@ import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
     HttpClientModule,
     NgbModule.forRoot(),
     NgxPageScrollModule,
-    BootstrapModalModule,
+    // BootstrapModalModule,
     SharedModule,
     ProjectModule,
     ProjectsModule,

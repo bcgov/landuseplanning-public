@@ -17,17 +17,6 @@ export class SurveyBuilderService {
 
   constructor() {}
 
-  // toFormGroup(questions: SurveyQuestion<string>[] ) {
-  //   let group: any = {};
-
-  //   questions.forEach(question => {
-  //     group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-  //                                             : new FormControl(question.value || '');
-  //   });
-  //   console.log('this is the group', group);
-  //   return new FormGroup(group);
-  // }
-
   genSurveyResponseForm(survey: Survey) {
     survey.questions.forEach(question => {
 
@@ -44,16 +33,16 @@ export class SurveyBuilderService {
     return newForm;
   }
 
+  // Make author and location no longer required
   buildSurveyResponseForm(survey) {
     let form = new FormGroup({
-      author: new FormControl(null, Validators.required),
-      location: new FormControl(null, Validators.required),
+      author: new FormControl(null),
+      location: new FormControl(null),
+      // author: new FormControl(null, Validators.required),
+      // location: new FormControl(null, Validators.required),
       responses: new FormArray([])
     })
     let surveyResponses = form.get('responses') as FormArray;
-
-    // surveyResponses.push( new FormGroup({ author: new FormControl(null, Validators.required)}))
-    // surveyResponses.push(new FormGroup({ location: new FormControl(null, Validators.required)}))
 
     survey.questions.forEach(question => {
       surveyResponses.push(this.newFormQuestion(question))

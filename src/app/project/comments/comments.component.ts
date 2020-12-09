@@ -167,7 +167,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     if (this.commentPeriod.surveySelected) {
 
       // open modal
-      this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg', windowClass: 'modal-xl' });
+      this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static',   size: 'xl' as 'lg', windowClass: 'comment-modal' });
       // set input parameter
       (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
       (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
@@ -186,7 +186,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       );
     } else if (this.commentPeriodId) {
       // open modal
-      this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'lg' });
+      this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
       // set input parameter
       (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
       (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
