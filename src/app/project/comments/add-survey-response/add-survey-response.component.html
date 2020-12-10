@@ -122,7 +122,7 @@
           <div class="form-group" *ngIf="survey.questions[i].type === 'multiChoice'">
             <div class="question"><span class="question-count">{{countArray[i]}}. </span><label class="control-label" for="choices" [innerHTML]="survey.questions[i].questionText"></label><span *ngIf="survey.questions[i].answerRequired" class="required">*</span></div>
             <!-- <br> -->
-            <label class="" for="choices">(Please make {{chooseAmount(survey.questions[i])}} selection(s).)</label>
+            <!-- <label class="" for="choices">(Please make {{chooseAmount(survey.questions[i])}} selection(s).)</label> -->
             <div class="choices">
                 <div *ngFor="let choice of entry.controls.multiChoices.controls; let j = index">
                   <label class="form-check-label" for="choice">
