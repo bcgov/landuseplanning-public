@@ -41,7 +41,7 @@
             <div class="basic-info">
               <div>
                 <label>Partner First Nation(s)</label>
-                <p class="value">{{project?.partner || "-" | titlecase}}</p>
+                <p class="value">{{project?.partner || "-" }}</p>
               </div>
               <div *ngIf="projectFieldType(project?.agreements) ==='string'" class="agreements">
                 <label>Agreement(s)</label>
