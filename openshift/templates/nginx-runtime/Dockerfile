@@ -22,7 +22,7 @@ RUN echo "" > /etc/nginx/publicServerEnvironmentSettings.js
 USER root
 
 # Fix up permissions
-RUN chmod -Rf 0777 /tmp /var /run /etc /mnt /usr/libexec/s2i/
+RUN chmod -Rf 0777 /tmp /var /run /etc /mnt /usr/libexec/s2i/ || :
 
 #try agin without /run for ocp4
 #RUN chmod -R 0777 /tmp /var /etc /mnt /usr/libexec/s2i/
