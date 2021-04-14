@@ -577,7 +577,8 @@ export class ApiService {
   addComment(comment: Comment): Observable<Comment> {
     const fields = [
       'comment',
-      'author'
+      'author',
+      'project'
     ];
     const queryString = 'comment?fields=' + this.buildValues(fields);
     return this.http.post<Comment>(`${this.apiPath}/${queryString}`, comment, {});
