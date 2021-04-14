@@ -1,6 +1,7 @@
 export class Comment {
   _id: string;
   author: string;
+  project: string;
   comment: string;
   commentId: number;
   dateAdded: Date;

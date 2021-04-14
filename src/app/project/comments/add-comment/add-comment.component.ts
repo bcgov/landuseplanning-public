@@ -130,6 +130,7 @@ export class AddCommentComponent implements OnInit {
     this.progressBufferValue += 100 * commentSize / this.totalSize;
 
     // Build the comment
+    this.comment.project = this.project._id;
     this.comment.author = this.contactName;
     this.comment.comment = this.commentInput;
     this.comment.location = this.locationInput;
