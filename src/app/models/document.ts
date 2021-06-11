@@ -12,7 +12,6 @@ export class Document {
   internalExt: string;
   documentSource: string;
   displayName: string;
-  documentURLText: string;
   milestone: string;
   dateUploaded: string;
   type: string;
@@ -43,7 +42,6 @@ export class Document {
     this.documentSource = obj && obj.documentSource || null;
 
     this.displayName = obj && obj.displayName || null;
-    this.documentURLText = obj && obj.documentURLText || null;
     this.milestone = obj && obj.milestone || null;
     this.dateUploaded = obj && obj.dateUploaded || null;
     this.dateUpdated = obj && obj.dateUpdated || null;
