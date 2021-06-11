@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TableComponent } from 'app/shared/components/table-template/table.component';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { Router } from '@angular/router';
+import { News } from 'app/models/news';
 
 @Component({
     selector: 'tbody[app-news-list-table-rows]',
@@ -41,5 +42,12 @@ export class NewsListTableRowsComponent implements OnInit, TableComponent {
       } else {
         return false;
       }
+    }
+
+    makeAriaLabel(activity: News) {
+      let activityPhrase, viewDocPhrase;
+      activity.headline ? activityPhrase = activity.headline : activityPhrase = `this update`;
+      activity.documentUrlText ? viewDocPhrase = activity.documentUrlText : viewDocPhrase = `View document`;
+      return `${viewDocPhrase} attached to ${activityPhrase}`;
     }
 }

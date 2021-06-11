@@ -53,9 +53,9 @@
                     Submit/ View Comments
                   </a>
                   <a *ngIf="item.documentUrl && !item?.documentUrl.includes('docs?folder')"
-                    class="btn btn-sm content-btn-alt" [attr.aria-label]="makeAriaLabel(item.headline)" title="View more information" href="{{item.documentUrl}}"
+                    class="btn btn-sm content-btn-alt" [attr.aria-label]="makeAriaLabel(item)" title="View more information" href="{{item.documentUrl}}"
                     target="_blank">
-                    View Document
+                    {{ item.documentUrlText || "View Document" }}
                   </a>
                 </div>
               </td>

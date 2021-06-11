@@ -592,6 +592,7 @@ export class ApiService {
       '_application',
       'documentFileName',
       'displayName',
+      'documentURLText',
       'internalURL',
       'internalMime',
       'internalExt',

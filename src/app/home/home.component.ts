@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { SearchService } from 'app/services/search.service';
 import { Subject } from 'rxjs';
+import { News } from 'app/models/news'
 
 @Component({
   selector: 'app-home',
@@ -27,10 +28,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  makeAriaLabel(activityName) {
-    let activityPhrase;
-    activityName ? activityPhrase = activityName : activityPhrase = `this update`;
-    return `View document attached to ${activityPhrase}`;
+  makeAriaLabel(activity: News) {
+    let activityPhrase, viewDocPhrase;
+    activity.headline ? activityPhrase = activity.headline : activityPhrase = `this update`;
+    activity.documentUrlText ? viewDocPhrase = activity.documentUrlText : viewDocPhrase = `View document`;
+    return `${viewDocPhrase} attached to ${activityPhrase}`;
   }
 
   ngOnDestroy() {
