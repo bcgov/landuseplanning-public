@@ -7,12 +7,12 @@
     <br>
     <br>
     <span [innerHtml]="activity.content"></span>
-    <a *ngIf="activity.project" class="btn content-btn-alt" [routerLink]="['/p', activity.project._id ]">
+    <a *ngIf="activity.project" class="btn content-btn-alt view-project-btn" [routerLink]="['/p', activity.project._id ]">
       <span>View Project</span>
     </a>
     <a *ngIf="isSingleDoc(activity?.documentUrl) && !activity?.documentUrl.includes('docs?folder')"
-      class="btn content-btn-alt" (click)="goToItem(activity?.documentUrl)">
-      <span>View Document(s)</span>
+      class="btn content-btn-alt view-document-btn" (click)="goToItem(activity?.documentUrl)" aria-labelledby="makeAriaLabel(activity)">
+      <span>{{ activity.documentUrlText || "View Document" }}</span>
     </a>
     <button *ngIf="activity?.pcp"
       class="btn content-btn-alt" (click)="goToCP(activity)">
