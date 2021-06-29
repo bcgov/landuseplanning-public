@@ -29,8 +29,8 @@ export const ProjectRoutes: Routes = [
     path: 'project-details',
     component: ProjectDetailsTabComponent,
     resolve: {
-      documents: ProjectActivitiesResolver,
-      shapefile: ShapeFileResolver
+      activities: ProjectActivitiesResolver,
+      documents: ShapeFileResolver
     },
     data: {
       title: 'Project Details',

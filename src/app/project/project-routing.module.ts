@@ -36,7 +36,7 @@ const routes: Routes = [
     path: 'p/:projId',
     component: ProjectComponent,
     resolve: {
-      project: ProjectResolver
+      projectAndBanner: ProjectResolver
     },
     // each tab within the page navigates to a separate route
     // e.g. /project/:id/(project|comments|decisions)

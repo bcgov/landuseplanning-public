@@ -47,10 +47,9 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { project: Project }) => {
-          console.log('the data', data)
-          if (data.project) {
-            this.currentProject = data.project;
+        (data) => {
+          if (data.projectAndBanner[0]) {
+            this.currentProject = data.projectAndBanner[0];
           } else {
             alert('Uh-oh, couldn\'t load project');
             // project not found --> navigate back to project list
@@ -74,9 +73,9 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
           .takeUntil(this.ngUnsubscribe)
           .subscribe((data: any) => {
             if (data) {
-              if (data.documents && data.documents[0].data.meta && data.documents[0].data.meta.length > 0) {
-                this.tableParams.totalListItems = data.documents[0].data.meta[0].searchResultsTotal;
-                this.recentActivities = data.documents[0].data.searchResults;
+              if (data.activites && data.activites[0].data.meta && data.activites[0].data.meta.length > 0) {
+                this.tableParams.totalListItems = data.activites[0].data.meta[0].searchResultsTotal;
+                this.recentActivities = data.activites[0].data.searchResults;
               } else {
                 this.tableParams.totalListItems = 0;
                 this.recentActivities = [];

@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2, ChangeDetectorRef, AfterViewInit, OnDestr
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import * as _ from 'lodash';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Project } from 'app/models/project';
@@ -37,8 +38,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   public appHeader: HTMLHeadingElement;
   private ngbModal: NgbModalRef = null;
   public surveySelected: Survey;
-
-
+  public bannerImage;
+  public bannerImageSrc: string;
+  public pathAPI: string;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -59,15 +61,29 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { project: Project }) => {
-          if (data.project) {
-            this.project = data.project;
+        (data) => {
+          console.log('data', data)
+          if (data.projectAndBanner) {
+            this.project = data.projectAndBanner[0];
             this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
             this.renderer.removeClass(document.body, 'no-scroll');
-            this.project = data.project;
+            this.bannerImage = data.projectAndBanner[1][0].data.searchResults[0];
+
+            console.log('banner', this.bannerImage);
+
+            // The following items are loaded by a file that is only present on cluster builds.
+            // Locally, this will be empty and local defaults will be used.
+            const remote_api_path = window.localStorage.getItem('from_admin_server--remote_api_path');
+            this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
+
+            if (this.bannerImage) {
+              const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
+              this.bannerImageSrc = `${this.pathAPI}/document/${this.bannerImage._id}/fetch/${safeName}`;
+              console.log('hello', this.bannerImageSrc)
+            }
             this._changeDetectionRef.detectChanges();
           } else {
-            alert('Uh-oh, couldn\'t load project');
+            alert('Uh-oh, couldn\'t load the project');
             // project not found --> navigate back to project list
             this.router.navigate(['/projects']);
           }
@@ -80,6 +96,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if ( this.appHeader ) {
       this.appHeader.focus();
     }
+  }
+
+  public getBannerURL() {
+    return `url(${this.bannerImageSrc})`;
   }
 
   public addComment() {
