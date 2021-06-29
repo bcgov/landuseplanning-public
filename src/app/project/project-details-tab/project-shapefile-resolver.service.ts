@@ -23,7 +23,7 @@ export class ShapeFileResolver implements Resolve<Observable<object>> {
       currentPage,
       pageSize,
       sortBy,
-      { documentSource: 'SHAPEFILE' },
+      {},
       true);
   }
 }
