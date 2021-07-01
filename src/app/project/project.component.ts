@@ -79,7 +79,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.bannerImage) {
               const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
               this.bannerImageSrc = `${this.pathAPI}/document/${this.bannerImage._id}/fetch/${safeName}`;
-              console.log('hello', this.bannerImageSrc)
             }
             this._changeDetectionRef.detectChanges();
           } else {
@@ -99,7 +98,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getBannerURL() {
-    return `url(${this.bannerImageSrc})`;
+    return this.bannerImageSrc ? `url(${this.bannerImageSrc})` : '';
   }
 
   public addComment() {

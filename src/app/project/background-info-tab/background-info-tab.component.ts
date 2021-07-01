@@ -28,9 +28,9 @@ export class BackgroundInfoTabComponent implements OnInit, OnDestroy {
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { project: Project }) => {
-          if (data.project) {
-            this.project = data.project;
+        (data) => {
+          if (data.projectAndBanner[0]) {
+            this.project = data.projectAndBanner[0];
           } else {
             alert('Uh-oh, couldn\'t load project');
             // project not found --> navigate back to project list
