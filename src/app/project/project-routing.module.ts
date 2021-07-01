@@ -25,7 +25,7 @@ const routes: Routes = [
     component: CommentsComponent,
     resolve: {
       commentPeriod: CommentsResolver,
-      project: ProjectResolver
+      projectAndBanner: ProjectResolver
     },
     data: {
       title: 'Project Comment Period',

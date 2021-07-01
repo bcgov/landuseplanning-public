@@ -16,6 +16,25 @@
   min-height: 80vh;
 }
 
+.hero-banner-alt {
+  background-size: cover;
+  background-position: center;
+  background-color: #001330;
+
+  .hero-banner__container {
+    background-color: #00409e8f;
+    margin: 0;
+    padding: 0 4rem;
+    width: 111%;
+    max-width: 100%;
+  }
+
+  .hero-banner__content {
+    padding-top: 5rem;
+  }
+
+}
+
 .comments {
     background-color: #fff;
     min-height: 100px;

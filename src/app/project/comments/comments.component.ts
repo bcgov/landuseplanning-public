@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
 
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
@@ -38,6 +39,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public project: Project;
   public comments: Comment[];
   public commentPeriodDocs;
+  public bannerImage;
+  public bannerImageSrc: string;
+  public pathAPI: string;
 
   public commentTableData: TableObject;
   public commentPeriodHeader: String;
@@ -72,10 +76,26 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { commentPeriod: CommentPeriod, project: Project }) => {
+        (data: { commentPeriod: CommentPeriod, projectAndBanner }) => {
 
-          if (data.project) {
-            this.project = data.project;
+          if (data.projectAndBanner[0]) {
+            this.project = data.projectAndBanner[0];
+          }
+
+          if (data.projectAndBanner[1]) {
+            this.bannerImage = data.projectAndBanner[1][0].data.searchResults[0];
+          }
+
+          // The following items are loaded by a file that is only present on cluster builds.
+          // Locally, this will be empty and local defaults will be used.
+          const remote_api_path = window.localStorage.getItem('from_admin_server--remote_api_path');
+          this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
+
+
+          if (this.bannerImage) {
+            const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
+            this.bannerImageSrc = `${this.pathAPI}/document/${this.bannerImage._id}/fetch/${safeName}`;
+            console.log('this banner', this.bannerImageSrc)
           }
 
           if (data.commentPeriod) {
@@ -143,6 +163,10 @@ export class CommentsComponent implements OnInit, OnDestroy {
       this.tableParams.sortBy = '+' + column;
     }
     this.getPaginatedComments(this.tableParams.currentPage);
+  }
+
+  public getBannerURL() {
+    return this.bannerImageSrc ? `url(${this.bannerImageSrc})` : '';
   }
 
   // public downloadDocument(document) {

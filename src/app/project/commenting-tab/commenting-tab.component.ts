@@ -42,10 +42,10 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
     this.route.parent.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        (data: { project: Project }) => {
-          if (data.project) {
-            this.currentProject = data.project;
-            this.getCommentPeriods(data.project._id);
+        (data) => {
+          if (data.projectAndBanner[0]) {
+            this.currentProject = data.projectAndBanner[0];
+            this.getCommentPeriods(data.projectAndBanner[0]._id);
           } else {
             alert('Uh-oh, couldn\'t load project');
             // project not found --> navigate back to project list

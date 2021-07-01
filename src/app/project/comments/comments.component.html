@@ -6,9 +6,10 @@
 
   <div *ngIf="!loading" class="project">
     <main class="project-info">
-      <div class="hero-banner-alt">
-        <div class="container">
-          <div class="hero-banner__content">
+      <div class="hero-banner-alt" [ngStyle]="{ 'backgroundImage': getBannerURL() }">
+          <div class="hero-banner__container">
+            <div class="container">
+              <div class="hero-banner__content">
             <h1 tabindex="-1">{{project?.name || '-'}}</h1>
             <div class="header-section mb-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
               <h3>
@@ -70,6 +71,7 @@
             Back to project details
           </button>
         </div>
+      </div>
       </div>
     </main>
   </div>
