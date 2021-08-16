@@ -73,7 +73,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // The following items are loaded by a file that is only present on cluster builds.
             // Locally, this will be empty and local defaults will be used.
-            const remote_api_path = window.localStorage.getItem('from_admin_server--remote_api_path');
+            const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_path');
             this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
             if (this.bannerImage) {
