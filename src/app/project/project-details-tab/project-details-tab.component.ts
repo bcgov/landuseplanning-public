@@ -8,7 +8,6 @@ import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Document } from 'app/models/document';
-import { CommentsResolver } from '../comments/comments-resolver.service';
 import * as _ from 'lodash';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
@@ -56,8 +55,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
     // The following items are loaded by a file that is only present on cluster builds.
     // Locally, this will be empty and local defaults will be used.
-    const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
-    this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
+    const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
+    this.pathAPI = (_.isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
   }
 
   ngAfterViewInit() {
@@ -160,7 +159,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.map.scrollWheelZoom.disable();
 
     // draw project marker
-    if (this.shapefile[0] && this.shapefile[0].documentFileName && this.shapefile[0].documentFileName.length > 0) {
+    if (this.shapefile[0] && this.shapefile[0]._id && this.shapefile[0].documentFileName && this.shapefile[0].documentFileName.length > 0) {
       console.log('Shapefile', this.shapefile);
       const escapedName = encode(this.shapefile[0].documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
       const shapeurl = this.pathAPI + '/document/' + this.shapefile[0]._id + '/fetch/' + escapedName;
@@ -173,7 +172,6 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       }.bind(this), 500);
       shapefile.addTo(this.map);
     } else if (this.project) {
-      console.log('No shapefille!', this.shapefile[0]);
       const markerIconYellow = L.icon({
         iconUrl: 'assets/images/marker-icon-yellow.svg',
         iconSize: [36, 36],
