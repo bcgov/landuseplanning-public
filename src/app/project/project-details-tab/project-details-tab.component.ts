@@ -8,6 +8,8 @@ import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Document } from 'app/models/document';
+import { CommentsResolver } from '../comments/comments-resolver.service';
+import * as _ from 'lodash';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
@@ -29,6 +31,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
   private ngbModal: NgbModalRef = null;
   public shapefile: Document[] = [];
+  public pathAPI: string;
 
   constructor(
     private storageService: StorageService,
@@ -44,13 +47,17 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.commentPeriod = this.project.commentPeriodForBanner;
     this.route.data.subscribe((res: any) => {
       if (res) {
-        if (res.shapefile && res.shapefile[0].data.meta && res.shapefile[0].data.meta.length > 0) {
-          this.shapefile = res.shapefile[0].data.searchResults;
+        if (res.documents && res.documents[0].data.meta && res.documents[0].data.meta.length > 0) {
+          this.shapefile = res.documents[0].data.searchResults;
         } else {
           this.shapefile = [];
         }
       }
     });
+    // The following items are loaded by a file that is only present on cluster builds.
+    // Locally, this will be empty and local defaults will be used.
+    const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
+    this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
   }
 
   ngAfterViewInit() {
@@ -156,7 +163,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     if (this.shapefile[0] && this.shapefile[0].documentFileName && this.shapefile[0].documentFileName.length > 0) {
       console.log('Shapefile', this.shapefile);
       const escapedName = encode(this.shapefile[0].documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-      const shapeurl = '/api/document/' + this.shapefile[0]._id + '/fetch/' + escapedName;
+      const shapeurl = this.pathAPI + '/document/' + this.shapefile[0]._id + '/fetch/' + escapedName;
       const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false });
       let shapefileBounds = window.setInterval(function () {
         if (shapefile.getBounds().isValid() === true) {
@@ -166,6 +173,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       }.bind(this), 500);
       shapefile.addTo(this.map);
     } else if (this.project) {
+      console.log('No shapefille!', this.shapefile[0]);
       const markerIconYellow = L.icon({
         iconUrl: 'assets/images/marker-icon-yellow.svg',
         iconSize: [36, 36],
