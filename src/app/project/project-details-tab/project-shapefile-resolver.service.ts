@@ -23,7 +23,7 @@ export class ShapeFileResolver implements Resolve<Observable<object>> {
       currentPage,
       pageSize,
       sortBy,
-      {},
+      { documentSource: 'SHAPEFILE' }, // Only look for shapefiles so we are not needlessly parsing through images or other documents.
       true);
   }
 }
