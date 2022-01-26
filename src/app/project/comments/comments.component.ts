@@ -101,13 +101,13 @@ export class CommentsComponent implements OnInit, OnDestroy {
           if (data.commentPeriod) {
             // To fix the issue where the last page is empty.
             this.commentPeriod = data.commentPeriod;
-            console.log('Comment Period info', this.commentPeriod);
+            const engagementLabel = this.project.engagementLabel ? this.project.engagementLabel : 'Public Comment Period';
             if (this.commentPeriod.commentPeriodStatus === 'Closed') {
-              this.commentPeriodHeader = 'Public Comment Period is Now Closed';
+              this.commentPeriodHeader = `${engagementLabel} is now closed`;
             } else if (this.commentPeriod.commentPeriodStatus === 'Pending') {
-              this.commentPeriodHeader = 'Public Comment Period is Pending';
+              this.commentPeriodHeader = `${engagementLabel} is pending`;
             } else if (this.commentPeriod.commentPeriodStatus === 'Open') {
-              this.commentPeriodHeader = 'Public Comment Period is Now Open';
+              this.commentPeriodHeader = `${engagementLabel} is now open`;
             }
 
             if (this.commentPeriod.relatedDocuments && this.commentPeriod.relatedDocuments.length > 0) {

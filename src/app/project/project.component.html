@@ -2,7 +2,6 @@
   <main class="project-info">
     <div class="hero-banner-alt" [ngStyle]="{backgroundImage: getBannerURL() }">
       <div class="hero-banner__container">
-
         <div class="container">
           <div class="hero-banner__content">
             <h1 tabindex="-1">{{project?.name || '-'}}</h1>
@@ -42,7 +41,7 @@
       <div class="m-3 py-3">
         <div class="row">
           <div class="col-md-6">
-            <h2 class="mb-0">Public Comment Period is {{project.commentPeriodForBanner.commentPeriodStatus}}</h2>
+            <h2 class="mb-0">{{project?.engagementLabel || 'Public Comment Period'}} is {{project.commentPeriodForBanner.commentPeriodStatus}}</h2>
             <h5>{{project.commentPeriodForBanner.dateStarted | date: 'MMMM d'}} -
               {{project.commentPeriodForBanner.dateCompleted | date: 'longDate'}}</h5>
           </div>
@@ -60,7 +59,7 @@
         <div class="row">
           <div class="col-md-12">
             <p *ngIf="project.commentPeriodForBanner.informationLabel" class="mb-0">
-              This Public Comment Period is regarding the <b>{{project.commentPeriodForBanner.informationLabel}}</b>
+              This {{project?.engagementLabel || 'Public Comment Period'}} is regarding the <b>{{project.commentPeriodForBanner.informationLabel}}</b>
             </p>
             <p *ngIf="project.commentPeriodForBanner.informationLabel == null" class="mb-0">
               {{project.commentPeriodForBanner.instructions}}

@@ -9,23 +9,32 @@ import * as _ from 'lodash';
 
 import { Project } from 'app/models/project';
 import { ApiService } from './api';
-import { CommentPeriodService } from './commentperiod.service';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Org } from 'app/models/organization';
-import { SearchResults } from 'app/models/search';
 
 @Injectable()
 export class ProjectService {
   private project: Project = null; // for caching
   private projectList: Project[] = [];
 
-
   constructor(
     private api: ApiService,
-    private commentPeriodService: CommentPeriodService,
   ) { }
 
-  // get just the projects (for fast mapping)
+  /**
+   * Get just the projects (for fast mapping).
+   *
+   * @param {number} pageNum
+   * @param {number} pageSize
+   * @param {object} regionFilters
+   * @param {object} cpStatusFilters
+   * @param {object} appStatusFilters
+   * @param {string|null} applicantFilter
+   * @param {string|null} clFileFilter
+   * @param {string|null} dispIdFilter
+   * @param {string|null} purposeFilter
+   * @returns {Observable}
+   */
   getAll(pageNum: number = 0, pageSize: number = 1000000, regionFilters: object = {}, cpStatusFilters: object = {}, appStatusFilters: object = {},
     applicantFilter: string = null, clFileFilter: string = null, dispIdFilter: string = null, purposeFilter: string = null): Observable<Project[]> {
     const regions: Array<string> = [];
@@ -51,15 +60,33 @@ export class ProjectService {
       .catch(this.api.handleError);
   }
 
-  // get count of projects
+  /**
+   * Get number of projects.
+   *
+   * @returns {Observable}
+   */
   getCount(): Observable<number> {
     return this.api.getCountProjects()
       .catch(error => this.api.handleError(error));
   }
 
-  // get all projects and related data
-  // TODO: instead of using promises to get all data at once, use observables and DEEP-OBSERVE changes
-  // see https://github.com/angular/angular/issues/11704
+  /**
+   * Get all projects and related data.
+   *
+   * @todo instead of using promises to get all data at once, use observables and DEEP-OBSERVE changes.
+   * @see https://github.com/angular/angular/issues/11704
+   *
+   * @param {number} pageNum
+   * @param {number} pageSize
+   * @param {object} regionFilters
+   * @param {object} cpStatusFilters
+   * @param {object} appStatusFilters
+   * @param {string|null} applicantFilter
+   * @param {string|null} clFileFilter
+   * @param {string|null} dispIdFilter
+   * @param {string|null} purposeFilter
+   * @returns {Observable}
+   */
   getAllFull(pageNum: number = 0, pageSize: number = 1000000, regionFilters: object = {}, cpStatusFilters: object = {}, appStatusFilters: object = {},
     applicantFilter: string = null, clFileFilter: string = null, dispIdFilter: string = null, purposeFilter: string = null): Observable<Project[]> {
     // first get the projects
@@ -68,24 +95,27 @@ export class ProjectService {
         if (projects.length === 0) {
           return Observable.of([] as Project[]);
         }
-
         const promises: Array<Promise<any>> = [];
-
-        projects.forEach((project) => {
-          // Set relevant things here
-        });
 
         return Promise.all(promises).then(() => { return projects; });
       })
       .catch(this.api.handleError);
   }
 
-  // get a specific project by its id
+  /**
+   * Get project by ID.
+   *
+   * @param {string} projId
+   * @param {boolean} forceReload
+   * @param {string|null} cpStart
+   * @param {string|null} cpEnd
+   * @returns {Observable}
+   */
   getById(projId: string, forceReload: boolean = false, cpStart: string = null, cpEnd: string = null): Observable<Project> {
     if (this.project && this.project._id === projId && !forceReload) {
       return Observable.of(this.project);
     }
-    // first get the project
+    // First get the project.
     return this.api.getProject(projId, cpStart, cpEnd)
       .map(projects => {
         if (projects[0].commentPeriodForBanner && projects[0].commentPeriodForBanner.length > 0) {
@@ -93,12 +123,21 @@ export class ProjectService {
         } else {
           projects[0].commentPeriodForBanner = null;
         }
-        // return the first (only) project
+        // Return the first (only) project.
         return projects.length > 0 ? new Project(projects[0]) : null;
       })
       .catch(this.api.handleError);
   }
 
+  /**
+   * Get project pins.
+   *
+   * @param {string} proj
+   * @param {number} pageNum
+   * @param {number} pageSize
+   * @param {any} sortBy
+   * @returns {Observable}
+   */
   getPins(proj: string, pageNum: number, pageSize: number, sortBy: any): Observable<Org> {
     return this.api.getProjectPins(proj, pageNum, pageSize, sortBy)
     .catch(error => this.api.handleError(error));

@@ -1,12 +1,13 @@
-
 export class Project {
-  // the following are retrieved from the API
+  // the following are retrieved from the API.
   _id: string;
   existingLandUsePlans: String;
   centroid: Array<number> = [];
   description: String;
+  details: String;
   engagementStatus: String;
   backgroundInfo: String;
+  engagementLabel: String;
   engagementInfo: String;
   documentInfo: String;
   overlappingRegionalDistricts: String;
@@ -57,8 +58,10 @@ export class Project {
     this.nature = obj && obj.nature || null;
     this.existingLandUsePlans = obj && obj.existingLandUsePlans || null;
     this.description = obj && obj.description || null;
+    this.details = obj && obj.details || null;
     this.engagementStatus = obj && obj.engagementStatus || null;
     this.backgroundInfo = obj && obj.backgroundInfo || null;
+    this.engagementLabel = obj && obj.engagementLabel || null;
     this.engagementInfo = obj && obj.engagementInfo || null;
     this.documentInfo = obj && obj.documentInfo || null;
     this.overlappingRegionalDistricts = obj && obj.overlappingRegionalDistricts || null;
