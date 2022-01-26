@@ -1,53 +1,8 @@
 <div class="tab-pane" role="tabpanel">
   <section class="tab-section">
     <div class="row">
-      <div class="col-6">
-        <div class="location-info">
-          <h2>Details</h2>
-          <div>
-            <label>Region</label>
-            <p class="value">{{project?.region || "-" }}</p>
-          </div>
-          <div>
-            <label>Regional Districts</label>
-            <p class="value">{{ overlappingDistrictsListString || "-" }}</p>
-          </div>
-          <div *ngIf="project?.projectPhase">
-            <label>Project Phase</label>
-            <p class="value">{{project?.projectPhase || "-"}}</p>
-          </div>
-          <label>Existing Provincial Land Use Plan(s)</label>
-          <div *ngIf="multipleExistingPlans else singleExistingPlan">
-            <p class="value" *ngIf="project.existingLandUsePlans.length === 0">-</p>
-            <div *ngFor="let existingPlan of project.existingLandUsePlans; let i=index">
-              <div *ngIf="existingPlan.existingLandUsePlan && existingPlan.existingLandUsePlanURL else noPlanURL">
-                <p class="value"><a *ngIf="true" class="value clickable" target="_blank"
-                  href="{{existingPlan.existingLandUsePlanURL}}">{{existingPlan.existingLandUsePlan || "-" }}</a>
-                </p>
-              </div>
-              <ng-template #noPlanURL>
-                <div *ngIf="existingPlan.existingLandUsePlan">
-                  <p class="value">{{existingPlan.existingLandUsePlan || "-" }}</p>
-                </div>
-              </ng-template>
-            </div>
-          </div>
-          <ng-template #singleExistingPlan>
-            <div *ngIf="project.existingLandUsePlanURLs && project.existingLandUsePlans; else noPlanURL">
-              <p class="value"><a *ngIf="project.existingLandUsePlanURLs" class="value" target="_blank"
-                href="{{project.existingLandUsePlanURLs}}">{{project.existingLandUsePlans || "-" }}</a>
-              </p>
-            </div>
-            <ng-template #noPlanURL>
-              <div *ngIf="project?.existingLandUsePlans">
-                <p class="value">{{project?.existingLandUsePlans || "-" }}</p>
-              </div>
-            </ng-template>
-          </ng-template>
-        </div>
-      </div>
-      <div class="col-6">
-              <div class="map-item">
+      <div class="col-12">
+        <div class="map-item">
           <div class="map-wrapper">
             <div class="map-item__no-results" *ngIf="!project.centroid || project.centroid.length != 2">
               <span class="no-results-msg">No map available</span>
@@ -57,6 +12,11 @@
             </section>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row project-details-text">
+      <div class="col-12">
+        <p [innerHTML]="project?.details"></p>
       </div>
     </div>
     <br>
