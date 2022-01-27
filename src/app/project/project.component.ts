@@ -30,7 +30,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     { label: 'Engagement', link: 'commenting' },
     { label: 'Documents', link: 'documents' },
     { label: 'Project Phase', link: 'project-phase' },
-    // { label: 'Participating Indigenous Nations', link: 'pins' }
   ];
 
   public project: Project = null;
@@ -68,9 +67,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
             this.renderer.removeClass(document.body, 'no-scroll');
             this.bannerImage = data.projectAndBanner[1][0].data.searchResults[0];
-
-            console.log('banner', this.bannerImage);
-
             // The following items are loaded by a file that is only present on cluster builds.
             // Locally, this will be empty and local defaults will be used.
             const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');

@@ -190,10 +190,14 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.fixMap();
   }
 
-  // to avoid timing conflict with animations (resulting in small map tile at top left of page),
-  // ensure map component is visible in the DOM then update it; otherwise wait a bit...
-  // ref: https://github.com/Leaflet/Leaflet/issues/4835
-  // ref: https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+  /**
+   * To avoid timing conflict with animations (resulting in small map tile at top left of page),
+   * ensure map component is visible in the DOM then update it; otherwise wait a bit...
+   *
+   * @see https://github.com/Leaflet/Leaflet/issues/4835
+   * @see https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+   * @returns {undefined}
+   */
   private fixMap() {
     if (this.elementRef.nativeElement.offsetParent) {
       this.fitBounds(this.appFG.getBounds());
@@ -202,6 +206,12 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  /**
+   * Return string of overlapping districts.
+   *
+   * @param {string|array} districts
+   * @returns {string}
+   */
   stringifyOverlappingDistricts(districts: string | string[]): string {
     let overlappingDistrictsListString: string;
     if (Array.isArray(districts) === true ) {
@@ -212,6 +222,12 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     return overlappingDistrictsListString;
   }
 
+  /**
+   * Fits bounds of leaflet map.
+   *
+   * @param {L.LatLngBounds|null} bounds
+   * @returns {undefined}
+   */
   public fitBounds(bounds: L.LatLngBounds = null) {
     const fitBoundsOptions: L.FitBoundsOptions = {
       // disable animation to prevent known bug where zoom is sometimes incorrect
