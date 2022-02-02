@@ -7,8 +7,8 @@
 }
 
 .banner {
-  background-color: #003366;
-  color: white;
+  background-color: $primary;
+  color: #fff;
 }
 
 .project {
@@ -23,10 +23,10 @@
   .hero-banner-alt {
     background-size: cover;
     background-position: center;
-    background-color: #001330;
+    background-color: $primary;
 
     .hero-banner__container {
-      background-color: #00409e8f;
+      background-color: rgba($primary, 0.56);
       margin: 0;
       padding: 0 4rem;
       width: 111%;
@@ -93,7 +93,7 @@
       .engagement-status {
         font-size: 1rem;
         padding: 10px;
-        border: 2px solid white;
+        border: 2px solid #fff;
       }
     }
 
@@ -146,12 +146,8 @@
       margin: 0.2rem 0;
     }
 
-    .agreement {
-
-    }
-
     .agreement-link {
-      color: white;
+      color: #fff;
       text-decoration: underline;
 
       &:hover {
@@ -198,7 +194,7 @@
       padding: 35px 40px 40px;
       h2 {
         background: #fff;
-        color: #003364;
+        color: $primary;
         @media (min-width: 991px) {
           padding: 0 8px;
           position: absolute;
@@ -249,8 +245,8 @@
     }
   }
   section.people {
-    background: #3C6186;
-    color: white;
+    background: $primary;
+    color: #fff;
 
     a {
       color: #FED262;
@@ -278,16 +274,6 @@
     }
   }
 }
-
-// :after {
-//   content: '';
-//   width: 100%;
-//   top: 0;
-//   right: 0;
-//   height: 100%;
-//   background: #136bc378;
-//   z-index: 999;
-// }
 
 @media (max-width: 991px) {
   .project {

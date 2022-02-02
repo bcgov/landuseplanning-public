@@ -4,38 +4,40 @@
 
 <main *ngIf="!loading">
   <div class="hero-banner">
-    <div class="container">
-      <div class="hero-banner__content">
-        <h1 tabindex="-1">List of projects</h1>
-        <p>Use the list below to navigate to individual project pages. Only active land use planning projects in B.C. are listed.
-        Additional land use planning projects will be added to the list as they are initiated. Visit the B.C. government's <a class="hero-link" aria-label="Visit the B.C. Government's Land Use Plans webpage." href="https://www2.gov.bc.ca/gov/content/industry/crown-land-water/land-use-planning/regions">Land
-        Use Plans</a> webpage to access all completed provincial land use plans.</p>
-      </div>
-      <label class="instructions instructions__white" for="keywordInput">Search projects by title.</label>
-      <form #f="ngForm" class="search-form ui form" (ngSubmit)="onSubmit()">
-        <div class="search-area">
-          <div class="input-group main-search-field">
-            <input class="form-control" type="text" name="keywordInput"
-              id="keywordInput" [(ngModel)]="tableParams.keywords" autofocus />
-            <div *ngIf="!showAdvancedSearch || !isShowingFilter()" class="input-group-append">
-              <!-- prevent searching if input is empty or we're already searching -->
-              <button class="btn btn-main" type="submit">
-                <span>Search</span>
-              </button>
+    <div class="hero-banner__container">
+      <div class="container">
+        <div class="hero-banner__content">
+          <h1 tabindex="-1">List of projects</h1>
+          <p>Use the list below to navigate to individual project pages. Only active land use planning projects in B.C. are listed.
+          Additional land use planning projects will be added to the list as they are initiated. Visit the B.C. government's <a class="hero-link" aria-label="Visit the B.C. Government's Land Use Plans webpage." href="https://www2.gov.bc.ca/gov/content/industry/crown-land-water/land-use-planning/regions">Land
+          Use Plans</a> webpage to access all completed provincial land use plans.</p>
+        </div>
+        <label class="instructions instructions__white" for="keywordInput">Search projects by title.</label>
+        <form #f="ngForm" class="search-form ui form" (ngSubmit)="onSubmit()">
+          <div class="search-area">
+            <div class="input-group main-search-field">
+              <input class="form-control" type="text" name="keywordInput"
+                id="keywordInput" [(ngModel)]="tableParams.keywords" autofocus />
+              <div *ngIf="!showAdvancedSearch || !isShowingFilter()" class="input-group-append">
+                <!-- prevent searching if input is empty or we're already searching -->
+                <button class="btn btn-main" type="submit">
+                  <span>Search</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="instructions instructions__white">You can also <a class="hero-link" routerLink="/projects">go to map view of projects.</a></div>
-        <br>
-        <div class="results">
-          <p *ngIf="!loading && tableParams.totalListItems == 0">
-            No result<span *ngIf="count != 1">s</span> found for "{{tableParams.keywords}}"
-          </p>
-          <div *ngIf="!loading && tableParams.totalListItems > 0">
-            {{tableParams.totalListItems}} result<span *ngIf="tableParams.totalListItems != 1">s found</span>
+          <div class="instructions instructions__white">You can also <a class="hero-link" routerLink="/projects">go to map view of projects.</a></div>
+          <br>
+          <div class="results">
+            <p *ngIf="!loading && tableParams.totalListItems == 0">
+              No result<span *ngIf="count != 1">s</span> found for "{{tableParams.keywords}}"
+            </p>
+            <div *ngIf="!loading && tableParams.totalListItems > 0">
+              {{tableParams.totalListItems}} result<span *ngIf="tableParams.totalListItems != 1">s found</span>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 

@@ -58,12 +58,12 @@
     height: 60px;
     padding-top: 0.25rem;
     border-radius: 30px;
-    border: 4px solid #3979b4;
+    border: 4px solid $primary;
     text-align: center;
     font-size: 32px !important;
 
     i {
-      color: #3979b4;
+      color: $primary;
       font-size: 32px;
     }
   }

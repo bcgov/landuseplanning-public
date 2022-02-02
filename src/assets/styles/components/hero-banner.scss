@@ -8,6 +8,19 @@
   background-size: 350%;
   box-shadow: 0 0 4rem #00264d inset;
 
+  /*.hero-banner {
+  background-size: cover;
+  background-position: center;
+  background-color: $primary;*/
+
+  .hero-banner__container {
+    background-color: rgba($primary, 0.56);
+    margin: 0;
+    padding: 0 4rem;
+    width: 111%;
+    max-width: 100%;
+  }
+
   .container {
     min-height: 20rem;
     @media (max-width: 767px) {
@@ -106,7 +119,7 @@
 
     &:hover,
     &:focus {
-      color: #036;
+      color: #fff;
     }
 
     + span {
