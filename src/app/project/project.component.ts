@@ -118,7 +118,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private getFileSourceUrl(file: Document | ProjectLogo): string {
     let sourceUrl;
-    if ("_id" in file) {
+    if ('_id' in file) {
       sourceUrl = `${this.pathAPI}/document/${file._id}/fetch/${file.documentFileName.replace(/ /g, '_')}`;
     } else {
       sourceUrl = `${this.pathAPI}/document/${file.document}/fetch/${file.name.replace(/ /g, '_')}`;

@@ -166,7 +166,7 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
       this.chooseArray[index]--
     }
     if (question.choose) {
-      if (this.chooseArray[index] == question.choose) {
+      if (this.chooseArray[index] === question.choose) {
         this.surveyResponseForm.controls.responses.controls[index].setErrors(null);
         console.log('errors nullified')
       } else {
