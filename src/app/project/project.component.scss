@@ -30,6 +30,23 @@
       margin: 0;
       width: 111%;
       max-width: 100%;
+
+      .project-logos {
+        padding: 0;
+        list-style-type: none;
+        display: flex;
+
+        li {
+          margin-right: 1rem;
+
+          a {
+            img {
+              max-height: 90px;
+              width: auto;
+            }
+          }
+        }
+      }
     }
 
     h1 {

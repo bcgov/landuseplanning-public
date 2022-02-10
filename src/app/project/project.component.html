@@ -5,6 +5,13 @@
         <div class="container">
           <div class="hero-banner__content">
             <h1 tabindex="-1">{{project?.name || '-'}}</h1>
+            <ul *ngIf="projectLogosWithSource" class="project-logos">
+              <li *ngFor="let logo of projectLogosWithSource">
+                <a [attr.href]="logo.link ? logo.link : null">
+                  <img [src]="logo.source" [alt]="logo.alt"/>
+                </a>
+              </li>
+            </ul>
             <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
             <div class="basic-info">
               <div class="partner-nations">
