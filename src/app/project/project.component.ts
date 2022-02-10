@@ -5,7 +5,8 @@ import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Project } from 'app/models/project';
+import { Project, ProjectLogo, ProjectLogoWithSource } from 'app/models/project';
+import { Document } from 'app/models/document';
 import { Survey } from 'app/models/survey';
 import { CommentPeriod } from 'app/models/commentperiod';
 
@@ -33,6 +34,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   public project: Project = null;
+  public projectLogosWithSource: ProjectLogoWithSource[];
   public period: CommentPeriod = null;
   public appHeader: HTMLHeadingElement;
   private ngbModal: NgbModalRef = null;
@@ -61,7 +63,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         (data) => {
-          console.log('data', data)
           if (data.projectAndBanner) {
             this.project = data.projectAndBanner[0];
             this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
@@ -73,8 +74,19 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
             if (this.bannerImage) {
-              const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
-              this.bannerImageSrc = `${this.pathAPI}/document/${this.bannerImage._id}/fetch/${safeName}`;
+              this.bannerImageSrc = this.getFileSourceUrl(this.bannerImage);
+            }
+
+            if (this.project.logos.length) {
+              this.projectLogosWithSource = this.project.logos.map(logo => {
+                return {
+                  document: logo.document,
+                  name: logo.name,
+                  alt: logo.alt,
+                  link: logo.link,
+                  source: this.getFileSourceUrl(logo)
+                }
+              })
             }
             this._changeDetectionRef.detectChanges();
           } else {
@@ -95,6 +107,23 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getBannerURL() {
     return this.bannerImageSrc ? `url(${this.bannerImageSrc})` : '';
+  }
+
+  /**
+   * Get a URL of where the file can be found so it can be used as an
+   * image source tag, background url, etc.
+   *
+   * @param file File to get the URL for.
+   * @returns The URL of the file.
+   */
+  private getFileSourceUrl(file: Document | ProjectLogo): string {
+    let sourceUrl;
+    if ("_id" in file) {
+      sourceUrl = `${this.pathAPI}/document/${file._id}/fetch/${file.documentFileName.replace(/ /g, '_')}`;
+    } else {
+      sourceUrl = `${this.pathAPI}/document/${file.document}/fetch/${file.name.replace(/ /g, '_')}`;
+    }
+    return sourceUrl;
   }
 
   public addComment() {
