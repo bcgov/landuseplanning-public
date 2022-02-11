@@ -6,6 +6,7 @@ export class Project {
   description: String;
   details: String;
   engagementStatus: String;
+  logos: ProjectLogo[];
   backgroundInfo: String;
   engagementLabel: String;
   engagementInfo: String;
@@ -60,6 +61,7 @@ export class Project {
     this.description = obj && obj.description || null;
     this.details = obj && obj.details || null;
     this.engagementStatus = obj && obj.engagementStatus || null;
+    this.logos = obj && obj.logos || null;
     this.backgroundInfo = obj && obj.backgroundInfo || null;
     this.engagementLabel = obj && obj.engagementLabel || null;
     this.engagementInfo = obj && obj.engagementInfo || null;
@@ -96,37 +98,22 @@ export class Project {
     this.write = obj && obj.write || null;
     this.delete = obj && obj.delete || null;
 
-    // if (obj && obj.publishDate) {
-    //   this.publishDate = new Date(obj.publishDate);
-    // }
-
-    // // replace \\n (JSON format) with newlines
-    // if (obj && obj.description) {
-    //   this.description = obj.description.replace(/\\n/g, '\n');
-    // }
-    // if (obj && obj.legalDescription) {
-    //   this.legalDescription = obj.legalDescription.replace(/\\n/g, '\n');
-    // }
-
     // copy centroid
     if (obj && obj.centroid) {
       obj.centroid.forEach(num => {
         this.centroid.push(num);
       });
     }
-
-    // // copy documents
-    // if (obj && obj.documents) {
-    //   for (const doc of obj.documents) {
-    //     this.documents.push(doc);
-    //   }
-    // }
-
-    // // copy features
-    // if (obj && obj.features) {
-    //   for (const feature of obj.features) {
-    //     this.features.push(feature);
-    //   }
-    // }
   }
+}
+
+export interface ProjectLogo {
+  document: string;
+  name: string;
+  alt: string;
+  link: string;
+}
+
+export interface ProjectLogoWithSource extends ProjectLogo {
+  source: string;
 }
