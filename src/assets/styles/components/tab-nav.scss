@@ -1,37 +1,4 @@
 .nav-tabs {
-    @include flex-flow(row wrap);
-    border-bottom: none;
-
-    .nav-link {
-        padding: 0.75rem 0.2rem;
-        border: none;
-        background: $tab-sm-bg;
-        text-align: center;
-        // text-transform: uppercase;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all ease-in 0.2s;
-    }
-}
-
-// @media (max-width: 767px) {
-//     .nav-tabs {
-//         margin: -0.15rem;
-
-//         .nav-link {
-//             margin: 0.15rem;
-//             border-radius: 0;
-
-//             &.active {
-//                 color: $tab-sm-active-color;
-//                 background-color: $tab-sm-active-bg;
-//             }
-//         }
-//     }
-// }
-
-
-.nav-tabs {
     @include flex-flow(row nowrap);
     margin-bottom: 2.5rem;
     border-bottom: 2px solid $tab-nav-border-color;
@@ -50,7 +17,9 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         background-color: transparent;
-        font-size: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        transition: all ease-in 0.2s;
 
         &:hover {
             background-color: $tab-hover-bg;
