@@ -1,5 +1,6 @@
 ### 1.1.1 February 11, 2022
 * Added OpenShift templates for the Public pipeline
+* Added Github action for tests and linting
 
 ### 1.1.0 January 26, 2022
 * Remove unnecessary console.log calls
