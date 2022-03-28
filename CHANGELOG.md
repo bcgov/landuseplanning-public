@@ -1,3 +1,6 @@
+### 1.1.2 March 28, 2022
+* Replace deprecated node-sass with sass library [DESENG-93](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-93)
+
 ### 1.1.1 February 11, 2022
 * Added OpenShift templates for the Public pipeline
 * Added Github action for tests and linting
