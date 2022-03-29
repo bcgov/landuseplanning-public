@@ -1,3 +1,6 @@
+### 1.1.3 March 28, 2022
+* Fix karma error when running tests [DESENG-92](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-92)
+
 ### 1.1.2 March 28, 2022
 * Replace deprecated node-sass with sass library [DESENG-93](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-93)
 
