@@ -23,7 +23,7 @@ export class DocumentsResolver implements Resolve<Observable<object>> {
       currentPage,
       pageSize,
       sortBy,
-      { documentSource: 'PROJECT' },
+      { internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' },
       true);
   }
 }
