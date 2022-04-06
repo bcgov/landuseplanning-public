@@ -1,3 +1,7 @@
+### 1.1.4 April 6, 2022
+* Remove background info tab heading [DESENG-109](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-109)
+* Only load documents on the documents project tab [DESENG-103](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-103)
+
 ### 1.1.3 March 28, 2022
 * Fix karma error when running tests [DESENG-92](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-92)
 

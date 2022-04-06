@@ -1,7 +1,6 @@
 <div class="tab-pane" role="tabpanel">
     <section class="tab-section" *ngIf="project">
         <div *ngIf="project.backgroundInfo">
-            <h2>Background Information</h2>
             <div class="mb-3 tab-section-text" [innerHTML]="project.backgroundInfo | newlines"></div>
         </div>
     </section>
