@@ -1,0 +1,16 @@
+.project-details-text, .tab-pane {
+  // Figure/image styles taken from ckeditor styles.
+  figure.image {
+    position: relative;
+
+    &.image-style-side {
+      float: right;
+      margin-left: 1.5em;
+      max-width: 50%;
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+}

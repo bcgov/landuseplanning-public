@@ -1,3 +1,6 @@
+### 1.1.5 April 7, 2022
+* Wrapped image not showing correctly on public [DESENG-108](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-108)
+
 ### 1.1.4 April 6, 2022
 * Remove background info tab heading [DESENG-109](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-109)
 * Only load documents on the documents project tab [DESENG-103](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-103)
