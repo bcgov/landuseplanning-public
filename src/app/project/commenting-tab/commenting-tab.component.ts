@@ -47,7 +47,6 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
         (data) => {
           if (data.projectAndBanner[0]) {
             this.currentProject = data.projectAndBanner[0];
-            console.log('lol', this.currentProject.engagementInfo)
             this.currentProjectEngagementInfo = this.domSanitizer.bypassSecurityTrustHtml(this.currentProject.engagementInfo);
             this.getCommentPeriods(data.projectAndBanner[0]._id);
           } else {
