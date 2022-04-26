@@ -3,6 +3,7 @@ import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 import { Project } from 'app/models/project';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
@@ -25,16 +26,17 @@ import { CommentPeriod } from 'app/models/commentperiod';
 })
 export class CommentingTabComponent implements OnInit, OnDestroy {
   public currentProject: Project = null;
+  public currentProjectEngagementInfo: SafeHtml;
   public loading = true;
   public commentPeriods: Array<CommentPeriod> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public commentPeriodService: CommentPeriodService, // used in template
-    private _changeDetectionRef: ChangeDetectorRef
+    private _changeDetectionRef: ChangeDetectorRef,
+    private domSanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -45,6 +47,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
         (data) => {
           if (data.projectAndBanner[0]) {
             this.currentProject = data.projectAndBanner[0];
+            this.currentProjectEngagementInfo = this.domSanitizer.bypassSecurityTrustHtml(this.currentProject.engagementInfo);
             this.getCommentPeriods(data.projectAndBanner[0]._id);
           } else {
             alert('Uh-oh, couldn\'t load project');

@@ -47,7 +47,7 @@ export class CommentPeriod {
   userCan: String;
   vettedPercent: Number;
   vettingRoles: String;
-  commentPeriodInfo: String;
+  commentPeriodInfo: string;
 
   // Permissions
   read: Array<String> = [];
@@ -55,7 +55,7 @@ export class CommentPeriod {
   delete: Array<String> = [];
 
   // Not from API
-  commentPeriodStatus: String;
+  commentPeriodStatus: string;
   daysRemaining: String;
 
   constructor(obj?: any) {

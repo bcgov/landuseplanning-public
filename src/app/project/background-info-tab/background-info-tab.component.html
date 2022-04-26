@@ -1,7 +1,7 @@
 <div class="tab-pane" role="tabpanel">
     <section class="tab-section" *ngIf="project">
         <div *ngIf="project.backgroundInfo">
-            <div class="mb-3 tab-section-text" [innerHTML]="project.backgroundInfo | newlines"></div>
+            <div class="mb-3 tab-section-text ck-content" [innerHTML]="currentProjectBackgroundInfo"></div>
         </div>
     </section>
 </div>

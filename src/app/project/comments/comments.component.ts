@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
@@ -42,6 +43,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public bannerImage;
   public bannerImageSrc: string;
   public pathAPI: string;
+  public commentPeriodInfo: SafeHtml;
 
   public commentTableData: TableObject;
   public commentPeriodHeader: String;
@@ -63,7 +65,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
     private _changeDetectionRef: ChangeDetectorRef,
     private modalService: NgbModal,
     private router: Router,
-    private tableTemplateUtils: TableTemplateUtils
+    private tableTemplateUtils: TableTemplateUtils,
+    private domSanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -101,6 +104,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
           if (data.commentPeriod) {
             // To fix the issue where the last page is empty.
             this.commentPeriod = data.commentPeriod;
+            this.commentPeriodInfo = this.domSanitizer.bypassSecurityTrustHtml(this.commentPeriod.commentPeriodInfo);
             const engagementLabel = this.project.engagementLabel ? this.project.engagementLabel : 'Public Comment Period';
             if (this.commentPeriod.commentPeriodStatus === 'Closed') {
               this.commentPeriodHeader = `${engagementLabel} is now closed`;

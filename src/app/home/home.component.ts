@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { SearchService } from 'app/services/search.service';
 import { Subject } from 'rxjs';
 import { News } from 'app/models/news'
@@ -15,7 +16,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private _changeDetectionRef: ChangeDetectorRef,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public domSanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {

@@ -41,7 +41,7 @@
                   <span class="title-container__date">{{item.dateAdded | date:'longDate'}}</span>
                 </div>
                 <div class="activity-feed__content">
-                  <div class="activity-content" [innerHTML]="item.content"></div>
+                  <div class="activity-content ck-content" [innerHTML]="domSanitizer.bypassSecurityTrustHtml(item.content)"></div>
                 </div>
                 <div class="activity-feed__actions">
                   <a class="btn btn-sm content-btn-alt" title="View more information about {{item.project.name}}"

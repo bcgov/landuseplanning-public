@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 import { Project, ProjectLogo, ProjectLogoWithSource } from 'app/models/project';
 import { Document } from 'app/models/document';
@@ -34,6 +35,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   public project: Project = null;
+  public projectDescription: SafeHtml;
   public projectLogosWithSource: ProjectLogoWithSource[];
   public period: CommentPeriod = null;
   public appHeader: HTMLHeadingElement;
@@ -51,10 +53,11 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private _changeDetectionRef: ChangeDetectorRef,
     private renderer: Renderer2,
+    private domSanitizer: DomSanitizer,
     public configService: ConfigService,
     public projectService: ProjectService, // used in template
     public commentPeriodService: CommentPeriodService, // used in template
-    public surveyService: SurveyService
+    public surveyService: SurveyService,
   ) { }
 
   ngOnInit() {

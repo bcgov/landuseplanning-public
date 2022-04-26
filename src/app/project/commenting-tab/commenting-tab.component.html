@@ -5,7 +5,7 @@
 
     <section class="tab-section" *ngIf="!loading">
         <div class="tab-section-text" *ngIf="currentProject.engagementInfo">
-            <div class="mb-3" [innerHTML]="currentProject.engagementInfo | newlines"></div>
+            <div class="mb-3 ck-content" [innerHTML]="currentProjectEngagementInfo"></div>
         </div>
         <div *ngIf="commentPeriods.length < 1">
             No comment periods are currently scheduled for this project.

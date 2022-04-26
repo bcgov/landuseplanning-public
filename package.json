@@ -1,6 +1,6 @@
 {
   "name": "base-app",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
@@ -55,6 +55,7 @@
     "popper.js": "^1.14.1",
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.5.2",
+    "sanitize-html": "^2.7.0",
     "sass": "^1.49.9",
     "shpjs": "^3.4.3",
     "web-animations-js": "^2.3.1",

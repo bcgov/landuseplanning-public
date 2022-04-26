@@ -77,7 +77,7 @@
   </div>
   <div *ngIf="!loading" class="container comments mt-3">
     <div *ngIf="commentPeriod.commentPeriodInfo">
-      <div class="mb-3" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
+      <div class="mb-3 ck-content" [innerHTML]="commentPeriodInfo"></div>
     </div>
     <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">
       <p class="table-instructions">Click on a document to download it.</p>
