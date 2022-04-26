@@ -1,3 +1,6 @@
+### 1.1.6 April 25, 2022
+* Wrapped image not showing correctly on public [DESENG-117](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-117)
+
 ### 1.1.5 April 7, 2022
 * Wrapped image not showing correctly on public [DESENG-108](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-108)
 

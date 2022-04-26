@@ -1,5 +1,6 @@
 import { Component, Input, Renderer2, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, FormArray } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { FormArray } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -15,10 +16,8 @@ import { SurveyBuilderService } from 'app/services/surveyBuilder.service';
 import * as moment from 'moment-timezone';
 import { Project } from 'app/models/project';
 import { Survey } from 'app/models/survey';
-import { SurveyQuestion } from 'app/models/surveyQuestion';
 import { SurveyResponse } from 'app/models/surveyResponse';
 import { ConfigService } from 'app/services/config.service';
-import { mergeAnalyzedFiles } from '@angular/compiler';
 
 @Component({
   selector: 'app-add-survey-response',
@@ -69,6 +68,7 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
     private surveyBuilderService: SurveyBuilderService,
     private documentService: DocumentService,
     private config: ConfigService,
+    public domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {

@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 import { Document } from 'app/models/document';
 import { SearchTerms } from 'app/models/search';
@@ -27,15 +28,11 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   public terms = new SearchTerms();
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   public documents: Document[] = null;
+  public currentProjectDocumentInfo: SafeHtml;
   public loading = true;
 
   public documentTableData: TableObject;
   public documentTableColumns: any[] = [
-    // {
-    //   name: '',
-    //   value: 'check',
-    //   width: 'col-1'
-    // },
     {
       name: 'Document',
       value: 'displayName',
@@ -67,6 +64,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private storageService: StorageService,
     private tableTemplateUtils: TableTemplateUtils,
+    private domSanitizer: DomSanitizer,
     private utils: Utils
   ) { }
 
@@ -79,6 +77,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
       });
 
     this.currentProject = this.storageService.state.currentProject.data;
+    this.currentProjectDocumentInfo = this.domSanitizer.bypassSecurityTrustHtml(this.currentProject.documentInfo);
 
     this.route.data
       .takeUntil(this.ngUnsubscribe)

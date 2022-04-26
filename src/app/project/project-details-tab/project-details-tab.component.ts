@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import 'leaflet';
 import 'assets/js/leaflet.shpfile.js';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 import { StorageService } from 'app/services/storage.service';
 import { Subject } from 'rxjs';
@@ -31,16 +32,19 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   private ngbModal: NgbModalRef = null;
   public shapefile: Document[] = [];
   public pathAPI: string;
+  public projectDetails: SafeHtml;
 
   constructor(
     private storageService: StorageService,
     private elementRef: ElementRef,
     public configService: ConfigService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private domSanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
     this.project = this.storageService.state.currentProject.data;
+    this.projectDetails = this.domSanitizer.bypassSecurityTrustHtml(this.project.details);
     this.multipleExistingPlans = Array.isArray(this.project.existingLandUsePlans);
     this.overlappingDistrictsListString = this.stringifyOverlappingDistricts(this.project.overlappingRegionalDistricts);
     this.commentPeriod = this.project.commentPeriodForBanner;

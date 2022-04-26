@@ -6,7 +6,7 @@
     <span>{{activity.project?.name}}</span>
     <br>
     <br>
-    <span [innerHtml]="activity.content"></span>
+    <span class="ck-content" [innerHtml]="domSanitizer.bypassSecurityTrustHtml(activity.content)"></span>
     <a *ngIf="activity.project" class="btn content-btn-alt view-project-btn" [routerLink]="['/p', activity.project._id ]">
       <span>View Project</span>
     </a>

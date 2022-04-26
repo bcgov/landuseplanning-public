@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { DomSanitizer } from '@angular/platform-browser';
 import { TableComponent } from 'app/shared/components/table-template/table.component';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ export class NewsListTableRowsComponent implements OnInit, TableComponent {
     public paginationData: any;
 
     constructor(
-      private router: Router
+      private router: Router,
+      public domSanitizer: DomSanitizer,
     ) { }
 
     ngOnInit() {

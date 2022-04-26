@@ -7,7 +7,7 @@
       <span>{{activity.headline || '-'}}</span>
       <br>
       <br>
-      <span [innerHtml]="activity.content"></span>
+      <span class="ck-content" [innerHtml]="domSanitizer.bypassSecurityTrustHtml(activity.content)"></span>
     </div>
     <br>
     <div>
