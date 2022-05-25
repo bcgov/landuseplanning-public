@@ -1,8 +1,7 @@
 <tr tabindex="0"
   (click)="goToProject(project)" (keyup.Enter)="goToProject(project)"
   *ngFor="let project of projects | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }">
-  <td scope="row" data-label="Name" [attr.aria-label]="makeAriaLabel(project.name)" class="col-3">{{project.name || '-'}}</td>
-  <td scope="row" data-label="Partner First Nation(s)" [attr.aria-hidden]="true" class="col-3">{{project.partner || '-'}}</td>
-  <td scope="row" data-label="Regional Districts" [attr.aria-hidden]="true" class="col-3">{{ project.overlappingRegionalDistricts || '-'}}</td>
-  <td scope="row" data-label="Project Phase" [attr.aria-hidden]="true" class="col-3">{{project.projectPhase || '-'}}</td>
+  <td scope="row" data-label="Name" [attr.aria-label]="makeAriaLabel(project.name)" class="col-4">{{project.name || '-'}}</td>
+  <td scope="row" data-label="Partner First Nation(s)" [attr.aria-hidden]="true" class="col-4">{{project.partner || '-'}}</td>
+  <td scope="row" data-label="Project Phase" [attr.aria-hidden]="true" class="col-4">{{project.projectPhase || '-'}}</td>
 </tr>

@@ -78,22 +78,17 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     {
       name: 'Name',
       value: 'name',
-      width: 'col-3'
+      width: 'col-4'
     },
     {
       name: 'Partner First Nation(s)',
       value: 'partner',
-      width: 'col-3'
-    },
-    {
-      name: 'Regional Districts',
-      value: 'overlappingRegionalDistricts',
-      width: 'col-3'
+      width: 'col-4'
     },
     {
       name: 'Phase',
       value: 'projectPhase',
-      width: 'col-3'
+      width: 'col-4'
     }
   ];
 
