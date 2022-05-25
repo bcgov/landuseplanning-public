@@ -126,7 +126,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
                       // project.shapefiles = [];
                       shapefiles.forEach(shapefile => {
                         if (project._id === shapefile.project) {
-                          console.log("how many times")
                           project.shapefiles.push({
                             shapefileId: shapefile._id,
                             documentFileName: shapefile.documentFileName
@@ -137,9 +136,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
                   }
 
                   this.allApps = _.concat(this.allApps, projects);
-                  console.log('all projects', projects)
                   // filter component gets all apps
-                  this.allApps.forEach(app => console.log('all apps', app.shapefiles.length))
                   this.filterApps = this.allApps;
                 });
             }, error => {
