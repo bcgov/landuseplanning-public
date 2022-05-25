@@ -630,6 +630,41 @@ export class ApiService {
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});
   }
 
+  /**
+   * Get all documents.
+   *
+   * @param   {string}  documentSource  The type of documents to get(shapefile, banner image, etc.).
+   * @returns {Observable}
+   */
+  getAllDocuments(documentSource: string): Observable<Document[]> {
+    const fields = [
+      'eaoStatus',
+      'internalOriginalName',
+      'documentFileName',
+      'labels',
+      'internalOriginalName',
+      'displayName',
+      'documentType',
+      'datePosted',
+      'dateUploaded',
+      'dateReceived',
+      'documentFileSize',
+      'documentSource',
+      'internalURL',
+      'internalMime',
+      'checkbox',
+      'project',
+      'type',
+      'documentAuthor',
+      'documentAuthorType',
+      'milestone',
+      'description',
+      'isPublished'
+    ];
+    const queryString = `document?documentSource=${documentSource}&fields=${this.buildValues(fields)}`;
+    return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});
+  }
+
   getDocument(id: string): Observable<Document[]> {
     const queryString = 'document/' + id + '?fields=internalOriginalName|documentSource';
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});

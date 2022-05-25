@@ -10,8 +10,10 @@ import * as L from 'leaflet';
 import * as _ from 'lodash';
 
 import { Project } from 'app/models/project';
+import { Document } from 'app/models/document';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
+import { DocumentService } from 'app/services/document.service';
 
 const PAGE_SIZE = 100;
 
@@ -44,7 +46,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
-  public allApps: Array<Project> = [];
+  public allApps: Array<any> = [];
+  public projectShapefiles: Document[] = [];
   public filterApps: Array<Project> = [];
   public mapApps: Array<Project> = [];
   public listApps: Array<Project> = [];
@@ -58,6 +61,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private router: Router,
     private _changeDetectionRef: ChangeDetectorRef,
     private projectService: ProjectService,
+    private documentService: DocumentService,
     public configService: ConfigService, // used in template
     private renderer: Renderer2
   ) {
@@ -84,9 +88,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     L.DomEvent.disableClickPropagation(applist_filters);
     L.DomEvent.disableScrollPropagation(applist_filters);
 
-    // get initial filters
-    // this.filters = { ...this.appfilters.getFilters() }; // FUTURE
-
     // load initial apps
     this.getApps();
   }
@@ -94,7 +95,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   private getApps() {
     // do this in another event so it's not in current change detection cycle
     setTimeout(() => {
-      const start = (new Date()).getTime(); // for profiling
       this.isLoading = true;
       this.snackBarRef = this.snackBar.open('Loading projects ...');
       this.allApps = []; // empty the list
@@ -114,20 +114,42 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             .finally(() => {
               this.snackBarRef.dismiss();
               this.isLoading = false;
-              console.log('got', this.allApps.length, 'apps in', (new Date()).getTime() - start, 'ms');
             })
-            .subscribe(projects => {
-              this.allApps = _.concat(this.allApps, projects);
-              // filter component gets all apps
-              this.filterApps = this.allApps;
+            .subscribe((projects: Project[]) => {
+              // Get all shapefiles.
+              this.documentService.getAll("SHAPEFILE")
+              .takeUntil(this.ngUnsubscribe)
+              .subscribe(shapefiles => {
+                  // "Attach" a shapefile to its project.
+                  if (shapefiles) {
+                    projects.forEach(project => {
+                      // project.shapefiles = [];
+                      shapefiles.forEach(shapefile => {
+                        if (project._id === shapefile.project) {
+                          console.log("how many times")
+                          project.shapefiles.push({
+                            shapefileId: shapefile._id,
+                            documentFileName: shapefile.documentFileName
+                          })
+                        }
+                      })
+                    })
+                  }
+
+                  this.allApps = _.concat(this.allApps, projects);
+                  console.log('all projects', projects)
+                  // filter component gets all apps
+                  this.allApps.forEach(app => console.log('all apps', app.shapefiles.length))
+                  this.filterApps = this.allApps;
+                });
             }, error => {
-              console.log(error);
+              console.error(error);
               alert('Uh-oh, couldn\'t load projects');
               // projects not found --> navigate back to home
               this.router.navigate(['/']);
             });
         }, error => {
-          console.log(error);
+          console.error(error);
           alert('Uh-oh, couldn\'t count projects');
           // projects not found --> navigate back to home
           this.router.navigate(['/']);
@@ -142,6 +164,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
    */
   public updateMatching() {
     // map component gets filtered apps
+
     this.mapApps = this.filterApps.filter(a => a.isMatches);
     // NB: OnChanges event will update the map
     this.appmap.resetMap();

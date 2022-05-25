@@ -78,6 +78,26 @@ export class DocumentService {
       .catch(this.api.handleError);
   }
 
+  /**
+   * Get all documents.
+   *
+   * @param   {string}  documentSource  The type of documents to get(shapefile, banner image, etc.).
+   * @returns {Observable}
+   */
+  getAll(documentSource: string): Observable<Document[]> {
+    return this.api.getAllDocuments(documentSource)
+      .map((res: any) => {
+        if (res) {
+          const documents = res;
+          documents.forEach((document, i) => {
+            documents[i] = new Document(document);
+          });
+          return documents;
+        }
+      })
+      .catch(this.api.handleError);
+  }
+
   // get a specific document by its id
   getById(documentId: string, forceReload: boolean = false): Observable<Document> {
     if (this.document && this.document._id === documentId && !forceReload) {
