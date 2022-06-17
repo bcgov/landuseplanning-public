@@ -1,4 +1,5 @@
 ### 1.2.0 May 25, 2022
+* Render polygons on the main app map [DESENG-4](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-4)
 * Remove regional districts column in projects list table [DESENG-136](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-136)
 
 ### 1.1.5 April 7, 2022

@@ -5,11 +5,15 @@ import 'leaflet';
 import 'leaflet.markercluster';
 import 'assets/js/leaflet.ajax.js';
 import * as _ from 'lodash';
-
 import { Project } from 'app/models/project';
+import { Document } from 'app/models/document';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-detail-popup.component';
+
+// need to import leaflet this way to include the shapefile->geojson plugin
+declare let L;
+const encode = encodeURIComponent;
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
@@ -20,12 +24,8 @@ declare module 'leaflet' {
   }
 }
 
-const L = window['L'];
-
 const markerIconYellow = L.icon({
   iconUrl: 'assets/images/marker-icon-yellow.svg',
-  // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
-  // iconRetinaUrl: 'assets/images/marker-icon-2x-yellow.svg',
   iconSize: [36, 36],
   iconAnchor: [18, 36],
   tooltipAnchor: [16, -28]
@@ -33,12 +33,8 @@ const markerIconYellow = L.icon({
 
 const markerIconYellowLg = L.icon({
   iconUrl: 'assets/images/marker-icon-yellow-lg.svg',
-  // Retina Icon is not needed here considering we're using an SVG. Enable if you want to change to a raster asset.
-  // iconRetinaUrl: 'assets/images/marker-icon-yellow-lg.svg',
   iconSize: [48, 48],
   iconAnchor: [24, 48],
-  // popupAnchor: [1, -34], // TODO: update, if needed
-  // tooltipAnchor: [16, -28] // TODO: update, if needed
 });
 
 @Component({
@@ -55,13 +51,14 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   @Output() updateVisible = new EventEmitter(); // to projects component
   @Output() reloadApps = new EventEmitter(); // to projects component
 
+  public pathAPI: string;
   private map: L.Map = null;
+  private shapefileList: Array<L.GeoJSON> = [];
   private markerList: Array<L.Marker> = []; // list of markers
   private currentMarker: L.Marker = null; // for removing previous marker
   private markerClusterGroup = L.markerClusterGroup({
     showCoverageOnHover: false,
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
-    // iconCreateFunction: this.clusterCreate // FUTURE: for custom markers, if needed
   });
   private loading = false;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -77,15 +74,14 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     private resolver: ComponentFactoryResolver
   ) { }
 
-  // // for creating custom cluster icon
-  // private clusterCreate(cluster): L.Icon | L.DivIcon {
-  //   const html = cluster.getChildcount().toString();
-  //   return L.divIcon({ html: html, className: 'my-cluster', iconSize: L.point(40, 40) });
-  // }
-
   // create map after view (which contains map id) is initialized
   ngAfterViewInit() {
     const self = this; // for closure function below
+
+    // The following items are loaded by a file that is only present on cluster builds.
+    // Locally, this will be empty and local defaults will be used.
+    const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
+    this.pathAPI = (_.isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
 
     // custom control to reset map view
     const resetViewControl = L.Control.extend({
@@ -136,38 +132,13 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       attributionControl: false
     });
 
-    // add LUP regions to map
-    /* commenting out for now until it is its own layer
-    const regions = L.geoJSON.ajax('assets/js/regions.json', {style: function (feature) {
-        return {color: feature.properties.COLOR};
-    },
-    onEachFeature: function (feature, layer) {
-        layer.bindTooltip(feature.properties.REGION_NAME);
-    }});
-    regions.addTo(this.map);*/
-
-    // map state change events
-    // this.map.on('zoomstart', function () {
-    //   console.log('zoomstart');
-    // }, this);
-
-    // this.map.on('movestart', function () {
-    //   console.log('movestart');
-    // }, this);
-
-    // this.map.on('resize', function () {
-    //   console.log('resize');
-    // }, this);
-
     // NB: moveend is called after zoomstart, movestart and resize
     this.map.on('moveend', function () {
-      // console.log('moveend');
       this.setVisibleDebounced();
     }, this);
 
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
-
 
     // add base maps layers control
     const baseLayers = {
@@ -213,9 +184,6 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   private fixMap() {
     if (this.elementRef.nativeElement.offsetParent) {
       this.fitBounds(); // use default bounds
-
-      // FUTURE: restore map bounds here ?
-      // this.fitBounds(this.configService.mapBounds);
     } else {
       setTimeout(this.fixMap.bind(this), 50);
     }
@@ -224,9 +192,6 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
-      // console.log('map: got filtered apps from filters component');
-      // console.log('# filtered apps =', this.projects.length);
-
       const deletedApps = _.difference(changes.projects.previousValue, changes.projects.currentValue) as Array<Project>;
       const addedApps = _.difference(changes.projects.currentValue, changes.projects.previousValue) as Array<Project>;
 
@@ -245,9 +210,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     * Resets map view.
     */
   private resetView() {
-    // console.log('resetting view');
     this.fitBounds(); // use default bounds
-    // this.reloadApps.emit(); // FUTURE: reload apps ?
   }
 
   /**
@@ -261,11 +224,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    * NB: Call setVisibleDebounced() instead!
    */
   private setVisible() {
-    // console.log('setting visible');
     const mapBounds = this.map.getBounds();
-
-    // FUTURE: save map bounds here ?
-    // this.configService.mapBounds = mapBounds;
 
     // update visibility for apps with markers only
     // ie, leave apps without markers 'visible' (as initialized)
@@ -283,7 +242,6 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   }
 
   private fitBounds(bounds: L.LatLngBounds = null) {
-    // console.log('fitting bounds');
     const fitBoundsOptions: L.FitBoundsOptions = {
       // use top padding to adjust for filters header (which is always visible)
       // paddingTopLeft: L.point(0, this.appfilters.clientHeight),
@@ -301,33 +259,49 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   /**
     * Removes deleted / draws added projects.
+    *
+    * @param   {Project[]} deletedApps Deleted projects.
+    * @param   {Project[]} addedApps Added projects.
+    * @returns {void}
     */
-  private drawMap(deletedApps: Project[], addedApps: Project[]) {
-    // console.log('drawing map');
-    // console.log('deleted =', this.deleted);
-    // console.log('added =', this.added);
-
+  private drawMap(deletedApps: Project[], addedApps: Project[]): void {
     // remove deleted apps from list and map
     deletedApps.forEach(app => {
       const markerIndex = _.findIndex(this.markerList, { projectId: app._id });
+      const shapefileIndex = _.findIndex(this.shapefileList, { projectId: app._id });
       if (markerIndex >= 0) {
         const markers = this.markerList.splice(markerIndex, 1);
         this.markerClusterGroup.removeLayer(markers[0]);
+      }
+      if (shapefileIndex >= 0) {
+        this.shapefileList.splice(shapefileIndex, 1);
       }
     });
 
     // draw added apps
     addedApps.forEach(app => {
-      // add marker
-      if (app.centroid.length === 2) { // safety check
-        const title = `${app.name}\n`
+      // If there is a shapefile for one of the projects, display it instead of a pin.
+      if (app.shapefiles && app.shapefiles.length > 0) {
+        app.shapefiles.forEach(projectShapefile => {
+          const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+          const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
+          const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false })
+          .on('click', () => {});
+          shapefile.addTo(this.map);
+          this.shapefileList.push(shapefile);
+        })
+      } else {
+        // If no shapefile is found for a project, display a pin of its coordinates instead.
+        if (2 === app.centroid.length) {
+          const title = `${app.name}\n`
           + `${app.overlappingRegionalDistricts}\n`;
-        const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { keyboard: true, title: title })
+          const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { keyboard: true, title: title })
           .setIcon(markerIconYellow)
           .on('click', L.Util.bind(this.onMarkerClick, this, app));
-        marker.projectId = app._id;
-        this.markerList.push(marker); // save to list
-        this.markerClusterGroup.addLayer(marker); // save to marker clusters group
+          marker.projectId = app._id;
+          this.markerList.push(marker); // save to list
+          this.markerClusterGroup.addLayer(marker); // save to marker clusters group
+        }
       }
     });
 
@@ -398,9 +372,6 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(markerIconYellowLg);
-        // FUTURE: zoom in to this app/marker ?
-        // FUTURE: show the marker popup ?
-        // this.onMarkerClick(app, { target: marker });
       }
     }
   }
@@ -409,42 +380,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.fitBounds(); // use default bounds
   }
 
-  /**
-   * Center map on specified point, applying offset if needed.
-   */
-  // TODO: register for list/filter changes and apply offset accordingly ?
-  private centerMap(latlng: L.LatLng) {
-    let point = this.map.latLngToLayerPoint(latlng);
-
-    if (this.configService.isApplistListVisible) {
-      point = point.subtract([(this.applist.clientWidth / 2), 0]);
-    }
-
-    point = point.subtract([0, (this.appfilters.clientHeight / 2)]); // filters header is always visible
-
-    this.map.panTo(this.map.layerPointToLatLng(point));
-  }
-
   public onLoadStart() { this.loading = true; }
 
   public onLoadEnd() { this.loading = false; }
-
-  private regionStyle(feature) {
-    return {
-      fillColor: this.regionColour(feature.properties.OBJECTID)
-    };
-  }
-
-  private regionColour(id) {
-    console.log('Colour for ID', id);
-    return  id === 1 ? 'red' :
-            id === 2 ? 'green' :
-            id === 3 ? 'yellow' :
-            id === 4 ? 'purple' :
-            id === 5 ? 'black' :
-            id === 6 ? 'white' :
-            id === 7 ? 'orange' :
-            id === 8 ? 'brown' :
-                       'blue';
-  }
 }
