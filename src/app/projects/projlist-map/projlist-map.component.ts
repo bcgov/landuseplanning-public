@@ -286,7 +286,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false })
-          .on('click', () => {});
+          .on('click', L.Util.bind(this.onShapefileClick, this, app));
           shapefile.addTo(this.map);
           this.shapefileList.push(shapefile);
         })
@@ -309,13 +309,21 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.setVisibleDebounced();
   }
 
+  /**
+   * When the user clicks on a point, show a popup with information about
+   * the project marker.
+   *
+   * @param {Array} args Leaflet objects passed to click handler.
+   * @returns {void}
+   */
   private onMarkerClick(...args: any[]) {
     const app = args[0] as Project;
     const marker = args[1].target as L.Marker;
 
-    this.applist.toggleCurrentApp(app); // update selected item in app list
+    // update selected item in app list.
+    this.applist.toggleCurrentApp(app);
 
-    // if there's already a popup, delete it
+    // if there's already a popup, delete it.
     let popup = marker.getPopup();
     if (popup) {
       const wasOpen = popup.isOpen();
@@ -324,36 +332,88 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       if (wasOpen) { return; }
     }
 
-    let popupOptions = {};
-    // Fix for different viewports on scrolling for map display
-    if (this.map.getSize().y < 800) {
-      popupOptions = {
-        className: 'map-popup-content',
-        autoPanPaddingTopLeft: L.point(2, 100),
-        autoPanPaddingBottomRight: L.point(2, 30)
-      };
-    } else {
-      popupOptions = {
-        className: 'map-popup-content',
-        autoPanPaddingTopLeft: L.point(80, 200),
-        autoPanPaddingBottomRight: L.point(80, 30)
-      };
-    }
-
-    // compile marker popup component
-    const compFactory = this.resolver.resolveComponentFactory(ProjDetailPopupComponent);
-    const compRef = compFactory.create(this.injector);
-    compRef.instance.proj = app;
-    this.appRef.attachView(compRef.hostView);
-    compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
-    const div = document.createElement('div').appendChild(compRef.location.nativeElement);
+    const popupOptions = this.getPopupOptions();
+    const getPopupComponent = this.getPopupComponent(app);
 
     popup = L.popup(popupOptions)
       .setLatLng(marker.getLatLng())
-      .setContent(div);
+      .setContent(getPopupComponent);
 
     // bind popup to marker so it automatically closes when marker is removed
     marker.bindPopup(popup).openPopup();
+  }
+
+  /**
+   * When the user clicks on a shapefile, show a popup with information about
+   * the project shapefile.
+   *
+   * @param {Array} args Leaflet objects passed to click handler.
+   * @returns {void}
+   */
+  private onShapefileClick(...args: any[]): void {
+    const app = args[0] as Project;
+    const shapefile = args[1];
+
+    // update selected item in app list.
+    this.applist.toggleCurrentApp(app);
+
+    // if there's already a popup, delete it.
+    let popup = shapefile.target.getPopup();
+    if (popup) {
+      const wasOpen = popup.isOpen();
+      popup.remove();
+      shapefile.layer.unbindPopup();
+      if (wasOpen) { return; }
+    }
+
+    const popupOptions = this.getPopupOptions();
+    const getPopupComponent = this.getPopupComponent(app);
+
+    popup = L.popup(popupOptions)
+      .setLatLng(shapefile.latlng)
+      .setContent(getPopupComponent);
+
+    // bind popup to specific layer so it automatically closes when marker is removed.
+    shapefile.layer.bindPopup(popup).openPopup();
+  }
+
+  /**
+   * Dynamically adjusts the popup size to depending on the size of the
+   * map so the popup isn't too large.
+   *
+   * @returns {Object}
+   */
+  private getPopupOptions(): Object {
+    const popupOptions = {
+      className: 'map-popup-content',
+      autoPanPaddingTopLeft: null,
+      autoPanPaddingBottomRight: null
+    };
+
+    // Fix for different viewports on scrolling for map display
+    if (this.map.getSize().y < 800) {
+      popupOptions.autoPanPaddingTopLeft = L.point(2, 100);
+      popupOptions.autoPanPaddingBottomRight = L.point(2, 30);
+    } else {
+      popupOptions.autoPanPaddingTopLeft = L.point(80, 200);
+      popupOptions.autoPanPaddingBottomRight = L.point(80, 30);
+    }
+    return popupOptions;
+  }
+
+  /**
+   * Generates the content for the popup.
+   *
+   * @param {Project} project The project to pass to the component factory.
+   * @returns {HTMLElement}
+   */
+  private getPopupComponent(project: Project): HTMLElement {
+    const compFactory = this.resolver.resolveComponentFactory(ProjDetailPopupComponent);
+    const compRef = compFactory.create(this.injector);
+    compRef.instance.proj = project;
+    this.appRef.attachView(compRef.hostView);
+    compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
+    return document.createElement('div').appendChild(compRef.location.nativeElement);
   }
 
   /**
