@@ -77,7 +77,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
               this.bannerImageSrc = this.getFileSourceUrl(this.bannerImage);
             }
 
-            if (this.project.logos.length) {
+            if (Array.isArray(this.project.logos)) {
               this.projectLogosWithSource = this.project.logos.map(logo => {
                 return {
                   document: logo.document,

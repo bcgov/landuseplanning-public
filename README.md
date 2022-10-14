@@ -155,6 +155,20 @@ npm run tests-ci
 npm run e2e
 ```
 
+### Running a single test
+
+It is possible to run a single `describe` or `it`  block by changing it to `fdescribe` or `fit` respectively. The prepended `f` stands for "focus." As of Oct. 13, 2022, the version of Karma we're using only provides this method of running portions of the test code. For example:
+
+```
+fdescribe('Example test block', () => {
+  it('Checks the veractiy of "true"', () => {
+    expect(true).toBeTruthy();
+  });
+});
+```
+
+Now if you run `ng test`, only this `fdescribe` block will run.
+
 # Code Scaffolding Using Angular CLI
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
