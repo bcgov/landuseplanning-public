@@ -224,6 +224,7 @@ export class ApiService {
       'projectPhase',
       'logos',
       'backgroundInfo',
+      'backgroundImage',
       'engagementLabel',
       'engagementInfo',
       'documentInfo',

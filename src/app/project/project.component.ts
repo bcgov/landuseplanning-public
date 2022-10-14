@@ -39,7 +39,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   public appHeader: HTMLHeadingElement;
   private ngbModal: NgbModalRef = null;
   public surveySelected: Survey;
-  public bannerImage;
+  public bannerImage: Document;
+  public allProjectBannerImages: Document[] = [];
   public bannerImageSrc: string;
   public pathAPI: string;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -67,12 +68,16 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             this.project = data.projectAndBanner[0];
             this.storageService.state.currentProject = { type: 'currentProject', data: this.project };
             this.renderer.removeClass(document.body, 'no-scroll');
-            this.bannerImage = data.projectAndBanner[1][0].data.searchResults[0];
+            this.allProjectBannerImages = data.projectAndBanner[1][0].data.searchResults;
+            this.bannerImage = this.allProjectBannerImages.find((bannerImage) => bannerImage._id === this.project.backgroundImage);
             // The following items are loaded by a file that is only present on cluster builds.
             // Locally, this will be empty and local defaults will be used.
             const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
             this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
+            console.log('the resolver data', data)
+            console.log("all banner images", this.allProjectBannerImages);
+            console.log("the banner image", this.bannerImage);
             if (this.bannerImage) {
               this.bannerImageSrc = this.getFileSourceUrl(this.bannerImage);
             }
@@ -106,6 +111,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getBannerURL() {
+    console.log('bannerImageSrc?', this.bannerImageSrc)
     return this.bannerImageSrc ? `url(${this.bannerImageSrc})` : '';
   }
 
@@ -123,6 +129,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       sourceUrl = `${this.pathAPI}/document/${file.document}/fetch/${file.name.replace(/ /g, '_')}`;
     }
+
+    console.log('file source URL', sourceUrl);
     return sourceUrl;
   }
 

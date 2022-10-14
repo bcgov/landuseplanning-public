@@ -8,6 +8,7 @@ export class Project {
   engagementStatus: String;
   logos: ProjectLogo[];
   backgroundInfo: String;
+  backgroundImage: String;
   engagementLabel: String;
   engagementInfo: String;
   documentInfo: String;
@@ -64,6 +65,7 @@ export class Project {
     this.engagementStatus = obj && obj.engagementStatus || null;
     this.logos = obj && obj.logos || null;
     this.backgroundInfo = obj && obj.backgroundInfo || null;
+    this.backgroundImage = obj && obj.backgroundImage || null;
     this.engagementLabel = obj && obj.engagementLabel || null;
     this.engagementInfo = obj && obj.engagementInfo || null;
     this.documentInfo = obj && obj.documentInfo || null;
