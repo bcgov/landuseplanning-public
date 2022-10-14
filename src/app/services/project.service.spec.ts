@@ -3,14 +3,12 @@ import { ProjectService } from './project.service';
 import { ApiService } from 'app/services/api';
 import { DocumentService } from './document.service';
 import { CommentPeriodService } from './commentperiod.service';
-import { DecisionService } from './decision.service';
 import { FeatureService } from './feature.service';
 import 'rxjs/add/observable/of';
 import { Observable } from 'rxjs/Observable';
 import { Project } from 'app/models/project';
 import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
-import { Decision } from 'app/models/decision';
 import { Feature } from 'app/models/feature';
 
 describe('ProjectService', () => {
@@ -89,12 +87,6 @@ describe('ProjectService', () => {
     }
   };
 
-  const decisionServiceStub = {
-    getByProjectId(projectId: string) {
-      return Observable.of(new Decision({ _id: 'IIIII' }));
-    }
-  };
-
   const featureServiceStub = {
     getByProjectId(projectId: string) {
       const features = [
@@ -112,7 +104,6 @@ describe('ProjectService', () => {
         { provide: ApiService, useValue: apiServiceStub },
         { provide: DocumentService, useValue: documentServiceStub },
         { provide: CommentPeriodService, useValue: commentPeriodServiceStub },
-        { provide: DecisionService, useValue: decisionServiceStub },
         { provide: FeatureService, useValue: featureServiceStub },
       ]
     });
@@ -291,14 +282,6 @@ describe('ProjectService', () => {
         });
       });
 
-      it('sets the decisions to the result of the decisionService', () => {
-        service.getById('AAAA').subscribe(project => {
-          expect(project.decision).toBeDefined();
-          expect(project.decision).not.toBeNull();
-          expect(project.decision._id).toBe('IIIII');
-        });
-      });
-
       it('sets the features to the result of the featureService', () => {
         service.getById('AAAA').subscribe(project => {
           expect(project.features).toBeDefined();
@@ -319,36 +302,12 @@ describe('ProjectService', () => {
       expect(service.getStatusString('AC')).toBe('Project Under Review');
     });
 
-    it('with "AL" code it returns "Decision: Allowed', () => {
-      expect(service.getStatusString('AL')).toBe('Decision: Allowed');
-    });
-
     it('with "CA" code it returns "Project Cancelled', () => {
       expect(service.getStatusString('CA')).toBe('Project Cancelled');
     });
 
-    it('with "DE" code it returns "Decision Made', () => {
-      expect(service.getStatusString('DE')).toBe('Decision Made');
-    });
-
-    it('with "DI" code it returns "Decision: Not Approved', () => {
-      expect(service.getStatusString('DI')).toBe('Decision: Not Approved');
-    });
-
     it('with "DG" code it returns "Tenure: Disposition in Good Standing', () => {
       expect(service.getStatusString('DG')).toBe('Tenure: Disposition in Good Standing');
-    });
-
-    it('with "OA" code it returns "Decision: Offer Accepted', () => {
-      expect(service.getStatusString('OA')).toBe('Decision: Offer Accepted');
-    });
-
-    it('with "ON" code it returns "Decision: Offer Not Accepted', () => {
-      expect(service.getStatusString('ON')).toBe('Decision: Offer Not Accepted');
-    });
-
-    it('with "OF" code it returns "Decision: Offered', () => {
-      expect(service.getStatusString('OF')).toBe('Decision: Offered');
     });
 
     it('with "SU" code it returns "Tenure: Suspended', () => {
@@ -416,20 +375,6 @@ describe('ProjectService', () => {
 
     it('returns the status back if it is not recognized', () => {
       expect(service.getStatusCode('WOO_BOY')).toBe('Woo Boy');
-    });
-  });
-
-  describe('isDecision()', () => {
-    it('returns false for the non-decision statuses', () => {
-      ['AB', 'AC', 'DE', 'SU', 'UN'].forEach(status => {
-        expect(service.isDecision(status)).toBe(false);
-      });
-    });
-
-    it('returns true for the decision statuses', () => {
-      ['AL', 'CA', 'DI', 'DG', 'OA', 'ON', 'OF'].forEach(status => {
-        expect(service.isDecision(status)).toBe(true);
-      });
     });
   });
 

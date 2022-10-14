@@ -73,11 +73,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
             this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
+            console.log("the banner image", data.projectAndBanner[1][0].data.searchResults);
             if (this.bannerImage) {
               this.bannerImageSrc = this.getFileSourceUrl(this.bannerImage);
             }
 
-            if (this.project.logos.length) {
+            if (Array.isArray(this.project.logos)) {
               this.projectLogosWithSource = this.project.logos.map(logo => {
                 return {
                   document: logo.document,

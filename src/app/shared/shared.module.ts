@@ -15,7 +15,6 @@ import { DragMoveDirective } from 'app/shared/utils/drag-move.directive';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TableTemplateComponent } from 'app/shared/components/table-template/table-template.component';
 import { ListConverterPipe } from './pipes/list-converter.pipe';
-import { OrgNamePipe } from './pipes/org-name.pipe';
 import { TableTemplateUtils } from './utils/table-template-utils';
 import { Utils } from 'app/shared/utils/utils';
 import { TableDirective } from './components/table-template/table.directive';
@@ -39,8 +38,7 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     DragMoveDirective,
     TableTemplateComponent,
     TableDirective,
-    ListConverterPipe,
-    OrgNamePipe
+    ListConverterPipe
   ],
   exports: [
     BrowserModule,
@@ -56,8 +54,7 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     DragMoveDirective,
     TableTemplateComponent,
     NgxPaginationModule,
-    ListConverterPipe,
-    OrgNamePipe
+    ListConverterPipe
   ],
   providers: [
     TableTemplateUtils,

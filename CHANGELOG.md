@@ -1,3 +1,7 @@
+### 1.2.1 Oct 13, 2022
+* Allow for individual tests to be run [DESENG-112](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-112)
+* Clean up errors when running `ng test`(including testing projects for Decisions, which aren't used, and removing an unused pipe)
+
 ### 1.2.0 May 25, 2022
 * Render polygons on the main app map [DESENG-4](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-4)
 * Remove regional districts column in projects list table [DESENG-136](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-136)

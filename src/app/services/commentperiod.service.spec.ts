@@ -122,7 +122,7 @@ describe('CommentPeriodService', () => {
           apiSpy.getPeriod.and.returnValue(Observable.of({ text: () => { } }));
 
           service
-            .getById('1', true)
+            .getById('1')
             .subscribe(result => expect(result).toEqual(null as CommentPeriod));
         }));
       });
@@ -134,7 +134,7 @@ describe('CommentPeriodService', () => {
           );
 
           service
-            .getById('1', true)
+            .getById('1')
             .subscribe(result =>
               expect(result).toEqual(new CommentPeriod({ _id: '1' }))
             );
@@ -151,7 +151,7 @@ describe('CommentPeriodService', () => {
           );
 
           service
-            .getById('1', true)
+            .getById('1')
             .subscribe(result =>
               expect(result).toEqual(new CommentPeriod({ _id: '1' }))
             );
@@ -175,7 +175,7 @@ describe('CommentPeriodService', () => {
           );
 
           // call once to set the cache
-          service.getById('1', true).subscribe();
+          service.getById('1').subscribe();
         }));
 
         it('returns the cached comment period', async(() => {
