@@ -58,7 +58,6 @@ import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    EnvBannerComponent,
     // TagInputModule,
     BrowserModule,
     FormsModule,
