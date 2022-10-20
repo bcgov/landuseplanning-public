@@ -34,7 +34,7 @@ USER 0
 
 # update npm, and install some dependencies that are slow to install.
 RUN npm i npm@6.4.1 -g	&& \
-  rm -R /opt/rh/rh-nodejs8/root/usr/lib/node_modules/npm
+  rm -R /opt/rh/rh-nodejs10/root/usr/lib/node_modules/npm
 
 
 # Required in order to mount .npm as a volume to cache downloaded files
