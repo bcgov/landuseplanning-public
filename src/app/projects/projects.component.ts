@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material/snack-bar';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
