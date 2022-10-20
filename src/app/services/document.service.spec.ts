@@ -19,7 +19,7 @@ describe('DocumentService', () => {
   });
 
   it('should be created', () => {
-    const service: DocumentService = TestBed.get(DocumentService);
+    const service: DocumentService = TestBed.inject(DocumentService);
     expect(service).toBeTruthy();
   });
 });

@@ -42,7 +42,7 @@ describe('CommentService', () => {
   });
 
   it('should be created', () => {
-    const service = TestBed.get(CommentService);
+    const service = TestBed.inject(CommentService);
     expect(service).toBeTruthy();
   });
 
@@ -51,9 +51,9 @@ describe('CommentService', () => {
     let commentPeriodServiceSpy;
     let apiSpy;
     beforeEach(() => {
-      service = TestBed.get(CommentService);
-      commentPeriodServiceSpy = TestBed.get(CommentPeriodService);
-      apiSpy = TestBed.get(ApiService);
+      service = TestBed.inject(CommentService);
+      commentPeriodServiceSpy = TestBed.inject(CommentPeriodService);
+      apiSpy = TestBed.inject(ApiService);
     });
 
     //   describe('when no comment periods are returned by the comment period service', () => {
@@ -256,8 +256,8 @@ describe('CommentService', () => {
     //   let service: CommentService;
     //   let apiSpy;
     //   beforeEach(() => {
-    //     service = TestBed.get(CommentService);
-    //     apiSpy = TestBed.get(ApiService);
+    //     service = TestBed.inject(CommentService);
+    //     apiSpy = TestBed.inject(ApiService);
     //   });
 
     //   describe('when the comment period has no comments', () => {
@@ -328,9 +328,9 @@ describe('CommentService', () => {
     //   let apiSpy;
     //   let documentServiceSpy;
     //   beforeEach(() => {
-    //     service = TestBed.get(CommentService);
-    //     apiSpy = TestBed.get(ApiService);
-    //     documentServiceSpy = TestBed.get(DocumentService);
+    //     service = TestBed.inject(CommentService);
+    //     apiSpy = TestBed.inject(ApiService);
+    //     documentServiceSpy = TestBed.inject(DocumentService);
     //   });
 
     //   describe('when forceReload is set to true', () => {
@@ -481,8 +481,8 @@ describe('CommentService', () => {
     let service: CommentService;
     let apiSpy;
     beforeEach(() => {
-      service = TestBed.get(CommentService);
-      apiSpy = TestBed.get(ApiService);
+      service = TestBed.inject(CommentService);
+      apiSpy = TestBed.inject(ApiService);
     });
 
     describe('when no comment is returned by the api', () => {

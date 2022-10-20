@@ -136,7 +136,7 @@ describe('CommentingTabComponent', () => {
 
       beforeEach(() => {
         activatedRouteStub.setParentData({ project: project });
-        commentService = TestBed.get(CommentService);
+        commentService = TestBed.inject(CommentService);
       });
 
       // it('calls commentService getAllByProjectId with the app id from the route', () => {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ResponseContentType } from '@angular/http';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
