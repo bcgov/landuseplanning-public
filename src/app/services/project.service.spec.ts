@@ -108,7 +108,7 @@ describe('ProjectService', () => {
       ]
     });
 
-    service = TestBed.get(ProjectService);
+    service = TestBed.inject(ProjectService);
   });
 
   it('should be created', inject([ProjectService], (appService: ProjectService) => {
@@ -137,7 +137,7 @@ describe('ProjectService', () => {
     ];
 
     beforeEach(() => {
-      apiService = TestBed.get(ApiService);
+      apiService = TestBed.inject(ApiService);
 
       const response = {
         text() {
@@ -176,7 +176,7 @@ describe('ProjectService', () => {
     };
 
     beforeEach(() => {
-      apiService = TestBed.get(ApiService);
+      apiService = TestBed.inject(ApiService);
 
       const response = {
         text() {

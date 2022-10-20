@@ -7,7 +7,7 @@ import { NgbModule, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { VarDirective } from 'app/shared/utils/ng-var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';

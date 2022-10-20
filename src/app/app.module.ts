@@ -1,5 +1,4 @@
 import { NgModule, ApplicationRef } from '@angular/core';
-// import { TagInputModule } from 'ngx-chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
+import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -55,16 +55,44 @@ import { ComplianceOversightComponent } from 'app/compliance-oversight/complianc
 import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
 import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
 
+/**
+ * Needed for NgxPageScrollCoreModule to set the default easing logic.
+ *
+ * Examples may be found at https://github.com/gdsmith/jquery.easing/blob/master/jquery.easing.js
+ * or http://gizma.com/easing/
+ *
+ * @param {number} t current time
+ * @param {number} b beginning value
+ * @param {number} c change In value
+ * @param {number} d duration
+ * @return {number}
+ */
+const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number): number => {
+    // easeInOutExpo easing
+    if (t === 0) {
+      return b;
+    }
+    if (t === d) {
+      return b + c;
+    }
+    if ((t /= d / 2) < 1) {
+      return c / 2 * Math.pow(2, 8 * (t - 1)) + b;
+    }
+    return c / 2 * (-Math.pow(2, -8 * --t) + 2) + b;
+};
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    // TagInputModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    NgbModule.forRoot(),
+    NgbModule,
     NgxPageScrollModule,
-    // BootstrapModalModule,
+    NgxPageScrollCoreModule.forRoot({
+      scrollOffset: 50,
+      easingLogic: defaultPageScrollEasingLogic
+    }),
     SharedModule,
     ProjectModule,
     ProjectsModule,

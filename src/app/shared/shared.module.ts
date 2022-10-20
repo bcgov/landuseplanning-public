@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatProgressBarModule } from '@angular/material';
-import { MatSnackBarModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 
 import { OrderByPipe } from 'app/shared/pipes/order-by.pipe';

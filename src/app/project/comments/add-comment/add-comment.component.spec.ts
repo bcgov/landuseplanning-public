@@ -3,7 +3,7 @@ import { AddCommentComponent } from './add-comment.component';
 import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { MatProgressBarModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
 import { CommentPeriod } from 'app/models/commentperiod';

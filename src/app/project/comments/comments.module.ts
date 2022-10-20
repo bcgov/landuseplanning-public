@@ -20,7 +20,7 @@ import { AddSurveyResponseComponent } from './add-survey-response/add-survey-res
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule.forRoot(),
+    NgbModule,
     NgxPaginationModule,
     RouterModule,
     SharedModule

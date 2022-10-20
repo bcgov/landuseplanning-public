@@ -36,7 +36,7 @@ import { ConfirmEmailComponent } from './email-subscribe/confirm-email/confirm-e
   imports: [
     CommonModule,
     FormsModule,
-    NgbModule.forRoot(),
+    NgbModule,
     RouterModule,
     SharedModule,
     CommentsModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
+import { MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -117,7 +118,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             })
             .subscribe((projects: Project[]) => {
               // Get all shapefiles.
-              this.documentService.getAll("SHAPEFILE")
+              this.documentService.getAll('SHAPEFILE')
               .takeUntil(this.ngUnsubscribe)
               .subscribe(shapefiles => {
                   // "Attach" a shapefile to its project.
