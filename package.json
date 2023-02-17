@@ -78,7 +78,10 @@
     "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+<<<<<<< HEAD
     "ngx-chips": "^3.0.0",
+=======
+>>>>>>> 843f5e4521158a658f16e0097ea8bec21c0b9fd8
     "protractor": "^6.0.0",
     "ts-node": "2.0.0",
     "tslib": "^1.10.0",
