@@ -51,6 +51,7 @@
 
   a {
     color: $footer-color;
+    text-decoration: underline;
 
     &.feedback-link {
       color: $gold;
@@ -59,6 +60,7 @@
     &:focus,
     &:hover {
       color: $gold;
+      text-decoration: none;
     }
   }
 

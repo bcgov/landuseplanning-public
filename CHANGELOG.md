@@ -1,3 +1,6 @@
+### 1.3.0 Feb 16, 2023
+* Merging in new site style rebrand [DESENG-270](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-270)
+
 ### 1.2.1 Oct 13, 2022
 * Allow for individual tests to be run [DESENG-112](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-112)
 * Clean up errors when running `ng test`(including testing projects for Decisions, which aren't used, and removing an unused pipe)

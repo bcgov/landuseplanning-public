@@ -6,12 +6,6 @@
     background: $bg-default;
 }
 
-@media (min-width: 768px) {
-    :host {
-        // padding-top: 4.2rem;
-    }
-}
-
 .app-comments {
   min-height: 80vh;
 }
@@ -22,7 +16,7 @@
   background-color: #001330;
 
   .hero-banner__container {
-    background-color: #00409e8f;
+    background-color: $primary;
     margin: 0;
     padding: 0 3rem;
     width: 111%;
@@ -383,7 +377,3 @@
     width: 80vw !important;
   }
 }
-
-// .modal-xl .modal-lg {
-//   width: 80vw;
-// }

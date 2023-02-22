@@ -36,8 +36,7 @@
     right: 0;
     border-bottom-style: solid;
     border-bottom-width: 2px;
-    border-bottom-color: #fcba19;
-    // background-color: transparent;
+    border-bottom-color: $primary;
     transition: all linear 0.2s;
 
     .navbar {
@@ -47,7 +46,6 @@
 
   .app-header--flex {
     @include flex(0 0 auto);
-    /*position: relative;*/
     background: $header-bg;
     color: $header-font-color;
   }
@@ -62,7 +60,7 @@
 .navbar-toggler {
   margin-right: 0.5rem;
   padding: 0.5rem 0.4rem;
-  border: 2px solid $gold;
+  border: 2px solid $primary;
   color: $gold;
   font-size: medium;
   font-weight: 600;
@@ -107,7 +105,7 @@
 // NAVBAR
 .navbar {
   padding: 0;
-  background-color: $header-bg;
+  background-color: $primary;
   z-index: 1000;
 
   .navbar-nav {
@@ -119,7 +117,7 @@
       z-index: 1001; // +1 to keep above dropdown menus
       padding: 0.875rem 1rem;
       border-top: 1px solid $mn-border-color;
-      color: #fcba18;
+      color: $header-font-color;
       text-transform: uppercase;
       font-size: $mn-font-size;
       font-weight: 700;
@@ -139,7 +137,7 @@
     .dropdown {
       &.show {
         .dropdown-toggle {
-          color: $gold;
+          color: $header-font-color;
         }
       }
     }
@@ -187,7 +185,6 @@
   }
 }
 
-/*@media (min-width: 768px) {*/
 @media (min-width: 992px) {
   .navbar {
     background: transparent;
@@ -204,7 +201,7 @@
           display: inline-block;
         }
         &:hover {
-          border-bottom: 2px solid #fcba18;
+          border-bottom: 2px solid $primary;
         }
       }
 
@@ -213,7 +210,7 @@
           margin: 0;
           padding: 0.5rem;
           min-width: 16rem;
-          background-color: #002663;
+          background-color: $primary;
           &.dm-sm {
             min-width: 12rem;
           }
@@ -237,7 +234,7 @@
             >a,
             >a:hover,
             >a:focus {
-              background-color: #002663;
+              background-color: $header-bg;
               border: none;
             }
             .dropdown-menu {
@@ -254,22 +251,11 @@
   }
 }
 
-// Navbar Brand
-.navbar-brand {
-  height: 3.4375rem;
-  /*background-image: url("/assets/images/bcgov-header-vert-SM.png");*/
-  background-image: url("/assets/images/BCID_H_rgb_rev.png");
-  background-position: 8px center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  white-space: normal;
-}
-
 .navbar-brand__title {
   margin-top: 0.78rem;
   margin-left: 175px;
   display: inline-block;
-  color: #fff;
+  color: $header-font-color;
   line-height: 1.1rem;
   font-weight: 800;
   font-size: 1rem;
@@ -312,12 +298,6 @@
 }
 
 @media (min-width: 1224px) {
-  .navbar-brand {
-    /*background-image: url("/assets/images/bcgov-header-vert-SM.png");*/
-    background-image: url("/assets/images/BCID_H_rgb_rev.png");
-    background-position: 10px center;
-    background-size: contain;
-  }
 
   .navbar-brand__title {
     margin-left: 188px;
@@ -331,13 +311,6 @@
     font-size: 0.6rem;
   }
 }
-/*
-@media (min-width: 1340px) {
-  .navbar-brand__title {
-    font-size: 2.5rem;
-  }
-}*/
-
 
 .visible {
   display: block;
