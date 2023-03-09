@@ -1,3 +1,7 @@
+### 1.4.0 Mar 9, 2023
+* Added option to add/remove Activities and Updates section from project description page. [DESENG-283](https://apps.itsm.gov.bc.
+ca/jira/browse/DESENG-283)
+
 ### 1.3.0 Feb 16, 2023
 * Merging in new site style rebrand [DESENG-270](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-270)
 
