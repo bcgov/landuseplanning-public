@@ -20,7 +20,7 @@
       </div>
     </div>
     <br>
-    <div class="row">
+    <div class="row" *ngIf="project?.activitiesAndUpdatesEnabled">
       <div class="col-12">
         <h2>Activities and Updates</h2>
         <app-project-activites></app-project-activites>

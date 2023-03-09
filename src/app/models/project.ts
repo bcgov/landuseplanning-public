@@ -44,6 +44,7 @@ export class Project {
   operational: any;
   nature: any;
   commentPeriodForBanner: any;
+  activitiesAndUpdatesEnabled: boolean;
 
   // Permissions
   read: Array<String> = [];
@@ -99,6 +100,7 @@ export class Project {
     this.read = obj && obj.read || null;
     this.write = obj && obj.write || null;
     this.delete = obj && obj.delete || null;
+    this.activitiesAndUpdatesEnabled = obj && obj.activitiesAndUpdatesEnabled || null;
 
     // copy centroid
     if (obj && obj.centroid) {
