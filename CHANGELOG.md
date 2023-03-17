@@ -1,3 +1,6 @@
+### 1.5.0 Mar 17, 2023
+* Updated hero background image to new image of Revelstoke. [DESENG-291](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-291)
+
 ### 1.4.0 Mar 9, 2023
 * Added option to add/remove Activities and Updates section from project description page. [DESENG-283](https://apps.itsm.gov.bc.
 ca/jira/browse/DESENG-283)
