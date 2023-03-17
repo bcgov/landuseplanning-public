@@ -3,7 +3,7 @@
 .hero-banner {
   position: relative;
   background-color: rgba($header-bg, 1);
-  background-image: url("/assets/images/Banner_1920x800px_v2_a_web_B.jpg");
+  background-image: url("/assets/images/lup_revelstoke.jpg");
   background-position: center bottom;
   background-size: 350%;
   box-shadow: 0 0 4rem #00264d inset;
@@ -104,6 +104,7 @@
     cursor: pointer;
     color: #e9a603;
     margin-bottom: 10px;
+    background-color: rgba(0,0,0,0.45);
 
     @media (min-width: 400px) {
       &:first-of-type {
