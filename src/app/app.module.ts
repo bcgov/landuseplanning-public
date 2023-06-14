@@ -120,11 +120,6 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     ShareButtonsComponent,
     EnvBannerComponent
   ],
-  entryComponents: [
-    NewsListTableRowsComponent,
-    ActivitiesListTableRowsComponent,
-    SplashModalComponent
-  ],
   providers: [
     ConfigService,
     CookieService,

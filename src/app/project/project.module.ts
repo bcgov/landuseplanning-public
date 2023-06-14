@@ -64,11 +64,6 @@ import { ConfirmEmailComponent } from './email-subscribe/confirm-email/confirm-e
   ],
   providers: [
     StorageService
-  ],
-  entryComponents: [
-    DocumentTableRowsComponent,
-    PinsTableRowsComponent,
-    CommentsTableRowsComponent
   ]
 })
 
