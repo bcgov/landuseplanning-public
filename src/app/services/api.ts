@@ -31,7 +31,6 @@ window['encodeURIComponent'] = (component: string) => {
 @Injectable()
 export class ApiService {
   // public token: string;
-  public isMS: boolean; // IE, Edge, etc
   public apiPath: string;
   public adminUrl: string;
   public env: string;  // Could be anything per Openshift settings but generally is one of 'local' | 'dev' | 'test' | 'prod' | 'demo'
@@ -39,9 +38,6 @@ export class ApiService {
   constructor(
     private http: HttpClient
   ) {
-    // const currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
-    // this.token = currentUser && currentUser.token;
-    this.isMS = window.navigator.msSaveOrOpenBlob ? true : false;
 
     // The following items are loaded by a file that is only present on cluster builds.
     // Locally, this will be empty and local defaults will be used.
@@ -69,19 +65,15 @@ export class ApiService {
     const blob = await this.downloadResource(document._id);
     let filename = document.displayName;
     filename = encode(filename).replace(/\\/g, '_').replace(/\//g, '_');
-    if (this.isMS) {
-      window.navigator.msSaveBlob(blob, filename);
-    } else {
-      const url = window.URL.createObjectURL(blob);
-      const a = window.document.createElement('a');
-      window.document.body.appendChild(a);
-      a.setAttribute('style', 'display: none');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove();
-    }
+    const url = window.URL.createObjectURL(blob);
+    const a = window.document.createElement('a');
+    window.document.body.appendChild(a);
+    a.setAttribute('style', 'display: none');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
   }
 
   public async openDocument(document: Document): Promise<void> {
@@ -131,14 +123,14 @@ export class ApiService {
     if (sortBy !== null) { queryString += `&sortBy=${sortBy}`; }
     if (secondarySort !== null) { queryString += `&sortBy=${secondarySort}`; }
     if (populate !== null) { queryString += `&populate=${populate}`; }
-    if (queryModifier !== {}) {
+    if (Object.keys(queryModifier).length !== 0) {
       Object.keys(queryModifier).forEach(key => {
         queryModifier[key].split(',').map(item => {
           queryString += `&and[${key}]=${item}`;
         });
       });
     }
-    if (filter !== {}) {
+    if (Object.keys(queryModifier).length !== 0) {
       Object.keys(filter).forEach(key => {
         filter[key].split(',').forEach(item => {
           queryString += `&or[${key}]=${item}`;

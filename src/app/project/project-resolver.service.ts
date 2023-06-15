@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { forkJoin, of, from, combineLatest, zip } from 'rxjs';
 import { mergeMap } from 'rxjs/operators'
 

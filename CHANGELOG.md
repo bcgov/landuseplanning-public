@@ -1,3 +1,6 @@
+### 1.5.1 Jun 15, 2023
+* Updated Angular (version 11) and several packages to address security concerns. [DESENG-344](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-344)
+
 ### 1.5.0 Mar 17, 2023
 * Updated hero background image to new image of Revelstoke. [DESENG-291](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-291)
 
