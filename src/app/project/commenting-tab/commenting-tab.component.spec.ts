@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import 'rxjs/add/observable/of';
 import { Project } from 'app/models/project';
 import { Comment } from 'app/models/comment';

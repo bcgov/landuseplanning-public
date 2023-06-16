@@ -1,8 +1,8 @@
 import { Component, Input, Renderer2, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormArray } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Utils } from 'app/shared/utils/utils';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';

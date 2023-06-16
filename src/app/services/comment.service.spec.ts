@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { Comment } from 'app/models/comment';
 import { CommentPeriod } from 'app/models/commentperiod';
 import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ApiService } from './api';
 import { CommentService } from './comment.service';
 import { CommentPeriodService } from './commentperiod.service';
