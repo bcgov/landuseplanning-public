@@ -1,7 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Decision } from 'app/models/decision';
 import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ApiService } from './api';
 import { DecisionService } from './decision.service';
 import { DocumentService } from './document.service';

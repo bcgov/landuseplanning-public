@@ -5,7 +5,7 @@ import { DocumentService } from './document.service';
 import { CommentPeriodService } from './commentperiod.service';
 import { FeatureService } from './feature.service';
 import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Project } from 'app/models/project';
 import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
