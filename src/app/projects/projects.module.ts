@@ -32,10 +32,6 @@ import { ProjectListTableRowsComponent } from './project-list/project-list-table
     ProjDetailPopupComponent,
     ProjectListComponent,
     ProjectListTableRowsComponent
-  ],
-  entryComponents: [
-    ProjDetailPopupComponent,
-    ProjectListTableRowsComponent
   ]
 })
 

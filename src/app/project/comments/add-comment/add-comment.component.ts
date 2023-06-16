@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 // import { HttpEventType } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
@@ -157,8 +157,8 @@ export class AddCommentComponent implements OnInit {
           formData.append('documentFileName', file.name);
           formData.append('internalOriginalName', file.name);
           formData.append('documentSource', 'COMMENT');
-          formData.append('dateUploaded', moment());
-          formData.append('datePosted', moment());
+          formData.append('dateUploaded', String(moment()));
+          formData.append('datePosted', String(moment()));
           formData.append('upfile', file);
           this.progressBufferValue += 100 * file.size / this.totalSize;
 

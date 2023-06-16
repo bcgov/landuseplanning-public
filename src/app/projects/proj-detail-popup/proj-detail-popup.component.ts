@@ -3,7 +3,7 @@ import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { CommentPeriod } from 'app/models/commentperiod';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 
 @Component({

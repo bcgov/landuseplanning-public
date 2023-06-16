@@ -33,10 +33,6 @@ import { AddSurveyResponseComponent } from './add-survey-response/add-survey-res
   ],
   exports: [
     FileUploadComponent
-  ],
-  entryComponents: [
-    AddCommentComponent,
-    AddSurveyResponseComponent
   ]
 })
 export class CommentsModule { }
