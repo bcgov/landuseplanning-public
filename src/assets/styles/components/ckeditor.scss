@@ -10,6 +10,7 @@
     img:not(.image-style-side) {
       margin-left: auto;
       margin-right: auto;
+      display: block;
     }
 
     &.image-style-side {
