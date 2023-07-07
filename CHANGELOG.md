@@ -1,3 +1,6 @@
+### 1.5.2 Jul 5, 2023
+* Fixed project description images so that they are centre-aligned by default. [DESENG-359](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-359)
+
 ### 1.5.1 Jun 15, 2023
 * Updated Angular (version 11) and several packages to address security concerns. [DESENG-344](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-344)
 
