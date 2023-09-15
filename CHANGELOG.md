@@ -1,3 +1,6 @@
+### 1.6.0 Sept 15, 2023
+* Upgraded BC-Sans font to version 2.0. [DESENG-387](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-387)
+
 ### 1.5.2 Jul 5, 2023
 * Fixed project description images so that they are centre-aligned by default. [DESENG-359](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-359)
 
