@@ -22,6 +22,7 @@ export class Document {
   datePosted: Date;
   dateUpdated: Date;
   projectPhase: string;
+  section: string;
 
   checkbox: boolean;
   upfile: File;
@@ -40,6 +41,7 @@ export class Document {
     this.internalSize = obj && obj.internalSize || null;
     this.internalExt = obj && obj.internalExt || null;
     this.documentSource = obj && obj.documentSource || null;
+    this.section = obj && obj.section || null;
 
     this.displayName = obj && obj.displayName || null;
     this.milestone = obj && obj.milestone || null;
