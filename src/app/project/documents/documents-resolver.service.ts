@@ -15,7 +15,6 @@ export class DocumentsResolver implements Resolve<Observable<object>> {
   resolve(route: ActivatedRouteSnapshot): Observable<object> {
     const projectId = route.parent.paramMap.get('projId');
     const currentPage = route.params.currentPage ? route.params.currentPage : 1;
-    // const pageSize = route.params.pageSize ? route.params.pageSize : 10;
     const sortBy = route.params.sortBy && route.params.sortBy !== 'null' ? route.params.sortBy : '-datePosted';
     const keywords = route.params.keywords;
 
