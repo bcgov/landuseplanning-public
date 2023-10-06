@@ -173,14 +173,22 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     return new Date(dateString).toLocaleDateString('en-us', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
-  goToItem(item) {
-    let filename = item.documentFileName;
+  /**
+   * When a document in the table is clicked, encode the its public URL so it can be served
+   * by the server, then navigate the user to a new tab with that document.
+   *
+   * @param item The document to form the URL for.
+   */
+  goToItem(item: Document): void {
+    const filename = item.documentFileName;
     let safeName = filename;
+
     try {
       safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
     } catch (e) {
-      console.log('error:', e);
+      console.log('Error, couldn\'t form the URL:', e);
     }
+
     window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 
@@ -358,12 +366,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
         this.router.navigate(['/search']);
         this.loading = false;
       }
-        // this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-        // this.documents = res[0].data.searchResults;
-        // this.setDocumentRowData();
-        // this.loading = false;
-        // this._changeDetectionRef.detectChanges();
-      });
+    });
   }
 
   public onNumItems(numItems) {
