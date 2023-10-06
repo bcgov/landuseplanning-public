@@ -43,21 +43,45 @@
     <div *ngIf="currentProject.documentInfo">
       <div class="mb-3 tab-section-text" [innerHTML]="currentProject.documentInfo | newlines"></div>
     </div>
-    <div *ngIf="documents.length === 0; else docsTable">
+    <div *ngIf="documentsGroupedBySection.length === 0 && documents.length === 0; else docsTable">
       No documents visible yet.
     </div>
     <ng-template #docsTable>
+      <mat-accordion *ngFor="let section of documentsGroupedBySection">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{section[0].section}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-      <p class="table-instructions">Click on a document to view it.</p>
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th class="col-7">Document</th>
+                <th class="col-3">Project Phase</th>
+                <th class="col-2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let file of section" (click)="goToItem(file)" (keyup.Enter)="goToItem(file)">
+                <td class="col-7">{{file.displayName}}</td>
+                <td class="col-3">{{file.projectPhase}}</td>
+                <td class="col-2">{{formatDocumentDate(file.datePosted)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
+      </mat-accordion>
 
       <app-table-template *ngIf="!loading && tableParams.totalListItems != 0"
-      (checkboxChange)='checkChange($event)'
-      [columns]="documentTableColumns"
-      [data]="documentTableData"
-      (onColumnSort)='setColumnSort($event)'
-      (onSelectedRow)='updateSelectedRow($event)'
-      (onPageNumUpdate)='getPaginatedDocs($event)'>
-    </app-table-template>
+        (checkboxChange)='checkChange($event)'
+        [columns]="documentTableColumns"
+        [data]="documentTableData"
+        (onColumnSort)='setColumnSort($event)'
+        (onSelectedRow)='updateSelectedRow($event)'
+        (onPageNumUpdate)='getPaginatedDocs($event)'>
+      </app-table-template>
   </ng-template>
   </section>
 
