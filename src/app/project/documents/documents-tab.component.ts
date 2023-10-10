@@ -152,7 +152,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     // Group files together with by section.
     const unorderedDocumentGroupings = groupBy(filesWithSections, 'section');
 
-    // Convert grouped files object to array to ensure correction section order is used.
+    // Convert grouped files object to array to ensure correct section order is used.
     Object.values(sectionIdsToNames).forEach((section) => {
       this.documentsGroupedBySection.push(unorderedDocumentGroupings[section]);
     })
@@ -174,7 +174,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * When a document in the table is clicked, encode the its public URL so it can be served
+   * When a document in the table is clicked, encode its public URL so it can be served
    * by the server, then navigate the user to a new tab with that document.
    *
    * @param item The document to form the URL for.
