@@ -1,3 +1,6 @@
+### 1.7.0 Oct 11, 2023
+* Add file sections [DESENG-372](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-372)
+
 ### 1.6.0 Sept 15, 2023
 * Upgraded BC-Sans font to version 2.0. [DESENG-387](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-387)
 
