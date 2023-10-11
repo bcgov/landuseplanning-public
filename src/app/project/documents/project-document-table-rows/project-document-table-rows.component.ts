@@ -38,8 +38,6 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
 
   ngOnInit() {
     this.documents = this.data.data;
-    console.log('documents', this.data);
-
     this.paginationData = this.data.paginationData;
     this.route.data
       .takeUntil(this.ngUnsubscribe)

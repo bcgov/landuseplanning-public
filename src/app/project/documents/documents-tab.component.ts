@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, zip } from 'rxjs';
+import { partition, groupBy, mapValues, keyBy } from 'lodash';
 
 import { Document } from 'app/models/document';
 import { SearchTerms } from 'app/models/search';
@@ -15,7 +16,16 @@ import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { Utils } from 'app/shared/utils/utils';
+import { DocumentSection } from 'app/models/documentSection';
+import { DocumentSectionService } from 'app/services/documentSection.service';
 
+const encode = encodeURIComponent;
+window['encodeURIComponent'] = (component: string) => {
+  return encode(component).replace(/[!'()*]/g, (c) => {
+    // Also encode !, ', (, ), and *
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+};
 
 @Component({
   selector: 'app-documents',
@@ -28,14 +38,11 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   public documents: Document[] = null;
   public loading = true;
+  public documentSections: DocumentSection[] = [];
+  public documentsGroupedBySection: Document[][] = [];
 
   public documentTableData: TableObject;
   public documentTableColumns: any[] = [
-    // {
-    //   name: '',
-    //   value: 'check',
-    //   width: 'col-1'
-    // },
     {
       name: 'Document',
       value: 'displayName',
@@ -54,9 +61,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   ];
 
   public selectedCount = 0;
-
   public currentProject;
-
   public tableParams: TableParamsObject = new TableParamsObject();
 
   constructor(
@@ -67,7 +72,8 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private storageService: StorageService,
     private tableTemplateUtils: TableTemplateUtils,
-    private utils: Utils
+    private utils: Utils,
+    private documentSectionService: DocumentSectionService
   ) { }
 
   ngOnInit() {
@@ -83,19 +89,32 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
-        if (res) {
-          if (res.documents && res.documents[0].data.meta && res.documents[0].data.meta.length > 0) {
-            this.tableParams.totalListItems = res.documents[0].data.meta[0].searchResultsTotal;
-            this.documents = res.documents[0].data.searchResults;
-          } else {
-            this.tableParams.totalListItems = 0;
-            this.documents = [];
+        if (res && res?.documents && res?.documents.length > 0) {
+          // As with the rest of the app, "file" and "document" are used interchangeably.
+          this.tableParams.totalListItems = 0;
+          const documentsAndSections = res.documents[0];
+
+          // Ensure the sections arranged by their "order" key.
+          this.documentSections = this.sortSectionsByOrder(res.documents[1]);
+
+          if (documentsAndSections.length > 0) {
+            // Set the documents for the table and total list items.
+            this.documents = documentsAndSections[0].data.searchResults;
+
+            if (documentsAndSections[0].data.meta.length > 0) {
+              this.tableParams.totalListItems = documentsAndSections[0].data.meta[0].searchResultsTotal;
+            }
+
+            if (this.documentSections.length > 0) {
+              this.groupAndSortFilesWithinSections();
+            }
           }
+
           this.loading = false;
           this.setDocumentRowData();
           this._changeDetectionRef.detectChanges();
         } else {
-          alert('Uh-oh, couldn\'t load valued components');
+          alert('Uh-oh, couldn\'t load documents.');
           // project not found --> navigate back to search
           this.router.navigate(['/search']);
           this.loading = false;
@@ -103,6 +122,99 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
       }
       );
   }
+
+  /**
+   * Groups files together within their sections, then sorts the sections.
+   */
+  groupAndSortFilesWithinSections(): void {
+    // Get a map of section IDs to their names.
+    const sectionIdsToNames = mapValues(keyBy(this.documentSections, '_id'), 'name');
+
+    /*
+    * If there are document/file sections, partition the list of
+    * files into those that are sectioned and those that aren't.
+    * */
+    const [filesWithSections, unorganizedFiles] = partition(
+      this.documents,
+      (document) => document.section && Object.keys(sectionIdsToNames).includes(document.section)
+    );
+
+    // Set documents in the "main" table to be docs without sections.
+    this.documents = unorganizedFiles;
+    // Update "main" table docs count.
+    this.tableParams.totalListItems = unorganizedFiles.length;
+
+    // Have each file use the section name rather than ID.
+    filesWithSections.forEach(file => {
+      file.section = sectionIdsToNames[file.section];
+    })
+
+    // Group files together with by section.
+    const unorderedDocumentGroupings = groupBy(filesWithSections, 'section');
+
+    // Convert grouped files object to array to ensure correct section order is used.
+    Object.values(sectionIdsToNames).forEach((section) => {
+      this.documentsGroupedBySection.push(unorderedDocumentGroupings[section]);
+    })
+
+    // Filter out sections with no files in them.
+    this.documentsGroupedBySection = this.documentsGroupedBySection.filter((document) => {
+      return Array.isArray(document);
+    })
+  }
+
+  /**
+   * Takes a date string and formats it as month, day, year. For example, December 31, 2000.
+   *
+   * @param dateString The date string to format.
+   * @returns The formatted date.
+   */
+  formatDocumentDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-us', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  /**
+   * When a document in the table is clicked, encode its public URL so it can be served
+   * by the server, then navigate the user to a new tab with that document.
+   *
+   * @param item The document to form the URL for.
+   */
+  goToItem(item: Document): void {
+    const filename = item.documentFileName;
+    let safeName = filename;
+
+    try {
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+    } catch (e) {
+      console.log('Error, couldn\'t form the URL:', e);
+    }
+
+    window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
+  }
+
+  /**
+   * Split the document sections into those that have an explicit "order"
+   * property declared, and those that don't. Of those that do, sort those by
+   * numerical order value. Finally, concatenate those with "null" as their order
+   * to the bottom of the list of document sections.
+   *
+   * It's important that this sorting method matches what is used on the backend
+   * app for file sections.
+   *
+   * @param documentSections An array of document sections to sort.
+   * @returns The sorted array of sections.
+   */
+    sortSectionsByOrder(documentSections: DocumentSection[]): DocumentSection[]  {
+      const [populatedEntries, nullEntires] = partition(
+        documentSections,
+        (section) => Number.isInteger(section.order)
+      );
+      if (populatedEntries.length > 0) {
+        // Sort by the order property.
+        populatedEntries.sort((a, b) => a.order - b.order);
+      }
+      return populatedEntries.concat(nullEntires);
+    }
 
   navSearchHelp() {
     this.router.navigate(['/search-help']);
@@ -210,24 +322,51 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
     this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
 
-    this.searchService.getSearchResults(
-      this.tableParams.keywords,
-      'Document',
-      [{ 'name': 'project', 'value': this.currentProject._id }],
-      pageNumber,
-      this.tableParams.pageSize,
-      this.tableParams.sortBy,
-      { documentSource: 'PROJECT' },
-      true)
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((res: any) => {
-        this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-        this.documents = res[0].data.searchResults;
+    zip(
+      this.searchService.getSearchResults(
+        this.tableParams.keywords,
+        'Document',
+        [{ 'name': 'project', 'value': this.currentProject._id }],
+        pageNumber,
+        null,
+        this.tableParams.sortBy,
+        { documentSource: 'PROJECT', internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' },
+        true),
+        this.documentSectionService.getAll(this.currentProject._id)
+    )
+    .takeUntil(this.ngUnsubscribe)
+    .subscribe((res: any) => {
+      if (res && res?.length > 0) {
+        this.documentsGroupedBySection = [];
+        // As with the rest of the app, "file" and "document" are used interchangeably.
+        this.tableParams.totalListItems = 0;
+        const documentsAndSections = res[0];
+
+        // Ensure the sections arranged by their "order" key.
+        this.documentSections = this.sortSectionsByOrder(res[1]);
+
+        if (documentsAndSections.length > 0) {
+          // Set the documents for the table and total list items.
+          this.documents = documentsAndSections[0].data.searchResults;
+          this.tableParams.totalListItems = documentsAndSections[0].data.meta[0].searchResultsTotal;
+
+          if (this.documentSections.length > 0) {
+            this.groupAndSortFilesWithinSections();
+          }
+        }
+
         this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
         this.setDocumentRowData();
         this.loading = false;
         this._changeDetectionRef.detectChanges();
-      });
+      } else {
+        alert('Uh-oh, couldn\'t load documents.');
+        console.error('Error. Couldn\'t load documents.', res)
+        // project not found --> navigate back to search
+        this.router.navigate(['/search']);
+        this.loading = false;
+      }
+    });
   }
 
   public onNumItems(numItems) {
