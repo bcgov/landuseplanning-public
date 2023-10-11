@@ -19,6 +19,7 @@ import { Org } from 'app/models/organization';
 import { Decision } from 'app/models/decision';
 import { User } from 'app/models/user';
 import { EmailSubscribe } from 'app/models/emailSubscribe';
+import { DocumentSection } from 'app/models/documentSection';
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -30,7 +31,6 @@ window['encodeURIComponent'] = (component: string) => {
 
 @Injectable()
 export class ApiService {
-  // public token: string;
   public apiPath: string;
   public adminUrl: string;
   public env: string;  // Could be anything per Openshift settings but generally is one of 'local' | 'dev' | 'test' | 'prod' | 'demo'
@@ -592,7 +592,8 @@ export class ApiService {
       'internalURL',
       'internalMime',
       'internalExt',
-      'internalSize'
+      'internalSize',
+      'section'
     ];
     const queryString = 'document?_application=' + appId + '&fields=' + this.buildValues(fields);
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});
@@ -651,7 +652,8 @@ export class ApiService {
       'documentAuthorType',
       'milestone',
       'description',
-      'isPublished'
+      'isPublished',
+      'section'
     ];
     const queryString = `document?documentSource=${documentSource}&fields=${this.buildValues(fields)}`;
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});
@@ -685,7 +687,8 @@ export class ApiService {
       'documentAuthorType',
       'milestone',
       'description',
-      'isPublished'
+      'isPublished',
+      'section'
     ];
     const queryString = `document?docIds=${this.buildValues(ids)}&fields=${this.buildValues(fields)}`;
     return this.http.get<Document[]>(`${this.apiPath}/${queryString}`, {});
@@ -709,6 +712,22 @@ export class ApiService {
   getTopNewsItems(): Observable<any[]> {
     const queryString = 'recentActivity?top=true';
     return this.http.get<any[]>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  /**
+   * Get all document sections by project.
+   *
+   * @param {string} projectId The project ID to get document sections for.
+   * @returns {Observable}
+   */
+  getDocumentSections(projectId: string): Observable<Object> {
+    const fields = [
+      'name',
+      'project',
+      'order',
+    ];
+    const queryString = `documentSection/${projectId}?fields=${this.buildValues(fields)}`;
+    return this.http.get<DocumentSection>(`${this.apiPath}/${queryString}`, {});
   }
 
   //
