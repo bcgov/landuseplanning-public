@@ -1,3 +1,6 @@
+### 1.7.1 Jan 18, 2024
+* Fix bug relating to documents tab pagination [DESENG-486](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-486)
+
 ### 1.7.0 Oct 11, 2023
 * Add file sections [DESENG-372](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-372)
 

@@ -321,14 +321,13 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
-
     zip(
       this.searchService.getSearchResults(
         this.tableParams.keywords,
         'Document',
         [{ 'name': 'project', 'value': this.currentProject._id }],
         pageNumber,
-        null,
+        this.tableParams.pageSize,
         this.tableParams.sortBy,
         { documentSource: 'PROJECT', internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' },
         true),
