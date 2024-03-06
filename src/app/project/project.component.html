@@ -90,28 +90,23 @@
 
     <section class="people">
       <div class="container">
-        <h2>Contacts</h2>
         <div class="flex-container">
           <div class="inner-col">
-            <h3>Engagement Lead</h3>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
-                wiid="C937">person</i>{{project?.projectLead?.displayName || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
-                wiid="C937">phone</i>{{project?.projectLead?.phoneNumber || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
-                wiid="C937">email</i><a class="contacts-link"
-                href="mailto:{{project?.projectLead?.email}}">{{project?.projectLead?.email || "-"}}</a></p>
-          </div><!--
-          <div class="inner-col">
-            <h3>Project Director</h3>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
-                wiid="C937">person</i>{{project?.projectDirector?.displayName || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
-                wiid="C937">phone</i>{{project?.projectDirector?.phoneNumber || "-"}}</p>
-            <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
-                wiid="C937">email</i><a
-                href="mailto:{{project?.projectDirector?.email}}">{{project?.projectDirector?.email || "-"}}</a></p>
-          </div>-->
+            <div *ngIf="project?.contactFormEnabled; else engagement_lead_section">
+              <button class="btn btn-small inverted" (click)="launchContactForm()" type="button">Contact the Project Team</button>
+            </div>
+            <ng-template #engagement_lead_section>
+              <h2>Contacts</h2>
+              <h3>Engagement Lead</h3>
+              <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                  wiid="C937">person</i>{{project?.projectLead?.displayName || "-"}}</p>
+              <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                  wiid="C937">phone</i>{{project?.projectLead?.phoneNumber || "-"}}</p>
+              <p class="value"><i _ngcontent-c11="" class="material-icons mr-3" role="presentation"
+                  wiid="C937">email</i><a class="contacts-link"
+                  href="mailto:{{project?.projectLead?.email}}">{{project?.projectLead?.email || "-"}}</a></p>
+            </ng-template>
+          </div>
           <div class="inner-col">
             <button class="btn btn-small inverted" (click)="addEmail()" type="button">Sign up for project updates</button>
           </div>

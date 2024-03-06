@@ -1,0 +1,44 @@
+<div class="modal-content">
+  <div class="modal-header">
+      <h2 class="modal-title">Contact the Project Team</h2>
+      <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg1" type="button"
+          aria-label="Close comment submission form." (click)="activeModal.dismiss()">
+          <i class="material-icons" aria-hidden="true">
+              close
+          </i>
+      </button>
+  </div>
+  <div class="modal-body">
+    <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)">
+      <section>
+        <p class="form-warning">Please complete all required fields.</p>
+          <div class="form-group">
+            <label class="control-label" for="name">Name*</label>
+            <input class="form-control" type="text" name="name" id="name" required ngModel/>
+            <label class="control-label" for="email">Email Address*</label>
+            <input class="form-control" type="text" name="email" id="email" required ngModel/>
+            <label class="control-label" for="message">Message*</label>
+            <textarea class="form-control" name="message" id="message" required ngModel></textarea>
+          </div>
+      </section>
+      <section class="m-b-0">
+          <h3>Notice of Collection</h3>
+              <p>This information is collected by Ministry of Forests, Lands Natural Resource Operations and Rural Development under
+              Section 26(c) of the <a class="paragraph-link" href="http://www.bclaws.ca/Recon/document/ID/freeside/96165_00" target="_blank">
+                  Freedom of Information and Protection of Privacy Act</a> and will be used to provide you with email
+              updates. Should you have any questions about the collection of your personal information, please contact:</p>
+          <p class="m-b-0">Resource Planning and Assessment Branch
+              <br>Ministry of Forests, Lands,
+              Natural Resource Operations and Rural Development
+              <br>PO Box 9525, STN PROV GOVT
+              <br>Victoria BC, V8W 9C3
+              <br><a class="paragraph-link" href="mailto:landuseplanning@gov.bc.ca">landuseplanning@gov.bc.ca</a>
+      </section>
+      <button class="btn btn-main"
+              type="submit"
+              [disabled]="!contactForm.value.name || !contactForm.value.email || !contactForm.value.message">
+            Submit
+      </button>
+    </form>
+  </div>
+</div>

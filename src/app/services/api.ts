@@ -20,6 +20,7 @@ import { Decision } from 'app/models/decision';
 import { User } from 'app/models/user';
 import { EmailSubscribe } from 'app/models/emailSubscribe';
 import { DocumentSection } from 'app/models/documentSection';
+import { ContactForm } from 'app/models/contactForm';
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -185,7 +186,9 @@ export class ApiService {
       'subpurpose',
       'tantalisID',
       'tenureStage',
-      'type'
+      'type',
+      'contactFormEnabled',
+      'contactFormEmails'
     ];
 
     let queryString = 'project?';
@@ -250,7 +253,9 @@ export class ApiService {
       'read',
       'write',
       'delete',
-      'activitiesAndUpdatesEnabled'
+      'activitiesAndUpdatesEnabled',
+      'contactFormEnabled',
+      'contactFormEmails'
     ];
     let queryString = `project/${id}?populate=true`;
     if (cpStart !== null) { queryString += `&cpStart[since]=${cpStart}`; }
@@ -750,6 +755,11 @@ export class ApiService {
   confirmEmail(emailAddress: string, confirmKey: string): Observable<EmailSubscribe> {
     const queryString = `emailSubscribe?email=${emailAddress}&confirmKey=${confirmKey}`;
     return this.http.put<EmailSubscribe>(`${this.apiPath}/${queryString}`, {});
+  }
+
+  // Send contact form response
+  sendContactFormResponse(contactForm: ContactForm): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiPath}/emailSubscribe/sendContactFormResponse`, contactForm, {});
   }
 
   //

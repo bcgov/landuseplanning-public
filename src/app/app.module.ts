@@ -118,7 +118,7 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     ModernizingComponent,
     FaqComponent,
     ShareButtonsComponent,
-    EnvBannerComponent
+    EnvBannerComponent,
   ],
   providers: [
     ConfigService,
