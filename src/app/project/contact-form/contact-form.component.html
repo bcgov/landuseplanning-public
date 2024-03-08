@@ -9,7 +9,7 @@
       </button>
   </div>
   <div class="modal-body">
-    <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)">
+    <form *ngIf="!successfulFormSubmission" #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)">
       <section>
         <p class="form-warning">Please complete all required fields.</p>
           <div class="form-group">
@@ -40,5 +40,10 @@
             Submit
       </button>
     </form>
+    <div class="successful-send" *ngIf="successfulFormSubmission">
+      <h2>Thanks for your submission!</h2>
+      <p>A member of the project team will be in touch shortly.</p>
+      <button class="btn btn-main" (click)="activeModal.dismiss()">Close window</button>
+    </div>
   </div>
 </div>

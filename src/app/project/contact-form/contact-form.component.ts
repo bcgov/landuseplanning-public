@@ -21,6 +21,7 @@ export class ContactFormComponent {
   public emailAddress: string;
   public message: string;
   public validationError = "";
+  public successfulFormSubmission = false;
 
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
@@ -38,13 +39,12 @@ export class ContactFormComponent {
     contactFormResponse.project = this.project._id;
     this.emailSubscribeService.sendContactForm(contactFormResponse)
       .toPromise()
-      .then(
-        // show feedback to user (you may now close this window)
-      )
+      .then(() => this.successfulFormSubmission = true)
       .catch(error => {
-        console.log('error', error);
-        alert('Uh-oh, error submitting email address');
+        alert('Uh-oh, error submitting submitting contact form request.');
+        console.error('Error submitting submitting contact form request. ', error)
         this.loading = false;
+        this.successfulFormSubmission = false;
       })
   }
 
