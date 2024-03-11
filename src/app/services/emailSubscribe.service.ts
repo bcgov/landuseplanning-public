@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 
 import { ApiService } from './api';
 import { EmailSubscribe } from 'app/models/emailSubscribe';
+import { ContactForm } from 'app/models/contactForm';
 
 @Injectable()
 export class EmailSubscribeService {
@@ -17,32 +18,6 @@ export class EmailSubscribeService {
   constructor(
     private api: ApiService,
   ) { }
-
-  // get a specific email by address & project
-  /*
-  getById(commentId: string, forceReload: boolean = false): Observable<Comment> {
-    if (this.comment && this.comment._id === commentId && !forceReload) {
-      return Observable.of(this.comment);
-    }
-
-    // first get the comment data
-    return this.api.getComment(commentId)
-    .pipe(
-      flatMap(res => {
-        let comments = res.body;
-        if (!comments || comments.length === 0) {
-          return of(null as Comment);
-        }
-        // Safety check for null documents or an empty array of documents.
-        if (comments[0].documents === null || comments[0].documents && comments[0].documents.length === 0) {
-          return of(new Comment(comments[0]));
-        }
-        // now get the rest of the data for this project
-        return this._getExtraAppData(new Comment(comments[0]));
-      })
-    )
-    .catch(error => this.api.handleError(error));
-  }*/
 
   add(orig: EmailSubscribe): Observable<EmailSubscribe> {
     // make a (deep) copy of the passed-in comment so we don't change it
@@ -75,6 +50,10 @@ export class EmailSubscribeService {
         return res ? new EmailSubscribe(res) : null;
       })
       .catch(this.api.handleError);
+  }
+
+  sendContactForm(contactForm: ContactForm): Observable<boolean> {
+    return this.api.sendContactFormResponse(contactForm);
   }
 
 }

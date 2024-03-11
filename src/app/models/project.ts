@@ -45,6 +45,8 @@ export class Project {
   nature: any;
   commentPeriodForBanner: any;
   activitiesAndUpdatesEnabled: boolean;
+  contactFormEnabled: boolean;
+  contactFormEmails: string[];
 
   // Permissions
   read: Array<String> = [];
@@ -101,6 +103,8 @@ export class Project {
     this.write = obj && obj.write || null;
     this.delete = obj && obj.delete || null;
     this.activitiesAndUpdatesEnabled = obj && obj.activitiesAndUpdatesEnabled || null;
+    this.contactFormEnabled = obj && obj.contactFormEnabled || null;
+    this.contactFormEmails = obj && obj.contactFormEmails || null;
 
     // copy centroid
     if (obj && obj.centroid) {
