@@ -1,3 +1,6 @@
+### 1.8.0 Mar 11, 2024
+* Add option for contact form on projects [DESENG-373](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-373)
+
 ### 1.7.1 Jan 18, 2024
 * Fix bug relating to documents tab pagination [DESENG-486](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-486)
 

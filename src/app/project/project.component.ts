@@ -131,7 +131,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.project.commentPeriodForBanner) {
         this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
         .subscribe((loadedSurvey: Survey) => {
-          console.log('survey', loadedSurvey)
           if (loadedSurvey) {
 
           // open modal
@@ -175,14 +174,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   public launchContactForm() {
     this.ngbModal = this.modalService.open(ContactFormComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
   (<ContactFormComponent>this.ngbModal.componentInstance).project = this.project;
-    // check result
-    this.ngbModal.result.then(
-      value => {
-        // saved
-        // TODO: Create success feedback for user.
-      },
-      reason => {}
-    );
 }
 
   CPActionAriaLabel(projName, action) {
