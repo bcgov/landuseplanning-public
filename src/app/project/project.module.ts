@@ -31,6 +31,7 @@ import { PinsComponent } from './pins/pins.component';
 import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.component';
 import { UnsubscribeComponent } from './email-subscribe/unsubscribe/unsubscribe.component';
 import { ConfirmEmailComponent } from './email-subscribe/confirm-email/confirm-email.component';
+import { ContactFormComponent } from './contact-form/contact-form.component';
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { ConfirmEmailComponent } from './email-subscribe/confirm-email/confirm-e
     EmailSubscribeComponent,
     UnsubscribeComponent,
     ConfirmEmailComponent,
+    ContactFormComponent,
   ],
   providers: [
     StorageService

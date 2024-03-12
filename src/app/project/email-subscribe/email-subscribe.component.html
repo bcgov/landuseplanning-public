@@ -54,7 +54,7 @@
             </section>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-main" type="button" aria-label="Submit your email address." (click)="p2_next()"
+            <button class="btn btn-main" type="button" aria-label="Submit your email address." (click)="submitForm()"
                 [disabled]="!commentForm1.form.valid || !(emailInput.value === confirmEmailInput.value)">Submit</button>
         </div>
     </div>

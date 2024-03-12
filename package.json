@@ -1,6 +1,6 @@
 {
   "name": "base-app",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",

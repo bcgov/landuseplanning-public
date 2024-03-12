@@ -18,6 +18,7 @@ import { StorageService } from 'app/services/storage.service';
 import { AddCommentComponent } from './comments/add-comment/add-comment.component';
 import { AddSurveyResponseComponent } from './comments/add-survey-response/add-survey-response.component';
 import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
+import { ContactFormComponent } from './contact-form/contact-form.component';
 
 @Component({
   selector: 'app-project',
@@ -130,7 +131,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.project.commentPeriodForBanner) {
         this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
         .subscribe((loadedSurvey: Survey) => {
-          console.log('survey', loadedSurvey)
           if (loadedSurvey) {
 
           // open modal
@@ -170,6 +170,11 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
   }
+
+  public launchContactForm() {
+    this.ngbModal = this.modalService.open(ContactFormComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
+  (<ContactFormComponent>this.ngbModal.componentInstance).project = this.project;
+}
 
   CPActionAriaLabel(projName, action) {
     let projPhrase;
