@@ -1,3 +1,6 @@
+### 1.9.0 April 10, 2024
+* Refresh static site content [DESENG-537](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-537)
+
 ### 1.8.0 Mar 11, 2024
 * Add option for contact form on projects [DESENG-373](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-373)
 
