@@ -78,7 +78,10 @@
       padding: 2rem;
       border-radius: 0.4rem;
       background: #f7f8fa;
-      height: 17rem;
+
+      .paragraph-link {
+        font-size: 0.8rem;
+      }
     }
   }
 }
