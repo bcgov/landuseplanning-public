@@ -77,15 +77,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // get data from route resolver
-    this.route.params
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(params => {
-        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
-      });
-
     this.currentProject = this.storageService.state.currentProject.data;
-
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
@@ -100,6 +92,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
           if (documentsAndSections.length > 0) {
             // Set the documents for the table and total list items.
             this.documents = documentsAndSections[0].data.searchResults;
+            this.updateTableDataAndParams();
 
             if (documentsAndSections[0].data.meta.length > 0) {
               this.tableParams.totalListItems = documentsAndSections[0].data.meta[0].searchResultsTotal;
@@ -121,6 +114,32 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
         }
       }
       );
+  }
+
+  /**
+   * Update the document table parameters like currentPage, pageSize, etc. If there's a
+   * document assigned to a section, load 100 files. Otherwise, load 10.
+   * This can be called after the document and document file sections have been loaded.
+   */
+  updateTableDataAndParams(): void {
+    if (this.documents.find(document => document.section)) {
+      this.route.params
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe(params => {
+          // Copy router params and update the page size value.
+          const updatedParams = {
+            ...params,
+            pageSize: 100
+          }
+          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(updatedParams);
+        });
+    } else {
+      this.route.params
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(params => {
+        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params)
+      });
+    }
   }
 
   /**
@@ -347,6 +366,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
         if (documentsAndSections.length > 0) {
           // Set the documents for the table and total list items.
           this.documents = documentsAndSections[0].data.searchResults;
+          this.updateTableDataAndParams();
           this.tableParams.totalListItems = documentsAndSections[0].data.meta[0].searchResultsTotal;
 
           if (this.documentSections.length > 0) {
