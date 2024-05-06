@@ -4,26 +4,28 @@
 
 <main *ngIf="!loading">
   <div class="hero-banner">
-    <div class="container">
-      <div class="hero-banner__content">
-        <h1 tabindex="-1">Land Use Plan Activities and Updates</h1>
-        <p>Use the list below to navigate individual projects that have updates. Click on any project to go
-          directly to its details page.</p>
-      </div>
-      <form #f="ngForm" class="search-form ui form" (ngSubmit)="onSubmit()">
-        <label class="instructions__white" for="keywordInput">Search activities and updates by title</label>
-        <div class="input-group main-search-field">
-          <input class="form-control" type="text" name="keywordInput"
-            id="keywordInput" [(ngModel)]="tableParams.keywords" autofocus />
-          <div class="input-group-append">
-            <!-- prevent searching if input is empty or we're already searching -->
-            <button class="btn btn-primary" type="submit">
-              <span>Search</span>
-            </button>
-          </div>
+    <div class="hero-banner__container">
+      <div class="container">
+        <div class="hero-banner__content">
+          <h1 tabindex="-1">Land Use Plan Activities and Updates</h1>
+          <p>Use the list below to navigate individual projects that have updates. Click on any project to go
+            directly to its details page.</p>
         </div>
-        <br>
-      </form>
+        <form #f="ngForm" class="search-form ui form" (ngSubmit)="onSubmit()">
+          <label class="instructions__white" for="keywordInput">Search activities and updates by title</label>
+          <div class="input-group main-search-field">
+            <input class="form-control" type="text" name="keywordInput"
+              id="keywordInput" [(ngModel)]="tableParams.keywords" autofocus />
+            <div class="input-group-append">
+              <!-- prevent searching if input is empty or we're already searching -->
+              <button class="btn btn-primary" type="submit">
+                <span>Search</span>
+              </button>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
     </div>
   </div>
 
