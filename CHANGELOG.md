@@ -1,5 +1,6 @@
-### 1.10.0 April 23, 2024
+### 1.10.0 May 6, 2024
 * Fix bug where documents don't load completely alongside sections [DESENG-598](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-598)
+* "Modernizing" page content update [DESENG-589](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-589)
 
 ### 1.9.0 April 10, 2024
 * Refresh static site content [DESENG-537](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-537)
