@@ -2,12 +2,16 @@
   background: white
 }
 
-.modernizing-intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+main {
+  padding-top: 1rem;
 
-img {
-  max-width: 100%;
+  .modernizing-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  img {
+      max-width: 100%;
+  }
 }
