@@ -1,3 +1,6 @@
+### 1.10.1 June 19, 2024
+* Sign up for project updates form not working [DESENG-653](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-653)
+
 ### 1.10.0 June 17, 2024
 * Fix bug where documents don't load completely alongside sections [DESENG-598](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-598)
 * "Modernizing" page content update [DESENG-589](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-589)
