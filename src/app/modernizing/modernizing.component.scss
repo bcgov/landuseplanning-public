@@ -1,3 +1,17 @@
 .static-content {
   background: white
 }
+
+main {
+  padding-top: 1rem;
+
+  .modernizing-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  img {
+      max-width: 100%;
+  }
+}
