@@ -107,7 +107,9 @@ http {
         }
                         
     }
-    
-    
 
+    server {
+      server_name .landuseplanning.gov.bc.ca
+      return 301 https://www.planninginpartnership.ca$request_uri;
+    }
 }
