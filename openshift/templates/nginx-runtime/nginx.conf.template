@@ -55,7 +55,8 @@ http {
 
     server {
         listen       8080 default_server;
-        server_name  localhost;
+        server_name landuseplanning.gov.bc.ca;
+        rewrite ^/(.*)$ https://planninginpartnership.ca/$1 permanent;
 
         # add in most common security headers
         add_header Content-Security-Policy "default-src * data: blob: filesystem: 'unsafe-inline' 'unsafe-eval'";
@@ -109,7 +110,6 @@ http {
     }
 
     server {
-      server_name .landuseplanning.gov.bc.ca
-      return 301 https://www.planninginpartnership.ca$request_uri;
+
     }
 }
