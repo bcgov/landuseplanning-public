@@ -13,9 +13,6 @@ COPY ./s2i/bin/ /usr/libexec/s2i/
 # Expose this variable to OpenShift
 LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 
-# Copy config from source to container
-COPY nginx.conf.template /tmp/
-
 # create empty Environment Settings JS file
 RUN echo "" > /etc/nginx/publicServerEnvironmentSettings.js
 
