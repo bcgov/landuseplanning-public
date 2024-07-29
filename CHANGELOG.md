@@ -1,3 +1,8 @@
+### 1.12 July 28, 2024
+* Redirect landuseplanning to planninginpartnership domain [DESENG-536](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-536)
+* Fix local build issue by inputting proper package.json version and removing build step
+* Remove commented-out nginx config
+
 ### 1.11 June 19, 2024
 * Sign up for project updates form not working [DESENG-653](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-653)
 * Restore "land use planning" page hero image, add FAQ page link [DESENG-652](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-652)
