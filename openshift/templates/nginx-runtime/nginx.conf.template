@@ -1,4 +1,5 @@
-# This nginx server config now lives in ConfigMaps (nginx-conf) in the dev, test, prod projects respectively
+# This config file's functionality has been reassigned to per-environment ConfigMaps in the dev, test, and prod projects in OpenShift
+# It is maintained here for transparency only
 
 worker_processes  auto;
 
