@@ -1,3 +1,7 @@
+### 1.14 September 4, 2024
+
+- Remove link from project phases graphic [DESENG-701](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-701)
+
 ### 1.13 August 21, 2024
 
 - Update URL on forest planning page [DESENG-691](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-691)

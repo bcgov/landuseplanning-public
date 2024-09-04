@@ -2,25 +2,23 @@
     <section class="tab-section" *ngIf="project">
         <div *ngIf="project.projectPhase">
             <h2>Current Project Phase</h2>
-            <a href="/phases">
-                <div *ngIf="project.projectPhase === 'Pre-Planning'" class="process-image">
-                    <img src="/assets/images/process-preplanning.png" alt="The current project phase is Pre-Planning. View more details about the Land Use Planning process. Link">
-                </div>
-                <div *ngIf="project.projectPhase === 'Plan Initiation'" class="process-image">
-                    <img src="/assets/images/process-planinitiation.png" alt="The current project phase is Plan Initiation. View more details about the Land Use Planning process. Link">
-                </div>
-                <div *ngIf="project.projectPhase === 'Plan Development'" class="process-image">
-                    <img src="/assets/images/process-plandevelopment.png"
-                        alt="The current project phase is Plan Development. View more details about the Land Use Planning process. Link">
-                </div>
-                <div *ngIf="project.projectPhase === 'Plan Evaluation and Approval'" class="process-image">
-                    <img src="/assets/images/process-planevaluation.png"
-                        alt="The current project phase is Plan Evaluation and Approval. View more details about the Land Use Planning process. Link">
-                </div>
-                <div *ngIf="project.projectPhase === 'Plan Implementation and Monitoring'" class="process-image">
-                    <img src="/assets/images/process-planimplementation.png" alt="The current project phase is Plan Implementation and Monitoring. View more details about the Land Use Planning process. Link">
-                </div>
-            </a>
+            <div *ngIf="project.projectPhase === 'Pre-Planning'" class="process-image">
+                <img src="/assets/images/process-preplanning.png" alt="The current project phase is Pre-Planning. View more details about the Land Use Planning process. Link">
+            </div>
+            <div *ngIf="project.projectPhase === 'Plan Initiation'" class="process-image">
+                <img src="/assets/images/process-planinitiation.png" alt="The current project phase is Plan Initiation. View more details about the Land Use Planning process. Link">
+            </div>
+            <div *ngIf="project.projectPhase === 'Plan Development'" class="process-image">
+                <img src="/assets/images/process-plandevelopment.png"
+                    alt="The current project phase is Plan Development. View more details about the Land Use Planning process. Link">
+            </div>
+            <div *ngIf="project.projectPhase === 'Plan Evaluation and Approval'" class="process-image">
+                <img src="/assets/images/process-planevaluation.png"
+                    alt="The current project phase is Plan Evaluation and Approval. View more details about the Land Use Planning process. Link">
+            </div>
+            <div *ngIf="project.projectPhase === 'Plan Implementation and Monitoring'" class="process-image">
+                <img src="/assets/images/process-planimplementation.png" alt="The current project phase is Plan Implementation and Monitoring. View more details about the Land Use Planning process. Link">
+            </div>
         </div>
     </section>
 </div>
