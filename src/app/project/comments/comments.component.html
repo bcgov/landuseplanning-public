@@ -44,8 +44,11 @@
                 <label>Partner First Nation(s)</label>
                 <p class="value">{{project?.partner || "-" }}</p>
               </div>
-              <div *ngIf="project?.agreements?.length > 0" class="agreements">
+              <div *ngIf="project?.agreements?.length > 0" class="agreements-label">
                 <label>Agreement(s)</label>
+              </div>
+			  <div *ngIf="projectFieldType(project?.agreements) === 'string'" class="agreements">
+                <p class="value">{{project?.agreements || "-"}}</p>
               </div>
               <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
                 <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
