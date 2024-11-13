@@ -1,3 +1,7 @@
+### 1.15 Nov 13, 2024
+
+- Agreements header is now invisible when no agreements are available. [DESENG-742](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-742)
+
 ### 1.14 September 4, 2024
 
 - Remove link from project phases graphic [DESENG-701](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-701)
