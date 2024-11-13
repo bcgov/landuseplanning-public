@@ -14,13 +14,10 @@
             </ul>
             <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
             <div class="basic-info">
-              <div *ngIf="projectFieldType(project?.agreements) ==='string'" class="agreements">
+              <div *ngIf="project?.agreements?.length > 0" class="agreements">
                 <label>Agreement(s)</label>
-                <p class="value">{{project?.agreements || "-"}}</p>
               </div>
               <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
-                <label>Agreement(s)</label>
-                <p class="value" *ngIf="project.agreements.length === 0">-</p>
                 <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
                   <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
                     <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
