@@ -16,6 +16,7 @@ export class Project {
   projectLead: any;
   partner: String;
   region: String;
+  shapeFileColour: string;
   projectDirector: any;
   agreements: { agreementName: string, agreementUrl: string }[];
   shapefiles: { shapefileId: string, documentFileName: string }[];
@@ -77,6 +78,7 @@ export class Project {
     this.region = obj && obj.region || null;
     this.projectDirector = obj && obj.projectDirector || null;
     this.agreements = obj && obj.agreements || null;
+    this.shapeFileColour = obj && obj.shapeFileColour || null;
     this.shapefiles = obj && obj.shapefiles || [];
     this.addedBy = obj && obj.addedBy || null;
     this.existingLandUsePlanURLs = obj && obj.existingLandUsePlanURLs || null;

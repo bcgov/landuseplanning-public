@@ -282,10 +282,11 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     addedApps.forEach(app => {
       // If there is a shapefile for one of the projects, display it instead of a pin.
       if (app.shapefiles && app.shapefiles.length > 0) {
+        const shapeFileStyle = { color: app.shapeFileColour || 'rgb(51, 136, 255)' };
         app.shapefiles.forEach(projectShapefile => {
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
-          const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false })
+          const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
           .on('click', L.Util.bind(this.onShapefileClick, this, app));
           shapefile.addTo(this.map);
           this.shapefileList.push(shapefile);

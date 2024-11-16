@@ -160,10 +160,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
     // draw project marker
     if (this.shapefile[0] && this.shapefile[0]._id && this.shapefile[0].documentFileName && this.shapefile[0].documentFileName.length > 0) {
-      console.log('Shapefile', this.shapefile);
+      const shapeFileStyle = { color: this.project.shapeFileColour || 'rgb(51, 136, 255)' };
       const escapedName = encode(this.shapefile[0].documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
       const shapeurl = this.pathAPI + '/document/' + this.shapefile[0]._id + '/fetch/' + escapedName;
-      const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false });
+      const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle });
       let shapefileBounds = window.setInterval(function () {
         if (shapefile.getBounds().isValid() === true) {
           this.map.fitBounds(shapefile.getBounds(), {padding: [50, 50]});
