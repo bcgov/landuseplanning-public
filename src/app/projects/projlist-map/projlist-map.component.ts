@@ -10,6 +10,7 @@ import { Document } from 'app/models/document';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-detail-popup.component';
+import { Constants } from 'app/shared/utils/constants';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
@@ -282,7 +283,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     addedApps.forEach(app => {
       // If there is a shapefile for one of the projects, display it instead of a pin.
       if (app.shapefiles && app.shapefiles.length > 0) {
-        const shapeFileStyle = { color: app.shapeFileColour || 'rgb(51, 136, 255)' };
+        const shapeFileStyle = { color: app.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
         app.shapefiles.forEach(projectShapefile => {
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
