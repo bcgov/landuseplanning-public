@@ -86,8 +86,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       width: 'col-4'
     },
     {
-      name: 'Phase',
-      value: 'projectPhase',
+      name: 'Process Type(s)',
+      value: 'projectTypes',
       width: 'col-4'
     }
   ];
@@ -351,6 +351,12 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     return overlappingDistrictsListString;
   }
 
+	stringifyProjectTypes(projectTypes) {
+		const filteredProjectTypes = projectTypes.filter(pt => true === pt.checked);
+		const projectTypeNames = filteredProjectTypes.map(pt => pt.name);
+		return projectTypeNames.join(', ') || '';
+	}
+
   setRowData() {
     let projectList = [];
     if (this.projects && this.projects.length > 0) {
@@ -361,7 +367,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
             name: project.name,
             partner: project.partner,
             overlappingRegionalDistricts: this.stringifyOverlappingDistricts(project.overlappingRegionalDistricts as string | string[]),
-            projectPhase: project.projectPhase
+            projectTypes: this.stringifyProjectTypes(project.projectTypes),
           }
         );
       });

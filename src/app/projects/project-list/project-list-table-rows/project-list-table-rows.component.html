@@ -3,5 +3,5 @@
   *ngFor="let project of projects | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }">
   <td scope="row" data-label="Name" [attr.aria-label]="makeAriaLabel(project.name)" class="col-4">{{project.name || '-'}}</td>
   <td scope="row" data-label="Partner First Nation(s)" [attr.aria-hidden]="true" class="col-4">{{project.partner || '-'}}</td>
-  <td scope="row" data-label="Project Phase" [attr.aria-hidden]="true" class="col-4">{{project.projectPhase || '-'}}</td>
+  <td scope="row" data-label="Project Phase" [attr.aria-hidden]="true" class="col-4">{{project.projectTypes || '-'}}</td>
 </tr>

@@ -40,6 +40,7 @@ export class Project {
   provElecDist: String;
   shortName: String;
   projectPhase: String;
+	projectTypes: ProjectType[];
   substitution: Boolean;
   updatedBy: String;
   operational: any;
@@ -98,6 +99,7 @@ export class Project {
     this.provElecDist = obj && obj.provElecDist || null;
     this.shortName = obj && obj.shortName || null;
     this.projectPhase = obj && obj.projectPhase || null;
+		this.projectTypes = obj && obj.projectTypes || null;
     this.substitution = obj && obj.substitution || null;
     this.updatedBy = obj && obj.updatedBy || null;
     this.commentPeriodForBanner = obj && obj.commentPeriodForBanner || null;
@@ -122,6 +124,11 @@ export interface ProjectLogo {
   name: string;
   alt: string;
   link: string;
+}
+
+export interface ProjectType {
+  name: string;
+  checked: boolean;
 }
 
 export interface ProjectLogoWithSource extends ProjectLogo {
