@@ -31,15 +31,15 @@
             [attr.aria-expanded]="isVisible" (focus)="dropDownVisible()"><span>Learn More</span><span class="caret"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" [class.visible]="isVisible" aria-labelledby="aboutMMTI">
-            <a class="dropdown-item" href="/modernizing" [routerLink]="['/modernizing']" tabindex="0" (click)="dropDownHide()" alt="List of Projects">
+            <a class="dropdown-item" href="/lup" [routerLink]="['/lup']" tabindex="0" (click)="dropDownHide()" alt="List of Projects">
               <strong aria-label="Learn more about the B.C. government’s commitment and approach to land use planning.">Land Use Planning</strong>
               <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about the B.C. government’s commitment and approach to land use planning.</span>
             </a>
-            <a class="dropdown-item" href="/phases" [routerLink]="['/phases']" tabindex="0" (click)="dropDownHide()">
+            <a class="dropdown-item" href="/flp" [routerLink]="['/flp']" tabindex="0" (click)="dropDownHide()">
               <strong aria-label="Learn more about forest landscape planning and the steps required to completing a plan.">Forest Landscape Planning</strong>
               <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about forest landscape planning and the steps required to completing a plan.</span>
             </a>
-            <a class="dropdown-item" href="/engagement" [routerLink]="['/engagement']" tabindex="0" (click)="dropDownHide()">
+            <a class="dropdown-item" href="/wsp" [routerLink]="['/wsp']" tabindex="0" (click)="dropDownHide()">
               <strong aria-label="Learn more about the legislation and tools that support water planning and governance in B.C.">Water Planning</strong>
               <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about the legislation and tools that support water planning and governance in B.C.</span>
             </a>

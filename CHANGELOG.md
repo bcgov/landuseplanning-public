@@ -1,9 +1,10 @@
-### 1.15 Nov 26, 2024
+### 1.15 Nov 27, 2024
 
 - Agreements header is now invisible when no agreements are available. [DESENG-742](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-742)
 - Shapefiles can now appear with custom colours on the main project map and the individual project map. [DESENG-743](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-743)
 - The Project Phase column in the project list has been replaced with Process Type(s). It lists relevant project planning types. [DESENG-746](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-746)
 - Custom collection notice will appear in contact and subscribe modals when available.  [DESENG-747](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-747)
+- Updated "Learn More" routes to reflect their current content. [DESENG-748](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-748)
 
 ### 1.14 September 4, 2024
 
