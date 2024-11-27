@@ -189,7 +189,8 @@ export class ApiService {
       'tenureStage',
       'type',
       'contactFormEnabled',
-      'contactFormEmails'
+      'contactFormEmails',
+      'collectionNotice',
     ];
 
     let queryString = 'project?';
@@ -257,7 +258,8 @@ export class ApiService {
       'delete',
       'activitiesAndUpdatesEnabled',
       'contactFormEnabled',
-      'contactFormEmails'
+      'contactFormEmails',
+      'collectionNotice',
     ];
     let queryString = `project/${id}?populate=true`;
     if (cpStart !== null) { queryString += `&cpStart[since]=${cpStart}`; }

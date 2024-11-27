@@ -23,15 +23,20 @@
       </section>
       <section class="m-b-0">
           <h3>Notice of Collection</h3>
-              <p>This information is collected by Ministry of Forests, Lands Natural Resource Operations and Rural Development under
+          <div *ngIf="!project.collectionNotice">
+            <p>This information is collected by Ministry of Forests, Lands Natural Resource Operations and Rural Development under
               Section 26(c) of the <a class="paragraph-link" href="http://www.bclaws.ca/Recon/document/ID/freeside/96165_00" target="_blank">
-                  Freedom of Information and Protection of Privacy Act</a> and will be used to provide you with email
-              updates. Should you have any questions about the collection of your personal information, please contact:</p>
-          <p class="m-b-0">Provincial Stewardship Strategies and Planning Branch
+              Freedom of Information and Protection of Privacy Act</a> and will be used to provide you with email
+              updates. Should you have any questions about the collection of your personal information, please contact:
+            </p>
+            <p class="m-b-0">Provincial Stewardship Strategies and Planning Branch
               <br>Ministry of Water, Land and Resource Stewardship
               <br>PO Box 9525, STN PROV GOVT
               <br>Victoria BC, V8W 9C3
               <br><a class="paragraph-link" href="mailto:landuseplanning@gov.bc.ca">landuseplanning@gov.bc.ca</a>
+            </p>
+          </div>
+          <div *ngIf="project.collectionNotice" [innerHTML]="project.collectionNotice"></div>
       </section>
       <button class="btn btn-main"
               type="submit"
