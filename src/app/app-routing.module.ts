@@ -61,10 +61,10 @@ const routes: Routes = [
     }
   },
   {
-    path: 'engagement',
+    path: 'wsp',
     component: EngagementComponent,
     data: {
-      title: 'Engagement',
+      title: 'Water Planning',
       focush1: true
     }
   },
@@ -85,18 +85,18 @@ const routes: Routes = [
     }
   },
   {
-    path: 'modernizing',
+    path: 'lup',
     component: ModernizingComponent,
     data: {
-      title: 'Modernized Land Use Planning',
+      title: 'Land Use Planning',
       focush1: true
     }
   },
   {
-    path: 'phases',
+    path: 'flp',
     component: ProcessComponent,
     data: {
-      title: 'Project Phases',
+      title: 'Forest Landscape Planning',
       focush1: true
     }
   },
