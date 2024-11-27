@@ -35,7 +35,6 @@ export class EmailSubscribeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.emailSubscribe = new EmailSubscribe();
     this.emailSubscribe.project = this.project._id;
-    console.log('project', this.project);
   }
 
   register() {

@@ -49,7 +49,7 @@ export class Project {
   activitiesAndUpdatesEnabled: boolean;
   contactFormEnabled: boolean;
   contactFormEmails: string[];
-  collectionNotice: String;
+  collectionNotice: string;
 
   // Permissions
   read: Array<String> = [];
