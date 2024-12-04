@@ -352,9 +352,12 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   }
 
 	stringifyProjectTypes(projectTypes) {
+		if (!projectTypes || !Array.isArray(projectTypes)) {
+			return '';
+		}
 		const filteredProjectTypes = projectTypes.filter(pt => true === pt.checked);
 		const projectTypeNames = filteredProjectTypes.map(pt => pt.name);
-		return projectTypeNames.join(', ') || '';
+		return projectTypeNames ? projectTypeNames.join(', ') : '';
 	}
 
   setRowData() {
