@@ -51,7 +51,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.overlappingDistrictsListString = this.stringifyOverlappingDistricts(this.project.overlappingRegionalDistricts);
     this.commentPeriod = this.project.commentPeriodForBanner;
     this.route.data.subscribe((res: any) => {
-      if (res) {
+      if (Array.isArray(res?.documents)) {
 				res.documents.forEach(document => {
 					if (document?.data?.meta?.length > 0) {
 						this.shapefiles.push(document.data.searchResults);
