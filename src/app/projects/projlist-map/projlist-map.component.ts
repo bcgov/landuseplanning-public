@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
 import { Subject } from 'rxjs';
 import 'leaflet';
@@ -6,7 +6,6 @@ import 'leaflet.markercluster';
 import 'assets/js/leaflet.ajax.js';
 import * as _ from 'lodash';
 import { Project } from 'app/models/project';
-import { Document } from 'app/models/document';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-detail-popup.component';
@@ -51,6 +50,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   @Input() appfilters; // from projects component
   @Output() updateVisible = new EventEmitter(); // to projects component
   @Output() reloadApps = new EventEmitter(); // to projects component
+	@ViewChild('map') private mapContainer: ElementRef;
 
   public pathAPI: string;
   private map: L.Map = null;
@@ -126,7 +126,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       noWrap: true
     });
 
-    this.map = L.map('map', {
+    this.map = L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
       zoomSnap: 0.1, // for greater granularity when fitting bounds

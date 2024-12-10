@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import 'leaflet';
 import 'assets/js/leaflet.shpfile.js';
 
@@ -7,7 +7,7 @@ import { Constants } from 'app/shared/utils/constants';
 import { Subject } from 'rxjs';
 import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Document } from 'app/models/document';
 import * as _ from 'lodash';
 
@@ -21,6 +21,7 @@ const encode = encodeURIComponent;
   styleUrls: ['./project-details-tab.component.scss'],
 })
 export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDestroy {
+	@ViewChild('map') private mapContainer: ElementRef;
   public project;
   public commentPeriod = null;
   public map: L.Map = null;
@@ -29,8 +30,12 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   public overlappingDistrictsListString: string;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
+	readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 60, lng: -114}}; // Converted for other parsing
+	public bounds = {southWest: {lat: NaN, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
   private ngbModal: NgbModalRef = null;
-  public shapefile: Document[] = [];
+  public shapefiles: Document[][] = [];
+	public convertedShapefiles = [];
+	public shapefileStyle: {color: string};
   public pathAPI: string;
 
   constructor(
@@ -47,11 +52,11 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.commentPeriod = this.project.commentPeriodForBanner;
     this.route.data.subscribe((res: any) => {
       if (res) {
-        if (res.documents && res.documents[0].data.meta && res.documents[0].data.meta.length > 0) {
-          this.shapefile = res.documents[0].data.searchResults;
-        } else {
-          this.shapefile = [];
-        }
+				res.documents.forEach(document => {
+					if (document?.data?.meta?.length > 0) {
+						this.shapefiles.push(document.data.searchResults);
+					}
+				})
       }
     });
     // The following items are loaded by a file that is only present on cluster builds.
@@ -116,7 +121,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       noWrap: true
     });
 
-    this.map = L.map('map', {
+		this.map = L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
       zoomSnap: 0.1 // for greater granularity when fitting bounds
@@ -156,40 +161,112 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       this.configService.baseLayerName = e.name;
     }, this);
 
-    // Disable zoom on project details - iterferes with scrolling page.
+    // Disable mouse zoom on project details - iterferes with scrolling page.
     this.map.scrollWheelZoom.disable();
 
-    // draw project marker
-    if (this.shapefile[0] && this.shapefile[0]._id && this.shapefile[0].documentFileName && this.shapefile[0].documentFileName.length > 0) {
-      const shapeFileStyle = { color: this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
-      const escapedName = encode(this.shapefile[0].documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-      const shapeurl = this.pathAPI + '/document/' + this.shapefile[0]._id + '/fetch/' + escapedName;
-      const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle });
-      let shapefileBounds = window.setInterval(function () {
-        if (shapefile.getBounds().isValid() === true) {
-          this.map.fitBounds(shapefile.getBounds(), {padding: [50, 50]});
-          window.clearInterval(shapefileBounds);
-        }
-      }.bind(this), 500);
-      shapefile.addTo(this.map);
-    } else if (this.project) {
-      const markerIconYellow = L.icon({
-        iconUrl: 'assets/images/marker-icon-yellow.svg',
-        iconSize: [36, 36],
-        iconAnchor: [18, 36],
-        tooltipAnchor: [16, -28]
-      });
+		// Convert documents to shapefiles
+		this.shapefileStyle = { color: this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR }; // Colour for the shapefiles
+		this.convertedShapefiles = this.shapefiles[0]?.map(sf => {
+			if (sf?._id && sf?.documentFileName?.length > 0) {
+				const escapedName = encode(sf.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+				const shapeurl = this.pathAPI + '/document/' + sf._id + '/fetch/' + escapedName;
+				return new L.Shapefile(shapeurl, { isArrayBuffer: false, style: this.shapefileStyle });
+			};
+		});
 
-      const title = `${this.project.name}\n`
-        + `${this.project.overlappingRegionalDistricts}\n`;
-      const marker = L.marker(L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
-        .setIcon(markerIconYellow);
-      this.map.addLayer(marker);
-    }
-    this.map.addLayer(this.appFG);
+    // draw project marker or shapefile(s)
+		let locationAdded = false;
 
-    this.fixMap();
-  }
+		// If there are converted shapefiles
+		if (this.convertedShapefiles) {
+			this.convertedShapefiles?.forEach((sf, index) => {
+				sf.on('data:loaded', () => {
+					const keys = Object.keys(sf._layers);
+					keys?.forEach(key => {
+						if (sf._layers[key]._bounds) {
+							this.calculateShapefileBounds(sf._layers[key]._bounds);
+						}
+					});
+
+					sf.addTo(this.appFG);
+					locationAdded = true;
+
+					// Last iteration only
+					if (index === this.convertedShapefiles?.length - 1) {
+						// Change map bounds based on values in bounds variable
+						if (this.bounds.southWest.lat && this.bounds.southWest.lng && this.bounds.northEast.lat && this.bounds.northEast.lng) {
+							this.map.fitBounds([[this.bounds.southWest.lat, this.bounds.southWest.lng], [this.bounds.northEast.lat, this.bounds.northEast.lng]], {padding: [50, 50]});
+						}
+						// If no shape files have been added, add a marker
+						if (!locationAdded && this.project) {
+							this.addMarker();
+						}
+						// Add the feature group to the map
+						this.map.addLayer(this.appFG);
+					}
+				})
+			});
+		} else {
+			// Otherwise skip the shapefiles and just add a marker
+			if (this.project) {
+				this.addMarker();
+				this.map.addLayer(this.appFG);
+				this.map.fitBounds(this.defaultBounds, {padding: [50, 50]});
+			}
+		}
+	}
+
+	/**
+	 * Caluclates the shapefile bounds.
+	 * Bounds can not exceed default BC bounds.
+	 * Bounds will not reduce in size, only expand if there are shapefiles that are outside current bounds.
+	 * 
+	 * @param {LatLngBounds} shapefileBounds
+	 * @returns {void}
+	 */
+	private calculateShapefileBounds = (shapefileBounds) => {
+		this.bounds = {
+			southWest: {
+				lat: shapefileBounds?._southWest.lat >= this.defaultBoundsObject.southWest.lat 
+					&& (!this.bounds.southWest.lat || shapefileBounds?._southWest.lat <= this.bounds.southWest.lat) 
+					? shapefileBounds._southWest.lat 
+					: this.bounds.southWest.lat,
+				lng: shapefileBounds?._southWest.lng >= this.defaultBoundsObject.southWest.lng 
+					&& (!this.bounds.southWest.lng || shapefileBounds?._southWest.lng <=  this.bounds.southWest.lng) 
+					? shapefileBounds._southWest.lng 
+					: this.bounds.southWest.lng,
+			},
+			northEast: {
+				lat: shapefileBounds?._northEast.lat <= this.defaultBoundsObject.northEast.lat 
+					&& (!this.bounds.northEast.lat || shapefileBounds?._northEast.lat >= this.bounds.northEast.lat) 
+					? shapefileBounds._northEast.lat 
+					: this.bounds.northEast.lat,
+				lng: shapefileBounds?._northEast.lng <= this.defaultBoundsObject.northEast.lng 
+					&& (!this.bounds.northEast.lng || shapefileBounds?._northEast.lng >= this.bounds.northEast.lat) 
+					? shapefileBounds._northEast.lng 
+					: this.bounds.northEast.lng,
+			}
+		};
+	}
+
+	/**
+   * Adds a marker to the map.
+   *
+   * @returns {undefined}
+   */
+	private addMarker = () => {
+		const markerIconYellow = L.icon({
+			iconUrl: 'assets/images/marker-icon-yellow.svg',
+			iconSize: [36, 36],
+			iconAnchor: [18, 36],
+			tooltipAnchor: [16, -28]
+		});
+		const title = `${this.project.name}\n`
+			+ `${this.project.overlappingRegionalDistricts}\n`;
+		const marker = L.marker(L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
+			.setIcon(markerIconYellow);
+		this.appFG.addLayer(marker);
+	}
 
   /**
    * To avoid timing conflict with animations (resulting in small map tile at top left of page),
@@ -247,7 +324,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnDestroy() {
     if (this.ngbModal) { this.ngbModal.dismiss('component destroyed'); }
-    if (this.map) { this.map.remove(); }
+    if (this.map) { this.map.remove(); this.map = undefined; }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
