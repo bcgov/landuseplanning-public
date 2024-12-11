@@ -217,7 +217,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 	}
 
 	/**
-	 * Caluclates the shapefile bounds.
+	 * Takes the bounds of a shapefile and updates the overall map bounds to include them.
 	 * Bounds can not exceed default BC bounds.
 	 * Bounds will not reduce in size, only expand if there are shapefiles that are outside current bounds.
 	 * 
@@ -252,7 +252,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 	/**
    * Adds a marker to the map.
    *
-   * @returns {undefined}
+   * @returns {void}
    */
 	private addMarker = () => {
 		const markerIconYellow = L.icon({
