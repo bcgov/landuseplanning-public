@@ -29,9 +29,9 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   public multipleExistingPlans: boolean;
   public overlappingDistrictsListString: string;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
-	readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 60, lng: -114}}; // Converted for other parsing
-	public bounds = {southWest: {lat: NaN, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
+  readonly defaultBounds = L.latLngBounds([48, -139], [61, -114]); // all of BC
+	readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 61, lng: -114}}; // Converted for other parsing
+	public bounds = {southWest: {lat: null, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
   private ngbModal: NgbModalRef = null;
   public shapefiles: Document[][] = [];
 	public convertedShapefiles = [];
@@ -173,8 +173,6 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 				return new L.Shapefile(shapeurl, { isArrayBuffer: false, style: this.shapefileStyle });
 			};
 		});
-
-    // draw project marker or shapefile(s)
 		let locationAdded = false;
 
 		// If there are converted shapefiles
@@ -183,11 +181,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 				sf.on('data:loaded', () => {
 					const keys = Object.keys(sf._layers);
 					keys?.forEach(key => {
-						if (sf._layers[key]._bounds) {
+						if (sf._layers[key]?._bounds) {
 							this.calculateShapefileBounds(sf._layers[key]._bounds);
 						}
 					});
-
 					sf.addTo(this.appFG);
 					locationAdded = true;
 
