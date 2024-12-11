@@ -1,3 +1,7 @@
+### 1.16 Dec 11, 2024
+
+- Added full compatibility for multiple shape files in a single project, using one or multiple zip files. [DESENG-750](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-750)
+
 ### 1.15 Nov 27, 2024
 
 - Agreements header is now invisible when no agreements are available. [DESENG-742](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-742)
