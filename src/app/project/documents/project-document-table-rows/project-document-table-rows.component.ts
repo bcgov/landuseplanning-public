@@ -81,14 +81,7 @@ export class DocumentTableRowsComponent implements OnInit, OnDestroy, TableCompo
   }
 
   goToItem(item) {
-    let filename = item.documentFileName;
-    let safeName = filename;
-    try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-    } catch (e) {
-      console.log('error:', e);
-    }
-    window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
+    this.api.openDocument(item);
   }
 
   makeAriaLabel(docName, docSize, docExt) {
