@@ -12,25 +12,33 @@ export class DocumentsResolver implements Resolve<Observable<object>> {
     private documentSectionService: DocumentSectionService
   ) { }
 
+	/**
+	 * Retrieves documents or external links
+	 * 
+	 * @param {ActivatedRouteSnapshot} route The route to get params from.
+	 * @param {string} schema The schema type to use, either 'Document' or 'ExternalLink'
+	 * @param {string} projectId The project ID of the documents you wish to retrieve
+	 * @returns {Observable<Object>}
+	 */
+	getFiles = (route: ActivatedRouteSnapshot, schema: string, projectId: string): Observable<Object> => {
+		const keywords = route.params?.keywords || '';
+		const dataset = schema;
+		const fields = [{ 'name': 'project', 'value': projectId }];
+		const pageNum = route.params?.currentPage || 1;
+		const pageSize = 100;
+		const sortBy = route.params?.sortBy || '-datePosted';
+		const queryModifier = 'Document' === schema ? { documentSource: 'PROJECT', internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' } : {};
+		const populate = true;
+		return this.searchService.getSearchResults(keywords, dataset, fields, pageNum, pageSize, sortBy, queryModifier, populate);
+	}
+
   resolve(route: ActivatedRouteSnapshot): Observable<object> {
     const projectId = route.parent.paramMap.get('projId');
-    const currentPage = route.params.currentPage ? route.params.currentPage : 1;
-    // By default, load 10 pages worth of documents
-    const pageSize = 100;
-    const sortBy = route.params.sortBy && route.params.sortBy !== 'null' ? route.params.sortBy : '-datePosted';
-    const keywords = route.params.keywords;
 
     return zip(
-      this.searchService.getSearchResults(
-        keywords,
-        'Document',
-        [{ 'name': 'project', 'value': projectId }],
-        currentPage,
-        pageSize,
-        sortBy,
-        { documentSource: 'PROJECT', internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' },
-        true),
-      this.documentSectionService.getAll(projectId)
+      this.getFiles(route, 'Document', projectId),
+      this.documentSectionService.getAll(projectId),
+			this.getFiles(route, 'ExternalLink', projectId),
     )
   }
 }

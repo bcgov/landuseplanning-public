@@ -179,11 +179,11 @@ export class CommentsComponent implements OnInit, OnDestroy {
     let filename = item.documentFileName;
     let safeName = filename;
     try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
     } catch (e) {
       console.log('error:', e);
     }
-    window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
+    window.open(this.pathAPI.replace('public', '') + '/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 
   public addComment() {

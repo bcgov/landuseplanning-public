@@ -1,3 +1,8 @@
+### 1.17 Jan 9, 2025
+
+- External links added by admins will now show up in documents sections of projects, combined with internal files. [DESENG-751](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-751)
+- Functionality supports sorting, pagination, and sections.
+
 ### 1.16 Dec 11, 2024
 
 - Added full compatibility for multiple shape files in a single project, using one or multiple zip files. [DESENG-750](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-750)

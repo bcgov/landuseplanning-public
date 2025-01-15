@@ -36,7 +36,8 @@ window['encodeURIComponent'] = (component: string) => {
 export class DocumentsTabComponent implements OnInit, OnDestroy {
   public terms = new SearchTerms();
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  public documents: Document[] = null;
+  public documents = null;
+	public documentVault = null;
   public loading = true;
   public documentSections: DocumentSection[] = [];
   public documentsGroupedBySection: Document[][] = [];
@@ -81,28 +82,28 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     this.route.data
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
-        if (res && res?.documents && res?.documents.length > 0) {
+        if (res?.documents?.length > 0) {
           // As with the rest of the app, "file" and "document" are used interchangeably.
           this.tableParams.totalListItems = 0;
-          const documentsAndSections = res.documents[0];
 
           // Ensure the sections arranged by their "order" key.
           this.documentSections = this.sortSectionsByOrder(res.documents[1]);
 
-          if (documentsAndSections.length > 0) {
+          if (res.documents[0].length > 0 || res.documents[2].length > 0 ) {
             // Set the documents for the table and total list items.
-            this.documents = documentsAndSections[0].data.searchResults;
+            const combinedResults = [...res.documents[0][0]?.data?.searchResults || [], ...res.documents[2][0]?.data?.searchResults || []];
+						const sortedResults = this.sortDocuments(combinedResults);
+						this.documents = this.documentVault = sortedResults;
             this.updateTableDataAndParams();
 
-            if (documentsAndSections[0].data.meta.length > 0) {
-              this.tableParams.totalListItems = documentsAndSections[0].data.meta[0].searchResultsTotal;
+            if (res.documents[0][0].data.meta.length > 0 || res.documents[2][0].data.meta.length > 0) {
+              this.tableParams.totalListItems = (res.documents[0][0].data.meta[0]?.searchResultsTotal || 0) + (res.documents[2][0].data.meta[0]?.searchResultsTotal || 0);
             }
 
             if (this.documentSections.length > 0) {
               this.groupAndSortFilesWithinSections();
             }
           }
-
           this.loading = false;
           this.setDocumentRowData();
           this._changeDetectionRef.detectChanges();
@@ -110,7 +111,6 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
           alert('Uh-oh, couldn\'t load documents.');
           // project not found --> navigate back to search
           this.router.navigate(['/search']);
-          this.loading = false;
         }
       }
       );
@@ -166,6 +166,9 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     // Have each file use the section name rather than ID.
     filesWithSections.forEach(file => {
       file.section = sectionIdsToNames[file.section];
+			if (file.internalExt) {
+				file.internalExt = file.internalExt.toUpperCase();
+			}
     })
 
     // Group files together with by section.
@@ -199,16 +202,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
    * @param item The document to form the URL for.
    */
   goToItem(item: Document): void {
-    const filename = item.documentFileName;
-    let safeName = filename;
-
-    try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-    } catch (e) {
-      console.log('Error, couldn\'t form the URL:', e);
-    }
-
-    window.open('/api/document/' + item._id + '/fetch/' + safeName, '_blank');
+    this.api.openDocument(item);
   }
 
   /**
@@ -296,6 +290,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
             displayName: document.displayName,
             datePosted: document.datePosted,
             description: document.description,
+						externalLink: document.externalLink || null,
             size: this.utils.formatBytes(document.internalSize),
             ext: document.internalExt.toUpperCase(),
             projectPhase: document.projectPhase,
@@ -320,8 +315,31 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     } else {
       this.tableParams.sortBy = '+' + column;
     }
-    this.getPaginatedDocs(this.tableParams.currentPage);
+    this.documentVault = this.sortDocuments(this.documentVault);
+		this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
+		this.getPaginatedDocs(this.tableParams.currentPage);
   }
+
+	public sortDocuments = (documents: any[]) => {
+		const sortData = this.tableParams.sortBy || '-datePosted';
+		const sortDir = '-' === Array.from(this.tableParams.sortBy)[0] ? -1 : 1;
+		const sortBy = sortData.substring(1);
+		if ('displayName' === sortBy) {
+			// If sorting strings then convert to lower case.
+			documents.sort((a, b) => {
+				if (a[sortBy].toLowerCase() < b[sortBy].toLowerCase()) return -1 * sortDir;
+				if (a[sortBy].toLowerCase() > b[sortBy].toLowerCase()) return 1 * sortDir;
+				return 0;
+			});
+		} else {
+			documents.sort((a, b) => {
+				if (a[sortBy] < b[sortBy]) return -1 * sortDir;
+				if (a[sortBy] > b[sortBy]) return 1 * sortDir;
+				return 0;
+			});
+		}
+		return documents || [];
+	}
 
   isEnabled(button) {
     switch (button) {
@@ -337,55 +355,17 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   }
 
   getPaginatedDocs(pageNumber) {
-    this.loading = true;
-
-    this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
-    zip(
-      this.searchService.getSearchResults(
-        this.tableParams.keywords,
-        'Document',
-        [{ 'name': 'project', 'value': this.currentProject._id }],
-        pageNumber,
-        this.tableParams.pageSize,
-        this.tableParams.sortBy,
-        { documentSource: 'PROJECT', internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' },
-        true),
-        this.documentSectionService.getAll(this.currentProject._id)
-    )
-    .takeUntil(this.ngUnsubscribe)
-    .subscribe((res: any) => {
-      if (res && res?.length > 0) {
-        this.documentsGroupedBySection = [];
-        // As with the rest of the app, "file" and "document" are used interchangeably.
-        this.tableParams.totalListItems = 0;
-        const documentsAndSections = res[0];
-
-        // Ensure the sections arranged by their "order" key.
-        this.documentSections = this.sortSectionsByOrder(res[1]);
-
-        if (documentsAndSections.length > 0) {
-          // Set the documents for the table and total list items.
-          this.documents = documentsAndSections[0].data.searchResults;
-          this.updateTableDataAndParams();
-          this.tableParams.totalListItems = documentsAndSections[0].data.meta[0].searchResultsTotal;
-
-          if (this.documentSections.length > 0) {
-            this.groupAndSortFilesWithinSections();
-          }
-        }
-
-        this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
-        this.setDocumentRowData();
-        this.loading = false;
-        this._changeDetectionRef.detectChanges();
-      } else {
-        alert('Uh-oh, couldn\'t load documents.');
-        console.error('Error. Couldn\'t load documents.', res)
-        // project not found --> navigate back to search
-        this.router.navigate(['/search']);
-        this.loading = false;
-      }
-    });
+		this.loading = true;
+		this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
+		const startIndex = (pageNumber - 1) * this.tableParams.pageSize;
+		const endIndex = startIndex + this.tableParams.pageSize;
+		if (endIndex && 0 < this.documentVault.length) {
+			this.documents = this.documentVault.slice(startIndex, endIndex);
+			this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.tableParams.keywords || '');
+			this.setDocumentRowData();
+			this.loading = false;
+			this._changeDetectionRef.detectChanges();
+		}
   }
 
   public onNumItems(numItems) {

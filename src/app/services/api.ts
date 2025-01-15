@@ -21,6 +21,7 @@ import { User } from 'app/models/user';
 import { EmailSubscribe } from 'app/models/emailSubscribe';
 import { DocumentSection } from 'app/models/documentSection';
 import { ContactForm } from 'app/models/contactForm';
+import { ExternalLink } from 'app/models/externalLink';
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -77,23 +78,24 @@ export class ApiService {
     a.remove();
   }
 
-  public async openDocument(document: Document): Promise<void> {
+  public async openDocument(document: any): Promise<void> {
     let filename;
-    if (document.documentSource === 'COMMENT') {
-      filename = document.internalOriginalName;
-    } else {
-      filename = document.documentFileName;
-    }
+    if (!document.externalLink) {
+      filename = 'COMMENT' === document.documentSource ? document.internalOriginalName : document.documentFileName;
+		}
     console.log(document);
     let safeName = '';
     try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
     } catch (e) {
       // fall through
       console.log('error', e);
     }
-    console.log('safeName', safeName);
-    window.open('/api/document/' + document._id + '/fetch/' + safeName, '_blank');
+		if (document.externalLink) {
+			window.open(document.externalLink);
+		} else {
+    	window.open(this.apiPath.replace('/public', '') + '/document/' + document._id + '/fetch/' + safeName, '_blank');
+		}
   }
 
   private downloadResource(id: string): Promise<Blob> {
