@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 export class ExternalLink {
   _id: string;
   project: string;
