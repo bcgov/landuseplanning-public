@@ -86,7 +86,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       width: 'col-4'
     },
     {
-      name: 'Process Type(s)',
+      name: 'Project Type(s)',
       value: 'projectTypes',
       width: 'col-4'
     }
