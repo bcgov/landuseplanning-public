@@ -13,7 +13,30 @@
 
     </div>
     <div class="instructions map-instructions">You can also <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a></div>
-</div>
+
+		<div class="project-type-filter">
+			<div class="project-type-filter-title-row">
+				<h3>Filter by</h3>
+				<button class="project-type-filter-button" id="show-hide-filter" (click)="handleShowHideFilter($event)">
+					<i class="material-icons">{{filterIconText}}</i>
+				</button>
+			</div>
+
+			<div id="project-type-filter-show-hide">
+				<div *ngFor="let ptf of projectTypeFilters" class="project-type-filter-row">
+					<mat-checkbox 
+						value={{ptf.name}}
+						class="project-type-filter-checkbox"
+						(change)="handleProjectTypeChange($event)"
+						[checked]="ptf.checked">
+					</mat-checkbox>
+					<span class="project-type-filter-text">{{ptf.name}}</span>
+					<br />
+				</div>
+			</div>
+
+		</div>
+
 
 <!--   <div class="app-filters__header d-flex justify-content-between">
     <div class="d-flex align-items-center"> -->

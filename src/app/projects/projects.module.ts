@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 // Modules
 import { SharedModule } from 'app/shared/shared.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // Components
 import { ProjectsComponent } from './projects.component';
@@ -22,7 +23,8 @@ import { ProjectListTableRowsComponent } from './project-list/project-list-table
     FormsModule,
     NgbModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+		MatCheckboxModule,
   ],
   declarations: [
     ProjectsComponent,

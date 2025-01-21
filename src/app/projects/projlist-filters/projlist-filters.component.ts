@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Constants } from 'app/shared/utils/constants';
 import { Project } from 'app/models/project';
@@ -26,6 +27,11 @@ export interface FiltersType {
   purposeFilter: string;
   publishFromFilter: Date;
   publishToFilter: Date;
+}
+
+export interface ProjectTypeFilter {
+	name: string;
+	checked: boolean;
 }
 
 @Component({
@@ -48,6 +54,13 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public loading = false;
   private paramMap: ParamMap = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+	public projectTypeFilters: ProjectTypeFilter[] = [
+		{name: 'Land Use Planning', checked: false},
+		{name: 'Forest Landscape Planning', checked: false},
+		{name: 'Water Planning and Governance', checked: false}
+	];
+	public filtersOpen: boolean = true;
+	public filterIconText: string = 'keyboard_arrow_up';
 
   // search keys for drop-down menus
   public regionKeys: Array<string> = [];
@@ -159,6 +172,37 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+	/**
+	 * Handles an event change to the project type filter
+	 * 
+	 * @param {MatCheckboxChange} event The event that is passed from the project type filter checkbox
+	 * @returns {void}
+	 */
+	public handleProjectTypeChange(event: MatCheckboxChange): void {
+		const index = this.projectTypeFilters.map(filter => filter.name).indexOf(event.source.value);
+		if (-1 !== index) {
+			this.projectTypeFilters[index].checked = event.checked;
+			this.internalApplyAllFilters(false);
+		}
+	}
+
+	/**
+	 * Shows or hides the project type filter. Especially useful for mobile viewports where it covers most of the screen.
+	 * 
+	 * @returns {void}
+	 */
+	public handleShowHideFilter(): void {
+		if (false === this.filtersOpen) {
+			this.elementRef.nativeElement.querySelector("#project-type-filter-show-hide").classList.remove('hide');
+			this.filterIconText = 'keyboard_arrow_up';
+			this.filtersOpen = true;
+		} else {
+			this.elementRef.nativeElement.querySelector("#project-type-filter-show-hide").classList.add('hide');
+			this.filterIconText = 'keyboard_arrow_down';
+			this.filtersOpen = false;
+		}
+	}
+
   // FOR FUTURE USE
   public getFilters(): FiltersType {
     return {
@@ -258,6 +302,18 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       !this.dispIdFilter || !item._id ||
       item._id.toString().indexOf(this.dispIdFilter.toString()) > -1
     );
+
+		// If there are any filters checked, check for matching project type filters
+		if (this.projectTypeFilters.find(ptf => true === ptf.checked)) {
+			const validatedLocations = [];
+			item.projectTypes.forEach(pt => {
+				// If a matching checkbox is checked, don't remove the project from the map.
+				if (true === pt.checked && this.projectTypeFilters.find(ptf => ptf.name === pt.name).checked) {
+					validatedLocations.push(pt.name);
+				}
+			})
+			retVal = 0 === validatedLocations.length ? false : retVal;
+		}
 
     return retVal;
   }
