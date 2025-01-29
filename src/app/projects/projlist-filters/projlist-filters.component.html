@@ -13,7 +13,35 @@
 
     </div>
     <div class="instructions map-instructions">You can also <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a></div>
-</div>
+
+		<div class="project-type-filter">
+      <fieldset [attr.aria-expanded]="filtersOpen">
+        <div class="project-type-filter-title-row">
+          <legend for class="filter-by-type-label">Filter by project type(s)</legend>
+          <button class="project-type-filter-button" id="show-hide-filter" (click)="handleShowHideFilter($event)">
+            <i
+              [ngClass]="{'collapsed': !filtersOpen}" 
+              class="material-icons filter-collapse-button">
+              {{filterIconText}}
+            </i>
+          </button>
+        </div>
+
+        <div *ngIf="filtersOpen">
+          <div *ngFor="let ptf of projectTypeFilters" class="project-type-filter-row">
+            <mat-checkbox 
+              value={{ptf.name}}
+              class="project-type-filter-checkbox"
+              (change)="handleProjectTypeChange($event)"
+              [checked]="ptf.checked">
+            </mat-checkbox>
+            <span class="project-type-filter-text">{{ptf.name}}</span>
+            <br />
+          </div>
+        </div>
+      </fieldset>
+		</div>
+
 
 <!--   <div class="app-filters__header d-flex justify-content-between">
     <div class="d-flex align-items-center"> -->
