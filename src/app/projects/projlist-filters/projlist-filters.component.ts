@@ -16,6 +16,7 @@ import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { ConfigService } from 'app/services/config.service';
+import { ProjectType } from 'app/models/project';
 
 export interface FiltersType {
   regionFilters: object;
@@ -27,11 +28,6 @@ export interface FiltersType {
   purposeFilter: string;
   publishFromFilter: Date;
   publishToFilter: Date;
-}
-
-export interface ProjectTypeFilter {
-	name: string;
-	checked: boolean;
 }
 
 @Component({
@@ -54,10 +50,10 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public loading = false;
   private paramMap: ParamMap = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-	public projectTypeFilters: ProjectTypeFilter[] = [
-		{name: 'Land Use Planning', checked: false},
-		{name: 'Forest Landscape Planning', checked: false},
-		{name: 'Water Planning and Governance', checked: false}
+	public projectTypeFilters: ProjectType[] = [
+		{name: 'Land Use Planning', checked: true},
+		{name: 'Forest Landscape Planning', checked: true},
+		{name: 'Water Planning and Governance', checked: true}
 	];
 	public filtersOpen: boolean = true;
 	public filterIconText: string = 'keyboard_arrow_up';
@@ -167,11 +163,6 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
 	/**
 	 * Handles an event change to the project type filter
 	 * 
@@ -187,20 +178,13 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	/**
-	 * Shows or hides the project type filter. Especially useful for mobile viewports where it covers most of the screen.
+	 * Shows or hides the project type filter.
+   * Especially useful for mobile viewports where it covers most of the screen.
 	 * 
 	 * @returns {void}
 	 */
 	public handleShowHideFilter(): void {
-		if (false === this.filtersOpen) {
-			this.elementRef.nativeElement.querySelector("#project-type-filter-show-hide").classList.remove('hide');
-			this.filterIconText = 'keyboard_arrow_up';
-			this.filtersOpen = true;
-		} else {
-			this.elementRef.nativeElement.querySelector("#project-type-filter-show-hide").classList.add('hide');
-			this.filterIconText = 'keyboard_arrow_down';
-			this.filtersOpen = false;
-		}
+    this.filtersOpen = !this.filtersOpen;
 	}
 
   // FOR FUTURE USE
@@ -275,21 +259,6 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   private showThisApp(item: Project): boolean {
     let retVal = true; // for short-circuiting checks
 
-    // if no option is selected, match all
-    const allRegions = this.regionKeys.every(key => {
-      return (this.regionFilters[key] === false);
-    });
-
-    // if no option is selected, match all
-    const allCpStatuses = this.cpStatusKeys.every(key => {
-      return (this.cpStatusFilters[key] === false);
-    });
-
-    // if no option is selected, match all
-    const allAppStatuses = this.appStatusKeys.every(key => {
-      return (this.appStatusFilters[key] === false);
-    });
-
     // check for matching Applicant
     const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
     retVal = retVal && (
@@ -303,16 +272,14 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       item._id.toString().indexOf(this.dispIdFilter.toString()) > -1
     );
 
-		// If there are any filters checked, check for matching project type filters
-		if (this.projectTypeFilters.find(ptf => true === ptf.checked)) {
-			const validatedLocations = [];
-			item.projectTypes.forEach(pt => {
-				// If a matching checkbox is checked, don't remove the project from the map.
-				if (true === pt.checked && this.projectTypeFilters.find(ptf => ptf.name === pt.name).checked) {
-					validatedLocations.push(pt.name);
-				}
-			})
-			retVal = 0 === validatedLocations.length ? false : retVal;
+		// If there are any filters unchecked, validate all project type filters
+		if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
+			const checkedProjectFilterTypeNames = this.projectTypeFilters.filter(ptf => ptf.checked).map(ptf => ptf.name);
+      const checkedProjectTypeNames = item.projectTypes.filter(pt => pt.checked).map(pt => pt.name);
+			const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
+
+      // If there are still project type(s) to show after filtering unchecked ones, return true.
+      return Boolean(projectTypesToShow.length);
 		}
 
     return retVal;
@@ -566,4 +533,9 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public onLoadStart() { this.loading = true; }
 
   public onLoadEnd() { this.loading = false; }
+
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }

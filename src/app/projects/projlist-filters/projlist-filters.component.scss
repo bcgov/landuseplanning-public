@@ -372,14 +372,18 @@ $app-filters-font-lg: 0.9375rem;
 	padding-left: 0.5rem;
 }
 
-#project-type-filter-show-hide.hide {
-	display: none;
-}
-
 ::ng-deep .project-type-filter-checkbox .mat-checkbox-ripple .mat-ripple-element {
 	background-color: #ffd740 !important;
 }
 
 ::ng-deep .project-type-filter-checkbox .mat-checkbox-indeterminate .mat-checkbox-background, ::ng-deep .mat-checkbox-checked .mat-checkbox-background {
 	background-color: #ffd740 !important;
+}
+
+.filter-by-type {
+  font-size: 1.25rem;
+}
+
+.filter-collapse-button.collapsed {
+  rotate: 180deg;
 }
