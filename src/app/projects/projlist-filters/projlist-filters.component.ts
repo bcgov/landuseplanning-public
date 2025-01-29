@@ -274,6 +274,9 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
 		// If there are any filters unchecked, validate all project type filters
 		if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
+      // If project is old and doesn't have projectTypes, allow it to be shown on map anyway.
+      if (!item.hasOwnProperty('projectTypes') || !Array.isArray(item.projectTypes)) return true;
+
 			const checkedProjectFilterTypeNames = this.projectTypeFilters.filter(ptf => ptf.checked).map(ptf => ptf.name);
       const checkedProjectTypeNames = item.projectTypes.filter(pt => pt.checked).map(pt => pt.name);
 			const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
