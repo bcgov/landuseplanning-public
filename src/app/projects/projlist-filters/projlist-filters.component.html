@@ -18,7 +18,7 @@
       <fieldset [attr.aria-expanded]="filtersOpen">
         <div class="project-type-filter-title-row">
           <legend for class="filter-by-type-label">Filter by project type(s)</legend>
-          <button class="project-type-filter-button" id="show-hide-filter" (click)="handleShowHideFilter($event)">
+          <button class="project-type-filter-button" id="show-hide-filter" (click)="handleShowHideFilter()">
             <i
               [ngClass]="{'collapsed': !filtersOpen}" 
               class="material-icons filter-collapse-button">
