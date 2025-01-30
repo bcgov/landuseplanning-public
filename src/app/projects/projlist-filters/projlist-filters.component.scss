@@ -315,8 +315,63 @@ $app-filters-font-lg: 0.9375rem;
   }
 }
 
-.map-instructions {
+.map-instructions, .project-type-filter {
   margin: 0;
   background: white;
   padding: 0 0 1rem 1.5rem;
+}
+
+.project-type-filter-title-row {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.project-type-filter-button {
+	display: flex;
+	width: 34px;
+	height: 34px;
+	margin-right: 1.5rem;
+	justify-content: center;
+	align-items: center;
+	border-radius: 4px;
+	background-color: white;
+	color: grey;
+	border: 2px solid #c6d0da;
+}
+
+.project-type-filter-button i {
+	font-size: 18px !important;
+}
+
+.project-type-filter-row {
+	vertical-align: middle;
+	display: flex;
+	align-items: center;
+	height: 28px;
+}
+
+.project-type-filter-checkbox {
+	font-size: 30px;
+}
+
+.project-type-filter-text {
+	padding-left: 0.5rem;
+}
+
+::ng-deep .project-type-filter-checkbox .mat-checkbox-ripple .mat-ripple-element {
+	background-color: #ffd740 !important;
+}
+
+::ng-deep .project-type-filter-checkbox .mat-checkbox-indeterminate .mat-checkbox-background, ::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+	background-color: #ffd740 !important;
+}
+
+.filter-by-type {
+  font-size: 1.25rem;
+}
+
+.filter-collapse-button.collapsed {
+  rotate: 180deg;
 }

@@ -1,3 +1,7 @@
+### 1.18 Jan 20, 2025
+
+- Added ability to filter projects on map by project type. [DESENG-752](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-752)
+
 ### 1.17 Jan 9, 2025
 
 - External links added by admins will now show up in documents sections of projects, combined with internal files. [DESENG-751](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-751)
