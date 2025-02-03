@@ -7,6 +7,7 @@
 - External links added by admins will now show up in documents sections of projects, combined with internal files. [DESENG-751](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-751)
 - Functionality supports sorting, pagination, and sections.
 - Corrected wording in project list from Process Type(s) to Project Type(s).
+- Custom collection notice will now show up in comment periods. [DESENG-754](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-754)
 
 ### 1.16 Dec 11, 2024
 
