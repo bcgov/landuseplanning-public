@@ -270,12 +270,14 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     deletedApps.forEach(app => {
       const markerIndex = _.findIndex(this.markerList, { projectId: app._id });
       const shapefileIndex = _.findIndex(this.shapefileList, { projectId: app._id });
+
       if (markerIndex >= 0) {
         const markers = this.markerList.splice(markerIndex, 1);
         this.markerClusterGroup.removeLayer(markers[0]);
       }
       if (shapefileIndex >= 0) {
-        this.shapefileList.splice(shapefileIndex, 1);
+        const shapefiles = this.shapefileList.splice(shapefileIndex, 1);
+        this.map.removeLayer(shapefiles[0]);
       }
     });
 
@@ -289,6 +291,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
           .on('click', L.Util.bind(this.onShapefileClick, this, app));
+          shapefile.projectId = app._id;
           shapefile.addTo(this.map);
           this.shapefileList.push(shapefile);
         })
