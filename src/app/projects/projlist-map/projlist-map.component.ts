@@ -230,11 +230,11 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // update visibility for apps with markers only
     // ie, leave apps without markers 'visible' (as initialized)
     for (const marker of this.markerList) {
-      const app = _.find(this.projects, { _id: marker.projectId });
-      if (app) {
+      const project = _.find(this.projects, { _id: marker.projectId });
+      if (project) {
         const markerLatLng = marker.getLatLng();
         // app is visible if map contains its marker
-        app.isVisible = mapBounds.contains(markerLatLng);
+        project.isVisible = mapBounds.contains(markerLatLng);
       }
     }
 
@@ -261,15 +261,15 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   /**
     * Removes deleted / draws added projects.
     *
-    * @param   {Project[]} deletedApps Deleted projects.
-    * @param   {Project[]} addedApps Added projects.
+    * @param   {Project[]} deletedProjects Deleted projects.
+    * @param   {Project[]} addedProjects Added projects.
     * @returns {void}
     */
-  private drawMap(deletedApps: Project[], addedApps: Project[]): void {
-    // remove deleted apps from list and map
-    deletedApps.forEach(app => {
-      const markerIndex = _.findIndex(this.markerList, { projectId: app._id });
-      const shapefileIndex = _.findIndex(this.shapefileList, { projectId: app._id });
+  private drawMap(deletedProjects: Project[], addedProjects: Project[]): void {
+    // remove deleted projects from list and map
+    deletedProjects.forEach(proj => {
+      const markerIndex = _.findIndex(this.markerList, { projectId: proj._id });
+      const shapefileIndex = _.findIndex(this.shapefileList, { projectId: proj._id });
 
       if (markerIndex >= 0) {
         const markers = this.markerList.splice(markerIndex, 1);
@@ -281,29 +281,29 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       }
     });
 
-    // draw added apps
-    addedApps.forEach(app => {
+    // draw added projects
+    addedProjects.forEach(proj => {
       // If there is a shapefile for one of the projects, display it instead of a pin.
-      if (app.shapefiles && app.shapefiles.length > 0) {
-        const shapeFileStyle = { color: app.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
-        app.shapefiles.forEach(projectShapefile => {
+      if (proj.shapefiles && proj.shapefiles.length > 0) {
+        const shapeFileStyle = { color: proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
+        proj.shapefiles.forEach(projectShapefile => {
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
-          .on('click', L.Util.bind(this.onShapefileClick, this, app));
-          shapefile.projectId = app._id;
+          .on('click', L.Util.bind(this.onShapefileClick, this, proj));
+          shapefile.projectId = proj._id;
           shapefile.addTo(this.map);
           this.shapefileList.push(shapefile);
         })
       } else {
         // If no shapefile is found for a project, display a pin of its coordinates instead.
-        if (2 === app.centroid.length) {
-          const title = `${app.name}\n`
-          + `${app.overlappingRegionalDistricts}\n`;
-          const marker = L.marker(L.latLng(app.centroid[1], app.centroid[0]), { keyboard: true, title: title })
+        if (2 === proj.centroid.length) {
+          const title = `${proj.name}\n`
+          + `${proj.overlappingRegionalDistricts}\n`;
+          const marker = L.marker(L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
           .setIcon(markerIconYellow)
-          .on('click', L.Util.bind(this.onMarkerClick, this, app));
-          marker.projectId = app._id;
+          .on('click', L.Util.bind(this.onMarkerClick, this, proj));
+          marker.projectId = proj._id;
           this.markerList.push(marker); // save to list
           this.markerClusterGroup.addLayer(marker); // save to marker clusters group
         }

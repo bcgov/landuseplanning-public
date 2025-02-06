@@ -153,7 +153,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
-      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(app => app.name ? app.name.toUpperCase() : null)).sort());
+      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(proj => proj.name ? proj.name.toUpperCase() : null)).sort());
 
       // (re)apply filtering
       this.internalApplyAllFilters(false);
