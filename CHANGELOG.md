@@ -1,6 +1,7 @@
 ### 1.18 Jan 20, 2025
 
 - Added ability to filter projects on map by project type. [DESENG-752](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-752)
+- Fixed shapefile filtering for text and checkbox filters
 
 ### 1.17 Jan 9, 2025
 

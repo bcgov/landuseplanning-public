@@ -65,8 +65,6 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
   // search keys for text boxes
   private applicantKeys: Array<string> = [];
-  // private clFileKeys: Array<number> = []; // NOT CURRENTLY USED
-  // private dispIdKeys: Array<number> = []; // NOT CURRENTLY USED
   private purposeKeys: Array<string> = [];
 
   public regionFilters: object = {}; // array-like object
@@ -155,8 +153,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
-
-      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(app => app.name ? app.name.toUpperCase() : null)).sort());
+      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(proj => proj.name ? proj.name.toUpperCase() : null)).sort());
 
       // (re)apply filtering
       this.internalApplyAllFilters(false);
@@ -243,7 +240,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private internalApplyAllFilters(doSave: boolean) {
-    this.projects.forEach(app => app.isMatches = this.showThisApp(app));
+    this.projects.forEach(proj => proj.isMatches = this.showThisProject(proj));
 
     // notify map component
     this.updateMatching.emit();
@@ -255,22 +252,23 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  // returns 'true' if all filters match
-  private showThisApp(item: Project): boolean {
-    let retVal = true; // for short-circuiting checks
+  /**
+   * Runs every time a text search is made or a filter is toggled.
+   * Check if the text search or one of the project type filters matches, if so, return true. 
+   * 
+   * @param item The individual map item (project) to make the check for.
+   * @returns 'true' if a match occurs. False if not.
+   */
+  private showThisProject(item: Project): boolean {
+    let doesMatch = true;
 
     // check for matching Applicant
     const applicantFilter = this.applicantFilter && this.applicantFilter.trim(); // returns null or empty
-    retVal = retVal && (
-      !this.applicantFilter || !item.name ||
-      item.name.toUpperCase().indexOf(applicantFilter.toUpperCase()) > -1
-    );
 
-    // check for matching Disposition ID
-    retVal = retVal && (
-      !this.dispIdFilter || !item._id ||
-      item._id.toString().indexOf(this.dispIdFilter.toString()) > -1
-    );
+    if (applicantFilter && item.name.toUpperCase().indexOf(applicantFilter.toUpperCase()) === -1) {
+      return false;
+    }
+
 
 		// If there are any filters unchecked, validate all project type filters
 		if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
@@ -282,10 +280,10 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 			const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
 
       // If there are still project type(s) to show after filtering unchecked ones, return true.
-      return Boolean(projectTypesToShow.length);
+      doesMatch = Boolean(projectTypesToShow.length);
 		}
 
-    return retVal;
+    return doesMatch;
   }
 
   private saveFilters() {
