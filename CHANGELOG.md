@@ -1,3 +1,7 @@
+### 1.18.1 Feb 13, 2025
+
+- Added old deploymentConfig YAML and new Kubernetes deployment YAML to the Openshift folder. [DESENG-762](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-762)
+
 ### 1.18 Jan 20, 2025
 
 - Added ability to filter projects on map by project type. [DESENG-752](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-752)
