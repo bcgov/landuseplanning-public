@@ -1,0 +1,259 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: landuseplanning-public-dev
+  namespace: e8b9ad-dev
+  uid: 2ddd7ff1-dd5e-4979-b3f0-f75426564dbe
+  resourceVersion: '13253943562'
+  generation: 99
+  creationTimestamp: '2021-02-10T17:05:02Z'
+  labels:
+    app: landuseplanning-public-dev-old
+    app.kubernetes.io/component: landuseplanning-public-dev-old
+    app.kubernetes.io/instance: landuseplanning-public-dev-old
+    app.kubernetes.io/part-of: landuseplanning-public-dev-old
+  managedFields:
+    - manager: openshift-controller-manager
+      operation: Update
+      apiVersion: apps.openshift.io/v1
+      time: '2025-02-07T00:23:40Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:template':
+            'f:spec':
+              'f:containers':
+                'k:{"name":"landuseplanning-public-dev"}':
+                  'f:image': {}
+          'f:triggers': {}
+        'f:status':
+          'f:conditions':
+            .: {}
+            'k:{"type":"Available"}':
+              .: {}
+              'f:type': {}
+            'k:{"type":"Progressing"}':
+              .: {}
+              'f:type': {}
+          'f:details': {}
+    - manager: Mozilla
+      operation: Update
+      apiVersion: apps.openshift.io/v1
+      time: '2025-02-13T19:42:54Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+            'f:app.kubernetes.io/part-of': {}
+        'f:spec':
+          'f:paused': {}
+          'f:replicas': {}
+          'f:selector':
+            .: {}
+            'f:app': {}
+          'f:strategy':
+            'f:activeDeadlineSeconds': {}
+            'f:rollingParams':
+              .: {}
+              'f:intervalSeconds': {}
+              'f:maxSurge': {}
+              'f:maxUnavailable': {}
+              'f:timeoutSeconds': {}
+              'f:updatePeriodSeconds': {}
+            'f:type': {}
+          'f:template':
+            .: {}
+            'f:metadata':
+              .: {}
+              'f:creationTimestamp': {}
+              'f:labels':
+                .: {}
+                'f:app': {}
+            'f:spec':
+              .: {}
+              'f:containers':
+                .: {}
+                'k:{"name":"landuseplanning-public-dev"}':
+                  'f:volumeMounts':
+                    .: {}
+                    'k:{"mountPath":"/etc/nginx/nginx.conf"}':
+                      .: {}
+                      'f:mountPath': {}
+                      'f:name': {}
+                      'f:subPath': {}
+                  'f:terminationMessagePolicy': {}
+                  .: {}
+                  'f:resources': {}
+                  'f:env':
+                    .: {}
+                    'k:{"name":"API_URL"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                    'k:{"name":"DEPLOYMENT_ENVIRONMENT"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                    'k:{"name":"REMOTE_ADMIN_PATH"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                    'k:{"name":"REMOTE_API_BASE_PATH"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                    'k:{"name":"REMOTE_API_PATH"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                  'f:terminationMessagePath': {}
+                  'f:imagePullPolicy': {}
+                  'f:ports':
+                    .: {}
+                    'k:{"containerPort":8080,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:protocol': {}
+                  'f:name': {}
+              'f:dnsPolicy': {}
+              'f:restartPolicy': {}
+              'f:schedulerName': {}
+              'f:securityContext': {}
+              'f:terminationGracePeriodSeconds': {}
+              'f:volumes':
+                .: {}
+                'k:{"name":"nginx-config"}':
+                  .: {}
+                  'f:configMap':
+                    .: {}
+                    'f:defaultMode': {}
+                    'f:name': {}
+                  'f:name': {}
+    - manager: openshift-controller-manager
+      operation: Update
+      apiVersion: apps.openshift.io/v1
+      time: '2025-02-13T19:44:47Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:updatedReplicas': {}
+          'f:readyReplicas': {}
+          'f:conditions':
+            'k:{"type":"Available"}':
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:status': {}
+            'k:{"type":"Progressing"}':
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+          'f:details':
+            'f:causes': {}
+            'f:message': {}
+          'f:replicas': {}
+          'f:availableReplicas': {}
+          'f:observedGeneration': {}
+          'f:unavailableReplicas': {}
+          'f:latestVersion': {}
+      subresource: status
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - landuseplanning-public-dev
+        from:
+          kind: ImageStreamTag
+          namespace: e8b9ad-tools
+          name: 'lup-public-deploy-image:dev'
+        lastTriggeredImage: 'image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-deploy-image@sha256:ffdd97f187d7163069c93fcb9f269e8039a5bd9b00faf4faa02e3f0690737190'
+    - type: ConfigChange
+  replicas: 0
+  revisionHistoryLimit: 10
+  test: false
+  paused: true
+  selector:
+    app: landuseplanning-public-dev-old
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: landuseplanning-public-dev-old
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: landuseplanning-public-dev
+          env:
+            - name: API_URL
+              value: 'https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/api'
+            - name: REMOTE_API_PATH
+              value: 'https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/api/public'
+            - name: REMOTE_API_BASE_PATH
+              value: 'https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/api'
+            - name: REMOTE_ADMIN_PATH
+              value: 'https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/admin'
+            - name: DEPLOYMENT_ENVIRONMENT
+              value: dev
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+          terminationMessagePolicy: File
+          image: 'image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-deploy-image@sha256:ffdd97f187d7163069c93fcb9f269e8039a5bd9b00faf4faa02e3f0690737190'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+status:
+  observedGeneration: 99
+  details:
+    message: config change
+    causes:
+      - type: ConfigChange
+  availableReplicas: 1
+  unavailableReplicas: 0
+  latestVersion: 77
+  updatedReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'False'
+      lastUpdateTime: '2025-02-13T19:44:45Z'
+      lastTransitionTime: '2025-02-13T19:44:45Z'
+      reason: RolloutCancelled
+      message: rollout of replication controller "landuseplanning-public-dev-77" was cancelled
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2025-02-13T19:44:47Z'
+      lastTransitionTime: '2025-02-13T19:44:47Z'
+      message: Deployment config has minimum availability.
+  replicas: 1
+  readyReplicas: 1

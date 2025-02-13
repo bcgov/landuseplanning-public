@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: landuseplanning-public-dev
+    app.kubernetes.io/component: landuseplanning-public-dev
+    app.kubernetes.io/instance: landuseplanning-public-dev
+    app.kubernetes.io/part-of: landuseplanning-public-dev
+  name: landuseplanning-public-dev
+  namespace: e8b9ad-dev
+spec:
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: landuseplanning-public-dev
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: landuseplanning-public-dev
+    spec:
+      containers:
+      - env:
+        - name: API_URL
+          value: https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/api
+        - name: REMOTE_API_PATH
+          value: https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/api/public
+        - name: REMOTE_API_BASE_PATH
+          value: https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/api
+        - name: REMOTE_ADMIN_PATH
+          value: https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/admin
+        - name: DEPLOYMENT_ENVIRONMENT
+          value: dev
+        image: image-registry.apps.silver.devops.gov.bc.ca/e8b9ad-tools/lup-public-deploy-image
+        imagePullPolicy: Always
+        name: lup-public-deploy-image
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-config
+          subPath: nginx.conf
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: nginx-config
+        name: nginx-config
