@@ -1,6 +1,7 @@
 ### 1.18.1 Feb 13, 2025
 
-- Added old deploymentConfig YAML and new Kubernetes deployment YAML to the Openshift folder. [DESENG-762](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-762)
+- Added old deploymentConfig YAML and new Kubernetes deployment YAML to the Openshift folder (dev environment). [DESENG-762](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-762)
+- Added old deploymentConfig YAML and new Kubernetes deployment YAML to the Openshift folder (test environment). [DESENG-766](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-766)
 
 ### 1.18 Jan 20, 2025
 
