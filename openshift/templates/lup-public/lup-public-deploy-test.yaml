@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: landuseplanning-public-test
+  namespace: e8b9ad-test
+  labels:
+    app: landuseplanning-public-test
+    app.kubernetes.io/component: landuseplanning-public-test
+    app.kubernetes.io/instance: landuseplanning-public-test
+    app.kubernetes.io/part-of: landuseplanning-public-test
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: landuseplanning-public-test
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: landuseplanning-public-test
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: landuseplanning-public-test
+          env:
+            - name: API_URL
+              value: 'https://landuseplanning-test.apps.silver.devops.gov.bc.ca/api'
+            - name: REMOTE_API_PATH
+              value: 'https://landuseplanning-test.apps.silver.devops.gov.bc.ca/api/public'
+            - name: REMOTE_API_BASE_PATH
+              value: 'https://landuseplanning-test.apps.silver.devops.gov.bc.ca/api'
+            - name: REMOTE_ADMIN_PATH
+              value: 'https://landuseplanning-test.apps.silver.devops.gov.bc.ca/admin'
+            - name: DEPLOYMENT_ENVIRONMENT
+              value: test
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+          terminationMessagePolicy: File
+          image: image-registry.apps.silver.devops.gov.bc.ca/e8b9ad-tools/lup-public-deploy-image
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
