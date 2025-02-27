@@ -161,10 +161,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
    */
   public updateMatching() {
     // map component gets filtered apps
-
     this.mapApps = this.filterApps.filter(a => a.isMatches);
-    // NB: OnChanges event will update the map
-    this.appmap.resetMap();
   }
 
   /**

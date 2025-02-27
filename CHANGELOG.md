@@ -1,3 +1,7 @@
+### 1.18.2 Feb 27, 2025
+
+- Disabled bound/zoom reseting after a filter is changed on the project map. [DESENG-771](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-771)
+
 ### 1.18.1 Feb 13, 2025
 
 - Added old deploymentConfig YAML and new Kubernetes deployment YAML to the Openshift folder (dev environment). [DESENG-762](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-762)
