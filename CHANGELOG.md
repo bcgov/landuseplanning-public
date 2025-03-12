@@ -1,3 +1,10 @@
+### 1.19.0 Mar 11, 2025
+
+- Added BC Basemap layer to project list map and individual project maps. [DESENG-770](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-770)
+- Fixed the missing 'Ocean Base' layer.
+- Fixed zooming for markers on individual project pages.
+- Updated Leaflet to version 1.5.0.
+
 ### 1.18.2 Feb 27, 2025
 
 - Disabled bound/zoom reseting after a filter is changed on the project map. [DESENG-771](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-771)

@@ -3,6 +3,8 @@ import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryRe
 import { Subject } from 'rxjs';
 import 'leaflet';
 import 'leaflet.markercluster';
+import * as Esri from "esri-leaflet";
+import * as EsriVector from "esri-leaflet-vector";
 import 'assets/js/leaflet.ajax.js';
 import * as _ from 'lodash';
 import { Project } from 'app/models/project';
@@ -14,6 +16,8 @@ import { Constants } from 'app/shared/utils/constants';
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
 const encode = encodeURIComponent;
+L.esri = Esri as any;  // Manually attach Esri to L
+L.esri.Vector = EsriVector as any;
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
@@ -105,7 +109,11 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       },
     });
 
-    const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
+		// Declare the basemap layers
+		const Esri_BC_Basemap = L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
+			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
+		});
+		const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13,
       noWrap: true
@@ -126,14 +134,16 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       noWrap: true
     });
 
+		// Declare the map with some parameters
     this.map = L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
       maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
+			maxZoom: 17,
       zoomSnap: 0.1, // for greater granularity when fitting bounds
       attributionControl: false
     });
 
-    // NB: moveend is called after zoomstart, movestart and resize
+		// NB: moveend is called after zoomstart, movestart and resize
     this.map.on('moveend', function () {
       this.setVisibleDebounced();
     }, this);
@@ -141,41 +151,42 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
 
-    // add base maps layers control
-    const baseLayers = {
-      'Ocean Base': Esri_OceanBasemap,
-      'Nat Geo World Map': Esri_NatGeoWorldMap,
-      'World Topographic': World_Topo_Map,
-      'World Imagery': World_Imagery
-    };
-    L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
+		// add base maps layers control
+		const baseLayers = {
+			'BC Basemap': Esri_BC_Basemap,
+			'Ocean Base': Esri_OceanBasemap,
+			'Nat Geo World Map': Esri_NatGeoWorldMap,
+			'World Topographic': World_Topo_Map,
+			'World Imagery': World_Imagery
+		};
+		L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
 
-    // map attribution
-    L.control.attribution({ position: 'bottomright' }).addTo(this.map);
+		// map attribution
+		L.control.attribution({ position: 'bottomright' }).addTo(this.map);
 
-    // add scale control
-    L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+		// add scale control
+		L.control.scale({ position: 'bottomleft' }).addTo(this.map);
 
-    // add zoom control
-    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+		// add zoom control
+		L.control.zoom({ position: 'bottomright' }).addTo(this.map);
 
-    // add reset view control
-    this.map.addControl(new resetViewControl());
+		// add reset view control
+		this.map.addControl(new resetViewControl());
 
-    // load base layer
-    for (const key of Object.keys(baseLayers)) {
-      if (key === this.configService.baseLayerName) {
-        this.map.addLayer(baseLayers[key]);
-        break;
-      }
-    }
+		// load base layer
+		for (const key of Object.keys(baseLayers)) {
+			if (key === this.configService.baseLayerName) {
+				this.map.addLayer(baseLayers[key]);
+				break;
+			}
+		}
 
-    // save any future base layer changes
-    this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
-      this.configService.baseLayerName = e.name;
-    }, this);
+		// save any future base layer changes
+		this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
+			this.configService.baseLayerName = e.name;
+		}, this);
 
-    this.fixMap();
+		this.fixMap();
   }
 
   // to avoid timing conflict with animations (resulting in small map tile at top left of page),

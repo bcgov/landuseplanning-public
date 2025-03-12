@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import 'leaflet';
 import 'assets/js/leaflet.shpfile.js';
+import * as Esri from "esri-leaflet";
+import * as EsriVector from "esri-leaflet-vector";
 
 import { StorageService } from 'app/services/storage.service';
 import { Constants } from 'app/shared/utils/constants';
@@ -14,6 +16,8 @@ import * as _ from 'lodash';
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
 const encode = encodeURIComponent;
+L.esri = Esri as any;  // Manually attach Esri to L
+L.esri.Vector = EsriVector as any;
 
 @Component({
   selector: 'app-project-details-tab',
@@ -100,7 +104,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // draw map
-    const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
+		const Esri_BC_Basemap = L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
+			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
+		});
+    const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13,
       noWrap: true
@@ -141,6 +148,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
     // add base maps layers control
     const baseLayers = {
+			'BC Basemap': Esri_BC_Basemap,
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
       'World Topographic': World_Topo_Map,
@@ -208,7 +216,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 			if (this.project) {
 				this.addMarker();
 				this.map.addLayer(this.appFG);
-				this.map.fitBounds(this.defaultBounds, {padding: [50, 50]});
+				if (this.project.centroid[0] && this.project.centroid[1]) {
+					const pos = [Number(this.project.centroid[0]), Number(this.project.centroid[1])];
+					this.map.fitBounds([[pos[1]-0.3, pos[0]-0.3], [pos[1]+0.3, pos[0]+0.3]]); // Centre map around marker and zoom
+				}
 			}
 		}
 	}
