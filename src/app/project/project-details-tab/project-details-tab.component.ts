@@ -1,8 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import 'leaflet';
 import 'assets/js/leaflet.shpfile.js';
-import * as Esri from "esri-leaflet";
-import * as EsriVector from "esri-leaflet-vector";
+import { vectorBasemapLayer } from "esri-leaflet-vector";
 
 import { StorageService } from 'app/services/storage.service';
 import { Constants } from 'app/shared/utils/constants';
@@ -16,8 +15,6 @@ import * as _ from 'lodash';
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
 const encode = encodeURIComponent;
-L.esri = Esri as any;  // Manually attach Esri to L
-L.esri.Vector = EsriVector as any;
 
 @Component({
   selector: 'app-project-details-tab',
@@ -104,7 +101,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // draw map
-		const Esri_BC_Basemap = L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
+		const Esri_BC_Basemap = vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
 			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
 		});
     const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
