@@ -17,7 +17,7 @@ export class ConfigService {
   private _lists = [];
 
   // TODO: store these in URL instead
-  private _baseLayerName = 'World Topographic'; // NB: must match a valid base layer name
+  private _baseLayerName = 'BC Basemap'; // NB: must match a valid base layer name
   private _mapBounds: L.LatLngBounds = null;
 
   constructor(private api: ApiService) {
