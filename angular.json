@@ -40,6 +40,9 @@
               "node_modules/leaflet/dist/leaflet.js",
               "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
               "node_modules/shpjs/dist/shp.min.js",
+							"node_modules/esri-leaflet/dist/esri-leaflet.js",
+							"node_modules/maplibre-gl/dist/maplibre-gl.js",
+							"node_modules/esri-leaflet-vector/dist/esri-leaflet-vector.js",
               "src/assets/js/utils.js",
               "src/assets/js/leaflet.shpfile.js",
               "src/assets/js/leaflet.ajax.js"
@@ -153,7 +156,7 @@
   "defaultProject": "base-app2",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
+      "prefix": "app"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
