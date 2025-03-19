@@ -39,7 +39,7 @@ export interface FiltersType {
 export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // NB: this component is bound to the same list of apps as the other components
   @Input() projects: Array<Project> = []; // from projects component
-  @Output() updateMatching = new EventEmitter(); // to projects component
+  @Output() updateMatching = new EventEmitter<string>(); // to projects component
 
   readonly minDate = moment('2018-03-23').toDate(); // first app created
   readonly maxDate = moment().toDate(); // today
@@ -170,7 +170,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 		const index = this.projectTypeFilters.map(filter => filter.name).indexOf(event.source.value);
 		if (-1 !== index) {
 			this.projectTypeFilters[index].checked = event.checked;
-			this.internalApplyAllFilters(false);
+			this.internalApplyAllFilters(false, 'project type filter');
 		}
 	}
 
@@ -236,14 +236,14 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     this.publishFromFilter = this._publishFromFilter;
     this.publishToFilter = this._publishToFilter;
 
-    this.internalApplyAllFilters(true);
+    this.internalApplyAllFilters(true, 'search');
   }
 
-  private internalApplyAllFilters(doSave: boolean) {
+  private internalApplyAllFilters(doSave: boolean, source: string = 'filter') {
     this.projects.forEach(proj => proj.isMatches = this.showThisProject(proj));
 
     // notify map component
-    this.updateMatching.emit();
+    this.updateMatching.emit(source);
 
     // if called from UI, save new filters
     // otherwise this is part of init or change event

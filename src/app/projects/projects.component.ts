@@ -53,6 +53,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   public listApps: Array<Project> = [];
   // private filters: FiltersType = null; // FUTURE
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+	public filterCount: number = 0;
 
   previousUrl: string;
 
@@ -159,9 +160,16 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   /**
    * Event handler called when filters component updates list of matching apps.
    */
-  public updateMatching() {
+  public updateMatching(source: string) {
     // map component gets filtered apps
     this.mapApps = this.filterApps.filter(a => a.isMatches);
+		// Prevent snackbar on initial page load
+		if (2 <= this.filterCount) {
+			this.snackBarRef = this.snackBar.open(`The ${source} has been updated with ${this.mapApps.length} results.`);
+			this.snackBarRef._dismissAfter(3000);
+		} else {
+			this.filterCount++;
+		}
   }
 
   /**
