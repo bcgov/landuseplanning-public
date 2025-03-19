@@ -3,7 +3,7 @@
 
   <app-projlist-filters class="app-filters" #appfilters
     [projects]="filterApps"
-    (updateMatching)="updateMatching()">
+    (updateMatching)="updateMatching($event)">
   </app-projlist-filters>
 
   <div class="app-list-map-container">
