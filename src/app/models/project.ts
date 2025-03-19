@@ -39,7 +39,7 @@ export class Project {
   proMember: String;
   provElecDist: String;
   shortName: String;
-  projectPhase: String;
+  projectPhase: string;
 	projectTypes: ProjectType[];
   substitution: Boolean;
   updatedBy: String;

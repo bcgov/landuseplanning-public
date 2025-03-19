@@ -221,6 +221,7 @@ export class ApiService {
       'agreements',
       'partner',
       'projectPhase',
+			'projectTypes',
       'logos',
       'backgroundInfo',
       'engagementLabel',
