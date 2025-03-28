@@ -82,22 +82,3 @@ spec:
       maxSurge: 25%
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
-status:
-  observedGeneration: 11
-  replicas: 2
-  updatedReplicas: 2
-  readyReplicas: 2
-  availableReplicas: 2
-  conditions:
-    - type: Available
-      status: 'True'
-      lastUpdateTime: '2025-03-25T20:26:46Z'
-      lastTransitionTime: '2025-03-25T20:26:46Z'
-      reason: MinimumReplicasAvailable
-      message: Deployment has minimum availability.
-    - type: Progressing
-      status: 'True'
-      lastUpdateTime: '2025-03-28T00:03:40Z'
-      lastTransitionTime: '2025-02-13T19:48:54Z'
-      reason: NewReplicaSetAvailable
-      message: ReplicaSet "landuseplanning-public-dev-775d7bcdc7" has successfully progressed.
