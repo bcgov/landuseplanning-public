@@ -54,6 +54,7 @@ import { ComplianceOversightComponent } from 'app/compliance-oversight/complianc
 import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
 import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
 import { DocumentSectionService } from './services/documentSection.service';
+import { HealthCheckComponent } from './health-check/health-check.component';
 
 /**
  * Needed for NgxPageScrollCoreModule to set the default easing logic.
@@ -119,6 +120,7 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     FaqComponent,
     ShareButtonsComponent,
     EnvBannerComponent,
+    HealthCheckComponent,
   ],
   providers: [
     ConfigService,

@@ -1,8 +1,9 @@
-### 1.20.0 Mar 26, 2025
+### 1.20.0 Mar 27, 2025
 
 - Implemented dynamic project phase options based on project type selection. [DESENG-780](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-780)
 - Updated project map with visual feedback for search and filter updates. [DESENG-773](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-773)
 - Added, updated, and organized Openshift pipeline and listener yamls. [DESENG-776](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-776)
+- Added health check route. [DESENG-776](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-776)
 
 ### 1.19.0 Mar 11, 2025
 

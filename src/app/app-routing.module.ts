@@ -14,9 +14,18 @@ import { ComplianceOversightComponent } from './compliance-oversight/compliance-
 import { ModernizingComponent } from './modernizing/modernizing.component';
 import { UnsubscribeComponent } from './project/email-subscribe/unsubscribe/unsubscribe.component';
 import { ConfirmEmailComponent } from './project/email-subscribe/confirm-email/confirm-email.component';
+import { HealthCheckComponent } from './health-check/health-check.component';
 import { NewsResolver } from './news/news-resolver.service';
 
 const routes: Routes = [
+	{
+    path: 'healthz',
+    component: HealthCheckComponent,
+    data: {
+      title: 'Health Check',
+      focush1: true
+    }
+  },
   {
     path: 'contact',
     component: ContactComponent,
