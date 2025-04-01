@@ -1,3 +1,7 @@
+### 1.20.1 Mar 13, 2025
+
+- Minor code changes to improve sorting and checks on project list page. [DESENG-786](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-786)
+
 ### 1.20.0 Mar 27, 2025
 
 - Implemented dynamic project phase options based on project type selection. [DESENG-780](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-780)
