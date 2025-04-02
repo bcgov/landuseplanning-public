@@ -351,14 +351,14 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     return overlappingDistrictsListString;
   }
 
-	stringifyProjectTypes(projectTypes) {
-		if (!projectTypes || !Array.isArray(projectTypes)) {
-			return '';
-		}
-		const filteredProjectTypes = projectTypes.filter(pt => true === pt.checked);
-		const projectTypeNames = filteredProjectTypes.map(pt => pt.name)?.sort();
-		return projectTypeNames ? projectTypeNames.join(', ') : '';
-	}
+  stringifyProjectTypes(projectTypes) {
+    if (!projectTypes || !Array.isArray(projectTypes)) {
+      return '';
+    }
+    const filteredProjectTypes = projectTypes.filter(pt => true === pt.checked);
+    const projectTypeNames = filteredProjectTypes.map(pt => pt.name).sort();
+    return projectTypeNames ? projectTypeNames.join(', ') : '';
+  }
 
   setRowData() {
     let projectList = [];
