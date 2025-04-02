@@ -143,8 +143,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
                 .takeUntil(this.ngUnsubscribe)
                 .subscribe((res: any) => {
                   console.log('Res', res);
-                  if (res[0].data) {
-                    if (res[0].data.searchResults.length > 0) {
+                  if (res?.[0]?.data) {
+                    if (res[0].data.searchResults?.length > 0) {
                       this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
                       this.projects = res[0].data.searchResults;
                     } else {
@@ -351,14 +351,14 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     return overlappingDistrictsListString;
   }
 
-	stringifyProjectTypes(projectTypes) {
-		if (!projectTypes || !Array.isArray(projectTypes)) {
-			return '';
-		}
-		const filteredProjectTypes = projectTypes.filter(pt => true === pt.checked);
-		const projectTypeNames = filteredProjectTypes.map(pt => pt.name);
-		return projectTypeNames ? projectTypeNames.join(', ') : '';
-	}
+  stringifyProjectTypes(projectTypes) {
+    if (!projectTypes || !Array.isArray(projectTypes)) {
+      return '';
+    }
+    const filteredProjectTypes = projectTypes.filter(pt => true === pt.checked);
+    const projectTypeNames = filteredProjectTypes.map(pt => pt.name).sort();
+    return projectTypeNames ? projectTypeNames.join(', ') : '';
+  }
 
   setRowData() {
     let projectList = [];
