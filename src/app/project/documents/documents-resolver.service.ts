@@ -26,7 +26,7 @@ export class DocumentsResolver implements Resolve<Observable<object>> {
 		const fields = [{ 'name': 'project', 'value': projectId }];
 		const pageNum = route.params?.currentPage || 1;
 		const pageSize = 100;
-		const sortBy = route.params?.sortBy || '-datePosted';
+		const sortBy = route.params?.sortBy || '-dateAdded';
 		const queryModifier = 'Document' === schema ? { documentSource: 'PROJECT', internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt' } : {};
 		const populate = true;
 		return this.searchService.getSearchResults(keywords, dataset, fields, pageNum, pageSize, sortBy, queryModifier, populate);

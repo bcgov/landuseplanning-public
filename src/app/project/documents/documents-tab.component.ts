@@ -56,7 +56,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     },
     {
       name: 'Date',
-      value: 'datePosted',
+      value: 'dateAdded',
       width: 'col-2'
     }
   ];
@@ -92,7 +92,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
           if (res.documents[0].length > 0 || res.documents[2].length > 0 ) {
             // Set the documents for the table and total list items.
             const combinedResults = [...res.documents[0][0]?.data?.searchResults || [], ...res.documents[2][0]?.data?.searchResults || []];
-						const sortedResults = this.sortDocuments(combinedResults);
+						const sortedResults = this.sortDocuments(combinedResults, this.tableParams.sortBy || '-dateAdded');
 						this.documents = this.documentVault = sortedResults;
             this.updateTableDataAndParams();
 
@@ -171,7 +171,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 			}
     })
 
-    // Group files together with by section.
+    // Group files together by section.
     const unorderedDocumentGroupings = groupBy(filesWithSections, 'section');
 
     // Convert grouped files object to array to ensure correct section order is used.
@@ -183,6 +183,11 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     this.documentsGroupedBySection = this.documentsGroupedBySection.filter((document) => {
       return Array.isArray(document);
     })
+
+    // Sort the grouped documents.
+    this.documentsGroupedBySection = this.documentsGroupedBySection.map(section => 
+      section.sort((a: any, b: any) => new Date(b.dateAdded || b.datePosted).getTime() - new Date(a.dateAdded || a.datePosted).getTime())
+    );
   }
 
   /**
@@ -282,13 +287,13 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
   setDocumentRowData() {
     let documentList = [];
-    if (this.documents && this.documents.length > 0) {
+    if (this.documents?.length > 0) {
       this.documents.forEach(document => {
         documentList.push(
           {
             documentFileName: document.documentFileName || document.displayName || document.internalOriginalName,
             displayName: document.displayName,
-            datePosted: document.datePosted,
+            datePosted: document.dateAdded || document.datePosted,
             description: document.description,
 						externalLink: document.externalLink || null,
             size: this.utils.formatBytes(document.internalSize),
@@ -315,15 +320,20 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     } else {
       this.tableParams.sortBy = '+' + column;
     }
-    this.documentVault = this.sortDocuments(this.documentVault);
+    this.documentVault = this.sortDocuments(this.documentVault, this.tableParams.sortBy, 'sorting');
 		this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
 		this.getPaginatedDocs(this.tableParams.currentPage);
   }
 
-	public sortDocuments = (documents: any[]) => {
-		const sortData = this.tableParams.sortBy || '-datePosted';
-		const sortDir = '-' === Array.from(this.tableParams.sortBy)[0] ? -1 : 1;
+	public sortDocuments = (documents: any[], sort: string = '-datePosted', action: string = 'init') => {
+    // Exclude documents with sections if we're reacting to a sorting action.
+    if ('sorting' === action) {
+      documents = documents.filter(doc => !doc.section);
+    }
+		const sortData = sort;
+		const sortDir = '-' === Array.from(sort)[0] ? -1 : 1;
 		const sortBy = sortData.substring(1);
+
 		if ('displayName' === sortBy) {
 			// If sorting strings then convert to lower case.
 			documents.sort((a, b) => {
@@ -331,7 +341,10 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 				if (a[sortBy].toLowerCase() > b[sortBy].toLowerCase()) return 1 * sortDir;
 				return 0;
 			});
-		} else {
+		} else if ('dateAdded' === sortBy) {
+      // Make sure dates are sorted correctly.
+      documents.sort((a: any, b: any) => sortDir * (new Date(a.dateAdded || a.datePosted).getTime() - new Date(b.dateAdded || b.datePosted).getTime()));
+    } else {
 			documents.sort((a, b) => {
 				if (a[sortBy] < b[sortBy]) return -1 * sortDir;
 				if (a[sortBy] > b[sortBy]) return 1 * sortDir;
