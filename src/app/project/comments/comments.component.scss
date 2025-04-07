@@ -1,9 +1,9 @@
 @import "~assets/styles/base/base.scss";
 
 :host {
-    @include flex(1 1 auto);
-    display: block;
-    background: $bg-default;
+  @include flex(1 1 auto);
+  display: block;
+  background: $bg-default;
 }
 
 .app-comments {
@@ -16,7 +16,7 @@
   background-color: #001330;
 
   .hero-banner__container {
-    background-color: $primary;
+    background-color: rgba($primary, 0.56);
     margin: 0;
     padding: 0 3rem;
     width: 111%;
@@ -25,31 +25,52 @@
 
   .hero-banner__content {
     padding-top: 5rem;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba($primary, 0.8);
+    border-radius: 0 0 0.5rem 0.5rem; // round on corners not touching the top to avoid seams
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+
+    @media screen and (max-width: 767px) {
+      // on screens smaller than 767px
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-radius: 0.5rem; //box is not touching the top; round on all corners
+    }
+
+    @media screen and (min-width: 1600px) {
+      // on screens larger than 1600px
+      border-radius: 0.5rem; //box is also not touching the top on larger screens
+    }
   }
 
 }
 
 .comments {
-    background-color: #fff;
-    min-height: 100px;
-    padding: 2rem 0;
+  background-color: #fff;
+  min-height: 100px;
+  padding: 2rem 0;
 
-    .header-section{
-        margin-top: 20px;
-        overflow-y: auto;
-        font-size: medium;
-        padding: 1rem;
-        border: 1px #ccc solid;
-        border-radius: 5px;
-        color: #fff;
-        background-color: #003366;
-    }
+  .header-section {
+    margin-top: 20px;
+    overflow-y: auto;
+    font-size: medium;
+    padding: 1rem;
+    border: 1px #ccc solid;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #003366;
+  }
 }
 
 .agreement {
   display: inline;
 
-  & > div {
+  &>div {
     display: inline;
   }
 
@@ -79,15 +100,23 @@
     @media (max-width: 767px) {
       padding: 1rem;
     }
+
+    &>button {
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      background-color: rgba($primary, 0.8);
+    }
   }
 
   .hero-banner-alt {
     h1 {
       display: inline-block;
     }
+
     .desc {
       margin: 0 0 30px;
     }
+
     .proj-status {
       display: inline-block;
       font-size: 1.2rem;
@@ -96,6 +125,7 @@
       color: #fcba18;
       text-transform: uppercase;
     }
+
     .ea-decision {
       color: #fcba18;
       font-size: 1rem;
@@ -109,22 +139,32 @@
     .basic-info {
       display: block;
 
-      > div {
+      >div {
         padding: 0px 15px 0 0;
         margin-right: 15px;
         margin-top: 0.2rem;
         display: flex;
       }
+
       label {
         font-weight: bold;
         color: #fcba18;
         font-size: 1rem;
+        padding: 0.5rem;
+        background: $primary-font;
+        border-radius: 5px;
+        vertical-align: middle;
+        box-sizing: border-box;
+        margin-top: -0.5rem;
+        text-align: center;
       }
+
       p {
         font-size: 1rem;
         display: inline-block;
       }
     }
+
     .hero-banner__content {
       padding-top: 3rem;
     }
@@ -140,13 +180,16 @@
       .row {
         margin-right: -16px;
         margin-left: -16px;
+
         @media (max-width: 767px) {
           display: block;
           font-size: 1rem;
+
           .value,
           p {
             font-size: 1rem;
           }
+
           .col-6 {
             max-width: 100%;
             margin-bottom: 12px;
@@ -154,6 +197,7 @@
         }
       }
     }
+
     .proj-status,
     .shape-id {
       font-size: 1.2rem;
@@ -161,21 +205,25 @@
       color: $primary;
       margin-bottom: 5px;
     }
+
     .col-6 {
       margin-bottom: 2px;
     }
+
     label {
       font-weight: bold;
       color: $primary;
       margin-bottom: 0;
       line-height: 1.2;
     }
+
     .value {
       font-size: .8rem;
       line-height: 1.25;
       margin-bottom: 5px;
       margin-left: 10px;
     }
+
     .organization-item {
       margin-top: 0;
       color: #fff;
@@ -184,12 +232,14 @@
       padding: 7px 10px;
       width: 100%;
       text-align: center;
+
       p {
         font-size: 1.2rem;
         font-weight: bold;
         margin-bottom: 0;
       }
     }
+
     .project-item {
       &__commenting {
         background-color: #ddd;
@@ -197,6 +247,7 @@
         padding: 7px 1rem;
       }
     }
+
     .location-info {
       @media (min-width: 991px) {
         position: absolute;
@@ -205,11 +256,14 @@
         transform: translateY(-50%);
         width: 550px;
       }
+
       border: 2px solid #003365;
       padding: 35px 40px 40px;
+
       h2 {
         background: #fff;
         color: #003364;
+
         @media (min-width: 991px) {
           padding: 0 8px;
           position: absolute;
@@ -217,6 +271,7 @@
           left: 30px;
         }
       }
+
       label,
       p {
         font-size: 1rem;
@@ -225,15 +280,18 @@
 
     .shape-info-item {
       hr {
-          margin: 1rem 0;
+        margin: 1rem 0;
       }
     }
+
     .nav-tabs {
       background: none;
     }
+
     .project-tabs {
       background: #f7f8fa;
     }
+
     .nav-tabs .nav-link.active {
       background: #f7f8fa;
     }
@@ -243,9 +301,11 @@
     display: flex;
     flex-direction: column;
     margin-top: 0;
+
     button {
       margin-bottom: 1rem;
     }
+
     >section {
       position: relative;
       background-color: #fff;
@@ -259,6 +319,7 @@
       }
     }
   }
+
   section.people {
     background: #3f668c;
     color: white;
@@ -273,15 +334,19 @@
       font-size: 1rem;
       font-weight: 700;
     }
+
     p {
       font-size: 1rem;
+
       i {
         vertical-align: bottom;
       }
     }
+
     .flex-container {
       @media (min-width: 991px) {
         display: flex;
+
         .inner-col {
           flex: 32%;
         }
@@ -314,7 +379,7 @@
     @include flex-direction(row);
     background: #f7f8fa;
 
-    + li {
+    +li {
       margin-top: 2px;
     }
   }
@@ -360,6 +425,7 @@
 
 .open-houses {
   color: black;
+
   span {
     font-size: 14px;
   }
@@ -370,10 +436,10 @@
   background-color: red !important;
   display: none !important;
   overflow-x: hidden !important;
-    overflow-y: auto;
-    color: green;
+  overflow-y: auto;
+  color: green;
 
-   .modal-dialog {
+  .modal-dialog {
     width: 80vw !important;
   }
 }
