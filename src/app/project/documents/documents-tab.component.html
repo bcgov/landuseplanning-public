@@ -67,7 +67,7 @@
               <tr *ngFor="let file of section" (click)="goToItem(file)" (keyup.Enter)="goToItem(file)">
                 <td class="col-7 strong-text"><strong>{{file.displayName}} <span>({{file.internalSize > 0 ? utils.formatBytes(file.internalSize) + ', ' : ''}}{{file.ext || file.internalExt || 'external'}})</span></strong></td>
                 <td class="col-3">{{file.projectPhase}}</td>
-                <td class="col-2">{{formatDocumentDate(file.datePosted)}}</td>
+                <td class="col-2">{{formatDocumentDate(file.dateAdded || file.datePosted)}}</td>
               </tr>
             </tbody>
           </table>
