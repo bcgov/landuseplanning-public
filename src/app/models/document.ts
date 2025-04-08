@@ -21,6 +21,7 @@ export class Document {
   eaoStatus: string;
   datePosted: Date;
   dateUpdated: Date;
+  dateAdded: Date;
   projectPhase: string;
   section: string;
 
@@ -48,6 +49,7 @@ export class Document {
     this.dateUploaded = obj && obj.dateUploaded || null;
     this.dateUpdated = obj && obj.dateUpdated || null;
     this.datePosted = obj && obj.datePosted || null;
+    this.dateAdded = obj && obj.dateAdded || null;
     this.type = obj && obj.type || null;
     this.description = obj && obj.description || null;
     this.documentAuthor = obj && obj.documentAuthor || null;
