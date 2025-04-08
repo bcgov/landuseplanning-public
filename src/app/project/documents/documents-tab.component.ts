@@ -186,7 +186,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
     // Sort the grouped documents.
     this.documentsGroupedBySection = this.documentsGroupedBySection.map(section => 
-      section.sort((a: any, b: any) => new Date(b.dateAdded || b.datePosted).getTime() - new Date(a.dateAdded || a.datePosted).getTime())
+      section.sort((a: Document, b: Document) => new Date(b.dateAdded || b.datePosted).getTime() - new Date(a.dateAdded || a.datePosted).getTime())
     );
   }
 
@@ -325,14 +325,13 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 		this.getPaginatedDocs(this.tableParams.currentPage);
   }
 
-	public sortDocuments = (documents: any[], sort: string = '-datePosted', action: string = 'init') => {
+	public sortDocuments = (documents: Document[], sort: string = '-datePosted', action: string = 'init') => {
     // Exclude documents with sections if we're reacting to a sorting action.
     if ('sorting' === action) {
       documents = documents.filter(doc => !doc.section);
     }
-		const sortData = sort;
 		const sortDir = '-' === Array.from(sort)[0] ? -1 : 1;
-		const sortBy = sortData.substring(1);
+		const sortBy = sort.substring(1);
 
 		if ('displayName' === sortBy) {
 			// If sorting strings then convert to lower case.
@@ -343,7 +342,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 			});
 		} else if ('dateAdded' === sortBy) {
       // Make sure dates are sorted correctly.
-      documents.sort((a: any, b: any) => sortDir * (new Date(a.dateAdded || a.datePosted).getTime() - new Date(b.dateAdded || b.datePosted).getTime()));
+      documents.sort((a: Document, b: Document) => sortDir * (new Date(a.dateAdded || a.datePosted).getTime() - new Date(b.dateAdded || b.datePosted).getTime()));
     } else {
 			documents.sort((a, b) => {
 				if (a[sortBy] < b[sortBy]) return -1 * sortDir;
