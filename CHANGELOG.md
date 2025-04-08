@@ -1,3 +1,8 @@
+### 1.20.2 Apr 07, 2025
+
+- Fixed issue with the comment period page not showing the banner image. [DESENG-790](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-790)
+- Updated .tool-versions to use Node 14.15.0
+
 ### 1.20.1 Mar 31, 2025
 
 - Minor code changes to improve sorting and checks on project list page. [DESENG-786](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-786)
