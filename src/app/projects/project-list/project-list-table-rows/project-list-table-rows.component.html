@@ -1,7 +1,7 @@
 <tr tabindex="0" role="row" (click)="goToProject(project)" (keyup.enter)="goToProject(project)"
   [attr.aria-label]="makeAriaLabel(project.name)"
   *ngFor="let project of projects | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }">
-  <td role="cell" scope="row" [ngClass]="'col-4 project-table__name-col'">{{project.name || '-'}}</td>
-  <td role="cell" scope="row" [ngClass]="'col-4 project-table__name-col'">{{project.partner || '-'}}</td>
-  <td role="cell" scope="row" [ngClass]="'col-4 project-table__name-col'">{{project.projectTypes || '-'}}</td>
+  <td role="cell" [ngClass]="'col-4 project-table__name-col'">{{project.name || '-'}}</td>
+  <td role="cell" [ngClass]="'col-4 project-table__name-col'">{{project.partner || '-'}}</td>
+  <td role="cell" [ngClass]="'col-4 project-table__name-col'">{{project.projectTypes || '-'}}</td>
 </tr>
