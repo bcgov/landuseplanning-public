@@ -1,3 +1,6 @@
+### 1.20.3 Apr 10, 2025
+- Fixed several screen reader accessibility issues in the project list page. [DESENG-788](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-788)
+
 ### 1.20.2 Apr 07, 2025
 
 - Fixed issue with the comment period page not showing the banner image. [DESENG-790](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-790)
