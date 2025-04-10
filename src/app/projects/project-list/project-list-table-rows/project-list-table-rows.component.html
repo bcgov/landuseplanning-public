@@ -1,7 +1,7 @@
-<tr tabindex="0"
-  (click)="goToProject(project)" (keyup.Enter)="goToProject(project)"
+<tr tabindex="0" role="row" (click)="goToProject(project)" (keyup.enter)="goToProject(project)"
+  [attr.aria-label]="makeAriaLabel(project.name)"
   *ngFor="let project of projects | paginate: { id: 'table-template-pagination', itemsPerPage: paginationData.pageSize, currentPage: paginationData.currentPage, totalItems: paginationData.totalListItems }">
-  <td scope="row" data-label="Name" [attr.aria-label]="makeAriaLabel(project.name)" class="col-4">{{project.name || '-'}}</td>
-  <td scope="row" data-label="Partner First Nation(s)" [attr.aria-hidden]="true" class="col-4">{{project.partner || '-'}}</td>
-  <td scope="row" data-label="Project Phase" [attr.aria-hidden]="true" class="col-4">{{project.projectTypes || '-'}}</td>
+  <td role="cell" [ngClass]="'col-4 project-table__name-col'">{{project.name || '-'}}</td>
+  <td role="cell" [ngClass]="'col-4 project-table__name-col'">{{project.partner || '-'}}</td>
+  <td role="cell" [ngClass]="'col-4 project-table__name-col'">{{project.projectTypes || '-'}}</td>
 </tr>
