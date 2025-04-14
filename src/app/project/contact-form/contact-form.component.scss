@@ -1,0 +1,48 @@
+.successful-send {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  text-align: center;
+
+  > * {
+    margin: 1rem;
+  }
+}
+
+::ng-deep .contact-form {
+
+  .files-info {
+    color: #ea4335;
+    font-size: 14px;
+  }
+
+  .dragarea {
+    padding: 1rem;
+    border: 2px dashed #ddd;
+    margin: 1rem 0 1.5rem;
+    border-radius: 4px;
+  }
+
+  label {
+    margin-top: 1rem;
+
+    &.first {
+      margin-top: 0;
+    }
+  }
+
+  .btn.btn-danger.btn-xs {
+    margin: 1rem;
+    display: inline-flex;
+  }
+
+  ul {
+    padding-left: 0;
+    padding-bottom: 1rem;
+  }
+
+  li {
+    height: 2.8rem;
+    display: inline-flex;
+    align-items: center;
+  }
+}

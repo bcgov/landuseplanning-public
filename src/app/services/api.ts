@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ErrorObserver } from 'rxjs';
 import { throwError } from 'rxjs';
@@ -192,6 +192,7 @@ export class ApiService {
       'tenureStage',
       'type',
       'contactFormEnabled',
+      'contactFormFilesEnabled',
       'contactFormEmails',
       'collectionNotice',
     ];
@@ -262,6 +263,7 @@ export class ApiService {
       'delete',
       'activitiesAndUpdatesEnabled',
       'contactFormEnabled',
+      'contactFormFilesEnabled',
       'contactFormEmails',
       'collectionNotice',
     ];
@@ -765,9 +767,37 @@ export class ApiService {
     return this.http.put<EmailSubscribe>(`${this.apiPath}/${queryString}`, {});
   }
 
-  // Send contact form response
+  /**
+   * Sends a contact form response email to the sender and the appointed receiver
+   * 
+   * @param contactForm The contact form data for submission
+   * @returns An observable boolean confirmation of success or failure
+   */
   sendContactFormResponse(contactForm: ContactForm): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiPath}/emailSubscribe/sendContactFormResponse`, contactForm, {});
+    if (contactForm.files?.length > 0) {
+      const formData = new FormData();
+      const headers = new HttpHeaders({ 'Accept': 'application/json' });
+      formData.append('name', contactForm.name);
+      formData.append('email', contactForm.email);
+      formData.append('message', contactForm.message);
+      formData.append('project', contactForm.project);
+  
+      for (const file of contactForm.files) {
+        formData.append('attachments', file, file.name);
+      }
+
+      return this.http.post<boolean>(
+        `${this.apiPath}/emailSubscribe/sendContactFormResponse`,
+        formData,
+        { headers }
+      );
+    } else {
+      // If no files, use a normal JSON post
+      return this.http.post<boolean>(
+        `${this.apiPath}/emailSubscribe/sendContactFormResponse`,
+        contactForm
+      );
+    }
   }
 
   //
