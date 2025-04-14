@@ -186,7 +186,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
     // Sort the grouped documents.
     this.documentsGroupedBySection = this.documentsGroupedBySection.map(section => 
-      section.sort((a: any, b: any) => new Date(b.dateAdded || b.datePosted).getTime() - new Date(a.dateAdded || a.datePosted).getTime())
+      section.sort((a: Document, b: Document) => new Date(b.dateAdded || b.datePosted).getTime() - new Date(a.dateAdded || a.datePosted).getTime())
     );
   }
 
@@ -298,7 +298,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 						externalLink: document.externalLink || null,
             size: this.utils.formatBytes(document.internalSize),
             ext: document.internalExt.toUpperCase(),
-            projectPhase: document.projectPhase,
+            projectPhase: document.projectPhase || null,
             type: document.type,
             milestone: document.milestone,
             _id: document._id,
@@ -325,32 +325,37 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 		this.getPaginatedDocs(this.tableParams.currentPage);
   }
 
-	public sortDocuments = (documents: any[], sort: string = '-datePosted', action: string = 'init') => {
+	public sortDocuments = (documents: Document[], sort: string = '-datePosted', action: string = 'init') => {
     // Exclude documents with sections if we're reacting to a sorting action.
     if ('sorting' === action) {
       documents = documents.filter(doc => !doc.section);
     }
-		const sortData = sort;
 		const sortDir = '-' === Array.from(sort)[0] ? -1 : 1;
-		const sortBy = sortData.substring(1);
+		const sortBy = sort.substring(1);
 
-		if ('displayName' === sortBy) {
-			// If sorting strings then convert to lower case.
-			documents.sort((a, b) => {
-				if (a[sortBy].toLowerCase() < b[sortBy].toLowerCase()) return -1 * sortDir;
-				if (a[sortBy].toLowerCase() > b[sortBy].toLowerCase()) return 1 * sortDir;
-				return 0;
-			});
-		} else if ('dateAdded' === sortBy) {
-      // Make sure dates are sorted correctly.
-      documents.sort((a: any, b: any) => sortDir * (new Date(a.dateAdded || a.datePosted).getTime() - new Date(b.dateAdded || b.datePosted).getTime()));
-    } else {
-			documents.sort((a, b) => {
-				if (a[sortBy] < b[sortBy]) return -1 * sortDir;
-				if (a[sortBy] > b[sortBy]) return 1 * sortDir;
-				return 0;
-			});
-		}
+    if (0 < documents.length && sortDir && sortBy) {
+      if ('displayName' === sortBy) {
+        // If sorting strings then convert to lower case.
+        documents.sort((a, b) => {
+          const aVal = (a[sortBy] ?? '').toString().toLowerCase();
+          const bVal = (b[sortBy] ?? '').toString().toLowerCase();
+          return sortDir * (aVal > bVal ? 1 : aVal < bVal ? -1 : 0);
+        });
+      } else if ('dateAdded' === sortBy) {
+        // Make sure dates are sorted correctly.
+        documents.sort((a: Document, b: Document) => {
+          const aDate = new Date(a.dateAdded || a.datePosted).getTime() || 0;
+          const bDate = new Date(b.dateAdded || b.datePosted).getTime() || 0;
+          return sortDir * (aDate - bDate);
+        });
+      } else {
+        documents.sort((a, b) => {
+          const aVal = a[sortBy] ?? '';
+          const bVal = b[sortBy] ?? '';
+          return sortDir * (aVal > bVal ? 1 : aVal < bVal ? -1 : 0);
+        });
+      }
+    }
 		return documents || [];
 	}
 
@@ -369,16 +374,20 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
 
   getPaginatedDocs(pageNumber) {
 		this.loading = true;
-		this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
-		const startIndex = (pageNumber - 1) * this.tableParams.pageSize;
-		const endIndex = startIndex + this.tableParams.pageSize;
-		if (endIndex && 0 < this.documentVault.length) {
+    let startIndex: number;
+    let endIndex: number;
+    if (this.tableParams?.sortBy && pageNumber) {
+      this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
+      startIndex = (pageNumber - 1) * this.tableParams.pageSize;
+      endIndex = startIndex + this.tableParams.pageSize;
+    }
+		if (endIndex && 0 < this.documentVault?.length) {
 			this.documents = this.documentVault.slice(startIndex, endIndex);
-			this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.tableParams.keywords || '');
-			this.setDocumentRowData();
-			this.loading = false;
-			this._changeDetectionRef.detectChanges();
 		}
+    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.tableParams.keywords || '');
+    this.setDocumentRowData();
+    this._changeDetectionRef.detectChanges();
+		this.loading = false;
   }
 
   public onNumItems(numItems) {
