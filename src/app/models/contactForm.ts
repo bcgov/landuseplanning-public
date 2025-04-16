@@ -4,6 +4,7 @@ export class ContactForm {
   name: string;
   email: string;
   message: string;
+  files: File[];
 
   constructor(obj?: any) {
     this._id = obj && obj._id || null;
@@ -11,5 +12,6 @@ export class ContactForm {
     this.project = obj && obj.project || null;
     this.email = obj && obj.email || null;
     this.message = obj && obj.message || null;
+    this.files = obj && obj.files || null;
   }
 }

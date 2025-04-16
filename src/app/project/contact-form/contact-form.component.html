@@ -1,4 +1,4 @@
-<div class="modal-content">
+<div class="modal-content contact-form">
   <div class="modal-header">
       <h2 class="modal-title">Contact the Project Team</h2>
       <button class="btn btn-icon close-btn gtm-submit-comment-cancel-pg1" type="button"
@@ -13,12 +13,16 @@
       <section>
         <p class="form-warning">Please complete all required fields.</p>
           <div class="form-group">
-            <label class="control-label" for="name">Name*</label>
+            <label class="control-label first" for="name">Name*</label>
             <input class="form-control" type="text" name="name" id="name" required ngModel/>
             <label class="control-label" for="email">Email Address*</label>
             <input class="form-control" type="text" name="email" id="email" required ngModel/>
             <label class="control-label" for="message">Message*</label>
             <textarea class="form-control" name="message" id="message" required ngModel></textarea>
+            <div *ngIf="project.contactFormFilesEnabled">
+              <label class="control-label" for="files">Attach File(s)</label>
+              <app-file-upload [maxFiles]="3" [maxSize]="10" [files]="contactFormFiles" (filesChange)="manageFileChange($event)"></app-file-upload>
+            </div>
           </div>
       </section>
       <section class="m-b-0">

@@ -48,6 +48,7 @@ export class Project {
   commentPeriodForBanner: any;
   activitiesAndUpdatesEnabled: boolean;
   contactFormEnabled: boolean;
+  contactFormFilesEnabled: boolean;
   contactFormEmails: string[];
   collectionNotice: string;
 
@@ -109,6 +110,7 @@ export class Project {
     this.delete = obj && obj.delete || null;
     this.activitiesAndUpdatesEnabled = obj && obj.activitiesAndUpdatesEnabled || null;
     this.contactFormEnabled = obj && obj.contactFormEnabled || null;
+    this.contactFormFilesEnabled = obj && obj.contactFormFilesEnabled || null;
     this.contactFormEmails = obj && obj.contactFormEmails || null;
     this.collectionNotice = obj && obj.collectionNotice || null;
 
