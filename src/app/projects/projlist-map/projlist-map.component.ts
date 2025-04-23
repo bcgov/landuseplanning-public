@@ -293,12 +293,13 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     addedProjects.forEach(proj => {
       // If there is a shapefile for one of the projects, display it instead of a pin.
       if (proj.shapefiles && proj.shapefiles.length > 0) {
-        const shapeFileStyle = { color: proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
-        proj.shapefiles.forEach(projectShapefile => {
+        const orderedShapefiles = _.orderBy(proj.shapefiles, ['order'], ['desc']);
+        orderedShapefiles.forEach(projectShapefile => {
+          const shapeFileStyle = { color: projectShapefile.colour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-          const shapeurl = this.pathAPI + '/document/' + projectShapefile.shapefileId + '/fetch/' + escapedName;
+          const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
-          .on('click', L.Util.bind(this.onShapefileClick, this, proj));
+          .on('click', L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));
           shapefile.projectId = proj._id;
           shapefile.addTo(this.map);
           this.shapefileList.push(shapefile);
@@ -346,7 +347,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     }
 
     const popupOptions = this.getPopupOptions();
-    const getPopupComponent = this.getPopupComponent(app);
+    const getPopupComponent = this.getPopupComponent(app, '');
 
     popup = L.popup(popupOptions)
       .setLatLng(marker.getLatLng())
@@ -365,8 +366,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    */
   private onShapefileClick(...args: any[]): void {
     const app = args[0] as Project;
-    const shapefile = args[1];
-
+    const shapefileTitle = args[1];
+    const shapefile = args[2];
     // update selected item in app list.
     this.applist.toggleCurrentApp(app);
 
@@ -380,7 +381,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     }
 
     const popupOptions = this.getPopupOptions();
-    const getPopupComponent = this.getPopupComponent(app);
+    const getPopupComponent = this.getPopupComponent(app, shapefileTitle);
 
     popup = L.popup(popupOptions)
       .setLatLng(shapefile.latlng)
@@ -420,10 +421,11 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    * @param {Project} project The project to pass to the component factory.
    * @returns {HTMLElement}
    */
-  private getPopupComponent(project: Project): HTMLElement {
+  private getPopupComponent(project: Project, shapefileTitle: string): HTMLElement {
     const compFactory = this.resolver.resolveComponentFactory(ProjDetailPopupComponent);
     const compRef = compFactory.create(this.injector);
     compRef.instance.proj = project;
+    compRef.instance.shapefileTitle = shapefileTitle;
     this.appRef.attachView(compRef.hostView);
     compRef.onDestroy(() => this.appRef.detachView(compRef.hostView));
     return document.createElement('div').appendChild(compRef.location.nativeElement);

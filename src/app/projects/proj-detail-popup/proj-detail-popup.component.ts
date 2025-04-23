@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 
 export class ProjDetailPopupComponent implements OnInit, OnDestroy {
   public proj: Project = null;
+  public shapefileTitle: string = null;
   public commentPeriod: CommentPeriod = null;
   public commentPeriodStatus: String;
 

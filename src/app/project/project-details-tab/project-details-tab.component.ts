@@ -10,6 +10,7 @@ import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { Document } from 'app/models/document';
+import { ProjectShapefile } from 'app/models/project';
 import * as _ from 'lodash';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
@@ -36,7 +37,6 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   private ngbModal: NgbModalRef = null;
   public shapefiles: Document[][] = [];
 	public convertedShapefiles = [];
-	public shapefileStyle: {color: string};
   public pathAPI: string;
 
   constructor(
@@ -52,6 +52,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.overlappingDistrictsListString = this.stringifyOverlappingDistricts(this.project.overlappingRegionalDistricts);
     this.commentPeriod = this.project.commentPeriodForBanner;
     this.route.data.subscribe((res: any) => {
+      if (Array.isArray(this.project?.shapefiles) && this.project?.shapefiles.length > 0) {
+        return;
+      }
+
       if (Array.isArray(res?.documents)) {
 				res.documents.forEach(document => {
 					if (document?.data?.meta?.length > 0) {
@@ -169,13 +173,25 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     // Disable mouse zoom on project details - iterferes with scrolling page.
     this.map.scrollWheelZoom.disable();
 
+    // Draw project-level shapefiles if they're available.
+    let shapefilesToDraw = this.shapefiles[0];
+    if (Array.isArray(this.project.shapefiles) && this.project.shapefiles.length > 0) {
+      shapefilesToDraw = this.project.shapefiles;
+      shapefilesToDraw = _.orderBy(shapefilesToDraw, ['order'], ['desc']);
+
+    }
 		// Convert documents to shapefiles
-		this.shapefileStyle = { color: this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR }; // Colour for the shapefiles
-		this.convertedShapefiles = this.shapefiles[0]?.map(sf => {
-			if (sf?._id && sf?.documentFileName?.length > 0) {
+		this.convertedShapefiles = shapefilesToDraw.map((sf: ProjectShapefile & Document) => {
+			if (sf?.documentFileName?.length > 0 && (sf?._id || sf?.document)) {
+        const fileId = sf?._id || sf?.document;
 				const escapedName = encode(sf.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-				const shapeurl = this.pathAPI + '/document/' + sf._id + '/fetch/' + escapedName;
-				return new L.Shapefile(shapeurl, { isArrayBuffer: false, style: this.shapefileStyle });
+				const shapeurl = this.pathAPI + '/document/' + fileId + '/fetch/' + escapedName;
+				return new L.Shapefile(shapeurl, {
+          isArrayBuffer: false,
+          style: {
+            color: sf.colour || this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR
+          }
+        });
 			};
 		});
 		let locationAdded = false;

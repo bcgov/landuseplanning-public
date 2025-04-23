@@ -19,7 +19,7 @@ export class Project {
   shapeFileColour: string;
   projectDirector: any;
   agreements: { agreementName: string, agreementUrl: string }[];
-  shapefiles: { shapefileId: string, documentFileName: string }[];
+  shapefiles: ProjectShapefile[];
 
   // Everything else
   addedBy: String;
@@ -128,6 +128,14 @@ export interface ProjectLogo {
   name: string;
   alt: string;
   link: string;
+}
+
+export interface ProjectShapefile {
+  documentFileName: string;
+  document: string;
+  title?: string;
+  colour?: string;
+  order?: number;
 }
 
 export interface ProjectType {

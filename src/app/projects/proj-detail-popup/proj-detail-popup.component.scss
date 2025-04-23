@@ -55,6 +55,11 @@ $popup-title-bg: #003366;
   li {
     overflow: hidden;
     text-overflow: ellipsis;
+
+    &.shapefile-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
   }
 
   li.app-description {
