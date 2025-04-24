@@ -183,13 +183,14 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 		// Convert documents to shapefiles
 		this.convertedShapefiles = shapefilesToDraw.map((sf: ProjectShapefile & Document) => {
 			if (sf?.documentFileName?.length > 0 && (sf?._id || sf?.document)) {
+        const shapefileColour = sf.colour || this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR;
         const fileId = sf?._id || sf?.document;
 				const escapedName = encode(sf.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
 				const shapeurl = this.pathAPI + '/document/' + fileId + '/fetch/' + escapedName;
 				return new L.Shapefile(shapeurl, {
           isArrayBuffer: false,
           style: {
-            color: sf.colour || this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR
+            color: shapefileColour
           }
         });
 			};

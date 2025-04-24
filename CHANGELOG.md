@@ -1,6 +1,6 @@
-### Apr 23, 2025
+### Apr 24, 2025
 
--  Add ability to select multiple shapefiles. [DESENG-769](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-769)
+-  Allow for multiple, overlapping shapefiles on the map search page and project pages. [DESENG-769](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-769)
 
 
 ### Apr 14, 2025
