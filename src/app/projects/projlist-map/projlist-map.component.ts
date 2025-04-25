@@ -295,7 +295,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       if (proj.shapefiles && proj.shapefiles.length > 0) {
         const orderedShapefiles = _.orderBy(proj.shapefiles, ['order'], ['desc']);
         orderedShapefiles.forEach(projectShapefile => {
-          const shapeFileStyle = { color: projectShapefile.colour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
+          const shapeFileStyle = { color: projectShapefile.colour || proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })

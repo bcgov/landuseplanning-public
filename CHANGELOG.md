@@ -1,3 +1,8 @@
+### Apr 25, 2025
+
+-  Add project-level shapefile colour reference to map page [DESENG-769](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-769)
+
+
 ### Apr 24, 2025
 
 -  Allow for multiple, overlapping shapefiles on the map search page and project pages. [DESENG-769](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-769)
