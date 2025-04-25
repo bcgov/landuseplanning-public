@@ -1,3 +1,8 @@
+### Apr 24, 2025
+
+-  Allow for multiple, overlapping shapefiles on the map search page and project pages. [DESENG-769](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-769)
+
+
 ### Apr 14, 2025
 
 - Added file attachment functionality to the contact form, which can be enabled/disabled by admins. [DESENG-789](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-789)

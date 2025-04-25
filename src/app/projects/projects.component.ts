@@ -117,19 +117,30 @@ export class ProjectsComponent implements OnInit, OnDestroy {
               this.isLoading = false;
             })
             .subscribe((projects: Project[]) => {
-              // Get all shapefiles.
               this.documentService.getAll('SHAPEFILE')
               .takeUntil(this.ngUnsubscribe)
               .subscribe(shapefiles => {
                   // "Attach" a shapefile to its project.
                   if (shapefiles) {
                     projects.forEach(project => {
-                      // project.shapefiles = [];
+                      if (Array.isArray(project?.shapefiles) && project?.shapefiles.length > 0) {
+                        return;
+                      }
+                      /**
+                       * If no shapefiles are attached, try to find another that's
+                       * associated with the project.
+                       */
                       shapefiles.forEach(shapefile => {
                         if (project._id === shapefile.project) {
                           project.shapefiles.push({
-                            shapefileId: shapefile._id,
-                            documentFileName: shapefile.documentFileName
+                            document: shapefile._id,
+                            documentFileName: shapefile.documentFileName,
+                            /**
+                             * Since 1 is displayed on top of other shapefiles, pick an arbitrarily
+                             * high number such that these shapefiles are displayed on the bottom.
+                             * */
+                            order: 99999999,
+                            colour: null
                           })
                         }
                       })
