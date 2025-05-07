@@ -1,11 +1,11 @@
 ### May 6, 2025
 
 - Modified project list to include project filters [DESENG-799](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-799)
-- Increased contrast of project list hero banner for accessibility
-- Refactored code to remove many lines and improve performance of search/filter
-- Updated appearance of some dated components
-- Added URL param update logic for project types, for consistent state on refresh
-- Modified sorting logic to work properly with filter
+  - Increased contrast of project list hero banner for accessibility
+  - Refactored code to remove many lines and improve performance of search/filter
+  - Updated appearance of some dated components
+  - Added URL param update logic for project types, for consistent state on refresh
+  - Modified sorting logic to work properly with filter
 
 ### Apr 25, 2025
 

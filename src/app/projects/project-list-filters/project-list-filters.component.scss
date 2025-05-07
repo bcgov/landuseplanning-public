@@ -10,7 +10,7 @@ div.app-list-filters__container {
     justify-content: space-between;
 
     .filter-by-type-label {
-      color: white;
+      color: #ffffff;
       font-weight: 500;
       margin-bottom: 0.25rem;
     }
@@ -27,7 +27,7 @@ div.app-list-filters__container {
     }
     
     .project-type-filter-text {
-      color: white;
+      color: #ffffff;
       padding-left: 0.5rem;
       font-weight: 300;
       font-size: 1rem;
@@ -35,34 +35,32 @@ div.app-list-filters__container {
   }
 }
 
-::ng-deep {
-  .app-list-filters__container .project-type-filter-row {
+::ng-deep .app-list-filters__container .project-type-filter-row {
 
-    .project-type-filter-checkbox {
-      
-      .mat-checkbox-ripple .mat-ripple-element {
-        background-color: #ffd740 !important;
-      }
-
-      &.mat-checkbox-indeterminate .mat-checkbox-background, &.mat-checkbox-checked .mat-checkbox-background {
-        background-color: #ffd740 !important;
-      }
+  .project-type-filter-checkbox {
+    
+    .mat-checkbox-ripple .mat-ripple-element {
+      background-color: #ffd740 !important;
     }
 
-    .mat-checkbox-frame {
-      border-color: #ffd740 !important;
+    &.mat-checkbox-indeterminate .mat-checkbox-background, &.mat-checkbox-checked .mat-checkbox-background {
+      background-color: #ffd740 !important;
     }
+  }
 
-    .mat-checkbox-checkmark-path {
-      stroke: black !important;
-    }
+  .mat-checkbox-frame {
+    border-color: #ffd740 !important;
+  }
 
-    .mat-checkbox.mat-accent {
+  .mat-checkbox-checkmark-path {
+    stroke: #000000 !important;
+  }
 
-      .mat-checkbox-checked .mat-checkbox-background,
-      .mat-checkbox-indeterminate .mat-checkbox-background {
-        background-color: transparent;
-      }
+  .mat-checkbox.mat-accent {
+
+    .mat-checkbox-checked .mat-checkbox-background,
+    .mat-checkbox-indeterminate .mat-checkbox-background {
+      background-color: transparent;
     }
   }
 }

@@ -17,12 +17,6 @@ export interface UpdateMatchingData {
   activeFilters: string[];
 }
 
-export interface ProjectTypeFullNameMap {
-  lup: string;
-  flp: string;
-  wpag: string;
-}
-
 @Component({
   selector: 'app-project-list-filters',
   templateUrl: './project-list-filters.component.html',
@@ -44,7 +38,7 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
 		{name: 'Water Planning and Governance', checked: true}
 	];
 
-  public fullNames: ProjectTypeFullNameMap = {
+  public fullNames = {
     lup: 'Land Use Planning',
     flp: 'Forest Landscape Planning',
     wpag: 'Water Planning and Governance',
@@ -93,7 +87,7 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
 	}
 
   /**
-   * Applies filters.
+   * Applies filters by getting those that are selected, passing them to the shared table component, and then emitting an event so that the table is updated.
    * 
    * @param source The source of the call to this method (optional)
 	 * @returns {void}
