@@ -3,7 +3,8 @@ export class Constants {
     DEFAULT_CURRENT_PAGE: 1,
     DEFAULT_PAGE_SIZE: 10,
     DEFAULT_SORT_BY: '-dateAdded',
-    DEFAULT_KEYWORDS: ''
+    DEFAULT_KEYWORDS: '',
+    DEFAULT_PROJECT_TYPES: 'all',
   };
 
   public static readonly types = [

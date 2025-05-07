@@ -1,0 +1,66 @@
+@import "~assets/styles/base/base.scss";
+
+div.app-list-filters__container {
+  margin-top: 2rem;
+
+  .project-type-filter-title-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+
+    .filter-by-type-label {
+      color: #ffffff;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+  }
+  
+  .project-type-filter-row {
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    height: 28px;
+
+    .project-type-filter-checkbox {
+      font-size: 30px;
+    }
+    
+    .project-type-filter-text {
+      color: #ffffff;
+      padding-left: 0.5rem;
+      font-weight: 300;
+      font-size: 1rem;
+    }
+  }
+}
+
+::ng-deep .app-list-filters__container .project-type-filter-row {
+
+  .project-type-filter-checkbox {
+    
+    .mat-checkbox-ripple .mat-ripple-element {
+      background-color: #ffd740 !important;
+    }
+
+    &.mat-checkbox-indeterminate .mat-checkbox-background, &.mat-checkbox-checked .mat-checkbox-background {
+      background-color: #ffd740 !important;
+    }
+  }
+
+  .mat-checkbox-frame {
+    border-color: #ffd740 !important;
+  }
+
+  .mat-checkbox-checkmark-path {
+    stroke: #000000 !important;
+  }
+
+  .mat-checkbox.mat-accent {
+
+    .mat-checkbox-checked .mat-checkbox-background,
+    .mat-checkbox-indeterminate .mat-checkbox-background {
+      background-color: transparent;
+    }
+  }
+}

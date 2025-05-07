@@ -11,12 +11,23 @@ export class TableTemplateUtils {
     private router: Router
   ) { }
 
-  public updateUrl(sortString, currentPage, pageSize, filter = null, keywords = '') {
+  /**
+   * Updates the URL params based on the parameters that are given.
+   * 
+   * @param sortString The column to sort by
+   * @param currentPage The current page of results
+   * @param pageSize How many results are included in one page
+   * @param filter Active filters
+   * @param keywords The search string entered by the user
+   * @param projectTypes The values that are active in the project type filter
+   */
+  public updateUrl(sortString: string, currentPage: number, pageSize: number, filter = null, keywords = '', projectTypes = '') {
     let currentUrl = this.router.url;
     currentUrl = (this.platformLocation as any).getBaseHrefFromDOM() + currentUrl.slice(1);
     currentUrl = currentUrl.split(';')[0];
     currentUrl += `;currentPage=${currentPage};pageSize=${pageSize}`;
     if (keywords !== '') { currentUrl += `;keywords=${keywords}`; }
+    if (projectTypes !== '') { currentUrl += `;projectTypes=${projectTypes}`; }
     if (sortString !== null) { currentUrl += `;sortBy=${sortString}`; }
     if (filter !== null) {
       Object.keys(filter).forEach(key => {
@@ -27,11 +38,19 @@ export class TableTemplateUtils {
     window.history.replaceState({}, '', currentUrl);
   }
 
+  /**
+   * Retrieves the parameters from the URL, optionally modifies filter values in URL.
+   * 
+   * @param params The new parameters that you wish to apply to the TableParamsObject
+   * @param filter The filter URL value to add/modify (optional)
+   * @param defaultSortBy The default 'sort by' value (optional)
+   * @returns A table parameter object
+   */
   public getParamsFromUrl(params, filter = null, defaultSortBy = null) {
     let pageSize = params.pageSize || Constants.tableDefaults.DEFAULT_PAGE_SIZE;
-    let currentPage = params.currentPage ? params.currentPage : Constants.tableDefaults.DEFAULT_CURRENT_PAGE;
-    let sortBy = params.sortBy ? params.sortBy : (defaultSortBy ? defaultSortBy : Constants.tableDefaults.DEFAULT_SORT_BY);
-    let keywords = params.keywords ? params.keywords : Constants.tableDefaults.DEFAULT_KEYWORDS;
+    let currentPage = params.currentPage || Constants.tableDefaults.DEFAULT_CURRENT_PAGE;
+    let sortBy = params.sortBy ? params.sortBy : (defaultSortBy || Constants.tableDefaults.DEFAULT_SORT_BY);
+    let keywords = params.keywords || Constants.tableDefaults.DEFAULT_KEYWORDS;
 
     this.updateUrl(sortBy, currentPage, pageSize, filter, keywords);
 

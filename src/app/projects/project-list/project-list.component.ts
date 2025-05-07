@@ -1,24 +1,23 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { Org } from 'app/models/organization';
-import { Project } from 'app/models/project';
+import { Project, ProjectType } from 'app/models/project';
 import { SearchTerms } from 'app/models/search';
 
 import { TableObject } from 'app/shared/components/table-template/table-object';
-import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 
 import { ProjectListTableRowsComponent } from './project-list-table-rows/project-list-table-rows.component';
 
-import { OrgService } from 'app/services/org.service';
 import { SearchService } from 'app/services/search.service';
-import { StorageService } from 'app/services/storage.service';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { UpdateMatchingData } from '../project-list-filters/project-list-filters.component';
+import { Constants } from 'app/shared/utils/constants';
 
 class ProjectFilterObject {
   constructor(
@@ -27,11 +26,19 @@ class ProjectFilterObject {
     public decisionDateStart: object = {},
     public decisionDateEnd: object = {},
     public pcp: object = {},
-    public proponent: Array<Org> = [],
     public region: Array<string> = [],
     public existingLandUsePlans: Array<string> = [],
     public vc: Array<object> = []
   ) { }
+}
+
+interface TableParams {
+  pageSize: number;
+  currentPage: number;
+  totalListItems: number;
+  sortBy: string;
+  keywords: string;
+  projectTypes: string;
 }
 
 @Component({
@@ -41,23 +48,30 @@ class ProjectFilterObject {
 })
 
 export class ProjectListComponent implements OnInit, OnDestroy {
+  constructor(
+    public snackBar: MatSnackBar,
+    private router: Router,
+    private route: ActivatedRoute,
+    private tableTemplateUtils: TableTemplateUtils,
+    private searchService: SearchService,
+  ) { }
+
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
 
   public projects: Array<Project> = [];
-  public proponents: Array<Org> = [];
-  public regions: Array<object> = [];
-  public ceaaInvolvements: Array<object> = [];
-
-  public loading = true;
-
-  public tableParams: TableParamsObject = new TableParamsObject();
+  public loading: boolean = true;
+  public tableParams: TableParams;
   public terms = new SearchTerms();
-
   public filterForURL: object = {};
   public filterForAPI: object = {};
-
   public filterForUI: ProjectFilterObject = new ProjectFilterObject();
-
-  public showAdvancedSearch = true;
+  public showAdvancedSearch: boolean = true;
+  public filterApps: Array<Project> = [];
+  public filterCount: number = 0;
+  public listApps: Array<Project> = [];
+  public snackBarCounter: number = 0;
+  public projectTableData: TableObject;
 
   public showFilters: object = {
     agreements: false,
@@ -72,8 +86,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     pcp: 0,
     more: 0
   };
-
-  public projectTableData: TableObject;
+  
   public projectTableColumns: any[] = [
     {
       name: 'Name',
@@ -92,164 +105,89 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     }
   ];
 
-  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private tableTemplateUtils: TableTemplateUtils,
-    private storageService: StorageService,
-    private searchService: SearchService,
-    private orgService: OrgService,
-    private _changeDetectionRef: ChangeDetectorRef
-  ) { }
-
+  // Get the params and save them to this.tableParams. Get the projects and save them to this.projects.
   ngOnInit() {
     this.route.params
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
-        let newParams = params;
-
-        if (Object.keys(newParams).length === 0 && newParams.constructor === Object) {
-          newParams = {
-            sortBy: '+name'
-          };
-        }
-
-        // Fetch proponents
-        this.orgService.getByCompanyType('Proponent')
+        this.tableParams = this.defineParams(params);
+        this.searchService.getSearchResults(
+          this.tableParams.keywords,
+          'Project',
+          [],
+          1,
+          100,
+          this.tableParams.sortBy,
+          {},
+          true,
+          null,
+          this.filterForAPI)
           .takeUntil(this.ngUnsubscribe)
-          .subscribe((proponents: any) => {
-            if (proponents) {
-              this.proponents = proponents;
-
-              this.setFiltersFromParams(params);
-
-              this.updateCounts();
-
-              this.tableParams = this.tableTemplateUtils.getParamsFromUrl(newParams, this.filterForURL);
-
-              this.searchService.getSearchResults(
-                this.tableParams.keywords,
-                'Project',
-                [],
-                this.tableParams.currentPage,
-                this.tableParams.pageSize,
-                this.tableParams.sortBy,
-                {},
-                true,
-                null,
-                this.filterForAPI)
-                .takeUntil(this.ngUnsubscribe)
-                .subscribe((res: any) => {
-                  console.log('Res', res);
-                  if (res?.[0]?.data) {
-                    if (res[0].data.searchResults?.length > 0) {
-                      this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-                      this.projects = res[0].data.searchResults;
-                    } else {
-                      this.tableParams.totalListItems = 0;
-                      this.projects = [];
-                    }
-                    this.setRowData();
-                  } else {
-                    alert('Uh-oh, couldn\'t load search results');
-                    // results not found --> navigate back to search
-                    this.router.navigate(['/']);
-                  }
-                  this.loading = false;
-                  this._changeDetectionRef.detectChanges();
-                });
+          .subscribe((res: any) => {
+            console.log('Res', res);
+            if (res?.[0]?.data) {
+              if (res[0].data.searchResults?.length > 0) {
+                this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
+                this.projects = this.filterApps = res[0].data.searchResults;
+              } else {
+                this.tableParams.totalListItems = 0;
+                this.projects = this.filterApps = [];
+              }
+              this.setTableData();
             } else {
-              alert('Uh-oh, couldn\'t load proponents');
+              alert('Uh-oh, couldn\'t load search results');
+              // results not found --> navigate back to search
               this.router.navigate(['/']);
             }
+            this.loading = false;
           });
       });
   }
 
-  addProject() {
-    this.storageService.state.back = { url: ['/projects'], label: 'All Projects(s)' };
-    this.router.navigate(['/projects', 'add']);
+  /**
+   * Defines the parameters by getting existing values or reverting to defaults when necessary.
+   * 
+   * @param params The router Params object from which we are getting values.
+   * @returns The defined TableParams that will be fed to the table.
+   */
+  public defineParams(params: Params): TableParams {
+    return {
+      pageSize: params.pageSize || Constants.tableDefaults.DEFAULT_PAGE_SIZE,
+      currentPage: params.currentPage || Constants.tableDefaults.DEFAULT_CURRENT_PAGE,
+      sortBy: params.sortBy || '+name',
+      keywords: params.keywords || Constants.tableDefaults.DEFAULT_KEYWORDS,
+      projectTypes: params.projectTypes || Constants.tableDefaults.DEFAULT_PROJECT_TYPES,
+      totalListItems: params.totalListItems || 0,
+    };
   }
 
-  paramsToCheckboxFilters(params, name, map) {
-    this.filterForUI[name] = {};
-    delete this.filterForURL[name];
-    delete this.filterForAPI[name];
-
-    if (params[name]) {
-      this.filterForURL[name] = params[name];
-
-      const values = params[name].split(',');
-      let apiValues = [];
-      values.forEach(value => {
-        this.filterForUI[name][value] = true;
-        apiValues.push(map && map[value] ? map[value] : value);
-      });
-      if (apiValues.length) {
-        this.filterForAPI[name] = apiValues.join(',');
+  /**
+   * Event handler called when filters component updates list of matching apps.
+   * 
+   * @param data The data passed from the child filter component to the parent component on filter update.
+   */
+  public updateMatching(data: UpdateMatchingData) {
+    this.projects = this.filterApps.filter(a => a.isMatches);
+    this.tableParams.totalListItems = this.projects.length;
+    // If filters have been modified, add/modify data to tableParams so it can endure page refresh.
+    if (Array.isArray(data.activeFilters)) {
+      if (data.activeFilters.length === 3) {
+        this.tableParams.projectTypes = 'all';
+      } else if (data.activeFilters.length > 0) {
+        this.tableParams.projectTypes = data.activeFilters.join(',');
+      } else {
+        this.tableParams.projectTypes = 'none';
       }
     }
-  }
-
-  paramsToCollectionFilters(params, name, collection, identifyBy) {
-    this.filterForUI[name] = [];
-    delete this.filterForURL[name];
-    delete this.filterForAPI[name];
-
-    if (params[name] && collection) {
-      let confirmedValues = [];
-      // look up each value in collection
-      const values = params[name].split(',');
-      values.forEach(value => {
-        const record = _.find(collection, [ identifyBy, value ]);
-        if (record) {
-          this.filterForUI[name].push(record);
-          confirmedValues.push(value);
-        }
-      });
-      if (confirmedValues.length) {
-        this.filterForURL[name] = confirmedValues.join(',');
-        this.filterForAPI[name] = confirmedValues.join(',');
-      }
-    }
-  }
-
-  paramsToDateFilters(params, name) {
-    this.filterForUI[name] = null;
-    delete this.filterForURL[name];
-    delete this.filterForAPI[name];
-
-    if (params[name]) {
-      this.filterForURL[name] = params[name];
-      this.filterForAPI[name] = params[name];
-      // NGB Date
-      const date = moment(params[name]).toDate();
-      this.filterForUI[name] = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
-    }
-  }
-
-  setFiltersFromParams(params) {
-
-    this.paramsToCollectionFilters(params, 'region', this.regions, 'code');
-    this.paramsToCollectionFilters(params, 'CEAAInvolvement', this.ceaaInvolvements, 'code');
-    this.paramsToCollectionFilters(params, 'proponent', this.proponents, '_id');
-    this.paramsToCollectionFilters(params, 'vc', null, '_id');
-
-    this.paramsToDateFilters(params, 'decisionDateStart');
-    this.paramsToDateFilters(params, 'decisionDateEnd');
-  }
-
-  checkboxFilterToParams(params, name) {
-    let keys = [];
-    Object.keys(this.filterForUI[name]).forEach(key => {
-      if (this.filterForUI[name][key]) {
-        keys.push(key);
-      }
-    });
-    if (keys.length) {
-      params[name] = keys.join(',');
+    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes)
+    this.sortProjects();
+    this.setTableData();
+    // Don't run the snackbar on page load.
+    if (this.snackBarCounter >= 2) {
+      this.snackBarRef = this.snackBar.open(`The ${data?.source || 'search or filter'} has been updated with ${this.projects.length} result${this.projects.length === 1 ? '' : 's'}.`);
+      this.snackBarRef._dismissAfter(3000);
+    } else {
+      this.snackBarCounter++;
     }
   }
 
@@ -271,74 +209,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     }
   }
 
-  setParamsFromFilters(params) {
-    this.checkboxFilterToParams(params, 'agreements');
-    this.checkboxFilterToParams(params, 'engagementStatus');
-    this.checkboxFilterToParams(params, 'pcp');
-
-    this.collectionFilterToParams(params, 'region', 'code');
-    this.collectionFilterToParams(params, 'CEAAInvolvement', 'code');
-    this.collectionFilterToParams(params, 'proponent', '_id');
-    this.collectionFilterToParams(params, 'vc', '_id');
-
-    this.dateFilterToParams(params, 'decisionDateStart');
-    this.dateFilterToParams(params, 'decisionDateEnd');
-  }
-
-  toggleFilter(name) {
-    if (this.showFilters[name]) {
-      this.updateCount(name);
-      this.showFilters[name] = false;
-    } else {
-      Object.keys(this.showFilters).forEach(key => {
-        if (this.showFilters[key]) {
-          this.updateCount(key);
-          this.showFilters[key] = false;
-        }
-      });
-      this.showFilters[name] = true;
-    }
-  }
-
   isShowingFilter() {
     return Object.keys(this.showFilters).some(key => { return this.showFilters[key]; });
-  }
-
-  clearAll() {
-    Object.keys(this.filterForUI).forEach(key => {
-      if (this.filterForUI[key]) {
-        if (Array.isArray(this.filterForUI[key])) {
-          this.filterForUI[key] = [];
-        } else if (typeof this.filterForUI[key] === 'object') {
-          this.filterForUI[key] = {};
-        } else {
-          this.filterForUI[key] = '';
-        }
-      }
-    });
-    this.updateCounts();
-  }
-
-  updateCount(name) {
-    const getCount = (n) => { return Object.keys(this.filterForUI[n]).filter(k => this.filterForUI[n][k]).length; };
-
-    let num = 0;
-    if (name === 'more') {
-      num = getCount('region') + this.filterForUI.proponent.length + getCount('CEAAInvolvement') + this.filterForUI.vc.length;
-    } else {
-      num = getCount(name);
-      if (name === 'engagementStatus') {
-        num += this.isNGBDate(this.filterForUI.decisionDateStart) ? 1 : 0;
-        num += this.isNGBDate(this.filterForUI.decisionDateEnd) ? 1 : 0;
-      }
-    }
-    this.numFilters[name] = num;
-  }
-
-  updateCounts() {
-    this.updateCount('agreements');
-    this.updateCount('pcp');
-    this.updateCount('more');
   }
 
   stringifyOverlappingDistricts(districts: string | string[]): string {
@@ -351,7 +223,13 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     return overlappingDistrictsListString;
   }
 
-  stringifyProjectTypes(projectTypes) {
+  /**
+   * Stringifies the project types for printing in the rows.
+   * 
+   * @param projectTypes The project types that need to be stringified
+   * @returns A string of project names, separated by commas
+   */
+  stringifyProjectTypes(projectTypes: ProjectType[]): string {
     if (!projectTypes || !Array.isArray(projectTypes)) {
       return '';
     }
@@ -360,7 +238,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     return projectTypeNames ? projectTypeNames.join(', ') : '';
   }
 
-  setRowData() {
+  /**
+   * Applies data to the table.
+   */
+  setTableData() {
     let projectList = [];
     if (this.projects && this.projects.length > 0) {
       this.projects.forEach(project => {
@@ -382,54 +263,58 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     }
   }
 
-  setColumnSort(column) {
-    if (this.tableParams.sortBy.charAt(0) === '+') {
-      this.tableParams.sortBy = '-' + column;
+  /**
+   * Handles a column sort event from the table.
+   * 
+   * @param column The column to sort by.
+   */
+  handleColumnSort(column: string) {
+    if (this.tableParams.sortBy.includes(column)) {
+      this.tableParams.sortBy = this.tableParams.sortBy.includes('+') ? `-${column}` : `+${column}`;
     } else {
-      this.tableParams.sortBy = '+' + column;
+      this.tableParams.sortBy = `+${column}`;
     }
-    this.getPaginatedProjects(this.tableParams.currentPage);
+    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes)
+    this.sortProjects();
+    this.setTableData();
   }
 
-  getPaginatedProjects(pageNumber) {
-    // Go to top of page after clicking to a different page.
-    window.scrollTo(0, 0);
-    this.loading = true;
-
-    this.tableParams = this.tableTemplateUtils.updateTableParams(this.tableParams, pageNumber, this.tableParams.sortBy);
-
-    this.searchService.getSearchResults(
-      this.tableParams.keywords,
-      'Project',
-      null,
-      pageNumber,
-      this.tableParams.pageSize,
-      this.tableParams.sortBy,
-      {},
-      true,
-      null,
-      this.filterForAPI
-    )
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((res: any) => {
-        if (res[0].data) {
-          this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
-          this.projects = res[0].data.searchResults;
-          this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords);
-          this.setRowData();
-          this.loading = false;
-          this._changeDetectionRef.detectChanges();
-        } else {
-          alert('Uh-oh, couldn\'t load topics');
-          // project not found --> navigate back to search
-          this.router.navigate(['/']);
-        }
+  /**
+   * Sorts the projects.
+   */
+  sortProjects() {
+    const sortBy = this.tableParams.sortBy.substring(1);
+    const direction = '+' === this.tableParams.sortBy.charAt(0) ? 1 : -1;
+    // Special case for project types. Data must be parsed.
+    if ('projectTypes' === sortBy) {
+      this.projects.sort((a, b) => {
+        const aProj = this.stringifyProjectTypes(a.projectTypes);
+        const bProj = this.stringifyProjectTypes(b.projectTypes);
+        return aProj.localeCompare(bProj) * direction;
       });
+    } else {
+      this.projects.sort((a, b) => {  
+        return a[sortBy].localeCompare(b[sortBy]) * direction;
+      });
+    }
+  }
+
+  /**
+   * Handles a page change event from the table.
+   * 
+   * @param pageNumber The new page number to apply.
+   * @returns {void}
+   */
+  handlePageChange(pageNumber: number): void {
+    this.tableParams.currentPage = pageNumber;
+    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes)
+    this.sortProjects();
+    this.setTableData();
   }
 
   public onSubmit() {
     // dismiss any open snackbar
-    // if (this.snackBarRef) { this.snackBarRef.dismiss(); }
+    if (this.snackBarRef) { this.snackBarRef.dismiss(); }
 
     // NOTE: Angular Router doesn't reload page on same URL
     // REF: https://stackoverflow.com/questions/40983055/how-to-reload-the-current-route-with-the-angular-2-router
@@ -438,14 +323,12 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     let params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
-    params['currentPage'] = this.tableParams.currentPage = 1;
-    params['sortBy'] = this.tableParams.sortBy = '-score';
+    params['currentPage'] = this.tableParams.currentPage ?? 1;
+    params['sortBy'] = this.tableParams.sortBy ?? '+name';
     params['keywords'] = this.tableParams.keywords;
-    params['pageSize'] = this.tableParams.pageSize = 10;
+    params['pageSize'] = this.tableParams.pageSize ?? 10;
+    params['projectTypes'] = this.tableParams.projectTypes;
 
-    this.setParamsFromFilters(params);
-
-    console.log('onSubmit params', params);
     this.router.navigate(['projects-list', params]);
   }
 
