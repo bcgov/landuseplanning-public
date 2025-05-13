@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 
@@ -17,6 +17,7 @@ import { TableParamsObject } from 'app/shared/components/table-template/table-pa
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
+import { ExternalLinkService } from 'app/services/externalLink.service';
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -63,7 +64,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
     private _changeDetectionRef: ChangeDetectorRef,
     private modalService: NgbModal,
     private router: Router,
-    private tableTemplateUtils: TableTemplateUtils
+    private tableTemplateUtils: TableTemplateUtils,
+    private externalLinkService: ExternalLinkService
   ) { }
 
   ngOnInit() {
@@ -77,28 +79,35 @@ export class CommentsComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         (data: { commentPeriod: CommentPeriod, projectAndBanner }) => {
-
-          if (data.projectAndBanner[0]) {
-            this.project = data.projectAndBanner[0];
-          }
-
-          if (data.projectAndBanner[1]) {
-            this.bannerImage = data.projectAndBanner[1][0].data.searchResults[0];
-          }
-
-          // The following items are loaded by a file that is only present on cluster builds.
-          // Locally, this will be empty and local defaults will be used.
           const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_path');
           this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
-
-          if (this.bannerImage) {
-            const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
-            this.bannerImageSrc = `${this.pathAPI}/document/${this.bannerImage._id}/fetch/${safeName}`;
-            console.log('this banner', this.bannerImageSrc)
+          if (data.projectAndBanner[0] && !this.project) {
+            this.project = data.projectAndBanner[0];
+            console.log('setting project', this.project);
+            this._changeDetectionRef.detectChanges();
           }
 
-          if (data.commentPeriod) {
+          if (data.projectAndBanner[1] && !this.bannerImage) {
+            const images = data.projectAndBanner[1][0].data.searchResults;
+
+            if (images.length > 1) {
+              // Make sure we're getting the latest image that has been assigned to this project
+              const sortedImages = data.projectAndBanner[1][0].data.searchResults.sort((a, b) => new Date(b.datePosted).getTime() - new Date(a.datePosted).getTime());
+              this.bannerImage = sortedImages[0];
+            } else if (images.length === 1) {
+              this.bannerImage = images[0];
+            }
+            
+            if (this.bannerImage) {
+              const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
+              this.bannerImageSrc = `${this.pathAPI.replace('public', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
+              console.log('setting banner', this.bannerImageSrc);
+              this._changeDetectionRef.detectChanges();
+            }
+          }
+
+          if (data.commentPeriod && !this.commentPeriod) {
             // To fix the issue where the last page is empty.
             this.commentPeriod = data.commentPeriod;
             const engagementLabel = this.project.engagementLabel ? this.project.engagementLabel : 'Public Comment Period';
@@ -110,13 +119,15 @@ export class CommentsComponent implements OnInit, OnDestroy {
               this.commentPeriodHeader = `${engagementLabel} is now open`;
             }
 
-            if (this.commentPeriod.relatedDocuments && this.commentPeriod.relatedDocuments.length > 0) {
-              this.documentService.getByMultiId(this.commentPeriod.relatedDocuments)
+            if (this.commentPeriod.relatedDocuments.length > 0 && !this.commentPeriodDocs) {
+              forkJoin([this.documentService.getByMultiId(this.commentPeriod.relatedDocuments), this.externalLinkService.getByMultiId(this.commentPeriod.relatedDocuments)])
                 .takeUntil(this.ngUnsubscribe)
-                .subscribe(docs => {
-                  this.commentPeriodDocs = docs;
-                  this._changeDetectionRef.detectChanges();
-                });
+                .subscribe(
+                  data => {
+                    this.commentPeriodDocs = [...data[0] || [], ...data[1] || []];
+                    this._changeDetectionRef.detectChanges();
+                  }
+                );
             }
             this.commentPeriodId = this.commentPeriod._id;
             this.commentService.getByPeriodId(this.commentPeriodId, this.tableParams.currentPage, this.tableParams.pageSize, true)
@@ -165,17 +176,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.getPaginatedComments(this.tableParams.currentPage);
   }
 
-  public getBannerURL() {
-    return this.bannerImageSrc ? `url(${this.bannerImageSrc})` : '';
-  }
-
-  // public downloadDocument(document) {
-  //   return this.api.downloadDocument(document).then(() => {
-  //     console.log('Download initiated for file(s)');
-  //   });
-  // }
-
   public goToItem(item) {
+    // If we're opening an external link instead of a document, go straight to the predefined link
+    if (item.externalLink) {
+      window.open(item.externalLink);
+    }
+    // Otherwise, if it's a regular document, fetch it via the API
     let filename = item.documentFileName;
     let safeName = filename;
     try {

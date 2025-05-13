@@ -41,6 +41,7 @@ import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DecisionService } from 'app/services/decision.service';
 import { DocumentService } from 'app/services/document.service';
+import { ExternalLinkService } from 'app/services/externalLink.service';
 import { SearchService } from 'app/services/search.service';
 import { OrgService } from 'app/services/org.service';
 import { FeatureService } from 'app/services/feature.service';
@@ -134,6 +135,7 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     CommentPeriodService,
     DecisionService,
     DocumentService,
+    ExternalLinkService,
     DocumentSectionService,
     SearchService,
     OrgService,
