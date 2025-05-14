@@ -84,7 +84,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
           if (data.projectAndBanner[0] && !this.project) {
             this.project = data.projectAndBanner[0];
-            console.log('setting project', this.project);
             this._changeDetectionRef.detectChanges();
           }
 
@@ -102,7 +101,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
             if (this.bannerImage) {
               const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
               this.bannerImageSrc = `${this.pathAPI.replace('public', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
-              console.log('setting banner', this.bannerImageSrc);
               this._changeDetectionRef.detectChanges();
             }
           }
