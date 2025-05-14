@@ -1,3 +1,10 @@
+### May 13, 2025
+
+- Fixed comment period page [DESENG-822](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-822)
+  - Added ability to post external links to a comment period (was not previously working)
+  - Restyled page as per ticket requirements
+  - Restored proper banner URL functionality
+
 ### May 6, 2025
 
 - Modified project list to include project filters [DESENG-799](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-799)

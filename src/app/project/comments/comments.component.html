@@ -6,87 +6,73 @@
 
   <div *ngIf="!loading" class="project">
     <main class="project-info">
-      <div class="hero-banner-alt" [ngStyle]="{ 'backgroundImage': getBannerURL() }">
-          <div class="hero-banner__container">
-            <div class="container">
-              <div class="hero-banner__content">
-            <h1 tabindex="-1">{{project?.name || '-'}}</h1>
-            <div class="header-section mb-4" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
-              <h3>
-                {{commentPeriodHeader}}
-              </h3>
-              <h3>
-                {{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}
-              </h3>
-              <div *ngIf="commentPeriod.informationLabel !== null">
-                <p>
-                  {{commentPeriod.instructions}}
-                </p>
-                <br>
-                <p>
-                  {{commentPeriod.additionalText}}
-                </p>
-                <br>
-                <p>
-                  {{commentPeriod.informationLabel}}
-                </p>
-              </div>
-              <p *ngIf="commentPeriod.informationLabel === null">
-                {{commentPeriod.instructions}}
-              </p>
-              <div class="d-flex justify-content-end">
-                <button class="btn btn-light" (click)="addComment()" type="button"
-                *ngIf="commentPeriod.commentPeriodStatus === 'Open'" [attr.aria-label]=makeAriaLabel(project.name)>Submit Comment</button>
-              </div>
-            </div>
-            <div class="basic-info">
-              <div>
-                <label>Partner First Nation(s)</label>
-                <p class="value">{{project?.partner || "-" }}</p>
-              </div>
-              <div *ngIf="project?.agreements?.length > 0" class="agreements-label">
-                <label>Agreement(s)</label>
-              </div>
-              <div *ngIf="projectFieldType(project?.agreements) === 'string'" class="agreements">
-                <p class="value">{{project?.agreements || "-"}}</p>
-              </div>
-              <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
-                <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
-                  <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
-                    <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
-                      href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
-                    </p>
-                    <span *ngIf="i !== project.agreements.length - 1">,</span>
-                  </div>
-                  <ng-template #noAgreementURL>
-                    <p class="value">{{agreement.agreementName || "-" }}</p>
-                    <span *ngIf="i !== project.agreements.length - 1">,</span>
-                  </ng-template>
+      <div class="hero-banner-alt" [ngStyle]="{ 'background-image': 'url(' + bannerImageSrc + ')' }">
+        <div class="hero-banner__container">
+          <div class="container">
+            <div class="hero-banner__content">
+
+              <h1 tabindex="-1">{{project?.name || '-'}}</h1>
+              <h2>{{commentPeriodHeader}}</h2>
+              <h3>{{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}</h3>
+
+              <div class="header-section" *ngIf="commentPeriod !== null && commentPeriod._id == commentPeriod._id">
+                <div *ngIf="commentPeriod.informationLabel !== null" class="hero-paragraph">
+                  <p>{{commentPeriod.instructions}}</p>
+                  <p>{{commentPeriod.additionalText}}</p>
+                  <p>{{commentPeriod.informationLabel}}</p>
+                </div>
+                <div *ngIf="commentPeriod.informationLabel === null" class="hero-paragraph">
+                  <p>{{commentPeriod.instructions}}</p>
                 </div>
               </div>
-            </div>
 
+              <div class="basic-info">
+                <div class="basic-info-subsection">
+                  <label>Partner First Nation(s)</label>
+                  <p class="nations-value">{{project?.partner || "-" }}</p>
+                </div>
+                <div class="basic-info-subsection agreements" *ngIf="project?.agreements?.length > 0">
+                  <label>Agreement(s)</label>
+                  <p *ngIf="projectFieldType(project?.agreements) === 'string'" class="agreements-value">{{project?.agreements || "-"}}</p>
+                  <p *ngIf="projectFieldType(project?.agreements) === 'object'" class="agreements-value">
+                    <span *ngFor="let agreement of project.agreements; let i = index">
+                      <span *ngIf="i !== 0">, </span>
+                      <a class="agreement-link" href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-"}}</a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="buttons-row">
+                <button class="btn btn-light" (click)="addComment()" type="button"
+                  *ngIf="commentPeriod.commentPeriodStatus === 'Open'" [attr.aria-label]=makeAriaLabel(project.name)>
+                  Submit Comment
+                </button>
+                <button class="btn inverted" (click)="goBackToProjectDetails()" type="button">
+                  Back to project details
+                </button>
+              </div>
+
+            </div>
           </div>
-          <button class="btn btn-sm inverted mb-3" (click)="goBackToProjectDetails()" type="button">
-            Back to project details
-          </button>
         </div>
-      </div>
       </div>
     </main>
   </div>
-  <div *ngIf="!loading" class="container comments mt-3">
+
+  <div *ngIf="!loading" class="container comment-period-content-container">
     <div *ngIf="commentPeriod.commentPeriodInfo">
-      <div class="mb-3" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
+      <div class="comment-period-paragraph" [innerHTML]="commentPeriod.commentPeriodInfo | newlines"></div>
     </div>
-    <div class="related-documents value mt-4" *ngIf="commentPeriodDocs?.length > 0">
+
+    <div class="related-documents" *ngIf="commentPeriodDocs?.length > 0">
       <p class="table-instructions">Click on a document to download it.</p>
       <div class="card">
         <div class="card-header">
           Related Documents
         </div>
-        <ul class="doc-list mt-0">
-          <li class="clickable-row" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="goToItem(doc)" (keyup.Enter)="downloadDocument(doc)">
+        <ul class="doc-list mt-0 list-group">
+          <li class="clickable-row list-group-item" tabindex="0" *ngFor="let doc of commentPeriodDocs" (click)="goToItem(doc)" (keyup.Enter)="downloadDocument(doc)">
             <span class="cell icon">
               <i class="material-icons">insert_drive_file</i>
             </span>
@@ -97,24 +83,20 @@
         </ul>
       </div>
     </div>
-    <div class="open-houses value mt-4" *ngIf="commentPeriod.openHouses.length > 0">
+
+    <div class="open-houses" *ngIf="commentPeriod.openHouses.length > 0">
       <div class="card">
         <div class="card-header">
           Open Houses
         </div>
         <ul class="list-group">
           <li class="list-group-item" *ngFor="let openHouse of commentPeriod.openHouses">
-            <h6>
-              <b>Date:</b>&nbsp;{{openHouse.eventDate | date}}
-            </h6>
-            <br>
-            <h6>
-              <b>Description:</b>&nbsp;{{openHouse.description}}
-            </h6>
+            <p class="open-house-paragraph"><strong>Date:</strong>&nbsp;{{openHouse.eventDate | date}}</p>
+            <p class="open-house-paragraph"><strong>Description:</strong>&nbsp;{{openHouse.description}}</p>
           </li>
         </ul>
       </div>
     </div>
+    
   </div>
-
 </div>

@@ -108,6 +108,31 @@ export class ApiService {
     return this.http.get<SearchResults[]>(`${this.apiPath}/${queryString}`, {});
   }
 
+  /**
+   * Get mutliple individual external links by their respective IDs.
+   *
+   * @param {Array} ids The external link IDs to retrieve by.
+   * @returns {Observable}
+   */
+  getExternalLinksByMultiId(ids: Array<String>): Observable<ExternalLink[]> {
+    const fields = [
+      '_id',
+      'documentFileName',
+      'displayName',
+      'section',
+      'externalLink',
+      'dateAdded',
+      'dateUpdated',
+      'checkbox',
+      'project',
+      'projectPhase',
+      'description',
+      'read'
+    ];
+    const queryString = `link?exLinkIds=${this.buildValues(ids)}&fields=${this.buildValues(fields)}`;
+    return this.http.get<ExternalLink[]>(`${this.apiPath}/${queryString}`, {});
+  }
+
   //
   // Searching
   //
