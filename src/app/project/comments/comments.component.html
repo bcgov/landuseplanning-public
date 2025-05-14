@@ -27,12 +27,8 @@
               </div>
 
               <div class="basic-info">
-                <div class="basic-info-subsection">
-                  <label>Partner First Nation(s)</label>
-                  <p class="nations-value">{{project?.partner || "-" }}</p>
-                </div>
                 <div class="basic-info-subsection agreements" *ngIf="project?.agreements?.length > 0">
-                  <label>Agreement(s)</label>
+                  <label>Agreement(s)</label><br />
                   <p *ngIf="projectFieldType(project?.agreements) === 'string'" class="agreements-value">{{project?.agreements || "-"}}</p>
                   <p *ngIf="projectFieldType(project?.agreements) === 'object'" class="agreements-value">
                     <span *ngFor="let agreement of project.agreements; let i = index">

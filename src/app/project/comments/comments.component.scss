@@ -61,7 +61,7 @@
           }
       
           .header-section {
-            margin: 2rem 0;
+            margin: 2rem 0 1rem;
       
             .hero-paragraph p {
               font-size: 1.25rem;
@@ -75,12 +75,8 @@
             gap: 1rem;
 
             .basic-info-subsection {
-              display: flex; 
+              display: block;
               gap: 0.5rem
-            }
-
-            .agreements {
-              margin-top: 0.2rem;
             }
       
             >div {
@@ -97,20 +93,19 @@
                 font-weight: bold;
                 color: #fcba18;
                 font-size: 1rem;
-                padding: 0 1rem;
-                background: $primary-font;
+                padding: 0;
                 border-radius: 5px;
                 height: 44px;
-                margin: auto 0;
-                margin-right: 0.5rem;
+                margin: 0;
         
                 @media (max-width: 760px) {
                   width: 100%;
+                  justify-content: flex-start;
                 }
               }
       
               p.agreements-value .agreement-link {
-                color: white;
+                color: #fff;
               }
 
               p.nations-value {
@@ -121,13 +116,13 @@
                 line-height: 1.75rem;
                 align-items: center;
                 font-size: 1rem;
-                margin: auto 0;
+                margin: auto 0 auto 10px;
               }
             }
           }
 
           div.buttons-row {
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
@@ -159,7 +154,8 @@
 
     .comment-period-paragraph {
       line-height: 1.9rem;
-      margin: 0 0 3rem;
+      margin: 0;
+      margin-bottom: 2.25rem;
       padding: 0;
     }
 
