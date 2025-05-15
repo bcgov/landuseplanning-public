@@ -94,7 +94,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             
             if (this.bannerImage) {
               const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
-              this.bannerImageSrc = `${this.pathAPI.replace('public/', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
+              this.bannerImageSrc = `${this.pathAPI.replace('/public', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
               this._changeDetectionRef.detectChanges();
             }
           }
@@ -210,7 +210,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       } catch (e) {
         console.log('error:', e);
       }
-      window.open(this.pathAPI.replace('public/', '') + '/document/' + item._id + '/fetch/' + safeName, '_blank');
+      window.open(this.pathAPI.replace('/public', '') + '/document/' + item._id + '/fetch/' + safeName, '_blank');
     }
   }
 
