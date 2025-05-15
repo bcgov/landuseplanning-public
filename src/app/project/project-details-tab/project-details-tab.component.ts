@@ -174,11 +174,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.map.scrollWheelZoom.disable();
 
     // Draw project-level shapefiles if they're available.
-    let shapefilesToDraw = this.shapefiles[0];
+    let shapefilesToDraw = this.shapefiles[0] || [];
     if (Array.isArray(this.project.shapefiles) && this.project.shapefiles.length > 0) {
       shapefilesToDraw = this.project.shapefiles;
       shapefilesToDraw = _.orderBy(shapefilesToDraw, ['order'], ['desc']);
-
     }
 		// Convert documents to shapefiles
 		this.convertedShapefiles = shapefilesToDraw.map((sf: ProjectShapefile & Document) => {
@@ -198,7 +197,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 		let locationAdded = false;
 
 		// If there are converted shapefiles
-		if (this.convertedShapefiles) {
+		if (Array.isArray(this.convertedShapefiles) && this.convertedShapefiles.length > 0) {
 			this.convertedShapefiles?.forEach((sf, index) => {
 				sf.on('data:loaded', () => {
 					const keys = Object.keys(sf._layers);
