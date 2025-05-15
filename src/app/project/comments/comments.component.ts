@@ -1,23 +1,24 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, Observable, Subject } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
-
 import { CommentService } from 'app/services/comment.service';
 import { AddCommentComponent } from './add-comment/add-comment.component';
 import { AddSurveyResponseComponent } from './add-survey-response/add-survey-response.component';
 import { Project } from 'app/models/project';
-import { DocumentService } from 'app/services/document.service';
-import { ApiService } from 'app/services/api';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
 import { ExternalLinkService } from 'app/services/externalLink.service';
+import { SearchService } from 'app/services/search.service';
+import { ExternalLink } from 'app/models/externalLink';
+import { Document } from 'app/models/document';
+
+type CommentPeriodFile = Document & ExternalLink;
 
 const encode = encodeURIComponent;
 window['encodeURIComponent'] = (component: string) => {
@@ -35,7 +36,6 @@ window['encodeURIComponent'] = (component: string) => {
 export class CommentsComponent implements OnInit, OnDestroy {
   public loading = true;
   public commentsLoading = true;
-
   public commentPeriod: CommentPeriod;
   public project: Project;
   public comments: Comment[];
@@ -43,29 +43,23 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public bannerImage;
   public bannerImageSrc: string;
   public pathAPI: string;
-
   public commentTableData: TableObject;
   public commentPeriodHeader: String;
-
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private commentPeriodId = null;
   private ngbModal: NgbModalRef = null;
-
   public tableParams: TableParamsObject = new TableParamsObject();
-
   public commentTableColumns = [];
 
-
   constructor(
-    private api: ApiService,
     private route: ActivatedRoute,
     private commentService: CommentService,
-    private documentService: DocumentService,
     private _changeDetectionRef: ChangeDetectorRef,
     private modalService: NgbModal,
     private router: Router,
     private tableTemplateUtils: TableTemplateUtils,
-    private externalLinkService: ExternalLinkService
+    private externalLinkService: ExternalLinkService,
+    private searchService: SearchService
   ) { }
 
   ngOnInit() {
@@ -100,7 +94,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             
             if (this.bannerImage) {
               const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
-              this.bannerImageSrc = `${this.pathAPI.replace('public', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
+              this.bannerImageSrc = `${this.pathAPI.replace('public/', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
               this._changeDetectionRef.detectChanges();
             }
           }
@@ -112,17 +106,29 @@ export class CommentsComponent implements OnInit, OnDestroy {
             if (this.commentPeriod.commentPeriodStatus === 'Closed') {
               this.commentPeriodHeader = `${engagementLabel} is now closed`;
             } else if (this.commentPeriod.commentPeriodStatus === 'Pending') {
-              this.commentPeriodHeader = `${engagementLabel} is pending`;
+              this.commentPeriodHeader = `${engagementLabel} is pending`; 
             } else if (this.commentPeriod.commentPeriodStatus === 'Open') {
               this.commentPeriodHeader = `${engagementLabel} is now open`;
             }
 
             if (this.commentPeriod.relatedDocuments.length > 0 && !this.commentPeriodDocs) {
-              forkJoin([this.documentService.getByMultiId(this.commentPeriod.relatedDocuments), this.externalLinkService.getByMultiId(this.commentPeriod.relatedDocuments)])
+              const documentRequest = this.getFiles();
+              const exLinkRequest = this.externalLinkService.getByMultiId(this.commentPeriod.relatedDocuments);
+              forkJoin([documentRequest, exLinkRequest])
                 .takeUntil(this.ngUnsubscribe)
                 .subscribe(
                   data => {
-                    this.commentPeriodDocs = [...data[0] || [], ...data[1] || []];
+                    this.commentPeriodDocs = [...data[0][0].data.searchResults || [], ...data[1] || []];
+                    if (this.commentPeriodDocs) {
+                      // Sort the documents by date added with most recent files first
+                      this.commentPeriodDocs.sort((a: CommentPeriodFile, b: CommentPeriodFile) => {
+                        const getDate = (item: CommentPeriodFile): number => {
+                          const dateStr = 'datePosted' in item && item.datePosted ? item.datePosted : item.dateAdded;
+                          return new Date(dateStr).getTime();
+                        };
+                        return getDate(b) - getDate(a);
+                      });
+                    }
                     this._changeDetectionRef.detectChanges();
                   }
                 );
@@ -156,6 +162,19 @@ export class CommentsComponent implements OnInit, OnDestroy {
       );
   }
 
+  /**
+	 * Retrieves comment period documents
+	 * 
+	 * @returns {Observable<Object>}
+	 */
+	public getFiles = (): Observable<Object> => {
+		const queryModifier = { 
+      documentSource: 'PROJECT', 
+      internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt', 
+      _id: this.commentPeriod.relatedDocuments.toString() 
+    };
+		return this.searchService.getSearchResults('', 'Document', [], 1, 100, '-dateAdded', queryModifier, true);
+	}
 
   setCommentRowData() {
     this.commentTableData = new TableObject(
@@ -174,20 +193,27 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.getPaginatedComments(this.tableParams.currentPage);
   }
 
-  public goToItem(item) {
+  /**
+	 * Event handler for a user click on a document
+   * 
+	 * @param item The item that's been clicked on, either a document or external link entry
+	 * @returns {Observable<Object>}
+	 */
+  public goToItem(item: CommentPeriodFile): void {
     // If we're opening an external link instead of a document, go straight to the predefined link
     if (item.externalLink) {
       window.open(item.externalLink);
+    } else {
+      // Otherwise, if it's a regular document, fetch it via the API
+      let filename = item.documentFileName;
+      let safeName = filename;
+      try {
+        safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
+      } catch (e) {
+        console.log('error:', e);
+      }
+      window.open(this.pathAPI.replace('public/', '') + '/document/' + item._id + '/fetch/' + safeName, '_blank');
     }
-    // Otherwise, if it's a regular document, fetch it via the API
-    let filename = item.documentFileName;
-    let safeName = filename;
-    try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
-    } catch (e) {
-      console.log('error:', e);
-    }
-    window.open(this.pathAPI.replace('public', '') + '/document/' + item._id + '/fetch/' + safeName, '_blank');
   }
 
   public addComment() {
