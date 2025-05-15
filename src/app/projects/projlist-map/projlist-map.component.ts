@@ -293,15 +293,15 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     addedProjects.forEach(proj => {
       // If there is a shapefile for one of the projects, display it instead of a pin.
       if (proj.shapefiles && proj.shapefiles.length > 0) {
-        const orderedShapefiles = _.orderBy(proj.shapefiles, ['order'], ['desc']);
-        orderedShapefiles.forEach(projectShapefile => {
+        // Get the project link, shapefile colour, and order before adding each shapefile to the global list.
+        proj.shapefiles.forEach(projectShapefile => {
           const shapeFileStyle = { color: projectShapefile.colour || proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
           const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
           .on('click', L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));
           shapefile.projectId = proj._id;
-          shapefile.addTo(this.map);
+          shapefile.shapefileOrder = Number(projectShapefile.order);
           this.shapefileList.push(shapefile);
         })
       } else {
@@ -317,10 +317,22 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
           this.markerClusterGroup.addLayer(marker); // save to marker clusters group
         }
       }
+      this.addShapefilesToMap();
     });
 
     // set visible apps
     this.setVisibleDebounced();
+  }
+
+  /**
+   * Take the list of all project shapefiles, order them by "shapefileOrder",
+   * then add them to the map.
+   */
+  private addShapefilesToMap(): void {
+    const orderedShapefiles = _.sortBy(this.shapefileList, ['shapefileOrder']);
+    orderedShapefiles.forEach(projectShapefile => {
+      projectShapefile.addTo(this.map);
+    });
   }
 
   /**
