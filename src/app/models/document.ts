@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 export class Document {
   _id: string;
+  _createdDate: string;
   project: string;
   documentFileName: string;
   internalOriginalName: string;
@@ -32,6 +33,7 @@ export class Document {
 
   constructor(obj?: any) {
     this._id = obj && obj._id || null;
+    this._createdDate = obj && obj._createdDate || null;
     this.project = obj && obj.project || null;
 
     this.documentFileName = obj && obj.documentFileName || null;
