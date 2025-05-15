@@ -194,10 +194,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   /**
-	 * Event handler for a user click on a document
+	 * Event handler for when a user clicks on a document
    * 
 	 * @param item The item that's been clicked on, either a document or external link entry
-	 * @returns {Observable<Object>}
 	 */
   public goToItem(item: CommentPeriodFile): void {
     // If we're opening an external link instead of a document, go straight to the predefined link
@@ -205,10 +204,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
       window.open(item.externalLink);
     } else {
       // Otherwise, if it's a regular document, fetch it via the API
-      let filename = item.documentFileName;
-      let safeName = filename;
+      let safeName = item.documentFileName;
       try {
-        safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
+        safeName = encode(safeName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
       } catch (e) {
         console.log('error:', e);
       }
