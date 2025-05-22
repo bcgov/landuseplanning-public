@@ -1,6 +1,6 @@
 ### May 22, 2025
 
-* Backed up old and new yamls for production deployment [DESENG-767](https://apps.itsm.gov.bc.ca/jira/browse/DESENG-767)
+* Backed up old and new yamls for production deployment [DESENG-767](https://citz-gdx.atlassian.net/browse/DESENG-767)
 
 ### May 15, 2025
 
