@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: landuseplanning-public-prod
+  namespace: e8b9ad-prod
+  labels:
+    app: landuseplanning-public-prod
+    app.kubernetes.io/component: landuseplanning-public-prod
+    app.kubernetes.io/instance: landuseplanning-public-prod
+    app.kubernetes.io/part-of: landuseplanning-public-prod
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: landuseplanning-public-prod
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: landuseplanning-public-prod
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: landuseplanning-public-prod
+          env:
+            - name: API_URL
+              value: 'https://www.planninginpartnership.ca/api'
+            - name: REMOTE_API_PATH
+              value: 'https://www.planninginpartnership.ca/api/public'
+            - name: REMOTE_API_BASE_PATH
+              value: 'https://www.planninginpartnership.ca/api'
+            - name: REMOTE_ADMIN_PATH
+              value: 'https://www.planninginpartnership.ca/admin'
+            - name: DEPLOYMENT_ENVIRONMENT
+              value: prod
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+          terminationMessagePolicy: File
+          image: image-registry.apps.silver.devops.gov.bc.ca/e8b9ad-tools/lup-public-deploy-image
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
