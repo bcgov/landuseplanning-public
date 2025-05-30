@@ -295,14 +295,16 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       if (proj.shapefiles && proj.shapefiles.length > 0) {
         // Get the project link, shapefile colour, and order before adding each shapefile to the global list.
         proj.shapefiles.forEach(projectShapefile => {
-          const shapeFileStyle = { color: projectShapefile.colour || proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
-          const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
-          const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
-          const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
-          .on('click', L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));
-          shapefile.projectId = proj._id;
-          shapefile.shapefileOrder = Number(projectShapefile.order);
-          this.shapefileList.push(shapefile);
+          if (!projectShapefile?.showOnMapPage) {
+            const shapeFileStyle = { color: projectShapefile.colour || proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
+            const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+            const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
+            const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
+              .on('click', L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));
+            shapefile.projectId = proj._id;
+            shapefile.shapefileOrder = Number(projectShapefile.order);
+            this.shapefileList.push(shapefile);
+          }
         })
       } else {
         // If no shapefile is found for a project, display a pin of its coordinates instead.
