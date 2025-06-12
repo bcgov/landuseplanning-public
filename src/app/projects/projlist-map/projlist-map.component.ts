@@ -283,7 +283,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
         // Find marker indexes
       const markerIndexes = this.markerList.reduce((acc, item, index) => {
-        if (item.projectId.toString() === proj._id) acc.push(index);
+        if (item.projectId?.toString() === proj._id) acc.push(index);
           return acc;
         }, []);
 
@@ -299,10 +299,10 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       }
       
       if (this.shapefileList?.length > 0) {
-        
+
         // Find shapefile indexes
       const shapefileIndexes = this.shapefileList.reduce((acc, item, index) => {
-        if (item.projectId.toString() === proj._id) acc.push(index);
+        if (item.projectId?.toString() === proj._id) acc.push(index);
           return acc;
         }, []);
 
