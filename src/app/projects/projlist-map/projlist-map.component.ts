@@ -11,10 +11,10 @@ import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
 import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-detail-popup.component';
 import { Constants } from 'app/shared/utils/constants';
+import { Utils } from 'app/shared/utils/utils';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
-const encode = encodeURIComponent;
 
 declare module 'leaflet' {
   export interface FeatureGroup<P = any> {
@@ -73,7 +73,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     public projectService: ProjectService,
     public configService: ConfigService,
     private injector: Injector,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private utils: Utils,
   ) { }
 
   // create map after view (which contains map id) is initialized
@@ -267,25 +268,43 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   }
 
   /**
-    * Removes deleted / draws added projects.
+    * Removes hidden projects and draws added projects.
     *
-    * @param   {Project[]} deletedProjects Deleted projects.
+    * @param   {Project[]} hiddenProjects Hidden projects.
     * @param   {Project[]} addedProjects Added projects.
     * @returns {void}
     */
-  private drawMap(deletedProjects: Project[], addedProjects: Project[]): void {
-    // remove deleted projects from list and map
-    deletedProjects.forEach(proj => {
-      const markerIndex = _.findIndex(this.markerList, { projectId: proj._id });
-      const shapefileIndex = _.findIndex(this.shapefileList, { projectId: proj._id });
+  private drawMap(hiddenProjects: Project[], addedProjects: Project[]): void {
 
-      if (markerIndex >= 0) {
-        const markers = this.markerList.splice(markerIndex, 1);
-        this.markerClusterGroup.removeLayer(markers[0]);
+    // remove deleted projects from list and map
+    hiddenProjects.forEach(proj => {
+
+      // Find marker indexes
+      const markerIndexes = this.markerList.reduce((acc, item, index) => {
+        if (item.projectId.toString() === proj._id) acc.push(index);
+        return acc;
+      }, []);
+
+      // Remove the markers from the map at the specified indexes
+      if (markerIndexes.length > 0) {
+        markerIndexes.sort((a, b) => b - a).forEach(mi => {
+          const [marker] = this.markerList.splice(mi, 1);
+          this.markerClusterGroup.removeLayer(marker);
+        })
       }
-      if (shapefileIndex >= 0) {
-        const shapefiles = this.shapefileList.splice(shapefileIndex, 1);
-        this.map.removeLayer(shapefiles[0]);
+
+      // Find shapefile indexes
+      const shapefileIndexes = this.shapefileList.reduce((acc, item, index) => {
+        if (item.projectId.toString() === proj._id) acc.push(index);
+        return acc;
+      }, []);
+
+      // Remove the shapefiles from the map at the specified indexes
+      if (shapefileIndexes.length > 0) {
+        shapefileIndexes.sort((a, b) => b - a).forEach(sfi => {
+          const [shapefile] = this.shapefileList.splice(sfi, 1);
+          this.map.removeLayer(shapefile);
+        })
       }
     });
 
@@ -295,8 +314,10 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       if (proj.shapefiles && proj.shapefiles.length > 0) {
         // Get the project link, shapefile colour, and order before adding each shapefile to the global list.
         proj.shapefiles.forEach(projectShapefile => {
-          const shapeFileStyle = { color: projectShapefile.colour || proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR };
-          const escapedName = encode(projectShapefile.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+          // Colour value from the individual shapefile OR global project colour OR default constant colour
+          const colour = projectShapefile.colour || proj.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR;
+          const shapeFileStyle = { color: colour };
+          const escapedName = this.utils.encodeFileName(projectShapefile.documentFileName);
           const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
           const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
           .on('click', L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));

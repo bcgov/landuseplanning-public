@@ -48,7 +48,7 @@ $toggle-list-anim-duration: 0.2s;
 
   .leaflet-popup {
     margin-bottom: 30px; // Offset so we can see the marker
-    z-index: 400;
+    z-index: 1000; // Make pop-ups appear above markers and shapefiles
   }
   
   .leaflet-popup-content-wrapper {

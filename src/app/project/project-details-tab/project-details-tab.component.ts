@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Document } from 'app/models/document';
 import { ProjectShapefile } from 'app/models/project';
 import * as _ from 'lodash';
+import { Utils } from 'app/shared/utils/utils';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
@@ -43,7 +44,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     private storageService: StorageService,
     private elementRef: ElementRef,
     public configService: ConfigService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utils: Utils
   ) { }
 
   ngOnInit() {
@@ -184,7 +186,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 			if (sf?.documentFileName?.length > 0 && (sf?._id || sf?.document)) {
         const shapefileColour = sf.colour || this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR;
         const fileId = sf?._id || sf?.document;
-				const escapedName = encode(sf.documentFileName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_');
+				const escapedName = this.utils.encodeFileName(sf.documentFileName);
 				const shapeurl = this.pathAPI + '/document/' + fileId + '/fetch/' + escapedName;
 				return new L.Shapefile(shapeurl, {
           isArrayBuffer: false,
