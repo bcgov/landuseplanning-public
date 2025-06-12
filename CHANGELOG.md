@@ -6,6 +6,10 @@
 - Fixed layering of map objects so pins don't show up on top of pop-up messages
 - Fixed filtering so that it correctly removes shapefiles (was previously redrawing on top of itself)
 
+### June 5, 2025
+
+- Modified logic branching for Submit Comment button on comment period page. [DESENG-829](https://citz-gdx.atlassian.net/browse/DESENG-829)
+
 ### May 22, 2025
 
 - Backed up old and new yamls for production deployment [DESENG-767](https://citz-gdx.atlassian.net/browse/DESENG-767)
