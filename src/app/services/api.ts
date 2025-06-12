@@ -22,14 +22,7 @@ import { EmailSubscribe } from 'app/models/emailSubscribe';
 import { DocumentSection } from 'app/models/documentSection';
 import { ContactForm } from 'app/models/contactForm';
 import { ExternalLink } from 'app/models/externalLink';
-
-const encode = encodeURIComponent;
-window['encodeURIComponent'] = (component: string) => {
-  return encode(component).replace(/[!'()*]/g, (c) => {
-    // Also encode !, ', (, ), and *
-    return '%' + c.charCodeAt(0).toString(16);
-  });
-};
+import { Utils } from 'app/shared/utils/utils';
 
 @Injectable()
 export class ApiService {
@@ -38,7 +31,8 @@ export class ApiService {
   public env: string;  // Could be anything per Openshift settings but generally is one of 'local' | 'dev' | 'test' | 'prod' | 'demo'
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private utils: Utils
   ) {
 
     // The following items are loaded by a file that is only present on cluster builds.
@@ -66,7 +60,7 @@ export class ApiService {
     console.log(document);
     const blob = await this.downloadResource(document._id);
     let filename = document.displayName;
-    filename = encode(filename).replace(/\\/g, '_').replace(/\//g, '_');
+    filename = this.utils.encodeFileName(filename);
     const url = window.URL.createObjectURL(blob);
     const a = window.document.createElement('a');
     window.document.body.appendChild(a);
@@ -86,7 +80,7 @@ export class ApiService {
     console.log(document);
     let safeName = '';
     try {
-      safeName = encode(filename).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
+      safeName = this.utils.encodeFileName(filename);
     } catch (e) {
       // fall through
       console.log('error', e);

@@ -19,14 +19,6 @@ import { Utils } from 'app/shared/utils/utils';
 import { DocumentSection } from 'app/models/documentSection';
 import { DocumentSectionService } from 'app/services/documentSection.service';
 
-const encode = encodeURIComponent;
-window['encodeURIComponent'] = (component: string) => {
-  return encode(component).replace(/[!'()*]/g, (c) => {
-    // Also encode !, ', (, ), and *
-    return '%' + c.charCodeAt(0).toString(16);
-  });
-};
-
 @Component({
   selector: 'app-documents',
   templateUrl: './documents-tab.component.html',

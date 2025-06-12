@@ -6,14 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'app/services/api';
 import { Utils } from 'app/shared/utils/utils';
 
-const encode = encodeURIComponent;
-window['encodeURIComponent'] = (component: string) => {
-  return encode(component).replace(/[!'()*]/g, (c) => {
-    // Also encode !, ', (, ), and *
-    return '%' + c.charCodeAt(0).toString(16);
-  });
-};
-
 @Component({
   selector: 'tbody[app-document-table-rows]',
   templateUrl: './project-document-table-rows.component.html',
