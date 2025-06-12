@@ -276,35 +276,45 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     */
   private drawMap(hiddenProjects: Project[], addedProjects: Project[]): void {
 
-    // remove deleted projects from list and map
+    // remove hidden projects from list and map
     hiddenProjects.forEach(proj => {
 
-      // Find marker indexes
+      if (this.markerList?.length > 0) {
+
+        // Find marker indexes
       const markerIndexes = this.markerList.reduce((acc, item, index) => {
         if (item.projectId.toString() === proj._id) acc.push(index);
-        return acc;
-      }, []);
+          return acc;
+        }, []);
 
-      // Remove the markers from the map at the specified indexes
-      if (markerIndexes.length > 0) {
-        markerIndexes.sort((a, b) => b - a).forEach(mi => {
-          const [marker] = this.markerList.splice(mi, 1);
-          this.markerClusterGroup.removeLayer(marker);
-        })
+        // Remove the markers from the map at the specified indexes
+        if (markerIndexes.length > 0) {
+          markerIndexes.sort((a, b) => b - a).forEach(mi => {
+            const [marker] = this.markerList.splice(mi, 1);
+            if (marker) {
+              this.markerClusterGroup.removeLayer(marker);
+            }
+          })
+        }
       }
-
-      // Find shapefile indexes
+      
+      if (this.shapefileList?.length > 0) {
+        
+        // Find shapefile indexes
       const shapefileIndexes = this.shapefileList.reduce((acc, item, index) => {
         if (item.projectId.toString() === proj._id) acc.push(index);
-        return acc;
-      }, []);
+          return acc;
+        }, []);
 
-      // Remove the shapefiles from the map at the specified indexes
-      if (shapefileIndexes.length > 0) {
-        shapefileIndexes.sort((a, b) => b - a).forEach(sfi => {
-          const [shapefile] = this.shapefileList.splice(sfi, 1);
-          this.map.removeLayer(shapefile);
-        })
+        // Remove the shapefiles from the map at the specified indexes
+        if (shapefileIndexes.length > 0) {
+          shapefileIndexes.sort((a, b) => b - a).forEach(sfi => {
+            const [shapefile] = this.shapefileList.splice(sfi, 1);
+            if (shapefile) {
+              this.map.removeLayer(shapefile);
+            }
+          })
+        }
       }
     });
 
