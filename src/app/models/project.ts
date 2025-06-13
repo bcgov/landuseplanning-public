@@ -82,7 +82,7 @@ export class Project {
     this.projectDirector = obj && obj.projectDirector || null;
     this.agreements = obj && obj.agreements || null;
     this.shapeFileColour = obj && obj.shapeFileColour || null;
-    this.shapefiles = obj && obj.shapefiles || null;
+    this.shapefiles = obj && obj.shapefiles || [];
     this.addedBy = obj && obj.addedBy || null;
     this.existingLandUsePlanURLs = obj && obj.existingLandUsePlanURLs || null;
     this.code = obj && obj.code || null;
