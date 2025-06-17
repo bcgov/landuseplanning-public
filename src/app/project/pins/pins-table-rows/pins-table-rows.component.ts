@@ -5,14 +5,6 @@ import { TableObject } from 'app/shared/components/table-template/table-object';
 import { Router } from '@angular/router';
 import { ApiService } from 'app/services/api';
 
-const encode = encodeURIComponent;
-window['encodeURIComponent'] = (component: string) => {
-  return encode(component).replace(/[!'()*]/g, (c) => {
-    // Also encode !, ', (, ), and *
-    return '%' + c.charCodeAt(0).toString(16);
-  });
-};
-
 @Component({
   selector: 'tbody[app-pins-table-rows]',
   templateUrl: './pins-table-rows.component.html',

@@ -17,16 +17,11 @@ import { ExternalLinkService } from 'app/services/externalLink.service';
 import { SearchService } from 'app/services/search.service';
 import { ExternalLink } from 'app/models/externalLink';
 import { Document } from 'app/models/document';
+import { Utils } from 'app/shared/utils/utils';
+import { SurveyService } from 'app/services/survey.service';
+import { Survey } from 'app/models/survey';
 
 type CommentPeriodFile = Document & ExternalLink;
-
-const encode = encodeURIComponent;
-window['encodeURIComponent'] = (component: string) => {
-  return encode(component).replace(/[!'()*]/g, (c) => {
-    // Also encode !, ', (, ), and *
-    return '%' + c.charCodeAt(0).toString(16);
-  });
-};
 
 @Component({
   selector: 'app-comments',
@@ -59,7 +54,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
     private router: Router,
     private tableTemplateUtils: TableTemplateUtils,
     private externalLinkService: ExternalLinkService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private utils: Utils,
+    public surveyService: SurveyService
   ) { }
 
   ngOnInit() {
@@ -206,7 +203,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       // Otherwise, if it's a regular document, fetch it via the API
       let safeName = item.documentFileName;
       try {
-        safeName = encode(safeName).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\\/g, '_').replace(/\//g, '_').replace(/\%2F/g, '_').replace(/\ /g, '_');
+        safeName = this.utils.encodeFileName(safeName);
       } catch (e) {
         console.log('error:', e);
       }
@@ -214,46 +211,29 @@ export class CommentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addComment() {
-
-    if (this.commentPeriod.surveySelected) {
-
-      // open modal
-      this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static',   size: 'xl' as 'lg', windowClass: 'comment-modal' });
-      // set input parameter
-      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
-      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
-      (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = this.commentPeriod.surveySelected;
-
-      // check result
-      this.ngbModal.result.then(
-        value => {
-          // saved
-          console.log(`Success, value = ${value}`);
-        },
-        reason => {
-          // cancelled
-          console.log(`Cancelled, reason = ${reason}`);
+  /**
+	 * Triggers the opening of the survey dialog and opens the appropriate survey based on available data.
+   * 
+	 */
+  public addComment(): void {
+    if (this.project.commentPeriodForBanner) {
+      this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
+        .subscribe((loadedSurvey: Survey) => {
+          if (loadedSurvey) {
+          // open modal
+          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false });
+          // set input parameter
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
+          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
+        } else {
+          // open modal
+          this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
+          // set input parameter
+          (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+          (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
         }
-      );
-    } else if (this.commentPeriodId) {
-      // open modal
-      this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
-      // set input parameter
-      (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.commentPeriod;
-      (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
-
-      // check result
-      this.ngbModal.result.then(
-        value => {
-          // saved
-          console.log(`Success, value = ${value}`);
-        },
-        reason => {
-          // cancelled
-          console.log(`Cancelled, reason = ${reason}`);
-        }
-      );
+      })
     }
   }
 

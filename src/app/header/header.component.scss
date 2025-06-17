@@ -61,7 +61,7 @@
   margin-right: 0.5rem;
   padding: 0.5rem 0.4rem;
   border: 2px solid $primary;
-  color: $gold;
+  color: $header-font-color !important;
   font-size: medium;
   font-weight: 600;
   outline: none; // override user agent stylesheet default
@@ -105,7 +105,7 @@
 // NAVBAR
 .navbar {
   padding: 0;
-  background-color: $primary;
+  background-color: transparent;
   z-index: 1000;
 
   .navbar-nav {
@@ -253,9 +253,9 @@
 
 .navbar-brand__title {
   margin-top: 0.78rem;
-  margin-left: 175px;
   display: inline-block;
   color: $header-font-color;
+  margin-left: 0.75rem;
   line-height: 1.1rem;
   font-weight: 800;
   font-size: 1rem;
@@ -282,6 +282,7 @@
 @media (min-width: 650px) {
   .navbar-brand__title {
     font-size: 1.6rem;
+    margin-left: 175px;
   }
 }
 
