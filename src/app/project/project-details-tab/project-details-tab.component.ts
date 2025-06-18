@@ -226,8 +226,6 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 						if (this.bounds.southWest.lat && this.bounds.southWest.lng && this.bounds.northEast.lat && this.bounds.northEast.lng) {
 							this.map.fitBounds([[this.bounds.southWest.lat, this.bounds.southWest.lng], [this.bounds.northEast.lat, this.bounds.northEast.lng]], {padding: [50, 50]});
 						} else if (!locationAdded && this.project) {
-              // If no shape files have been added, add a marker
-              console.warn("No shapefile bounds found — falling back to marker");
 							this.addMarker();
 						}
 
