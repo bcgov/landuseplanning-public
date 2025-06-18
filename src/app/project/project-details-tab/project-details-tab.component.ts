@@ -206,7 +206,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     }
 
 		let locationAdded = false;
-    let totalShapefiles = this.convertedShapefiles.length;
+    let totalShapefiles = this.convertedShapefiles?.length;
     let loadedCounter = 0;
 
 		// If there are converted shapefiles
