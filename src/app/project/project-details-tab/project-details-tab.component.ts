@@ -183,24 +183,27 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       shapefilesToDraw = this.project.shapefiles;
       shapefilesToDraw = _.orderBy(shapefilesToDraw, ['order'], ['desc']);
     }
+
 		// Convert documents to shapefiles
-		this.convertedShapefiles = shapefilesToDraw.map((sf: ProjectShapefile & Document) => {
-			if (sf?.documentFileName?.length > 0 && (sf?._id || sf?.document)) {
-        const shapefileColour = sf.colour || this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR;
-        const fileId = sf?._id || sf?.document;
-				const escapedName = this.utils.encodeFileName(sf.documentFileName);
-				const shapeurl = this.pathAPI + '/document/' + fileId + '/fetch/' + escapedName;
-				const shapefile = new L.Shapefile(shapeurl, {
-          isArrayBuffer: false,
-          style: {
-            color: shapefileColour
-          }
-        });
-        shapefile._sourceUrl = shapeurl;
-        return shapefile;
-			};
-      return null // return something if invalid
-		})
+    if (Array.isArray(shapefilesToDraw) && shapefilesToDraw.length > 0) {
+      this.convertedShapefiles = shapefilesToDraw.map((sf: ProjectShapefile & Document) => {
+        if (sf?.documentFileName?.length > 0 && (sf?._id || sf?.document)) {
+          const shapefileColour = sf.colour || this.project.shapeFileColour || Constants.style.DEFAULT_SHAPEFILE_COLOUR;
+          const fileId = sf?._id || sf?.document;
+          const escapedName = this.utils.encodeFileName(sf.documentFileName);
+          const shapeurl = this.pathAPI + '/document/' + fileId + '/fetch/' + escapedName;
+          const shapefile = new L.Shapefile(shapeurl, {
+            isArrayBuffer: false,
+            style: {
+              color: shapefileColour
+            }
+          });
+          shapefile._sourceUrl = shapeurl;
+          return shapefile;
+        };
+        return null // return something if invalid
+      })
+    }
 
 		let locationAdded = false;
     let totalShapefiles = this.convertedShapefiles.length;
