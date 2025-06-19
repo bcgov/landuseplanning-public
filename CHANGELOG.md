@@ -1,3 +1,7 @@
+### Jun 18, 2025
+
+- Added an additional safeguard for shapefiles on the individual project page [DESENG-831](https://citz-gdx.atlassian.net/browse/DESENG-831)
+
 ### Jun 17, 2025
 
 - Add option to hide shapefiles on the map page [DESENG-825](https://citz-gdx.atlassian.net/browse/DESENG-825)
