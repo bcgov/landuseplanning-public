@@ -182,7 +182,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     if (Array.isArray(this.project.shapefiles) && this.project.shapefiles.length > 0) {
       // Draw project-level shape files if they're available.
       shapefilesToDraw = _.orderBy(this.project.shapefiles, ['order'], ['desc']);
-    } else if (Array.isArray(this.shapefiles) && this.shapefiles.length > 0) {
+    } else if (this.shapefiles.length > 0) {
       // Otherwise, draw the shape files that were retrieved by the document resolver.
       shapefilesToDraw = this.shapefiles;
     }
@@ -227,8 +227,12 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 						}
 					});
 					sf.addTo(this.appFG);
-          locationAdded = true;
-          loadedCounter++;
+
+          // Update our counter and flag if the shapefile has successfully been added
+          if (this.appFG.hasLayer(sf)) {
+            locationAdded = true;
+            loadedCounter++;
+          }
 
 					// Last iteration only
 					if (loadedCounter === totalShapefiles) {
