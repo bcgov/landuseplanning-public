@@ -1,3 +1,7 @@
+### Jun 19, 2025
+
+- Added support for shape files from legacy projects on individual project page [DESENG-831](https://citz-gdx.atlassian.net/browse/DESENG-831)
+
 ### Jun 18, 2025
 
 - Added an additional safeguard for shapefiles on the individual project page [DESENG-831](https://citz-gdx.atlassian.net/browse/DESENG-831)

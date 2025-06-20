@@ -34,7 +34,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 	readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 61, lng: -114}}; // Converted for other parsing
 	public bounds = {southWest: {lat: null, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
   private ngbModal: NgbModalRef = null;
-  public shapefiles: Document[][] = [];
+  public shapefiles: Document[] = [];
 	public convertedShapefiles = [];
   public pathAPI: string;
 
@@ -68,6 +68,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 				})
       }
     });
+
     // The following items are loaded by a file that is only present on cluster builds.
     // Locally, this will be empty and local defaults will be used.
     const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
@@ -177,11 +178,13 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     // Disable mouse zoom on project details - iterferes with scrolling page.
     this.map.scrollWheelZoom.disable();
 
-    // Draw project-level shapefiles if they're available.
-    let shapefilesToDraw = this.shapefiles[0] || [];
+    let shapefilesToDraw = [];
     if (Array.isArray(this.project.shapefiles) && this.project.shapefiles.length > 0) {
-      shapefilesToDraw = this.project.shapefiles;
-      shapefilesToDraw = _.orderBy(shapefilesToDraw, ['order'], ['desc']);
+      // Draw project-level shape files if they're available.
+      shapefilesToDraw = _.orderBy(this.project.shapefiles, ['order'], ['desc']);
+    } else if (Array.isArray(this.shapefiles) && this.shapefiles.length > 0) {
+      // Otherwise, draw the shape files that were retrieved by the document resolver.
+      shapefilesToDraw = this.shapefiles;
     }
 
 		// Convert documents to shapefiles
@@ -203,15 +206,19 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
         };
         return null // return something if invalid
       })
+      .filter(sf => sf !== null); // Remove any empty results
     }
-
-		let locationAdded = false;
-    let totalShapefiles = this.convertedShapefiles?.length;
-    let loadedCounter = 0;
 
 		// If there are converted shapefiles
 		if (Array.isArray(this.convertedShapefiles) && this.convertedShapefiles.length > 0) {
+
+      const totalShapefiles = this.convertedShapefiles.length;
+      let locationAdded = false;
+      let loadedCounter = 0;
+
 			this.convertedShapefiles?.forEach((sf) => {
+
+        // Shapefile successfully loaded
 				sf.on('data:loaded', () => {
 					const keys = Object.keys(sf._layers);
 					keys?.forEach(key => {
@@ -220,23 +227,28 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 						}
 					});
 					sf.addTo(this.appFG);
-					locationAdded = true;
+          locationAdded = true;
           loadedCounter++;
 
 					// Last iteration only
 					if (loadedCounter === totalShapefiles) {
+
 						// Change map bounds based on values in bounds variable
 						if (this.bounds.southWest.lat && this.bounds.southWest.lng && this.bounds.northEast.lat && this.bounds.northEast.lng) {
 							this.map.fitBounds([[this.bounds.southWest.lat, this.bounds.southWest.lng], [this.bounds.northEast.lat, this.bounds.northEast.lng]], {padding: [50, 50]});
-						} else if (!locationAdded && this.project) {
-							this.addMarker();
 						}
 
-						// Add the feature group to the map
-						this.map.addLayer(this.appFG);
+            if (!locationAdded) {
+              // Add a marker if no shape files have been added to the map
+              this.addMarkerAndAdjustBounds();
+            } else {
+              // Add the feature group to the map
+						  this.map.addLayer(this.appFG);
+            }
 					}
 				});
 
+        // Shapefile failed to load
         sf.on('data:error', (e) => {
           console.error("Shapefile failed to load:", {
             url: sf._sourceUrl || '',
@@ -244,28 +256,32 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
           });
 
           // Fall back to project centroid and create a pin with default bounds
-          if (this.project) {
-            this.addMarker();
-            this.map.addLayer(this.appFG);
-            this.map.fitBounds(this.defaultBounds);
-            this.map.invalidateSize();
-          }
+          this.addMarkerAndAdjustBounds();
         });
 			});
 		} else {
 			// Otherwise skip the shapefiles and just add a marker
-			if (this.project) {
-				this.addMarker();
-				this.map.addLayer(this.appFG);
-				if (this.project.centroid?.length === 2) {
-					const [lon, lat] = this.project.centroid.map(Number);
-          this.map.fitBounds([[lat - 0.3, lon - 0.3], [lat + 0.3, lon + 0.3]]);
-				} else {
-          this.map.fitBounds(this.defaultBounds);
-        }
-			}
+			this.addMarkerAndAdjustBounds();
 		}
 	}
+
+  /**
+   * Adds a marker and centres the bounds of the map around the marker.
+   * 
+   * @returns {void}
+   */
+  private addMarkerAndAdjustBounds = () => {
+    if (this.project) {
+      this.addMarker();
+      this.map.addLayer(this.appFG);
+      if (this.project.centroid?.length === 2) {
+        const [lon, lat] = this.project.centroid.map(Number);
+        this.map.fitBounds([[lat - 0.3, lon - 0.3], [lat + 0.3, lon + 0.3]]);
+      } else {
+        this.map.fitBounds(this.defaultBounds);
+      }
+		}
+  }
 
 	/**
 	 * Takes the bounds of a shapefile and updates the overall map bounds to include them.
