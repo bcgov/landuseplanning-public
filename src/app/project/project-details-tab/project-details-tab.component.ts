@@ -183,8 +183,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       // Draw project-level shape files if they're available.
       shapefilesToDraw = _.orderBy(this.project.shapefiles, ['order'], ['desc']);
     } else if (this.shapefiles.length > 0) {
-      // Otherwise, draw the shape files that were retrieved by the document resolver.
-      shapefilesToDraw = this.shapefiles;
+      // Otherwise, draw the first shape file that was retrieved by the document resolver, if it exists.
+      shapefilesToDraw = [this.shapefiles[0]];
     }
 
 		// Convert documents to shapefiles
