@@ -51,7 +51,7 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
           terminationMessagePolicy: File
-          image: image-registry.apps.silver.devops.gov.bc.ca/e8b9ad-tools/lup-public-deploy-image
+          image: image-registry.apps.silver.devops.gov.bc.ca/e8b9ad-tools/lup-public-deploy-image:test
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
