@@ -12,6 +12,7 @@ import { ConfigService } from 'app/services/config.service';
 import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-detail-popup.component';
 import { Constants } from 'app/shared/utils/constants';
 import { Utils } from 'app/shared/utils/utils';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
@@ -41,7 +42,8 @@ const markerIconYellowLg = L.icon({
 @Component({
   selector: 'app-projlist-map',
   templateUrl: './projlist-map.component.html',
-  styleUrls: ['./projlist-map.component.scss']
+  styleUrls: ['./projlist-map.component.scss'],
+  animations: [trigger('fade', [transition(':leave', [animate('300ms ease-out', style({ opacity: 0 }))])])]
 })
 
 export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy {
@@ -54,6 +56,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 	@ViewChild('map') private mapContainer: ElementRef;
 
   public pathAPI: string;
+  public loading = true;
+
   private map: L.Map = null;
   private shapefileList: Array<L.GeoJSON> = [];
   private markerList: Array<L.Marker> = []; // list of markers
@@ -62,7 +66,6 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     showCoverageOnHover: false,
     maxClusterRadius: 40, // NB: change to 0 to disable clustering
   });
-  private loading = false;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
@@ -178,6 +181,18 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 				break;
 			}
 		}
+
+    // Add "map loaded" listener for removing loading screen
+    // Must add additional timeout to account for vector tile rendering
+    // Base the timeout delay on user connection speed
+    this.map.once('moveend', () => {
+      this.utils.getConnectionTier().then((tier) => {
+        // Convert the returned connection speed to a millisecond value
+        const delay = { slow: 3500, medium: 3000, fast: 2500, turbo: 2000 }[tier];
+        // Set a timeout for removing the loading screen using the calculated value
+        setTimeout(() => this.loading = false, delay);
+      });
+    });
 
 		// save any future base layer changes
 		this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
@@ -502,5 +517,5 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   public onLoadStart() { this.loading = true; }
 
-  public onLoadEnd() { this.loading = false; }
+  public onLoadEnd() {}
 }

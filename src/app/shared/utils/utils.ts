@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+export type ConnectionTier = 'slow' | 'medium' | 'fast' | 'turbo';
+
 @Injectable()
 export class Utils {
   constructor() { }
@@ -48,5 +50,41 @@ export class Utils {
     .replace(/%2F/g, '_')  // Replace encoded forward slash with underscore
     .replace(/%5C/g, '_')  // Replace encoded backslash with underscore
     .replace(/%20/g, '_'); // Replace encoded space with underscore
+  }
+
+  /**
+   * Returns an estimated connection tier based on downlink.
+   * If downlink can't be found, it falls back to small image load time.
+   * 
+   * @returns {Promise<ConnectionTier>}
+   */
+  public async getConnectionTier(): Promise<ConnectionTier> {
+    // Try to retrieve the connection speed directly
+    const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+
+    if (conn?.downlink) {
+      const speed = conn.downlink;
+      if (speed < 1) return 'slow';
+      else if (speed < 10) return 'medium';
+      else if (speed < 100) return 'fast';
+      else return 'turbo';
+    }
+
+    // Image load time fallback
+    return new Promise<ConnectionTier>((resolve) => {
+      const img = new Image();
+      const start = performance.now();
+
+      img.onload = () => {
+        const duration = performance.now() - start;
+        if (duration > 1500) return resolve('slow');
+        else if (duration > 800) return resolve('medium');
+        else if (duration > 400) return resolve('fast');
+        else return resolve('turbo');
+      };
+
+      img.onerror = () => resolve('medium'); // assume average
+      img.src = 'https://www.google.com/images/phd/px.gif?' + Date.now();
+    });
   }
 }

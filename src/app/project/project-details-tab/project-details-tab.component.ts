@@ -12,6 +12,7 @@ import { Document } from 'app/models/document';
 import { ProjectShapefile } from 'app/models/project';
 import * as _ from 'lodash';
 import { Utils } from 'app/shared/utils/utils';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 // need to import leaflet this way to include the shapefile->geojson plugin
 declare let L;
@@ -20,10 +21,12 @@ declare let L;
   selector: 'app-project-details-tab',
   templateUrl: './project-details-tab.component.html',
   styleUrls: ['./project-details-tab.component.scss'],
+  animations: [trigger('fade', [transition(':leave', [animate('300ms ease-out', style({ opacity: 0 }))])])]
 })
 export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('map') private mapContainer: ElementRef;
   public project;
+  public loading = true;
   public commentPeriod = null;
   public map: L.Map = null;
   public appFG = L.featureGroup(); // group of layers for subject app
@@ -170,6 +173,18 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       }
     }
 
+    // Add "map loaded" listener for removing loading message
+    // Extra timeout is needed to give vector tiles time to render
+    // Base the timeout delay on user connection speed
+    this.map.once('moveend', () => {
+      this.utils.getConnectionTier().then((tier) => {
+        // Convert the returned connection speed to a millisecond delay value
+        const delay = { slow: 3500, medium: 3000, fast: 2500, turbo: 2000 }[tier];
+        // Set a timeout for removing the loading screen using the calculated value
+        setTimeout(() => this.loading = false, delay);
+      });
+    });
+
     // save any future base layer changes
     this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
       this.configService.baseLayerName = e.name;
@@ -204,7 +219,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
           shapefile._sourceUrl = shapeurl;
           return shapefile;
         };
-        return null // return something if invalid
+        return null; // return something if invalid
       })
       .filter(sf => sf !== null); // Remove any empty results
     }
@@ -214,7 +229,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
       const totalShapefiles = this.convertedShapefiles.length;
       let locationAdded = false;
-      let loadedCounter = 0;
+      let analyzedShapefiles = 0;
 
 			this.convertedShapefiles?.forEach((sf) => {
 
@@ -227,28 +242,16 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 						}
 					});
 					sf.addTo(this.appFG);
+          analyzedShapefiles++;
 
           // Update our counter and flag if the shapefile has successfully been added
           if (this.appFG.hasLayer(sf)) {
             locationAdded = true;
-            loadedCounter++;
           }
 
 					// Last iteration only
-					if (loadedCounter === totalShapefiles) {
-
-						// Change map bounds based on values in bounds variable
-						if (this.bounds.southWest.lat && this.bounds.southWest.lng && this.bounds.northEast.lat && this.bounds.northEast.lng) {
-							this.map.fitBounds([[this.bounds.southWest.lat, this.bounds.southWest.lng], [this.bounds.northEast.lat, this.bounds.northEast.lng]], {padding: [50, 50]});
-						}
-
-            if (!locationAdded) {
-              // Add a marker if no shape files have been added to the map
-              this.addMarkerAndAdjustBounds();
-            } else {
-              // Add the feature group to the map
-						  this.map.addLayer(this.appFG);
-            }
+					if (analyzedShapefiles === totalShapefiles) {
+            this.runShapeFilesAnalyzedActions(locationAdded);
 					}
 				});
 
@@ -258,9 +261,12 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
             url: sf._sourceUrl || '',
             error: e
           });
+          analyzedShapefiles++;
 
-          // Fall back to project centroid and create a pin with default bounds
-          this.addMarkerAndAdjustBounds();
+          // Last iteration only
+					if (analyzedShapefiles === totalShapefiles) {
+            this.runShapeFilesAnalyzedActions(locationAdded);
+					}
         });
 			});
 		} else {
@@ -268,6 +274,26 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 			this.addMarkerAndAdjustBounds();
 		}
 	}
+
+  /**
+   * The actions that should be run after all shape files are analyzed.
+   * 
+   * @param locationAdded A boolean that indicates whether or not at least one shapefile has been added to the map
+   */
+  private runShapeFilesAnalyzedActions = (locationAdded: boolean) => {
+    // Change map bounds based on values in bounds property
+    if (this.bounds.southWest.lat && this.bounds.southWest.lng && this.bounds.northEast.lat && this.bounds.northEast.lng) {
+      this.map.fitBounds([[this.bounds.southWest.lat, this.bounds.southWest.lng], [this.bounds.northEast.lat, this.bounds.northEast.lng]], {padding: [50, 50]});
+    }
+
+    // If no shape files have been added to the map, add a marker
+    if (!locationAdded) {
+      this.addMarkerAndAdjustBounds();
+    } else {
+      // Otherwise add the layer to the feature group
+      this.map.addLayer(this.appFG);
+    }
+  }
 
   /**
    * Adds a marker and centres the bounds of the map around the marker.
@@ -313,7 +339,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 					? shapefileBounds._northEast.lat 
 					: this.bounds.northEast.lat,
 				lng: shapefileBounds?._northEast.lng <= this.defaultBoundsObject.northEast.lng 
-					&& (!this.bounds.northEast.lng || shapefileBounds?._northEast.lng >= this.bounds.northEast.lat) 
+					&& (!this.bounds.northEast.lng || shapefileBounds?._northEast.lng >= this.bounds.northEast.lng) 
 					? shapefileBounds._northEast.lng 
 					: this.bounds.northEast.lng,
 			}

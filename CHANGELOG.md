@@ -1,5 +1,9 @@
 ### Jun 19, 2025
 
+- Added loading animation to hide map rendering. [DESENG-791](https://citz-gdx.atlassian.net/browse/DESENG-791)
+
+### Jun 19, 2025
+
 - Document the use of image tags in openshift Deployments. [DESENG-841](https://citz-gdx.atlassian.net/browse/DESENG-841)
 - Added support for shape files from legacy projects on individual project page [DESENG-831](https://citz-gdx.atlassian.net/browse/DESENG-831)
 
