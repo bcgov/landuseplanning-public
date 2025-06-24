@@ -2,6 +2,23 @@ import { Injectable } from '@angular/core';
 
 export type ConnectionTier = 'slow' | 'medium' | 'fast' | 'turbo';
 
+// As defined in MDN Web Docs: https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation
+export interface NetworkInformation extends EventTarget {
+  downlink: number;
+  downlinkMax?: number; // Deprecated edge case
+  effectiveType: 'slow-2g' | '2g' | '3g' | '4g';
+  rtt: number;
+  saveData: boolean;
+  type?: 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown';
+  onchange?: () => void;
+}
+
+export interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+}
+
 @Injectable()
 export class Utils {
   constructor() { }
@@ -60,7 +77,7 @@ export class Utils {
    */
   public async getConnectionTier(): Promise<ConnectionTier> {
     // Try to retrieve the connection speed directly
-    const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const conn = (navigator as NavigatorWithConnection).connection || (navigator as NavigatorWithConnection).mozConnection || (navigator as NavigatorWithConnection).webkitConnection;
 
     if (conn?.downlink) {
       const speed = conn.downlink;
