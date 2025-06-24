@@ -1,6 +1,7 @@
 ### Jun 23, 2025
 
 - Added loading animation to hide map rendering. [DESENG-791](https://citz-gdx.atlassian.net/browse/DESENG-791)
+  - Added utility function for measuring connection speed
 
 ### Jun 19, 2025
 

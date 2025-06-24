@@ -77,10 +77,8 @@ export class Utils {
 
       img.onload = () => {
         const duration = performance.now() - start;
-        if (duration > 1500) return resolve('slow');
-        else if (duration > 800) return resolve('medium');
-        else if (duration > 400) return resolve('fast');
-        else return resolve('turbo');
+        if (duration > 50) return resolve('slow');
+        else return resolve('medium');
       };
 
       img.onerror = () => resolve('medium'); // assume average
