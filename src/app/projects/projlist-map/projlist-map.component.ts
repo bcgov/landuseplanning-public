@@ -145,7 +145,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     });
 
 		// NB: moveend is called after zoomstart, movestart and resize
-    this.map.on('moveend', function () {
+    this.map.once('moveend', function () {
       this.setVisibleDebounced();
     }, this);
 

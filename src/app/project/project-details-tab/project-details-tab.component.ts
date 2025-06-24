@@ -251,7 +251,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
 					// Last iteration only
 					if (analyzedShapefiles === totalShapefiles) {
-            this.runShapeFilesAnalyzedActions(locationAdded);
+            this.shapeFilesLoadedHook(locationAdded);
 					}
 				});
 
@@ -265,7 +265,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
           // Last iteration only
 					if (analyzedShapefiles === totalShapefiles) {
-            this.runShapeFilesAnalyzedActions(locationAdded);
+            this.shapeFilesLoadedHook(locationAdded);
 					}
         });
 			});
@@ -280,7 +280,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
    * 
    * @param locationAdded A boolean that indicates whether or not at least one shapefile has been added to the map
    */
-  private runShapeFilesAnalyzedActions = (locationAdded: boolean) => {
+  private shapeFilesLoadedHook = (locationAdded: boolean) => {
     // Change map bounds based on values in bounds property
     if (this.bounds.southWest.lat && this.bounds.southWest.lng && this.bounds.northEast.lat && this.bounds.northEast.lng) {
       this.map.fitBounds([[this.bounds.southWest.lat, this.bounds.southWest.lng], [this.bounds.northEast.lat, this.bounds.northEast.lng]], {padding: [50, 50]});
