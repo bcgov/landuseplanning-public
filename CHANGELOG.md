@@ -4,6 +4,7 @@
 - Added loading animation to hide map rendering. [DESENG-791](https://citz-gdx.atlassian.net/browse/DESENG-791)
   - Added utility function for measuring connection speed
   - Added custom typing for utility function
+  - Added opacity to loading message and filters to background map, for visual feedback
 
 ### Jun 19, 2025
 

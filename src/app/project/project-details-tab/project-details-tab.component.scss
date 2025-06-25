@@ -7,11 +7,25 @@
   width: 100%;
   height: 100%;
   background-color: #f4f4f4;
+  opacity: 75%;
   z-index: 100000;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: all;
+
+  .spinner-new.rotating {
+    filter: brightness(0%) contrast(200%);
+  }
+
+  span {
+    color: #212529;
+  }
+}
+
+.map-container.bw-filter #map{
+  filter: grayscale(100%) brightness(85%) contrast(120%) blur(8px);
+  transition: filter 0.3s ease;
 }
 
 .location-info {
