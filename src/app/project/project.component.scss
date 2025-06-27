@@ -6,9 +6,81 @@
   background: $bg-default;
 }
 
-.banner {
-  background-color: $primary;
-  color: #fff;
+.comment-banner-section {
+  padding: 0;
+  margin: 0 auto 4rem;
+
+  .comment-banner-container {
+    color: #212529;
+    padding: 2rem;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    border: 2px #969696 solid;
+
+    .comment-banner-top-row {
+      display: flex;
+      flex-direction: row;
+
+      .comment-banner-heading {
+
+        h2 {
+          padding-bottom: 0.825rem;
+        }
+
+        h3 {
+          font-size: 1.5rem;
+        }
+      }
+
+      .comment-banner-buttons {
+        display: flex;
+        margin-left: auto;
+        gap: 1rem;
+        
+
+        button {
+          background-color: #595959;
+          color: #fff;
+          height: 40px;
+
+          &:hover {
+            color: #fcba18;
+            background-color: #212121;
+          }
+        }
+      }
+
+      @media (max-width: 995px) {
+        .comment-banner-buttons {
+          flex-direction: column;
+          margin-bottom: 1rem;
+
+          button {
+            height: auto;
+          }
+        }
+      }
+    }
+
+    .comment-banner-paragraph p {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 550px) {
+      .comment-banner-top-row {
+        display: block;
+      }
+    }
+  }
+}
+
+
+
+@media (max-width: 610px) {
+  .comment-banner-section {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 .project {
@@ -24,12 +96,24 @@
     background-size: cover;
     background-position: center;
     background-color: $primary;
+    margin-bottom: 4rem;
 
     .hero-banner__container {
       background-color: rgba($primary, 0.56);
       margin: 0;
       width: 111%;
       max-width: 100%;
+
+      .container {
+        padding: 0;
+      }
+
+      @media (max-width: 610px) {
+        .container {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+      }
 
       .project-logos {
         padding: 0;
@@ -142,6 +226,7 @@
         }
       }
     }
+
     .proj-status,
     .shape-id {
       font-size: 1.2rem;
@@ -149,9 +234,11 @@
       color: $primary;
       margin-bottom: 5px;
     }
+
     .col-6 {
       margin-bottom: 2px;
     }
+
     label {
       font-weight: bold;
       color: $primary;
@@ -173,11 +260,25 @@
       }
     }
 
+    .agreements-label {
+      margin-top: 2rem;
+    }
+
     .value {
-      font-size: .8rem;
+      display: inline-block;
+      font-size: 1rem;
       line-height: 1.25;
-      margin-bottom: 5px;
-      margin-left: 10px;
+      margin: 0.5rem 10px 0.5rem 0;
+    }
+
+    @media (max-width: 1200px) {
+      .agreements {
+        flex-direction: column;
+      }
+      .agreement {
+        width: 100%;
+        display: block;
+      }
     }
     .organization-item {
       margin-top: 0;
@@ -231,11 +332,27 @@
           margin: 1rem 0;
       }
     }
+
     .nav-tabs {
       background: none;
     }
+
     .project-tabs {
+      padding-top: 0;
       background: #f7f8fa;
+      min-height: 630px; // Set a minimum height to avoid jarring height changes on tab change
+
+      .container {
+        padding: 0;
+        padding-bottom: 2rem;
+      }
+
+      @media (max-width: 610px) {
+        .container {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+      }
     }
     .nav-tabs .nav-link.active {
       background: #f7f8fa;
@@ -258,6 +375,7 @@
       box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15);
 
       ul.nav-tabs {
+        margin-top: 0;
         margin-bottom: 1.5rem;
       }
     }

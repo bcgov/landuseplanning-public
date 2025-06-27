@@ -14,7 +14,7 @@
             </ul>
             <p class="desc" [innerHTML]="(project?.description || '-') | newlines"></p>
             <div class="basic-info">
-              <div *ngIf="project?.agreements?.length > 0" class="agreements">
+              <div *ngIf="project?.agreements?.length > 0" class="agreements-label">
                 <label>Agreement(s)</label>
               </div>
               <div *ngIf="projectFieldType(project?.agreements) === 'string'" class="agreements">
@@ -23,10 +23,11 @@
               <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
                 <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
                   <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
-                    <p class="value"><a *ngIf="true" class="agreement-link" target="_blank"
-                      href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-" }}</a>
-                    </p>
-                    <span *ngIf="i !== project.agreements.length - 1">,</span>
+                    <span class="value">
+                      <a class="agreement-link" target="_blank" href="{{agreement.agreementUrl}}">
+                        {{agreement.agreementName || "-" }}<span *ngIf="i !== project.agreements.length - 1">,</span>
+                      </a>
+                    </span>
                   </div>
                   <ng-template #noAgreementURL>
                     <p class="value">{{agreement.agreementName || "-" }}</p>
@@ -40,34 +41,32 @@
       </div>
     </div>
 
-    <div *ngIf="project.commentPeriodForBanner" class="container my-4 banner">
-      <div class="m-3 py-3">
-        <div class="row">
-          <div class="col-md-6">
+    <div *ngIf="project.commentPeriodForBanner" class="container comment-banner-section">
+      <div class="comment-banner-container">
+
+        <div class="comment-banner-top-row">
+          <div class="comment-banner-heading">
             <h2 class="mb-0">{{project?.engagementLabel || 'Public Comment Period'}} is {{project.commentPeriodForBanner.commentPeriodStatus}}</h2>
-            <h5>{{project.commentPeriodForBanner.dateStarted | date: 'MMMM d'}} -
-              {{project.commentPeriodForBanner.dateCompleted | date: 'longDate'}}</h5>
+            <h3>{{project.commentPeriodForBanner.dateStarted | date: 'MMMM d'}} -
+              {{project.commentPeriodForBanner.dateCompleted | date: 'longDate'}}</h3>
           </div>
-          <div class="col-md-6 text-right">
-            <div>
-              <button type="button" class="btn btn-light" (click)="goToViewComments()" [attr.aria-label]="CPActionAriaLabel(project.name, 'view')">
-                View Details
-              </button>
-              &nbsp;
-              <button class="btn btn-light" (click)="addComment()" type="button"
-                *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="CPActionAriaLabel(project.name, 'submit')">Participate Now</button>
-            </div>
+          <div class="comment-banner-buttons">
+            <button type="button" class="btn btn-light" (click)="goToViewComments()" [attr.aria-label]="CPActionAriaLabel(project.name, 'view')">
+              View Details
+            </button>
+            <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="CPActionAriaLabel(project.name, 'submit')">
+              Participate Now
+            </button>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <p *ngIf="project.commentPeriodForBanner.informationLabel" class="mb-0">
-              This {{project?.engagementLabel || 'Public Comment Period'}} is regarding the <b>{{project.commentPeriodForBanner.informationLabel}}</b>
-            </p>
-            <p *ngIf="project.commentPeriodForBanner.informationLabel == null" class="mb-0">
-              {{project.commentPeriodForBanner.instructions}}
-            </p>
-          </div>
+        
+        <div class="comment-banner-paragraph">
+          <p *ngIf="project.commentPeriodForBanner.informationLabel">
+            This {{project?.engagementLabel || 'Public Comment Period'}} is regarding the <b>{{project.commentPeriodForBanner.informationLabel}}</b>
+          </p>
+          <p *ngIf="project.commentPeriodForBanner.informationLabel == null">
+            {{project.commentPeriodForBanner.instructions}}
+          </p>
         </div>
       </div>
     </div>

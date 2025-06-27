@@ -13,15 +13,15 @@
 
         <div *ngIf="commentPeriods.length > 0">
             <div class="d-flex justify-content-between list-group-item"
-                 *ngFor="let commentPeriod of commentPeriods"
-                 (click)=goToCP(commentPeriod)>
-                <div *ngIf="commentPeriod.commentPeriodStatus">
+                 *ngFor="let commentPeriod of commentPeriods">
+                <div *ngIf="commentPeriod.commentPeriodStatus" class="engagement-tab-item-description">
                     <label class="title">{{commentPeriod.commentPeriodStatus}}</label>
                     <div class="commentInfo">{{commentPeriod.instructions}}</div>
                     <p class="mb-0">{{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}</p>
                 </div>
-                <div>
-                    <button class="badge badge-secondary p-3" aria-label="View details and submit comments to this project's comment period.">View details</button>
+                <div class="engagement-tab-buttons">
+                    <button (click)=goToCP(commentPeriod) class="badge badge-secondary p-3" aria-label="View details of this project's comment period.">View details</button>
+                    <button (click)=addComment() *ngIf="commentPeriod.commentPeriodStatus === 'Open'" class="badge badge-secondary p-3" aria-label="Participate now in this project's comment period.">Participate now</button>
                 </div>
             </div>
         </div>

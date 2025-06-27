@@ -65,6 +65,10 @@
 }
 
 .tab-section {
+  max-width: 100%;
+  overflow: hidden;
+  padding-bottom: 0;
+
   .status {
       text-align: right;
       font-size: large;
@@ -146,4 +150,9 @@
 
   .project-details-text {
     margin-top: 1.5rem;
+
+    p {
+      margin-bottom: 0;
+    }
+    
   }

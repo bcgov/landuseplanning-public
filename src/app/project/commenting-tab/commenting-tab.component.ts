@@ -1,12 +1,17 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
 import { Project } from 'app/models/project';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { CommentPeriod } from 'app/models/commentperiod';
+import { SurveyService } from 'app/services/survey.service';
+import { Survey } from 'app/models/survey';
+import { AddSurveyResponseComponent } from '../comments/add-survey-response/add-survey-response.component';
+import { AddCommentComponent } from '../comments/add-comment/add-comment.component';
 
 @Component({
   templateUrl: './commenting-tab.component.html',
@@ -28,13 +33,15 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
   public loading = true;
   public commentPeriods: Array<CommentPeriod> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-
+  private ngbModal: NgbModalRef = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private modalService: NgbModal,
+    private _changeDetectionRef: ChangeDetectorRef,
     public commentPeriodService: CommentPeriodService, // used in template
-    private _changeDetectionRef: ChangeDetectorRef
+    public surveyService: SurveyService,
   ) { }
 
   ngOnInit() {
@@ -73,6 +80,28 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
           });
         }
       });
+  }
+
+  public addComment() {
+    if (this.currentProject.commentPeriodForBanner) {
+      this.surveyService.getSelectedSurveyByCPId(this.currentProject.commentPeriodForBanner._id)
+        .subscribe((loadedSurvey: Survey) => {
+          if (loadedSurvey) {
+            // open modal
+            this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false });
+            // set input parameter
+            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.currentProject.commentPeriodForBanner;
+            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.currentProject;
+            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
+          } else {
+            // open modal
+            this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
+            // set input parameter
+            (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.currentProject.commentPeriodForBanner;
+            (<AddCommentComponent>this.ngbModal.componentInstance).project = this.currentProject;
+          }
+      })
+    }
   }
 
   ngOnDestroy() {

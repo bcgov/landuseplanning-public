@@ -176,7 +176,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     // Add "map loaded" listener for removing loading message
     // Extra timeout is needed to give vector tiles time to render
     // Base the timeout delay on user connection speed
-    this.map.once('moveend', () => {
+    this.map.whenReady(() => {
       this.utils.getConnectionTier().then((tier) => {
         // Convert the returned connection speed to a millisecond delay value
         const delay = { slow: 3500, medium: 3000, fast: 2500, turbo: 2000 }[tier];
