@@ -33,7 +33,7 @@ $toggle-list-anim-duration: 0.2s;
   height: 100%;
   background-color: #f4f4f4;
   opacity: 75%;
-  z-index: 100000;
+  z-index: 999; // Modals and main nav dropdowns still take precedence
   display: flex;
   align-items: center;
   justify-content: center;

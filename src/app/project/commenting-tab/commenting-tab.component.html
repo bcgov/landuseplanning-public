@@ -20,8 +20,21 @@
                     <p class="mb-0">{{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}</p>
                 </div>
                 <div class="engagement-tab-buttons">
-                    <button (click)=goToCP(commentPeriod) class="badge badge-secondary p-3" aria-label="View details of this project's comment period.">View details</button>
-                    <button (click)=addComment() *ngIf="commentPeriod.commentPeriodStatus === 'Open'" class="badge badge-secondary p-3" aria-label="Participate now in this project's comment period.">Participate now</button>
+                    <button 
+                        (click)=goToCP(commentPeriod) 
+                        class="badge badge-secondary p-3" 
+                        [attr.aria-label]="'View details of ' + (currentProject?.engagementLabel || 'this comment period')"
+                    >
+                        View details
+                    </button>
+                    <button 
+                        (click)=addComment() 
+                        *ngIf="commentPeriod?.commentPeriodStatus === 'Open'" 
+                        class="badge badge-secondary p-3" 
+                        [attr.aria-label]="'Participate now in ' + (currentProject?.engagementLabel || 'this comment period')"
+                    >
+                        Participate now
+                    </button>
                 </div>
             </div>
         </div>

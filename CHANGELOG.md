@@ -1,6 +1,7 @@
 ### Jun 27, 2025
 
 - Added 'participate now' button to engagement tab of individual project page. [DESENG-832](https://citz-gdx.atlassian.net/browse/DESENG-832)
+  - Increased specificity of aria text for 'view details' and 'participate now' buttons
 - Increased accessibility, updated styling, and removed blue colour from individual project page
   - Reworked tab component with clearer design language and higher contrast for accessibility
   - Set a minimum height to tab content, to avoid jarring height changes
