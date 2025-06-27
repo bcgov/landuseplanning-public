@@ -14,12 +14,13 @@
     padding: 0 4rem;
     width: 111%;
     max-width: 100%;
-  }
 
-  .container {
-    min-height: 20rem;
-    @media (max-width: 767px) {
-      padding: 2rem 1rem 2.5rem 2rem;
+    .container {
+      min-height: 20rem;
+
+      @media (max-width: 767px) {
+        padding: 2rem 1rem 2.5rem 2rem;
+      }
     }
   }
 }
@@ -36,8 +37,12 @@
   }
 
   .hero-banner__content {
-    padding-top: 5rem;
-    padding-bottom: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+
+    p {
+      margin-bottom: 0 !important;
+    }
   }
 }
 

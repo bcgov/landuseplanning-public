@@ -18,12 +18,8 @@
         </div>
       </div>
     </div>
-    <div class="row project-details-text">
-      <div class="col-12">
-        <p [innerHTML]="project?.details"></p>
-      </div>
-    </div>
-    <br>
+    <div class="project-details-text" [innerHTML]="project?.details"></div>
+    <br *ngIf="project?.activitiesAndUpdatesEnabled">
     <div class="row" *ngIf="project?.activitiesAndUpdatesEnabled">
       <div class="col-12">
         <h2>Activities and Updates</h2>

@@ -30,6 +30,7 @@ $app-filters-font-lg: 0.9375rem;
     background: rgba(255,255,255,1);
 
     .additional-text {
+      color: #212529;
       font-weight: normal;
       margin-bottom: 2rem;
       a {
@@ -50,7 +51,7 @@ $app-filters-font-lg: 0.9375rem;
       font-weight: 700;
       margin-bottom: 1.25rem;
       letter-spacing: -.025em;
-      color: #003367;
+      color: #212529;
 
       @media (max-width: 768px) {
         font-size: 1rem;
