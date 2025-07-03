@@ -133,7 +133,6 @@ div .likert {
   width:100%;
   margin:0;
   display:block;
-  // border-bottom:2px solid #efefef;
 }
 
 div .likert:last-of-type {border-bottom:0;}
@@ -179,6 +178,18 @@ app-file-upload {
 
 .question {
   display: flex;
+}
+
+.question, .info {
+    // Access elements that have been inserted via innerHTML
+    ::ng-deep {
+      img {
+          display: block;
+          margin: 0 auto;
+          max-width: 100%;
+          min-width: 50px;
+      }
+    }
 }
 
 .question-count {

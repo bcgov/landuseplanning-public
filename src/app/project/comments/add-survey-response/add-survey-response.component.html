@@ -161,7 +161,7 @@
           </div>
 
           <div class="form-group" *ngIf="survey.questions[i].type === 'info'">
-            <div class="control-label" [innerHTML]="survey.questions[i].infoText"></div>
+            <div class="control-label info" [innerHTML]="survey.questions[i].infoText"></div>
           </div>
           <div class="form-group" *ngIf="survey.questions[i].type === 'email'">
             <label class="control-label" for="emailAnswer"><span class="question-count">{{countArray[i]}}. </span>{{survey.questions[i].emailText}}<span *ngIf="survey.questions[i].answerRequired" class="required">*</span></label>
