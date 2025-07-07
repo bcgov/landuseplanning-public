@@ -1,6 +1,6 @@
 ### Jul 3, 2025
 - Restore use of the image picker in survey WYSIWYG editors [DESENG-866](https://citz-gdx.atlassian.net/browse/DESENG-866)
-- Remove some unused code
+- Remove some commented-out CSS
 
 ### Jun 27, 2025
 
