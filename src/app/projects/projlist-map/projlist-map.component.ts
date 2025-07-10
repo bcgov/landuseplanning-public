@@ -354,7 +354,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
         })
       } else {
         // If no shapefile is found for a project, display a pin of its coordinates instead.
-        if (2 === proj.centroid.length) {
+        if (this.markerMeetsConditions(proj)) {
           const title = `${proj.name}\n`
           + `${proj.overlappingRegionalDistricts}\n`;
           const marker = L.marker(L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
@@ -370,6 +370,22 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     // set visible apps
     this.setVisibleDebounced();
+  }
+
+  /**
+   * Make sure the project marker is valid and within BC bounds
+   * 
+   * @param project The project that contains the marker values
+   * @returns {boolean}
+   */
+  private markerMeetsConditions(project: Project): boolean {
+    if (!Array.isArray(project.centroid)) return false;
+    if (project.centroid.length !== 2) return false;
+    const [lon, lat] = project.centroid;
+    if (isNaN(lat) || isNaN(lon)) return false;
+    if (lat < 48 || lat > 62) return false;
+    if (lon < -139 || lon > -114) return false;
+    return true;
   }
 
   /**

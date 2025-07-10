@@ -1,3 +1,6 @@
+### Jul 9, 2025
+- Added marker/centroid verification for project list map and individual project map [DESENG-839](https://citz-gdx.atlassian.net/browse/DESENG-839)
+
 ### Jul 3, 2025
 - Restore use of the image picker in survey WYSIWYG editors [DESENG-866](https://citz-gdx.atlassian.net/browse/DESENG-866)
 - Remove some commented-out CSS

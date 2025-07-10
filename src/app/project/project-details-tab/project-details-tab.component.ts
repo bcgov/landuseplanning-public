@@ -301,16 +301,29 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
    * @returns {void}
    */
   private addMarkerAndAdjustBounds = () => {
-    if (this.project) {
+    if (this.project && this.markerMeetsConditions()) {
       this.addMarker();
       this.map.addLayer(this.appFG);
-      if (this.project.centroid?.length === 2) {
-        const [lon, lat] = this.project.centroid.map(Number);
-        this.map.fitBounds([[lat - 0.3, lon - 0.3], [lat + 0.3, lon + 0.3]]);
-      } else {
-        this.map.fitBounds(this.defaultBounds);
-      }
-		}
+      const [lon, lat] = this.project.centroid.map(Number);
+      this.map.fitBounds([[lat - 0.3, lon - 0.3], [lat + 0.3, lon + 0.3]]);
+    } else {
+      this.map.fitBounds(this.defaultBounds);
+    }
+  }
+
+  /**
+   * Make sure the project marker is valid and within BC bounds
+   * 
+   * @returns {boolean}
+   */
+  private markerMeetsConditions(): boolean {
+    if (!Array.isArray(this.project.centroid)) return false;
+    if (this.project.centroid.length !== 2) return false;
+    const [lon, lat] = this.project.centroid;
+    if (isNaN(lat) || isNaN(lon)) return false;
+    if (lat < 48 || lat > 62) return false;
+    if (lon < -139 || lon > -114) return false;
+    return true; // All checks passed
   }
 
 	/**
