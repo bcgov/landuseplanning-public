@@ -301,16 +301,14 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
    * @returns {void}
    */
   private addMarkerAndAdjustBounds = () => {
-    if (this.project) {
+    if (this.project && this.utils.markerMeetsConditions(this.project)) {
       this.addMarker();
       this.map.addLayer(this.appFG);
-      if (this.project.centroid?.length === 2) {
-        const [lon, lat] = this.project.centroid.map(Number);
-        this.map.fitBounds([[lat - 0.3, lon - 0.3], [lat + 0.3, lon + 0.3]]);
-      } else {
-        this.map.fitBounds(this.defaultBounds);
-      }
-		}
+      const [lon, lat] = this.project.centroid.map(Number);
+      this.map.fitBounds([[lat - 0.3, lon - 0.3], [lat + 0.3, lon + 0.3]]);
+    } else {
+      this.map.fitBounds(this.defaultBounds);
+    }
   }
 
 	/**

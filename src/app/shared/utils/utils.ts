@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Project } from 'app/models/project';
 
 export type ConnectionTier = 'slow' | 'medium' | 'fast' | 'turbo';
 
@@ -102,4 +103,20 @@ export class Utils {
       img.src = 'https://www.google.com/images/phd/px.gif?' + Date.now();
     });
   }
+
+  /**
+     * Make sure the project marker is valid and within BC bounds
+     * 
+     * @param project The project that contains the marker values
+     * @returns {boolean}
+     */
+    public markerMeetsConditions(project: Project): boolean {
+      if (!Array.isArray(project.centroid)) return false;
+      if (project.centroid.length !== 2) return false;
+      const [lon, lat] = project.centroid;
+      if (isNaN(lat) || isNaN(lon)) return false;
+      if (lat < 48 || lat > 62) return false;
+      if (lon < -139 || lon > -114) return false;
+      return true;
+    }
 }

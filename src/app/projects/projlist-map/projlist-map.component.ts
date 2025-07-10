@@ -354,7 +354,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
         })
       } else {
         // If no shapefile is found for a project, display a pin of its coordinates instead.
-        if (2 === proj.centroid.length) {
+        if (this.utils.markerMeetsConditions(proj)) {
           const title = `${proj.name}\n`
           + `${proj.overlappingRegionalDistricts}\n`;
           const marker = L.marker(L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
