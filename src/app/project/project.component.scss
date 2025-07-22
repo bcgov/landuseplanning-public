@@ -74,12 +74,10 @@
   }
 }
 
-
-
 @media (max-width: 610px) {
   .comment-banner-section {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 
@@ -99,7 +97,7 @@
     margin-bottom: 4rem;
 
     .hero-banner__container {
-      background-color: rgba($primary, 0.56);
+      background-color: rgba(40, 40, 40, 0.7);
       margin: 0;
       width: 111%;
       max-width: 100%;
@@ -110,8 +108,8 @@
 
       @media (max-width: 610px) {
         .container {
-          padding-left: 15px;
-          padding-right: 15px;
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
         }
       }
 
@@ -302,6 +300,9 @@
       }
     }
     .location-info {
+      border: 2px solid #003365;
+      padding: 35px 40px 40px;
+
       @media (min-width: 991px) {
         position: absolute;
         right: 0;
@@ -309,8 +310,7 @@
         transform: translateY(-50%);
         width: 550px;
       }
-      border: 2px solid #003365;
-      padding: 35px 40px 40px;
+
       h2 {
         background: #fff;
         color: $primary;
@@ -321,8 +321,8 @@
           left: 30px;
         }
       }
-      label,
-      p {
+
+      label, p {
         font-size: 1rem;
       }
     }
@@ -349,8 +349,8 @@
 
       @media (max-width: 610px) {
         .container {
-          padding-left: 15px;
-          padding-right: 15px;
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
         }
       }
     }
@@ -359,34 +359,100 @@
     }
   }
 
-  aside {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0;
-    button {
-      margin-bottom: 1rem;
-    }
-    >section {
-      position: relative;
-      background-color: #fff;
-      padding: 1rem;
-      border-radius: 5px;
-      min-height: 20rem;
-      box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15);
+  section.people {
+    color: #212529;
+    padding: 1rem 1.5rem 4rem !important;
 
-      ul.nav-tabs {
-        margin-top: 0;
-        margin-bottom: 1.5rem;
+    .container {
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 1.5rem;
+
+      @media (max-width: 750px) {
+        flex-wrap: wrap;
+      }
+
+      .people-contact-heading {
+        font-size: 1.5rem !important;
+        font-weight: 500;
+      }
+
+      .people-item {
+        border-radius: 5px;
+        width: 47%;
+        display: flex;
+        align-items: center;
+        min-height: 210px;
+
+        .contact-info a, .contact-info a:visited, .contact-info a:active {
+          text-decoration-color: #000 !important;
+
+          span {
+            color: #000 !important;
+          }
+        }
+
+        button, .contact-info {
+          opacity: 0.97;
+          position: relative;
+          overflow: hidden;
+          border-radius: 10px;
+
+          &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('/assets/images/lup_revelstoke.jpg') center top / cover no-repeat;
+            z-index: -1;
+            filter: brightness(1.3) saturate(0.4);
+            opacity: 0.15;
+          }
+        }
+        
+        button i {
+          font-size: 3rem;
+        }
+
+        @media (max-width: 750px) {
+          width: 100%;
+        }
+
+        .contact-info {
+          padding: 1.5rem;
+          width: 100%;
+          background: #f0e7df;
+          border: 1px solid #bca795;
+        }
+
+        .sign-up, .contact-anonymous {
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.5rem;
+
+          &:hover, &:active, &:focus {
+            background: #454545;
+            color: #FED262;
+          }
+        }
+
+        .contact-anonymous {
+          background: #e3f0df;
+          border: 1px solid #93b588;
+        }
+
+        .sign-up {
+          background: #dfe0f0;
+          border: 1px solid #8e90b3;
+        }
       }
     }
-  }
-  section.people {
-    background: $primary;
-    color: #fff;
 
-    a {
-      color: #FED262;
-    }
+    
 
     h3 {
       margin-bottom: .5rem;
@@ -394,14 +460,19 @@
       font-size: 1rem;
       font-weight: 700;
     }
+
     p {
       font-size: 1rem;
+
       i {
         vertical-align: bottom;
       }
     }
+
     .flex-container {
+
       @media (min-width: 991px) {
+
         display: flex;
         .inner-col {
           flex: 32%;

@@ -5,6 +5,13 @@ $app-filters-font-sm: 0.75rem;
 $app-filters-font-lg: 0.9375rem;
 
 .app-filters__container {
+  padding: .75rem 1.5rem;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    border-bottom-right-radius: 5px;
+  }
 
   &.open {
     position: absolute;
@@ -22,17 +29,25 @@ $app-filters-font-lg: 0.9375rem;
   }
 
   .search-container {
-    padding: .75rem 1.4rem .2rem;
-    color: #036;
     position: relative;
     font-weight: 700;
-    border-radius: 0px;
+    border-radius: 0;
+    border-bottom-right-radius: 5px;
     background: rgba(255,255,255,1);
+
+    @media (max-width: 768px) {
+      border: 1px solid #c6d0da;
+    }
 
     .additional-text {
       color: #212529;
       font-weight: normal;
       margin-bottom: 2rem;
+
+      @media (max-width: 768px) {
+        margin-bottom: 0.5rem; 
+      }
+
       a {
         text-decoration: underline;
 
@@ -42,31 +57,36 @@ $app-filters-font-lg: 0.9375rem;
       }
     }
 
-    @media (max-width: 768px) {
-      padding: .75rem .75rem .2rem;
+    .search-box {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
     }
 
-    label {
+    @media (max-width: 768px) {
+      padding: .75rem;
+    }
+
+    label, legend {
       font-size: 1.3rem;
       font-weight: 700;
-      margin-bottom: 1.25rem;
       letter-spacing: -.025em;
       color: #212529;
+      margin-bottom: 0;
 
       @media (max-width: 768px) {
         font-size: 1rem;
         font-weight: 600;
-        text-align: center;
       }
     }
 
     .gtm-filter-applicant {
       padding: .7rem;
-      padding-right: 85px;
       border-radius: 2px;
       box-shadow: none;
       -webkit-appearance: none;
       border: 2px solid #c6d0da;
+      border-right: none;
       font-size: 1rem;
       font-weight: 400;
       height: auto;
@@ -79,22 +99,22 @@ $app-filters-font-lg: 0.9375rem;
     .btn {
       border-radius: 0 4px 4px 0;
       font-size: 1rem;
-      position: absolute;
-      right: 22px;
-      bottom: 19px;
+      // position: absolute;
+      // right: 22px;
+      // bottom: 19px;
       height: 50px;
       background: #fcba18;
       color: #003367;
       border: none;
       font-weight: bold;
       padding: .5rem 1.4rem .6rem;
+      flex-direction: row;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       @media (max-width: 1200px) {
-        position: relative;
-        width: 100%;
-        left: auto;
-        right: auto;
-        margin-top: 10px;
+        max-width: 100px;
       }
 
       i {
@@ -317,29 +337,41 @@ $app-filters-font-lg: 0.9375rem;
 }
 
 .map-instructions, .project-type-filter {
-  margin: 0;
-  background: white;
-  padding: 0 0 1rem 1.5rem;
+  background: #fff;
+  padding: 2rem 0 0;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
 }
 
-.project-type-filter-title-row {
+.project-type-filter-title-row, .project-search-title-row {
 	display: flex;
 	flex-direction: row;
 	width: 100%;
 	justify-content: space-between;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 0.375rem;
+  }
 }
 
 .project-type-filter-button {
 	display: flex;
 	width: 34px;
 	height: 34px;
-	margin-right: 1.5rem;
 	justify-content: center;
 	align-items: center;
 	border-radius: 4px;
-	background-color: white;
+	background-color: #fff;
 	color: grey;
 	border: 2px solid #c6d0da;
+  margin-left: 0.25rem;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
 }
 
 .project-type-filter-button i {
@@ -349,16 +381,24 @@ $app-filters-font-lg: 0.9375rem;
 .project-type-filter-row {
 	vertical-align: middle;
 	display: flex;
-	align-items: center;
-	height: 28px;
+	align-items: flex-start;
+  font-weight: normal;
 }
 
 .project-type-filter-checkbox {
 	font-size: 30px;
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 
 .project-type-filter-text {
+  line-height: 1;
 	padding-left: 0.5rem;
+  display: inline-flex;
+  padding-bottom: 8px;
 }
 
 ::ng-deep .project-type-filter-checkbox .mat-checkbox-ripple .mat-ripple-element {
@@ -371,6 +411,10 @@ $app-filters-font-lg: 0.9375rem;
 
 .filter-by-type {
   font-size: 1.25rem;
+}
+
+.filter-by-type-label {
+  margin-bottom: 0;
 }
 
 .filter-collapse-button.collapsed {

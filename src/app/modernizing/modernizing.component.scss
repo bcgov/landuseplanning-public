@@ -1,9 +1,8 @@
 .static-content {
-  background: white
+  background: #fff
 }
 
 main {
-  padding-top: 1rem;
 
   .modernizing-intro {
     display: flex;
@@ -14,4 +13,16 @@ main {
   img {
       max-width: 100%;
   }
+}
+
+.container {
+  padding: 0;
+}
+
+.static-content {
+  padding: 1.5rem;
+}
+
+.external-link {
+  padding-bottom: 10px;
 }

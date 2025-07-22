@@ -1,4 +1,4 @@
-<footer class="app-footer" id="footer" [ngClass]="{'app-footer--sm': (router.url.startsWith('/projects'))}">
+<footer class="app-footer--sm" *ngIf="router.url.split('#')[0] === ('/projects') || router.url.split(';')[0] === ('/projects')">
   <div class="container">
     <div class="footer-admin clearfix">
       <ul class="gov-links">
@@ -9,5 +9,95 @@
         <li><a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">Accessibility</a></li>
       </ul>
     </div>
+  </div>
+</footer>
+
+<footer class="app-footer" id="footer" *ngIf="router.url.split('#')[0] !== ('/projects') && router.url.split(';')[0] !== ('/projects')">
+  <div class="footer-top-row">
+
+    <div class="footer-square">
+      <section id="internal-links">
+        <h2>Site Map</h2>
+        <ul class="gov-links">
+          <li><a routerLink="/home">Home</a></li>
+          <li><a routerLink="/projects-list">List of Projects</a></li>
+          <li><a routerLink="/projects">Map View</a></li>
+          <li>Learn: <a routerLink="/lup">LUP</a> | <a routerLink="/flp">FLP</a> | <a routerLink="/wsp">WSP</a> | <a routerLink="/faq">FAQ</a></li>
+          <li><a routerLink="/contact">Contact Us</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-square">
+      <section id="external-links">
+        <h2>External Links</h2>
+        <ul class="gov-links">
+          <li>
+            <a class="paragraph-link" href="https://www2.gov.bc.ca/gov/content/industry/crown-land-water/land-use-planning">
+              Land Use Planning
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+          <li>
+            <a class="paragraph-link" href="https://www2.gov.bc.ca/gov/content/industry/forestry/managing-our-forest-resources/forest-landscape-plans">
+              Forest Landscape Planning
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+          <li>
+            <a class="paragraph-link" href="https://www2.gov.bc.ca/gov/content/environment/air-land-water/water/water-planning-strategies">
+              Water Planning
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+          <li>
+            <a class="paragraph-link" href="https://engage.gov.bc.ca/govtogetherbc/">
+              GovtogetherBC
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-square">
+      <section id="statements">
+        <h2>Statements</h2>
+        <ul class="gov-links">
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">
+              Copyright
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">
+              Disclaimer
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">
+              Privacy
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">
+              Accessibility
+              <img class="external-link invert" src="/assets/images/external-link.png" alt="" />
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+  </div>
+  <div class="footer-bottom-row">
+
+    <section id="copyright">
+      <p class="footer-paragraph">Copyright &copy;2025 Planning in Partnership</p>
+    </section>
+
   </div>
 </footer>

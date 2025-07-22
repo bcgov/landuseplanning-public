@@ -11,10 +11,10 @@
              communities, and the general public.  </p>
           <div class="hero-banner__actions">
             <div class="hero-banner__actions-buttons">
-              <a class="btn slide-l-btn hero-btn inverted" href="/projects" [routerLink]="['/projects']">
-                <i class="material-icons">list</i><span>Map View of Projects</span>
+              <a class="btn slide-l-btn hero-btn inverted" [routerLink]="['/projects']">
+                <i class="material-icons">search</i><span>Map View of Projects</span>
               </a>
-              <a class="btn slide-l-btn hero-btn inverted" href="/projects-list" [routerLink]="['/projects-list']">
+              <a class="btn slide-l-btn hero-btn inverted" [routerLink]="['/projects-list']">
                 <i class="material-icons">list</i><span>List of Projects</span>
               </a>
             </div>
@@ -67,7 +67,7 @@
           </ng-container>
         </table>
         <div class="news-block-more">
-          <a class="btn slide-r-btn content-btn-alt" href="/news" [routerLink]="['/news']">
+          <a class="btn slide-r-btn content-btn-alt" [routerLink]="['/news']">
             <span>View All Activities & Updates</span>
             <i class="material-icons">&#xE5C8;</i>
           </a>
@@ -102,27 +102,29 @@
            and the Biodiversity and Ecosystem Health Framework may be added to this site over time.
         </p>
         <h2 class="learn-more-heading">Learn More</h2>
-        <div class="row feature-blocks">
-          <div class="col-md-4">
-            <div class="feature-block">
+        <div class="feature-blocks">
+          <div class="feature-block-outer">
+            <!-- <img src="/assets/images/lup_revelstoke.jpg" class="feature-block-image land" aria-hidden="true" /> -->
+            <div class="feature-block land">
               <h3>Land Use Planning</h3>
               <p>Learn about land use planning in B.C.</p>
-              <a class="btn btn-sm inverted" href="/lup" [routerLink]="['/lup']" aria-label="Learn more about land use planning.">Learn More</a>
+              <a class="btn btn-sm inverted" [routerLink]="['/lup']" aria-label="Learn more about land use planning.">Learn More</a>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="feature-block">
+          <div class="feature-block-outer">
+            <!-- <img src="/assets/images/lup_revelstoke.jpg" class="feature-block-image forest" aria-hidden="true" /> -->
+            <div class="feature-block forest">
               <h3>Forest Landscape Planning</h3>
               <p>Learn more about forest landscape planning in B.C.</p>
-              <a class="btn btn-sm inverted" href="/flp" [routerLink]="['/flp']" aria-label="Learn more about forest landscape planning.">Learn More</a>
+              <a class="btn btn-sm inverted" [routerLink]="['/flp']" aria-label="Learn more about forest landscape planning.">Learn More</a>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="feature-block">
+          <div class="feature-block-outer">
+            <!-- <img src="/assets/images/lup_revelstoke.jpg" class="feature-block-image water" aria-hidden="true" /> -->
+            <div class="feature-block water">
               <h3>Water Planning and Governance Tools</h3>
               <p>Learn about water planning and governance tools in B.C.</p>
-              <a class="btn btn-sm inverted" href="/wsp" [routerLink]="['/wsp']" aria-label="Learn more about water planning.">Learn
-                More</a>
+              <a class="btn btn-sm inverted" [routerLink]="['/wsp']" aria-label="Learn more about water planning.">Learn More</a>
             </div>
           </div>
         </div>

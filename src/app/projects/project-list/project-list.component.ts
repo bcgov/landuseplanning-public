@@ -60,7 +60,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
 
   public projects: Array<Project> = [];
-  public loading: boolean = true;
   public tableParams: TableParams;
   public terms = new SearchTerms();
   public filterForURL: object = {};
@@ -139,7 +138,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
               // results not found --> navigate back to search
               this.router.navigate(['/']);
             }
-            this.loading = false;
           });
       });
   }
@@ -183,7 +181,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     this.sortProjects();
     this.setTableData();
     // Don't run the snackbar on page load.
-    if (this.snackBarCounter >= 2) {
+    if (this.snackBarCounter >= 3) {
       this.snackBarRef = this.snackBar.open(`The ${data?.source || 'search or filter'} has been updated with ${this.projects.length} result${this.projects.length === 1 ? '' : 's'}.`);
       this.snackBarRef._dismissAfter(3000);
     } else {
@@ -329,10 +327,11 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['pageSize'] = this.tableParams.pageSize ?? 10;
     params['projectTypes'] = this.tableParams.projectTypes;
 
-    this.router.navigate(['projects-list', params]);
+    this.router.navigate(['projects-list'], params);
   }
 
   ngOnDestroy() {
+    console.warn('AppComponent destroyed'); // Should never show unless true reload
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

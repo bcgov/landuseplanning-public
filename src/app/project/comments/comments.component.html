@@ -27,15 +27,23 @@
               </div>
 
               <div class="basic-info">
-                <div class="basic-info-subsection agreements" *ngIf="project?.agreements?.length > 0">
-                  <label>Agreement(s)</label><br />
-                  <p *ngIf="projectFieldType(project?.agreements) === 'string'" class="agreements-value">{{project?.agreements || "-"}}</p>
-                  <p *ngIf="projectFieldType(project?.agreements) === 'object'" class="agreements-value">
-                    <span *ngFor="let agreement of project.agreements; let i = index">
-                      <span *ngIf="i !== 0">, </span>
-                      <a class="agreement-link" href="{{agreement.agreementUrl}}">{{agreement.agreementName || "-"}}</a>
-                    </span>
-                  </p>
+                <div *ngIf="project?.agreements?.length > 0" class="agreements-label">
+                  <label>Agreement(s)</label>
+                </div>
+                <div *ngIf="projectFieldType(project?.agreements) ==='object'" class="agreements">
+                  <div class="agreement" *ngFor="let agreement of project.agreements; let i=index">
+                    <div *ngIf="agreement.agreementName && agreement.agreementUrl else noAgreementURL">
+                      <span class="value">
+                        <a class="agreement-link" target="_blank" href="{{agreement.agreementUrl}}">
+                          {{agreement.agreementName || "-" }}<span *ngIf="i !== project.agreements.length - 1">,</span>
+                        </a>
+                      </span>
+                    </div>
+                    <ng-template #noAgreementURL>
+                      <p class="value">{{agreement.agreementName || "-" }}</p>
+                      <span *ngIf="i !== project.agreements.length - 1">,</span>
+                    </ng-template>
+                  </div>
                 </div>
               </div>
 

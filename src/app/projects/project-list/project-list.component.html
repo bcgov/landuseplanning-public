@@ -2,7 +2,7 @@
   <div class="spinner-new rotating"></div>
 </div>
 
-<main *ngIf="!loading">
+<main *ngIf="!loading" id="anchor-point">
   <div class="hero-banner">
     <div class="hero-banner__container">
       <div class="container">
@@ -49,7 +49,7 @@
 
   <section class="project-list table-container">
     <div class="container">
-      <p class="instructions">{{projects.length > 0 ? 'Click on a project to view more information' : 'Change the search or filter to try again'}}.</p>
+      <p class="plist-instructions">{{projects.length > 0 ? 'Click on a project to view more information' : 'Change the search or filter to try again'}}.</p>
       <div *ngIf="projects.length > 0">
         <app-table-template
           [columns]="projectTableColumns"

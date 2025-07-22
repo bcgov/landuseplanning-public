@@ -3,6 +3,11 @@ pagination-template {
 
   flex-direction: column;
   overflow: hidden;
+
+  ul.ngx-pagination {
+    padding: 0;
+    padding-bottom: 2rem;
+  }
 }
 
 .pagination {
@@ -81,5 +86,11 @@ pagination-template {
     float: right;
     margin-right: 0;
     margin-left: auto;
+  }
+}
+
+@media (min-width: 1600px) {
+  ul.ngx-pagination {
+    padding: 0 !important;
   }
 }

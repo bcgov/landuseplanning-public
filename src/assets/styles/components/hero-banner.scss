@@ -7,20 +7,21 @@
   background-position: center bottom;
   background-size: 350%;
   box-shadow: 0 0 4rem #00264d inset;
+  background-size: cover !important;
+  background-position: inherit !important;
 
   .hero-banner__container {
-    background-color: rgba($primary, 0.56);
-    margin: 0;
-    padding: 0 4rem;
+    background-color: rgba(40, 40, 40, 0.7);
+    margin: 0 auto;
+    padding: 0 1.5rem;
     width: 111%;
     max-width: 100%;
 
     .container {
       min-height: 20rem;
-
-      @media (max-width: 767px) {
-        padding: 2rem 1rem 2.5rem 2rem;
-      }
+      padding: 0;
+      width: 1140px;
+      max-width: 100%;
     }
   }
 }
@@ -149,7 +150,6 @@
     background-size: 200%;
 
     .container {
-      /*padding: 67px 0;*/
       min-height: 30rem;
     }
   }

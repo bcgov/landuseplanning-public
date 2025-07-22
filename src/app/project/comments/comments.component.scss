@@ -34,15 +34,13 @@
       }
     
       .hero-banner__container {
-        background-color: rgba($primary, 0.56);
+        background-color: rgba(40, 40, 40, 0.7);
         margin: 0;     
-        padding: 0 2rem;
+        padding: 4rem 1.5rem;
         max-width: 100%;
 
-        
-
         .container {
-          padding: 0 0 4rem;
+          padding: 0;
           @media (max-width: 760px) {
             padding-top: 3rem !important;
           }
@@ -50,15 +48,7 @@
         }
     
         .hero-banner__content {
-          backdrop-filter: blur(5px);
-          -webkit-backdrop-filter: blur(5px);
-          background-color: rgba($primary, 0.8);
-          border-radius: 0 0 0.5rem 0.5rem; // round on corners not touching the top to avoid seams
-          padding: 3rem 2rem 2.5rem;
-
-          @media (max-width: 760px) {
-            border-radius: 0.5rem;
-          }
+          padding: 0;
       
           .header-section {
             margin: 2rem 0 1rem;
@@ -70,9 +60,7 @@
           }
       
           .basic-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+            display: block;
 
             .basic-info-subsection {
               display: block;
@@ -104,19 +92,23 @@
                 }
               }
       
-              p.agreements-value .agreement-link {
-                color: #fff;
+              .partner-nations, .agreements {
+                display: flex;
+                margin: 0.2rem 0;
               }
 
-              p.nations-value {
-                display: inline-flex;
+              .agreement-link {
+                color: #fff;
+                text-decoration: underline;
+                padding-right: 5px;
+
+                &:hover {
+                  text-decoration: none;
+                }
               }
-              
-              p.agreements-value, p.nations-value {
-                line-height: 1.75rem;
-                align-items: center;
-                font-size: 1rem;
-                margin: auto 0 auto 10px;
+
+              .agreements-label {
+                margin-top: 2rem;
               }
             }
           }
@@ -160,7 +152,7 @@
     }
 
     .doc-list {
-      color: black;
+      color: #000;
       margin-top: 1rem;
   
       li {

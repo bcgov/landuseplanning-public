@@ -56,6 +56,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 		{name: 'Water Planning and Governance', checked: true}
 	];
 	public filtersOpen: boolean = true;
+  public searchOpen: boolean = true;
 	public filterIconText: string = 'keyboard_arrow_up';
 
   // search keys for drop-down menus
@@ -177,11 +178,16 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 	/**
 	 * Shows or hides the project type filter.
    * Especially useful for mobile viewports where it covers most of the screen.
+   * @param source 'search' or 'filter'
 	 * 
 	 * @returns {void}
 	 */
-	public handleShowHideFilter(): void {
-    this.filtersOpen = !this.filtersOpen;
+	public handleShowHideFilter(source: string): void {
+    if ('search' === source) {
+      this.searchOpen = !this.searchOpen;
+    } else if ('filter' === source) {
+      this.filtersOpen = !this.filtersOpen;
+    }
 	}
 
   // FOR FUTURE USE

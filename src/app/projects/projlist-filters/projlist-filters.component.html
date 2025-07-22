@@ -2,23 +2,40 @@
   <div class="search-container" id="applist-filters">
     <fieldset class="additional-filters" (click)="$event.stopPropagation()">
       <div class="form-group typeahead-container">
-        <label for="applicantInput">Search Active Land and Water Planning Projects by Title</label>
-        <p class="additional-text">Additional land and water planning projects will be added to the map as they are initiated.</p>
-          <input type="text" class="form-control gtm-filter-applicant "
-          id="applicantInput" [(ngModel)]="_applicantFilter" [ngbTypeahead]="applicantSearch">
+        
+        <div class="project-search-title-row">
+          <label for="applicantInput">Search Projects by Title</label>
+          <button class="project-type-filter-button" id="show-hide-search" (click)="handleShowHideFilter('search')">
+            <i [ngClass]="{'collapsed': !searchOpen}" class="material-icons filter-collapse-button">
+              {{filterIconText}}
+            </i>
+          </button>
         </div>
-        <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();"
-        [disabled]="loading"><i class="material-icons" aria-hidden="true">search</i>Search</button>
-      </fieldset>
 
-    </div>
-    <div class="instructions map-instructions">You can also <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a></div>
+        <div *ngIf="searchOpen">
+          <p class="additional-text">Additional land and water planning projects will be added to the map as they are initiated. You can also 
+            <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a>
+          </p>
+          <div class="search-box">
+            <input type="text" class="form-control gtm-filter-applicant" id="applicantInput" [(ngModel)]="_applicantFilter" [ngbTypeahead]="applicantSearch">
+            <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();"
+              [disabled]="loading">
+              <i class="material-icons" aria-hidden="true">search</i>
+              Search
+            </button>
+          </div>
+          
+        </div>
 
-		<div class="project-type-filter">
+      </div>
+    </fieldset>
+
+    <div class="project-type-filter">
       <fieldset [attr.aria-expanded]="filtersOpen">
+
         <div class="project-type-filter-title-row">
           <legend for class="filter-by-type-label">Filter by project type(s)</legend>
-          <button class="project-type-filter-button" id="show-hide-filter" (click)="handleShowHideFilter()">
+          <button class="project-type-filter-button" id="show-hide-filter" (click)="handleShowHideFilter('filter')">
             <i
               [ngClass]="{'collapsed': !filtersOpen}" 
               class="material-icons filter-collapse-button">
@@ -39,8 +56,13 @@
             <br />
           </div>
         </div>
+
       </fieldset>
-		</div>
+    </div>
+  </div>
+
+  
+</div>
 
 
 <!--   <div class="app-filters__header d-flex justify-content-between">

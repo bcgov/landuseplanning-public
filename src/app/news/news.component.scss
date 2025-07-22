@@ -42,7 +42,7 @@
       li {
         @include align-items(start);
         +li {
-          border-top: 1px solid white;
+          border-top: 1px solid #fff;
         }
       }
       .name,
@@ -162,9 +162,9 @@
 }
 
 .table-container {
-  background-color: white;
+  background-color: #fff;
 }
 
 .results {
-  color: white;
+  color: #fff;
 }

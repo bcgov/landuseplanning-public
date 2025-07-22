@@ -33,12 +33,12 @@
 }
 
 .hero-link {
-  color: white !important;
+  color: #fff !important;
   text-decoration: underline;
 
   &:focus,
   &:hover {
-    color: white !important;
+    color: #fff !important;
     text-decoration: none;
   }
 }
@@ -48,7 +48,7 @@
   margin: 1rem 0;
 
   &__white {
-    color: white;
+    color: #fff;
   }
 }
 
