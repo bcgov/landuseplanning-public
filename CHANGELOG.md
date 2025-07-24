@@ -1,3 +1,6 @@
+### Jul 24, 2025
+- If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
+
 ### Jul 9, 2025
 - Added marker/centroid verification for project list map and individual project map [DESENG-839](https://citz-gdx.atlassian.net/browse/DESENG-839)
 

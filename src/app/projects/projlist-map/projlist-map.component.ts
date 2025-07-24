@@ -350,20 +350,14 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
             shapefile.projectId = proj._id;
             shapefile.shapefileOrder = Number(projectShapefile.order);
             this.shapefileList.push(shapefile);
+          } else {
+            // If a project shapefile has been hidden on the main map, add a marker instead.
+            this.addMarkerToMap(proj);
           }
         })
       } else {
         // If no shapefile is found for a project, display a pin of its coordinates instead.
-        if (this.utils.markerMeetsConditions(proj)) {
-          const title = `${proj.name}\n`
-          + `${proj.overlappingRegionalDistricts}\n`;
-          const marker = L.marker(L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
-          .setIcon(markerIconYellow)
-          .on('click', L.Util.bind(this.onMarkerClick, this, proj));
-          marker.projectId = proj._id;
-          this.markerList.push(marker); // save to list
-          this.markerClusterGroup.addLayer(marker); // save to marker clusters group
-        }
+        this.addMarkerToMap(proj);
       }
       this.addShapefilesToMap();
     });
@@ -381,6 +375,26 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     orderedShapefiles.forEach(projectShapefile => {
       projectShapefile.addTo(this.map);
     });
+  }
+
+  /**
+   * Checks that the marker coordinates are valid and within bounds,
+   * then sets the pop-up message content, creates the marker icon,
+   * adds a click handler for the pop-up, and adds the new layer to the
+   * list of map layers.
+   * 
+   * @param proj The project to add the marker for.
+   */
+  private addMarkerToMap(proj: Project): void {
+    if (this.utils.markerMeetsConditions(proj)) {
+      const title = `${proj.name}\n` + `${proj.overlappingRegionalDistricts}\n`;
+      const marker = L.marker(L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
+        .setIcon(markerIconYellow)
+        .on('click', L.Util.bind(this.onMarkerClick, this, proj));
+      marker.projectId = proj._id;
+      this.markerList.push(marker); // save to list
+      this.markerClusterGroup.addLayer(marker); // save to marker clusters group
+    }
   }
 
   /**
