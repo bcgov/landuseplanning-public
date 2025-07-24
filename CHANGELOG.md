@@ -6,7 +6,6 @@
 - Made all site content mobile compatible
 - Adjusted margins of pages that were not aligned with header/footer
 - Changed some page content to improve accessibility (contrast, inverse text)
-- Added external link icons beside all external links
 - Added additional hover events for increased site interactivity
 - Removed all instances of colonial blue
 - Redesigned project contact info / contact button / subscribe button area to separate it from the footer
