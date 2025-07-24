@@ -71,6 +71,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   public listApps: Array<Project> = [];
   public snackBarCounter: number = 0;
   public projectTableData: TableObject;
+  public loading: boolean = false;
 
   public showFilters: object = {
     agreements: false,
