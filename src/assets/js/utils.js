@@ -12,12 +12,6 @@ function scroll_style() {
             $("#header").removeClass("app-header--solid");
         }
     }
-
-    if (window_top > 100) {
-        $(".scroll-top-btn").addClass("visible");
-    } else {
-        $(".scroll-top-btn").removeClass("visible");
-    }
 }
 
 $(function () {

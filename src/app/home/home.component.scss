@@ -16,8 +16,20 @@
   vertical-align: top;
 }
 
+.hero-banner__container {
+  padding: 2rem 1.5rem;
+
+  .container {
+    padding: 0;
+  }
+} 
+
+section.container {
+  padding: 0;
+}
+
 main {
-  padding: 3rem 0 3.75rem;
+  padding: 3rem 1.5rem 3.75rem;
   text-align: center;
 
   h2 {
@@ -36,37 +48,116 @@ main {
   p {
     line-height: 1.75;
     font-size: 1.2rem;
-    /*max-width: 780px;*/
     margin: 0 auto 16px;
   }
   a {
     text-decoration: underline;
-    &:hover {
+    &:hover, &:active, &:focus {
       text-decoration: none;
+      color: #fed262;
     }
   }
 }
 
 .feature-blocks {
   margin-top: 50px;
+  margin: auto;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
 
-  > div {
-    margin-bottom: 20px;
-    padding: 8px;
+  @media (max-width: 1200px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
   }
 
-  .feature-block {
-    padding: 2rem 1.5rem;
-    height: 100%;
+  .feature-block-outer {
+    text-align: center;
+    font-size: 0.9375rem;
+    vertical-align: bottom;
+    width: 30%;
+
+    @media (max-width: 1200px) {
+      width: 45%;
+    }
+
+    @media (max-width: 775px) {
+      width: 100%;
+    }
+
+    .feature-block {
+      padding: 2.5rem 1.5rem;
+      background: #d4d4d4;
+      border-radius: 5px;
+      display: flex;
+      height: 100%;
+      align-items: center;
+      flex-direction: column;
+      color: #212529;
+      opacity: 0.97;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url('/assets/images/lup_revelstoke.jpg') center top / cover no-repeat;
+        z-index: -1;
+        filter: brightness(1.3) saturate(0.4);
+        opacity: 0.15;
+      }
+
+      &.land {
+        background: #f0e7df;
+        border: 1px solid #bca795;
+      }
+
+      &.forest {
+        background: #e3f0df;
+        border: 1px solid #93b588;
+      }
+
+      &.water {
+        background: #dfe0f0;
+        border: 1px solid #8e90b3;
+      }
+
+      &.land::before {
+        background-position: -500px -400px;
+        width: 700px;
+        height: 700px;
+      }
+
+      &.forest::before {
+        background-position: -200px -400px;
+        width: 700px;
+        height: 700px;
+      }
+
+      &.water::before {
+        background-position: -1300px -300px;
+        width: 2000px;
+        height: 700px;
+      }
+
+      a {
+        margin-top: auto;
+        text-decoration: none;
+        color: #212529;
+        border-color: #212529;
+
+        &:hover, &:active, &:focus {
+          color: #fed262;
+        }
+      }
+    }
   }
 
-  p {
-    margin-bottom: 30px;
-    height: 100%;
-  }
-  a {
-    text-decoration: none;
-  }
+  
 }
 
 @media (max-width: 767px) {
@@ -77,5 +168,16 @@ main {
 
   .hero-banner__version {
     margin-top: -0.3rem;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .hero-banner__actions-buttons a {
+    width: 100%;
+  }
+
+  .news-block-more .btn:hover {
+    background-color: #454545;
   }
 }

@@ -1,3 +1,20 @@
+### Jul 24, 2025
+- Updated the header/footer with improved design, accessibility, and inclusivity. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
+  - Added a skip link to the header
+  - Added current page menu highlighting
+  - Made the header/footer mobile compatible
+- Made all site content mobile compatible
+- Adjusted margins of pages that were not aligned with header/footer
+- Changed some page content to improve accessibility (contrast, inverse text)
+- Added additional hover events for increased site interactivity
+- Removed all instances of colonial blue
+- Redesigned project contact info / contact button / subscribe button area to separate it from the footer
+- Restructured SCSS for increased specificity and legibility
+  - Changed any named colors like 'black' or 'white' to hex codes like '#000' or '#fff'
+- Fixed image centering issue in hero banner
+- Revised logic for scroll top button so that it uses Angular instead of jQuery
+- Fixed invisible footer on map page, in mobile view
+
 ### Jul 9, 2025
 - Added marker/centroid verification for project list map and individual project map [DESENG-839](https://citz-gdx.atlassian.net/browse/DESENG-839)
 

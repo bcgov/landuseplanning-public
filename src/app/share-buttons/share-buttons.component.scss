@@ -5,6 +5,11 @@
     top: 200px;
     padding: 0px;
 
+    // Avoid blocking important content on mobile
+    @media (max-width: 1200px) {
+        display: none;
+    }
+
     /*
     .facebook-share-container {
         background-color: #3b5998;

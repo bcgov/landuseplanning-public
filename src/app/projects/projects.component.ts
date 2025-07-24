@@ -97,7 +97,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     // do this in another event so it's not in current change detection cycle
     setTimeout(() => {
       this.isLoading = true;
-      this.snackBarRef = this.snackBar.open('Loading projects ...');
       this.allApps = []; // empty the list
 
       this.projectService.getCount()
@@ -113,7 +112,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
           Observable.of([] as Project[]).concat(...observables)
             .takeUntil(this.ngUnsubscribe)
             .finally(() => {
-              this.snackBarRef.dismiss();
               this.isLoading = false;
             })
             .subscribe((projects: Project[]) => {
