@@ -1,11 +1,9 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import { map, mergeMap, takeUntil, filter } from 'rxjs/operators';
 
 import { ApiService } from 'app/services/api';
 import { ConfigService } from 'app/services/config.service';
@@ -24,6 +22,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   loggedIn: string;
   hostname: string;
   showIntroModal: string;
+  isMapPage: boolean;
+  windowTop = 0;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -48,7 +48,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.loggedIn = this.cookieService.get('loggedIn');
-
     this.showIntroModal = '';
 
     if (!this.cookieService.check('showIntroModal')) {
@@ -56,30 +55,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.showIntroModal = this.cookieService.get('showIntroModal');
 
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        // We have to account for matrix params and anchor links.
+        this.isMapPage = '/projects' === event.urlAfterRedirects.split('#')[0] || '/projects' === event.urlAfterRedirects.split(';')[0];
+      });
   }
 
   setViewTitleandFocus() {
     // If title(string) and focush1(boolean) fields exist in route data,
     // set "page" title and focush1 accordingly
-    let routerNavEnd$ = this.router.events
-      .filter((event) => event instanceof NavigationEnd)
-      .map(() => this.activatedRoute)
-      .map((route) => {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => this.activatedRoute),
+        map((route) => {
         while (route.firstChild) {
           route = route.firstChild
         }
         return route;
-      })
-      .filter((route) => route.outlet === 'primary')
-      .mergeMap((route) => route.data)
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((event) => {
+      }),
+      filter((route) => route.outlet === 'primary'),
+      mergeMap((route) => route.data),
+      takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(event => {
         this.titleService.setTitle(event['title'] + ' - ' + this.appName);
         let pageh1 = document.getElementsByTagName('h1')[0];
         if (pageh1 && event['focush1']) {
           pageh1.focus();
         }
       });
+      
   }
 
   ngAfterViewInit() {
@@ -91,5 +99,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.windowTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
   }
 }

@@ -99,9 +99,6 @@ $app-filters-font-lg: 0.9375rem;
     .btn {
       border-radius: 0 4px 4px 0;
       font-size: 1rem;
-      // position: absolute;
-      // right: 22px;
-      // bottom: 19px;
       height: 50px;
       background: #fcba18;
       color: #003367;
@@ -375,7 +372,7 @@ $app-filters-font-lg: 0.9375rem;
 }
 
 .project-type-filter-button i {
-	font-size: 18px !important;
+	font-size: 18px !important; // Override material icon settings
 }
 
 .project-type-filter-row {
@@ -402,11 +399,11 @@ $app-filters-font-lg: 0.9375rem;
 }
 
 ::ng-deep .project-type-filter-checkbox .mat-checkbox-ripple .mat-ripple-element {
-	background-color: #ffd740 !important;
+	background-color: #ffd740 !important; // Override material checkbox defaults
 }
 
 ::ng-deep .project-type-filter-checkbox .mat-checkbox-indeterminate .mat-checkbox-background, ::ng-deep .mat-checkbox-checked .mat-checkbox-background {
-	background-color: #ffd740 !important;
+	background-color: #ffd740 !important; // Override material checkbox defaults
 }
 
 .filter-by-type {

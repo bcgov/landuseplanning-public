@@ -81,14 +81,14 @@
       }
 
       // Navbar Toggle Button
-      .navbar-toggler {
+      button.navbar-toggler {
         padding: 0.5rem 0.4rem;
         margin-left: auto;
-        border: 2px solid grey !important;
-        color: $header-font-color !important;
+        border: 2px solid $header-font-color;
+        color: $header-font-color;
         font-size: medium;
         font-weight: 600;
-        outline: none; // override user agent stylesheet default
+        outline: none;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -207,7 +207,7 @@
 
     .dropdown {
       display: flex;
-      flex-direction: column !important;
+      flex-direction: column;
       justify-content: center;
 
       &.show {
@@ -255,14 +255,14 @@
 
 // NAVBAR Desktop
 @media (min-width: 1200px) {
-  .navbar {
+  .navbar.navbar.navbar {
     background: transparent;
 
     .navbar-nav {
       margin-top: 0;
 
-      .nav-link {
-        padding: 0 1rem !important;
+      a.nav-link {
+        padding: 0 1rem;
         border-top: none;
 
         span {
@@ -275,7 +275,7 @@
 
         &.current {
           background-color: #e7e7e7;
-          box-shadow: 0 2px #000 !important;
+          box-shadow: 0 2px #000;
         }
       }
 
@@ -293,7 +293,7 @@
           }
 
           &.dropdown-menu-right {
-            background-color: #fff !important;
+            background-color: #fff;
           }
 
           .dropdown-item {
@@ -308,7 +308,7 @@
           }
 
           .dropdown-menu {
-            display: block !important;
+            display: block;
           }
         }
 
@@ -318,7 +318,6 @@
           >a,
           >a:hover,
           >a:focus {
-            // background-color: $header-bg;
             border: none;
           }
 

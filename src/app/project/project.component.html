@@ -93,7 +93,7 @@
         <div class="people-item">
 
           <button *ngIf="project?.contactFormEnabled" class="btn btn-small contact-anonymous" (click)="launchContactForm()" type="button">
-            <i _ngcontent-c11="" class="material-icons-outlined button-icon" role="presentation" wiid="C937">email</i>
+            <i _ngcontent-c11="" class="material-icons-outlined button-icon" role="presentation" wiid="C937" aria-hidden="true">email</i>
             <br>
             <span>Contact the Project Team</span>
           </button>
@@ -103,22 +103,22 @@
             <h2 class="people-contact-heading">Contact</h2>
 
             <p *ngIf="project?.projectLead?.displayName">
-              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937">person</i>
+              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937" aria-hidden="true">person</i>
               <span>{{project?.projectLead?.displayName}}</span>
             </p>
 
             <p>
-              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937">work_outline</i>
+              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937" aria-hidden="true">work_outline</i>
               <span>Engagement Lead</span>
             </p>
 
             <p *ngIf="project?.projectLead?.phoneNumber">
-              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937">phone</i>
+              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937" aria-hidden="true">phone</i>
               <span>{{project?.projectLead?.phoneNumber}}</span>
             </p>
 
             <p *ngIf="project?.projectLead?.email">
-              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937">email</i>
+              <i _ngcontent-c11="" class="material-icons-outlined mr-3" role="presentation" wiid="C937" aria-hidden="true">email</i>
               <a class="contacts-link" href="mailto:{{project?.projectLead?.email}}">
                 <span>{{project?.projectLead?.email}}</span>
               </a>
@@ -129,7 +129,7 @@
         <div class="people-item">
 
           <button class="btn btn-small sign-up" (click)="addEmail()" type="button">
-            <i _ngcontent-c11="" class="material-icons-outlined button-icon" role="presentation" wiid="C937">notifications_none</i>
+            <i _ngcontent-c11="" class="material-icons-outlined button-icon" role="presentation" wiid="C937" aria-hidden="true">notifications_none</i>
             <br>
             <span>Sign up for project updates</span>
           </button>

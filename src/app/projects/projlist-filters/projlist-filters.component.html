@@ -16,6 +16,7 @@
           <p class="additional-text">Additional land and water planning projects will be added to the map as they are initiated. You can also 
             <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a>
           </p>
+          <p class="sr-only">Users with assistive devices and software are advised to search on the <a class="paragraph-link" routerLink="/projects-list">list view page</a>.</p>
           <div class="search-box">
             <input type="text" class="form-control gtm-filter-applicant" id="applicantInput" [(ngModel)]="_applicantFilter" [ngbTypeahead]="applicantSearch">
             <button type="button" class="btn btn-primary" title="Apply Filters" id="applyButton" (click)="applyAllFilters();"

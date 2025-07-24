@@ -359,9 +359,9 @@
     }
   }
 
-  section.people {
+  section.people.people.people {
     color: #212529;
-    padding: 1rem 1.5rem 4rem !important;
+    padding: 1rem 1.5rem 4rem;
 
     .container {
       padding: 0;
@@ -376,7 +376,7 @@
       }
 
       .people-contact-heading {
-        font-size: 1.5rem !important;
+        font-size: 1.5rem;
         font-weight: 500;
       }
 
@@ -387,11 +387,11 @@
         align-items: center;
         min-height: 210px;
 
-        .contact-info a, .contact-info a:visited, .contact-info a:active {
-          text-decoration-color: #000 !important;
+        .contact-info p a, .contact-info p a:visited, .contact-info p a:active {
+          text-decoration-color: #000;
 
           span {
-            color: #000 !important;
+            color: #000;
           }
         }
 

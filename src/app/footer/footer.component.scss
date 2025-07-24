@@ -8,7 +8,7 @@
   justify-content: space-between;
   padding: 3rem 1.5rem;
 
-  .footer-top-row, .footer-bottom-row {
+  .footer-top-row {
     width: 1140px;
     gap: 3rem;
     max-width: 100%;
@@ -26,8 +26,8 @@
     }
 
     @media (max-width: 720px) {
-        flex-wrap: wrap;
-      }
+      flex-wrap: wrap;
+    }
 
     .footer-square {
       display: flex;
@@ -44,174 +44,107 @@
         width: 100%;
         line-height: 2;
 
-        a, a:visited {
-          // color: #fed262 !important;
-          color: #fff !important;
+        ul {
+          padding: 0;
+          font-size: 0.875rem;
+          list-style-type: none;
 
-          &:hover, &:active, &:focus {
-            color: $gold !important;
-            text-decoration: none !important;
+          li {
+            margin-bottom: 0.25rem;
+
+            a, a:visited {
+              color: #fff;
+              text-decoration: underline;
+
+              &:hover, &:active, &:focus {
+                color: $gold;
+                text-decoration: none;
+              }
+            }
           }
         }
       }
     }
   }
-
-  .footer-top-row {
-    margin-bottom: 3rem;
-  }
-}
-
-p.footer-paragraph {
-  padding: 0;
-  margin: 0 0 1rem;
-  line-height: 1.75 !important;
-  font-size: 0.9rem;
-}
-
-ul {
-  padding: 0;
-  font-size: 0.875rem;
-  list-style-type: none;
-
-  li {
-    margin-bottom: 0.25rem;
-  }
 }
 
 // Small footer for the map page
-.app-footer--sm .nav-links {
-  margin: 0;
-}
-
-a {
-  color: $footer-color;
-  text-decoration: underline;
-
-  &.feedback-link {
-    color: $gold;
-  }
-
-  &:focus,
-  &:hover {
-    color: $gold;
-    text-decoration: none;
-  }
-}
-
-.app-footer--sm .footer-admin {
-  text-align: center;
-
-  .gov-links {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-
-    li {
-      display: inline-block;
-      margin: 0;
-      line-height: 1;
-
-      &:after {
-        position: relative;
-        top: -1px;
-        display: inline-block;
-        margin-left: 0.5rem;
-        margin-right: 0.25rem;
-        content: '|';
-      }
-
-      &:last-child {
-        &:after {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  .app-footer--sm .app-footer {
-    section {
-      text-align: left;
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    h4 {
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $bg-dark-border-color;
-    }
-  }
-}
-
-.app-footer--sm  {
+.app-footer--sm {
   right: 0;
   bottom: 0;
   left: 0;
   border: none;
   position: absolute;
   color: #fff;
+  font-size: 0.65rem;
+
+  @media (min-width: 768px) {
+    font-size: 0.825rem;
+  }
 
   .container {
     max-width: 100%;
     padding: 0 0.5rem;
-  }
 
-  .footer-admin {
-    margin: 0;
-    margin-bottom: 1rem;
-    padding-top: 0.4rem;
-    padding-bottom: 0;
-    border: none;
-  }
-
-  .footer-info {
-    display: none;
-  }
-
-  ul {
-    width: 1140px;
-    max-width: 100%;
-    margin: 0 auto !important;
-    font-size: 0.65rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-  }
-}
-
-.app-footer-sm {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .app-footer--sm {
-    font-size: 0.825rem;
-
-    .container {
+    @media (min-width: 768px) {
       padding: 0 1rem;
     }
 
     .footer-admin {
-      padding-top: 0.3rem;
+      text-align: center;
+      margin: 0;
+      margin-bottom: 1rem;
+      padding-top: 0.4rem;
+      padding-bottom: 0;
+      border: none;
+
+      ul.gov-links {
+        text-align: center;
+        padding: 0;
+        width: 1140px;
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        li {
+          display: inline-block;
+          margin: 0;
+          line-height: 1;
+
+          a {
+            color: $footer-color;
+            text-decoration: underline;
+
+            &.feedback-link {
+              color: $gold;
+            }
+
+            &:focus,
+            &:hover {
+              color: $gold;
+              text-decoration: none;
+            }
+          }
+
+          &:after {
+            position: relative;
+            top: -1px;
+            display: inline-block;
+            margin-left: 0.5rem;
+            margin-right: 0.25rem;
+            content: '|';
+          }
+
+          &:last-child {
+            &:after {
+              display: none;
+            }
+          }
+        }
+      }
     }
-
-    ul {
-      font-size: 0.825rem;
-    }
-  }
-}
-
-.external-link {
-  padding: 0 !important;
-  padding-bottom: 10px  !important;
-  width: inherit !important;
-
-  &.invert {
-    filter: invert(1);
   }
 }

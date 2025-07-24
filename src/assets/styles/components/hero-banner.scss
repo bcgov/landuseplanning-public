@@ -5,10 +5,9 @@
   background-color: rgba($header-bg, 1);
   background-image: url("/assets/images/lup_revelstoke.jpg");
   background-position: center bottom;
-  background-size: 350%;
   box-shadow: 0 0 4rem #00264d inset;
-  background-size: cover !important;
-  background-position: inherit !important;
+  background-size: cover;
+  background-position: inherit;
 
   .hero-banner__container {
     background-color: rgba(40, 40, 40, 0.7);
@@ -40,10 +39,6 @@
   .hero-banner__content {
     padding-top: 4rem;
     padding-bottom: 4rem;
-
-    p {
-      margin-bottom: 0 !important;
-    }
   }
 }
 
@@ -131,12 +126,6 @@
   }
 }
 
-@media (min-width: 400px) {
-  .hero-banner {
-    background-size: 300%;
-  }
-}
-
 @media (min-width: 567px) {
   .hero-banner {
     .container {
@@ -147,7 +136,6 @@
 
 @media (min-width: 768px) {
   .hero-banner {
-    background-size: 200%;
 
     .container {
       min-height: 30rem;
@@ -171,33 +159,11 @@
 }
 
 @media (min-width: 1024px) {
-  .hero-banner {
-    background-size: 150%;
-  }
-
   .hero-banner__content {
     h1 {
       .wb {
         display: inline;
       }
     }
-  }
-}
-
-@media (min-width: 1200px) {
-  .hero-banner{
-    background-size: 140%;
-  }
-}
-
-@media (min-width: 1600px) {
-  .hero-banner {
-    background-position: center -15rem;
-  }
-}
-
-@media (min-width: 1900px) {
-  .hero-banner {
-    background-size: 120%;
   }
 }
