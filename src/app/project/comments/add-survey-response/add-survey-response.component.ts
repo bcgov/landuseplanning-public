@@ -1,5 +1,5 @@
 import { Component, Input, Renderer2, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, FormArray } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -12,13 +12,16 @@ import { CommentPeriod } from 'app/models/commentperiod';
 import { DocumentService } from 'app/services/document.service';
 import { SurveyResponseService } from 'app/services/surveyResponse.service';
 import { SurveyBuilderService } from 'app/services/surveyBuilder.service';
-import * as moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { Project } from 'app/models/project';
 import { Survey } from 'app/models/survey';
-import { SurveyQuestion } from 'app/models/surveyQuestion';
 import { SurveyResponse } from 'app/models/surveyResponse';
 import { ConfigService } from 'app/services/config.service';
-import { mergeAnalyzedFiles } from '@angular/compiler';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 @Component({
   selector: 'app-add-survey-response',
@@ -289,8 +292,8 @@ export class AddSurveyResponseComponent implements OnInit, AfterViewInit, OnDest
           formData.append('documentFileName', file.name);
           formData.append('internalOriginalName', file.name);
           formData.append('documentSource', 'COMMENT');
-          formData.append('dateUploaded', String(moment()));
-          formData.append('datePosted', String(moment()));
+          formData.append('dateUploaded', String(dayjs().tz(dayjs.tz.guess()).toISOString()));
+          formData.append('datePosted', String(dayjs().tz(dayjs.tz.guess()).toISOString()));
           formData.append('upfile', file);
           this.progressBufferValue += 100 * file.size / this.totalSize;
 

@@ -147,16 +147,22 @@ export class ApiService {
     if (populate !== null) { queryString += `&populate=${populate}`; }
     if (Object.keys(queryModifier).length !== 0) {
       Object.keys(queryModifier).forEach(key => {
-        queryModifier[key].split(',').map(item => {
+        const val = queryModifier[key];
+        if (typeof val === 'string') {
+          val.split(',').forEach(item => {
           queryString += `&and[${key}]=${item}`;
         });
+        }
       });
     }
     if (Object.keys(queryModifier).length !== 0) {
       Object.keys(filter).forEach(key => {
-        filter[key].split(',').forEach(item => {
-          queryString += `&or[${key}]=${item}`;
-        });
+        const val = filter[key];
+        if (typeof val === 'string') {
+          val.split(',').forEach(item => {
+            queryString += `&or[${key}]=${item}`;
+          });
+        }
       });
     }
     queryString += `&fields=${this.buildValues(fields)}`;

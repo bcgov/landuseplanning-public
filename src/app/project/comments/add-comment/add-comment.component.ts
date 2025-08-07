@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-// import { HttpEventType } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
@@ -10,9 +9,14 @@ import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
-import * as moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { Project } from 'app/models/project';
 import { ConfigService } from 'app/services/config.service';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 @Component({
   templateUrl: './add-comment.component.html',
@@ -157,8 +161,8 @@ export class AddCommentComponent implements OnInit {
           formData.append('documentFileName', file.name);
           formData.append('internalOriginalName', file.name);
           formData.append('documentSource', 'COMMENT');
-          formData.append('dateUploaded', String(moment()));
-          formData.append('datePosted', String(moment()));
+          formData.append('dateUploaded', String(dayjs().tz(dayjs.tz.guess()).toISOString()));
+          formData.append('datePosted', String(dayjs().tz(dayjs.tz.guess()).toISOString()));
           formData.append('upfile', file);
           this.progressBufferValue += 100 * file.size / this.totalSize;
 

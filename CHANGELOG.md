@@ -1,3 +1,16 @@
+### Aug 6, 2025
+- Optimized site load times and added a loading/welcome message for limited-speed users. [DESENG-872](https://citz-gdx.atlassian.net/browse/DESENG-872)
+  - Measured load times with different speeds and in different environments and added results to spreadsheet
+  - Used globs and custom script loading for map scripts instead of app-wide script loading
+  - Lazy loaded some components for further optimization, including individual project, project list, and project map
+  - Replaced moment.js with dayjs for date handling, which is similar but much less resource-intensive
+  - Added post-optimization local load times to spreadsheet for comparison
+  - Added a friendly loading/welcome message for people with slow connections
+- Renamed misspelled component (activites > activities)
+- Increased efficiency of font loading for outlined material icons
+- Matched versions for all Leaflet dependencies
+- Removed legacy icon fonts for IE and IOS 5
+
 ### Jul 24, 2025
 - Updated the header/footer with improved design, accessibility, and inclusivity. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
   - Added a skip link to the header
