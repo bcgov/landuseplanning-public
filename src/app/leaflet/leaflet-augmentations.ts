@@ -1,4 +1,6 @@
-// Extend leaflet types here
+// Leaflet declarations
+// Allows you to add additional properties and methods to Leaflet
+// Used for typing before script is available in component
 import 'leaflet';
 
 declare module 'leaflet' {

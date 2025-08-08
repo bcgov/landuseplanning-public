@@ -37,7 +37,8 @@ const routes: Routes = [
     loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule),
     data: { 
       title: 'Map View of Projects', 
-      focush1: true }
+      focush1: true 
+    }
   },
   {
     path: 'projects-list',

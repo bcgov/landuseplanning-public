@@ -4,7 +4,7 @@ import { Constants } from 'app/shared/utils/constants';
 import { Subject } from 'rxjs';
 import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { Document } from 'app/models/document';
 import { ProjectShapefile } from 'app/models/project';
 import * as _ from 'lodash';
@@ -63,8 +63,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.pathAPI = _.isEmpty(remoteApiPath) ? 'http://localhost:3000/api' : remoteApiPath;
 
     // Try to get project from parent resolver
-    const parentWithProject = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
-    const projectAndBanner = parentWithProject?.snapshot.data?.projectAndBanner;
+    const parentData = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
+    const projectAndBanner = parentData?.snapshot.data?.projectAndBanner;
 
     if (Array.isArray(projectAndBanner) && projectAndBanner[0]) {
       this.project = projectAndBanner[0];
@@ -92,7 +92,13 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  private processShapefilesFromRoute(res: any): void {
+  /**
+   * Extracts needed shape file data from the route shapshot data
+   * 
+   * @param res The route data snapshot from which the shape files are extracted
+   * @returns void
+   */
+  private processShapefilesFromRoute(res: Data): void {
     if (Array.isArray(this.project?.shapefiles) && this.project.shapefiles.length > 0) {
       return;
     }

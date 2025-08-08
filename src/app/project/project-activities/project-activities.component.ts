@@ -6,7 +6,6 @@ import { TableParamsObject } from 'app/shared/components/table-template/table-pa
 import { News } from 'app/models/news';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { SearchTerms } from 'app/models/search';
-import { Project } from 'app/models/project';
 import { ActivitiesListTableRowsComponent } from './activities-list-table-rows/activities-list-table-rows.component';
 
 @Component({
@@ -46,10 +45,6 @@ export class ProjectActivitiesComponent implements OnInit, OnDestroy {
     private _changeDetectionRef: ChangeDetectorRef) { }
 
   ngOnInit() {
-    // Assign values from inputs
-    this.currentProject = this.project || null;
-
-
     if (this.activities?.[0]?.data?.meta?.length > 0) {
       this.tableParams.totalListItems = this.activities[0].data.meta[0].searchResultsTotal;
       this.recentActivities = this.activities[0].data.searchResults;
@@ -109,8 +104,10 @@ export class ProjectActivitiesComponent implements OnInit, OnDestroy {
     params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
-
-    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
+    if (this.project?._id) {
+      this.router.navigate(['p', this.project._id, 'project-details', params]);
+    }
+    
   }
 
   public onSubmit() {
@@ -128,8 +125,9 @@ export class ProjectActivitiesComponent implements OnInit, OnDestroy {
     params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
-
-    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
+    if (this.project?._id) {
+      this.router.navigate(['p', this.project._id, 'project-details', params])
+    }
   }
 
   ngOnDestroy() {

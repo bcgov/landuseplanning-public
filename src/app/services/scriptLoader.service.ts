@@ -6,7 +6,8 @@ export class ScriptLoaderService {
   private loadedStyles: { [url: string]: boolean } = {};
 
   /**
-   * Load a single script
+   * Load a single script 
+   * Loads straight into a component to avoid app-level script dependencies
    * 
    * @param path The location of the script that you would like to load
    * @returns Promise<void>
@@ -41,6 +42,7 @@ export class ScriptLoaderService {
 
   /**
    * Load a single stylesheet
+   * Loads straight into a component to avoid app-level style dependencies
    * 
    * @param url The location of the stylesheet that you would like to load
    * @returns Promise<void>
@@ -74,9 +76,10 @@ export class ScriptLoaderService {
 
   /**
    * Load multiple scripts
+   * Loads them straight into a component to avoid app-level script dependencies
    * 
    * @param paths The locations of the scripts that you would like to load
-   * @returns Promise<void>
+   * @returns Promise<void[]>
    */
   loadScripts(paths: string[]): Promise<void[]> {
     return Promise.all(paths.map(path => this.loadScript(path)));
@@ -84,6 +87,7 @@ export class ScriptLoaderService {
 
   /**
    * Load multiple stylesheets
+   * Loads them straight into a component to avoid app-level style dependencies
    * 
    * @param urls The locations of the stylesheets that you would like to load
    * @returns Promise<void>
