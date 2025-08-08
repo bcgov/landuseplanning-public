@@ -113,19 +113,28 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   }
 
   async ngAfterViewInit() {
-    this.scriptLoader.loadStyle('/leaflet/leaflet.css');
+    try {
+      await this.scriptLoader.loadStyle('/leaflet/leaflet.css');
+    } catch (e) {
+      console.error('Failed to load Leaflet style sheet', e);
+    }
     // Load prerequisite scripts
-    await this.scriptLoader.loadScripts([
-      '/maplibre-gl/maplibre-gl.js',
-      '/leaflet/leaflet.js',
-    ]);
-    // Load subsequent scripts
-    await this.scriptLoader.loadScripts([
-      '/esri-leaflet/esri-leaflet.js',
-      '/esri-leaflet-vector/esri-leaflet-vector.js',
-      '/shpjs/shp.min.js',
-      '/leaflet-shpfile/leaflet.shpfile.js'
-    ]);
+    try {
+      await this.scriptLoader.loadScripts([
+        '/maplibre-gl/maplibre-gl.js',
+        '/leaflet/leaflet.js',
+      ]);
+      // Load subsequent scripts
+      await this.scriptLoader.loadScripts([
+        '/esri-leaflet/esri-leaflet.js',
+        '/esri-leaflet-vector/esri-leaflet-vector.js',
+        '/shpjs/shp.min.js',
+        '/leaflet-shpfile/leaflet.shpfile.js'
+      ]);
+    } catch (e) {
+      console.error('Failed to load one or more Leaflet scripts', e);
+    }
+    
 
     this.L = (window as any).L;
     this.appFG = this.L.featureGroup(); // group of layers for subject app
