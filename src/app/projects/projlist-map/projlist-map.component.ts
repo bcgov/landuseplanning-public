@@ -55,25 +55,34 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   // create map after view (which contains map id) is initialized
   async ngAfterViewInit() {
-    this.scriptLoader.loadStyles([
+    try {
+      await this.scriptLoader.loadStyles([
       '/leaflet/leaflet.css',
       '/leaflet-markercluster/MarkerCluster.css',
       '/leaflet-markercluster/MarkerCluster.Default.css'
     ]);
-    // Load prerequisite scripts
-    await this.scriptLoader.loadScripts([
-      '/maplibre-gl/maplibre-gl.js',
-      '/leaflet/leaflet.js',
-    ]);
-    // Load subsequent scripts
-    await this.scriptLoader.loadScripts([
-      '/esri-leaflet/esri-leaflet.js',
-      '/esri-leaflet-vector/esri-leaflet-vector.js',
-      '/leaflet-ajax/leaflet.ajax.js',
-      '/shpjs/shp.min.js',
-      '/leaflet-shpfile/leaflet.shpfile.js',
-      '/leaflet-markercluster/leaflet.markercluster.js',
-    ]);
+    } catch (e) {
+      console.error('One or more style sheets failed to load', e)
+    }
+    
+    try {
+      // Load prerequisite scripts
+      await this.scriptLoader.loadScripts([
+        '/maplibre-gl/maplibre-gl.js',
+        '/leaflet/leaflet.js',
+      ]);
+      // Load subsequent scripts
+      await this.scriptLoader.loadScripts([
+        '/esri-leaflet/esri-leaflet.js',
+        '/esri-leaflet-vector/esri-leaflet-vector.js',
+        '/leaflet-ajax/leaflet.ajax.js',
+        '/shpjs/shp.min.js',
+        '/leaflet-shpfile/leaflet.shpfile.js',
+        '/leaflet-markercluster/leaflet.markercluster.js',
+      ]);
+    } catch (e) {
+      console.error('One or more scripts failed to load', e)
+    }
 
     this.L = (window as any).L;
 

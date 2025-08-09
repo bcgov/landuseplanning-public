@@ -4,7 +4,7 @@ import { Constants } from 'app/shared/utils/constants';
 import { Subject } from 'rxjs';
 import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { Document } from 'app/models/document';
 import { ProjectShapefile } from 'app/models/project';
 import * as _ from 'lodash';
@@ -63,8 +63,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.pathAPI = _.isEmpty(remoteApiPath) ? 'http://localhost:3000/api' : remoteApiPath;
 
     // Try to get project from parent resolver
-    const parentWithProject = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
-    const projectAndBanner = parentWithProject?.snapshot.data?.projectAndBanner;
+    const parentData = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
+    const projectAndBanner = parentData?.snapshot.data?.projectAndBanner;
 
     if (Array.isArray(projectAndBanner) && projectAndBanner[0]) {
       this.project = projectAndBanner[0];
@@ -92,7 +92,13 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  private processShapefilesFromRoute(res: any): void {
+  /**
+   * Extracts needed shape file data from the route shapshot data
+   * 
+   * @param res The route data snapshot from which the shape files are extracted
+   * @returns void
+   */
+  private processShapefilesFromRoute(res: Data): void {
     if (Array.isArray(this.project?.shapefiles) && this.project.shapefiles.length > 0) {
       return;
     }
@@ -107,19 +113,28 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   }
 
   async ngAfterViewInit() {
-    this.scriptLoader.loadStyle('/leaflet/leaflet.css');
+    try {
+      await this.scriptLoader.loadStyle('/leaflet/leaflet.css');
+    } catch (e) {
+      console.error('Failed to load Leaflet style sheet', e);
+    }
     // Load prerequisite scripts
-    await this.scriptLoader.loadScripts([
-      '/maplibre-gl/maplibre-gl.js',
-      '/leaflet/leaflet.js',
-    ]);
-    // Load subsequent scripts
-    await this.scriptLoader.loadScripts([
-      '/esri-leaflet/esri-leaflet.js',
-      '/esri-leaflet-vector/esri-leaflet-vector.js',
-      '/shpjs/shp.min.js',
-      '/leaflet-shpfile/leaflet.shpfile.js'
-    ]);
+    try {
+      await this.scriptLoader.loadScripts([
+        '/maplibre-gl/maplibre-gl.js',
+        '/leaflet/leaflet.js',
+      ]);
+      // Load subsequent scripts
+      await this.scriptLoader.loadScripts([
+        '/esri-leaflet/esri-leaflet.js',
+        '/esri-leaflet-vector/esri-leaflet-vector.js',
+        '/shpjs/shp.min.js',
+        '/leaflet-shpfile/leaflet.shpfile.js'
+      ]);
+    } catch (e) {
+      console.error('Failed to load one or more Leaflet scripts', e);
+    }
+    
 
     this.L = (window as any).L;
     this.appFG = this.L.featureGroup(); // group of layers for subject app

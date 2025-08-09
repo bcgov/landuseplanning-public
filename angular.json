@@ -34,12 +34,7 @@
                 "output": "leaflet"
               },
               {
-                "glob": "**/*",
-                "input": "node_modules/leaflet.markercluster/dist",
-                "output": "leaflet-markercluster"
-              },
-              {
-                "glob": "*.css",
+                "glob": "*.{js,css}",
                 "input": "node_modules/leaflet.markercluster/dist",
                 "output": "leaflet-markercluster"
               },
@@ -154,7 +149,7 @@
                 "output": "leaflet"
               },
               {
-                "glob": "**/*",
+                "glob": "*.{js,css}",
                 "input": "node_modules/leaflet.markercluster/dist",
                 "output": "leaflet-markercluster"
               },
