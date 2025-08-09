@@ -1,13 +1,27 @@
-<footer class="app-footer--sm" *ngIf="router.url.split('#')[0] === ('/projects') || router.url.split(';')[0] === ('/projects')">
+<footer class="app-footer--sm" [class.hidden]="footerHidden" *ngIf="router.url.split('#')[0] === ('/projects') || router.url.split(';')[0] === ('/projects')">
   <div class="container">
-    <div class="footer-admin clearfix">
+    <div class="footer-admin">
       <ul class="gov-links">
         <li><a routerLink="/home">Home</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">Copyright</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">Disclaimer</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">Privacy</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">Accessibility</a></li>
       </ul>
+      <div 
+        class="close-footer" 
+        [attr.aria-hidden]="!isMobile ? 'true' : null"
+        [attr.aria-label]="isMobile ? 'Show or hide the footer' : null" 
+        (click)="showHideFooter()"
+      >
+        <span>
+          {{ footerHideSymbol }}
+        </span>
+      </div>
     </div>
   </div>
 </footer>

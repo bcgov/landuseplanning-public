@@ -1,3 +1,6 @@
+### Aug 8, 2025
+- Fixed the small footer on the map page, as per Steve. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
+
 ### Aug 6, 2025
 - Optimized site load times and added a loading/welcome message for limited-speed users. [DESENG-872](https://citz-gdx.atlassian.net/browse/DESENG-872)
   - Measured load times with different speeds and in different environments and added results to spreadsheet

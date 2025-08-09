@@ -417,3 +417,18 @@ $app-filters-font-lg: 0.9375rem;
 .filter-collapse-button.collapsed {
   rotate: 180deg;
 }
+
+div.search-sub-container,
+.filter-container {
+  padding: 0;
+  border: none;
+}
+
+.search-sub-container.search-closed,
+.filter-container.filters-closed {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
+}
