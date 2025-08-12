@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { Constants } from 'app/shared/utils/constants';
 import { Subject } from 'rxjs';
 import { ConfigService } from 'app/services/config.service';
@@ -13,6 +13,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ScriptLoaderService } from 'app/services/scriptLoader.service';
 import type { Map, FeatureGroup, LatLngBounds, LayersControlEvent, FitBoundsOptions } from 'leaflet';
 import { ProjectService } from 'app/services/project.service';
+import { RecentActivity } from 'app/models/recentActivity';
 
 @Component({
   selector: 'app-project-details-tab',
@@ -50,6 +51,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     private utils: Utils,
     private scriptLoader: ScriptLoaderService,
     private projectService: ProjectService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -85,9 +87,9 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     }
 
     // Load activities from current route
-    this.route.data.subscribe((res: any) => {
-      if (res.activities) {
-        this.activities = res.activities;
+    this.route.data.subscribe((data: { activities: RecentActivity[] }) => {
+      if (data.activities) {
+        this.activities = data.activities;
       }
     });
   }
@@ -117,6 +119,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       await this.scriptLoader.loadStyle('/leaflet/leaflet.css');
     } catch (e) {
       console.error('Failed to load Leaflet style sheet', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
     }
     // Load prerequisite scripts
     try {
@@ -133,6 +137,8 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       ]);
     } catch (e) {
       console.error('Failed to load one or more Leaflet scripts', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
     }
     
 
