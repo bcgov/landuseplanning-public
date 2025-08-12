@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
-import * as moment from 'moment';
+import dayjs from 'dayjs';
 import * as _ from 'lodash';
 
 import { Project, ProjectType } from 'app/models/project';
@@ -204,7 +204,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   dateFilterToParams(params, name) {
     if (this.isNGBDate(this.filterForUI[name])) {
       const date = new Date(this.filterForUI[name].year, this.filterForUI[name].month - 1, this.filterForUI[name].day);
-      params[name] = moment(date).format('YYYY-MM-DD');
+      params[name] = dayjs(date).format('YYYY-MM-DD');
     }
   }
 

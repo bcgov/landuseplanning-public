@@ -1,8 +1,12 @@
+### Aug 6, 2025
+- Optimized site load times and added a loading/welcome message for limited-speed users. [DESENG-872](https://citz-gdx.atlassian.net/browse/DESENG-872)
+- Renamed misspelled component (activites > activities)
+- Increased efficiency of font loading for outlined material icons
+- Matched versions for all Leaflet dependencies
+- Removed legacy icon fonts for IE and IOS 5
+
 ### Jul 24, 2025
 - Updated the header/footer with improved design, accessibility, and inclusivity. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
-  - Added a skip link to the header
-  - Added current page menu highlighting
-  - Made the header/footer mobile compatible
 - Made all site content mobile compatible
 - Adjusted margins of pages that were not aligned with header/footer
 - Changed some page content to improve accessibility (contrast, inverse text)

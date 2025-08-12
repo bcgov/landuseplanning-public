@@ -23,9 +23,8 @@ import { ProjectPhaseTabComponent } from './project-phase-tab/project-phase-tab.
 import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
 
 import { StorageService } from 'app/services/storage.service';
-import { ProjectDetailsTabComponent } from './project-details-tab/project-details-tab.component';
 import { CommentsTableRowsComponent } from 'app/project/comments/comments-table-rows/comments-table-rows.component';
-import { ProjectActivitesComponent } from './project-activites/project-activites.component';
+import { ProjectActivitiesComponent } from './project-activities/project-activities.component';
 import { CertificatesComponent } from './certificates/certificates.component';
 import { PinsComponent } from './pins/pins.component';
 import { PinsTableRowsComponent } from './pins/pins-table-rows/pins-table-rows.component';
@@ -56,8 +55,7 @@ import { ContactFormComponent } from './contact-form/contact-form.component';
     PinsTableRowsComponent,
     ProjectPhaseTabComponent,
     CommentsTableRowsComponent,
-    ProjectDetailsTabComponent,
-    ProjectActivitesComponent,
+    ProjectActivitiesComponent,
     CertificatesComponent,
     PinsComponent,
     EmailSubscribeComponent,
@@ -67,6 +65,9 @@ import { ContactFormComponent } from './contact-form/contact-form.component';
   ],
   providers: [
     StorageService
+  ],
+  exports: [
+    ProjectActivitiesComponent
   ]
 })
 

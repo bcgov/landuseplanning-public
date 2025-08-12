@@ -9,7 +9,7 @@ import 'rxjs/add/observable/of';
 import { Project } from 'app/models/project';
 import { Comment } from 'app/models/comment';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
+import dayjs from 'dayjs';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { ActivatedRouteStub } from 'app/spec/helpers';
 
@@ -79,7 +79,7 @@ describe('CommentingTabComponent', () => {
         jasmine.clock().install();
 
         const currentTime = new Date(2018, 12, 1);
-        const today = moment(currentTime).toDate();
+        const today = dayjs(currentTime).toDate();
         jasmine.clock().mockDate(today);
         // existingProject.currentPeriod = appCommentPeriod;
       });

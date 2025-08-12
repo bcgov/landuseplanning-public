@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ContactComponent } from 'app/contact/contact.component';
-import { ProjectsComponent } from 'app/projects/projects.component';
 import { HomeComponent } from 'app/home/home.component';
-import { ProjectListComponent } from './projects/project-list/project-list.component';
 import { NewsListComponent } from './news/news.component';
 import { LegislationComponent } from './legislation/legislation.component';
 import { EngagementComponent } from './engagement/engagement.component';
@@ -36,15 +34,15 @@ const routes: Routes = [
   },
   {
     path: 'projects',
-    component: ProjectsComponent,
-    data: {
-      title: 'Map View of Projects',
-      focush1: true
+    loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule),
+    data: { 
+      title: 'Map View of Projects', 
+      focush1: true 
     }
   },
   {
     path: 'projects-list',
-    component: ProjectListComponent,
+    loadChildren: () => import('./projects/project-list/project-list.module').then(m => m.ProjectListModule),
     data: {
       title: 'List View of Projects',
       focush1: true

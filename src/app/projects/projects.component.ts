@@ -6,9 +6,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/operator/finally';
-import * as L from 'leaflet';
 import * as _ from 'lodash';
-
 import { Project } from 'app/models/project';
 import { Document } from 'app/models/document';
 import { ProjectService } from 'app/services/project.service';
@@ -81,13 +79,17 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // prevent underlying map actions for list and filters components
-    const applist_list = <HTMLElement>document.getElementById('applist-list');
-    L.DomEvent.disableClickPropagation(applist_list);
-    L.DomEvent.disableScrollPropagation(applist_list);
+    const applist_list = document.getElementById('applist-list');
+    if (applist_list) {
+      applist_list.addEventListener('click', e => e.stopPropagation());
+      applist_list.addEventListener('wheel', e => e.stopPropagation());
+    }
 
-    const applist_filters = <HTMLElement>document.getElementById('applist-filters');
-    L.DomEvent.disableClickPropagation(applist_filters);
-    L.DomEvent.disableScrollPropagation(applist_filters);
+    const applist_filters = document.getElementById('applist-filters');
+    if (applist_filters) {
+      applist_filters.addEventListener('click', e => e.stopPropagation());
+      applist_filters.addEventListener('wheel', e => e.stopPropagation());
+    }
 
     // load initial apps
     this.getApps();

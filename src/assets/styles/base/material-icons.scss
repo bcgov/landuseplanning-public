@@ -1,11 +1,23 @@
 /* Ref: https://fonts.googleapis.com/icon?family=Material+Icons */
 
+// Material Icons Outlined
+@font-face {
+  font-family: 'Material Icons Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: 
+    local('Material Icons Outlined'),
+    local('MaterialIconsOutlined-Regular'),
+    url(/assets/fonts/MaterialIconsOutlined-Regular.woff2) format('woff2'),
+}
+
 // Material Icons
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(/assets/fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+  font-display: block;
   src: 
     local('Material Icons'),
     local('MaterialIcons-Regular'),
@@ -14,23 +26,12 @@
     url(/assets/fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 
-// Material Icons Outlined
-@font-face {
+.material-icons-outlined {
   font-family: 'Material Icons Outlined';
-  font-style: normal;
-  font-weight: 400;
-  src: 
-    local('Material Icons Outlined'),
-    local('MaterialIconsOutlined-Regular'),
-    url(/assets/fonts/MaterialIconsOutlined-Regular.woff2) format('woff2'),
 }
 
 .material-icons {
   font-family: 'Material Icons';
-}
-
-.material-icons-outlined {
-  font-family: 'Material Icons Outlined';
 }
 
 .material-icons, .material-icons-outlined {

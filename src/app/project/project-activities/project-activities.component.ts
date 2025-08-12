@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { Subject } from 'rxjs';
@@ -6,15 +6,17 @@ import { TableParamsObject } from 'app/shared/components/table-template/table-pa
 import { News } from 'app/models/news';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { SearchTerms } from 'app/models/search';
-import { Project } from 'app/models/project';
 import { ActivitiesListTableRowsComponent } from './activities-list-table-rows/activities-list-table-rows.component';
 
 @Component({
-  selector: 'app-project-activites',
-  templateUrl: './project-activites.component.html',
-  styleUrls: ['./project-activites.component.scss']
+  selector: 'app-project-activities',
+  templateUrl: './project-activities.component.html',
+  styleUrls: ['./project-activities.component.scss']
 })
-export class ProjectActivitesComponent implements OnInit, OnDestroy {
+export class ProjectActivitiesComponent implements OnInit, OnDestroy {
+  @Input() project;
+  @Input() activities;
+
   public terms = new SearchTerms();
   public recentActivities: Array<News> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -43,21 +45,13 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     private _changeDetectionRef: ChangeDetectorRef) { }
 
   ngOnInit() {
-
-    this.route.parent.data
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(
-        (data) => {
-          if (data.projectAndBanner[0]) {
-            this.currentProject = data.projectAndBanner[0];
-          } else {
-            alert('Uh-oh, couldn\'t load project');
-            // project not found --> navigate back to project list
-            this.router.navigate(['/projects']);
-          }
-          this._changeDetectionRef.detectChanges();
-        }
-      );
+    if (this.activities?.[0]?.data?.meta?.length > 0) {
+      this.tableParams.totalListItems = this.activities[0].data.meta[0].searchResultsTotal;
+      this.recentActivities = this.activities[0].data.searchResults;
+    } else {
+      this.tableParams.totalListItems = 0;
+      this.recentActivities = [];
+    }
 
     this.route.params
       .takeUntil(this.ngUnsubscribe)
@@ -67,30 +61,12 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
           this.tableParams.sortBy = '-dateAdded';
           this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
         }
+        this.setRowData();
+        this.loading = false;
         this._changeDetectionRef.detectChanges();
-
-        this.route.data
-          .takeUntil(this.ngUnsubscribe)
-          .subscribe((data: any) => {
-            if (data) {
-              if (data.activites && data.activites[0].data.meta && data.activites[0].data.meta.length > 0) {
-                this.tableParams.totalListItems = data.activites[0].data.meta[0].searchResultsTotal;
-                this.recentActivities = data.activites[0].data.searchResults;
-              } else {
-                this.tableParams.totalListItems = 0;
-                this.recentActivities = [];
-              }
-              this.setRowData();
-              this.loading = false;
-              this._changeDetectionRef.detectChanges();
-            } else {
-              alert('Uh-oh, couldn\'t load valued components');
-              // project not found --> navigate back to search
-              this.router.navigate(['/search']);
-            }
-          });
       });
   }
+
   setRowData() {
     let list = [];
     if (this.recentActivities && this.recentActivities.length > 0) {
@@ -128,8 +104,10 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
-
-    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
+    if (this.project?._id) {
+      this.router.navigate(['p', this.project._id, 'project-details', params]);
+    }
+    
   }
 
   public onSubmit() {
@@ -147,8 +125,9 @@ export class ProjectActivitesComponent implements OnInit, OnDestroy {
     params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
-
-    this.router.navigate(['p', this.currentProject._id, 'project-details', params]);
+    if (this.project?._id) {
+      this.router.navigate(['p', this.project._id, 'project-details', params])
+    }
   }
 
   ngOnDestroy() {

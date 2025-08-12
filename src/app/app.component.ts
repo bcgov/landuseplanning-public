@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs';
@@ -7,8 +7,6 @@ import { map, mergeMap, takeUntil, filter } from 'rxjs/operators';
 
 import { ApiService } from 'app/services/api';
 import { ConfigService } from 'app/services/config.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SplashModalComponent } from './splash-modal/splash-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +31,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private cookieService: CookieService,
     private api: ApiService,
     private configService: ConfigService,
-    private modalService: NgbModal,
   ) {
 
     // Set the app name. Used as part of dynamically set page titles.

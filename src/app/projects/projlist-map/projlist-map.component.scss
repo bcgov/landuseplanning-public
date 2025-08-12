@@ -170,6 +170,18 @@ $toggle-list-anim-duration: 0.2s;
   }
 }
 
+::ng-deep {
+  .leaflet-popup-content-wrapper.leaflet-popup-content-wrapper {
+    border-radius: 5px;
+
+    .leaflet-popup-content {
+      margin: 0;
+      overflow: hidden;
+      border-radius: 5px;
+    }
+  }
+  
+}
 @media (min-width: 1024px) {
   ::ng-deep {
     .leaflet-popup-content {

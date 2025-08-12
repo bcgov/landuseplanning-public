@@ -18,34 +18,67 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
+              {
+                "glob": "**/maplibre-gl.{js,css}",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "maplibre-gl"
+              },
+              {
+                "glob": "leaflet.js",
+                "input": "node_modules/leaflet/dist",
+                "output": "leaflet"
+              },
+              {
+                "glob": "leaflet.css",
+                "input": "node_modules/leaflet/dist",
+                "output": "leaflet"
+              },
+              {
+                "glob": "*.{js,css}",
+                "input": "node_modules/leaflet.markercluster/dist",
+                "output": "leaflet-markercluster"
+              },
+              {
+                "glob": "esri-leaflet.js",
+                "input": "node_modules/esri-leaflet/dist",
+                "output": "esri-leaflet"
+              },
+              {
+                "glob": "esri-leaflet-vector.js",
+                "input": "node_modules/esri-leaflet-vector/dist",
+                "output": "esri-leaflet-vector"
+              },
+              {
+                "glob": "leaflet.ajax.js",
+                "input": "src/assets/js",
+                "output": "leaflet-ajax"
+              },
+              {
+                "glob": "shp.min.js",
+                "input": "node_modules/shpjs/dist",
+                "output": "shpjs"
+              },
+              {
+                "glob": "leaflet.shpfile.js",
+                "input": "src/assets/js",
+                "output": "leaflet-shpfile"
+              },
               "src/favicon.ico",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
-                "output": "/assets/images"
+                "output": "/leaflet/images"
               }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/leaflet/dist/leaflet.css",
-              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
-              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               "src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "node_modules/moment/min/moment.min.js",
-              "node_modules/leaflet/dist/leaflet.js",
-              "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
-              "node_modules/shpjs/dist/shp.min.js",
-							"node_modules/esri-leaflet/dist/esri-leaflet.js",
-							"node_modules/maplibre-gl/dist/maplibre-gl.js",
-							"node_modules/esri-leaflet-vector/dist/esri-leaflet-vector.js",
-              "src/assets/js/utils.js",
-              "src/assets/js/leaflet.shpfile.js",
-              "src/assets/js/leaflet.ajax.js"
+              "src/assets/js/utils.js"
             ]
           },
           "configurations": {
@@ -91,24 +124,65 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "node_modules/moment/min/moment.min.js",
-              "node_modules/leaflet/dist/leaflet.js",
-              "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
-              "node_modules/shpjs/dist/shp.min.js",
-              "src/assets/js/utils.js",
-              "src/assets/js/leaflet.shpfile.js",
-              "src/assets/js/leaflet.ajax.js"
+              "src/assets/js/utils.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/leaflet/dist/leaflet.css",
-              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
-              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               "src/styles.scss"
             ],
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images",
+                "output": "/assets/images"
+              },
+              {
+                "glob": "leaflet.js",
+                "input": "node_modules/leaflet/dist",
+                "output": "leaflet"
+              },
+              {
+                "glob": "leaflet.css",
+                "input": "node_modules/leaflet/dist",
+                "output": "leaflet"
+              },
+              {
+                "glob": "*.{js,css}",
+                "input": "node_modules/leaflet.markercluster/dist",
+                "output": "leaflet-markercluster"
+              },
+              {
+                "glob": "esri-leaflet.js",
+                "input": "node_modules/esri-leaflet/dist",
+                "output": "esri-leaflet"
+              },
+              {
+                "glob": "esri-leaflet-vector.js",
+                "input": "node_modules/esri-leaflet-vector/dist",
+                "output": "esri-leaflet-vector"
+              },
+              {
+                "glob": "shp.min.js",
+                "input": "node_modules/shpjs/dist",
+                "output": "shpjs"
+              },
+              {
+                "glob": "leaflet.ajax.js",
+                "input": "src/assets/js",
+                "output": "leaflet-ajax"
+              },
+              {
+                "glob": "leaflet.shpfile.js",
+                "input": "src/assets/js",
+                "output": "leaflet-shpfile"
+              },
+              {
+                "glob": "**/maplibre-gl.{js,css}",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "maplibre-gl"
+              },
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",

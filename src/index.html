@@ -11,6 +11,7 @@
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="description" content="Find, learn about, and comment on active Land Use Planning engagements in British Columbia.">
 	<link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/MaterialIconsOutlined-Regular.woff2" crossorigin="anonymous">
 
     <meta property="og:title" content="Provincial Land Use Planning" />
     <meta property="og:type" content="website" />
@@ -47,12 +48,46 @@
     </script>
     <!-- Snowplow stop plowing -->
     <script src="./publicServerEnvironmentSettings.js"></script> <!-- Generated at cluster during the image deploy time by the run file in the nginx-runtime -->
+    <style>
+        .spinner-container.app-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            opacity: 0;
+            background: #c5dec5;
+            background: linear-gradient(338deg,rgba(197, 222, 197, 1) 0%, rgba(230, 235, 255, 1) 100%);
+            transition: background-opacity 1s ease-in-out;
+            animation: fadeIn 1s ease-in-out 2s forwards;
+        }
+        .spinner-container.app-loading h1 {
+            margin-bottom: 3rem;
+        }
+        .spinner-container.app-loading p {
+            margin-top: 3rem;
+        }
+        .spinner-container.app-loading .spinner-new.rotating.app-container {
+            display: block;
+            position: static;
+            margin-top: 0;
+            margin-left: 0;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body id="top">
 	<app-root>
-		<div class="spinner-container" *ngIf="!results" aria-label="Loading...">
-			<div class="spinner-new rotating"></div>
+		<div class="spinner-container app-loading" *ngIf="!results" aria-label="Loading...">
+            <p>Welcome to</p>
+            <h1>Planning in Partnership</h1>
+			<div class="spinner-new rotating app-container"></div>
+            <p>Please wait a moment while the website loads...</p>
 		</div>
 	</app-root>
 </body>

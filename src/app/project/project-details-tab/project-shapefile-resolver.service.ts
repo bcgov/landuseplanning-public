@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { SearchService } from 'app/services/search.service';
 
@@ -11,11 +11,15 @@ export class ShapeFileResolver implements Resolve<Observable<object>> {
   ) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<object> {
-    const projectId = route.parent.paramMap.get('projId');
+    const projectId = route.pathFromRoot.find(r => r.paramMap.has('projId'))?.paramMap.get('projId');
     const currentPage = 1;
     const pageSize = 100;
     const sortBy = '-datePosted';
     const keywords = '';
+
+    if (!projectId) {
+      return of(null);
+    }
     return this.searchService.getSearchResults(
       keywords,
       'Document',
