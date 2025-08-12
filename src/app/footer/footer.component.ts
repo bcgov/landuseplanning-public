@@ -17,7 +17,7 @@ export class FooterComponent {
         this.isMobile = result.matches;
       });
   }
-  public footerHidden = false;
+  public isFooterHidden = false;
   public footerHideSymbol = '<';
   public isMobile: boolean;
 
@@ -26,8 +26,8 @@ export class FooterComponent {
    * 
    * @returns void
    */
-  public showHideFooter = function() {
-    this.footerHidden = !this.footerHidden;
+  public showHideFooter() {
+    this.isFooterHidden = !this.isFooterHidden;
     this.footerHideSymbol = '<' === this.footerHideSymbol ? '>' : '<';
   }
 }

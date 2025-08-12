@@ -1,4 +1,4 @@
-<footer class="app-footer--sm" [class.hidden]="footerHidden" *ngIf="router.url.split('#')[0] === ('/projects') || router.url.split(';')[0] === ('/projects')">
+<footer class="app-footer--sm" [class.hidden]="isFooterHidden" *ngIf="router.url.split('#')[0] === ('/projects') || router.url.split(';')[0] === ('/projects')">
   <div class="container">
     <div class="footer-admin">
       <ul class="gov-links">
@@ -12,16 +12,16 @@
         <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">Accessibility</a></li>
       </ul>
-      <div 
+      <button
         class="close-footer" 
-        [attr.aria-hidden]="!isMobile ? 'true' : null"
-        [attr.aria-label]="isMobile ? 'Show or hide the footer' : null" 
+        aria-label="Show or hide the footer"
         (click)="showHideFooter()"
+        *ngIf="isMobile"
       >
         <span>
           {{ footerHideSymbol }}
         </span>
-      </div>
+      </button>
     </div>
   </div>
 </footer>

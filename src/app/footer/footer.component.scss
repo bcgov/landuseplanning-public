@@ -78,15 +78,15 @@
   position: absolute;
   color: #fff;
   font-size: 0.65rem;
-  background-color: grey;
+  background-color: #808080;
   display: flex;
-  z-index: 200000;
+  z-index: 1005; // map filters are 1004, map is 999
   min-height: 65px;
 
   &.hidden {
 
     @media (max-width: 768px) {
-      width: 30px;
+      width: 1.25rem;
     }
 
     div ul.gov-links.gov-links.gov-links {
@@ -121,7 +121,7 @@
 
   .container {
     max-width: 100%;
-    padding: 0 2rem 0 0.5rem;
+    padding: 0 1.25rem 0 0.5rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -171,22 +171,17 @@
           }
         }
       }
-      div.close-footer {
-        display: none;
-        height: 0;
-
-        span {
-          cursor: pointer;
-        }
-
-        @media(max-width: 767px) {
-          display: inline;
-          position: absolute;
-          top: 18px;
-          right: 10px;
-          font-weight: bold;
-          font-size: 1.1rem;
-        }
+      button.close-footer {
+        height: 30px;
+        border: none;
+        background-color: transparent;
+        color: #fff;
+        display: inline;
+        position: absolute;
+        top: 18px;
+        right: 0;
+        font-weight: bold;
+        font-size: 1.1rem;
       }
     }
   }
