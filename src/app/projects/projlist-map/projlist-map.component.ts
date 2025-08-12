@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import * as _ from 'lodash';
 import { Project } from 'app/models/project';
@@ -50,7 +51,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     private injector: Injector,
     private resolver: ComponentFactoryResolver,
     private utils: Utils,
-    private scriptLoader: ScriptLoaderService
+    private scriptLoader: ScriptLoaderService,
+    private router: Router,
   ) { }
 
   // create map after view (which contains map id) is initialized
@@ -62,7 +64,9 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       '/leaflet-markercluster/MarkerCluster.Default.css'
     ]);
     } catch (e) {
-      console.error('One or more style sheets failed to load', e)
+      console.error('One or more style sheets failed to load', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
     }
     
     try {
@@ -81,7 +85,9 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
         '/leaflet-markercluster/leaflet.markercluster.js',
       ]);
     } catch (e) {
-      console.error('One or more scripts failed to load', e)
+      console.error('One or more scripts failed to load', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
     }
 
     this.L = (window as any).L;
@@ -299,8 +305,6 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   private fitBounds(bounds: LatLngBounds = this.defaultBounds) {
     const fitBoundsOptions: FitBoundsOptions = {
-      // use top padding to adjust for filters header (which is always visible)
-      // paddingTopLeft: this.L.point(0, this.appfilters.clientHeight),
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false
