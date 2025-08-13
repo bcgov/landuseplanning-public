@@ -52,6 +52,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   // private filters: FiltersType = null; // FUTURE
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 	public filterCount: number = 0;
+  public env: string;
+  public devBannerActive: boolean;
 
   previousUrl: string;
 
@@ -78,6 +80,14 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // For height calculations
+    const deployment_env = window.localStorage.getItem('from_admin_server--deployment_env');
+    this.env = (_.isEmpty(deployment_env)) ? 'prod' : deployment_env;
+    if (this.env.toUpperCase() === 'PROD') {
+      this.devBannerActive = false;
+    } else {
+      this.devBannerActive = true;
+    }
     // prevent underlying map actions for list and filters components
     const applist_list = document.getElementById('applist-list');
     if (applist_list) {

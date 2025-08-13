@@ -1,4 +1,4 @@
-<div class="projects-view" [ngClass]="configService.isApplistListVisible ? 'app-list-open':'app-list-closed'" id="anchor-point">
+<div class="projects-view" [class.dev-banner]="devBannerActive" [ngClass]="configService.isApplistListVisible ? 'app-list-open':'app-list-closed'" id="anchor-point">
   <h1 class="sr-only projlist-map-header">Find Land Use Planning Projects in British Columbia</h1>
 
   <app-projlist-filters class="app-filters" #appfilters

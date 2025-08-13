@@ -12,7 +12,7 @@
           </button>
         </div>
 
-        <div *ngIf="searchOpen">
+        <div class="search-sub-container" [class.search-closed]="!searchOpen">
           <p class="additional-text">Additional land and water planning projects will be added to the map as they are initiated. You can also 
             <a class="paragraph-link" routerLink="/projects-list">go to list view of projects.</a>
           </p>
@@ -45,7 +45,7 @@
           </button>
         </div>
 
-        <div *ngIf="filtersOpen">
+        <div class="filter-container" [class.filters-closed]="!filtersOpen">
           <div *ngFor="let ptf of projectTypeFilters" class="project-type-filter-row">
             <mat-checkbox 
               value={{ptf.name}}

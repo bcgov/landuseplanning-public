@@ -73,18 +73,59 @@
   right: 0;
   bottom: 0;
   left: 0;
+  width: 25%;
   border: none;
   position: absolute;
   color: #fff;
   font-size: 0.65rem;
+  background-color: #808080;
+  display: flex;
+  z-index: 1005; // map filters are 1004, map is 999
+  min-height: 65px;
+
+  &.hidden {
+
+    @media (max-width: 768px) {
+      width: 1.25rem;
+    }
+
+    div ul.gov-links.gov-links.gov-links {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    width: 33%;
+  }
+
+  @media (max-width: 767px) {
+    width: 60%;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  @media (max-width: 425px) {
+    width: 80%;
+  }
 
   @media (min-width: 768px) {
     font-size: 0.825rem;
+    min-height: 41px;
   }
 
   .container {
     max-width: 100%;
-    padding: 0 0.5rem;
+    padding: 0 1.25rem 0 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 
     @media (min-width: 768px) {
       padding: 0 1rem;
@@ -92,22 +133,22 @@
 
     .footer-admin {
       text-align: center;
-      margin: 0;
-      margin-bottom: 1rem;
-      padding-top: 0.4rem;
+      margin: 1rem 0;
       padding-bottom: 0;
       border: none;
 
       ul.gov-links {
         text-align: center;
         padding: 0;
-        width: 1140px;
         max-width: 100%;
         margin: 0 auto;
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
+        gap: 0.5rem;
+        width: 100%;
 
         li {
           display: inline-block;
@@ -128,22 +169,19 @@
               text-decoration: none;
             }
           }
-
-          &:after {
-            position: relative;
-            top: -1px;
-            display: inline-block;
-            margin-left: 0.5rem;
-            margin-right: 0.25rem;
-            content: '|';
-          }
-
-          &:last-child {
-            &:after {
-              display: none;
-            }
-          }
         }
+      }
+      button.close-footer {
+        height: 30px;
+        border: none;
+        background-color: transparent;
+        color: #fff;
+        display: inline;
+        position: absolute;
+        top: 18px;
+        right: 0;
+        font-weight: bold;
+        font-size: 1.1rem;
       }
     }
   }

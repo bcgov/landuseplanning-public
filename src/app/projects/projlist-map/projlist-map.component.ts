@@ -496,12 +496,12 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     };
 
     // Fix for different viewports on scrolling for map display
-    if (this.map.getSize().y < 800) {
-      popupOptions.autoPanPaddingTopLeft = this.L.point(2, 350);
-      popupOptions.autoPanPaddingBottomRight = this.L.point(2, 30);
+    if (this.map.getSize().x < 800) {
+      popupOptions.autoPanPaddingTopLeft = this.L.point(0, 500);
+      popupOptions.autoPanPaddingBottomRight = this.L.point(0, 20);
     } else {
-      popupOptions.autoPanPaddingTopLeft = this.L.point(80, 200);
-      popupOptions.autoPanPaddingBottomRight = this.L.point(80, 30);
+      popupOptions.autoPanPaddingTopLeft = this.L.point(20, 400);
+      popupOptions.autoPanPaddingBottomRight = this.L.point(20, 80);
     }
     return popupOptions;
   }

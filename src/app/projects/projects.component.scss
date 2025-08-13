@@ -21,10 +21,34 @@ app-projects:host {
   @include flex-flow(row nowrap);
   position: absolute;
   width: 100%;
-  height: calc(100vh - 100px - 40px);
+  height: calc(100vh - 68px);
 
-  @media (min-width: 446px) {
-    height: calc(100vh - 80px - 32px);
+  @media (max-width: 1199px) {
+    height: calc(100vh - 60px);
+  }
+
+  @media (max-width: 447px) {
+    height: calc(100vh - 100px);
+  }
+
+  &.dev-banner {
+    height: calc(100vh - 68px - 54px);
+
+    @media (max-width: 1199px) {
+      height: calc(100vh - 60px - 54px);
+    }
+
+    @media (max-width: 740px) {
+      height: calc(100vh - 60px - 78px);
+    }
+
+    @media (max-width: 447px) {
+      height: calc(100vh - 100px - 78px);
+    }
+
+    @media (max-width: 388px) {
+      height: calc(100vh - 100px - 102px);
+    }
   }
 }
 
