@@ -8,7 +8,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import dayjs from 'dayjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Constants } from 'app/shared/utils/constants';
@@ -41,8 +41,8 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   @Input() projects: Array<Project> = []; // from projects component
   @Output() updateMatching = new EventEmitter<string>(); // to projects component
 
-  readonly minDate = moment('2018-03-23').toDate(); // first app created
-  readonly maxDate = moment().toDate(); // today
+  readonly minDate = dayjs('2018-03-23').toDate(); // first app created
+  readonly maxDate = dayjs().toDate(); // today
 
   public isFiltersCollapsed: boolean;
   public isCpStatusCollapsed = true;
@@ -56,6 +56,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 		{name: 'Water Planning and Governance', checked: true}
 	];
 	public filtersOpen: boolean = true;
+  public searchOpen: boolean = true;
 	public filterIconText: string = 'keyboard_arrow_up';
 
   // search keys for drop-down menus
@@ -177,11 +178,16 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 	/**
 	 * Shows or hides the project type filter.
    * Especially useful for mobile viewports where it covers most of the screen.
+   * @param source 'search' or 'filter'
 	 * 
 	 * @returns {void}
 	 */
-	public handleShowHideFilter(): void {
-    this.filtersOpen = !this.filtersOpen;
+	public handleShowHideFilter(source: string): void {
+    if ('search' === source) {
+      this.searchOpen = !this.searchOpen;
+    } else if ('filter' === source) {
+      this.filtersOpen = !this.filtersOpen;
+    }
 	}
 
   // FOR FUTURE USE
@@ -340,11 +346,11 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (this.publishFromFilter) {
-      params['publishFrom'] = moment(this.publishFromFilter).format('YYYY-MM-DD');
+      params['publishFrom'] = dayjs(this.publishFromFilter).format('YYYY-MM-DD');
     }
 
     if (this.publishToFilter) {
-      params['publishTo'] = moment(this.publishToFilter).format('YYYY-MM-DD');
+      params['publishTo'] = dayjs(this.publishToFilter).format('YYYY-MM-DD');
     }
 
     // change browser URL without reloading page (so any query params are saved in history)
@@ -410,8 +416,8 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       this.clFileFilter = this.paramMap.get('clFile') ? +this.paramMap.get('clFile') : null;
       this.dispIdFilter = this.paramMap.get('dispId') ? +this.paramMap.get('dispId') : null;
       this.purposeFilter = this.paramMap.get('purpose');
-      this.publishFromFilter = this.paramMap.get('publishFrom') ? moment(this.paramMap.get('publishFrom')).toDate() : null;
-      this.publishToFilter = this.paramMap.get('publishTo') ? moment(this.paramMap.get('publishTo')).toDate() : null;
+      this.publishFromFilter = this.paramMap.get('publishFrom') ? dayjs(this.paramMap.get('publishFrom')).toDate() : null;
+      this.publishToFilter = this.paramMap.get('publishTo') ? dayjs(this.paramMap.get('publishTo')).toDate() : null;
 
       // copy all data from actual to temporary properties
       this._regionFilters = { ...this.regionFilters };

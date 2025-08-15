@@ -1,13 +1,102 @@
-<footer class="app-footer" id="footer" [ngClass]="{'app-footer--sm': (router.url.startsWith('/projects'))}">
+<footer class="app-footer--sm" [class.hidden]="isFooterHidden" *ngIf="router.url.split('#')[0] === ('/projects') || router.url.split(';')[0] === ('/projects')">
   <div class="container">
-    <div class="footer-admin clearfix">
+    <div class="footer-admin">
       <ul class="gov-links">
         <li><a routerLink="/home">Home</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">Copyright</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">Disclaimer</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">Privacy</a></li>
+        <li aria-hidden="true">|</li>
         <li><a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">Accessibility</a></li>
       </ul>
+      <button
+        class="close-footer" 
+        aria-label="Show or hide the footer"
+        (click)="showHideFooter()"
+        *ngIf="isMobile"
+      >
+        <span>
+          {{ footerHideSymbol }}
+        </span>
+      </button>
     </div>
+  </div>
+</footer>
+
+<footer class="app-footer" id="footer" *ngIf="router.url.split('#')[0] !== ('/projects') && router.url.split(';')[0] !== ('/projects')">
+  <div class="footer-top-row">
+
+    <div class="footer-square">
+      <section id="internal-links">
+        <h2>Site Map</h2>
+        <ul class="gov-links">
+          <li><a routerLink="/home">Home</a></li>
+          <li><a routerLink="/projects-list">List of Projects</a></li>
+          <li><a routerLink="/projects">Map View</a></li>
+          <li>Learn: <a routerLink="/lup">LUP</a> | <a routerLink="/flp">FLP</a> | <a routerLink="/wsp">WSP</a> | <a routerLink="/faq">FAQ</a></li>
+          <li><a routerLink="/contact">Contact Us</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-square">
+      <section id="external-links">
+        <h2>External Links</h2>
+        <ul class="gov-links">
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/industry/crown-land-water/land-use-planning">
+              Land Use Planning
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/industry/forestry/managing-our-forest-resources/forest-landscape-plans">
+              Forest Landscape Planning
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/environment/air-land-water/water/water-planning-strategies">
+              Water Planning
+            </a>
+          </li>
+          <li>
+            <a href="https://engage.gov.bc.ca/govtogetherbc/">
+              GovtogetherBC
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-square">
+      <section id="statements">
+        <h2>Statements</h2>
+        <ul class="gov-links">
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">
+              Copyright
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">
+              Disclaimer
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">
+              Privacy
+            </a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">
+              Accessibility
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+
   </div>
 </footer>

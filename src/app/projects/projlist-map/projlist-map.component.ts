@@ -1,43 +1,17 @@
 import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import 'leaflet';
-import 'leaflet.markercluster';
-import { vectorBasemapLayer } from "esri-leaflet-vector";
-import 'assets/js/leaflet.ajax.js';
 import * as _ from 'lodash';
 import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
+import { ScriptLoaderService } from 'app/services/scriptLoader.service';
 import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-detail-popup.component';
 import { Constants } from 'app/shared/utils/constants';
 import { Utils } from 'app/shared/utils/utils';
 import { animate, style, transition, trigger } from '@angular/animations';
-
-// need to import leaflet this way to include the shapefile->geojson plugin
-declare let L;
-
-declare module 'leaflet' {
-  export interface FeatureGroup<P = any> {
-    projectId: number;
-  }
-  export interface Marker<P = any> {
-    projectId: number;
-  }
-}
-
-const markerIconYellow = L.icon({
-  iconUrl: 'assets/images/marker-icon-yellow.svg',
-  iconSize: [36, 36],
-  iconAnchor: [18, 36],
-  tooltipAnchor: [16, -28]
-});
-
-const markerIconYellowLg = L.icon({
-  iconUrl: 'assets/images/marker-icon-yellow-lg.svg',
-  iconSize: [48, 48],
-  iconAnchor: [24, 48],
-});
+import type { MarkerClusterGroup, Map, GeoJSON, Marker, Icon, LatLngBounds, LayersControlEvent, FitBoundsOptions } from 'leaflet';
 
 @Component({
   selector: 'app-projlist-map',
@@ -57,18 +31,17 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   public pathAPI: string;
   public loading = true;
-
-  private map: L.Map = null;
-  private shapefileList: Array<L.GeoJSON> = [];
-  private markerList: Array<L.Marker> = []; // list of markers
-  private currentMarker: L.Marker = null; // for removing previous marker
-  private markerClusterGroup = L.markerClusterGroup({
-    showCoverageOnHover: false,
-    maxClusterRadius: 40, // NB: change to 0 to disable clustering
-  });
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
-  readonly defaultBounds = L.latLngBounds([48, -139], [60, -114]); // all of BC
+  private map: Map = null;
+  private shapefileList: GeoJSON[] = [];
+  private markerList: Marker[] = []; // list of markers
+  private currentMarker: Marker = null; // for removing previous marker
+  private markerClusterGroup: MarkerClusterGroup = null;
+  private markerIconYellow: Icon = null;
+  private markerIconYellowLg: Icon = null;
+  private defaultBounds: LatLngBounds = null;
+  private L: typeof import('leaflet');
 
   constructor(
     private appRef: ApplicationRef,
@@ -78,24 +51,83 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     private injector: Injector,
     private resolver: ComponentFactoryResolver,
     private utils: Utils,
+    private scriptLoader: ScriptLoaderService,
+    private router: Router,
   ) { }
 
   // create map after view (which contains map id) is initialized
-  ngAfterViewInit() {
-    const self = this; // for closure function below
+  async ngAfterViewInit() {
+    try {
+      await this.scriptLoader.loadStyles([
+      '/leaflet/leaflet.css',
+      '/leaflet-markercluster/MarkerCluster.css',
+      '/leaflet-markercluster/MarkerCluster.Default.css'
+    ]);
+    } catch (e) {
+      console.error('One or more style sheets failed to load', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
+    }
+    
+    try {
+      // Load prerequisite scripts
+      await this.scriptLoader.loadScripts([
+        '/maplibre-gl/maplibre-gl.js',
+        '/leaflet/leaflet.js',
+      ]);
+      // Load subsequent scripts
+      await this.scriptLoader.loadScripts([
+        '/esri-leaflet/esri-leaflet.js',
+        '/esri-leaflet-vector/esri-leaflet-vector.js',
+        '/leaflet-ajax/leaflet.ajax.js',
+        '/shpjs/shp.min.js',
+        '/leaflet-shpfile/leaflet.shpfile.js',
+        '/leaflet-markercluster/leaflet.markercluster.js',
+      ]);
+    } catch (e) {
+      console.error('One or more scripts failed to load', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
+    }
+
+    this.L = (window as any).L;
+
+    this.defaultBounds = this.L.latLngBounds([48, -139], [60, -114]); // all of BC
+    
+    this.markerIconYellow = this.L.icon({
+      iconUrl: 'assets/images/marker-icon-yellow.svg',
+      iconSize: [36, 36],
+      iconAnchor: [18, 36],
+      tooltipAnchor: [16, -28]
+    });
+
+    this.markerIconYellowLg = this.L.icon({
+      iconUrl: 'assets/images/marker-icon-yellow-lg.svg',
+      iconSize: [48, 48],
+      iconAnchor: [24, 48],
+    });
+
+    this.markerClusterGroup = this.L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 40, // NB: change to 0 to disable clustering
+    });
 
     // The following items are loaded by a file that is only present on cluster builds.
     // Locally, this will be empty and local defaults will be used.
     const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
     this.pathAPI = (_.isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
 
+    // for closure function below
+    const self = this; 
+    const L_ = this.L;
+
     // custom control to reset map view
-    const resetViewControl = L.Control.extend({
+    const resetViewControl = this.L.Control.extend({
       options: {
         position: 'bottomright'
       },
       onAdd: function () {
-        const element = L.DomUtil.create('button');
+        const element = L_.DomUtil.create('button');
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
@@ -103,42 +135,42 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
         element.className = 'material-icons map-reset-control';
 
         // prevent underlying map actions for these events
-        L.DomEvent.disableClickPropagation(element); // includes double-click
-        L.DomEvent.disableScrollPropagation(element);
+        L_.DomEvent.disableClickPropagation(element); // includes double-click
+        L_.DomEvent.disableScrollPropagation(element);
 
         return element;
       },
     });
 
 		// Declare the basemap layers
-		const Esri_BC_Basemap = vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
+		const Esri_BC_Basemap = this.L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
 			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
 		});
-		const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+		const Esri_OceanBasemap = this.L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13,
       noWrap: true
     });
-    const Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+    const Esri_NatGeoWorldMap = this.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
       maxZoom: 16,
       noWrap: true
     });
-    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    const World_Topo_Map = this.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
       maxZoom: 16,
       noWrap: true
     });
-    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const World_Imagery = this.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       maxZoom: 17,
       noWrap: true
     });
 
 		// Declare the map with some parameters
-    this.map = L.map(this.mapContainer.nativeElement, {
+    this.map = this.L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
-      maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
+      maxBounds: this.L.latLngBounds(this.L.latLng(-90, -180), this.L.latLng(90, 180)), // restrict view to "the world"
 			maxZoom: 17,
       zoomSnap: 0.1, // for greater granularity when fitting bounds
       attributionControl: false
@@ -160,16 +192,16 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 			'World Topographic': World_Topo_Map,
 			'World Imagery': World_Imagery
 		};
-		L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
+		this.L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
 
 		// map attribution
-		L.control.attribution({ position: 'bottomright' }).addTo(this.map);
+		this.L.control.attribution({ position: 'bottomright' }).addTo(this.map);
 
 		// add scale control
-		L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+		this.L.control.scale({ position: 'bottomleft' }).addTo(this.map);
 
 		// add zoom control
-		L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+		this.L.control.zoom({ position: 'bottomright' }).addTo(this.map);
 
 		// add reset view control
 		this.map.addControl(new resetViewControl());
@@ -195,11 +227,15 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     });
 
 		// save any future base layer changes
-		this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
+		this.map.on('baselayerchange', function (e: LayersControlEvent) {
 			this.configService.baseLayerName = e.name;
 		}, this);
 
 		this.fixMap();
+
+    if (this.projects?.length > 0 && this.L && this.map) {
+      this.drawMap([], this.projects);
+    }
   }
 
   // to avoid timing conflict with animations (resulting in small map tile at top left of page),
@@ -216,6 +252,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
+    if (!this.L || !this.map) return;
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
       const deletedApps = _.difference(changes.projects.previousValue, changes.projects.currentValue) as Array<Project>;
       const addedApps = _.difference(changes.projects.currentValue, changes.projects.previousValue) as Array<Project>;
@@ -253,7 +290,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     // update visibility for apps with markers only
     // ie, leave apps without markers 'visible' (as initialized)
-    for (const marker of this.markerList) {
+    for (const marker of this.markerList as Marker[]) {
       const project = _.find(this.projects, { _id: marker.projectId });
       if (project) {
         const markerLatLng = marker.getLatLng();
@@ -266,10 +303,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.updateVisible.emit();
   }
 
-  private fitBounds(bounds: L.LatLngBounds = null) {
-    const fitBoundsOptions: L.FitBoundsOptions = {
-      // use top padding to adjust for filters header (which is always visible)
-      // paddingTopLeft: L.point(0, this.appfilters.clientHeight),
+  private fitBounds(bounds: LatLngBounds = this.defaultBounds) {
+    const fitBoundsOptions: FitBoundsOptions = {
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false
@@ -290,14 +325,12 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     * @returns {void}
     */
   private drawMap(hiddenProjects: Project[], addedProjects: Project[]): void {
-
     // remove hidden projects from list and map
     hiddenProjects.forEach(proj => {
 
       if (this.markerList?.length > 0) {
-
         // Find marker indexes
-      const markerIndexes = this.markerList.reduce((acc, item, index) => {
+        const markerIndexes = this.markerList.reduce((acc, item, index) => {
         if (item.projectId?.toString() === proj._id) acc.push(index);
           return acc;
         }, []);
@@ -314,9 +347,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       }
       
       if (this.shapefileList?.length > 0) {
-
         // Find shapefile indexes
-      const shapefileIndexes = this.shapefileList.reduce((acc, item, index) => {
+        const shapefileIndexes = this.shapefileList.reduce((acc, item, index) => {
         if (item.projectId?.toString() === proj._id) acc.push(index);
           return acc;
         }, []);
@@ -345,8 +377,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
             const shapeFileStyle = { color: colour };
             const escapedName = this.utils.encodeFileName(projectShapefile.documentFileName);
             const shapeurl = this.pathAPI + '/document/' + projectShapefile.document + '/fetch/' + escapedName;
-            const shapefile = new L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
-              .on('click', L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));
+            const shapefile = new this.L.Shapefile(shapeurl, { isArrayBufer: false, style: shapeFileStyle })
+              .on('click', this.L.Util.bind(this.onShapefileClick, this, proj, projectShapefile.title));
             shapefile.projectId = proj._id;
             shapefile.shapefileOrder = Number(projectShapefile.order);
             this.shapefileList.push(shapefile);
@@ -359,10 +391,9 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
         // If no shapefile is found for a project, display a pin of its coordinates instead.
         this.addMarkerToMap(proj);
       }
-      this.addShapefilesToMap();
     });
-
     // set visible apps
+    this.addShapefilesToMap();
     this.setVisibleDebounced();
   }
 
@@ -387,10 +418,11 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    */
   private addMarkerToMap(proj: Project): void {
     if (this.utils.markerMeetsConditions(proj)) {
-      const title = `${proj.name}\n` + `${proj.overlappingRegionalDistricts}\n`;
-      const marker = L.marker(L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
-        .setIcon(markerIconYellow)
-        .on('click', L.Util.bind(this.onMarkerClick, this, proj));
+      const title = `${proj.name}\n`
+      + `${proj.overlappingRegionalDistricts}\n`;
+      const marker = this.L.marker(this.L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
+      .setIcon(this.markerIconYellow)
+      .on('click', this.L.Util.bind(this.onMarkerClick, this, proj));
       marker.projectId = proj._id;
       this.markerList.push(marker); // save to list
       this.markerClusterGroup.addLayer(marker); // save to marker clusters group
@@ -406,7 +438,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    */
   private onMarkerClick(...args: any[]) {
     const app = args[0] as Project;
-    const marker = args[1].target as L.Marker;
+    const marker = args[1].target as Marker;
 
     // update selected item in app list.
     this.applist.toggleCurrentApp(app);
@@ -423,7 +455,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     const popupOptions = this.getPopupOptions();
     const getPopupComponent = this.getPopupComponent(app, '');
 
-    popup = L.popup(popupOptions)
+    popup = this.L.popup(popupOptions)
       .setLatLng(marker.getLatLng())
       .setContent(getPopupComponent);
 
@@ -457,7 +489,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     const popupOptions = this.getPopupOptions();
     const getPopupComponent = this.getPopupComponent(app, shapefileTitle);
 
-    popup = L.popup(popupOptions)
+    popup = this.L.popup(popupOptions)
       .setLatLng(shapefile.latlng)
       .setContent(getPopupComponent);
 
@@ -479,12 +511,12 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     };
 
     // Fix for different viewports on scrolling for map display
-    if (this.map.getSize().y < 800) {
-      popupOptions.autoPanPaddingTopLeft = L.point(2, 350);
-      popupOptions.autoPanPaddingBottomRight = L.point(2, 30);
+    if (this.map.getSize().x < 800) {
+      popupOptions.autoPanPaddingTopLeft = this.L.point(0, 500);
+      popupOptions.autoPanPaddingBottomRight = this.L.point(0, 20);
     } else {
-      popupOptions.autoPanPaddingTopLeft = L.point(80, 200);
-      popupOptions.autoPanPaddingBottomRight = L.point(80, 30);
+      popupOptions.autoPanPaddingTopLeft = this.L.point(20, 400);
+      popupOptions.autoPanPaddingBottomRight = this.L.point(20, 80);
     }
     return popupOptions;
   }
@@ -511,7 +543,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   public onHighlightProject(app: Project, show: boolean) {
     // reset icon on previous marker, if any
     if (this.currentMarker) {
-      this.currentMarker.setIcon(markerIconYellow);
+      this.currentMarker.setIcon(this.markerIconYellow);
       this.currentMarker = null;
     }
 
@@ -520,7 +552,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       const marker = _.find(this.markerList, { projectId: app._id });
       if (marker) {
         this.currentMarker = marker;
-        marker.setIcon(markerIconYellowLg);
+        marker.setIcon(this.markerIconYellowLg);
       }
     }
   }

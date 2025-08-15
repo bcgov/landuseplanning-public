@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
@@ -22,7 +22,7 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
 
 @NgModule({
   imports: [
-    BrowserModule,
+    CommonModule,
     MatProgressBarModule,
     MatSnackBarModule,
     NgxTextOverflowClampModule,
@@ -41,7 +41,7 @@ import { PublishedPipe } from 'app/shared/pipes/published.pipe';
     ListConverterPipe
   ],
   exports: [
-    BrowserModule,
+    CommonModule,
     MatProgressBarModule,
     MatSnackBarModule,
     NgxTextOverflowClampModule,

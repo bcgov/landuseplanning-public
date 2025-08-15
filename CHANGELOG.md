@@ -1,5 +1,30 @@
-### Jul 24, 2025
+
+### Aug 15, 2025
 - If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
+
+### Aug 8, 2025
+- Fixed the small footer on the map page, as per Steve. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
+
+### Aug 6, 2025
+- Optimized site load times and added a loading/welcome message for limited-speed users. [DESENG-872](https://citz-gdx.atlassian.net/browse/DESENG-872)
+- Renamed misspelled component (activites > activities)
+- Increased efficiency of font loading for outlined material icons
+- Matched versions for all Leaflet dependencies
+- Removed legacy icon fonts for IE and IOS 5
+
+### Jul 24, 2025
+- Updated the header/footer with improved design, accessibility, and inclusivity. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
+- Made all site content mobile compatible
+- Adjusted margins of pages that were not aligned with header/footer
+- Changed some page content to improve accessibility (contrast, inverse text)
+- Added additional hover events for increased site interactivity
+- Removed all instances of colonial blue
+- Redesigned project contact info / contact button / subscribe button area to separate it from the footer
+- Restructured SCSS for increased specificity and legibility
+  - Changed any named colors like 'black' or 'white' to hex codes like '#000' or '#fff'
+- Fixed image centering issue in hero banner
+- Revised logic for scroll top button so that it uses Angular instead of jQuery
+- Fixed invisible footer on map page, in mobile view
 
 ### Jul 9, 2025
 - Added marker/centroid verification for project list map and individual project map [DESENG-839](https://citz-gdx.atlassian.net/browse/DESENG-839)

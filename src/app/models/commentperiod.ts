@@ -1,7 +1,9 @@
-import * as moment from 'moment';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import { Project } from './project';
 import { Survey } from './survey';
 
+dayjs.extend(isBetween);
 
 export class CommentPeriod {
   _id: string;
@@ -115,20 +117,19 @@ export class CommentPeriod {
 
     // get comment period days remaining and determine commentPeriodStatus of the period
     if (obj && obj.dateStarted && obj.dateCompleted) {
-      const now = new Date();
-      const dateStarted = moment(obj.dateStarted);
-      const dateCompleted = moment(obj.dateCompleted);
-      const sevenDays = new Date(obj.dateStarted);
-      sevenDays.setDate(sevenDays.getDate() - 7);
+      const now = dayjs();
+      const dateStarted = dayjs(obj.dateStarted);
+      const dateCompleted = dayjs(obj.dateCompleted);
+      const sevenDaysBeforeStart = dateStarted.subtract(7, 'day');
 
-      if (moment(now).isBetween(dateStarted, dateCompleted)) {
+      if (now.isBetween(dateStarted, dateCompleted)) {
         this.commentPeriodStatus = 'Open';
-        let days = dateCompleted.diff(moment(now), 'days');
+        const days = dateCompleted.diff(now, 'day');
         this.daysRemaining = days + (days === 1 ? ' Day ' : ' Days ') + 'Remaining';
-      } else if (moment(now).isAfter(dateCompleted)) {
+      } else if (now.isAfter(dateCompleted)) {
         this.commentPeriodStatus = 'Closed';
         this.daysRemaining = 'Completed';
-      } else if (moment(now).isBetween(moment(sevenDays), dateStarted)) {
+      } else if (now.isBetween(sevenDaysBeforeStart, dateStarted)) {
         this.commentPeriodStatus = 'Pending';
         this.daysRemaining = 'Pending';
       }

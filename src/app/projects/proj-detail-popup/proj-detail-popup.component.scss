@@ -2,7 +2,7 @@
 
 $popup-border-radius: 0.2rem;
 $popup-title-color: #fff;
-$popup-title-bg: #003366;
+$popup-title-bg: #595959;
 
 .popup-title {
   padding-top: 0.75rem;
@@ -124,17 +124,15 @@ hr {
   margin-bottom: 0.875em;
 }
 
-@media (max-width: 1023px) {
   .popup-content {
     font-size: 0.85rem;
-  }
-}
+    border: 1px solid #fff;
+    border-radius: 5px;
 
-@media (min-width: 1024px) {
-  .popup-content {
-    font-size: 1rem;
+    @media (min-width: 1024px) {
+      font-size: 1rem;
+    }
   }
-}
 
 .agreement {
   display: inline;

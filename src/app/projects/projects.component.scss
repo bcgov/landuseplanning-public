@@ -4,10 +4,9 @@ $toggle-list-anim-duration: 0.2s;
 $map-component-shadow: 0.1rem 0.1rem 0.5rem rgba(0,0,0,0.25);
 
 app-projects:host {
-  /*position: absolute;*/    // We need to set absolute here --- the map component exhibits some funky behaviour when leveraging flexbox on it's parent container
   top: 3.7rem;            // Offset height of header
   right: 0;
-  bottom: 2rem;
+  bottom: 0;
   left: 0;
 }
 
@@ -22,7 +21,35 @@ app-projects:host {
   @include flex-flow(row nowrap);
   position: absolute;
   width: 100%;
-  height: calc(100vh - 80px - 32px);
+  height: calc(100vh - 68px);
+
+  @media (max-width: 1199px) {
+    height: calc(100vh - 60px);
+  }
+
+  @media (max-width: 447px) {
+    height: calc(100vh - 100px);
+  }
+
+  &.dev-banner {
+    height: calc(100vh - 68px - 54px);
+
+    @media (max-width: 1199px) {
+      height: calc(100vh - 60px - 54px);
+    }
+
+    @media (max-width: 740px) {
+      height: calc(100vh - 60px - 78px);
+    }
+
+    @media (max-width: 447px) {
+      height: calc(100vh - 100px - 78px);
+    }
+
+    @media (max-width: 388px) {
+      height: calc(100vh - 100px - 102px);
+    }
+  }
 }
 
 // Project Filters
@@ -32,20 +59,19 @@ app-projects:host {
   z-index: 1004;
   box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.15);
   position: absolute;
+  width: 60%;
+  border-bottom-left-radius: 5px;
 }
 
 @media (min-width: 768px) {
   .app-filters {
-    // position: absolute;
-    // top: 2px;
-    // left: 50%;
-    // transform: translateX(-50%);
     position: static;
     height: 100%;
-    background-color: white;
+    background-color: #fff;
     width: 33%;
     box-shadow: $map-component-shadow;
     transition: left ease-out $toggle-list-anim-duration;
+    border-bottom-left-radius: 0;
   }
 }
 

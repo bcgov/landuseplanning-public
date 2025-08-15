@@ -3,92 +3,64 @@
 .app-footer {
   background: $footer-bg;
   color: $footer-color;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 1.5rem;
 
-  .container {
-    padding-top: 1.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: 1.5rem;
-    padding-left: 1.5rem;
-  }
+  .footer-top-row {
+    width: 1140px;
+    gap: 3rem;
+    max-width: 100%;
+    margin: 0 auto;
+    justify-content: space-between;
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 
-  section {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid $bg-dark-border-color;
-
-    &.last {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-  }
-
-  h4 {
-    margin-bottom: 1rem;
-    font-size: medium;
-    font-weight: bold;
-  }
-
-  p {
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-
-  ul {
-    padding: 0;
-    font-size: 0.875rem;
-    list-style-type: none;
-
-    li {
-      margin-bottom: 0.25rem;
-    }
-  }
-
-  .nav-links {
-    margin: 0;
-  }
-
-  a {
-    color: $footer-color;
-    text-decoration: underline;
-
-    &.feedback-link {
-      color: $gold;
+    h2 {
+      width: 100%;
+      margin-bottom: 1rem;
+      color: #fed262;
     }
 
-    &:focus,
-    &:hover {
-      color: $gold;
-      text-decoration: none;
+    @media (max-width: 720px) {
+      flex-wrap: wrap;
     }
-  }
 
-  .footer-admin {
-  text-align: center;
+    .footer-square {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      border: none;
+      width: 30%;
 
-    .gov-links {
-      text-align: center;
-      margin: 0;
-      padding: 0;
+      @media (max-width: 720px) {
+        width: 100%;
+      }
 
-      li {
-        display: inline-block;
-        margin: 0;
-        line-height: 1;
+      section {
+        width: 100%;
+        line-height: 2;
 
-        &:after {
-          position: relative;
-          top: -1px;
-          display: inline-block;
-          margin-left: 0.5rem;
-          margin-right: 0.25rem;
-          content: '|';
-        }
+        ul {
+          padding: 0;
+          font-size: 0.875rem;
+          list-style-type: none;
 
-        &:last-child {
-          &:after {
-            display: none;
+          li {
+            margin-bottom: 0.25rem;
+
+            a, a:visited {
+              color: #fff;
+              text-decoration: underline;
+
+              &:hover, &:active, &:focus {
+                color: $gold;
+                text-decoration: none;
+              }
+            }
           }
         }
       }
@@ -96,69 +68,121 @@
   }
 }
 
-@media (min-width: 768px) {
-  .app-footer {
-    section {
-      text-align: left;
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    h4 {
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $bg-dark-border-color;
-    }
-  }
-}
-
-.app-footer--sm  {
-  position: fixed;
+// Small footer for the map page
+.app-footer--sm {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 2rem;
+  width: 25%;
   border: none;
+  position: absolute;
+  color: #fff;
+  font-size: 0.65rem;
+  background-color: #808080;
+  display: flex;
+  z-index: 1005; // map filters are 1004, map is 999
+  min-height: 65px;
+
+  &.hidden {
+
+    @media (max-width: 768px) {
+      width: 1.25rem;
+    }
+
+    div ul.gov-links.gov-links.gov-links {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    width: 33%;
+  }
+
+  @media (max-width: 767px) {
+    width: 60%;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  @media (max-width: 425px) {
+    width: 80%;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 0.825rem;
+    min-height: 41px;
+  }
 
   .container {
     max-width: 100%;
-    padding: 0 0.5rem;
-  }
+    padding: 0 1.25rem 0 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 
-  .footer-admin {
-    margin: 0;
-    padding-top: 0.4rem;
-    padding-bottom: 0;
-    border: none;
-  }
-
-  .footer-info {
-    display: none;
-  }
-
-  ul {
-    font-size: 0.65rem;
-  }
-}
-
-.app-footer-sm {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .app-footer--sm {
-    font-size: 0.825rem;
-
-    .container {
+    @media (min-width: 768px) {
       padding: 0 1rem;
     }
 
     .footer-admin {
-      padding-top: 0.3rem;
-    }
+      text-align: center;
+      margin: 1rem 0;
+      padding-bottom: 0;
+      border: none;
 
-    ul {
-      font-size: 0.825rem;
+      ul.gov-links {
+        text-align: center;
+        padding: 0;
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+
+        li {
+          display: inline-block;
+          margin: 0;
+          line-height: 1;
+
+          a {
+            color: $footer-color;
+            text-decoration: underline;
+
+            &.feedback-link {
+              color: $gold;
+            }
+
+            &:focus,
+            &:hover {
+              color: $gold;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+      button.close-footer {
+        height: 30px;
+        border: none;
+        background-color: transparent;
+        color: #fff;
+        display: inline;
+        position: absolute;
+        top: 18px;
+        right: 0;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
     }
   }
 }

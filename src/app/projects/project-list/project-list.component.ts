@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
-import * as moment from 'moment';
+import dayjs from 'dayjs';
 import * as _ from 'lodash';
 
 import { Project, ProjectType } from 'app/models/project';
@@ -60,7 +60,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
 
   public projects: Array<Project> = [];
-  public loading: boolean = true;
   public tableParams: TableParams;
   public terms = new SearchTerms();
   public filterForURL: object = {};
@@ -72,6 +71,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   public listApps: Array<Project> = [];
   public snackBarCounter: number = 0;
   public projectTableData: TableObject;
+  public loading: boolean = false;
 
   public showFilters: object = {
     agreements: false,
@@ -139,7 +139,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
               // results not found --> navigate back to search
               this.router.navigate(['/']);
             }
-            this.loading = false;
           });
       });
   }
@@ -183,7 +182,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     this.sortProjects();
     this.setTableData();
     // Don't run the snackbar on page load.
-    if (this.snackBarCounter >= 2) {
+    if (this.snackBarCounter >= 3) {
       this.snackBarRef = this.snackBar.open(`The ${data?.source || 'search or filter'} has been updated with ${this.projects.length} result${this.projects.length === 1 ? '' : 's'}.`);
       this.snackBarRef._dismissAfter(3000);
     } else {
@@ -205,7 +204,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   dateFilterToParams(params, name) {
     if (this.isNGBDate(this.filterForUI[name])) {
       const date = new Date(this.filterForUI[name].year, this.filterForUI[name].month - 1, this.filterForUI[name].day);
-      params[name] = moment(date).format('YYYY-MM-DD');
+      params[name] = dayjs(date).format('YYYY-MM-DD');
     }
   }
 
@@ -329,10 +328,11 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['pageSize'] = this.tableParams.pageSize ?? 10;
     params['projectTypes'] = this.tableParams.projectTypes;
 
-    this.router.navigate(['projects-list', params]);
+    this.router.navigate(['projects-list'], params);
   }
 
   ngOnDestroy() {
+    console.warn('AppComponent destroyed'); // Should never show unless true reload
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

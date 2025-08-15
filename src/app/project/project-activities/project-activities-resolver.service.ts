@@ -17,7 +17,7 @@ export class ProjectActivitiesResolver implements Resolve<Observable<object>> {
     if (tableParams.sortBy === '-datePosted') {
       tableParams.sortBy = '-dateAdded';
     }
-    const projId = route.parent.paramMap.get('projId');
+    const projectId = route.pathFromRoot.find(r => r.paramMap.has('projId'))?.paramMap.get('projId');
     return this.searchService.getSearchResults(
       tableParams.keywords,
       'RecentActivity',
@@ -25,7 +25,7 @@ export class ProjectActivitiesResolver implements Resolve<Observable<object>> {
       tableParams.currentPage,
       tableParams.pageSize,
       tableParams.sortBy,
-      { project: projId },
+      { project: projectId },
       true);
   }
 }

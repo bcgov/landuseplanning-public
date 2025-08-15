@@ -521,7 +521,7 @@ L.geoJson.ajax = function (geojson, options) {
 },{"./ajax":3,"./jsonp":5,"leaflet":undefined,"lie":1}],5:[function(require,module,exports){
 (function (global){
 'use strict';
-var L = global.L || require('leaflet');
+var L = window.L || require('leaflet');
 var Promise = require('lie');
 
 module.exports = function (url, options) {

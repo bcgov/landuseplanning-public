@@ -1,21 +1,19 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-import 'leaflet';
-import 'assets/js/leaflet.shpfile.js';
-import { vectorBasemapLayer } from "esri-leaflet-vector";
-import { StorageService } from 'app/services/storage.service';
+import { Router } from '@angular/router';
 import { Constants } from 'app/shared/utils/constants';
 import { Subject } from 'rxjs';
 import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { Document } from 'app/models/document';
 import { ProjectShapefile } from 'app/models/project';
 import * as _ from 'lodash';
 import { Utils } from 'app/shared/utils/utils';
 import { animate, style, transition, trigger } from '@angular/animations';
-
-// need to import leaflet this way to include the shapefile->geojson plugin
-declare let L;
+import { ScriptLoaderService } from 'app/services/scriptLoader.service';
+import type { Map, FeatureGroup, LatLngBounds, LayersControlEvent, FitBoundsOptions } from 'leaflet';
+import { ProjectService } from 'app/services/project.service';
+import { RecentActivity } from 'app/models/recentActivity';
 
 @Component({
   selector: 'app-project-details-tab',
@@ -25,69 +23,140 @@ declare let L;
 })
 export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('map') private mapContainer: ElementRef;
+
+  private ngbModal: NgbModalRef = null;
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+
+  public pathAPI: string;
   public project;
+  public activities;
   public loading = true;
   public commentPeriod = null;
-  public map: L.Map = null;
-  public appFG = L.featureGroup(); // group of layers for subject app
   public multipleExistingPlans: boolean;
   public overlappingDistrictsListString: string;
-  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  readonly defaultBounds = L.latLngBounds([48, -139], [61, -114]); // all of BC
+
+  public map: Map = null;
+  public appFG: FeatureGroup = null; // group of layers for subject app
+  public defaultBounds: LatLngBounds = null; // all of BC
 	readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 61, lng: -114}}; // Converted for other parsing
 	public bounds = {southWest: {lat: null, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
-  private ngbModal: NgbModalRef = null;
   public shapefiles: Document[] = [];
 	public convertedShapefiles = [];
-  public pathAPI: string;
+  private L: typeof import('leaflet');
 
   constructor(
-    private storageService: StorageService,
     private elementRef: ElementRef,
     public configService: ConfigService,
     private route: ActivatedRoute,
     private utils: Utils,
+    private scriptLoader: ScriptLoaderService,
+    private projectService: ProjectService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+    // Remove any existing map
     if (this.map) {
       this.map.remove();
       this.map = undefined;
     }
-    this.project = this.storageService.state.currentProject.data;
-    this.multipleExistingPlans = Array.isArray(this.project.existingLandUsePlans);
-    this.overlappingDistrictsListString = this.stringifyOverlappingDistricts(this.project.overlappingRegionalDistricts);
-    this.commentPeriod = this.project.commentPeriodForBanner;
-    this.route.data.subscribe((res: any) => {
-      if (Array.isArray(this.project?.shapefiles) && this.project?.shapefiles.length > 0) {
-        return;
-      }
 
-      if (Array.isArray(res?.documents)) {
-				res.documents.forEach(document => {
-					if (document?.data?.meta?.length > 0) {
-						this.shapefiles.push(...document.data.searchResults);
-					}
-				})
+    const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
+    this.pathAPI = _.isEmpty(remoteApiPath) ? 'http://localhost:3000/api' : remoteApiPath;
+
+    // Try to get project from parent resolver
+    const parentData = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
+    const projectAndBanner = parentData?.snapshot.data?.projectAndBanner;
+
+    if (Array.isArray(projectAndBanner) && projectAndBanner[0]) {
+      this.project = projectAndBanner[0];
+      this.processShapefilesFromRoute(this.route.snapshot.data);
+    } else {
+      // Fallback: load project manually by ID
+      const projectId = this.route.pathFromRoot
+        .map(r => r.snapshot)
+        .find(snap => snap.paramMap.has('projId'))
+        ?.paramMap.get('projId');
+
+      if (projectId) {
+        this.projectService.getById(projectId).subscribe(p => {
+          this.project = p;
+          this.processShapefilesFromRoute(this.route.snapshot.data);
+        });
+      }
+    }
+
+    // Load activities from current route
+    this.route.data.subscribe((data: { activities: RecentActivity[] }) => {
+      if (data.activities) {
+        this.activities = data.activities;
       }
     });
-
-    // The following items are loaded by a file that is only present on cluster builds.
-    // Locally, this will be empty and local defaults will be used.
-    const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
-    this.pathAPI = (_.isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
   }
 
-  ngAfterViewInit() {
-    const self = this; // for closure function below
+  /**
+   * Extracts needed shape file data from the route shapshot data
+   * 
+   * @param res The route data snapshot from which the shape files are extracted
+   * @returns void
+   */
+  private processShapefilesFromRoute(res: Data): void {
+    if (Array.isArray(this.project?.shapefiles) && this.project.shapefiles.length > 0) {
+      return;
+    }
+
+    if (Array.isArray(res?.documents)) {
+      res.documents.forEach(doc => {
+        if (doc?.data?.meta?.length > 0 && Array.isArray(doc.data?.searchResults)) {
+          this.shapefiles.push(...doc.data.searchResults);
+        }
+      });
+    }
+  }
+
+  async ngAfterViewInit() {
+    try {
+      await this.scriptLoader.loadStyle('/leaflet/leaflet.css');
+    } catch (e) {
+      console.error('Failed to load Leaflet style sheet', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
+    }
+    // Load prerequisite scripts
+    try {
+      await this.scriptLoader.loadScripts([
+        '/maplibre-gl/maplibre-gl.js',
+        '/leaflet/leaflet.js',
+      ]);
+      // Load subsequent scripts
+      await this.scriptLoader.loadScripts([
+        '/esri-leaflet/esri-leaflet.js',
+        '/esri-leaflet-vector/esri-leaflet-vector.js',
+        '/shpjs/shp.min.js',
+        '/leaflet-shpfile/leaflet.shpfile.js'
+      ]);
+    } catch (e) {
+      console.error('Failed to load one or more Leaflet scripts', e);
+      alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
+      this.router.navigate(['/']);
+    }
+    
+
+    this.L = (window as any).L;
+    this.appFG = this.L.featureGroup(); // group of layers for subject app
+    this.defaultBounds = this.L.latLngBounds([48, -139], [61, -114]); // all of BC
+
+    // for closure function below
+    const self = this;
+    const L_ = this.L;
 
     // custom control to reset map view
-    const resetViewControl = L.Control.extend({
+    const resetViewControl = this.L.Control.extend({
       options: {
         position: 'topleft'
       },
       onAdd: function (map) {
-        const element = L.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
+        const element = L_.DomUtil.create('i', 'material-icons leaflet-bar leaflet-control leaflet-control-custom');
 
         element.title = 'Reset view';
         element.innerText = 'refresh'; // material icon name
@@ -105,41 +174,41 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
         };
 
         // prevent underlying map actions for these events
-        L.DomEvent.disableClickPropagation(element); // includes double-click
-        L.DomEvent.disableScrollPropagation(element);
+        L_.DomEvent.disableClickPropagation(element); // includes double-click
+        L_.DomEvent.disableScrollPropagation(element);
 
         return element;
       },
     });
 
     // draw map
-		const Esri_BC_Basemap = vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
+		const Esri_BC_Basemap = this.L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
 			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
 		});
-    const Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+    const Esri_OceanBasemap = this.L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13,
       noWrap: true
     });
-    const Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+    const Esri_NatGeoWorldMap = this.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
       maxZoom: 16,
       noWrap: true
     });
-    const World_Topo_Map = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    const World_Topo_Map = this.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
       maxZoom: 16,
       noWrap: true
     });
-    const World_Imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const World_Imagery = this.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       maxZoom: 17,
       noWrap: true
     });
 
-		this.map = L.map(this.mapContainer.nativeElement, {
+		this.map = this.L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
-      maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)), // restrict view to "the world"
+      maxBounds: this.L.latLngBounds(this.L.latLng(-90, -180), this.L.latLng(90, 180)), // restrict view to "the world"
       zoomSnap: 0.1 // for greater granularity when fitting bounds
     });
 
@@ -150,10 +219,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     this.map.addControl(new resetViewControl());
 
     // add zoom control
-    L.control.zoom({ position: 'topleft' }).addTo(this.map);
+    this.L.control.zoom({ position: 'topleft' }).addTo(this.map);
 
     // add scale control
-    L.control.scale({ position: 'bottomright' }).addTo(this.map);
+    this.L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
     // add base maps layers control
     const baseLayers = {
@@ -163,7 +232,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       'World Topographic': World_Topo_Map,
       'World Imagery': World_Imagery
     };
-    L.control.layers(baseLayers).addTo(this.map);
+    this.L.control.layers(baseLayers).addTo(this.map);
 
     // load base layer
     for (const key of Object.keys(baseLayers)) {
@@ -186,7 +255,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // save any future base layer changes
-    this.map.on('baselayerchange', function (e: L.LayersControlEvent) {
+    this.map.on('baselayerchange', function (e: LayersControlEvent) {
       this.configService.baseLayerName = e.name;
     }, this);
 
@@ -210,7 +279,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
           const fileId = sf?._id || sf?.document;
           const escapedName = this.utils.encodeFileName(sf.documentFileName);
           const shapeurl = this.pathAPI + '/document/' + fileId + '/fetch/' + escapedName;
-          const shapefile = new L.Shapefile(shapeurl, {
+          const shapefile = new this.L.Shapefile(shapeurl, {
             isArrayBuffer: false,
             style: {
               color: shapefileColour
@@ -350,7 +419,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
    * @returns {void}
    */
 	private addMarker = () => {
-		const markerIconYellow = L.icon({
+		const markerIconYellow = this.L.icon({
 			iconUrl: 'assets/images/marker-icon-yellow.svg',
 			iconSize: [36, 36],
 			iconAnchor: [18, 36],
@@ -358,7 +427,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 		});
 		const title = `${this.project.name}\n`
 			+ `${this.project.overlappingRegionalDistricts}\n`;
-		const marker = L.marker(L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
+		const marker = this.L.marker(this.L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
 			.setIcon(markerIconYellow);
 		this.appFG.addLayer(marker);
 	}
@@ -398,11 +467,11 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   /**
    * Fits bounds of leaflet map.
    *
-   * @param {L.LatLngBounds|null} bounds
+   * @param {LatLngBounds|null} bounds
    * @returns {undefined}
    */
-  public fitBounds(bounds: L.LatLngBounds = null) {
-    const fitBoundsOptions: L.FitBoundsOptions = {
+  public fitBounds(bounds: LatLngBounds = null) {
+    const fitBoundsOptions: FitBoundsOptions = {
       // disable animation to prevent known bug where zoom is sometimes incorrect
       // ref: https://github.com/Leaflet/Leaflet/issues/3249
       animate: false,

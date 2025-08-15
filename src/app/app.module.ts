@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { A11yModule } from '@angular/cdk/a11y';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
 import { CookieService } from 'ngx-cookie-service';
@@ -13,7 +12,6 @@ import { CookieService } from 'ngx-cookie-service';
 // modules
 import { SharedModule } from 'app/shared/shared.module';
 import { ProjectModule } from 'app/project/project.module';
-import { ProjectsModule } from 'app/projects/projects.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 
 // components
@@ -52,7 +50,7 @@ import { NewsMultifieldFilterPipe } from 'app/shared/pipes/news-multifield-filte
 import { LegislationComponent } from 'app/legislation/legislation.component';
 import { ProcessComponent } from 'app/process/process.component';
 import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
-import { ActivitiesListTableRowsComponent } from './project/project-activites/activities-list-table-rows/activities-list-table-rows.component';
+import { ActivitiesListTableRowsComponent } from './project/project-activities/activities-list-table-rows/activities-list-table-rows.component';
 import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
 import { DocumentSectionService } from './services/documentSection.service';
 import { HealthCheckComponent } from './health-check/health-check.component';
@@ -97,7 +95,6 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     }),
     SharedModule,
     ProjectModule,
-    ProjectsModule,
     A11yModule,
     AppRoutingModule // <-- module import order matters - https://angular.io/guide/router#module-import-order-matters
   ],
