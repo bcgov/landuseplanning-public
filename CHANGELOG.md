@@ -1,3 +1,7 @@
+
+### Aug 15, 2025
+- If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
+
 ### Aug 8, 2025
 - Fixed the small footer on the map page, as per Steve. [DESENG-865](https://citz-gdx.atlassian.net/browse/DESENG-865)
 
