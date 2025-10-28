@@ -1,3 +1,5 @@
+### Oct 28, 2025
+- Swap position of comment period dates and description on comment period page [DESENG-899](https://citz-gdx.atlassian.net/browse/DESENG-899)
 
 ### Aug 15, 2025
 - If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
