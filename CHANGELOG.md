@@ -1,3 +1,6 @@
+### Oct 28, 2025
+- Replaced the LUP phases graphic on the Modernizing Land Use Planning page with an updated version. [DESENG-902](https://citz-gdx.atlassian.net/browse/DESENG-902)
+  - Updated alt text and explanation headings to match new graphic
 
 ### Aug 15, 2025
 - If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
