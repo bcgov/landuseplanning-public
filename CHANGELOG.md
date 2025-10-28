@@ -1,3 +1,6 @@
+### Oct 28, 2025
+- Update homepage to link the text "land and water planning in B.C." to the official gov't resource PDF. [DESENG-901](https://citz-gdx.atlassian.net/browse/DESENG-901)
+  - Added appropriate aria-labels and icons to indicate link opens in new tab and is a PDF.
 
 ### Aug 15, 2025
 - If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
