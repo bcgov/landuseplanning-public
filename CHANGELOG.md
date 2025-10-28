@@ -1,3 +1,5 @@
+### Oct 28, 2025
+- Change ministry name for information collection notice [DESENG-900](https://citz-gdx.atlassian.net/browse/DESENG-900)
 
 ### Aug 15, 2025
 - If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)
