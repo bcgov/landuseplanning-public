@@ -12,16 +12,22 @@ import { CommentPeriod } from 'app/models/commentperiod';
 import { DocumentService } from 'app/services/document.service';
 import { SurveyResponseService } from 'app/services/surveyResponse.service';
 import { SurveyBuilderService } from 'app/services/surveyBuilder.service';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import * as dayjs from 'dayjs';
+import { PluginFunc } from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
+import * as timezone from 'dayjs/plugin/timezone';
 import { Project } from 'app/models/project';
 import { Survey } from 'app/models/survey';
 import { SurveyResponse } from 'app/models/surveyResponse';
 import { ConfigService } from 'app/services/config.service';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+const loadDayjsPlugin = (pluginModule: unknown): PluginFunc => {
+  const moduleWithDefault = pluginModule as { default?: PluginFunc };
+  return moduleWithDefault.default || (pluginModule as PluginFunc);
+};
+
+dayjs.extend(loadDayjsPlugin(utc));
+dayjs.extend(loadDayjsPlugin(timezone));
 
 @Component({
   selector: 'app-add-survey-response',

@@ -1,8 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { Comment } from 'app/models/comment';
 import { CommentPeriod } from 'app/models/commentperiod';
-import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { ApiService } from './api';
 import { CommentService } from './comment.service';
 import { CommentPeriodService } from './commentperiod.service';
@@ -487,7 +486,7 @@ describe('CommentService', () => {
 
     describe('when no comment is returned by the api', () => {
       it('returns null', async(() => {
-        apiSpy.addComment.and.returnValue(Observable.of({ text: () => { } }));
+        apiSpy.addComment.and.returnValue(of(null));
 
         service
           .add(new Comment())
@@ -499,12 +498,7 @@ describe('CommentService', () => {
       it('returns the empty comment', async(() => {
         const comment = new Comment();
 
-        apiSpy.addComment.and.returnValue(
-          Observable.of({
-            text: () => 'notNull',
-            json: () => comment
-          })
-        );
+        apiSpy.addComment.and.returnValue(of(comment));
 
         service.add(comment).subscribe(result => {
           expect(result).toEqual(comment);
@@ -535,17 +529,14 @@ describe('CommentService', () => {
         // Replace ApiService.addComment with a fake method that simply returns the arg passed to it.
         apiSpy.addComment.and.callFake((arg: Comment) => {
           modifiedComment = arg;
-          return Observable.of({
-            text: () => 'notNull',
-            json: () => arg
-          });
+          return of(arg);
         });
 
         service.add(comment).subscribe(result => {
           expect(result).toEqual(jasmine.any(Comment));
 
           expect(modifiedComment._id).toBeUndefined();
-          expect(modifiedComment.documents).toBeUndefined();
+          expect(modifiedComment.documents).toEqual(comment.documents);
 
           // expect(modifiedComment.comment).toEqual(
           //   comment.comment.replace(/\n/g, '\\n')

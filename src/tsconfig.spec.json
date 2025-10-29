@@ -5,6 +5,7 @@
     "module": "commonjs",
     "target": "es5",
     "baseUrl": "",
+    "skipLibCheck": true, // bypass Karma type checking issues
     "types": [
       "jasmine",
       "node",

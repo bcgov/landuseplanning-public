@@ -11,7 +11,23 @@ import { ProjDetailPopupComponent } from 'app/projects/proj-detail-popup/proj-de
 import { Constants } from 'app/shared/utils/constants';
 import { Utils } from 'app/shared/utils/utils';
 import { animate, style, transition, trigger } from '@angular/animations';
-import type { MarkerClusterGroup, Map, GeoJSON, Marker, Icon, LatLngBounds, LayersControlEvent, FitBoundsOptions } from 'leaflet';
+import type {
+  Map,
+  GeoJSON,
+  Marker,
+  Icon,
+  LatLngBounds,
+  LayersControlEvent,
+  FitBoundsOptions
+} from 'leaflet';
+
+interface ProjectMarker extends Marker {
+  projectId?: string;
+}
+
+interface ProjectGeoJson extends GeoJSON {
+  projectId?: string;
+}
 
 @Component({
   selector: 'app-projlist-map',
@@ -27,21 +43,21 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   @Input() appfilters; // from projects component
   @Output() updateVisible = new EventEmitter(); // to projects component
   @Output() reloadApps = new EventEmitter(); // to projects component
-	@ViewChild('map') private mapContainer: ElementRef;
+  @ViewChild('map') private mapContainer: ElementRef;
 
   public pathAPI: string;
   public loading = true;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   private map: Map = null;
-  private shapefileList: GeoJSON[] = [];
-  private markerList: Marker[] = []; // list of markers
-  private currentMarker: Marker = null; // for removing previous marker
-  private markerClusterGroup: MarkerClusterGroup = null;
+  private shapefileList: ProjectGeoJson[] = [];
+  private markerList: ProjectMarker[] = []; // list of markers
+  private currentMarker: ProjectMarker = null; // for removing previous marker
+  private markerClusterGroup: any = null;
   private markerIconYellow: Icon = null;
   private markerIconYellowLg: Icon = null;
   private defaultBounds: LatLngBounds = null;
-  private L: typeof import('leaflet');
+  private L: any;
 
   constructor(
     private appRef: ApplicationRef,
@@ -68,7 +84,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
       this.router.navigate(['/']);
     }
-    
+
     try {
       // Load prerequisite scripts
       await this.scriptLoader.loadScripts([
@@ -93,7 +109,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.L = (window as any).L;
 
     this.defaultBounds = this.L.latLngBounds([48, -139], [60, -114]); // all of BC
-    
+
     this.markerIconYellow = this.L.icon({
       iconUrl: 'assets/images/marker-icon-yellow.svg',
       iconSize: [36, 36],
@@ -118,7 +134,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     this.pathAPI = (_.isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
 
     // for closure function below
-    const self = this; 
+    const self = this;
     const L_ = this.L;
 
     // custom control to reset map view
@@ -142,11 +158,11 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       },
     });
 
-		// Declare the basemap layers
-		const Esri_BC_Basemap = this.L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
-			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
-		});
-		const Esri_OceanBasemap = this.L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+    // Declare the basemap layers
+    const Esri_BC_Basemap = this.L.esri.Vector.vectorBasemapLayer('bbe05270d3a642f5b62203d6c454f457', {
+      token: 'AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh',
+    });
+    const Esri_OceanBasemap = this.L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13,
       noWrap: true
@@ -167,16 +183,16 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       noWrap: true
     });
 
-		// Declare the map with some parameters
+    // Declare the map with some parameters
     this.map = this.L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
       maxBounds: this.L.latLngBounds(this.L.latLng(-90, -180), this.L.latLng(90, 180)), // restrict view to "the world"
-			maxZoom: 17,
+      maxZoom: 17,
       zoomSnap: 0.1, // for greater granularity when fitting bounds
       attributionControl: false
     });
 
-		// NB: moveend is called after zoomstart, movestart and resize
+    // NB: moveend is called after zoomstart, movestart and resize
     this.map.once('moveend', function () {
       this.setVisibleDebounced();
     }, this);
@@ -184,35 +200,35 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // add markers group
     this.map.addLayer(this.markerClusterGroup);
 
-		// add base maps layers control
-		const baseLayers = {
-			'BC Basemap': Esri_BC_Basemap,
-			'Ocean Base': Esri_OceanBasemap,
-			'Nat Geo World Map': Esri_NatGeoWorldMap,
-			'World Topographic': World_Topo_Map,
-			'World Imagery': World_Imagery
-		};
-		this.L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
+    // add base maps layers control
+    const baseLayers = {
+      'BC Basemap': Esri_BC_Basemap,
+      'Ocean Base': Esri_OceanBasemap,
+      'Nat Geo World Map': Esri_NatGeoWorldMap,
+      'World Topographic': World_Topo_Map,
+      'World Imagery': World_Imagery
+    };
+    this.L.control.layers(baseLayers, null, { position: 'topright' }).addTo(this.map);
 
-		// map attribution
-		this.L.control.attribution({ position: 'bottomright' }).addTo(this.map);
+    // map attribution
+    this.L.control.attribution({ position: 'bottomright' }).addTo(this.map);
 
-		// add scale control
-		this.L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+    // add scale control
+    this.L.control.scale({ position: 'bottomleft' }).addTo(this.map);
 
-		// add zoom control
-		this.L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+    // add zoom control
+    this.L.control.zoom({ position: 'bottomright' }).addTo(this.map);
 
-		// add reset view control
-		this.map.addControl(new resetViewControl());
+    // add reset view control
+    this.map.addControl(new resetViewControl());
 
-		// load base layer
-		for (const key of Object.keys(baseLayers)) {
-			if (key === this.configService.baseLayerName) {
-				this.map.addLayer(baseLayers[key]);
-				break;
-			}
-		}
+    // load base layer
+    for (const key of Object.keys(baseLayers)) {
+      if (key === this.configService.baseLayerName) {
+        this.map.addLayer(baseLayers[key]);
+        break;
+      }
+    }
 
     // Add "map loaded" listener for removing loading screen
     // Must add additional timeout to account for vector tile rendering
@@ -226,12 +242,12 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       });
     });
 
-		// save any future base layer changes
-		this.map.on('baselayerchange', function (e: LayersControlEvent) {
-			this.configService.baseLayerName = e.name;
-		}, this);
+    // save any future base layer changes
+    this.map.on('baselayerchange', function (e: LayersControlEvent) {
+      this.configService.baseLayerName = e.name;
+    }, this);
 
-		this.fixMap();
+    this.fixMap();
 
     if (this.projects?.length > 0 && this.L && this.map) {
       this.drawMap([], this.projects);
@@ -252,7 +268,9 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
-    if (!this.L || !this.map) return;
+    if (!this.L || !this.map) {
+      return;
+    }
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
       const deletedApps = _.difference(changes.projects.previousValue, changes.projects.currentValue) as Array<Project>;
       const addedApps = _.difference(changes.projects.currentValue, changes.projects.previousValue) as Array<Project>;
@@ -263,7 +281,9 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   }
 
   public ngOnDestroy() {
-    if (this.map) { this.map.remove(); }
+    if (this.map) {
+      this.map.remove();
+    }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -290,7 +310,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     // update visibility for apps with markers only
     // ie, leave apps without markers 'visible' (as initialized)
-    for (const marker of this.markerList as Marker[]) {
+    for (const marker of this.markerList) {
       const project = _.find(this.projects, { _id: marker.projectId });
       if (project) {
         const markerLatLng = marker.getLatLng();
@@ -327,11 +347,12 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
   private drawMap(hiddenProjects: Project[], addedProjects: Project[]): void {
     // remove hidden projects from list and map
     hiddenProjects.forEach(proj => {
-
       if (this.markerList?.length > 0) {
         // Find marker indexes
         const markerIndexes = this.markerList.reduce((acc, item, index) => {
-        if (item.projectId?.toString() === proj._id) acc.push(index);
+          if (item.projectId?.toString() === proj._id) {
+            acc.push(index);
+          }
           return acc;
         }, []);
 
@@ -342,14 +363,16 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
             if (marker) {
               this.markerClusterGroup.removeLayer(marker);
             }
-          })
+          });
         }
       }
-      
+
       if (this.shapefileList?.length > 0) {
         // Find shapefile indexes
         const shapefileIndexes = this.shapefileList.reduce((acc, item, index) => {
-        if (item.projectId?.toString() === proj._id) acc.push(index);
+          if (item.projectId?.toString() === proj._id) {
+            acc.push(index);
+          }
           return acc;
         }, []);
 
@@ -360,7 +383,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
             if (shapefile) {
               this.map.removeLayer(shapefile);
             }
-          })
+          });
         }
       }
     });
@@ -386,7 +409,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
             // If a project shapefile has been hidden on the main map, add a marker instead.
             this.addMarkerToMap(proj);
           }
-        })
+  });
       } else {
         // If no shapefile is found for a project, display a pin of its coordinates instead.
         this.addMarkerToMap(proj);
@@ -413,16 +436,16 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    * then sets the pop-up message content, creates the marker icon,
    * adds a click handler for the pop-up, and adds the new layer to the
    * list of map layers.
-   * 
+   *
    * @param proj The project to add the marker for.
    */
   private addMarkerToMap(proj: Project): void {
     if (this.utils.markerMeetsConditions(proj)) {
       const title = `${proj.name}\n`
       + `${proj.overlappingRegionalDistricts}\n`;
-      const marker = this.L.marker(this.L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title: title })
-      .setIcon(this.markerIconYellow)
-      .on('click', this.L.Util.bind(this.onMarkerClick, this, proj));
+      const marker = this.L.marker(this.L.latLng(proj.centroid[1], proj.centroid[0]), { keyboard: true, title })
+        .setIcon(this.markerIconYellow)
+        .on('click', this.L.Util.bind(this.onMarkerClick, this, proj));
       marker.projectId = proj._id;
       this.markerList.push(marker); // save to list
       this.markerClusterGroup.addLayer(marker); // save to marker clusters group

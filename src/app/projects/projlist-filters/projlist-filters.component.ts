@@ -8,7 +8,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
 import * as _ from 'lodash';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Constants } from 'app/shared/utils/constants';
@@ -50,14 +50,14 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   public loading = false;
   private paramMap: ParamMap = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-	public projectTypeFilters: ProjectType[] = [
-		{name: 'Land Use Planning', checked: true},
-		{name: 'Forest Landscape Planning', checked: true},
-		{name: 'Water Planning and Governance', checked: true}
-	];
-	public filtersOpen: boolean = true;
-  public searchOpen: boolean = true;
-	public filterIconText: string = 'keyboard_arrow_up';
+  public projectTypeFilters: ProjectType[] = [
+    { name: 'Land Use Planning', checked: true },
+    { name: 'Forest Landscape Planning', checked: true },
+    { name: 'Water Planning and Governance', checked: true }
+  ];
+  public filtersOpen = true;
+  public searchOpen = true;
+  public filterIconText = 'keyboard_arrow_up';
 
   // search keys for drop-down menus
   public regionKeys: Array<string> = [];
@@ -161,34 +161,31 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-	/**
-	 * Handles an event change to the project type filter
-	 * 
-	 * @param {MatCheckboxChange} event The event that is passed from the project type filter checkbox
-	 * @returns {void}
-	 */
-	public handleProjectTypeChange(event: MatCheckboxChange): void {
-		const index = this.projectTypeFilters.map(filter => filter.name).indexOf(event.source.value);
-		if (-1 !== index) {
-			this.projectTypeFilters[index].checked = event.checked;
-			this.internalApplyAllFilters(false, 'project type filter');
-		}
-	}
+  /**
+   * Handles an event change to the project type filter
+   *
+   * @param event The event passed from the project type filter checkbox
+   */
+  public handleProjectTypeChange(event: MatCheckboxChange): void {
+    const index = this.projectTypeFilters.map(filter => filter.name).indexOf(event.source.value);
+    if (-1 !== index) {
+      this.projectTypeFilters[index].checked = event.checked;
+      this.internalApplyAllFilters(false, 'project type filter');
+    }
+  }
 
-	/**
-	 * Shows or hides the project type filter.
-   * Especially useful for mobile viewports where it covers most of the screen.
-   * @param source 'search' or 'filter'
-	 * 
-	 * @returns {void}
-	 */
-	public handleShowHideFilter(source: string): void {
+  /**
+   * Shows or hides the project type filter. Especially useful for mobile viewports where it covers most of the screen.
+   *
+   * @param source Indicates whether the action originated from the search or filter buttons
+   */
+  public handleShowHideFilter(source: string): void {
     if ('search' === source) {
       this.searchOpen = !this.searchOpen;
     } else if ('filter' === source) {
       this.filtersOpen = !this.filtersOpen;
     }
-	}
+  }
 
   // FOR FUTURE USE
   public getFilters(): FiltersType {
@@ -260,8 +257,8 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
   /**
    * Runs every time a text search is made or a filter is toggled.
-   * Check if the text search or one of the project type filters matches, if so, return true. 
-   * 
+   * Check if the text search or one of the project type filters matches, if so, return true.
+   *
    * @param item The individual map item (project) to make the check for.
    * @returns 'true' if a match occurs. False if not.
    */
@@ -275,19 +272,20 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
       return false;
     }
 
-
-		// If there are any filters unchecked, validate all project type filters
-		if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
+    // If there are any filters unchecked, validate all project type filters
+    if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
       // If project is old and doesn't have projectTypes, allow it to be shown on map anyway.
-      if (!item.hasOwnProperty('projectTypes') || !Array.isArray(item.projectTypes)) return true;
+      if (!item.hasOwnProperty('projectTypes') || !Array.isArray(item.projectTypes)) {
+        return true;
+      }
 
-			const checkedProjectFilterTypeNames = this.projectTypeFilters.filter(ptf => ptf.checked).map(ptf => ptf.name);
+      const checkedProjectFilterTypeNames = this.projectTypeFilters.filter(ptf => ptf.checked).map(ptf => ptf.name);
       const checkedProjectTypeNames = item.projectTypes.filter(pt => pt.checked).map(pt => pt.name);
-			const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
+      const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
 
       // If there are still project type(s) to show after filtering unchecked ones, return true.
       doesMatch = Boolean(projectTypesToShow.length);
-		}
+    }
 
     return doesMatch;
   }
