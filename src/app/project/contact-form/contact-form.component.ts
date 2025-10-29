@@ -20,7 +20,7 @@ export class ContactFormComponent {
   public name: string;
   public emailAddress: string;
   public message: string;
-  public validationError = "";
+  public validationError = '';
   public successfulFormSubmission = false;
   public contactFormFiles: File[] = [];
 
@@ -32,17 +32,17 @@ export class ContactFormComponent {
     private router: Router,
     public api: ApiService,
     private emailSubscribeService: EmailSubscribeService,
-  ){}
+  ) {}
 
   /**
    * Event handler for file list changes
-   * 
+   *
    * @param files The list of selected files
    */
   public manageFileChange(files: FileList) {
     if (files && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
-        const file = files[i]
+        const file = files[i];
         // Check if it's already added
         if (!this.contactFormFiles.find(f => f.name === file.name)) {
           this.contactFormFiles.push(file);
@@ -53,7 +53,7 @@ export class ContactFormComponent {
 
   /**
    * Submits the form to the email subscribe service
-   * 
+   *
    * @param contactForm The contact form to submit
    */
   onSubmit(contactForm: NgForm) {
@@ -66,10 +66,10 @@ export class ContactFormComponent {
       .then(() => this.successfulFormSubmission = true)
       .catch(error => {
         alert('Uh-oh, error submitting submitting contact form request.');
-        console.error('Error submitting submitting contact form request. ', error)
+        console.error('Error submitting submitting contact form request. ', error);
         this.loading = false;
         this.successfulFormSubmission = false;
-      })
+      });
   }
 
 }

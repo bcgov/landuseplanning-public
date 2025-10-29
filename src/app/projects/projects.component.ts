@@ -30,6 +30,19 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   // ref: https://github.com/escardin/angular2-community-faq/blob/master/services.md#how-do-i-communicate-between-components-using-a-shared-service
   // ref: https://stackoverflow.com/questions/34700438/global-events-in-angular
   private _loading = false;
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
+  public allApps: Array<any> = [];
+  public projectShapefiles: Document[] = [];
+  public filterApps: Array<Project> = [];
+  public mapApps: Array<Project> = [];
+  public listApps: Array<Project> = [];
+  // private filters: FiltersType = null; // FUTURE
+  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
+  public filterCount = 0;
+  public env: string;
+  public devBannerActive: boolean;
+  public previousUrl: string;
+
   set isLoading(val: boolean) {
     this._loading = val;
     if (val) {
@@ -42,20 +55,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.applist.onLoadEnd();
     }
   }
-
-  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
-  public allApps: Array<any> = [];
-  public projectShapefiles: Document[] = [];
-  public filterApps: Array<Project> = [];
-  public mapApps: Array<Project> = [];
-  public listApps: Array<Project> = [];
-  // private filters: FiltersType = null; // FUTURE
-  private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-	public filterCount: number = 0;
-  public env: string;
-  public devBannerActive: boolean;
-
-  previousUrl: string;
 
   constructor(
     public snackBar: MatSnackBar,
@@ -151,10 +150,10 @@ export class ProjectsComponent implements OnInit, OnDestroy {
                              * */
                             order: 99999999,
                             colour: null
-                          })
+                          });
                         }
-                      })
-                    })
+                      });
+                    });
                   }
 
                   this.allApps = _.concat(this.allApps, projects);
@@ -184,13 +183,13 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   public updateMatching(source: string) {
     // map component gets filtered apps
     this.mapApps = this.filterApps.filter(a => a.isMatches);
-		// Prevent snackbar on initial page load
-		if (2 <= this.filterCount) {
-			this.snackBarRef = this.snackBar.open(`The ${source} has been updated with ${this.mapApps.length} results.`);
-			this.snackBarRef._dismissAfter(3000);
-		} else {
-			this.filterCount++;
-		}
+    // Prevent snackbar on initial page load
+    if (2 <= this.filterCount) {
+      this.snackBarRef = this.snackBar.open(`The ${source} has been updated with ${this.mapApps.length} results.`);
+      this.snackBarRef._dismissAfter(3000);
+    } else {
+      this.filterCount++;
+    }
   }
 
   /**

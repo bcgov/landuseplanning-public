@@ -107,7 +107,6 @@ export class ProjectActivitiesComponent implements OnInit, OnDestroy {
     if (this.project?._id) {
       this.router.navigate(['p', this.project._id, 'project-details', params]);
     }
-    
   }
 
   public onSubmit() {
@@ -126,7 +125,7 @@ export class ProjectActivitiesComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
     if (this.project?._id) {
-      this.router.navigate(['p', this.project._id, 'project-details', params])
+      this.router.navigate(['p', this.project._id, 'project-details', params]);
     }
   }
 

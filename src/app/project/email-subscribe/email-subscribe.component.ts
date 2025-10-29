@@ -34,7 +34,25 @@ export class EmailSubscribeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.emailSubscribe = new EmailSubscribe();
-    this.emailSubscribe.project = this.project._id;
+    if (this.project) {
+      this.emailSubscribe.project = this.project._id;
+      return;
+    }
+
+    if (this.route.parent) {
+      this.route.parent.data
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe(parentData => {
+          if (parentData && parentData.project) {
+            this.project = parentData.project;
+            this.emailSubscribe.project = this.project._id;
+          } else {
+            this.router.navigate(['/projects']);
+          }
+        });
+    } else {
+      this.router.navigate(['/projects']);
+    }
   }
 
   register() {
