@@ -9,14 +9,20 @@ import { Document } from 'app/models/document';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { CommentService } from 'app/services/comment.service';
 import { DocumentService } from 'app/services/document.service';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import * as dayjs from 'dayjs';
+import { PluginFunc } from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
+import * as timezone from 'dayjs/plugin/timezone';
 import { Project } from 'app/models/project';
 import { ConfigService } from 'app/services/config.service';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+const loadDayjsPlugin = (pluginModule: unknown): PluginFunc => {
+  const moduleWithDefault = pluginModule as { default?: PluginFunc };
+  return moduleWithDefault.default || (pluginModule as PluginFunc);
+};
+
+dayjs.extend(loadDayjsPlugin(utc));
+dayjs.extend(loadDayjsPlugin(timezone));
 
 @Component({
   templateUrl: './add-comment.component.html',

@@ -29,7 +29,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   public terms = new SearchTerms();
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   public documents = null;
-	public documentVault = null;
+  public documentVault = null;
   public loading = true;
   public documentSections: DocumentSection[] = [];
   public documentsGroupedBySection: Document[][] = [];
@@ -84,8 +84,8 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
           if (res.documents[0].length > 0 || res.documents[2].length > 0 ) {
             // Set the documents for the table and total list items.
             const combinedResults = [...res.documents[0][0]?.data?.searchResults || [], ...res.documents[2][0]?.data?.searchResults || []];
-						const sortedResults = this.sortDocuments(combinedResults, this.tableParams.sortBy || '-dateAdded');
-						this.documents = this.documentVault = sortedResults;
+            const sortedResults = this.sortDocuments(combinedResults, this.tableParams.sortBy || '-dateAdded');
+            this.documents = this.documentVault = sortedResults;
             this.updateTableDataAndParams();
 
             if (res.documents[0][0].data.meta.length > 0 || res.documents[2][0].data.meta.length > 0) {
@@ -158,9 +158,9 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     // Have each file use the section name rather than ID.
     filesWithSections.forEach(file => {
       file.section = sectionIdsToNames[file.section];
-			if (file.internalExt) {
-				file.internalExt = file.internalExt.toUpperCase();
-			}
+      if (file.internalExt) {
+        file.internalExt = file.internalExt.toUpperCase();
+      }
     })
 
     // Group files together by section.
@@ -177,7 +177,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     })
 
     // Sort the grouped documents.
-    this.documentsGroupedBySection = this.documentsGroupedBySection.map(section => 
+    this.documentsGroupedBySection = this.documentsGroupedBySection.map(section =>
       section.sort((a: Document, b: Document) => new Date(b.dateAdded || b.datePosted).getTime() - new Date(a.dateAdded || a.datePosted).getTime())
     );
   }
@@ -287,7 +287,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
             displayName: document.displayName,
             datePosted: document.dateAdded || document.datePosted,
             description: document.description,
-						externalLink: document.externalLink || null,
+            externalLink: document.externalLink || null,
             size: this.utils.formatBytes(document.internalSize),
             ext: document.internalExt.toUpperCase(),
             projectPhase: document.projectPhase || null,
@@ -313,17 +313,17 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
       this.tableParams.sortBy = '+' + column;
     }
     this.documentVault = this.sortDocuments(this.documentVault, this.tableParams.sortBy, 'sorting');
-		this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
-		this.getPaginatedDocs(this.tableParams.currentPage);
+    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
+    this.getPaginatedDocs(this.tableParams.currentPage);
   }
 
-	public sortDocuments = (documents: Document[], sort: string = '-datePosted', action: string = 'init') => {
+  public sortDocuments = (documents: Document[], sort: string = '-datePosted', action: string = 'init') => {
     // Exclude documents with sections if we're reacting to a sorting action.
     if ('sorting' === action) {
       documents = documents.filter(doc => !doc.section);
     }
-		const sortDir = '-' === Array.from(sort)[0] ? -1 : 1;
-		const sortBy = sort.substring(1);
+    const sortDir = '-' === Array.from(sort)[0] ? -1 : 1;
+    const sortBy = sort.substring(1);
 
     if (0 < documents.length && sortDir && sortBy) {
       if ('displayName' === sortBy) {
@@ -348,8 +348,8 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
         });
       }
     }
-		return documents || [];
-	}
+    return documents || [];
+  }
 
   isEnabled(button) {
     switch (button) {
@@ -365,7 +365,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
   }
 
   getPaginatedDocs(pageNumber) {
-		this.loading = true;
+    this.loading = true;
     let startIndex: number;
     let endIndex: number;
     if (this.tableParams?.sortBy && pageNumber) {
@@ -373,13 +373,13 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
       startIndex = (pageNumber - 1) * this.tableParams.pageSize;
       endIndex = startIndex + this.tableParams.pageSize;
     }
-		if (endIndex && 0 < this.documentVault?.length) {
-			this.documents = this.documentVault.slice(startIndex, endIndex);
-		}
+    if (endIndex && 0 < this.documentVault?.length) {
+      this.documents = this.documentVault.slice(startIndex, endIndex);
+    }
     this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.tableParams.keywords || '');
     this.setDocumentRowData();
     this._changeDetectionRef.detectChanges();
-		this.loading = false;
+    this.loading = false;
   }
 
   public onNumItems(numItems) {

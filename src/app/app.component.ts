@@ -68,11 +68,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         filter((event) => event instanceof NavigationEnd),
         map(() => this.activatedRoute),
         map((route) => {
-        while (route.firstChild) {
-          route = route.firstChild
-        }
-        return route;
-      }),
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route;
+        }),
       filter((route) => route.outlet === 'primary'),
       mergeMap((route) => route.data),
       takeUntil(this.ngUnsubscribe)
@@ -83,8 +83,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (pageh1 && event['focush1']) {
           pageh1.focus();
         }
-      });
-      
+  });
   }
 
   ngAfterViewInit() {

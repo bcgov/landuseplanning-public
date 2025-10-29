@@ -16,7 +16,7 @@ describe('BackgroundInfoTabComponent', () => {
   let fixture: ComponentFixture<BackgroundInfoTabComponent>;
 
   const existingProject = new Project();
-  const validRouteData = { project: existingProject };
+  const validRouteData = { projectAndBanner: [existingProject] };
 
   const activatedRouteStub = new ActivatedRouteStub(validRouteData);
   const routerSpy = {
@@ -72,13 +72,14 @@ describe('BackgroundInfoTabComponent', () => {
     });
 
     it('sets the component project to the one from the route', () => {
+      component.ngOnInit();
       expect(component.project).toEqual(existingProject);
     });
   });
 
   describe('when the project is not available from the route', () => {
     beforeEach(() => {
-      activatedRouteStub.setParentData({ something: 'went wrong' });
+      activatedRouteStub.setParentData({ projectAndBanner: [] });
     });
 
     it('redirects to /projects', () => {

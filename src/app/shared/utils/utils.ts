@@ -53,27 +53,27 @@ export class Utils {
 
   /**
    * Apply encodeURIComponent to a filename, escape !, ', and *, then undo some escaping from encodeURIComponent, and return the string.
-   * 
+   *
    * @param filename The original file name to be encoded
    * @returns The encoded file name
    */
   public encodeFileName(filename: string): string {
     return encodeURIComponent(filename)
-    // Escape additional characters not handled by encodeURIComponent
-    .replace(/!/g, '%21')   // Encode exclamation mark
-    .replace(/'/g, '%27')   // Encode single quote
-    .replace(/\*/g, '%2A')  // Encode asterisk
+      // Escape additional characters not handled by encodeURIComponent
+      .replace(/!/g, '%21')   // Encode exclamation mark
+      .replace(/'/g, '%27')   // Encode single quote
+      .replace(/\*/g, '%2A')  // Encode asterisk
 
-    // Convert certain escaped characters to underscore
-    .replace(/%2F/g, '_')  // Replace encoded forward slash with underscore
-    .replace(/%5C/g, '_')  // Replace encoded backslash with underscore
-    .replace(/%20/g, '_'); // Replace encoded space with underscore
+      // Convert certain escaped characters to underscore
+      .replace(/%2F/g, '_')  // Replace encoded forward slash with underscore
+      .replace(/%5C/g, '_')  // Replace encoded backslash with underscore
+      .replace(/%20/g, '_'); // Replace encoded space with underscore
   }
 
   /**
    * Returns an estimated connection tier based on downlink.
    * If downlink can't be found, it falls back to small image load time.
-   * 
+   *
    * @returns {Promise<ConnectionTier>}
    */
   public async getConnectionTier(): Promise<ConnectionTier> {
@@ -82,10 +82,14 @@ export class Utils {
 
     if (conn?.downlink) {
       const speed = conn.downlink;
-      if (speed < 1) return 'slow';
-      else if (speed < 10) return 'medium';
-      else if (speed < 100) return 'fast';
-      else return 'turbo';
+      if (speed < 1) {
+        return 'slow';
+      } else if (speed < 10) {
+        return 'medium';
+      } else if (speed < 100) {
+        return 'fast';
+      }
+      return 'turbo';
     }
 
     // Image load time fallback
@@ -95,8 +99,10 @@ export class Utils {
 
       img.onload = () => {
         const duration = performance.now() - start;
-        if (duration > 50) return resolve('slow');
-        else return resolve('medium');
+        if (duration > 50) {
+          return resolve('slow');
+        }
+        return resolve('medium');
       };
 
       img.onerror = () => resolve('medium'); // assume average
@@ -105,18 +111,28 @@ export class Utils {
   }
 
   /**
-     * Make sure the project marker is valid and within BC bounds
-     * 
-     * @param project The project that contains the marker values
-     * @returns {boolean}
-     */
-    public markerMeetsConditions(project: Project): boolean {
-      if (!Array.isArray(project.centroid)) return false;
-      if (project.centroid.length !== 2) return false;
-      const [lon, lat] = project.centroid;
-      if (isNaN(lat) || isNaN(lon)) return false;
-      if (lat < 48 || lat > 62) return false;
-      if (lon < -139 || lon > -114) return false;
-      return true;
+   * Make sure the project marker is valid and within BC bounds
+   *
+   * @param project The project that contains the marker values
+   * @returns {boolean}
+   */
+  public markerMeetsConditions(project: Project): boolean {
+    if (!Array.isArray(project.centroid)) {
+      return false;
     }
+    if (project.centroid.length !== 2) {
+      return false;
+    }
+    const [lon, lat] = project.centroid;
+    if (isNaN(lat) || isNaN(lon)) {
+      return false;
+    }
+    if (lat < 48 || lat > 62) {
+      return false;
+    }
+    if (lon < -139 || lon > -114) {
+      return false;
+    }
+    return true;
+  }
 }

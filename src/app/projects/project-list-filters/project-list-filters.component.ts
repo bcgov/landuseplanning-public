@@ -28,15 +28,15 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
   @Input() tableParams: TableParamsObject = new TableParamsObject(); // from project list component
   @Output() updateMatching = new EventEmitter<UpdateMatchingData>(); // to project list component
 
-  public loading: boolean = false;
+  public loading = false;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  public applyFilterCount: number = 0;
+  public applyFilterCount = 0;
 
-	public projectTypeFilters: ProjectType[] = [
-		{name: 'Land Use Planning', checked: true},
-		{name: 'Forest Landscape Planning', checked: true},
-		{name: 'Water Planning and Governance', checked: true}
-	];
+  public projectTypeFilters: ProjectType[] = [
+    { name: 'Land Use Planning', checked: true },
+    { name: 'Forest Landscape Planning', checked: true },
+    { name: 'Water Planning and Governance', checked: true }
+  ];
 
   public fullNames = {
     lup: 'Land Use Planning',
@@ -67,30 +67,30 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
       const expandedProjectTypesArray = projectTypesArray.map(item => this.fullNames[item] || item);
       this.projectTypeFilters.forEach(ptf => {
         ptf.checked = expandedProjectTypesArray.includes(ptf.name) || 'all' === this.tableParams.projectTypes ? true : false;
-      })
+  });
     }
     this.applyFilterCount++;
   }
 
-	/**
-	 * Handles an event change to the project type filter
-	 * 
-	 * @param {MatCheckboxChange} event The event that is passed from the project type filter checkbox
-	 * @returns {void}
-	 */
-	public handleProjectTypeChange(event: MatCheckboxChange): void {
-		const index = this.projectTypeFilters.map(filter => filter.name).indexOf(event.source.value);
-		if (-1 !== index) {
-			this.projectTypeFilters[index].checked = event.checked;
-			this.internalApplyAllFilters('project type filter');
-		}
-	}
+  /**
+   * Handles an event change to the project type filter
+   *
+   * @param {MatCheckboxChange} event The event that is passed from the project type filter checkbox
+   * @returns {void}
+   */
+  public handleProjectTypeChange(event: MatCheckboxChange): void {
+    const index = this.projectTypeFilters.map(filter => filter.name).indexOf(event.source.value);
+    if (-1 !== index) {
+      this.projectTypeFilters[index].checked = event.checked;
+      this.internalApplyAllFilters('project type filter');
+    }
+  }
 
   /**
    * Applies filters by getting those that are selected, passing them to the shared table component, and then emitting an event so that the table is updated.
-   * 
+   *
    * @param source The source of the call to this method (optional)
-	 * @returns {void}
+   * @returns {void}
    */
   private internalApplyAllFilters(source: string = 'filter'): void {
     // This runs before ngOnInit, so we need set the filter controls on the first iteration
@@ -105,9 +105,9 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
       .map(ptf => ptf.name.match(/\b\w/g).join('').toLowerCase());
 
     const returnData = {
-      source: source,
-      activeFilters: activeFilters,
-    }
+      source,
+      activeFilters,
+    };
 
     // Update table params
     this.tableParams.projectTypes = activeFilters.join(',');
@@ -118,25 +118,27 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
 
   /**
    * Runs every time a filter is toggled.
-   * Check if one of the project type filters matches. If so, return true. 
-   * 
+   * Check if one of the project type filters matches. If so, return true.
+   *
    * @param item The individual project to make the check for.
    * @returns 'true' if a match occurs. False if not.
    */
   private showThisProject(item: Project): boolean {
     let doesMatch = true;
-		// If there are any filters unchecked, validate all project type filters
-		if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
+    // If there are any filters unchecked, validate all project type filters
+    if (this.projectTypeFilters.find(ptf => !ptf.checked)) {
       // If project is old and doesn't have projectTypes, allow it to be shown in list anyway.
-      if (!item.hasOwnProperty('projectTypes') || !Array.isArray(item.projectTypes)) return true;
+      if (!item.hasOwnProperty('projectTypes') || !Array.isArray(item.projectTypes)) {
+        return true;
+      }
 
-			const checkedProjectFilterTypeNames = this.projectTypeFilters.filter(ptf => ptf.checked).map(ptf => ptf.name);
+      const checkedProjectFilterTypeNames = this.projectTypeFilters.filter(ptf => ptf.checked).map(ptf => ptf.name);
       const checkedProjectTypeNames = item.projectTypes.filter(pt => pt.checked).map(pt => pt.name);
-			const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
+      const projectTypesToShow = checkedProjectTypeNames.filter(pt => checkedProjectFilterTypeNames.includes(pt));
 
       // If there are still project type(s) to show after filtering unchecked ones, return true.
       doesMatch = Boolean(projectTypesToShow.length);
-		}
+    }
     return doesMatch;
   }
 

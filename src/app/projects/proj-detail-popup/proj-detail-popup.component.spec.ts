@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { Project } from 'app/models/project';
+import { of } from 'rxjs';
 
 describe('ProjDetailPopupComponent', () => {
   let component: ProjDetailPopupComponent;
@@ -28,9 +29,8 @@ describe('ProjDetailPopupComponent', () => {
   };
 
   const stubCommentPeriodService = {
-    isOpen() {
-      return true;
-    }
+    getAllByProjectId: () => of([{ commentPeriodStatus: 'Open' }]),
+    isOpen: () => true
   };
 
   beforeEach(async(() => {

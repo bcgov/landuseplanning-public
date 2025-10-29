@@ -6,9 +6,9 @@ const routes: Routes = [
   {
     path: '',
     component: ProjectsComponent,
-    data: { 
-      title: 'Map View of Projects', 
-      focush1: true 
+    data: {
+      title: 'Map View of Projects',
+      focush1: true
     }
   }
 ];
