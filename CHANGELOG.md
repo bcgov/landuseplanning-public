@@ -1,5 +1,6 @@
-
 ### Oct 28, 2025
+- Replaced the LUP phases graphic on the Modernizing Land Use Planning page with an updated version. [DESENG-902](https://citz-gdx.atlassian.net/browse/DESENG-902)
+  - Updated alt text and explanation headings to match new graphic
 - Stabilized Angular unit tests by stubbing heavy components and relaxing template validation with `NO_ERRORS_SCHEMA`  so `ng test` runs again. [DESENG-882](https://citz-gdx.atlassian.net/browse/DESENG-882)
   - Replaced conflicting third-party typings with local shims (for example Leaflet marker clusters).
   - Brought remaining spec imports, forms modules, and router stubs up to date to eliminate CI failures caused by missing declarations or runtime errors.
