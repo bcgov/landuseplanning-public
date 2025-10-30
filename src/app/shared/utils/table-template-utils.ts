@@ -13,7 +13,7 @@ export class TableTemplateUtils {
 
   /**
    * Updates the URL params based on the parameters that are given.
-   * 
+   *
    * @param sortString The column to sort by
    * @param currentPage The current page of results
    * @param pageSize How many results are included in one page
@@ -40,7 +40,7 @@ export class TableTemplateUtils {
 
   /**
    * Retrieves the parameters from the URL, optionally modifies filter values in URL.
-   * 
+   *
    * @param params The new parameters that you wish to apply to the TableParamsObject
    * @param filter The filter URL value to add/modify (optional)
    * @param defaultSortBy The default 'sort by' value (optional)

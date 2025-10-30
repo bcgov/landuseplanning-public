@@ -22,7 +22,7 @@ import { RecentActivity } from 'app/models/recentActivity';
   animations: [trigger('fade', [transition(':leave', [animate('300ms ease-out', style({ opacity: 0 }))])])]
 })
 export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDestroy {
-	@ViewChild('map') private mapContainer: ElementRef;
+  @ViewChild('map') private mapContainer: ElementRef;
 
   private ngbModal: NgbModalRef = null;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
@@ -38,10 +38,10 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   public map: Map = null;
   public appFG: FeatureGroup = null; // group of layers for subject app
   public defaultBounds: LatLngBounds = null; // all of BC
-	readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 61, lng: -114}}; // Converted for other parsing
-	public bounds = {southWest: {lat: null, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
+  readonly defaultBoundsObject = {southWest: {lat: 48, lng: -139}, northEast: {lat: 61, lng: -114}}; // Converted for other parsing
+  public bounds = {southWest: {lat: null, lng: null}, northEast: {lat: null, lng: null}}; // Bounds object for keeping track of bounds
   public shapefiles: Document[] = [];
-	public convertedShapefiles = [];
+  public convertedShapefiles = [];
   private L: typeof import('leaflet');
 
   constructor(
@@ -96,7 +96,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
   /**
    * Extracts needed shape file data from the route shapshot data
-   * 
+   *
    * @param res The route data snapshot from which the shape files are extracted
    * @returns void
    */
@@ -140,7 +140,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
       this.router.navigate(['/']);
     }
-    
+
 
     this.L = (window as any).L;
     this.appFG = this.L.featureGroup(); // group of layers for subject app
@@ -182,9 +182,9 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // draw map
-		const Esri_BC_Basemap = this.L.esri.Vector.vectorBasemapLayer("bbe05270d3a642f5b62203d6c454f457", {
-			token: "AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh",
-		});
+    const Esri_BC_Basemap = this.L.esri.Vector.vectorBasemapLayer('bbe05270d3a642f5b62203d6c454f457', {
+      token: 'AAPK22185e2b89234d44a13e17d56be107baT24tgFM0N7tI5fRSqvi4IP3_MF167rsx01IUHtYBqmQhNgw9LCDxmRtT2F3rQdqh',
+    });
     const Esri_OceanBasemap = this.L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
       maxZoom: 13,
@@ -206,7 +206,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       noWrap: true
     });
 
-		this.map = this.L.map(this.mapContainer.nativeElement, {
+    this.map = this.L.map(this.mapContainer.nativeElement, {
       zoomControl: false, // will be added manually below
       maxBounds: this.L.latLngBounds(this.L.latLng(-90, -180), this.L.latLng(90, 180)), // restrict view to "the world"
       zoomSnap: 0.1 // for greater granularity when fitting bounds
@@ -226,7 +226,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
     // add base maps layers control
     const baseLayers = {
-			'BC Basemap': Esri_BC_Basemap,
+      'BC Basemap': Esri_BC_Basemap,
       'Ocean Base': Esri_OceanBasemap,
       'Nat Geo World Map': Esri_NatGeoWorldMap,
       'World Topographic': World_Topo_Map,
@@ -271,7 +271,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       shapefilesToDraw = [this.shapefiles[0]];
     }
 
-		// Convert documents to shapefiles
+    // Convert documents to shapefiles
     if (Array.isArray(shapefilesToDraw) && shapefilesToDraw.length > 0) {
       this.convertedShapefiles = shapefilesToDraw.map((sf: ProjectShapefile & Document) => {
         if (sf?.documentFileName?.length > 0 && (sf?._id || sf?.document)) {
@@ -293,24 +293,24 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       .filter(sf => sf !== null); // Remove any empty results
     }
 
-		// If there are converted shapefiles
-		if (Array.isArray(this.convertedShapefiles) && this.convertedShapefiles.length > 0) {
+    // If there are converted shapefiles
+    if (Array.isArray(this.convertedShapefiles) && this.convertedShapefiles.length > 0) {
 
       const totalShapefiles = this.convertedShapefiles.length;
       let locationAdded = false;
       let analyzedShapefiles = 0;
 
-			this.convertedShapefiles?.forEach((sf) => {
+      this.convertedShapefiles?.forEach((sf) => {
 
         // Shapefile successfully loaded
-				sf.on('data:loaded', () => {
-					const keys = Object.keys(sf._layers);
-					keys?.forEach(key => {
-						if (sf._layers[key]?._bounds) {
-							this.calculateShapefileBounds(sf._layers[key]._bounds);
-						}
-					});
-					sf.addTo(this.appFG);
+        sf.on('data:loaded', () => {
+          const keys = Object.keys(sf._layers);
+          keys?.forEach(key => {
+            if (sf._layers[key]?._bounds) {
+              this.calculateShapefileBounds(sf._layers[key]._bounds);
+            }
+          });
+          sf.addTo(this.appFG);
           analyzedShapefiles++;
 
           // Update our counter and flag if the shapefile has successfully been added
@@ -318,35 +318,35 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
             locationAdded = true;
           }
 
-					// Last iteration only
-					if (analyzedShapefiles === totalShapefiles) {
+          // Last iteration only
+          if (analyzedShapefiles === totalShapefiles) {
             this.shapeFilesLoadedHook(locationAdded);
-					}
-				});
+          }
+        });
 
         // Shapefile failed to load
         sf.on('data:error', (e) => {
-          console.error("Shapefile failed to load:", {
+          console.error('Shapefile failed to load:', {
             url: sf._sourceUrl || '',
             error: e
           });
           analyzedShapefiles++;
 
           // Last iteration only
-					if (analyzedShapefiles === totalShapefiles) {
+          if (analyzedShapefiles === totalShapefiles) {
             this.shapeFilesLoadedHook(locationAdded);
-					}
+          }
         });
-			});
-		} else {
-			// Otherwise skip the shapefiles and just add a marker
-			this.addMarkerAndAdjustBounds();
-		}
-	}
+      });
+    } else {
+      // Otherwise skip the shapefiles and just add a marker
+      this.addMarkerAndAdjustBounds();
+    }
+  }
 
   /**
    * The actions that should be run after all shape files are analyzed.
-   * 
+   *
    * @param locationAdded A boolean that indicates whether or not at least one shapefile has been added to the map
    */
   private shapeFilesLoadedHook = (locationAdded: boolean) => {
@@ -366,7 +366,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
 
   /**
    * Adds a marker and centres the bounds of the map around the marker.
-   * 
+   *
    * @returns {void}
    */
   private addMarkerAndAdjustBounds = () => {
@@ -380,57 +380,57 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-	/**
-	 * Takes the bounds of a shapefile and updates the overall map bounds to include them.
-	 * Bounds can not exceed default BC bounds.
-	 * Bounds will not reduce in size, only expand if there are shapefiles that are outside current bounds.
-	 * 
-	 * @param {LatLngBounds} shapefileBounds
-	 * @returns {void}
-	 */
-	private calculateShapefileBounds = (shapefileBounds) => {
-		this.bounds = {
-			southWest: {
-				lat: shapefileBounds?._southWest.lat >= this.defaultBoundsObject.southWest.lat 
-					&& (!this.bounds.southWest.lat || shapefileBounds?._southWest.lat <= this.bounds.southWest.lat) 
-					? shapefileBounds._southWest.lat 
-					: this.bounds.southWest.lat,
-				lng: shapefileBounds?._southWest.lng >= this.defaultBoundsObject.southWest.lng 
-					&& (!this.bounds.southWest.lng || shapefileBounds?._southWest.lng <=  this.bounds.southWest.lng) 
-					? shapefileBounds._southWest.lng 
-					: this.bounds.southWest.lng,
-			},
-			northEast: {
-				lat: shapefileBounds?._northEast.lat <= this.defaultBoundsObject.northEast.lat 
-					&& (!this.bounds.northEast.lat || shapefileBounds?._northEast.lat >= this.bounds.northEast.lat) 
-					? shapefileBounds._northEast.lat 
-					: this.bounds.northEast.lat,
-				lng: shapefileBounds?._northEast.lng <= this.defaultBoundsObject.northEast.lng 
-					&& (!this.bounds.northEast.lng || shapefileBounds?._northEast.lng >= this.bounds.northEast.lng) 
-					? shapefileBounds._northEast.lng 
-					: this.bounds.northEast.lng,
-			}
-		};
-	}
+  /**
+   * Takes the bounds of a shapefile and updates the overall map bounds to include them.
+   * Bounds can not exceed default BC bounds.
+   * Bounds will not reduce in size, only expand if there are shapefiles that are outside current bounds.
+   *
+   * @param {LatLngBounds} shapefileBounds
+   * @returns {void}
+   */
+  private calculateShapefileBounds = (shapefileBounds) => {
+    this.bounds = {
+      southWest: {
+        lat: shapefileBounds?._southWest.lat >= this.defaultBoundsObject.southWest.lat
+          && (!this.bounds.southWest.lat || shapefileBounds?._southWest.lat <= this.bounds.southWest.lat)
+          ? shapefileBounds._southWest.lat
+          : this.bounds.southWest.lat,
+        lng: shapefileBounds?._southWest.lng >= this.defaultBoundsObject.southWest.lng
+          && (!this.bounds.southWest.lng || shapefileBounds?._southWest.lng <=  this.bounds.southWest.lng)
+          ? shapefileBounds._southWest.lng
+          : this.bounds.southWest.lng,
+      },
+      northEast: {
+        lat: shapefileBounds?._northEast.lat <= this.defaultBoundsObject.northEast.lat
+          && (!this.bounds.northEast.lat || shapefileBounds?._northEast.lat >= this.bounds.northEast.lat)
+          ? shapefileBounds._northEast.lat
+          : this.bounds.northEast.lat,
+        lng: shapefileBounds?._northEast.lng <= this.defaultBoundsObject.northEast.lng
+          && (!this.bounds.northEast.lng || shapefileBounds?._northEast.lng >= this.bounds.northEast.lng)
+          ? shapefileBounds._northEast.lng
+          : this.bounds.northEast.lng,
+      }
+    };
+  }
 
-	/**
+  /**
    * Adds a marker to the map.
    *
    * @returns {void}
    */
-	private addMarker = () => {
-		const markerIconYellow = this.L.icon({
-			iconUrl: 'assets/images/marker-icon-yellow.svg',
-			iconSize: [36, 36],
-			iconAnchor: [18, 36],
-			tooltipAnchor: [16, -28]
-		});
-		const title = `${this.project.name}\n`
-			+ `${this.project.overlappingRegionalDistricts}\n`;
-		const marker = this.L.marker(this.L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
-			.setIcon(markerIconYellow);
-		this.appFG.addLayer(marker);
-	}
+  private addMarker = () => {
+    const markerIconYellow = this.L.icon({
+      iconUrl: 'assets/images/marker-icon-yellow.svg',
+      iconSize: [36, 36],
+      iconAnchor: [18, 36],
+      tooltipAnchor: [16, -28]
+    });
+    const title = `${this.project.name}\n`
+      + `${this.project.overlappingRegionalDistricts}\n`;
+    const marker = this.L.marker(this.L.latLng(this.project.centroid[1], this.project.centroid[0]), { title: title })
+      .setIcon(markerIconYellow);
+    this.appFG.addLayer(marker);
+  }
 
   /**
    * To avoid timing conflict with animations (resulting in small map tile at top left of page),

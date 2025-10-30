@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FooterComponent } from './footer.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'app/services/api';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { of } from 'rxjs';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -15,7 +17,13 @@ describe('FooterComponent', () => {
     TestBed.configureTestingModule({
       declarations: [FooterComponent],
       imports: [RouterTestingModule],
-      providers: [{ provide: ApiService, useValue: apiServiceStub }]
+      providers: [
+        { provide: ApiService, useValue: apiServiceStub },
+        {
+          provide: BreakpointObserver,
+          useValue: { observe: () => of({ matches: false }) }
+        }
+      ]
     }).compileComponents();
   }));
 
@@ -29,10 +37,9 @@ describe('FooterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('it renders a link to the admin page using the api service admin url', () => {
+  it('displays site map content when not on the projects page', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const adminLink = compiled.querySelector('a.gtm-admin-login');
-    expect(adminLink.textContent).toContain('Admin Login');
-    expect(adminLink.getAttribute('href')).toEqual('http://localhost:4000/admin/');
+    const heading = compiled.querySelector('#internal-links h2');
+    expect(heading.textContent).toContain('Site Map');
   });
 });

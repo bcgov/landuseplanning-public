@@ -76,7 +76,7 @@ export class ApiService {
     let filename;
     if (!document.externalLink) {
       filename = 'COMMENT' === document.documentSource ? document.internalOriginalName : document.documentFileName;
-		}
+    }
     console.log(document);
     let safeName = '';
     try {
@@ -85,11 +85,11 @@ export class ApiService {
       // fall through
       console.log('error', e);
     }
-		if (document.externalLink) {
-			window.open(document.externalLink);
-		} else {
-    	window.open(this.apiPath.replace('/public', '') + '/document/' + document._id + '/fetch/' + safeName, '_blank');
-		}
+    if (document.externalLink) {
+      window.open(document.externalLink);
+    } else {
+      window.open(this.apiPath.replace('/public', '') + '/document/' + document._id + '/fetch/' + safeName, '_blank');
+    }
   }
 
   private downloadResource(id: string): Promise<Blob> {
@@ -198,7 +198,7 @@ export class ApiService {
       'agreements',
       'partner',
       'projectPhase',
-			'projectTypes',
+      'projectTypes',
       'logos',
       'shapefiles',
       'backgroundInfo',
@@ -248,7 +248,7 @@ export class ApiService {
       'agreements',
       'partner',
       'projectPhase',
-			'projectTypes',
+      'projectTypes',
       'logos',
       'shapefiles',
       'backgroundInfo',
@@ -796,7 +796,7 @@ export class ApiService {
 
   /**
    * Sends a contact form response email to the sender and the appointed receiver
-   * 
+   *
    * @param contactForm The contact form data for submission
    * @returns An observable boolean confirmation of success or failure
    */
@@ -808,7 +808,7 @@ export class ApiService {
       formData.append('email', contactForm.email);
       formData.append('message', contactForm.message);
       formData.append('project', contactForm.project);
-  
+
       for (const file of contactForm.files) {
         formData.append('attachments', file, file.name);
       }
