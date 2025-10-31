@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import * as _ from 'lodash';
 
 import { Project, ProjectType } from 'app/models/project';
@@ -48,14 +48,6 @@ interface TableParams {
 })
 
 export class ProjectListComponent implements OnInit, OnDestroy {
-  constructor(
-    public snackBar: MatSnackBar,
-    private router: Router,
-    private route: ActivatedRoute,
-    private tableTemplateUtils: TableTemplateUtils,
-    private searchService: SearchService,
-  ) { }
-
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
 
@@ -65,13 +57,13 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   public filterForURL: object = {};
   public filterForAPI: object = {};
   public filterForUI: ProjectFilterObject = new ProjectFilterObject();
-  public showAdvancedSearch: boolean = true;
+  public showAdvancedSearch = true;
   public filterApps: Array<Project> = [];
-  public filterCount: number = 0;
+  public filterCount = 0;
   public listApps: Array<Project> = [];
-  public snackBarCounter: number = 0;
+  public snackBarCounter = 0;
   public projectTableData: TableObject;
-  public loading: boolean = false;
+  public loading = false;
 
   public showFilters: object = {
     agreements: false,
@@ -86,7 +78,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     pcp: 0,
     more: 0
   };
-  
+
   public projectTableColumns: any[] = [
     {
       name: 'Name',
@@ -104,6 +96,14 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       width: 'col-4'
     }
   ];
+
+  constructor(
+    public snackBar: MatSnackBar,
+    private router: Router,
+    private route: ActivatedRoute,
+    private tableTemplateUtils: TableTemplateUtils,
+    private searchService: SearchService,
+  ) { }
 
   // Get the params and save them to this.tableParams. Get the projects and save them to this.projects.
   ngOnInit() {
@@ -145,7 +145,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   /**
    * Defines the parameters by getting existing values or reverting to defaults when necessary.
-   * 
+   *
    * @param params The router Params object from which we are getting values.
    * @returns The defined TableParams that will be fed to the table.
    */
@@ -162,7 +162,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   /**
    * Event handler called when filters component updates list of matching apps.
-   * 
+   *
    * @param data The data passed from the child filter component to the parent component on filter update.
    */
   public updateMatching(data: UpdateMatchingData) {
@@ -178,7 +178,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
         this.tableParams.projectTypes = 'none';
       }
     }
-    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes)
+  this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes);
     this.sortProjects();
     this.setTableData();
     // Don't run the snackbar on page load.
@@ -214,7 +214,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   stringifyOverlappingDistricts(districts: string | string[]): string {
     let overlappingDistrictsListString: string;
-    if (Array.isArray(districts) === true ) {
+  if (Array.isArray(districts) === true) {
       overlappingDistrictsListString = (<string[]>districts).join(', ');
     } else {
       overlappingDistrictsListString = districts as string;
@@ -224,7 +224,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   /**
    * Stringifies the project types for printing in the rows.
-   * 
+   *
    * @param projectTypes The project types that need to be stringified
    * @returns A string of project names, separated by commas
    */
@@ -264,7 +264,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   /**
    * Handles a column sort event from the table.
-   * 
+   *
    * @param column The column to sort by.
    */
   handleColumnSort(column: string) {
@@ -273,7 +273,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     } else {
       this.tableParams.sortBy = `+${column}`;
     }
-    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes)
+  this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes);
     this.sortProjects();
     this.setTableData();
   }
@@ -292,7 +292,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
         return aProj.localeCompare(bProj) * direction;
       });
     } else {
-      this.projects.sort((a, b) => {  
+  this.projects.sort((a, b) => {
         return a[sortBy].localeCompare(b[sortBy]) * direction;
       });
     }
@@ -300,13 +300,13 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   /**
    * Handles a page change event from the table.
-   * 
+   *
    * @param pageNumber The new page number to apply.
    * @returns {void}
    */
   handlePageChange(pageNumber: number): void {
     this.tableParams.currentPage = pageNumber;
-    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes)
+  this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes);
     this.sortProjects();
     this.setTableData();
   }
@@ -319,7 +319,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     // REF: https://stackoverflow.com/questions/40983055/how-to-reload-the-current-route-with-the-angular-2-router
     // WORKAROUND: add timestamp to force URL to be different than last time
 
-    let params = this.terms.getParams();
+  const params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage ?? 1;

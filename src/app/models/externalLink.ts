@@ -2,7 +2,7 @@ export class ExternalLink {
   _id: string;
   project: string;
   displayName: string;
-	externalLink: string;
+  externalLink: string;
   section: string;
   dateAdded: Date;
   dateUpdated: Date;
@@ -20,6 +20,6 @@ export class ExternalLink {
     this.dateUpdated = obj && obj.dateUpdated || null;
     this.description = obj && obj.description || null;
     this.projectPhase = obj && obj.projectPhase || null;
-		this.checkbox = false || null;
+    this.checkbox = false || null;
   }
 }

@@ -7,8 +7,8 @@
           <p>Land and water planning guides stewardship of our province’s land and water resources,
             supporting the preservation of cultural values, healthy ecosystems, and opportunities for
             economic activities for all British Columbians. This is a transparent process that includes
-             partnering with First Nations and engaging with local governments, industry, stakeholders,
-             communities, and the general public.  </p>
+            partnering with First Nations and engaging with local governments, industry, stakeholders,
+            communities, and the general public. </p>
           <div class="hero-banner__actions">
             <div class="hero-banner__actions-buttons">
               <a class="btn slide-l-btn hero-btn inverted" [routerLink]="['/projects']">
@@ -52,13 +52,14 @@
                     [routerLink]="['/p', item.project?._id ]" *ngIf="item.project?._id">
                     Project Info
                   </a>
-                  <a *ngIf="item?.pcp" class="btn btn-sm content-btn-alt" title="View this {{item.project?.engagementLabel || 'Public Comment Period'}}"
+                  <a *ngIf="item?.pcp" class="btn btn-sm content-btn-alt"
+                    title="View this {{item.project?.engagementLabel || 'Public Comment Period'}}"
                     [routerLink]="['/p', item.project?._id, 'cp', item.pcp ]">
                     Submit/ View Comments
                   </a>
                   <a *ngIf="item.documentUrl && !item?.documentUrl.includes('docs?folder')"
-                    class="btn btn-sm content-btn-alt" [attr.aria-label]="makeAriaLabel(item)" title="View more information" href="{{item.documentUrl}}"
-                    target="_blank">
+                    class="btn btn-sm content-btn-alt" [attr.aria-label]="makeAriaLabel(item)"
+                    title="View more information" href="{{item.documentUrl}}" target="_blank">
                     {{ item.documentUrlText || "View Document" }}
                   </a>
                 </div>
@@ -82,24 +83,31 @@
           This site was created to provide a unified space where land and water planning activities
           can be shared to ensure transparency of these processes in the province. It is a portal to
           learn about land and water planning projects in B.C., access supporting documents and reports,
-           and submit comments and feedback to planning teams involved in active planning projects.
+          and submit comments and feedback to planning teams involved in active planning projects.
         </p>
         <p>
-          Land and water planning in B.C. happens at different scales. Planning can occur at a strategic
-           level where major land use zones guide conservation and economic outcomes, and at a tactical
-            level to provide more detailed guidance for specific activities and objectives. Each planning
-             process is designed to address the issues and challenges within the plan area, mitigate the
-              effects of climate change on communities, advance reconciliation, and provide clarity on
-              how the land base will be managed for all economic, cultural, and conservation objectives.
-               The Province is adopting a more integrated approach to planning that will result in
-               coordinated processes to achieve various planning objectives. This site provides access
-                to information on all active land use planning, forest landscape planning, and water
-                 planning projects.
+          <a href="https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/forestry/forest-landscape-plans/land-and-water-planning.pdf"
+            target="_blank" rel="noopener noreferrer"
+            aria-label="Land and water planning in B.C. (PDF, 2.6 MB, opens in new tab)">
+            Land and water planning in B.C.
+            <i class="material-icons" aria-hidden="true">picture_as_pdf</i>
+            <i class="material-icons" aria-hidden="true">open_in_new</i>
+          </a>
+          happens at different scales. Planning can occur at a strategic
+          level where major land use zones guide conservation and economic outcomes, and at a tactical
+          level to provide more detailed guidance for specific activities and objectives. Each planning
+          process is designed to address the issues and challenges within the plan area, mitigate the
+          effects of climate change on communities, advance reconciliation, and provide clarity on
+          how the land base will be managed for all economic, cultural, and conservation objectives.
+          The Province is adopting a more integrated approach to planning that will result in
+          coordinated processes to achieve various planning objectives. This site provides access
+          to information on all active land use planning, forest landscape planning, and water
+          planning projects.
         </p>
         <p>
           Information on other provincial stewardship initiatives including Species at Risk and
           Recovery Planning, the Old Growth Strategic Review, the Together for Wildlife Strategy,
-           and the Biodiversity and Ecosystem Health Framework may be added to this site over time.
+          and the Biodiversity and Ecosystem Health Framework may be added to this site over time.
         </p>
         <h2 class="learn-more-heading">Learn More</h2>
         <div class="feature-blocks">
@@ -107,21 +115,24 @@
             <div class="feature-block land">
               <h3>Land Use Planning</h3>
               <p>Learn about land use planning in B.C.</p>
-              <a class="btn btn-sm inverted" [routerLink]="['/lup']" aria-label="Learn more about land use planning.">Learn More</a>
+              <a class="btn btn-sm inverted" [routerLink]="['/lup']"
+                aria-label="Learn more about land use planning.">Learn More</a>
             </div>
           </div>
           <div class="feature-block-outer">
             <div class="feature-block forest">
               <h3>Forest Landscape Planning</h3>
               <p>Learn more about forest landscape planning in B.C.</p>
-              <a class="btn btn-sm inverted" [routerLink]="['/flp']" aria-label="Learn more about forest landscape planning.">Learn More</a>
+              <a class="btn btn-sm inverted" [routerLink]="['/flp']"
+                aria-label="Learn more about forest landscape planning.">Learn More</a>
             </div>
           </div>
           <div class="feature-block-outer">
             <div class="feature-block water">
               <h3>Water Planning and Governance Tools</h3>
               <p>Learn about water planning and governance tools in B.C.</p>
-              <a class="btn btn-sm inverted" [routerLink]="['/wsp']" aria-label="Learn more about water planning.">Learn More</a>
+              <a class="btn btn-sm inverted" [routerLink]="['/wsp']" aria-label="Learn more about water planning.">Learn
+                More</a>
             </div>
           </div>
         </div>

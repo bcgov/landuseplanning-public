@@ -4,21 +4,23 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CommentService } from 'app/services/comment.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs';
 import { Project } from 'app/models/project';
 import { Comment } from 'app/models/comment';
 import { ActivatedRoute, Router } from '@angular/router';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { ActivatedRouteStub } from 'app/spec/helpers';
+import { SurveyService } from 'app/services/survey.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CommentingTabComponent', () => {
   let component: CommentingTabComponent;
   let fixture: ComponentFixture<CommentingTabComponent>;
 
-  const existingProject = new Project();
-  const validRouteData = { project: existingProject };
+  const existingProject = new Project({ _id: 'AAAA' });
+  const validRouteData = { projectAndBanner: [existingProject, [{ data: { searchResults: [] } }]] };
 
   const activatedRouteStub = new ActivatedRouteStub(validRouteData);
 
@@ -29,14 +31,29 @@ describe('CommentingTabComponent', () => {
   const commentPeriodServiceStub = {
     isOpen() {
       return true;
+    },
+    getAllByProjectId() {
+      return of({ data: [] });
     }
   };
 
   const commentServiceStub = {
     getAllByProjectId() {
-      return Observable.of([new Comment({})]);
+      return of([new Comment({})]);
     }
   };
+
+  const surveyServiceStub = {
+    getSelectedSurveyByCPId() {
+      return of(null);
+    }
+  } as Partial<SurveyService>;
+
+  const ngbModalStub = {
+    open: jasmine.createSpy('open').and.returnValue({
+      componentInstance: {}
+    })
+  } as Partial<NgbModal>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -48,7 +65,10 @@ describe('CommentingTabComponent', () => {
         { provide: DialogService },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Router, useValue: routerSpy },
-      ]
+        { provide: SurveyService, useValue: surveyServiceStub },
+        { provide: NgbModal, useValue: ngbModalStub }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -128,14 +148,14 @@ describe('CommentingTabComponent', () => {
     });
 
     describe('comments', () => {
-      const project = new Project({ _id: 'AAAA' });
+  const project = new Project({ _id: 'AAAA' });
       const oldComment = new Comment({ dateAdded: new Date(2018, 3, 1) });
       const mediumComment = new Comment({ dateAdded: new Date(2018, 6, 1) });
       const newComment = new Comment({ dateAdded: new Date(2018, 11, 1) });
       let commentService: CommentService;
 
       beforeEach(() => {
-        activatedRouteStub.setParentData({ project: project });
+  activatedRouteStub.setParentData({ projectAndBanner: [project, [{ data: { searchResults: [] } }]] });
         commentService = TestBed.inject(CommentService);
       });
 

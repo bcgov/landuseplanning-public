@@ -9,21 +9,21 @@ import { BreakpointObserver } from '@angular/cdk/layout';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-  constructor(public api: ApiService, public router: Router, private breakpointObserver: BreakpointObserver) {
+  public isFooterHidden = false;
+  public footerHideSymbol = '<';
+  public isMobile: boolean;
 
+  constructor(public api: ApiService, public router: Router, private breakpointObserver: BreakpointObserver) {
     // Get the viewport to determine how we display the footer show/hide toggle.
     this.breakpointObserver.observe(['(max-width: 767px)'])
       .subscribe(result => {
         this.isMobile = result.matches;
       });
   }
-  public isFooterHidden = false;
-  public footerHideSymbol = '<';
-  public isMobile: boolean;
 
   /**
    * Shows or hides the footer in mobile mode
-   * 
+   *
    * @returns void
    */
   public showHideFooter() {
