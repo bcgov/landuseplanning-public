@@ -1,5 +1,5 @@
 <div class="tab-pane" role="tabpanel">
-    <div class="spinner-container" *ngIf="loading" >
+    <div class="spinner-container" *ngIf="loading">
         <div class="spinner-new rotating"></div>
     </div>
 
@@ -12,27 +12,23 @@
         </div>
 
         <div *ngIf="commentPeriods.length > 0">
-            <div class="d-flex justify-content-between list-group-item"
-                 *ngFor="let commentPeriod of commentPeriods">
+            <div class="d-flex justify-content-between list-group-item" *ngFor="let commentPeriod of commentPeriods">
                 <div *ngIf="commentPeriod.commentPeriodStatus" class="engagement-tab-item-description">
                     <label class="title">{{commentPeriod.commentPeriodStatus}}</label>
+                    <p class="mb-0">
+                        {{commentPeriod.dateStarted | date:'MMMM d'}} -
+                        {{commentPeriod.dateCompleted | date:'longDate'}}
+                    </p>
                     <div class="commentInfo">{{commentPeriod.instructions}}</div>
-                    <p class="mb-0">{{commentPeriod.dateStarted | date:'MMMM d'}} - {{commentPeriod.dateCompleted | date:'longDate'}}</p>
                 </div>
                 <div class="engagement-tab-buttons">
-                    <button 
-                        (click)=goToCP(commentPeriod) 
-                        class="badge badge-secondary p-3" 
-                        [attr.aria-label]="'View details of ' + (currentProject?.engagementLabel || 'this comment period')"
-                    >
+                    <button (click)=goToCP(commentPeriod) class="badge badge-secondary p-3"
+                        [attr.aria-label]="'View details of ' + (currentProject?.engagementLabel || 'this comment period')">
                         View details
                     </button>
-                    <button 
-                        (click)=addComment() 
-                        *ngIf="commentPeriod?.commentPeriodStatus === 'Open'" 
-                        class="badge badge-secondary p-3" 
-                        [attr.aria-label]="'Participate now in ' + (currentProject?.engagementLabel || 'this comment period')"
-                    >
+                    <button (click)=addComment() *ngIf="commentPeriod?.commentPeriodStatus === 'Open'"
+                        class="badge badge-secondary p-3"
+                        [attr.aria-label]="'Participate now in ' + (currentProject?.engagementLabel || 'this comment period')">
                         Participate now
                     </button>
                 </div>
