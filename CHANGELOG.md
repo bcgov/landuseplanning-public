@@ -1,4 +1,6 @@
 ### Oct 28, 2025
+- Update homepage to link the text "land and water planning in B.C." to the official gov't resource PDF. [DESENG-901](https://citz-gdx.atlassian.net/browse/DESENG-901)
+  - Added appropriate aria-labels and icons to indicate link opens in new tab and is a PDF.
 - Replaced the LUP phases graphic on the Modernizing Land Use Planning page with an updated version. [DESENG-902](https://citz-gdx.atlassian.net/browse/DESENG-902)
   - Updated alt text and explanation headings to match new graphic
 - Stabilized Angular unit tests by stubbing heavy components and relaxing template validation with `NO_ERRORS_SCHEMA`  so `ng test` runs again. [DESENG-882](https://citz-gdx.atlassian.net/browse/DESENG-882)
