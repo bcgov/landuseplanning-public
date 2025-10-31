@@ -1,9 +1,11 @@
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween';
+import * as dayjs from 'dayjs';
+import { PluginFunc } from 'dayjs';
+import * as isBetween from 'dayjs/plugin/isBetween';
 import { Project } from './project';
 import { Survey } from './survey';
 
-dayjs.extend(isBetween);
+const isBetweenPlugin = (isBetween as unknown as { default?: PluginFunc }).default || (isBetween as unknown as PluginFunc);
+dayjs.extend(isBetweenPlugin);
 
 export class CommentPeriod {
   _id: string;

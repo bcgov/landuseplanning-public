@@ -38,7 +38,6 @@ const routes: Routes = [
     resolve: {
       projectAndBanner: ProjectResolver
     },
-    
     children: [
       ...ProjectRoutes,
       {

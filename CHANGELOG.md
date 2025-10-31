@@ -1,5 +1,13 @@
 ### Oct 28, 2025
 - Swap position of comment period dates and description on comment period page [DESENG-899](https://citz-gdx.atlassian.net/browse/DESENG-899)
+- Update homepage to link the text "land and water planning in B.C." to the official gov't resource PDF. [DESENG-901](https://citz-gdx.atlassian.net/browse/DESENG-901)
+  - Added appropriate aria-labels and icons to indicate link opens in new tab and is a PDF.
+- Replaced the LUP phases graphic on the Modernizing Land Use Planning page with an updated version. [DESENG-902](https://citz-gdx.atlassian.net/browse/DESENG-902)
+  - Updated alt text and explanation headings to match new graphic
+- Stabilized Angular unit tests by stubbing heavy components and relaxing template validation with `NO_ERRORS_SCHEMA`  so `ng test` runs again. [DESENG-882](https://citz-gdx.atlassian.net/browse/DESENG-882)
+  - Replaced conflicting third-party typings with local shims (for example Leaflet marker clusters).
+  - Brought remaining spec imports, forms modules, and router stubs up to date to eliminate CI failures caused by missing declarations or runtime errors.
+  - Added skipLibCheck to tsconfig.spec.json to bypass type checking issues with Karma and Jasmine.
 
 ### Aug 15, 2025
 - If a shapefile is hidden on the main map, show a marker in its place [DESENG-874](https://citz-gdx.atlassian.net/browse/DESENG-874)

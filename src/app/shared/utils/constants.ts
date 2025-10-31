@@ -132,8 +132,8 @@ export class Constants {
   ];
 
   public static readonly style = {
-	DEFAULT_SHAPEFILE_COLOUR: 'rgb(51, 136, 255)',
-}
+    DEFAULT_SHAPEFILE_COLOUR: 'rgb(51, 136, 255)',
+  };
 
   // list of subpurposes according to Tantalis
   // NB: order of subpurposes is code order in Tantalis

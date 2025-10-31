@@ -16,7 +16,7 @@ import { HealthCheckComponent } from './health-check/health-check.component';
 import { NewsResolver } from './news/news-resolver.service';
 
 const routes: Routes = [
-	{
+  {
     path: 'healthz',
     component: HealthCheckComponent,
     data: {
@@ -35,9 +35,9 @@ const routes: Routes = [
   {
     path: 'projects',
     loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule),
-    data: { 
-      title: 'Map View of Projects', 
-      focush1: true 
+    data: {
+      title: 'Map View of Projects',
+      focush1: true
     }
   },
   {

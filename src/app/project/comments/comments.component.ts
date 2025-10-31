@@ -88,7 +88,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             } else if (images.length === 1) {
               this.bannerImage = images[0];
             }
-            
+
             if (this.bannerImage) {
               const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
               this.bannerImageSrc = `${this.pathAPI.replace('/public', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
@@ -103,7 +103,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
             if (this.commentPeriod.commentPeriodStatus === 'Closed') {
               this.commentPeriodHeader = `${engagementLabel} is now closed`;
             } else if (this.commentPeriod.commentPeriodStatus === 'Pending') {
-              this.commentPeriodHeader = `${engagementLabel} is pending`; 
+              this.commentPeriodHeader = `${engagementLabel} is pending`;
             } else if (this.commentPeriod.commentPeriodStatus === 'Open') {
               this.commentPeriodHeader = `${engagementLabel} is now open`;
             }
@@ -114,8 +114,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
               forkJoin([documentRequest, exLinkRequest])
                 .takeUntil(this.ngUnsubscribe)
                 .subscribe(
-                  data => {
-                    this.commentPeriodDocs = [...data[0][0].data.searchResults || [], ...data[1] || []];
+                  (results) => {
+                    this.commentPeriodDocs = [...results[0][0].data.searchResults || [], ...results[1] || []];
                     if (this.commentPeriodDocs) {
                       // Sort the documents by date added with most recent files first
                       this.commentPeriodDocs.sort((a: CommentPeriodFile, b: CommentPeriodFile) => {
@@ -160,18 +160,18 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   /**
-	 * Retrieves comment period documents
-	 * 
-	 * @returns {Observable<Object>}
-	 */
-	public getFiles = (): Observable<Object> => {
-		const queryModifier = { 
-      documentSource: 'PROJECT', 
-      internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt', 
-      _id: this.commentPeriod.relatedDocuments.toString() 
+   * Retrieves comment period documents
+   *
+   * @returns {Observable<Object>}
+   */
+  public getFiles = (): Observable<Object> => {
+    const queryModifier = {
+      documentSource: 'PROJECT',
+      internalExt: 'doc,docx,xls,xlsx,ppt,pptx,pdf,txt',
+      _id: this.commentPeriod.relatedDocuments.toString()
     };
-		return this.searchService.getSearchResults('', 'Document', [], 1, 100, '-dateAdded', queryModifier, true);
-	}
+    return this.searchService.getSearchResults('', 'Document', [], 1, 100, '-dateAdded', queryModifier, true);
+  };
 
   setCommentRowData() {
     this.commentTableData = new TableObject(
@@ -191,10 +191,10 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   /**
-	 * Event handler for when a user clicks on a document
-   * 
-	 * @param item The item that's been clicked on, either a document or external link entry
-	 */
+   * Event handler for when a user clicks on a document
+   *
+   * @param item The item that's been clicked on, either a document or external link entry
+   */
   public goToItem(item: CommentPeriodFile): void {
     // If we're opening an external link instead of a document, go straight to the predefined link
     if (item.externalLink) {
@@ -212,28 +212,28 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   /**
-	 * Triggers the opening of the survey dialog and opens the appropriate survey based on available data.
-   * 
-	 */
+   * Triggers the opening of the survey dialog and opens the appropriate survey based on available data.
+   *
+   */
   public addComment(): void {
     if (this.project.commentPeriodForBanner) {
       this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
         .subscribe((loadedSurvey: Survey) => {
           if (loadedSurvey) {
-          // open modal
-          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false });
-          // set input parameter
-          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
-          (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
-        } else {
-          // open modal
-          this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
-          // set input parameter
-          (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-          (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
-        }
-      })
+            // open modal
+            this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false });
+            // set input parameter
+            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
+            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
+          } else {
+            // open modal
+            this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
+            // set input parameter
+            (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
+            (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
+          }
+        });
     }
   }
 
