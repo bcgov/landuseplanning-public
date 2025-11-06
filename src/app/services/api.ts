@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ErrorObserver } from 'rxjs';
 import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { isEmpty, each} from 'lodash';
 
 import { Project } from 'app/models/project';
 import { Feature } from 'app/models/feature';
-import { News } from 'app/models/news';
 import { Comment } from 'app/models/comment';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Survey } from 'app/models/survey';
@@ -41,9 +39,9 @@ export class ApiService {
     const remote_admin_path = window.localStorage.getItem('from_public_server--remote_admin_path');
     const deployment_env = window.localStorage.getItem('from_public_server--deployment_env');
 
-    this.apiPath = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api/public' : remote_api_path;
-    this.adminUrl = (_.isEmpty(remote_admin_path)) ? 'http://localhost:4200' : remote_admin_path;
-    this.env = (_.isEmpty(deployment_env)) ? 'prod' : deployment_env;
+    this.apiPath = (isEmpty(remote_api_path)) ? 'http://localhost:3000/api/public' : remote_api_path;
+    this.adminUrl = (isEmpty(remote_admin_path)) ? 'http://localhost:4200' : remote_admin_path;
+    this.env = (isEmpty(deployment_env)) ? 'prod' : deployment_env;
   }
 
   handleError(error: any): Observable<any> {
@@ -846,7 +844,7 @@ export class ApiService {
   //
   private buildValues(collection: any[]): string {
     let values = '';
-    _.each(collection, function (a) {
+    each(collection, function (a) {
       values += a + '|';
     });
     // trim the last |
