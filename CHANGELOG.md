@@ -3,6 +3,7 @@
   - Replace large import of Lodash `_` in emailSubscribe.service.ts with specific function import to reduce bundle size.
 
 ### Oct 28, 2025
+- Change ministry name for information collection notice [DESENG-900](https://citz-gdx.atlassian.net/browse/DESENG-900)
 - Swap position of comment period dates and description on comment period page [DESENG-899](https://citz-gdx.atlassian.net/browse/DESENG-899)
 - Update homepage to link the text "land and water planning in B.C." to the official gov't resource PDF. [DESENG-901](https://citz-gdx.atlassian.net/browse/DESENG-901)
   - Added appropriate aria-labels and icons to indicate link opens in new tab and is a PDF.
