@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, mergeMap } from 'rxjs/operators';
-import { of, forkJoin } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { ApiService } from './api';
 import { EmailSubscribe } from 'app/models/emailSubscribe';
@@ -21,7 +19,7 @@ export class EmailSubscribeService {
 
   add(orig: EmailSubscribe): Observable<EmailSubscribe> {
     // make a (deep) copy of the passed-in comment so we don't change it
-    const emailSubscribe = _.cloneDeep(orig);
+    const emailSubscribe = cloneDeep(orig);
 
     // ID must not exist on POST
     delete emailSubscribe._id;
