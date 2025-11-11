@@ -2,7 +2,8 @@ import { Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, EventEmi
 import { ApplicationRef, ElementRef, SimpleChanges, Injector, ComponentFactoryResolver } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import * as _ from 'lodash';
+import { isEmpty, difference, debounce, find, sortBy } from 'lodash';
+
 import { Project } from 'app/models/project';
 import { ProjectService } from 'app/services/project.service';
 import { ConfigService } from 'app/services/config.service';
@@ -131,7 +132,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // The following items are loaded by a file that is only present on cluster builds.
     // Locally, this will be empty and local defaults will be used.
     const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
-    this.pathAPI = (_.isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
+    this.pathAPI = (isEmpty(remoteApiPath)) ? 'http://localhost:3000/api' : remoteApiPath;
 
     // for closure function below
     const self = this;
@@ -272,8 +273,8 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
       return;
     }
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
-      const deletedApps = _.difference(changes.projects.previousValue, changes.projects.currentValue) as Array<Project>;
-      const addedApps = _.difference(changes.projects.currentValue, changes.projects.previousValue) as Array<Project>;
+      const deletedApps = difference(changes.projects.previousValue, changes.projects.currentValue) as Array<Project>;
+      const addedApps = difference(changes.projects.currentValue, changes.projects.previousValue) as Array<Project>;
 
       // (re)draw the matching apps
       this.drawMap(deletedApps, addedApps);
@@ -300,7 +301,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    * Actual function executes no more than once every 250ms.
    */
   // tslint:disable-next-line:member-ordering
-  private setVisibleDebounced = _.debounce(this.setVisible, 250);
+  private setVisibleDebounced = debounce(this.setVisible, 250);
 
   /**
    * NB: Call setVisibleDebounced() instead!
@@ -311,7 +312,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
     // update visibility for apps with markers only
     // ie, leave apps without markers 'visible' (as initialized)
     for (const marker of this.markerList) {
-      const project = _.find(this.projects, { _id: marker.projectId });
+      const project = find(this.projects, { _id: marker.projectId });
       if (project) {
         const markerLatLng = marker.getLatLng();
         // app is visible if map contains its marker
@@ -425,7 +426,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
    * then add them to the map.
    */
   private addShapefilesToMap(): void {
-    const orderedShapefiles = _.sortBy(this.shapefileList, ['shapefileOrder']);
+    const orderedShapefiles = sortBy(this.shapefileList, ['shapefileOrder']);
     orderedShapefiles.forEach(projectShapefile => {
       projectShapefile.addTo(this.map);
     });
@@ -572,7 +573,7 @@ export class ProjlistMapComponent implements AfterViewInit, OnChanges, OnDestroy
 
     // set icon on new marker
     if (show) {
-      const marker = _.find(this.markerList, { projectId: app._id });
+      const marker = find(this.markerList, { projectId: app._id });
       if (marker) {
         this.currentMarker = marker;
         marker.setIcon(this.markerIconYellowLg);

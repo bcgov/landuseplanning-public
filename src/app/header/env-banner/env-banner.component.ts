@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-env-banner',
@@ -14,7 +14,7 @@ export class EnvBannerComponent implements OnInit {
   constructor() {
     const deployment_env = window.localStorage.getItem('from_admin_server--deployment_env');
 
-    this.env = (_.isEmpty(deployment_env)) ? 'prod' : deployment_env;
+    this.env = (isEmpty(deployment_env)) ? 'prod' : deployment_env;
     if (this.env.toUpperCase() === 'PROD') {
       this.showBanner = false;
     } else {

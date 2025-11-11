@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 export class User {
   _id: string;
@@ -19,7 +19,7 @@ export class User {
 
     // copy roles
     if (obj && obj.roles) {
-      this.roles = _.cloneDeep(obj.roles);
+      this.roles = cloneDeep(obj.roles);
     }
   }
 }

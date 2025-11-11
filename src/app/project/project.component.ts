@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2, ChangeDetectorRef, AfterViewInit, OnDestr
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Project, ProjectLogo, ProjectLogoWithSource } from 'app/models/project';
@@ -72,7 +72,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             // The following items are loaded by a file that is only present on cluster builds.
             // Locally, this will be empty and local defaults will be used.
             const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
-            this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
+            this.pathAPI = (isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
             if (this.bannerImage) {
               this.bannerImageSrc = this.getFileSourceUrl(this.bannerImage);

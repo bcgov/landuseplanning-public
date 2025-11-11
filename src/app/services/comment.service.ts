@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { of, forkJoin } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import * as _ from 'lodash';
 
 import { ApiService } from './api';
 import { Comment } from 'app/models/comment';
 import { DocumentService } from './document.service';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class CommentService {
@@ -56,7 +56,7 @@ export class CommentService {
     // first get the comment data
     return this.api.getComment(commentId)
     .pipe(
-      flatMap(res => {
+      mergeMap(res => {
         let comments = res.body;
         if (!comments || comments.length === 0) {
           return of(null as Comment);
@@ -74,7 +74,7 @@ export class CommentService {
 
   add(orig: Comment): Observable<Comment> {
     // make a (deep) copy of the passed-in comment so we don't change it
-    const comment = _.cloneDeep(orig);
+    const comment = cloneDeep(orig);
 
     // ID must not exist on POST
     delete comment._id;
