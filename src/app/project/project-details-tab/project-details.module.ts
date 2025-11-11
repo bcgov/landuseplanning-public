@@ -18,7 +18,8 @@ const routes: Routes = [
     },
     data: {
       title: 'Project Details',
-      focush1: false
+      focush1: false,
+      description: 'Detailed information about this project, including location, timeline, and engagement opportunities.'
     }
   }
 ];

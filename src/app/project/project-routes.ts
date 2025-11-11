@@ -29,7 +29,8 @@ export const ProjectRoutes: Routes = [
     },
     data: {
       title: 'Certificates',
-      focush1: false
+      focush1: false,
+      description: 'View certificates and related documents for this project.'
     }
   },
   {
@@ -37,7 +38,8 @@ export const ProjectRoutes: Routes = [
     component: ProjectPhaseTabComponent,
     data: {
       title: 'Project Phase',
-      focush1: false
+      focush1: false,
+      description: 'Current phase information for this project.'
     }
   },
   {
@@ -48,7 +50,8 @@ export const ProjectRoutes: Routes = [
     },
     data: {
       title: 'Project Pins',
-      focush1: false
+      focush1: false,
+      description: 'Important pinned information and updates for this project.'
     }
   },
   {
@@ -56,7 +59,8 @@ export const ProjectRoutes: Routes = [
     component: CommentingTabComponent,
     data: {
       title: 'Project Comments',
-      focush1: false
+      focush1: false,
+      description: 'View and submit comments on this project during open comment periods.'
     }
   },
   {
@@ -68,7 +72,8 @@ export const ProjectRoutes: Routes = [
     },
     data: {
       title: 'Project Documents',
-      focush1: false
+      focush1: false,
+      description: 'Access project documents, reports, and supporting materials for this planning engagement.'
     }
   },
   {
@@ -76,7 +81,8 @@ export const ProjectRoutes: Routes = [
     component: DecisionsTabComponent,
     data: {
       title: 'Project Decisions',
-      focush1: false
+      focush1: false,
+      description: 'View decisions and determinations made for this project.'
     }
   },
   {
@@ -84,7 +90,8 @@ export const ProjectRoutes: Routes = [
     component: BackgroundInfoTabComponent,
     data: {
       title: 'Project Background Information',
-      focush1: false
+      focush1: false,
+      description: 'Background information, context, and history for this project.'
     }
   },
   {
@@ -92,7 +99,9 @@ export const ProjectRoutes: Routes = [
     component: EmailSubscribeComponent,
     data: {
       title: 'Email Subscribe',
-      focush1: false
+      focush1: false,
+      description: 'Subscribe to email updates and notifications for this project.',
+      robots: 'noindex, follow'
     }
   },
   {
@@ -100,7 +109,8 @@ export const ProjectRoutes: Routes = [
     component: CommentsComponent,
     data: {
       title: 'Project Comments',
-      focush1: true
+      focush1: true,
+      description: 'Submit your comments and feedback on this project.'
     }
   }
 ];

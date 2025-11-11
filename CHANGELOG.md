@@ -1,3 +1,9 @@
+### Nov 10, 2025
+- Added dynamic meta/OpenGraph tags for improved SEO and social media sharing. [DESENG-915](https://citz-gdx.atlassian.net/browse/DESENG-915)
+  - Created a SeoService to manage meta tags across the application.
+  - Added a description to most routes for better SEO and social media previews.
+  - Updated project pages to include relevant meta tags based on project data.
+
 ### Nov 5, 2025
 - Updated email confirmation error page and subscription modal with clearer instructions. [DESENG-921](https://citz-gdx.atlassian.net/browse/DESENG-921)
   - Replace large import of Lodash `_` in emailSubscribe.service.ts with specific function import to reduce bundle size.

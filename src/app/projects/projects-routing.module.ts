@@ -8,7 +8,8 @@ const routes: Routes = [
     component: ProjectsComponent,
     data: {
       title: 'Map View of Projects',
-      focush1: true
+      focush1: true,
+      description: 'Interactive map view of land and water planning projects across British Columbia. Explore active planning engagements in your area.'
     }
   }
 ];

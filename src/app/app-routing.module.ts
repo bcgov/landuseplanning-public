@@ -21,7 +21,9 @@ const routes: Routes = [
     component: HealthCheckComponent,
     data: {
       title: 'Health Check',
-      focush1: true
+      focush1: true,
+      description: 'System health check for Planning in Partnership.',
+      robots: 'noindex, nofollow'
     }
   },
   {
@@ -29,7 +31,8 @@ const routes: Routes = [
     component: ContactComponent,
     data: {
       title: 'Contact Us',
-      focush1: true
+      focush1: true,
+      description: 'Get in touch with the Planning in Partnership team. Find contact information for land and water planning inquiries in British Columbia.'
     }
   },
   {
@@ -37,7 +40,8 @@ const routes: Routes = [
     loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule),
     data: {
       title: 'Map View of Projects',
-      focush1: true
+      focush1: true,
+      description: 'Interactive map view of land and water planning projects across British Columbia. Explore active planning engagements in your area.'
     }
   },
   {
@@ -45,7 +49,8 @@ const routes: Routes = [
     loadChildren: () => import('./projects/project-list/project-list.module').then(m => m.ProjectListModule),
     data: {
       title: 'List View of Projects',
-      focush1: true
+      focush1: true,
+      description: 'Browse all land and water planning projects in British Columbia. View active planning engagements in list format.'
     }
   },
   {
@@ -56,7 +61,8 @@ const routes: Routes = [
     },
     data: {
       title: 'Activities and Updates',
-      focush1: true
+      focush1: true,
+      description: 'Latest news, activities, and updates on land and water planning projects in British Columbia.'
     }
   },
   {
@@ -64,7 +70,8 @@ const routes: Routes = [
     component: LegislationComponent,
     data: {
       title: 'Legislation',
-      focush1: true
+      focush1: true,
+      description: 'Learn about the legislation governing land and water planning in British Columbia, including relevant acts and regulations.'
     }
   },
   {
@@ -72,7 +79,8 @@ const routes: Routes = [
     component: EngagementComponent,
     data: {
       title: 'Water Planning',
-      focush1: true
+      focush1: true,
+      description: 'Information about water sustainability planning in British Columbia and how to get involved.'
     }
   },
   {
@@ -80,7 +88,8 @@ const routes: Routes = [
     component: FaqComponent,
     data: {
       title: 'Frequently Asked Questions',
-      focush1: true
+      focush1: true,
+      description: 'Find answers to common questions about planning processes, engagement opportunities, and how to participate in B.C.'
     }
   },
   {
@@ -88,7 +97,8 @@ const routes: Routes = [
     component: ComplianceOversightComponent,
     data: {
       title: 'Compliance Oversight',
-      focush1: true
+      focush1: true,
+      description: 'Information about compliance and oversight for planning projects in British Columbia.'
     }
   },
   {
@@ -96,7 +106,8 @@ const routes: Routes = [
     component: ModernizingComponent,
     data: {
       title: 'Land Use Planning',
-      focush1: true
+      focush1: true,
+      description: 'Learn about land use planning modernization initiatives in British Columbia and how they support sustainable development.'
     }
   },
   {
@@ -104,7 +115,8 @@ const routes: Routes = [
     component: ProcessComponent,
     data: {
       title: 'Forest Landscape Planning',
-      focush1: true
+      focush1: true,
+      description: 'Information about forest landscape planning processes in British Columbia, including how to participate and provide input.'
     }
   },
   {
@@ -112,7 +124,9 @@ const routes: Routes = [
     component: UnsubscribeComponent,
     data: {
       title: 'Unsubscribe from project updates',
-      focush1: true
+      focush1: true,
+      description: 'Unsubscribe from email updates for planning projects.',
+      robots: 'noindex, nofollow'
     }
   },
   {
@@ -120,7 +134,9 @@ const routes: Routes = [
     component: ConfirmEmailComponent,
     data: {
       title: 'Confirm Email Address',
-      focush1: true
+      focush1: true,
+      description: 'Confirm your email address to receive updates on planning projects.',
+      robots: 'noindex, nofollow'
     }
   },
   {
@@ -129,7 +145,8 @@ const routes: Routes = [
     component: HomeComponent,
     data: {
       title: 'Home',
-      focush1: true
+      focush1: true,
+      description: 'Find, learn about, and comment on active land and water planning engagements in British Columbia. Planning in Partnership.'
     }
   },
   {
