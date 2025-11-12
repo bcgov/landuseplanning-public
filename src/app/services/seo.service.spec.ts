@@ -13,7 +13,7 @@ describe('SeoService', () => {
   beforeEach(() => {
     const metaSpy = jasmine.createSpyObj('Meta', ['updateTag']);
     const titleSpy = jasmine.createSpyObj('Title', ['setTitle']);
-    
+
     mockDocument = {
       createElement: jasmine.createSpy('createElement').and.returnValue({
         setAttribute: jasmine.createSpy('setAttribute')
@@ -35,7 +35,7 @@ describe('SeoService', () => {
         { provide: DOCUMENT, useValue: mockDocument }
       ]
     });
-    
+
     service = TestBed.inject(SeoService);
     metaService = TestBed.inject(Meta) as jasmine.SpyObj<Meta>;
     titleService = TestBed.inject(Title) as jasmine.SpyObj<Title>;

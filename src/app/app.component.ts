@@ -84,12 +84,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // Set page title
         const pageTitle = event['title'] || 'Home';
         this.titleService.setTitle(pageTitle + ' - ' + this.appName);
-        
+
         // Extract project data if available from route data or parent route
         let projectImage = null;
         let projectName = null;
         let projectDescription = null;
-        
+
         // Check current route and parent routes for project data
         let currentRoute = this.activatedRoute;
         while (currentRoute) {
@@ -97,10 +97,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           if (routeData['projectAndBanner']) {
             const project = routeData['projectAndBanner'][0];
             const bannerDocs = routeData['projectAndBanner'][1];
-            
+
             projectName = project?.name;
             projectDescription = project?.description;
-            
+
             // Get banner image if available
             if (bannerDocs && bannerDocs[0]?.data?.searchResults?.length > 0) {
               const bannerDoc = bannerDocs[0].data.searchResults[0];
@@ -112,32 +112,32 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           currentRoute = currentRoute.firstChild;
         }
-        
+
         // Update SEO meta tags
         const currentUrl = this.seoService.getFullUrl(this.router.url.split('?')[0].split('#')[0]);
-        
+
         // Build description - combine route-specific description with project description snippet
         let description = event['description'] || 'Find, learn about, and comment on active land and water planning engagements in British Columbia.';
-        
+
         // If we have both a route description and project description, append a snippet of the project description
         if (event['description'] && projectDescription) {
           // Limit project description to first 100 characters for a snippet
-          const projectSnippet = projectDescription.length > 100 
-            ? projectDescription.substring(0, 100).trim() + '...' 
+          const projectSnippet = projectDescription.length > 100
+            ? projectDescription.substring(0, 100).trim() + '...'
             : projectDescription;
           description = `${event['description']} ${projectSnippet}`;
         } else if (!event['description'] && projectDescription) {
           // Only use project description as fallback if no route description exists
           description = projectDescription;
         }
-        
+
         // Build title - use project name if available for any project page
         let metaTitle = pageTitle;
         if (projectName && pageTitle.startsWith('Project')) {
           // For project pages like "Project Details", "Project Documents", etc., use the project name
           metaTitle = `${projectName} - ${pageTitle}`;
         }
-        
+
         const seoConfig = {
           title: metaTitle,
           description: description,
@@ -146,7 +146,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           image: projectImage || event['image'] || '/assets/images/lup_revelstoke.jpg'
         };
         this.seoService.updateMetaTags(seoConfig);
-        
+
         // Set focus on h1 if required
         let pageh1 = document.getElementsByTagName('h1')[0];
         if (pageh1 && event['focush1']) {

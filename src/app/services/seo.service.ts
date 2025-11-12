@@ -42,7 +42,7 @@ export class SeoService {
     const mergedConfig = { ...this.defaultConfig, ...config };
 
     // Set page title
-    const fullTitle = config.title 
+    const fullTitle = config.title
       ? `${config.title} - ${this.defaultConfig.siteName}`
       : this.defaultConfig.title;
     this.titleService.setTitle(fullTitle);
@@ -128,12 +128,12 @@ export class SeoService {
     if (!imageUrl) {
       return this.getFullUrl(this.defaultConfig.image);
     }
-    
+
     // If already absolute URL, return as-is
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return imageUrl;
     }
-    
+
     // If relative URL, get current origin and append
     const origin = this.document.location.origin;
     const cleanPath = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
