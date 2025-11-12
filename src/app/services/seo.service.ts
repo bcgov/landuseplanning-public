@@ -21,7 +21,7 @@ export class SeoService {
     title: 'Planning in Partnership',
     description: 'Find, learn about, and comment on active land and water planning engagements in British Columbia.',
     image: '/assets/images/lup_revelstoke.jpg',
-    url: 'https://landuseplanning.gov.bc.ca',
+    url: 'https://planninginpartnership.ca',
     type: 'website',
     robots: 'index, follow',
     siteName: 'Planning in Partnership',

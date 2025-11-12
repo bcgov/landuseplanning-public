@@ -197,17 +197,17 @@ describe('SeoService', () => {
 
   describe('getBaseUrl', () => {
     it('should return the default base URL', () => {
-      expect(service.getBaseUrl()).toBe('https://landuseplanning.gov.bc.ca');
+      expect(service.getBaseUrl()).toBe('https://planninginpartnership.ca');
     });
   });
 
   describe('getFullUrl', () => {
     it('should generate full URL from path with leading slash', () => {
-      expect(service.getFullUrl('/projects')).toBe('https://landuseplanning.gov.bc.ca/projects');
+      expect(service.getFullUrl('/projects')).toBe('https://planninginpartnership.ca/projects');
     });
 
     it('should generate full URL from path without leading slash', () => {
-      expect(service.getFullUrl('projects')).toBe('https://landuseplanning.gov.bc.ca/projects');
+      expect(service.getFullUrl('projects')).toBe('https://planninginpartnership.ca/projects');
     });
   });
 });
