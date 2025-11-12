@@ -83,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(event => {
         // Set page title
         const pageTitle = event['title'] || 'Home';
-        this.titleService.setTitle(pageTitle + ' - ' + this.appName);
+        this.titleService.setTitle(`${pageTitle}  -  ${this.appName}`);
 
         // Extract project data if available from route data or parent route
         let projectImage = null;
@@ -102,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             projectDescription = project?.description;
 
             // Get banner image if available
-            if (bannerDocs && bannerDocs[0]?.data?.searchResults?.length > 0) {
+            if (bannerDocs?.[0]?.data?.searchResults?.length > 0) {
               const bannerDoc = bannerDocs[0].data.searchResults[0];
               const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
               const pathAPI = (isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         // Update SEO meta tags
-        const currentUrl = this.seoService.getFullUrl(this.router.url.split('?')[0].split('#')[0]);
+        const currentUrl = this.seoService.getFullUrl(this.router.url.split('?')[0].split('#')[0]).split(';')[0];
 
         // Build description - combine route-specific description with project description snippet
         let description = event['description'] || 'Find, learn about, and comment on active land and water planning engagements in British Columbia.';
