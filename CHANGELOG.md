@@ -1,3 +1,12 @@
+### Nov 13, 2025
+- Added robots.txt and sitemap.xml files for improved SEO and web crawler guidance. [DESENG-917](https://citz-gdx.atlassian.net/browse/DESENG-917)
+  - Created robots.txt to manage crawler access and behavior.
+  - Created sitemap.xml to list important site URLs for indexing.
+    - Created sitemap_static.xml for static pages.
+    - Sitemaps for dynamic (project) pages have to be served from the API, so 
+      sitemap_dynamic.xml is hosted there, and linked from sitemap.xml.
+  - Updated angular.json to include new files in the build process.
+
 ### Nov 10, 2025
 - Added dynamic meta/OpenGraph tags for improved SEO and social media sharing. [DESENG-915](https://citz-gdx.atlassian.net/browse/DESENG-915)
   - Created a SeoService to manage meta tags across the application.

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Static pages served from Angular app -->
+  <sitemap>
+    <loc>https://planninginpartnership.ca/sitemap_static.xml</loc>
+  </sitemap>
+  
+  <!-- Dynamic project pages served from API -->
+  <sitemap>
+    <loc>https://planninginpartnership.ca/api/sitemap_dynamic.xml</loc>
+  </sitemap>
+</sitemapindex>
