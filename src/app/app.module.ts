@@ -54,6 +54,7 @@ import { ActivitiesListTableRowsComponent } from './project/project-activities/a
 import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
 import { DocumentSectionService } from './services/documentSection.service';
 import { HealthCheckComponent } from './health-check/health-check.component';
+import { SeoService } from './services/seo.service';
 
 /**
  * Needed for NgxPageScrollCoreModule to set the default easing logic.
@@ -137,7 +138,8 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     SearchService,
     OrgService,
     FeatureService,
-    EmailSubscribeService
+    EmailSubscribeService,
+    SeoService
   ],
   bootstrap: [
     AppComponent

@@ -4,9 +4,11 @@ import { Title } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject } from 'rxjs';
 import { map, mergeMap, takeUntil, filter } from 'rxjs/operators';
+import { isEmpty } from 'lodash';
 
 import { ApiService } from 'app/services/api';
 import { ConfigService } from 'app/services/config.service';
+import { SeoService } from 'app/services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -31,10 +33,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private cookieService: CookieService,
     private api: ApiService,
     private configService: ConfigService,
+    private seoService: SeoService,
   ) {
 
     // Set the app name. Used as part of dynamically set page titles.
-    this.appName = 'Land Use Planning';
+    this.appName = 'Planning in Partnership';
 
     // ref: https://stackoverflow.com/questions/5899783/detect-safari-using-jquery
     this.isSafari = (/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
@@ -78,7 +81,73 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       takeUntil(this.ngUnsubscribe)
       )
       .subscribe(event => {
-        this.titleService.setTitle(event['title'] + ' - ' + this.appName);
+        // Set page title
+        const pageTitle = event['title'] || 'Home';
+        this.titleService.setTitle(`${pageTitle}  -  ${this.appName}`);
+
+        // Extract project data if available from route data or parent route
+        let projectImage = null;
+        let projectName = null;
+        let projectDescription = null;
+
+        // Check current route and parent routes for project data
+        let currentRoute = this.activatedRoute;
+        while (currentRoute) {
+          const routeData = currentRoute.snapshot.data;
+          if (routeData['projectAndBanner']) {
+            const project = routeData['projectAndBanner'][0];
+            const bannerDocs = routeData['projectAndBanner'][1];
+
+            projectName = project?.name;
+            projectDescription = project?.description;
+
+            // Get banner image if available
+            if (bannerDocs?.[0]?.data?.searchResults?.length > 0) {
+              const bannerDoc = bannerDocs[0].data.searchResults[0];
+              const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_base_path');
+              const pathAPI = (isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
+              projectImage = `${pathAPI}/document/${bannerDoc._id}/fetch/${bannerDoc.documentFileName.replace(/ /g, '_')}`;
+            }
+            break;
+          }
+          currentRoute = currentRoute.firstChild;
+        }
+
+        // Update SEO meta tags
+        const currentUrl = this.seoService.getFullUrl(this.router.url.split('?')[0].split('#')[0]).split(';')[0];
+
+        // Build description - combine route-specific description with project description snippet
+        let description = event['description'] || 'Find, learn about, and comment on active land and water planning engagements in British Columbia.';
+
+        // If we have both a route description and project description, append a snippet of the project description
+        if (event['description'] && projectDescription) {
+          // Limit project description to first 100 characters for a snippet
+          const projectSnippet = projectDescription.length > 100
+            ? projectDescription.substring(0, 100).trim() + '...'
+            : projectDescription;
+          description = `${event['description']} ${projectSnippet}`;
+        } else if (!event['description'] && projectDescription) {
+          // Only use project description as fallback if no route description exists
+          description = projectDescription;
+        }
+
+        // Build title - use project name if available for any project page
+        let metaTitle = pageTitle;
+        if (projectName && pageTitle.startsWith('Project')) {
+          // For project pages like "Project Details", "Project Documents", etc., use the project name
+          metaTitle = `${projectName} - ${pageTitle}`;
+        }
+
+        const seoConfig = {
+          title: metaTitle,
+          description: description,
+          url: currentUrl,
+          robots: event['robots'] || 'index, follow',
+          image: projectImage || event['image'] || '/assets/images/lup_revelstoke.jpg'
+        };
+        this.seoService.updateMetaTags(seoConfig);
+
+        // Set focus on h1 if required
         let pageh1 = document.getElementsByTagName('h1')[0];
         if (pageh1 && event['focush1']) {
           pageh1.focus();

@@ -7,8 +7,8 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/takeUntil';
-import * as _ from 'lodash';
 import * as dayjs from 'dayjs';
+import { sortedUniq, compact, isEqual } from 'lodash';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Constants } from 'app/shared/utils/constants';
@@ -154,7 +154,7 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   // called when apps list changes
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.projects && !changes.projects.firstChange && changes.projects.currentValue) {
-      this.applicantKeys = _.sortedUniq(_.compact(this.projects.map(proj => proj.name ? proj.name.toUpperCase() : null)).sort());
+      this.applicantKeys = sortedUniq(compact(this.projects.map(proj => proj.name ? proj.name.toUpperCase() : null)).sort());
 
       // (re)apply filtering
       this.internalApplyAllFilters(false);
@@ -520,15 +520,15 @@ export class ProjlistFiltersComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public regionHasChanges(): boolean {
-    return !_.isEqual(this._regionFilters, this.regionFilters);
+    return !isEqual(this._regionFilters, this.regionFilters);
   }
 
   public cpStatusHasChanges(): boolean {
-    return !_.isEqual(this._cpStatusFilters, this.cpStatusFilters);
+    return !isEqual(this._cpStatusFilters, this.cpStatusFilters);
   }
 
   public appStatusHasChanges(): boolean {
-    return !_.isEqual(this._appStatusFilters, this.appStatusFilters);
+    return !isEqual(this._appStatusFilters, this.appStatusFilters);
   }
 
   public onShowHideClick() {

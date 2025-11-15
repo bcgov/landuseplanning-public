@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
 import { CommentService } from 'app/services/comment.service';
@@ -71,7 +71,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: { commentPeriod: CommentPeriod, projectAndBanner }) => {
           const remote_api_path = window.localStorage.getItem('from_public_server--remote_api_path');
-          this.pathAPI = (_.isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
+          this.pathAPI = (isEmpty(remote_api_path)) ? 'http://localhost:3000/api' : remote_api_path;
 
           if (data.projectAndBanner[0] && !this.project) {
             this.project = data.projectAndBanner[0];

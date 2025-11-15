@@ -7,7 +7,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Data } from '@angular/router';
 import { Document } from 'app/models/document';
 import { ProjectShapefile } from 'app/models/project';
-import * as _ from 'lodash';
+import { isEmpty, orderBy } from 'lodash';
 import { Utils } from 'app/shared/utils/utils';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ScriptLoaderService } from 'app/services/scriptLoader.service';
@@ -62,7 +62,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     }
 
     const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
-    this.pathAPI = _.isEmpty(remoteApiPath) ? 'http://localhost:3000/api' : remoteApiPath;
+    this.pathAPI = isEmpty(remoteApiPath) ? 'http://localhost:3000/api' : remoteApiPath;
 
     // Try to get project from parent resolver
     const parentData = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
@@ -265,7 +265,7 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     let shapefilesToDraw = [];
     if (Array.isArray(this.project.shapefiles) && this.project.shapefiles.length > 0) {
       // Draw project-level shape files if they're available.
-      shapefilesToDraw = _.orderBy(this.project.shapefiles, ['order'], ['desc']);
+      shapefilesToDraw = orderBy(this.project.shapefiles, ['order'], ['desc']);
     } else if (this.shapefiles.length > 0) {
       // Otherwise, draw the first shape file that was retrieved by the document resolver, if it exists.
       shapefilesToDraw = [this.shapefiles[0]];

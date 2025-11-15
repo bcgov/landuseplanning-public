@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/operator/finally';
-import * as _ from 'lodash';
+import { isEmpty, concat } from 'lodash';
 import { Project } from 'app/models/project';
 import { Document } from 'app/models/document';
 import { ProjectService } from 'app/services/project.service';
@@ -81,7 +81,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // For height calculations
     const deployment_env = window.localStorage.getItem('from_admin_server--deployment_env');
-    this.env = (_.isEmpty(deployment_env)) ? 'prod' : deployment_env;
+    this.env = (isEmpty(deployment_env)) ? 'prod' : deployment_env;
     if (this.env.toUpperCase() === 'PROD') {
       this.devBannerActive = false;
     } else {
@@ -156,7 +156,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
                     });
                   }
 
-                  this.allApps = _.concat(this.allApps, projects);
+                  this.allApps = concat(this.allApps, projects);
                   // filter component gets all apps
                   this.filterApps = this.allApps;
                 });

@@ -5,6 +5,25 @@
     - Update all references
   - Update OpenShift pipeline and buildConfigs to accomodate pre-rendering stage
 
+### Nov 13, 2025
+- Added robots.txt and sitemap.xml files for improved SEO and web crawler guidance. [DESENG-917](https://citz-gdx.atlassian.net/browse/DESENG-917)
+  - Created robots.txt to manage crawler access and behavior.
+  - Created sitemap.xml to list important site URLs for indexing.
+    - Created sitemap_static.xml for static pages.
+    - Sitemaps for dynamic (project) pages have to be served from the API, so 
+      sitemap_dynamic.xml is hosted there, and linked from sitemap.xml.
+  - Updated angular.json to include new files in the build process.
+
+### Nov 10, 2025
+- Added dynamic meta/OpenGraph tags for improved SEO and social media sharing. [DESENG-915](https://citz-gdx.atlassian.net/browse/DESENG-915)
+  - Created a SeoService to manage meta tags across the application.
+  - Added a description to most routes for better SEO and social media previews.
+  - Updated project pages to include relevant meta tags based on project data.
+
+### Nov 5, 2025
+- Updated email confirmation error page and subscription modal with clearer instructions. [DESENG-921](https://citz-gdx.atlassian.net/browse/DESENG-921)
+  - Replace large import of Lodash `_` in emailSubscribe.service.ts with specific function import to reduce bundle size.
+
 ### Oct 28, 2025
 - Change ministry name for information collection notice [DESENG-900](https://citz-gdx.atlassian.net/browse/DESENG-900)
 - Swap position of comment period dates and description on comment period page [DESENG-899](https://citz-gdx.atlassian.net/browse/DESENG-899)

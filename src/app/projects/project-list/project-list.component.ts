@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
 import * as dayjs from 'dayjs';
-import * as _ from 'lodash';
 
 import { Project, ProjectType } from 'app/models/project';
 import { SearchTerms } from 'app/models/search';
