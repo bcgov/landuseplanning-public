@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "base-app2": {
+    "landuseplanning-public": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -11,7 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/landuseplanning-public",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
@@ -104,12 +104,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "base-app2:build",
+            "browserTarget": "landuseplanning-public:build",
             "port": 4300
           },
           "configurations": {
             "production": {
-              "browserTarget": "base-app2:build:production"
+              "browserTarget": "landuseplanning-public:build:production"
             }
           }
         },
@@ -203,7 +203,7 @@
         }
       }
     },
-    "base-app2-e2e": {
+    "landuseplanning-public-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -212,7 +212,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "base-app2:serve"
+            "devServerTarget": "landuseplanning-public:serve"
           }
         },
         "lint": {
@@ -227,7 +227,7 @@
       }
     }
   },
-  "defaultProject": "base-app2",
+  "defaultProject": "landuseplanning-public",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app"

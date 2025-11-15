@@ -1,3 +1,10 @@
+### Nov 14, 2025
+- Add pre-rendering for static pages with Scully [DESENG-914](https://citz-gdx.atlassian.net/browse/DESENG-914)
+  - Customize package.json to work with custom Scully/Puppeteer/Chromium configuration compatible with ARM macs and TS 4.0.8
+  - Modify dist folder layout and app name to match Scully's requirements
+    - Update all references
+  - Update OpenShift pipeline and buildConfigs to accomodate pre-rendering stage
+
 ### Oct 28, 2025
 - Change ministry name for information collection notice [DESENG-900](https://citz-gdx.atlassian.net/browse/DESENG-900)
 - Swap position of comment period dates and description on comment period page [DESENG-899](https://citz-gdx.atlassian.net/browse/DESENG-899)

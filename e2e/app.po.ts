@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class BaseApp2Page {
+export class LandUsePlanningPublicPage {
   navigateTo() {
     return browser.get('/');
   }

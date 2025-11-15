@@ -90,13 +90,23 @@ spec:
       taskRef:
         kind: ClusterTask
         name: openshift-client
+    - name: build-static-pages
+      params:
+        - name: SCRIPT
+          value: |
+            oc start-build lup-public-prerender-static-pages --follow --wait
+      runAfter:
+        - build-angular-compiled
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
     - name: build-deploy
       params:
         - name: SCRIPT
           value: |
             oc start-build lup-public-deploy-image --follow --wait
       runAfter:
-        - build-angular-compiled
+        - build-static-pages
       taskRef:
         kind: ClusterTask
         name: openshift-client
@@ -130,4 +140,4 @@ spec:
       params:
         - name: SCRIPT
           value: |
-            oc rollout status deployment/landuseplanning-public-dev -n e8b9ad-dev --timeout="120s"
+            oc rollout status deployment/landuseplanning-public-dev -n e8b9ad-dev --timeout="180s"

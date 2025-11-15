@@ -57,7 +57,7 @@ yarn install
 ```
 2. Run the build
 
-   The build artifacts will be stored in the `./dist/` directory.
+   The build artifacts will be stored in the `./dist/landuseplanning-public` directory.
 ```
 npm run build
 ```
@@ -65,6 +65,23 @@ npm run build
 ```
 ng serve --prod
 ```
+
+# Pre-rendering pages
+
+## Using Scully to pre-render pages
+
+This application utilizes Scully to pre-render static pages for improved SEO. 
+
+1. If you wish to change which pages are rendered statically, you can do so in scully.landuseplanning-public.config.ts. The current static routes are listed under extraRoutes. 
+2. After building your app, Scully will run automatically. If you wish to start Scully page generation manually, you can do it with this command:
+```
+npm run scully
+```
+3. If you wish to test the Scully static server, you can do so by running this command:
+```
+npm run scully:serve
+```
+You can then access the static pages via your localhost address, followed by the port number defined in the Scully config file. Example: `localhost:1642`
 
 # Linting and Formatting
 

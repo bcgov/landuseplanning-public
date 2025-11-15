@@ -1,0 +1,50 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: lup-public-deploy-image
+  namespace: e8b9ad-tools
+  labels:
+    name: lup-public-deploy-image
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'lup-public-deploy-image:latest'
+  resources:
+    limits:
+      cpu: 500m
+      memory: 4Gi
+    requests:
+      cpu: 400m
+      memory: 2Gi
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'lup-public-nginx-runtime:latest'
+      env:
+        - name: BUILD_LOGLEVEL
+          value: '5'
+  postCommit: {}
+  source:
+    type: Dockerfile
+    dockerfile: |-
+      FROM lup-public-nginx-runtime:latest
+      COPY * /tmp/app/scully/
+      USER root
+      RUN rm -rf /tmp/app/dist && \
+          cp -r /tmp/app/scully /tmp/app/dist && \
+          ln -sf /etc/nginx/publicServerEnvironmentSettings.js /tmp/app/dist/publicServerEnvironmentSettings.js
+      USER 104
+      CMD /usr/libexec/s2i/run
+    images:
+      - from:
+          kind: ImageStreamTag
+          name: 'lup-public-prerender-static-pages:latest'
+        paths:
+          - sourcePath: /opt/app-root/scully/.
+            destinationDir: tmp/app/scully
