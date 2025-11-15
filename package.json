@@ -14,8 +14,7 @@
     "tests-ci": "ng test --watch=false",
     "lint": "ng lint --format=stylish",
     "e2e": "ng e2e",
-    "preinstall": "export PUPPETEER_SKIP_DOWNLOAD=true",
-    "postinstall": "unset PUPPETEER_SKIP_DOWNLOAD && npm run build",
+    "postinstall": "npm run build",
     "scully": "npx scully --",
     "scully:serve": "npx scully serve --"
   },

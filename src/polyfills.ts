@@ -101,4 +101,6 @@ if (!String.prototype.padStart) {
 * SCULLY IMPORTS
 */
 // tslint:disable-next-line: align
-import 'zone.js/dist/task-tracking';
+if (typeof window === 'undefined') {
+  import('zone.js/dist/task-tracking');
+}

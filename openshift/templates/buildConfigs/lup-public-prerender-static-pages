@@ -36,7 +36,7 @@ spec:
 
       RUN curl -fsSL https://rpm.nodesource.com/setup_14.x | bash - && \
           yum install -y nodejs git && \
-          npm install -g npm@6
+          npm install -g npm@8
 
       WORKDIR /opt/app-root/src
 
