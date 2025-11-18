@@ -1,3 +1,10 @@
+### Nov 14, 2025
+- Add pre-rendering for static pages with Scully [DESENG-914](https://citz-gdx.atlassian.net/browse/DESENG-914)
+  - Customize package.json to work with custom Scully/Puppeteer/Chromium configuration compatible with ARM macs and TS 4.0.8
+  - Modify dist folder layout and app name to match Scully's requirements
+    - Update all references
+  - Update OpenShift pipeline and buildConfigs to accomodate pre-rendering stage
+
 ### Nov 13, 2025
 - Added robots.txt and sitemap.xml files for improved SEO and web crawler guidance. [DESENG-917](https://citz-gdx.atlassian.net/browse/DESENG-917)
   - Created robots.txt to manage crawler access and behavior.

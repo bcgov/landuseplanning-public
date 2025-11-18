@@ -96,3 +96,11 @@ if (!String.prototype.padStart) {
     }
   };
 }
+
+/***************************************************************************************************
+* SCULLY IMPORTS
+*/
+// tslint:disable-next-line: align
+if (typeof window === 'undefined') {
+  import('zone.js/dist/task-tracking');
+}

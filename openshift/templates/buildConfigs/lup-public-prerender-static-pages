@@ -1,0 +1,47 @@
+
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: lup-public-prerender-static-pages
+  namespace: e8b9ad-tools
+  labels:
+    name: lup-public-prerender-static-pages
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'lup-public-prerender-static-pages:latest'
+  resources:
+    limits:
+      cpu: 500m
+      memory: 4Gi
+    requests:
+      cpu: 400m
+      memory: 2Gi
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'lup-public-compiled:latest'
+      env:
+        - name: BUILD_LOGLEVEL
+          value: '5'
+  source:
+    type: Dockerfile
+    dockerfile: |-
+      FROM lup-public-compiled:latest
+
+      RUN curl -fsSL https://rpm.nodesource.com/setup_14.x | bash - && \
+          yum install -y nodejs git && \
+          npm install -g npm@8
+
+      WORKDIR /opt/app-root/src
+
+      RUN npm ci && \
+          npx scully --config scully.config.js
+
+      RUN mkdir -p /opt/app-root/scully && \
+          cp -r dist/scully/* /opt/app-root/scully/
