@@ -69,7 +69,7 @@ spec:
             oc start-build lup-public-angular-builder --follow --wait
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: build-nginx
       params:
         - name: SCRIPT
@@ -79,7 +79,7 @@ spec:
         - build-angular-builder
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: build-angular-compiled
       params:
         - name: SCRIPT
@@ -89,7 +89,7 @@ spec:
         - build-nginx
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: build-static-pages
       params:
         - name: SCRIPT
@@ -99,7 +99,7 @@ spec:
         - build-angular-compiled
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: build-deploy
       params:
         - name: SCRIPT
@@ -109,7 +109,7 @@ spec:
         - build-static-pages
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: tag-image
       params:
         - name: SCRIPT
@@ -119,7 +119,7 @@ spec:
         - build-deploy
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: trigger-deployment
       params:
         - name: SCRIPT
@@ -130,13 +130,13 @@ spec:
         - tag-image
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
     - name: check-rollout-status
       runAfter:
         - trigger-deployment
       taskRef:
         kind: ClusterTask
-        name: openshift-client
+        name: openshift-client-1-5-0
       params:
         - name: SCRIPT
           value: |
