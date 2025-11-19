@@ -32,16 +32,13 @@ spec:
   source:
     type: Dockerfile
     dockerfile: |-
-      FROM lup-public-compiled:latest
-
-      RUN curl -fsSL https://rpm.nodesource.com/setup_14.x | bash - && \
-          yum install -y nodejs git && \
-          npm install -g npm@8
-
       WORKDIR /opt/app-root/src
 
-      RUN npm ci && \
-          npx scully --config scully.config.js
+      COPY --from=image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-compiled:latest /opt/app-root/src/dist/landuseplanning-public ./dist/landuseplanning-public
+      COPY --from=image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-compiled:latest /opt/app-root/src/package*.json ./
+      COPY --from=image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-compiled:latest /opt/app-root/src/scully.landuseplanning-public.config.ts ./scully.landuseplanning-public.config.ts
 
-      RUN mkdir -p /opt/app-root/scully && \
+      RUN npm ci --only=production && \
+          npx scully --config scully.landuseplanning-public.config.ts && \
+          mkdir -p /opt/app-root/scully && \
           cp -r dist/scully/* /opt/app-root/scully/
