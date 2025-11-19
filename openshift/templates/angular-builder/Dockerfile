@@ -1,4 +1,4 @@
-# Get community edition of nodejs v10.x (LTS)
+# Get nodejs version 16 ubi8 from local OpenShift image registry
 FROM image-registry.apps.silver.devops.gov.bc.ca/openshift/nodejs:16-ubi8
 
 # Switch to root for package installs
