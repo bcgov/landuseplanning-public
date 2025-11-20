@@ -42,7 +42,7 @@ spec:
     images:
       - from:
           kind: ImageStreamTag
-          name: 'lup-public-copy-static-pages:latest'
+          name: 'lup-public-compiled:latest'
         paths:
           - sourcePath: /opt/app-root/scully/.
             destinationDir: .

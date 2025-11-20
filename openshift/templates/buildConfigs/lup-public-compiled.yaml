@@ -1,15 +1,14 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: lup-public-copy-static-pages
+  name: lup-public-compiled
   namespace: e8b9ad-tools
-  labels:
-    name: lup-public-copy-static-pages
 spec:
+  nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
-      name: 'lup-public-copy-static-pages:latest'
+      name: 'lup-public-compiled:latest'
   resources:
     limits:
       cpu: 500m
@@ -24,12 +23,15 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: 'lup-public-compiled:latest'
-      env:
-        - name: BUILD_LOGLEVEL
-          value: '5'
+        name: 'lup-public-angular-builder:latest'
+  postCommit: {}
   source:
-    type: Dockerfile
+    type: Git
+    git:
+      uri: 'https://github.com/bcgov/landuseplanning-public'
+      ref: dev
     dockerfile: |-
       WORKDIR /opt/app-root/src
+      RUN npm run build && npm run postbuild
       RUN mkdir -p /opt/app-root/scully && cp -r dist/scully/* /opt/app-root/scully/
+  runPolicy: Serial

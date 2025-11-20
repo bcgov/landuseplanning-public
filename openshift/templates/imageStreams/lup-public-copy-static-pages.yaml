@@ -1,8 +1,0 @@
-kind: ImageStream
-apiVersion: image.openshift.io/v1
-metadata:
-  name: lup-public-copy-static-pages
-  namespace: e8b9ad-tools
-spec:
-  lookupPolicy:
-    local: false
