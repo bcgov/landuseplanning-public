@@ -5,7 +5,7 @@ FROM image-registry.apps.silver.devops.gov.bc.ca/openshift/nodejs:16-ubi8
 USER 0
 
 # Install dependencies
-RUN microdnf install -y \
+RUN yum -y install \
     alsa-lib \
     atk \
     cups-libs \
@@ -27,8 +27,8 @@ RUN microdnf install -y \
     xorg-x11-fonts-Type1 \
     xorg-x11-utils \
     nss \
-    && microdnf update nss -y \
-    && microdnf clean all
+    && yum -y update nss \
+    && yum clean all
 
 # Restore permissions
 RUN chown -R 1001:0 /opt/app-root/src && \
