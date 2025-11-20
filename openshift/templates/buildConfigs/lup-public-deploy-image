@@ -33,6 +33,7 @@ spec:
   source:
     type: Dockerfile
     dockerfile: |-
+      FROM image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-nginx-runtime:latest
       USER root
       RUN mkdir -p /tmp/app/dist && \
           cp -r /tmp/app/scully/. /tmp/app/dist && \
