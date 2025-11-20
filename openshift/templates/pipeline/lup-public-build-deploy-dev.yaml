@@ -90,23 +90,13 @@ spec:
       taskRef:
         kind: ClusterTask
         name: openshift-client-1-5-0
-    - name: build-static-pages
-      params:
-        - name: SCRIPT
-          value: |
-            oc start-build lup-public-prerender-static-pages --follow --wait
-      runAfter:
-        - build-angular-compiled
-      taskRef:
-        kind: ClusterTask
-        name: openshift-client-1-5-0
     - name: build-deploy
       params:
         - name: SCRIPT
           value: |
             oc start-build lup-public-deploy-image --follow --wait
       runAfter:
-        - build-static-pages
+        - build-angular-compiled
       taskRef:
         kind: ClusterTask
         name: openshift-client-1-5-0
