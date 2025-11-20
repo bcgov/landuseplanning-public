@@ -93,8 +93,7 @@ To add this image to your OpenShift Project,
 
 What happens in OpenShift:
 1. Trigger's `angular-builder` to build with your source code
-1. Scully pre-rendering is completed
-1. Copies output, i.e., `/opt/app-root/scully` to `nginx-runtime` directory `tmp/app/dist`
+1. Copies output, i.e., `/opt/app-root/src/dist/` to `nginx-runtime` directory `tmp/app`
 1. Create to image, `<your app name>-build` to Image Stream
 
 ## Setup "Your App" Deployment

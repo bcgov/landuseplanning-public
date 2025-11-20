@@ -36,11 +36,6 @@ yarn-error.log
 yarn.lock
 debug.log
 
-# Pre-rendering
-scully.log
-.scully/
-.scully/settings.yml
-
 # e2e
 /e2e/*.js
 /e2e/*.map
