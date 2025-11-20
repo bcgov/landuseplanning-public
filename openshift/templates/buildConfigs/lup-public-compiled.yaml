@@ -19,19 +19,17 @@ spec:
   successfulBuildsHistoryLimit: 5
   failedBuildsHistoryLimit: 5
   strategy:
-    type: Docker
-    dockerStrategy:
+    type: Source
+    sourceStrategy:
       from:
         kind: ImageStreamTag
         name: 'lup-public-angular-builder:latest'
-  postCommit: {}
+  postCommit:
+    script: |
+      mkdir -p /opt/app-root/scully && cp -r dist/scully/* /opt/app-root/scully/
   source:
     type: Git
     git:
       uri: 'https://github.com/bcgov/landuseplanning-public'
       ref: dev
-    dockerfile: |-
-      WORKDIR /opt/app-root/src
-      RUN npm run build && npm run postbuild
-      RUN mkdir -p /opt/app-root/scully && cp -r dist/scully/* /opt/app-root/scully/
   runPolicy: Serial
