@@ -5,7 +5,7 @@ FROM image-registry.apps.silver.devops.gov.bc.ca/openshift/nodejs:16-ubi8
 USER 0
 
 # Install dependencies
-RUN yum -y install  \
+RUN yum -y install \
     alsa-lib \
     atk \
     cups-libs \
