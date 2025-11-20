@@ -94,7 +94,7 @@ spec:
       params:
         - name: SCRIPT
           value: |
-            oc start-build lup-public-prerender-static-pages --follow --wait
+            oc start-build lup-public-copy-static-pages --follow --wait
       runAfter:
         - build-angular-compiled
       taskRef:

@@ -1,0 +1,35 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: lup-public-copy-static-pages
+  namespace: e8b9ad-tools
+  labels:
+    name: lup-public-copy-static-pages
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'lup-public-copy-static-pages:latest'
+  resources:
+    limits:
+      cpu: 500m
+      memory: 4Gi
+    requests:
+      cpu: 400m
+      memory: 2Gi
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'lup-public-compiled:latest'
+      env:
+        - name: BUILD_LOGLEVEL
+          value: '5'
+  source:
+    type: Dockerfile
+    dockerfile: |-
+      WORKDIR /opt/app-root/src
+      RUN mkdir -p /opt/app-root/scully && cp -r dist/scully/* /opt/app-root/scully/

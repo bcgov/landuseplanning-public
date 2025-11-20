@@ -1,9 +1,8 @@
 kind: ImageStream
 apiVersion: image.openshift.io/v1
 metadata:
-  name: lup-public-prerender-static-pages
+  name: lup-public-copy-static-pages
   namespace: e8b9ad-tools
-  resourceVersion: '17099214537'
 spec:
   lookupPolicy:
     local: false
