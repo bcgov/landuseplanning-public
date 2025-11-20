@@ -7,7 +7,7 @@
     "prestart": "",
     "start": "ng serve -o --port 4300",
     "build": "ng build --prod --configuration=production",
-    "postbuild": "node node_modules/puppeteer/install.js && scully",
+    "postbuild": "scully",
     "pretest": "",
     "test": "echo 'Test suite should be run with \"`npm run tests` or npm `run tests-ci`\"'",
     "tests": "ng test",

@@ -33,18 +33,18 @@ spec:
   source:
     type: Dockerfile
     dockerfile: |-
-      FROM image-registry.openshift-image-registry.svc:5000/e8b9ad-tools/lup-public-nginx-runtime:latest
+      FROM lup-public-nginx-runtime:latest
       COPY * /tmp/app/scully/
       USER root
-      RUN mkdir -p /tmp/app/dist && \
-          cp -r /tmp/app/scully/. /tmp/app/dist && \
+      RUN rm -rf /tmp/app/dist && \
+          cp -r /tmp/app/scully /tmp/app/dist && \
           ln -sf /etc/nginx/publicServerEnvironmentSettings.js /tmp/app/dist/publicServerEnvironmentSettings.js
       USER 104
       CMD /usr/libexec/s2i/run
     images:
       - from:
           kind: ImageStreamTag
-          name: 'lup-public-compiled:latest'
+          name: 'lup-public-prerender-static-pages:latest'
         paths:
           - sourcePath: /opt/app-root/scully/.
-            destinationDir: .
+            destinationDir: tmp/app/scully
