@@ -1,15 +1,14 @@
-import { LandUsePlanningPublicPage } from './app.po';
+import { BaseApp2Page } from './app.po';
 
-describe('Land Use Planning Public App', () => {
-  let page: LandUsePlanningPublicPage;
+describe('base-app2 App', () => {
+  let page: BaseApp2Page;
 
   beforeEach(() => {
-    page = new LandUsePlanningPublicPage();
+    page = new BaseApp2Page();
   });
 
-  it('should display message saying app works', async () => {
-    await page.navigateTo();
-    const text = await page.getParagraphText();
-    expect(text).toEqual('app works!');
+  it('should display message saying app works', () => {
+    page.navigateTo();
+    expect(page.getParagraphText()).toEqual('app works!');
   });
 });

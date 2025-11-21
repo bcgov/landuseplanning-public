@@ -1,38 +1,46 @@
-# Get nodejs version 16 ubi8 from local OpenShift image registry
-FROM image-registry.apps.silver.devops.gov.bc.ca/openshift/nodejs:16-ubi8
+# Get community edition of nodejs v10.x (LTS)
+FROM centos/nodejs-10-centos7
+
+ENV PATH="/opt/rh/rh-nodejs10/root/usr/bin/:$PATH"
 
 # Switch to root for package installs
 USER 0
 
-# Install dependencies
-RUN microdnf install -y \
-    alsa-lib \
-    atk \
-    cups-libs \
-    gtk3 \
-    ipa-gothic-fonts \
-    libXcomposite \
-    libXcursor \
-    libXdamage \
-    libXext \
-    libXi \
-    libXrandr \
-    libXScrnSaver \
-    libXtst \
-    pango \
-    xorg-x11-fonts-100dpi \
-    xorg-x11-fonts-75dpi \
-    xorg-x11-fonts-cyrillic \
-    xorg-x11-fonts-misc \
-    xorg-x11-fonts-Type1 \
-    xorg-x11-utils \
-    nss \
-    && microdnf update nss -y \
-    && microdnf clean all
+# install Chrome Headless dependencies
+#RUN yum -y install pango.x86_64 \
+#      libXcomposite.x86_64 \
+#      libXcursor.x86_64 \
+#      libXdamage.x86_64 \
+#      libXext.x86_64 \
+#      libXi.x86_64 \
+#      libXtst.x86_64 \
+#      cups-libs.x86_64 \
+#      libXScrnSaver.x86_64 \
+#      libXrandr.x86_64 \
+#      GConf2.x86_64 \
+#      alsa-lib.x86_64 \
+#      atk.x86_64 \
+#      gtk3.x86_64 \
+#      ipa-gothic-fonts \
+#      xorg-x11-fonts-100dpi \
+#      xorg-x11-fonts-75dpi \
+#      xorg-x11-utils \
+#      xorg-x11-fonts-cyrillic \
+#      xorg-x11-fonts-Type1 \
+#      xorg-x11-fonts-misc \
+#      && yum clean all -y && \
+# yum cache files may still exist (and quite large in size)
+#      rm -rf /var/cache/yum/*
 
-# Restore permissions
-RUN chown -R 1001:0 /opt/app-root/src && \
-    chmod -R ug+rwx /opt/app-root/src
+# update npm, and install some dependencies that are slow to install.
+RUN npm i npm@6.4.1 -g	&& \
+  rm -R /opt/rh/rh-nodejs10/root/usr/lib/node_modules/npm
+
+
+# Required in order to mount .npm as a volume to cache downloaded files
+RUN chown -R 1001:0 .npm && \
+  chmod -R ug+rwx .npm && \
+  chown -R 1001:0 /opt/app-root/src/.config
 
 # Run container by default as user with id 1001 (default)
 USER 1001

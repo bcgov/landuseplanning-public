@@ -111,7 +111,7 @@ objects:
               kind: ImageStreamTag
               name: "${NAME}:latest"
             paths:
-              - sourcePath: /opt/app-root/src/dist/landuseplanning-public/.
+              - sourcePath: /opt/app-root/src/dist/.
                 destinationDir: tmp
       strategy:
         type: Docker
