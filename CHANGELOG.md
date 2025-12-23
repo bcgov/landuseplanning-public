@@ -1,3 +1,6 @@
+### Dec 22, 2025
+- Update environemnt banner component to read from correct localStorage key [DESENG-924](https://citz-gdx.atlassian.net/browse/DESENG-924)
+
 ### Nov 13, 2025
 - Added robots.txt and sitemap.xml files for improved SEO and web crawler guidance. [DESENG-917](https://citz-gdx.atlassian.net/browse/DESENG-917)
   - Created robots.txt to manage crawler access and behavior.

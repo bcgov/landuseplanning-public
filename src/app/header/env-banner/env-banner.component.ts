@@ -12,7 +12,7 @@ export class EnvBannerComponent implements OnInit {
   public showBanner: boolean;
 
   constructor() {
-    const deployment_env = window.localStorage.getItem('from_admin_server--deployment_env');
+    const deployment_env = window.localStorage.getItem('from_public_server--deployment_env');
 
     this.env = (isEmpty(deployment_env)) ? 'prod' : deployment_env;
     if (this.env.toUpperCase() === 'PROD') {
