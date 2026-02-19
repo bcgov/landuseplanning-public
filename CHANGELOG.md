@@ -1,3 +1,8 @@
+### Feb 19, 2026
+- Small wording updates to comment period [DESENG-924](https://citz-gdx.atlassian.net/browse/DESENG-935)
+  - Changed "Submit a Comment" heading to "Participate Now" 
+  - Changed "All accepted comments submitted" to "All submissions"
+
 ### Dec 22, 2025
 - Update environemnt banner component to read from correct localStorage key [DESENG-924](https://citz-gdx.atlassian.net/browse/DESENG-924)
 
