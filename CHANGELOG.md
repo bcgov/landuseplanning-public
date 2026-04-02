@@ -1,3 +1,18 @@
+### Apr 2, 2026
+- Updated navigation bar items [DESENG-941](https://citz-gdx.atlassian.net/browse/DESENG-941)
+  - Removed "Home" button
+  - Changed "List of Projects" to "Projects"
+  - Changed "Map View" to "Project Map"
+  - Changed "Learn More" to "Planning"
+  - Changed Project Map icon from magnifying glass to map
+- Added British Columbia logo to home page [DESENG-940](https://citz-gdx.atlassian.net/browse/DESENG-940)
+  - Logo appears in the hero banner in the position noted in the ticket
+- Cleaned up activities and updates section on homepage
+  - Only appears if items are available
+  - Fixed borders in feed
+  - Removed underlining on ghost button
+- Removed unintentional light-gray color on individual project pages
+
 ### Feb 19, 2026
 - Small wording updates to comment period [DESENG-924](https://citz-gdx.atlassian.net/browse/DESENG-935)
   - Changed "Submit a Comment" heading to "Participate Now" 
