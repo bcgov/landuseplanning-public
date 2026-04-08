@@ -20,51 +20,43 @@
         <ul class="navbar-nav">
           <li class="nav-item">
             
-            <a class="nav-link" title="Home" routerLink="/" (focus)="dropDownHide()" [class.current]="router.url === '/'">
-              <span class="icon align-middle"><i class="material-icons-outlined" aria-hidden="true">home</i></span>
-              <span>Home</span>
-            </a>
-
-          </li>
-          <li class="nav-item">
-            
-            <a class="nav-link" title="List Projects" routerLink="/projects-list" (focus)="dropDownHide()" [class.current]="router.url.split(';')[0] === '/projects-list'">
+            <a class="nav-link" title="A list of the projects" routerLink="/projects-list" (focus)="dropDownHide()" [class.current]="router.url.split(';')[0] === '/projects-list'">
               <span class="icon align-middle"><i class="material-icons" aria-hidden="true">list</i></span>
-              <span>List of Projects</span>
+              <span>Projects</span>
             </a>
 
           </li>
           <li class="nav-item">
 
-            <a class="nav-link" title="Map View of Projects" routerLink="/projects" (focus)="dropDownHide()" [class.current]="router.url.split('#')[0] === '/projects'">
-              <span class="icon align-middle"><i class="material-icons" aria-hidden="true">search</i></span>
-              <span>Map View</span>
+            <a class="nav-link" title="A map of the projects" routerLink="/projects" (focus)="dropDownHide()" [class.current]="router.url.split('#')[0] === '/projects'">
+              <span class="icon align-middle"><i class="material-icons-outlined" aria-hidden="true">map</i></span>
+              <span>Project Map</span>
             </a>
 
           </li>
           <li class="nav-item dropdown">
 
-            <a class="nav-link dropdown-toggle" id="aboutMMTI" tabindex="0" data-toggle="dropdown" aria-haspopup="true"
+            <a class="nav-link dropdown-toggle" title="Learn about land and water planning" id="aboutMMTI" tabindex="0" data-toggle="dropdown" aria-haspopup="true"
               [attr.aria-expanded]="isVisible" (focus)="dropDownVisible()">
               <span class="icon align-middle"><i class="material-icons-outlined" aria-hidden="true">school</i></span>
-              <span>Learn More</span>
+              <span>Planning</span>
               <span class="caret"></span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-right" [class.visible]="isVisible" aria-labelledby="aboutMMTI">
-              <a class="dropdown-item" [routerLink]="['/lup']" tabindex="0" (click)="dropDownHide()" alt="List of Projects" [class.current]="router.url.includes('/lup')">
-                <strong aria-label="Learn more about the B.C. government’s commitment and approach to land use planning.">Land Use Planning</strong>
-                <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about the B.C. government’s commitment and approach to land use planning.</span>
+              <a class="dropdown-item" [routerLink]="['/lup']" tabindex="0" (click)="dropDownHide()" title="Learn about Land Use Planning" [class.current]="router.url.includes('/lup')">
+                <strong aria-label="Learn more about the B.C. government's commitment and approach to land use planning.">Land Use Planning</strong>
+                <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about the B.C. government's commitment and approach to land use planning.</span>
               </a>
-              <a class="dropdown-item" [routerLink]="['/flp']" tabindex="0" (click)="dropDownHide()" [class.current]="router.url.includes('/flp')">
+              <a class="dropdown-item" [routerLink]="['/flp']" tabindex="0" (click)="dropDownHide()" title="Learn about Forest Landscape Planning" [class.current]="router.url.includes('/flp')">
                 <strong aria-label="Learn more about forest landscape planning and the steps required to completing a plan.">Forest Landscape Planning</strong>
                 <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about forest landscape planning and the steps required to completing a plan.</span>
               </a>
-              <a class="dropdown-item" [routerLink]="['/wsp']" tabindex="0" (click)="dropDownHide()" [class.current]="router.url.includes('/wsp')">
+              <a class="dropdown-item" [routerLink]="['/wsp']" tabindex="0" title="Learn about Water Planning" (click)="dropDownHide()" [class.current]="router.url.includes('/wsp')">
                 <strong aria-label="Learn more about the legislation and tools that support water planning and governance in B.C.">Water Planning</strong>
                 <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about the legislation and tools that support water planning and governance in B.C.</span>
               </a>
-              <a class="dropdown-item" [routerLink]="['/faq']" tabindex="0" (click)="dropDownHide()" [class.current]="router.url.includes('/faq')">
+              <a class="dropdown-item" [routerLink]="['/faq']" tabindex="0" title="Frequently Asked Questions" (click)="dropDownHide()" [class.current]="router.url.includes('/faq')">
                 <strong aria-label="Go to frequently asked questions.">Frequently Asked Questions</strong>
                 <span class="dd-item-desc" [attr.aria-hidden]="true">Learn more about land and water planning in British Columbia</span>
               </a>
@@ -73,7 +65,7 @@
           </li>
           <li class="nav-item">
 
-            <a class="nav-link" routerLink="/contact" (focus)="dropDownHide()" [class.current]="router.url === '/contact'">
+            <a class="nav-link" routerLink="/contact" title="Contact email addresses and external links" (focus)="dropDownHide()" [class.current]="router.url === '/contact'">
               <span class="icon align-middle"><i class="material-icons-outlined" aria-hidden="true">email</i></span>
               <span>Contact Us</span>
             </a>

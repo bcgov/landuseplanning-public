@@ -22,7 +22,12 @@
   .container {
     padding: 0;
   }
-} 
+}
+
+.updates-item {
+  padding: 1rem 1rem 0;
+  text-align: center !important; // Override table styles
+}
 
 section.container {
   padding: 0;
@@ -48,7 +53,7 @@ main {
   p {
     line-height: 1.75;
     font-size: 1.2rem;
-    margin: 0 auto 16px;
+    margin: 0 auto 1.5rem;
   }
   a {
     text-decoration: underline;
@@ -156,8 +161,6 @@ main {
       }
     }
   }
-
-  
 }
 
 @media (max-width: 767px) {
@@ -171,6 +174,16 @@ main {
   }
 }
 
+#tableTop {
+  margin-bottom: 0;
+}
+
+.news-block-more {
+  padding-top: 2rem;
+  border-top: 1px solid #dee2e6;
+  margin-bottom: 5rem;
+}
+
 @media (max-width: 500px) {
 
   .hero-banner__actions-buttons a {
@@ -179,5 +192,26 @@ main {
 
   .news-block-more .btn:hover {
     background-color: #454545;
+    margin-bottom: 4rem;
+  }
+}
+
+.activity-feed__actions {
+  padding-bottom: 1.5rem;
+
+  a.btn {
+    text-decoration: none;
+  }
+}
+
+.bcgov-logo {
+  margin-top: 1.5rem;
+  display: inline-flex;
+  background: $bg-default;
+  width: 216px;
+
+  img {
+    width: 100%;
+    height: auto;
   }
 }

@@ -339,7 +339,6 @@
 
     .project-tabs {
       padding-top: 0;
-      background: #f7f8fa;
       min-height: 630px; // Set a minimum height to avoid jarring height changes on tab change
 
       .container {
@@ -353,9 +352,6 @@
           padding-right: 1.5rem;
         }
       }
-    }
-    .nav-tabs .nav-link.active {
-      background: #f7f8fa;
     }
   }
 
