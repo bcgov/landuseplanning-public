@@ -1,15 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TableObject } from 'app/shared/components/table-template/table-object';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
-import { ApiService } from 'app/services/api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SearchService } from 'app/services/search.service';
 import { StorageService } from 'app/services/storage.service';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { Subject } from 'rxjs';
 import { SearchTerms } from 'app/models/search';
-import { PlatformLocation } from '@angular/common';
 import { PinsTableRowsComponent } from './pins-table-rows/pins-table-rows.component';
+import { Project } from 'app/models/project';
 
 @Component({
   selector: 'app-pins',
@@ -21,7 +19,7 @@ export class PinsComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   public tableData: TableObject;
   public tableParams: TableParamsObject = new TableParamsObject();
-  public currentProject;
+  public currentProject: Project;
   public typeFilters = [];
   public terms = new SearchTerms();
   public loading: Boolean = true;
@@ -44,23 +42,14 @@ export class PinsComponent implements OnInit, OnDestroy {
   ];
   constructor(
     private _changeDetectionRef: ChangeDetectorRef,
-    private api: ApiService,
-    private platformLocation: PlatformLocation,
     private route: ActivatedRoute,
     private router: Router,
-    private searchService: SearchService,
     private storageService: StorageService,
     private tableTemplateUtils: TableTemplateUtils
-  ) {
-    try {
-      let currRoute = router.url.split(';')[0];
-    } catch (e) {
-      console.log('e:', e);
-    }
-  }
+  ) { }
 
   ngOnInit() {
-    this.route.params
+    this.route.queryParams
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         // Different sort order:
@@ -107,7 +96,7 @@ export class PinsComponent implements OnInit, OnDestroy {
     }
   }
 
-  setColumnSort(column) {
+  setColumnSort(column: string) {
     if (this.tableParams.sortBy.charAt(0) === '+') {
       this.tableParams.sortBy = '-' + column;
     } else {
@@ -116,7 +105,7 @@ export class PinsComponent implements OnInit, OnDestroy {
     this.getPaginated(this.tableParams.currentPage);
   }
 
-  getPaginated(pageNumber, reset = false) {
+  getPaginated(pageNumber: number, reset = false) {
     // Go to top of page after clicking to a different page.
     this.loading = true;
     this._changeDetectionRef.detectChanges();
@@ -138,7 +127,7 @@ export class PinsComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     if (this.typeFilters.length > 0) { params['type'] = this.typeFilters.toString(); }
 
-    this.router.navigate(['p', this.currentProject._id, 'pins', params]);
+    this.router.navigate([], { relativeTo: this.route, queryParams: params });
   }
 
   ngOnDestroy() {

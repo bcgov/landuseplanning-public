@@ -1,3 +1,12 @@
+### Apr 13, 2026
+- Fixed dead search functionality on project list page [DESENG-955](https://citz-gdx.atlassian.net/browse/DESENG-955)
+    - Converted site to use query params instead of route params
+    - Reworked some working components to accomodate for this
+- Fixed long load times for individual project maps (Snowplow was conflicting with map ready state)
+- Fixed contact info vertical spacing for situations where info is missing
+- Added snackbar to activities and updates searches to give visual feedback
+- Removed unneeded existing console logging
+
 ### Apr 2, 2026
 - Updated navigation bar items [DESENG-941](https://citz-gdx.atlassian.net/browse/DESENG-941)
   - Removed "Home" button

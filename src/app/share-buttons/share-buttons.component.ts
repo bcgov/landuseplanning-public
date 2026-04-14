@@ -12,7 +12,6 @@ export class ShareButtonsComponent implements OnInit {
   public pageTitle: String = 'Provincial Land Use Planning';
 
   constructor(@Inject(DOCUMENT) doc: Document) {
-    console.log(doc.location.href);
     this.pageURL = doc.location.href;
   }
 

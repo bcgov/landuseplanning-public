@@ -23,7 +23,7 @@
     <div class="row" *ngIf="project?.activitiesAndUpdatesEnabled">
       <div class="col-12">
         <h2>Activities and Updates</h2>
-        <app-project-activities [project]="project" [activities]="activities"></app-project-activities>
+        <app-project-activities [project]="project" [activities]="activities" [tableParams]="tableParams" (search)="onSearch($event)"></app-project-activities>
       </div>
     </div>
   </section>

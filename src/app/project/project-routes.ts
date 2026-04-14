@@ -16,11 +16,6 @@ import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.compo
 
 export const ProjectRoutes: Routes = [
   {
-    path: '',
-    redirectTo: 'project-details',
-    pathMatch: 'full'
-  },
-  {
     path: 'certificates',
     component: CertificatesComponent,
     resolve: {

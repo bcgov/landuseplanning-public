@@ -61,7 +61,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Get page size and current page from url
-    this.route.params.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
     });
 
@@ -181,7 +181,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     );
   }
 
-  setColumnSort(column) {
+  setColumnSort(column: string) {
     if (this.tableParams.sortBy.charAt(0) === '+') {
       this.tableParams.sortBy = '-' + column;
     } else {
@@ -241,7 +241,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/p', this.project._id]);
   }
 
-  getPaginatedComments(pageNumber) {
+  getPaginatedComments(pageNumber: number) {
     // Go to top of page after clicking to a different page.
     // window.scrollTo(0, 0);
     this.loading = true;

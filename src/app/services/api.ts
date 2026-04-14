@@ -75,7 +75,6 @@ export class ApiService {
     if (!document.externalLink) {
       filename = 'COMMENT' === document.documentSource ? document.internalOriginalName : document.documentFileName;
     }
-    console.log(document);
     let safeName = '';
     try {
       safeName = this.utils.encodeFileName(filename);
@@ -130,7 +129,7 @@ export class ApiService {
   //
   searchKeywords(keys: string, dataset: string, fields: any[], pageNum: number, pageSize: number, sortBy: string = null, queryModifier: object = {}, populate = false, secondarySort: string = null, filter: object = {}): Observable<SearchResults[]> {
     let queryString = `search?dataset=${dataset}`;
-    if (fields && fields.length > 0) {
+    if (Array.isArray(fields) && fields.length > 0) {
       fields.forEach(item => {
         queryString += `&${item.name}=${item.value}`;
       });
@@ -164,7 +163,6 @@ export class ApiService {
       });
     }
     queryString += `&fields=${this.buildValues(fields)}`;
-    console.log(queryString);
     return this.http.get<SearchResults[]>(`${this.apiPath}/${queryString}`, {});
   }
 

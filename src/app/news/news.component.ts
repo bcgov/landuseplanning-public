@@ -13,7 +13,7 @@ import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { NewsListTableRowsComponent } from './news-list-table-rows/news-list-table-rows.component';
 
 import { SearchService } from 'app/services/search.service';
-import { StorageService } from 'app/services/storage.service';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-news',
@@ -23,11 +23,15 @@ import { StorageService } from 'app/services/storage.service';
 
 export class NewsListComponent implements OnInit, OnDestroy {
   public recentActivities: Array<News> = [];
+  public initialLoadComplete = false;
   public loading = true;
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
+  private snackBarCounter = 0;
 
   public showOnlyOpenApps: boolean;
   public tableParams: TableParamsObject = new TableParamsObject();
   public terms = new SearchTerms();
+  public submittedKeywords = '';
 
   public projectTableData: TableObject;
   public projectTableColumns: any[] = [
@@ -52,54 +56,101 @@ export class NewsListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private tableTemplateUtils: TableTemplateUtils,
     private searchService: SearchService,
-    private _changeDetectionRef: ChangeDetectorRef
+    private _changeDetectionRef: ChangeDetectorRef,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
-    this.route.params
+    this.route.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((res: any) => {
+        if (!res.activities?.[0]?.data) {
+          alert('Uh-oh, couldn\'t load topics');
+          this.router.navigate(['/']);
+          return;
+        }
+
+        if (!this.initialLoadComplete) {
+          this.recentActivities = res.activities[0].data.searchResults || [];
+          this.tableParams.totalListItems =
+            res.activities[0].data.meta?.[0]?.searchResultsTotal || 0;
+
+          this.setRowData();
+          this.initialLoadComplete = true;
+          this._changeDetectionRef.detectChanges();
+        }
+      });
+
+    this.route.queryParams
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
+
+        // Normalize legacy values
         if (this.tableParams.sortBy === '-datePosted') {
           this.tableParams.sortBy = '-dateAdded';
-          this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
+          this.tableTemplateUtils.updateUrl(
+            this.tableParams.sortBy,
+            this.tableParams.currentPage,
+            this.tableParams.pageSize,
+            null,
+            this.tableParams.keywords
+          );
+          return;
         }
-        this._changeDetectionRef.detectChanges();
 
-        this.route.data
-          .takeUntil(this.ngUnsubscribe)
-          .subscribe((res: any) => {
-            if (res.activities[0].data) {
-              if (res.activities[0].data.searchResults.length > 0) {
-                this.tableParams.totalListItems = res.activities[0].data.meta[0].searchResultsTotal;
-                this.recentActivities = res.activities[0].data.searchResults;
-              } else {
-                this.tableParams.totalListItems = 0;
-                this.recentActivities = [];
-              }
-              this.setRowData();
-              this.loading = false;
-              this._changeDetectionRef.detectChanges();
-            } else {
-              alert('Uh-oh, couldn\'t load topics');
-              // activity not found --> navigate back to search
-              this.router.navigate(['/']);
-            }
-          });
+        this.runSearch();
       });
   }
 
+  private runSearch(): void {
+    this.loading = true;
+
+    this.searchService.getSearchResults(
+      this.tableParams.keywords,
+      'RecentActivity',
+      null,
+      this.tableParams.currentPage,
+      this.tableParams.pageSize,
+      this.tableParams.sortBy,
+      {},
+      true
+    )
+    .takeUntil(this.ngUnsubscribe)
+    .subscribe((res: any) => {
+      const data = res?.[0]?.data;
+      const resultsCount = data?.meta?.[0]?.searchResultsTotal;
+      this.submittedKeywords = this.tableParams.keywords;
+      if (data) {
+        if (resultsCount) {
+          this.tableParams.totalListItems =
+          res[0].data.meta[0].searchResultsTotal;
+        }
+
+        this.recentActivities = res[0].data.searchResults;
+        this.setRowData();
+      } else {
+        this.recentActivities = [];
+        this.tableParams.totalListItems = 0;
+      }
+      this.loading = false;
+      this._changeDetectionRef.detectChanges();
+
+      // Don't show snackbar on initial component load
+      if (this.snackBarCounter >= 1) {
+        this.snackBarRef = this.snackBar.open(`Recent activities and updates have been updated with ${resultsCount || 0} result${resultsCount !== 1 ? 's' : ''}.`);
+        this.snackBarRef._dismissAfter(3000);
+      } else {
+        this.snackBarCounter++;
+      }
+    });
+  }
+
   setRowData() {
-    let activityList = [];
     if (this.recentActivities && this.recentActivities.length > 0) {
-      this.recentActivities.forEach(activity => {
-        activityList.push(
-          activity
-        );
-      });
       this.projectTableData = new TableObject(
         NewsListTableRowsComponent,
-        activityList,
+        this.recentActivities,
         this.tableParams
       );
     }
@@ -115,7 +166,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     this.getPaginatedProjects(this.tableParams.currentPage);
   }
 
-  getPaginatedProjects(pageNumber) {
+  getPaginatedProjects(pageNumber: number) {
     // Go to top of page after clicking to a different page.
     window.scrollTo(0, 0);
     this.loading = true;
@@ -136,7 +187,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     )
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
-        if (res[0].data) {
+        if (res[0]?.data) {
           this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
           this.recentActivities = res[0].data.searchResults;
           this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, null, this.tableParams.keywords);
@@ -158,7 +209,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
     // NOTE: Angular Router doesn't reload page on same URL
     // REF: https://stackoverflow.com/questions/40983055/how-to-reload-the-current-route-with-the-angular-2-router
     // WORKAROUND: add timestamp to force URL to be different than last time
-
     const params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
@@ -166,10 +216,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     params['sortBy'] = this.tableParams.sortBy = '-dateAdded';
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
-
-    console.log('params =', params);
-    console.log('nav:', ['news', params]);
-    this.router.navigate(['news', params]);
+    this.router.navigate([], { relativeTo: this.route, queryParams: params });
   }
 
   ngOnDestroy() {
