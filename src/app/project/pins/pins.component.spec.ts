@@ -29,7 +29,7 @@ describe('PinsComponent', () => {
       declarations: [ PinsComponent ],
       imports: [RouterTestingModule],
       providers: [
-        { provide: ActivatedRoute, useValue: { params: of({}), data: of({ pins }) } },
+        { provide: ActivatedRoute, useValue: { queryParams: of({}), data: of({ pins }) } },
         { provide: ApiService, useValue: {} },
         { provide: SearchService, useValue: {} },
         { provide: StorageService, useValue: { state: { currentProject: { data: new Project({ _id: 'proj-1' }) } } } },

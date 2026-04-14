@@ -8,6 +8,7 @@ import { NewsListComponent } from './news.component';
 import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
 import { SearchService } from 'app/services/search.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('NewsListComponent', () => {
   let component: NewsListComponent;
@@ -33,8 +34,14 @@ describe('NewsListComponent', () => {
     }
   };
 
+const matSnackBarStub = {
+  open: () => ({
+    _dismissAfter: () => {}
+  })
+};
+
   const activatedRouteStub = {
-    params: of({}),
+    queryParams: of({}),
     data: of({ activities: [{ data: { meta: [{ searchResultsTotal: 0 }], searchResults: [] } }] })
   };
 
@@ -45,7 +52,8 @@ describe('NewsListComponent', () => {
       providers: [
         { provide: TableTemplateUtils, useValue: tableTemplateUtilsStub },
         { provide: SearchService, useValue: searchServiceStub },
-        { provide: ActivatedRoute, useValue: activatedRouteStub }
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
+        { provide: MatSnackBar, useValue: matSnackBarStub }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
