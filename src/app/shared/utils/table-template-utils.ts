@@ -24,19 +24,25 @@ export class TableTemplateUtils {
   public updateUrl(sortString: string, currentPage: number, pageSize: number, filter = null, keywords = '', projectTypes = '') {
     let currentUrl = this.router.url;
     currentUrl = (this.platformLocation as any).getBaseHrefFromDOM() + currentUrl.slice(1);
-    currentUrl = currentUrl.split(';')[0];
-    currentUrl += `;currentPage=${currentPage};pageSize=${pageSize}`;
-    if (keywords !== '') { currentUrl += `;keywords=${keywords}`; }
-    if (projectTypes !== '') { currentUrl += `;projectTypes=${projectTypes}`; }
-    if (sortString !== null) { currentUrl += `;sortBy=${sortString}`; }
-    if (filter !== null) {
+    currentUrl = currentUrl.split('?')[0];
+    const queryParams: any = {
+      currentPage: currentPage,
+      pageSize: pageSize,
+      keywords: keywords ?? undefined,
+      projectTypes: projectTypes ?? undefined,
+      sortBy: sortString ?? undefined,
+      ms: Date.now()
+    };
+
+    if (filter) {
       Object.keys(filter).forEach(key => {
-        currentUrl += `;${key}=${filter[key]}`;
+        queryParams[key] = filter[key];
       });
     }
-    currentUrl += ';ms=' + new Date().getTime();
-    window.history.replaceState({}, '', currentUrl);
+
+    window.history.replaceState({}, '', currentUrl + '?' + new URLSearchParams(queryParams).toString());
   }
+
 
   /**
    * Retrieves the parameters from the URL, optionally modifies filter values in URL.

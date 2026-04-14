@@ -106,7 +106,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   // Get the params and save them to this.tableParams. Get the projects and save them to this.projects.
   ngOnInit() {
-    this.route.params
+    this.route.queryParams
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         this.tableParams = this.defineParams(params);
@@ -123,7 +123,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
           this.filterForAPI)
           .takeUntil(this.ngUnsubscribe)
           .subscribe((res: any) => {
-            console.log('Res', res);
             if (res?.[0]?.data) {
               if (res[0].data.searchResults?.length > 0) {
                 this.tableParams.totalListItems = res[0].data.meta[0].searchResultsTotal;
@@ -184,9 +183,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     if (this.snackBarCounter >= 3) {
       this.snackBarRef = this.snackBar.open(`The ${data?.source || 'search or filter'} has been updated with ${this.projects.length} result${this.projects.length === 1 ? '' : 's'}.`);
       this.snackBarRef._dismissAfter(3000);
-    } else {
-      this.snackBarCounter++;
     }
+    this.snackBarCounter++;
   }
 
   collectionFilterToParams(params, name, identifyBy) {
@@ -272,7 +270,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     } else {
       this.tableParams.sortBy = `+${column}`;
     }
-  this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes);
+    this.tableTemplateUtils.updateUrl(this.tableParams.sortBy, this.tableParams.currentPage, this.tableParams.pageSize, this.filterForURL, this.tableParams.keywords, this.tableParams.projectTypes);
     this.sortProjects();
     this.setTableData();
   }
@@ -318,7 +316,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     // REF: https://stackoverflow.com/questions/40983055/how-to-reload-the-current-route-with-the-angular-2-router
     // WORKAROUND: add timestamp to force URL to be different than last time
 
-  const params = this.terms.getParams();
+    const params = this.terms.getParams();
     params['ms'] = new Date().getMilliseconds();
     params['dataset'] = this.terms.dataset;
     params['currentPage'] = this.tableParams.currentPage ?? 1;
@@ -326,12 +324,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize ?? 10;
     params['projectTypes'] = this.tableParams.projectTypes;
-
-    this.router.navigate(['projects-list'], params);
+    this.router.navigate([], { relativeTo: this.route, queryParams: params });
   }
 
   ngOnDestroy() {
-    console.warn('AppComponent destroyed'); // Should never show unless true reload
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

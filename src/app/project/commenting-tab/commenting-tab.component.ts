@@ -68,16 +68,12 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
     this.router.navigate(['p', this.currentProject._id, 'cp', commentPeriod._id]);
   }
 
-  getCommentPeriods(projectId) {
+  getCommentPeriods(projectId: string) {
     this.commentPeriodService.getAllByProjectId(projectId)
       .takeUntil(this.ngUnsubscribe)
       .subscribe((res: any) => {
         if (res.data) {
           this.commentPeriods = res.data;
-          console.log('commenting-tab', res.data);
-          this.commentPeriods.forEach(element => {
-            // element.instructions = element.instructions.match(/Comment Period on the (.*?) for /)[1];
-          });
         }
       });
   }

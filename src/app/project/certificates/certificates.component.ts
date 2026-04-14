@@ -61,7 +61,7 @@ export class CertificatesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.params
+    this.route.queryParams
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         if (this.currentUrl === 'amendments') {
@@ -122,7 +122,7 @@ export class CertificatesComponent implements OnInit, OnDestroy {
     }
   }
 
-  setColumnSort(column) {
+  setColumnSort(column: string) {
     if (this.tableParams.sortBy.charAt(0) === '+') {
       this.tableParams.sortBy = '-' + column;
     } else {
@@ -131,7 +131,7 @@ export class CertificatesComponent implements OnInit, OnDestroy {
     this.getPaginatedDocs(this.tableParams.currentPage);
   }
 
-  getPaginatedDocs(pageNumber, reset = false) {
+  getPaginatedDocs(pageNumber: number, reset = false) {
     // Go to top of page after clicking to a different page.
     this.loading = true;
     this._changeDetectionRef.detectChanges();
@@ -151,14 +151,12 @@ export class CertificatesComponent implements OnInit, OnDestroy {
     params['sortBy'] = this.tableParams.sortBy;
     params['pageSize'] = this.tableParams.pageSize;
     params['keywords'] = this.tableParams.keywords;
-    // params['dateAddedStart'] = this.utils.convertFormGroupNGBDateToJSDate(this.filter.dateAddedStart).toISOString();
-    // params['dateAddedEnd'] = this.utils.convertFormGroupNGBDateToJSDate(this.filter.dateAddedEnd).toISOString();
     if (this.typeFilters.length > 0) { params['type'] = this.typeFilters.toString(); }
 
     if (this.currentUrl === 'amendments') {
-      this.router.navigate(['p', this.currentProject._id, 'amendments', params]);
+      this.router.navigate(['p', this.currentProject._id, 'amendments'], { queryParams: params });
     } else {
-      this.router.navigate(['p', this.currentProject._id, 'certificates', params]);
+      this.router.navigate(['p', this.currentProject._id, 'certificates'], { queryParams: params });
     }
   }
 

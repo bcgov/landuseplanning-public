@@ -21,7 +21,7 @@ tableParams.currentPage = 1;
 tableParams.pageSize = 10;
 
 const activatedRouteStub = {
-  params: of({}),
+  queryParams: of({}),
   data: of({
     commentPeriod: new CommentPeriod({ _id: 'cp-1', relatedDocuments: [] }),
     projectAndBanner: [

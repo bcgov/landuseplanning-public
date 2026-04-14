@@ -7,6 +7,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { ProjectActivitiesResolver } from '../project-activities/project-activities-resolver.service';
 import { ShapeFileResolver } from './project-shapefile-resolver.service';
 import { ProjectModule } from '../project.module';
+import { ProjectResolver } from '../project-resolver.service';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
     resolve: {
       activities: ProjectActivitiesResolver,
       documents: ShapeFileResolver,
+      projectAndBanner: ProjectResolver
     },
     data: {
       title: 'Project Details',

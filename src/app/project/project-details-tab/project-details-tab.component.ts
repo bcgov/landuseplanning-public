@@ -6,14 +6,18 @@ import { ConfigService } from 'app/services/config.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Data } from '@angular/router';
 import { Document } from 'app/models/document';
-import { ProjectShapefile } from 'app/models/project';
+import { Project, ProjectShapefile } from 'app/models/project';
 import { isEmpty, orderBy } from 'lodash';
 import { Utils } from 'app/shared/utils/utils';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ScriptLoaderService } from 'app/services/scriptLoader.service';
 import type { Map, FeatureGroup, LatLngBounds, LayersControlEvent, FitBoundsOptions } from 'leaflet';
-import { ProjectService } from 'app/services/project.service';
 import { RecentActivity } from 'app/models/recentActivity';
+import { SearchTerms } from 'app/models/search';
+import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
+import { TableTemplateUtils } from 'app/shared/utils/table-template-utils';
+import { SearchService } from 'app/services/search.service';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-project-details-tab',
@@ -28,12 +32,16 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
 
   public pathAPI: string;
-  public project;
-  public activities;
+  public project: Project;
+  public activities: RecentActivity[];
   public loading = true;
   public commentPeriod = null;
   public multipleExistingPlans: boolean;
   public overlappingDistrictsListString: string;
+  public terms = new SearchTerms();
+  public tableParams: TableParamsObject = new TableParamsObject();
+  private snackBarRef: MatSnackBarRef<SimpleSnackBar> = null;
+  private snackBarCounter = 0;
 
   public map: Map = null;
   public appFG: FeatureGroup = null; // group of layers for subject app
@@ -49,9 +57,11 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     public configService: ConfigService,
     private route: ActivatedRoute,
     private utils: Utils,
+    private tableTemplateUtils: TableTemplateUtils,
     private scriptLoader: ScriptLoaderService,
-    private projectService: ProjectService,
     private router: Router,
+    private searchService: SearchService,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -64,32 +74,69 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     const remoteApiPath = window.localStorage.getItem('from_public_server--remote_api_base_path');
     this.pathAPI = isEmpty(remoteApiPath) ? 'http://localhost:3000/api' : remoteApiPath;
 
-    // Try to get project from parent resolver
-    const parentData = this.route.pathFromRoot.find(r => r.snapshot.data?.projectAndBanner);
-    const projectAndBanner = parentData?.snapshot.data?.projectAndBanner;
-
-    if (Array.isArray(projectAndBanner) && projectAndBanner[0]) {
-      this.project = projectAndBanner[0];
-      this.processShapefilesFromRoute(this.route.snapshot.data);
-    } else {
-      // Fallback: load project manually by ID
-      const projectId = this.route.pathFromRoot
-        .map(r => r.snapshot)
-        .find(snap => snap.paramMap.has('projId'))
-        ?.paramMap.get('projId');
-
-      if (projectId) {
-        this.projectService.getById(projectId).subscribe(p => {
-          this.project = p;
+    this.route.data
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(res => {
+        if (res?.projectAndBanner && Array.isArray(res.projectAndBanner)) {
+          this.project = res.projectAndBanner[0];
           this.processShapefilesFromRoute(this.route.snapshot.data);
-        });
-      }
-    }
+        }
+      });
 
-    // Load activities from current route
-    this.route.data.subscribe((data: { activities: RecentActivity[] }) => {
-      if (data.activities) {
-        this.activities = data.activities;
+    this.route.queryParams
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(params => {
+        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
+
+        if (this.tableParams.sortBy === '-datePosted') {
+          this.tableParams.sortBy = '-dateAdded';
+          this.tableTemplateUtils.updateUrl(
+            this.tableParams.sortBy,
+            this.tableParams.currentPage,
+            this.tableParams.pageSize,
+            null,
+            this.tableParams.keywords
+          );
+          return;
+        }
+
+        this.fetchActivities();
+      });
+  };
+
+  private fetchActivities(): void {
+    this.loading = true;
+
+    this.searchService.getSearchResults(
+      this.tableParams.keywords,
+      'RecentActivity',
+      null,
+      this.tableParams.currentPage,
+      this.tableParams.pageSize,
+      this.tableParams.sortBy,
+      {},
+      true
+    )
+    .takeUntil(this.ngUnsubscribe)
+    .subscribe(res => {
+      const data = res?.[0]?.data;
+      const resultsCount = data?.meta?.[0]?.searchResultsTotal;
+      this.activities = data?.searchResults || [];
+      this.tableParams.totalListItems = resultsCount || 0;
+
+      // Don't show snackbar on initial component load
+      if (this.snackBarCounter >= 1) {
+        this.snackBarRef = this.snackBar.open(`Recent activities and updates section updated with ${resultsCount || 0} result${resultsCount !== 1 ? 's' : ''}.`);
+        this.snackBarRef._dismissAfter(3000);
+        this.loading = false;
+      } else {
+        this.snackBarCounter++;
+        // Remove the loading overlay on the map based on the connection speed
+        // Waiting for map ready sometimes fails because of conflicts with Snowplow
+        this.utils.getConnectionTier().then((tier) => {
+          const delay = { slow: 3250, medium: 2750, fast: 2250, turbo: 1750 }[tier];
+          setTimeout(() => this.loading = false, delay);
+        });
       }
     });
   }
@@ -140,7 +187,6 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
       alert('Uh-oh, the map failed to load. You will be redirected to the homepage.');
       this.router.navigate(['/']);
     }
-
 
     this.L = (window as any).L;
     this.appFG = this.L.featureGroup(); // group of layers for subject app
@@ -241,18 +287,6 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
         break;
       }
     }
-
-    // Add "map loaded" listener for removing loading message
-    // Extra timeout is needed to give vector tiles time to render
-    // Base the timeout delay on user connection speed
-    this.map.whenReady(() => {
-      this.utils.getConnectionTier().then((tier) => {
-        // Convert the returned connection speed to a millisecond delay value
-        const delay = { slow: 3500, medium: 3000, fast: 2500, turbo: 2000 }[tier];
-        // Set a timeout for removing the loading screen using the calculated value
-        setTimeout(() => this.loading = false, delay);
-      });
-    });
 
     // save any future base layer changes
     this.map.on('baselayerchange', function (e: LayersControlEvent) {
@@ -484,6 +518,17 @@ export class ProjectDetailsTabComponent implements OnInit, AfterViewInit, OnDest
     } else {
       this.map.fitBounds(this.defaultBounds, fitBoundsOptions);
     }
+  }
+
+  public onSearch(params: Partial<TableParamsObject>) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        ...this.tableParams,
+        ...params,
+        ms: Date.now()
+      }
+    });
   }
 
   ngOnDestroy() {

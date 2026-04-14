@@ -115,7 +115,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
    */
   updateTableDataAndParams(): void {
     if (this.documents.find(document => document.section)) {
-      this.route.params
+      this.route.queryParams
         .takeUntil(this.ngUnsubscribe)
         .subscribe(params => {
           // Copy router params and update the page size value.
@@ -126,7 +126,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
           this.tableParams = this.tableTemplateUtils.getParamsFromUrl(updatedParams);
         });
     } else {
-      this.route.params
+      this.route.queryParams
       .takeUntil(this.ngUnsubscribe)
       .subscribe(params => {
         this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params)
@@ -241,7 +241,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
             selBox.style.left = '0';
             selBox.style.top = '0';
             selBox.style.opacity = '0';
-            selBox.value = window.location.href.split(';')[0] + `/detail/${item._id}`;
+            selBox.value = window.location.href.split('?')[0] + `/detail/${item._id}`;
             document.body.appendChild(selBox);
             selBox.focus();
             selBox.select();
@@ -306,7 +306,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     }
   }
 
-  setColumnSort(column) {
+  setColumnSort(column: string) {
     if (this.tableParams.sortBy.charAt(0) === '+') {
       this.tableParams.sortBy = '-' + column;
     } else {
@@ -397,7 +397,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     numItems === 'max' ? params['pageSize'] = this.tableParams.pageSize = this.tableParams.totalListItems : params['pageSize'] = this.tableParams.pageSize = numItems;
 
-    this.router.navigate(['p', this.currentProject._id, 'documents', params]);
+    this.router.navigate([], { relativeTo: this.route, queryParams: params });
   }
 
   public onSubmit() {
@@ -416,7 +416,7 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
     params['keywords'] = this.tableParams.keywords;
     params['pageSize'] = this.tableParams.pageSize = 10;
 
-    this.router.navigate(['p', this.currentProject._id, 'documents', params]);
+    this.router.navigate([], { relativeTo: this.route, queryParams: params });
   }
 
   ngOnDestroy() {

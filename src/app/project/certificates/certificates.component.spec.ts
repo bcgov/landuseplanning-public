@@ -32,7 +32,7 @@ describe('CertificatesComponent', () => {
   } as Partial<TableTemplateUtils>;
 
   const activatedRouteStub = {
-    params: of({}),
+    queryParams: of({}),
     data: of({ documents: [{ data: { meta: [{ searchResultsTotal: 0 }], searchResults: [] } }] })
   } as Partial<ActivatedRoute>;
 
