@@ -63,7 +63,7 @@ export class ProjectActivitiesComponent implements OnChanges, OnDestroy {
     }
     this.search.emit({ keywords: this.tableParams.keywords, currentPage: this.tableParams.currentPage });
   }
-  
+
   public onSubmit() {
     this.search.emit({
       currentPage: 1,

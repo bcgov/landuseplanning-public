@@ -18,14 +18,14 @@ export class ProjectResolver {
       .map(r => r.paramMap.get('projId'))
       .find(id => !!id);
 
-    if (!projectId) return;
+    if (!projectId) {return};
 
     // force-reload so we always have latest data
     let start = new Date();
     let end = new Date();
     start.setDate(start.getDate() - 7);
     end.setDate(end.getDate() + 7);
-    
+
     const currentPage = route.params.currentPage ? route.params.currentPage : 1;
     const pageSize = route.params.pageSize ? route.params.pageSize : 10;
     const sortBy = route.params.sortBy && route.params.sortBy !== 'null' ? route.params.sortBy : '-datePosted';
