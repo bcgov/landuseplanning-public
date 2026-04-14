@@ -52,7 +52,7 @@
                 </div>
                 <div class="activity-feed__actions" *ngIf="item && (item.pcp || (item.project && item.project._id) || item.documentUrl)">
                   <a class="btn btn-sm content-btn-alt" title="View more information about {{item.project.name}}"
-                    [routerLink]="['/p', item.project?._id, 'project-details' ]" *ngIf="item.project?._id">
+                    [routerLink]="['/p', item.project?._id, 'project-details']" *ngIf="item.project?._id">
                     Project Info
                   </a>
                   <a *ngIf="item?.pcp" class="btn btn-sm content-btn-alt"
