@@ -48,7 +48,7 @@
               </div>
 
               <div class="buttons-row">
-                <button class="btn btn-light" (click)="addComment()" type="button"
+                <button class="btn btn-light" (click)="handleParticipate()" type="button"
                   *ngIf="commentPeriod.commentPeriodStatus === 'Open'" [attr.aria-label]=makeAriaLabel(project.name)>
                   Participate Now
                 </button>

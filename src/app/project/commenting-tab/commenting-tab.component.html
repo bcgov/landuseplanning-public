@@ -26,7 +26,7 @@
                         [attr.aria-label]="'View details of ' + (currentProject?.engagementLabel || 'this comment period')">
                         View details
                     </button>
-                    <button (click)=addComment() *ngIf="commentPeriod?.commentPeriodStatus === 'Open'"
+                    <button (click)=handleParticipate() *ngIf="commentPeriod?.commentPeriodStatus === 'Open'"
                         class="badge badge-secondary p-3"
                         [attr.aria-label]="'Participate now in ' + (currentProject?.engagementLabel || 'this comment period')">
                         Participate now

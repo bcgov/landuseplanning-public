@@ -45,7 +45,7 @@ describe('DocumentsTabComponent', () => {
       declarations: [ DocumentsTabComponent ],
       imports: [RouterTestingModule],
       providers: [
-        { provide: ActivatedRoute, useValue: { data: of(routeData), params: of({ currentPage: 1, pageSize: 10, sortBy: '-dateAdded' }) } },
+        { provide: ActivatedRoute, useValue: { data: of(routeData), params: of({ currentPage: 1, pageSize: 10, sortBy: '-dateAdded' }), queryParams: of({}) } },
         { provide: ApiService, useValue: { openDocument: jasmine.createSpy('openDocument'), downloadDocument: jasmine.createSpy('downloadDocument') } },
         { provide: SearchService, useValue: {} },
         { provide: StorageService, useValue: { state: { currentProject: { data: new Project({ _id: 'proj-1', name: 'Project 1' }) } } } },

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { isEmpty } from 'lodash';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
@@ -20,6 +20,7 @@ import { Document } from 'app/models/document';
 import { Utils } from 'app/shared/utils/utils';
 import { SurveyService } from 'app/services/survey.service';
 import { Survey } from 'app/models/survey';
+import { ExternalLinkComponent } from './external-link/external-link.component';
 
 type CommentPeriodFile = Document & ExternalLink;
 
@@ -211,30 +212,51 @@ export class CommentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Triggers the opening of the survey dialog and opens the appropriate survey based on available data.
-   *
-   */
-  public addComment(): void {
-    if (this.project.commentPeriodForBanner) {
-      this.surveyService.getSelectedSurveyByCPId(this.project.commentPeriodForBanner._id)
-        .subscribe((loadedSurvey: Survey) => {
-          if (loadedSurvey) {
-            // open modal
-            this.ngbModal = this.modalService.open(AddSurveyResponseComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false });
-            // set input parameter
-            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).project = this.project;
-            (<AddSurveyResponseComponent>this.ngbModal.componentInstance).survey = loadedSurvey;
-          } else {
-            // open modal
-            this.ngbModal = this.modalService.open(AddCommentComponent, { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' });
-            // set input parameter
-            (<AddCommentComponent>this.ngbModal.componentInstance).currentPeriod = this.project.commentPeriodForBanner;
-            (<AddCommentComponent>this.ngbModal.componentInstance).project = this.project;
-          }
-        });
+  public handleParticipate() {
+    const method = this.project.commentPeriodForBanner?.commentingMethod;
+    if (!method) {return; }
+    switch (method) {
+      case 'externalEngagementTool':
+        this.openExternalLinkModal();
+        break;
+      case 'surveyTool':
+        this.openSurveyModal();
+        break;
+      case 'basicForm':
+        this.openCommentModal();
+        break;
+      default:
+        console.error('Unknown commenting method:', method);
     }
+  }
+
+  public openExternalLinkModal() {
+    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
+    this.ngbModal = this.modalService.open(ExternalLinkComponent, options);
+    const instance = <ExternalLinkComponent>this.ngbModal.componentInstance as ExternalLinkComponent;
+    instance.externalLinkText = this.project?.commentPeriodForBanner?.externalToolPopupText;
+  }
+
+  public openSurveyModal() {
+    this.surveyService.getSelectedSurveyByCPId(this.project?.commentPeriodForBanner?._id)
+      .subscribe((loadedSurvey: Survey) => {
+        if (loadedSurvey) {
+          const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
+          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, options);
+          const instance = <AddSurveyResponseComponent>this.ngbModal.componentInstance as AddSurveyResponseComponent;
+          instance.currentPeriod = this.project?.commentPeriodForBanner;
+          instance.project = this.project;
+          instance.survey = loadedSurvey;
+        }
+    });
+  }
+
+  public openCommentModal() {
+    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' } as NgbModalOptions;
+    this.ngbModal = this.modalService.open(AddCommentComponent, options);
+    const instance = <AddCommentComponent>this.ngbModal.componentInstance as AddCommentComponent;
+    instance.currentPeriod = this.project?.commentPeriodForBanner;
+    instance.project = this.project;
   }
 
   public goBackToProjectDetails() {
