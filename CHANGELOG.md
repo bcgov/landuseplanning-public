@@ -1,3 +1,8 @@
+### Apr 24, 2026
+- Made external links available from the public side [DESENG-959](https://citz-gdx.atlassian.net/browse/DESENG-959)
+  - Refactored code for Participate Now button handling
+  - Applied to three locations (main Project page, comment period page, project engagement tab)
+
 ### Apr 13, 2026
 - Fixed dead search functionality on project list page [DESENG-955](https://citz-gdx.atlassian.net/browse/DESENG-955)
   - Converted site to use query params instead of route params

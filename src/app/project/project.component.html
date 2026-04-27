@@ -54,7 +54,7 @@
             <button type="button" class="btn btn-light" (click)="goToViewComments()" [attr.aria-label]="CPActionAriaLabel(project.name, 'view')">
               View Details
             </button>
-            <button class="btn btn-light" (click)="addComment()" type="button" *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="CPActionAriaLabel(project.name, 'submit')">
+            <button class="btn btn-light" (click)="handleParticipate()" type="button" *ngIf="project.commentPeriodForBanner.commentPeriodStatus === 'Open'" [attr.aria-label]="CPActionAriaLabel(project.name, 'submit')">
               Participate Now
             </button>
           </div>

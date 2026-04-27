@@ -1,0 +1,25 @@
+@import "~assets/styles/base/base.scss";
+
+.modal-content {
+  h4, h5 {
+    font-weight: 600;
+  }
+
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+#modal-instructions {
+  display: none;
+}
+
+.modal-footer {
+  .btn {
+    min-width: 6rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+}
+
+

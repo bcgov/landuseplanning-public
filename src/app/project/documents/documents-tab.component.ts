@@ -114,24 +114,20 @@ export class DocumentsTabComponent implements OnInit, OnDestroy {
    * This can be called after the document and document file sections have been loaded.
    */
   updateTableDataAndParams(): void {
-    if (this.documents.find(document => document.section)) {
       this.route.queryParams
         .takeUntil(this.ngUnsubscribe)
         .subscribe(params => {
-          // Copy router params and update the page size value.
-          const updatedParams = {
-            ...params,
-            pageSize: 100
+          const section = this.documents.find((document: Document) => document.section);
+          if (section) {
+            const updatedParams = {
+              ...params,
+              pageSize: 100
+            }
+            this.tableParams = this.tableTemplateUtils.getParamsFromUrl(updatedParams);
+            return;
           }
-          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(updatedParams);
+          this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params);
         });
-    } else {
-      this.route.queryParams
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe(params => {
-        this.tableParams = this.tableTemplateUtils.getParamsFromUrl(params)
-      });
-    }
   }
 
   /**

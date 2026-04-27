@@ -1,0 +1,27 @@
+<div id="modal-instructions">Use tab to navigate form elements. Escape key to close.</div>
+
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">Participate Now</h4>
+    <button class="btn btn-icon close-btn gtm-submit-comment_cancel-pg1" type="button" aria-label="Close"
+      (click)="activeModal.dismiss('dismissed page1')">
+      <i class="material-icons">
+        close
+      </i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <section>
+      <h2>How it Works</h2>
+      <p>
+        All submissions to the project team will be evaluated and considered throughout the
+        land use planning process. Comments may be anonymously quoted or summarized in a publicly available 'What We Heard' report following
+        the engagement period. Comments will not be considered if - in the Land Use Planning team's view - they are profane,
+        abusive or do not relate to the matter being consulted upon.
+      </p>
+      <p *ngIf="externalLinkText" class="modal-body" [innerHTML]="externalLinkText"></p>
+    </section>
+      
+  </div>
+</div>
