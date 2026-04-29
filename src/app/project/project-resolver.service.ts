@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { zip } from 'rxjs';
 
 import { ProjectService } from 'app/services/project.service';
-import { SurveyService } from 'app/services/survey.service';
 import { SearchService } from 'app/services/search.service';
 
 @Injectable()
 export class ProjectResolver {
 
   constructor(private projectService: ProjectService,
-              private surveyService: SurveyService,
               private searchService: SearchService) { }
 
   resolve(route: ActivatedRouteSnapshot) {

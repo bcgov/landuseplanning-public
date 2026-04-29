@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import { isEmpty } from 'lodash';
-import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Project, ProjectLogo, ProjectLogoWithSource } from 'app/models/project';
 import { Document } from 'app/models/document';
@@ -15,11 +15,9 @@ import { ProjectService } from 'app/services/project.service';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { SurveyService } from 'app/services/survey.service';
 import { StorageService } from 'app/services/storage.service';
-import { AddCommentComponent } from './comments/add-comment/add-comment.component';
-import { AddSurveyResponseComponent } from './comments/add-survey-response/add-survey-response.component';
 import { EmailSubscribeComponent } from './email-subscribe/email-subscribe.component';
 import { ContactFormComponent } from './contact-form/contact-form.component';
-import { ExternalLinkComponent } from './comments/external-link/external-link.component';
+import { ParticipateService } from 'app/services/participate.service';
 
 @Component({
   selector: 'app-project',
@@ -56,7 +54,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     public configService: ConfigService,
     public projectService: ProjectService, // used in template
     public commentPeriodService: CommentPeriodService, // used in template
-    public surveyService: SurveyService
+    public surveyService: SurveyService,
+    private participateService: ParticipateService
   ) { }
 
   ngOnInit() {
@@ -128,51 +127,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     return sourceUrl;
   }
 
-  public handleParticipate() {
-    const method = this.project.commentPeriodForBanner?.commentingMethod;
-    if (!method) {return; }
-    switch (method) {
-      case 'externalEngagementTool':
-        this.openExternalLinkModal();
-        break;
-      case 'surveyTool':
-        this.openSurveyModal();
-        break;
-      case 'basicForm':
-        this.openCommentModal();
-        break;
-      default:
-        console.error('Unknown commenting method:', method);
-    }
-  }
-
-  public openExternalLinkModal() {
-    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
-    this.ngbModal = this.modalService.open(ExternalLinkComponent, options);
-    const instance = <ExternalLinkComponent>this.ngbModal.componentInstance as ExternalLinkComponent;
-    instance.externalLinkText = this.project?.commentPeriodForBanner?.externalToolPopupText;
-  }
-
-  public openSurveyModal() {
-    this.surveyService.getSelectedSurveyByCPId(this.project?.commentPeriodForBanner?._id)
-      .subscribe((loadedSurvey: Survey) => {
-        if (loadedSurvey) {
-          const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
-          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, options);
-          const instance = <AddSurveyResponseComponent>this.ngbModal.componentInstance as AddSurveyResponseComponent;
-          instance.currentPeriod = this.project?.commentPeriodForBanner;
-          instance.project = this.project;
-          instance.survey = loadedSurvey;
-        }
-    });
-  }
-
-  public openCommentModal() {
-    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' } as NgbModalOptions;
-    this.ngbModal = this.modalService.open(AddCommentComponent, options);
-    const instance = <AddCommentComponent>this.ngbModal.componentInstance as AddCommentComponent;
-    instance.currentPeriod = this.project?.commentPeriodForBanner;
-    instance.project = this.project;
+  public async handleParticipate() {
+    await this.participateService.handleParticipate(this.project);
   }
 
   public addEmail() {

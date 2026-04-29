@@ -9,7 +9,8 @@ import 'rxjs/add/observable/forkJoin';
 })
 
 export class ExternalLinkComponent {
-  @Input() externalLinkText: string;
+  @Input() externalToolPopupText: string;
+  @Input() externalToolPopupURL: string;
 
   constructor(
     public activeModal: NgbActiveModal,
