@@ -1,3 +1,9 @@
+### Apr 29, 2026
+- Refactored participate now code into injectable for less repeated code [DESENG-959](https://citz-gdx.atlassian.net/browse/DESENG-959)
+  - Created a participate service that fetches modal with the correct data
+- Created unit tests for new service
+- Removed unused imports from multiple components
+
 ### Apr 24, 2026
 - Made external links available from the public side [DESENG-959](https://citz-gdx.atlassian.net/browse/DESENG-959)
   - Refactored code for Participate Now button handling
