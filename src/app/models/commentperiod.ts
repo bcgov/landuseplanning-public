@@ -34,6 +34,7 @@ export class CommentPeriod {
   isVetted: String;
   commentingMethod: string;
   externalToolPopupText: string;
+  externalToolPopupURL: string;
   surveySelected: Survey;
   milestone: String;
   openCommentPeriod: String;
@@ -87,6 +88,7 @@ export class CommentPeriod {
     this.isVetted = obj && obj.isVetted || null;
     this.commentingMethod = obj && obj.commentingMethod || null;
     this.externalToolPopupText = obj && obj.externalToolPopupText || null;
+    this.externalToolPopupURL = obj && obj.externalToolPopupURL || null;
     this.surveySelected = obj && obj.surveySelected || null;
     this.milestone = obj && obj.milestone || null;
     this.openHouses = obj && obj.openHouses || null;

@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
@@ -9,10 +8,7 @@ import { Project } from 'app/models/project';
 import { CommentPeriodService } from 'app/services/commentperiod.service';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { SurveyService } from 'app/services/survey.service';
-import { Survey } from 'app/models/survey';
-import { AddSurveyResponseComponent } from '../comments/add-survey-response/add-survey-response.component';
-import { AddCommentComponent } from '../comments/add-comment/add-comment.component';
-import { ExternalLinkComponent } from '../comments/external-link/external-link.component';
+import { ParticipateService } from 'app/services/participate.service';
 
 @Component({
   templateUrl: './commenting-tab.component.html',
@@ -34,15 +30,14 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
   public loading = true;
   public commentPeriods: Array<CommentPeriod> = [];
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
-  private ngbModal: NgbModalRef = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private modalService: NgbModal,
     private _changeDetectionRef: ChangeDetectorRef,
     public commentPeriodService: CommentPeriodService, // used in template
     public surveyService: SurveyService,
+    private participateService: ParticipateService
   ) { }
 
   ngOnInit() {
@@ -65,7 +60,7 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
       );
   }
 
-  goToCP(commentPeriod) {
+  goToCP(commentPeriod: CommentPeriod) {
     this.router.navigate(['p', this.currentProject._id, 'cp', commentPeriod._id]);
   }
 
@@ -79,51 +74,8 @@ export class CommentingTabComponent implements OnInit, OnDestroy {
       });
   }
 
-  public handleParticipate() {
-    const method = this.currentProject.commentPeriodForBanner?.commentingMethod;
-    if (!method) {return; }
-    switch (method) {
-      case 'externalEngagementTool':
-        this.openExternalLinkModal();
-        break;
-      case 'surveyTool':
-        this.openSurveyModal();
-        break;
-      case 'basicForm':
-        this.openCommentModal();
-        break;
-      default:
-        console.error('Unknown commenting method:', method);
-    }
-  }
-
-  public openExternalLinkModal() {
-    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
-    this.ngbModal = this.modalService.open(ExternalLinkComponent, options);
-    const instance = <ExternalLinkComponent>this.ngbModal.componentInstance as ExternalLinkComponent;
-    instance.externalLinkText = this.currentProject?.commentPeriodForBanner?.externalToolPopupText;
-  }
-
-  public openSurveyModal() {
-    this.surveyService.getSelectedSurveyByCPId(this.currentProject?.commentPeriodForBanner?._id)
-      .subscribe((loadedSurvey: Survey) => {
-        if (loadedSurvey) {
-          const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
-          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, options);
-          const instance = <AddSurveyResponseComponent>this.ngbModal.componentInstance as AddSurveyResponseComponent;
-          instance.currentPeriod = this.currentProject?.commentPeriodForBanner;
-          instance.project = this.currentProject;
-          instance.survey = loadedSurvey;
-        }
-    });
-  }
-
-  public openCommentModal() {
-    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' } as NgbModalOptions;
-    this.ngbModal = this.modalService.open(AddCommentComponent, options);
-    const instance = <AddCommentComponent>this.ngbModal.componentInstance as AddCommentComponent;
-    instance.currentPeriod = this.currentProject?.commentPeriodForBanner;
-    instance.project = this.currentProject;
+  public async handleParticipate() {
+    await this.participateService.handleParticipate(this.currentProject);
   }
 
   ngOnDestroy() {

@@ -1,13 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
-import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { isEmpty } from 'lodash';
 import { CommentPeriod } from 'app/models/commentperiod';
 import { Comment } from 'app/models/comment';
 import { CommentService } from 'app/services/comment.service';
-import { AddCommentComponent } from './add-comment/add-comment.component';
-import { AddSurveyResponseComponent } from './add-survey-response/add-survey-response.component';
 import { Project } from 'app/models/project';
 import { TableParamsObject } from 'app/shared/components/table-template/table-params-object';
 import { TableObject } from 'app/shared/components/table-template/table-object';
@@ -19,8 +17,8 @@ import { ExternalLink } from 'app/models/externalLink';
 import { Document } from 'app/models/document';
 import { Utils } from 'app/shared/utils/utils';
 import { SurveyService } from 'app/services/survey.service';
-import { Survey } from 'app/models/survey';
-import { ExternalLinkComponent } from './external-link/external-link.component';
+import { ParticipateService } from 'app/services/participate.service';
+import { NgStyle } from '@angular/common';
 
 type CommentPeriodFile = Document & ExternalLink;
 
@@ -43,21 +41,21 @@ export class CommentsComponent implements OnInit, OnDestroy {
   public commentPeriodHeader: String;
   private ngUnsubscribe: Subject<boolean> = new Subject<boolean>();
   private commentPeriodId = null;
-  private ngbModal: NgbModalRef = null;
   public tableParams: TableParamsObject = new TableParamsObject();
   public commentTableColumns = [];
+  public backgroundStyle = {};
 
   constructor(
     private route: ActivatedRoute,
     private commentService: CommentService,
     private _changeDetectionRef: ChangeDetectorRef,
-    private modalService: NgbModal,
     private router: Router,
     private tableTemplateUtils: TableTemplateUtils,
     private externalLinkService: ExternalLinkService,
     private searchService: SearchService,
     private utils: Utils,
-    public surveyService: SurveyService
+    public surveyService: SurveyService,
+    private participateService: ParticipateService
   ) { }
 
   ngOnInit() {
@@ -90,12 +88,13 @@ export class CommentsComponent implements OnInit, OnDestroy {
               this.bannerImage = images[0];
             }
 
-            if (this.bannerImage) {
+            if (this.bannerImage?._id && this.bannerImage.documentFileName) {
               const safeName = this.bannerImage.documentFileName.replace(/ /g, '_');
               this.bannerImageSrc = `${this.pathAPI.replace('/public', '')}/document/${this.bannerImage._id}/fetch/${safeName}`;
               this._changeDetectionRef.detectChanges();
             }
           }
+          this.backgroundStyle = this.getHeroBackgroundStyle();
 
           if (data.commentPeriod && !this.commentPeriod) {
             // To fix the issue where the last page is empty.
@@ -212,55 +211,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleParticipate() {
-    const method = this.project.commentPeriodForBanner?.commentingMethod;
-    if (!method) {return; }
-    switch (method) {
-      case 'externalEngagementTool':
-        this.openExternalLinkModal();
-        break;
-      case 'surveyTool':
-        this.openSurveyModal();
-        break;
-      case 'basicForm':
-        this.openCommentModal();
-        break;
-      default:
-        console.error('Unknown commenting method:', method);
-    }
-  }
-
-  public openExternalLinkModal() {
-    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
-    this.ngbModal = this.modalService.open(ExternalLinkComponent, options);
-    const instance = <ExternalLinkComponent>this.ngbModal.componentInstance as ExternalLinkComponent;
-    instance.externalLinkText = this.project?.commentPeriodForBanner?.externalToolPopupText;
-  }
-
-  public openSurveyModal() {
-    this.surveyService.getSelectedSurveyByCPId(this.project?.commentPeriodForBanner?._id)
-      .subscribe((loadedSurvey: Survey) => {
-        if (loadedSurvey) {
-          const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg', keyboard: false } as NgbModalOptions;
-          this.ngbModal = this.modalService.open(AddSurveyResponseComponent, options);
-          const instance = <AddSurveyResponseComponent>this.ngbModal.componentInstance as AddSurveyResponseComponent;
-          instance.currentPeriod = this.project?.commentPeriodForBanner;
-          instance.project = this.project;
-          instance.survey = loadedSurvey;
-        }
-    });
-  }
-
-  public openCommentModal() {
-    const options = { ariaLabelledBy: 'modal-instructions', backdrop: 'static', size: 'xl' as 'lg' } as NgbModalOptions;
-    this.ngbModal = this.modalService.open(AddCommentComponent, options);
-    const instance = <AddCommentComponent>this.ngbModal.componentInstance as AddCommentComponent;
-    instance.currentPeriod = this.project?.commentPeriodForBanner;
-    instance.project = this.project;
+  public async handleParticipate() {
+    await this.participateService.handleParticipate(this.project);
   }
 
   public goBackToProjectDetails() {
-    this.router.navigate(['/p', this.project._id]);
+    this.router.navigate(['/p', this.project._id, 'project-details']);
   }
 
   getPaginatedComments(pageNumber: number) {
@@ -290,6 +246,13 @@ export class CommentsComponent implements OnInit, OnDestroy {
     let projPhrase;
     projName ? projPhrase = `the ${projName} project` : projPhrase = `this project's`;
     return `Submit a comment to ${projPhrase} comment period.`;
+  }
+
+  getHeroBackgroundStyle() {
+    if (this.bannerImageSrc) {
+      return { 'background-image': 'url(' + this.bannerImageSrc + ')' };
+    }
+    return { 'background': '#001330' };
   }
 
   ngOnDestroy() {

@@ -47,12 +47,9 @@
 				<div *ngIf="project.collectionNotice" [innerHTML]="project.collectionNotice"></div>
       </section>
     </div>
-    <div *ngIf="this.commentingMethod !== 'externalEngagementTool'" class="modal-footer">
+    <div class="modal-footer">
       <button type="button" class="btn btn-main" aria-label="Go to next page of comment submission form." (click)="p1_next()">Next</button>
     </div>
-    <ng-template #externalToolText>
-      <div class="modal-body" [innerHTML]="currentPeriod.externalToolPopupText"></div>
-    </ng-template>
   </div>
 </form>
 
