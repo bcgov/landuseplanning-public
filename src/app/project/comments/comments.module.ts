@@ -13,6 +13,7 @@ import { FileUploadComponent } from 'app/file-upload/file-upload.component';
 import { CommentsComponent } from './comments.component';
 import { AddCommentComponent } from './add-comment/add-comment.component';
 import { AddSurveyResponseComponent } from './add-survey-response/add-survey-response.component';
+import { ExternalLinkComponent } from './external-link/external-link.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { AddSurveyResponseComponent } from './add-survey-response/add-survey-res
     FileUploadComponent,
     AddCommentComponent,
     CommentsComponent,
-    AddSurveyResponseComponent
+    AddSurveyResponseComponent,
+    ExternalLinkComponent
   ],
   exports: [
     FileUploadComponent
