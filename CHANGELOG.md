@@ -1,3 +1,7 @@
+### Jun 26, 2026
+- Added document descriptions to grouped documents in project documents tab. [DESENG-965](https://citz-gdx.atlassian.net/browse/DESENG-965)
+- Changed package.json app name to the real name
+
 ### Apr 29, 2026
 - Refactored participate now code into injectable for less repeated code [DESENG-959](https://citz-gdx.atlassian.net/browse/DESENG-959)
   - Created a participate service that fetches modal with the correct data
