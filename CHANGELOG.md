@@ -1,3 +1,6 @@
+### Aug 26, 2026
+- Added conservation planning as a project type filter to the project list and project map. [DESENG-968](https://citz-gdx.atlassian.net/browse/DESENG-968)
+
 ### Jun 26, 2026
 - Added document descriptions to grouped documents in project documents tab. [DESENG-965](https://citz-gdx.atlassian.net/browse/DESENG-965)
 - Changed package.json app name to the real name

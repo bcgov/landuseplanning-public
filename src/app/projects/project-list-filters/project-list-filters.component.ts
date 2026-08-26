@@ -35,13 +35,15 @@ export class ProjectListFiltersComponent implements OnInit, OnChanges, OnDestroy
   public projectTypeFilters: ProjectType[] = [
     { name: 'Land Use Planning', checked: true },
     { name: 'Forest Landscape Planning', checked: true },
-    { name: 'Water Planning and Governance', checked: true }
+    { name: 'Water Planning and Governance', checked: true },
+    { name: 'Conservation Planning', checked: true }
   ];
 
   public fullNames = {
     lup: 'Land Use Planning',
     flp: 'Forest Landscape Planning',
     wpag: 'Water Planning and Governance',
+    cp: 'Conservation Planning',
   }
 
   constructor(
