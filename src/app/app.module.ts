@@ -25,6 +25,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { SearchHelpComponent } from './search-help/search-help.component';
 import { ShareButtonsComponent } from './share-buttons/share-buttons.component';
 import { EnvBannerComponent } from './header/env-banner/env-banner.component';
+import { InfoBannerComponent } from './header/info-banner/info-banner.component';
 import { EngagementComponent } from './engagement/engagement.component';
 import { ModernizingComponent } from './modernizing/modernizing.component';
 import { FaqComponent } from './faq/faq.component';
@@ -119,6 +120,7 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     FaqComponent,
     ShareButtonsComponent,
     EnvBannerComponent,
+    InfoBannerComponent,
     HealthCheckComponent,
   ],
   providers: [

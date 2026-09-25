@@ -1,3 +1,9 @@
+### Sep 25, 2026
+- Added an info banner that replicates the banner on gov.bc.ca. [DESENG-971](https://citz-gdx.atlassian.net/browse/DESENG-971)
+  - It can be toggled via an environment variable from OpenShift
+  - The banner will appear on every page until the X button is pressed
+  - After the X is pressed, the banner will no longer be displayed on any page
+
 ### Aug 26, 2026
 - Added conservation planning as a project type filter to the project list and project map. [DESENG-968](https://citz-gdx.atlassian.net/browse/DESENG-968)
 

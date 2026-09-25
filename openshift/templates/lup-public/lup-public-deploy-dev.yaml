@@ -63,6 +63,8 @@ spec:
               value: 'https://landuseplanning-dev.apps.silver.devops.gov.bc.ca/admin'
             - name: DEPLOYMENT_ENVIRONMENT
               value: dev
+            - name: ENABLE_INFO_BANNER
+              value: 'true'
           ports:
             - name: http
               containerPort: 8080
