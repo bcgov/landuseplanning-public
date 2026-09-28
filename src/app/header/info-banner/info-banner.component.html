@@ -1,0 +1,11 @@
+<div *ngIf="showBanner" class="outer-info-banner alert-info">
+  <div class="inner-info-banner" role="banner">
+    <i class="material-icons" aria-hidden="true">info</i>
+    <span>
+      {{ bannerText }}
+    </span>
+    <button type="button" class="close" aria-label="Close" (click)="dismissBanner()">
+      <i class="material-icons close" aria-hidden="true">close</i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+@import "~assets/styles/base/base.scss";
+
+.outer-info-banner {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem 1.5rem;
+    background: $info-banner-bg;
+
+    .inner-info-banner {
+        color: $info-banner-font-color;
+        display: flex;
+        width: 1140px; // Layout width
+        max-width: 100%;
+        margin: 0 auto;
+        gap: 1rem;
+        align-items: center;
+
+        i {
+            font-size: 2rem;
+            color: $info-banner-font-color;
+            opacity: 1;
+            justify-self: flex-start;
+        }
+    }
+}
