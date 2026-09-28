@@ -65,6 +65,8 @@ spec:
               value: dev
             - name: ENABLE_INFO_BANNER
               value: 'true'
+            - name: INFO_BANNER_TEXT
+              value: 'Due to the provincial election period, this site is not being updated except for emerging public health and safety information or topics that are statutory in nature.'
           ports:
             - name: http
               containerPort: 8080

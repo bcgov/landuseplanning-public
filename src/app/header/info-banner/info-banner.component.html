@@ -1,8 +1,8 @@
 <div *ngIf="showBanner" class="outer-info-banner alert-info">
-  <div class="inner-info-banner">
+  <div class="inner-info-banner" role="banner">
     <i class="material-icons" aria-hidden="true">info</i>
     <span>
-      Due to the provincial election period, this site is not being updated except for emerging public health and safety information or topics that are statutory in nature.
+      {{ bannerText }}
     </span>
     <button type="button" class="close" aria-label="Close" (click)="dismissBanner()">
       <i class="material-icons close" aria-hidden="true">close</i>
