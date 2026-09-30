@@ -53,6 +53,7 @@ import { ProcessComponent } from 'app/process/process.component';
 import { ComplianceOversightComponent } from 'app/compliance-oversight/compliance-oversight.component';
 import { ActivitiesListTableRowsComponent } from './project/project-activities/activities-list-table-rows/activities-list-table-rows.component';
 import { EmailSubscribeService } from 'app/services/emailSubscribe.service';
+import { InfoBannerService } from './services/infoBanner.service';
 import { DocumentSectionService } from './services/documentSection.service';
 import { HealthCheckComponent } from './health-check/health-check.component';
 import { SeoService } from './services/seo.service';
@@ -141,7 +142,8 @@ const defaultPageScrollEasingLogic = (t: number, b: number, c: number, d: number
     OrgService,
     FeatureService,
     EmailSubscribeService,
-    SeoService
+    SeoService,
+    InfoBannerService
   ],
   bootstrap: [
     AppComponent
