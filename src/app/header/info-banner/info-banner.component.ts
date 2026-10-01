@@ -18,8 +18,6 @@ export class InfoBannerComponent implements OnInit, OnDestroy {
     private infoBannerService: InfoBannerService
   ) {
     this.bannerEnabled = window.localStorage.getItem('from_public_server--enable_info_banner') || 'false';
-    console.log(this.bannerEnabled);
-    console.log(this.bannerEnabled.toLowerCase() === 'true');
 
     this.bannerText = window.localStorage.getItem('from_public_server--info_banner_text') ||
       'Due to the provincial election period, this site is not being updated except for emerging public health ' +
