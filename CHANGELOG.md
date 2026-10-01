@@ -5,6 +5,7 @@
   - The banner will appear on every page until the X button is pressed
   - After the X is pressed, the banner will no longer be displayed on any page
   - A small "i" icon will appear on the navigation bar after the banner has been dismissed, which can make the banner appear again
+- Updated Openshift template YAMLs with new env variables and imagePullPolicy
 
 ### Aug 26, 2026
 - Added conservation planning as a project type filter to the project list and project map. [DESENG-968](https://citz-gdx.atlassian.net/browse/DESENG-968)
