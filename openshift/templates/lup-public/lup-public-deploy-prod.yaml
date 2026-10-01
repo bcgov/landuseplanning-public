@@ -42,6 +42,10 @@ spec:
               value: 'https://www.planninginpartnership.ca/admin'
             - name: DEPLOYMENT_ENVIRONMENT
               value: prod
+            - name: ENABLE_INFO_BANNER
+              value: 'true'
+            - name: INFO_BANNER_TEXT
+              value: 'Due to the provincial election period, this site is not being updated except for emerging public health and safety information or topics that are statutory in nature.'
           ports:
             - containerPort: 8080
               protocol: TCP
